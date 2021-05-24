@@ -1,0 +1,21 @@
+import 'package:example/ExampleTextBufferGeometry.dart';
+import 'package:flutter/material.dart';
+
+import 'MyApp1.dart';
+import 'MyApp2.dart';
+import 'MyApp3.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    // return MyApp1();
+    // return MyApp2();
+    // return MyApp3();
+    return ExampleTextBufferGeometry();
+  }
+}

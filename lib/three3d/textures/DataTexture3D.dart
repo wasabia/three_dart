@@ -1,0 +1,36 @@
+part of three_textures;
+
+class DataTexture3D extends Texture {
+
+  bool isDataTexture3D = true;
+  late int wrapR;
+
+  DataTexture3D( {Uint8List? data = null, int width = 1, int height = 1, int depth = 1 }) : super(null, null, null, null, null, null, null, null, null, null) {
+
+    this.image = ImageElement(data: data, width: width, height: height, depth: depth );
+
+
+    this.magFilter = NearestFilter;
+    this.minFilter = NearestFilter;
+
+    this.wrapR = ClampToEdgeWrapping;
+
+    this.generateMipmaps = false;
+    this.flipY = false;
+
+    this.needsUpdate = true;
+  }
+
+	// We're going to add .setXXX() methods for setting properties later.
+	// Users can still set in DataTexture3D directly.
+	//
+	//	const texture = new THREE.DataTexture3D( data, width, height, depth );
+	// 	texture.anisotropy = 16;
+	//
+	// See #14839
+
+
+
+}
+
+

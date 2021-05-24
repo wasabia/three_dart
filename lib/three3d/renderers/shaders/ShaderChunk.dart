@@ -1,0 +1,261 @@
+import 'ShaderChunk/alphamap_fragment.glsl.dart';
+import 'ShaderChunk/alphamap_pars_fragment.glsl.dart';
+import 'ShaderChunk/alphatest_fragment.glsl.dart';
+import 'ShaderChunk/aomap_fragment.glsl.dart';
+import 'ShaderChunk/aomap_pars_fragment.glsl.dart';
+import 'ShaderChunk/begin_vertex.glsl.dart';
+import 'ShaderChunk/beginnormal_vertex.glsl.dart';
+import 'ShaderChunk/bsdfs.glsl.dart';
+import 'ShaderChunk/bumpmap_pars_fragment.glsl.dart';
+import 'ShaderChunk/clearcoat_normal_fragment_begin.glsl.dart';
+import 'ShaderChunk/clearcoat_normal_fragment_maps.glsl.dart';
+import 'ShaderChunk/clearcoat_pars_fragment.glsl.dart';
+import 'ShaderChunk/clipping_planes_fragment.glsl.dart';
+import 'ShaderChunk/clipping_planes_pars_fragment.glsl.dart';
+import 'ShaderChunk/clipping_planes_pars_vertex.glsl.dart';
+import 'ShaderChunk/clipping_planes_vertex.glsl.dart';
+import 'ShaderChunk/color_fragment.glsl.dart';
+import 'ShaderChunk/color_pars_fragment.glsl.dart';
+import 'ShaderChunk/color_pars_vertex.glsl.dart';
+import 'ShaderChunk/color_vertex.glsl.dart';
+import 'ShaderChunk/common.glsl.dart';
+import 'ShaderChunk/cube_uv_reflection_fragment.glsl.dart';
+import 'ShaderChunk/defaultnormal_vertex.glsl.dart';
+import 'ShaderChunk/displacementmap_pars_vertex.glsl.dart';
+import 'ShaderChunk/displacementmap_vertex.glsl.dart';
+import 'ShaderChunk/dithering_fragment.glsl.dart';
+import 'ShaderChunk/dithering_pars_fragment.glsl.dart';
+import 'ShaderChunk/emissivemap_fragment.glsl.dart';
+import 'ShaderChunk/emissivemap_pars_fragment.glsl.dart';
+import 'ShaderChunk/encodings_fragment.glsl.dart';
+import 'ShaderChunk/encodings_pars_fragment.glsl.dart';
+import 'ShaderChunk/envmap_common_pars_fragment.glsl.dart';
+import 'ShaderChunk/envmap_fragment.glsl.dart';
+import 'ShaderChunk/envmap_pars_fragment.glsl.dart';
+import 'ShaderChunk/envmap_pars_vertex.glsl.dart';
+import 'ShaderChunk/envmap_physical_pars_fragment.glsl.dart';
+import 'ShaderChunk/envmap_vertex.glsl.dart';
+import 'ShaderChunk/fog_fragment.glsl.dart';
+import 'ShaderChunk/fog_pars_fragment.glsl.dart';
+import 'ShaderChunk/fog_pars_vertex.glsl.dart';
+import 'ShaderChunk/fog_vertex.glsl.dart';
+import 'ShaderChunk/gradientmap_pars_fragment.glsl.dart';
+import 'ShaderChunk/lightmap_fragment.glsl.dart';
+import 'ShaderChunk/lightmap_pars_fragment.glsl.dart';
+import 'ShaderChunk/lights_fragment_begin.glsl.dart';
+import 'ShaderChunk/lights_fragment_end.glsl.dart';
+import 'ShaderChunk/lights_fragment_maps.glsl.dart';
+import 'ShaderChunk/lights_lambert_vertex.glsl.dart';
+import 'ShaderChunk/lights_pars_begin.glsl.dart';
+import 'ShaderChunk/lights_phong_fragment.glsl.dart';
+import 'ShaderChunk/lights_phong_pars_fragment.glsl.dart';
+import 'ShaderChunk/lights_physical_fragment.glsl.dart';
+import 'ShaderChunk/lights_physical_pars_fragment.glsl.dart';
+import 'ShaderChunk/lights_toon_fragment.glsl.dart';
+import 'ShaderChunk/lights_toon_pars_fragment.glsl.dart';
+import 'ShaderChunk/logdepthbuf_fragment.glsl.dart';
+import 'ShaderChunk/logdepthbuf_pars_fragment.glsl.dart';
+import 'ShaderChunk/logdepthbuf_pars_vertex.glsl.dart';
+import 'ShaderChunk/logdepthbuf_vertex.glsl.dart';
+import 'ShaderChunk/map_fragment.glsl.dart';
+import 'ShaderChunk/map_pars_fragment.glsl.dart';
+import 'ShaderChunk/map_particle_fragment.glsl.dart';
+import 'ShaderChunk/map_particle_pars_fragment.glsl.dart';
+import 'ShaderChunk/metalnessmap_fragment.glsl.dart';
+import 'ShaderChunk/metalnessmap_pars_fragment.glsl.dart';
+import 'ShaderChunk/morphnormal_vertex.glsl.dart';
+import 'ShaderChunk/morphtarget_pars_vertex.glsl.dart';
+import 'ShaderChunk/morphtarget_vertex.glsl.dart';
+import 'ShaderChunk/normal_fragment_begin.glsl.dart';
+import 'ShaderChunk/normal_fragment_maps.glsl.dart';
+import 'ShaderChunk/normalmap_pars_fragment.glsl.dart';
+import 'ShaderChunk/packing.glsl.dart';
+import 'ShaderChunk/premultiplied_alpha_fragment.glsl.dart';
+import 'ShaderChunk/project_vertex.glsl.dart';
+import 'ShaderChunk/roughnessmap_fragment.glsl.dart';
+import 'ShaderChunk/roughnessmap_pars_fragment.glsl.dart';
+import 'ShaderChunk/shadowmap_pars_fragment.glsl.dart';
+import 'ShaderChunk/shadowmap_pars_vertex.glsl.dart';
+import 'ShaderChunk/shadowmap_vertex.glsl.dart';
+import 'ShaderChunk/shadowmask_pars_fragment.glsl.dart';
+import 'ShaderChunk/skinbase_vertex.glsl.dart';
+import 'ShaderChunk/skinning_pars_vertex.glsl.dart';
+import 'ShaderChunk/skinning_vertex.glsl.dart';
+import 'ShaderChunk/skinnormal_vertex.glsl.dart';
+import 'ShaderChunk/specularmap_fragment.glsl.dart';
+import 'ShaderChunk/specularmap_pars_fragment.glsl.dart';
+import 'ShaderChunk/tonemapping_fragment.glsl.dart';
+import 'ShaderChunk/tonemapping_pars_fragment.glsl.dart';
+import 'ShaderChunk/transmissionmap_fragment.glsl.dart';
+import 'ShaderChunk/transmissionmap_pars_fragment.glsl.dart';
+import 'ShaderChunk/uv2_pars_fragment.glsl.dart';
+import 'ShaderChunk/uv2_pars_vertex.glsl.dart';
+import 'ShaderChunk/uv2_vertex.glsl.dart';
+import 'ShaderChunk/uv_pars_fragment.glsl.dart';
+import 'ShaderChunk/uv_pars_vertex.glsl.dart';
+import 'ShaderChunk/uv_vertex.glsl.dart';
+import 'ShaderChunk/worldpos_vertex.glsl.dart';
+import 'ShaderLib/background_frag.glsl.dart';
+import 'ShaderLib/background_vert.glsl.dart';
+import 'ShaderLib/cube_frag.glsl.dart';
+import 'ShaderLib/cube_vert.glsl.dart';
+import 'ShaderLib/depth_frag.glsl.dart';
+import 'ShaderLib/depth_vert.glsl.dart';
+import 'ShaderLib/distanceRGBA_frag.glsl.dart';
+import 'ShaderLib/distanceRGBA_vert.glsl.dart';
+import 'ShaderLib/equirect_frag.glsl.dart';
+import 'ShaderLib/equirect_vert.glsl.dart';
+import 'ShaderLib/linedashed_frag.glsl.dart';
+import 'ShaderLib/linedashed_vert.glsl.dart';
+import 'ShaderLib/meshbasic_frag.glsl.dart';
+import 'ShaderLib/meshbasic_vert.glsl.dart';
+import 'ShaderLib/meshlambert_frag.glsl.dart';
+import 'ShaderLib/meshlambert_vert.glsl.dart';
+import 'ShaderLib/meshmatcap_frag.glsl.dart';
+import 'ShaderLib/meshmatcap_vert.glsl.dart';
+import 'ShaderLib/meshphong_frag.glsl.dart';
+import 'ShaderLib/meshphong_vert.glsl.dart';
+import 'ShaderLib/meshphysical_frag.glsl.dart';
+import 'ShaderLib/meshphysical_vert.glsl.dart';
+import 'ShaderLib/meshtoon_frag.glsl.dart';
+import 'ShaderLib/meshtoon_vert.glsl.dart';
+import 'ShaderLib/normal_frag.glsl.dart';
+import 'ShaderLib/normal_vert.glsl.dart';
+import 'ShaderLib/points_frag.glsl.dart';
+import 'ShaderLib/points_vert.glsl.dart';
+import 'ShaderLib/shadow_frag.glsl.dart';
+import 'ShaderLib/shadow_vert.glsl.dart';
+import 'ShaderLib/sprite_frag.glsl.dart';
+import 'ShaderLib/sprite_vert.glsl.dart';
+
+Map<String, String> ShaderChunk = {
+  "alphamap_fragment": alphamap_fragment,
+	"alphamap_pars_fragment": alphamap_pars_fragment,
+	"alphatest_fragment": alphatest_fragment,
+	"aomap_fragment": aomap_fragment,
+	"aomap_pars_fragment": aomap_pars_fragment,
+	"begin_vertex": begin_vertex,
+	"beginnormal_vertex": beginnormal_vertex,
+	"bsdfs": bsdfs,
+	"bumpmap_pars_fragment": bumpmap_pars_fragment,
+	"clipping_planes_fragment": clipping_planes_fragment,
+	"clipping_planes_pars_fragment": clipping_planes_pars_fragment,
+	"clipping_planes_pars_vertex": clipping_planes_pars_vertex,
+	"clipping_planes_vertex": clipping_planes_vertex,
+	"color_fragment": color_fragment,
+	"color_pars_fragment": color_pars_fragment,
+	"color_pars_vertex": color_pars_vertex,
+	"color_vertex": color_vertex,
+	"common": commonGlsl,
+	"cube_uv_reflection_fragment": cube_uv_reflection_fragment,
+	"defaultnormal_vertex": defaultnormal_vertex,
+	"displacementmap_pars_vertex": displacementmap_pars_vertex,
+	"displacementmap_vertex": displacementmap_vertex,
+	"emissivemap_fragment": emissivemap_fragment,
+	"emissivemap_pars_fragment": emissivemap_pars_fragment,
+	"encodings_fragment": encodings_fragment,
+	"encodings_pars_fragment": encodings_pars_fragment,
+	"envmap_fragment": envmap_fragment,
+	"envmap_common_pars_fragment": envmap_common_pars_fragment,
+	"envmap_pars_fragment": envmap_pars_fragment,
+	"envmap_pars_vertex": envmap_pars_vertex,
+	"envmap_physical_pars_fragment": envmap_physical_pars_fragment,
+	"envmap_vertex": envmap_vertex,
+	"fog_vertex": fog_vertex,
+	"fog_pars_vertex": fog_pars_vertex,
+	"fog_fragment": fog_fragment,
+	"fog_pars_fragment": fog_pars_fragment,
+	"gradientmap_pars_fragment": gradientmap_pars_fragment,
+	"lightmap_fragment": lightmap_fragment,
+	"lightmap_pars_fragment": lightmap_pars_fragment,
+	"lights_lambert_vertex": lights_lambert_vertex,
+	"lights_pars_begin": lights_pars_begin,
+	"lights_toon_fragment": lights_toon_fragment,
+	"lights_toon_pars_fragment": lights_toon_pars_fragment,
+	"lights_phong_fragment": lights_phong_fragment,
+	"lights_phong_pars_fragment": lights_phong_pars_fragment,
+	"lights_physical_fragment": lights_physical_fragment,
+	"lights_physical_pars_fragment": lights_physical_pars_fragment,
+	"lights_fragment_begin": lights_fragment_begin,
+	"lights_fragment_maps": lights_fragment_maps,
+	"lights_fragment_end": lights_fragment_end,
+	"logdepthbuf_fragment": logdepthbuf_fragment,
+	"logdepthbuf_pars_fragment": logdepthbuf_pars_fragment,
+	"logdepthbuf_pars_vertex": logdepthbuf_pars_vertex,
+	"logdepthbuf_vertex": logdepthbuf_vertex,
+	"map_fragment": map_fragment,
+	"map_pars_fragment": map_pars_fragment,
+	"map_particle_fragment": map_particle_fragment,
+	"map_particle_pars_fragment": map_particle_pars_fragment,
+	"metalnessmap_fragment": metalnessmap_fragment,
+	"metalnessmap_pars_fragment": metalnessmap_pars_fragment,
+	"morphnormal_vertex": morphnormal_vertex,
+	"morphtarget_pars_vertex": morphtarget_pars_vertex,
+	"morphtarget_vertex": morphtarget_vertex,
+	"normal_fragment_begin": normal_fragment_begin,
+	"normal_fragment_maps": normal_fragment_maps,
+	"normalmap_pars_fragment": normalmap_pars_fragment,
+	"clearcoat_normal_fragment_begin": clearcoat_normal_fragment_begin,
+	"clearcoat_normal_fragment_maps": clearcoat_normal_fragment_maps,
+	"clearcoat_pars_fragment": clearcoat_pars_fragment,
+	"packing": packingGlsl,
+	"premultiplied_alpha_fragment": premultiplied_alpha_fragment,
+	"project_vertex": project_vertex,
+	"dithering_fragment": dithering_fragment,
+	"dithering_pars_fragment": dithering_pars_fragment,
+	"roughnessmap_fragment": roughnessmap_fragment,
+	"roughnessmap_pars_fragment": roughnessmap_pars_fragment,
+	"shadowmap_pars_fragment": shadowmap_pars_fragment,
+	"shadowmap_pars_vertex": shadowmap_pars_vertex,
+	"shadowmap_vertex": shadowmap_vertex,
+	"shadowmask_pars_fragment": shadowmask_pars_fragment,
+	"skinbase_vertex": skinbase_vertex,
+	"skinning_pars_vertex": skinning_pars_vertex,
+	"skinning_vertex": skinning_vertex,
+	"skinnormal_vertex": skinnormal_vertex,
+	"specularmap_fragment": specularmap_fragment,
+	"specularmap_pars_fragment": specularmap_pars_fragment,
+	"tonemapping_fragment": tonemapping_fragment,
+	"tonemapping_pars_fragment": tonemapping_pars_fragment,
+	"transmissionmap_fragment": transmissionmap_fragment,
+	"transmissionmap_pars_fragment": transmissionmap_pars_fragment,
+	"uv_pars_fragment": uv_pars_fragment,
+	"uv_pars_vertex": uv_pars_vertex,
+	"uv_vertex": uv_vertex,
+	"uv2_pars_fragment": uv2_pars_fragment,
+	"uv2_pars_vertex": uv2_pars_vertex,
+	"uv2_vertex": uv2_vertex,
+	"worldpos_vertex": worldpos_vertex,
+	"background_frag": background_frag,
+	"background_vert": background_vert,
+	"cube_frag": cube_frag,
+	"cube_vert": cube_vert,
+	"depth_frag": depth_frag,
+	"depth_vert": depth_vert,
+	"distanceRGBA_frag": distanceRGBA_frag,
+	"distanceRGBA_vert": distanceRGBA_vert,
+	"equirect_frag": equirect_frag,
+	"equirect_vert": equirect_vert,
+	"linedashed_frag": linedashed_frag,
+	"linedashed_vert": linedashed_vert,
+	"meshbasic_frag": meshbasic_frag,
+	"meshbasic_vert": meshbasic_vert,
+	"meshlambert_frag": meshlambert_frag,
+	"meshlambert_vert": meshlambert_vert,
+	"meshmatcap_frag": meshmatcap_frag,
+	"meshmatcap_vert": meshmatcap_vert,
+	"meshtoon_frag": meshtoon_frag,
+	"meshtoon_vert": meshtoon_vert,
+	"meshphong_frag": meshphong_frag,
+	"meshphong_vert": meshphong_vert,
+	"meshphysical_frag": meshphysical_frag,
+	"meshphysical_vert": meshphysical_vert,
+	"normal_frag": normal_frag,
+	"normal_vert": normal_vert,
+	"points_frag": points_frag,
+	"points_vert": points_vert,
+	"shadow_frag": shadow_frag,
+	"shadow_vert": shadow_vert,
+	"sprite_frag": sprite_frag,
+	"sprite_vert": sprite_vert
+};

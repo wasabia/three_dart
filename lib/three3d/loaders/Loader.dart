@@ -1,0 +1,76 @@
+part of three_loaders;
+
+
+class Loader {
+
+  late LoadingManager manager;
+  late String crossOrigin;
+  late bool withCredentials;
+  late String path;
+  late String resourcePath;
+  late Map<String, dynamic> requestHeader;
+  String responseType = "text";
+  late String mimeType;
+
+  Loader( manager ) {
+
+    this.manager = ( manager != null ) ? manager : DefaultLoadingManager;
+
+    this.crossOrigin = 'anonymous';
+    this.withCredentials = false;
+    this.path = '';
+    this.resourcePath = '';
+    this.requestHeader = {};
+  }
+
+  load (String url, Function? onLoad, Function? onProgress, Function? onError ) {
+
+  }
+
+  loadAsync ( String url, Function? onProgress ) {
+
+	}
+
+	parse ( json, {String? path, Function? onLoad, Function? onError} ) {
+
+  }
+
+	setCrossOrigin ( crossOrigin ) {
+
+		this.crossOrigin = crossOrigin;
+		return this;
+
+	}
+
+	setWithCredentials ( value ) {
+
+		this.withCredentials = value;
+		return this;
+
+	}
+
+	setPath ( path ) {
+
+		this.path = path;
+		return this;
+
+	}
+
+	setResourcePath ( resourcePath ) {
+
+		this.resourcePath = resourcePath;
+		return this;
+
+	}
+
+	setRequestHeader ( requestHeader ) {
+
+		this.requestHeader = requestHeader;
+		return this;
+
+	}
+
+
+}
+
+

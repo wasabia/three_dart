@@ -1,0 +1,9 @@
+String logdepthbuf_pars_fragment = """
+#if defined( USE_LOGDEPTHBUF ) && defined( USE_LOGDEPTHBUF_EXT )
+
+	uniform float logDepthBufFC;
+	varying float vFragDepth;
+	varying float vIsPerspective;
+
+#endif
+""";
