@@ -31,13 +31,15 @@ List<ShapePath> createPaths(String text, num size, Map<String, dynamic> data) {
   num scale = size / data["resolution"];
   num line_height = (data["boundingBox"]["yMax"] -
           data["boundingBox"]["yMin"] +
-          data["underlineThickness"]) *
-      scale;
+          data["underlineThickness"]) * scale;
 
   List<ShapePath> paths = [];
 
   num offsetX = 0.0;
   num offsetY = 0.0;
+
+  
+
 
   for (var i = 0; i < chars.length; i++) {
     var char = chars[i];
@@ -55,8 +57,8 @@ List<ShapePath> createPaths(String text, num size, Map<String, dynamic> data) {
   return paths;
 }
 
-Map<String, dynamic> createPath(
-    char, num scale, num offsetX, num offsetY, data) {
+Map<String, dynamic> createPath(String char, num scale, num offsetX, num offsetY, data) {
+  
   var glyph = data["glyphs"][char] ?? data["glyphs"]['?'];
 
   if (glyph == null) {
@@ -65,60 +67,63 @@ Map<String, dynamic> createPath(
     glyph = data["glyphs"]["a"];
   }
 
+  var _font = data["font"];
+  var _glyphs = _font.stringToGlyphs(char);
+  var _paths = _font.glyphsToPath(_glyphs);
+
+
+
   var path = ShapePath();
 
   num x = 0.1;
   num y = 0.1;
   num cpx, cpy, cpx1, cpy1, cpx2, cpy2;
 
-  if (glyph["o"] != null) {
-    var outline = glyph["_cachedOutline"];
+  for(var path in _paths) {
+    var cmds = path["cmds"];
+    var crds = path["crds"];
 
-    if (outline == null) {
-      glyph["_cachedOutline"] = glyph["o"].split(' ');
-      outline = glyph["_cachedOutline"];
-    }
+    int i = 0;
+    for (int j = 0, l = cmds.length; j < l;) {
+      var action = cmds[j];
+      j = j + 1;
 
-    for (int i = 0, l = outline.length; i < l;) {
-      var action = outline[i];
-      i = i + 1;
-
-      switch (action) {
-        case 'm': // moveTo
-          x = int.parse(outline[i++]) * scale + offsetX;
-          y = int.parse(outline[i++]) * scale + offsetY;
+      switch (action) {  
+        case 'M': // moveTo
+          x = int.parse(crds[i++]) * scale + offsetX;
+          y = int.parse(crds[i++]) * scale + offsetY;
 
           path.moveTo(x, y);
           break;
 
-        case 'l': // lineTo
+        case 'L': // lineTo
 
-          x = int.parse(outline[i++]) * scale + offsetX;
-          y = int.parse(outline[i++]) * scale + offsetY;
+          x = int.parse(crds[i++]) * scale + offsetX;
+          y = int.parse(crds[i++]) * scale + offsetY;
 
           path.lineTo(x, y);
 
           break;
 
-        case 'q': // quadraticCurveTo
+        case 'Q': // quadraticCurveTo
 
-          cpx = int.parse(outline[i++]) * scale + offsetX;
-          cpy = int.parse(outline[i++]) * scale + offsetY;
-          cpx1 = int.parse(outline[i++]) * scale + offsetX;
-          cpy1 = int.parse(outline[i++]) * scale + offsetY;
+          cpx = int.parse(crds[i++]) * scale + offsetX;
+          cpy = int.parse(crds[i++]) * scale + offsetY;
+          cpx1 = int.parse(crds[i++]) * scale + offsetX;
+          cpy1 = int.parse(crds[i++]) * scale + offsetY;
 
           path.quadraticCurveTo(cpx1, cpy1, cpx, cpy);
 
           break;
 
-        case 'b': // bezierCurveTo
+        case 'B': // bezierCurveTo
 
-          cpx = int.parse(outline[i++]) * scale + offsetX;
-          cpy = int.parse(outline[i++]) * scale + offsetY;
-          cpx1 = int.parse(outline[i++]) * scale + offsetX;
-          cpy1 = int.parse(outline[i++]) * scale + offsetY;
-          cpx2 = int.parse(outline[i++]) * scale + offsetX;
-          cpy2 = int.parse(outline[i++]) * scale + offsetY;
+          cpx = int.parse(crds[i++]) * scale + offsetX;
+          cpy = int.parse(crds[i++]) * scale + offsetY;
+          cpx1 = int.parse(crds[i++]) * scale + offsetX;
+          cpy1 = int.parse(crds[i++]) * scale + offsetY;
+          cpx2 = int.parse(crds[i++]) * scale + offsetX;
+          cpy2 = int.parse(crds[i++]) * scale + offsetY;
 
           path.bezierCurveTo(cpx1, cpy1, cpx2, cpy2, cpx, cpy);
 

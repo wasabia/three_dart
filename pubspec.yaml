@@ -14,8 +14,8 @@ dependencies:
   universal_html: ^2.0.7
   ffi:
   image:
-  opentype:
-    path: ../opentype
+  # opentype:
+  #   path: ../opentype
     # git: https://github.com/wasabia/opentype.git
   typr_dart:
     path: ../typr_dart
