@@ -29,6 +29,8 @@ part './Face3.dart';
 part './Geometry.dart';
 part './GLBufferAttribute.dart';
 
+part './InstancedBufferAttribute.dart';
+part './InstancedBufferGeometry.dart';
 
 part './InterleavedBuffer.dart';
 part './InterleavedBufferAttribute.dart';

@@ -218,17 +218,17 @@ class _MyAppState extends State<ExampleTextBufferGeometry> {
   }
 
   _addX() {
-    group.rotation.x = group.rotation.x + 0.1;
+   
     mesh.rotation.x = mesh.rotation.x + 0.1;
 
     render();
   }
   _addY() {
-    group.rotation.y = group.rotation.y + 0.1;
+    mesh.rotation.y = mesh.rotation.y + 0.1;
     render();
   }
   _addZ() {
-    group.rotation.z = group.rotation.z + 0.1;
+    mesh.rotation.z = mesh.rotation.z + 0.1;
     render();
   }
 
@@ -328,7 +328,7 @@ class _MyAppState extends State<ExampleTextBufferGeometry> {
 
 
     camera = new THREE.PerspectiveCamera( fov: 40, aspect: 1, near: 1, far: 10000 );
-    camera.position.z = 3200;
+    camera.position.z = 1600;
 
 
     scene = new THREE.Scene();
@@ -336,30 +336,48 @@ class _MyAppState extends State<ExampleTextBufferGeometry> {
 
     camera.lookAt(scene.position);
 
+    var loader = new THREE.FontLoader(null);
+    // var loader = new THREE.TYPRLoader(null);
+    // var loader = new THREE.TTFLoader(null);
 
-    var loader = new THREE.TTFLoader(null);
-
-    // String _fontPath = 'fonts/ttf/kenpixel.ttf';
+    // String _fontPath = 'assets/kenpixel.ttf';
     // String _fontPath = "fonts/ttf/DMFT.ttf";
-    String _fontPath = "assets/pingfang.ttf";
+    // String _fontPath = "assets/pingfang.ttf";
+    // String _fontPath = 'fonts/kenpixel.ttf';
+    // String _fontPath = 'fonts/pingfang.ttf';
+    String _fontPath = "fonts/PingFang SC_Medium.json";
 
-    var dataJson = await loader.loadAsync( _fontPath, null );
-    var font = THREE.Font(dataJson);
-    var geometry = new THREE.TextBufferGeometry( "请输入您的文字", {
+    var font = await loader.loadAsync( _fontPath, null );
+    // var font = THREE.TYPRFont(dataJson);
+    // var font = THREE.TTFFont(dataJson);
+
+
+
+    var geometry = new THREE.TextBufferGeometry( "O", {
       "font": font,
-      "size": 40,
-      "height": 5,
+      "size": 100,
+      "height": 25,
       "curveSegments": 3,
-      "bevelThickness": 2,
-      "bevelSize": 1,
+      "bevelThickness": 3,
+      "bevelSize": 5,
       "bevelEnabled": true
     } );
 
+
+    // var shapes = font.generateShapes( "O", size: 100 );
+
+    // var geometry = new THREE.ShapeBufferGeometry( shapes );
+
+
+
     geometry.center();
+
 
     var material = THREE.MeshBasicMaterial( {"color": 0xffffff} );
 
     mesh = new THREE.Mesh(geometry, material);
+
+    mesh.rotation.set(0.1, 0.2, 0.3);
 
     scene.add(mesh);
 

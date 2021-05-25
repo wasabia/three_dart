@@ -130,6 +130,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+  opentype:
+    dependency: "direct main"
+    description:
+      path: "../opentype"
+      relative: true
+    source: path
+    version: "0.0.1"
   path:
     dependency: transitive
     description:

@@ -24,6 +24,8 @@ export './scenes/index.dart';
 export './textures/index.dart';
 export './constants.dart';
 
+export './WeakMap.dart';
+
 
 
 

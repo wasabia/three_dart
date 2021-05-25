@@ -64,7 +64,43 @@ class TYPRLoader extends Loader {
     
 		convert( typr_dart.Font font, reversed ) {
 
+      var round = Math.round;
+
+			var glyphs = {};
+			var scale = ( 100000 ) / ( ( font.head["unitsPerEm"] ?? 2048 ) * 72 );
+
+      var numGlyphs = font.maxp["numGlyphs"];
+
+		
+
+			// for ( var i = 0; i < numGlyphs; i ++ ) {
+
+			// 	var path = font.glyphToPath(i);
+
+      //   // print(path);
+
+			// 	if ( path != null ) {          
+      //     var aWidths = font.hmtx["aWidth"];
+
+      //     path["ha"] = round( aWidths[i] * scale );
+
+      //     var crds = path["crds"];
+      //     List<num> _scaledCrds = [];
+
+      //     crds.forEach((nrd) {
+      //       _scaledCrds.add(nrd * scale);
+      //     });
+
+      //     path["crds"] = _scaledCrds;
+
+			// 		glyphs[i ] = path;
+
+			// 	}
+
+			// }
+
 			return {
+  
 				"font": font,
 				"familyName": font.getFamilyName(),
 				"underlinePosition": font.post["underlinePosition"],

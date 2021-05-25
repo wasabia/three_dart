@@ -1,3 +1,4 @@
+import 'package:example/ExampleText.dart';
 import 'package:example/ExampleTextBufferGeometry.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
     // return MyApp1();
     // return MyApp2();
     // return MyApp3();
-    return ExampleTextBufferGeometry();
+    // return ExampleTextBufferGeometry();
+    return ExampleText();
   }
 }

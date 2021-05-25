@@ -9,7 +9,19 @@ class FontLoader extends Loader {
     
   }
 
-  
+  loadAsync( url, Function? onProgress ) async {
+		var loader = new FileLoader( this.manager );
+		loader.setPath( this.path );
+		loader.responseType = this.responseType;
+		loader.setRequestHeader( this.requestHeader );
+		loader.setWithCredentials( this.withCredentials );
+		var text = await loader.loadAsync( url, null );
+
+    var jsonData = json.decode(text);
+
+    return this.parse( jsonData );
+	}
+
   load( url, onLoad, onProgress, onError ) {
 
 		var scope = this;
@@ -41,7 +53,7 @@ class FontLoader extends Loader {
 	}
 
 	parse( json, {String? path, Function? onLoad, Function? onError}  ) {
-		return Font( json );
+		return TTFFont( json );
 	}
 
 }

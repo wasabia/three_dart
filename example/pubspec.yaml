@@ -58,7 +58,7 @@ flutter:
   assets:
     - assets/helvetiker_bold.typeface.json
     - assets/pingfang.ttf
-
+    - assets/kenpixel.ttf
 
     
   # An image asset can refer to one or more resolution-specific "variants", see

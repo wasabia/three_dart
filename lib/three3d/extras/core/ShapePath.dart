@@ -205,7 +205,7 @@ class ShapePath {
 		if ( newShapes.length > 1 ) {
 
 			var ambiguous = false;
-			const toChange = [];
+			var toChange = [];
 
 			for ( var sIdx = 0, sLen = newShapes.length; sIdx < sLen; sIdx ++ ) {
 
