@@ -557,14 +557,13 @@ class WebGLRenderer {
   renderBufferDirect(Camera camera, dynamic? scene, geometry, Material material,
       Object3D object, group) {
     
-
     // renderBufferDirect second parameter used to be fog (could be null)
     if (scene == null) scene =  _emptyScene; 
 
     var frontFaceCW = (object.isMesh && object.matrixWorld.determinant() < 0);
 
 
-    // print("WebGLRenderer.renderBufferDirect object: ${object.type} ${object.id} material: ${material.type} ${material.id} geometry: ${geometry.type} ${geometry.id} object.isMesh: ${object.isMesh} frontFaceCW: ${frontFaceCW} ");
+    print("WebGLRenderer.renderBufferDirect object: ${object.type} ${object.id} material: ${material.type} ${material.id} geometry: ${geometry.type} ${geometry.id} object.isMesh: ${object.isMesh} frontFaceCW: ${frontFaceCW} ");
 
    
     WebGLProgram program = setProgram(camera, scene, material, object);
@@ -579,8 +578,10 @@ class WebGLRenderer {
 
     BufferAttribute? position = geometry.attributes["position"];
 
+    print(" index---------position ");
+    print(index.array);
+    print(position?.array);
  
-
     if (index == null) {
       if (position == null || position.count == 0) return;
     } else if (index.count == 0) {
@@ -619,16 +620,14 @@ class WebGLRenderer {
     var rangeCount = geometry.drawRange["count"] * rangeFactor;
 
     var groupStart = group != null ? group["start"] * rangeFactor : 0;
-    var groupCount =
-        group != null ? group["count"] * rangeFactor : double.maxFinite;
+    var groupCount = group != null ? group["count"] * rangeFactor : double.maxFinite;
 
     var drawStart = Math.max(rangeStart, groupStart);
 
-    var drawEnd =
-        Math.min3(dataCount, rangeStart + rangeCount, groupStart + groupCount) -
-            1;
+    var drawEnd = Math.min3(dataCount, rangeStart + rangeCount, groupStart + groupCount) - 1;
 
     var drawCount = Math.max(0, drawEnd - drawStart + 1);
+
 
     if (drawCount == 0) return;
 
@@ -662,11 +661,13 @@ class WebGLRenderer {
       renderer.setMode(_gl.TRIANGLES);
     }
 
+
     if (object.isInstancedMesh) {
       renderer.renderInstances(drawStart, drawCount, object.count);
     } else if (geometry.isInstancedBufferGeometry) {
-      var instanceCount =
-          Math.min(geometry.instanceCount, geometry._maxInstanceCount);
+
+
+      var instanceCount = Math.min(geometry.instanceCount, geometry.maxInstanceCount);
 
       renderer.renderInstances(drawStart, drawCount, instanceCount);
     } else {
@@ -1137,8 +1138,8 @@ class WebGLRenderer {
     var progUniforms = materialProperties["program"].getUniforms();
     var uniformsList = WebGLUniforms.seqWithValue(progUniforms.seq, uniforms);
 
-    print(" init material ...............object: ${object.type} ");
-    print(uniformsList);
+    // print(" init material ...............object: ${object.type} ");
+    // print(uniformsList);
 
     materialProperties["uniformsList"] = uniformsList;
   }

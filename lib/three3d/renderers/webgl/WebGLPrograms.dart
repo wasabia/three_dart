@@ -135,7 +135,7 @@ class WebGLPrograms {
 
 		var envMap = cubemaps.get( material.envMap ?? environment );
 
-		var shaderID = shaderIDs[ material.type ];
+		var shaderID = shaderIDs[ material.shaderID ];
 
 		// heuristics to create shader parameters according to lights in the scene
 		// (not to blow over maxLights budget)
@@ -166,7 +166,7 @@ class WebGLPrograms {
 			fragmentShader = material.fragmentShader;
 		}
 
-    // print(" WebGLPrograms material : ${material.runtimeType.toString()} ${material.id} object: ${object.type} ${object.id} shaderID: ${shaderID} ");
+    // print(" WebGLPrograms material : ${material.type} ${material.shaderID} ${material.id} object: ${object.type} ${object.id} shaderID: ${shaderID} ");
 
 		var currentRenderTarget = renderer.getRenderTarget();
 
@@ -349,7 +349,7 @@ class WebGLPrograms {
 
     // print("WebGLPrograms.getUniforms material: ${material.type} ");
 
-		String? shaderID = shaderIDs[ material.type ];
+		String? shaderID = shaderIDs[ material.shaderID ];
 		Map<String, dynamic> uniforms;
 
  

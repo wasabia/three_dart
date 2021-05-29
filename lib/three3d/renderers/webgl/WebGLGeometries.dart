@@ -25,7 +25,7 @@ class WebGLGeometries {
 
 		}
 
-		for ( var name in buffergeometry.attributes ) {
+		for ( var name in buffergeometry.attributes.keys ) {
 
 			attributes.remove( buffergeometry.attributes[ name ] );
 
@@ -37,7 +37,7 @@ class WebGLGeometries {
 
 		var attribute = wireframeAttributes.get( buffergeometry );
 
-		if ( attribute ) {
+		if ( attribute != null ) {
 
 			attributes.remove( attribute );
 			wireframeAttributes.delete( buffergeometry );
@@ -47,10 +47,8 @@ class WebGLGeometries {
 		bindingStates.releaseStatesOfGeometry( buffergeometry );
 
 		if ( geometry.isInstancedBufferGeometry == true ) {
-
-			geometry.remove("_maxInstanceCount");
-
-
+			// geometry.remove("maxInstanceCount");
+      geometry.maxInstanceCount = null;
 		}
 
 		//
@@ -101,6 +99,7 @@ class WebGLGeometries {
 		// Updating index buffer in VAO now. See WebGLBindingStates.
 
 		geometryAttributes.keys.forEach(( name ) {
+
 			attributes.update( geometryAttributes[ name ], gl.ARRAY_BUFFER, name: name );
 
 		});

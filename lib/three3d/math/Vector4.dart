@@ -663,4 +663,19 @@ class Vector4 {
 
 	}
 
+  Vector4.fromJson(Map<String, dynamic> json) {
+    x = json['x'];
+    y = json['y'];
+    z = json['z'];
+    w = json['w'];
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'x': x,
+      'y': y,
+      'z': z,
+      'w': w
+    };
+  }
 }

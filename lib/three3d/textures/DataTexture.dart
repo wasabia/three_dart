@@ -5,6 +5,8 @@ class DataTexture extends Texture {
 
   bool isDataTexture = true;
   
+  // todo
+  String? font;
   
   DataTexture( data, width, height, format, type, mapping, wrapS, wrapT, magFilter, minFilter, anisotropy, encoding ) : super( null, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy, encoding ) {
     

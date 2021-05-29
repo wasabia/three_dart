@@ -50,28 +50,30 @@ class WebGLIndexedBufferRenderer extends BaseWebGLBufferRenderer {
 
 		if ( primcount == 0 ) return;
 
-		var extension, methodName;
+		// var extension, methodName;
 
-		if ( isWebGL2 ) {
+		// if ( isWebGL2 ) {
 
-			extension = gl;
-			methodName = 'drawElementsInstanced';
+		// 	extension = gl;
+		// 	methodName = 'drawElementsInstanced';
 
-		} else {
+		// } else {
 
-			extension = extensions.get( 'ANGLE_instanced_arrays' );
-			methodName = 'drawElementsInstancedANGLE';
+		// 	extension = extensions.get( 'ANGLE_instanced_arrays' );
+		// 	methodName = 'drawElementsInstancedANGLE';
 
-			if ( extension == null ) {
+		// 	if ( extension == null ) {
 
-				print( 'THREE.WebGLIndexedBufferRenderer: using THREE.InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays.' );
-				return;
+		// 		print( 'THREE.WebGLIndexedBufferRenderer: using THREE.InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays.' );
+		// 		return;
 
-			}
+		// 	}
 
-		}
+		// }
 
-		extension[ methodName ]( mode, count, type, start * bytesPerElement, primcount );
+		// extension[ methodName ]( mode, count, type, start * bytesPerElement, primcount );
+
+    gl.drawElementsInstanced( mode, count, type, start * bytesPerElement, primcount );
 
 		info.update( count, mode, primcount );
 

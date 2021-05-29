@@ -1,0 +1,32 @@
+{
+    "parameters": {
+        "text": "请输入您的文字", 
+        "font": "/fonts/pingfang.ttf", 
+        "fontSize": 0.5, 
+        "letterSpacing": 0, 
+        "lineHeight": "normal", 
+        "maxWidth": "Infinity", 
+        "direction": "auto", 
+        "textAlign": "left", 
+        "textIndent": 0, 
+        "whiteSpace": "normal", 
+        "overflowWrap": "normal", 
+        "anchorX": 0, 
+        "anchorY": 0, 
+        "colorRanges": null, 
+        "includeCaretPositions": true, 
+        "sdfGlyphSize": 64
+    }, 
+    "sdfTexture": Instance of 'DataTexture', 
+
+    "totalBlockSize"
+    "totalBounds"
+
+    "glyphBounds": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+    "glyphAtlasIndices": [0, 0, 0, 0, 0, 0, 0], 
+
+    "chunkedBounds": [], 
+
+
+    "visibleBounds": [1.7976931348623157e+308, 1.7976931348623157e+308, -1.7976931348623157e+308, -1.7976931348623157e+308], 
+    "timings": {"total": 11042, "fontLoad": 10906, "layout": 136, "sdf": {}, "sdfTotal": 0}}

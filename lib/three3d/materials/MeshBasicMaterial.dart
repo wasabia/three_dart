@@ -38,7 +38,7 @@ class MeshBasicMaterial extends Material {
   bool isMeshBasicMaterial = true;
   String type = 'MeshBasicMaterial';
 
-  MeshBasicMaterial(parameters) : super() {
+  MeshBasicMaterial([Map<String, dynamic>? parameters]) : super() {
   
     this.color = new Color(1, 1, 1); // emissive
 
@@ -102,4 +102,11 @@ class MeshBasicMaterial extends Material {
 
     return this;
   }
+
+
+  clone() {
+    return MeshBasicMaterial().copy(this);
+  }
+
+
 }

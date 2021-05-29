@@ -19,6 +19,9 @@ dependencies:
     # git: https://github.com/wasabia/opentype.git
   typr_dart:
     path: ../typr_dart
+  bidi_dart:
+    path: ../bidi_dart
+
 
 dev_dependencies:
   flutter_test:

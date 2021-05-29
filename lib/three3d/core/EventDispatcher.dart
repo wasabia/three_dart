@@ -61,7 +61,7 @@ mixin EventDispatcher {
   }
 
   dispatchEvent(Event event) {
-    if (this._listeners == null) return;
+    if (this._listeners.keys.length == 0) return;
 
     var listeners = this._listeners;
     var listenerArray = listeners[event.type];
@@ -80,5 +80,9 @@ mixin EventDispatcher {
         _fn(event);
       }
     }
+  }
+
+  clearListeners() {
+    _listeners.clear();
   }
 }

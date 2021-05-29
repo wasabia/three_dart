@@ -163,8 +163,21 @@ class Material with EventDispatcher {
   bool? uniformsNeedUpdate;
 
   Function? onBeforeCompile;
+  late Function customProgramCacheKey;
+
+
+  String? shaderid;
+
+  String get shaderID => shaderid ?? type;
+  set shaderID(value) {
+    shaderid = value;
+  }
 
   Material() {
+    customProgramCacheKey = () {
+      return this.onBeforeCompile?.toString();
+    };
+
   }
 
   Material.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) {
@@ -176,11 +189,9 @@ class Material with EventDispatcher {
 
   // onBeforeCompile(shaderobject, renderer) {}
 
-  customProgramCacheKey() {
-    return this.onBeforeCompile?.toString();
-  }
+  
 
-  setValues(Map<String, dynamic> values) {
+  setValues(Map<String, dynamic>? values) {
 
     	if ( values == null ) return;
 

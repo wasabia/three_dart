@@ -3,7 +3,7 @@ part of three_core;
 class InstancedBufferAttribute extends BufferAttribute {
 
   late num meshPerAttribute;
-  bool isInstancedBufferAttribute = false;
+  bool isInstancedBufferAttribute = true;
 
   InstancedBufferAttribute( array, itemSize, normalized, meshPerAttribute ) : super(array, itemSize, normalized) {
     if ( normalized is num ) {

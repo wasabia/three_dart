@@ -56,7 +56,8 @@ class BufferGeometry with EventDispatcher {
   late num curveSegments;
   late List<Shape> shapes;
 
-
+  int? maxInstanceCount;
+  int? instanceCount;
 
   BufferGeometry() {
 
@@ -260,9 +261,9 @@ class BufferGeometry with EventDispatcher {
 		// translate geometry
 
 		_bufferGeometrym1.makeTranslation( x, y, z );
-
-
 		this.applyMatrix4( _bufferGeometrym1 );
+
+    return this;
 	}
 
 	scale( num x, num y, num z ) {

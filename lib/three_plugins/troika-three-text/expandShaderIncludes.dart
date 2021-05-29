@@ -1,4 +1,6 @@
-import 'package:three_dart/three3d/renderers/shaders/ShaderChunk.dart';
+
+part of troika_three_text;
+
 
 /**
  * Recursively expands all `#include <xyz>` statements within string of shader code.
@@ -8,11 +10,14 @@ import 'package:three_dart/three3d/renderers/shaders/ShaderChunk.dart';
  * @return {string} The GLSL code with all includes expanded
  */
 
-var includePattern = RegExp("^[ \t]*#include +<([\w\d./]+)>");
+var includePattern = RegExp(r"^[ \t]*#include +<([\w\d./]+)>", multiLine: true);
 
 String expandShaderIncludes(String source) {
+
+  var mactes = includePattern.allMatches(source);
+  
   // Loop through all matches.
-  for (var match in includePattern.allMatches(source)) {
+  for (var match in mactes) {
     /**
        * Returns the string matched by the given [group].
        *

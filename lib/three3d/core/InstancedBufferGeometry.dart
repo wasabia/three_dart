@@ -4,7 +4,7 @@ part of three_core;
 class InstancedBufferGeometry extends BufferGeometry {
 
 	String type = 'InstancedBufferGeometry';
-	num instanceCount = Math.Infinity;
+	int? instanceCount = Math.Infinity.toInt();
   bool isInstancedBufferGeometry = true;
 
   InstancedBufferGeometry() : super() {

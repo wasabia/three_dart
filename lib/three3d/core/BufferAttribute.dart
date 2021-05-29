@@ -377,9 +377,18 @@ class BufferAttribute extends BaseBufferAttribute {
 	}
 
 	clone () {
-
-		return BufferAttribute( this.array, this.itemSize, false ).copy( this );
-
+    if(type == "BufferAttribute") {
+      return BufferAttribute( this.array, this.itemSize, false ).copy( this );
+    } else if(type == "Float32BufferAttribute") {
+      return Float32BufferAttribute(this.array, this.itemSize, false).copy(this);
+    } else if(type == "Uint8BufferAttribute") {
+      return Uint8BufferAttribute(this.array, this.itemSize, false).copy(this);
+    } else if(type == "Uint16BufferAttribute") {
+      return Uint16BufferAttribute(this.array, this.itemSize, false).copy(this);  
+      
+    } else {
+      throw("BufferAttribute type: ${type} clone need support ....  ");
+    }
 	}
 
 	toJSON () {

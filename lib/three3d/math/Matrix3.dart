@@ -335,4 +335,14 @@ class Matrix3 {
     return this.elements.sublist(0);
   }
 
+  Matrix3.fromJson(Map<String, dynamic> json) {
+    elements = json['elements'];
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'elements': elements
+    };
+  }
+
 }

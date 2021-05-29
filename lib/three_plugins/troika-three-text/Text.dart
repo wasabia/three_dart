@@ -177,7 +177,7 @@ class Text extends Mesh {
    * plane. Defaults to 1. This can be increased to provide more geometrical detail for custom
    * vertex shader effects, for example.
    */
-  num _glyphGeometryDetail = 1;
+  // num _glyphGeometryDetail = 1;
 
 
 
@@ -187,10 +187,10 @@ class Text extends Mesh {
 
 
 
-  bool _needsSync = false;
+  bool _needsSync = true;
   bool _isSyncing = false;
   List<Function> _queuedSyncs = [];
-  late dynamic _textRenderInfo;
+  dynamic _textRenderInfo;
   Material? _derivedMaterial;
   Material? _baseMaterial;
   Material? _defaultMaterial;
@@ -202,7 +202,7 @@ class Text extends Mesh {
      * all the properties have been set.
      * @override
      */
-    this.onBeforeRender = (renderer, scene, camera, geometry, material, group) {
+    this.onBeforeRender = ({renderer, scene, camera, geometry, material, group}) {
       this.syncText(null);
 
       // This may not always be a text material, e.g. if there's a scene.overrideMaterial present
@@ -257,17 +257,24 @@ class Text extends Mesh {
         }, (textRenderInfo) {
           this._isSyncing = false;
 
+          print(" --------------textRenderInfo----------------");
+          print(textRenderInfo);
+          var __sdfTexture = textRenderInfo["sdfTexture"];
+          print(__sdfTexture);
+          print(__sdfTexture.image);
+          // print(__sdfTexture.image.data);
+
           // Save result for later use in onBeforeRender
           this._textRenderInfo = textRenderInfo;
 
           // Update the geometry attributes
           var _geometry = this.geometry as GlyphsGeometry;
           _geometry.updateGlyphs(
-            textRenderInfo.glyphBounds,
-            textRenderInfo.glyphAtlasIndices,
-            textRenderInfo.blockBounds,
-            textRenderInfo.chunkedBounds,
-            textRenderInfo.glyphColors
+            textRenderInfo["glyphBounds"],
+            textRenderInfo["glyphAtlasIndices"],
+            textRenderInfo["blockBounds"],
+            textRenderInfo["chunkedBounds"],
+            textRenderInfo["glyphColors"]
           );
 
           // If we had extra sync requests queued up, kick it off
@@ -317,9 +324,9 @@ class Text extends Mesh {
   // Handler for automatically wrapping the base material with our upgrades. We do the wrapping
   // lazily on _read_ rather than write to avoid unnecessary wrapping on transient values.
   get material {
-    var derivedMaterial = this._derivedMaterial as DerivedBasicMaterial;
+    var derivedMaterial = this._derivedMaterial;
     var baseMaterial = this._baseMaterial ?? this._defaultMaterial ?? (this._defaultMaterial = defaultMaterial.clone());
-    if (derivedMaterial == null || derivedMaterial.baseMaterial != baseMaterial) {
+    if (derivedMaterial == null || (derivedMaterial as DerivedBasicMaterial).baseMaterial != baseMaterial) {
       derivedMaterial = this._derivedMaterial = createTextDerivedMaterial(baseMaterial);
       // dispose the derived material when its base material is disposed:
       // baseMaterial.addEventListener('dispose', onDispose() {
@@ -327,6 +334,8 @@ class Text extends Mesh {
       //   derivedMaterial.dispose();
       // });
     }
+
+    derivedMaterial = derivedMaterial as DerivedBasicMaterial;
     // If text outline is configured, render it as a preliminary draw using Three's multi-material
     // feature (see GlyphsGeometry which sets up `groups` for this purpose) Doing it with multi
     // materials ensures the layers are always rendered consecutively in a consistent order.
@@ -353,7 +362,7 @@ class Text extends Mesh {
     }
   }
   set material(baseMaterial) {
-    if (baseMaterial && baseMaterial.isTroikaTextMaterial) { //prevent double-derivation
+    if (baseMaterial != null && baseMaterial.isTroikaTextMaterial) { //prevent double-derivation
       this._derivedMaterial = baseMaterial;
       this._baseMaterial = baseMaterial.baseMaterial;
     } else {
@@ -385,24 +394,24 @@ class Text extends Mesh {
 
   _prepareForRender(material) {
     var isOutline = material.isTextOutlineMaterial;
-    var uniforms = material.uniforms;
-    var textInfo = this.textRenderInfo;
-    if (textInfo) {
+    Map<String, dynamic> uniforms = material.uniforms;
+    Map<String, dynamic>? textInfo = this.textRenderInfo;
+    if (textInfo != null) {
       var sdfTexture = textInfo["sdfTexture"];
       var blockBounds = textInfo["blockBounds"];
       
-      uniforms.uTroikaSDFTexture.value = sdfTexture;
-      uniforms.uTroikaSDFTextureSize.value.set(sdfTexture.image.width, sdfTexture.image.height);
-      uniforms.uTroikaSDFGlyphSize.value = textInfo.sdfGlyphSize;
-      uniforms.uTroikaSDFExponent.value = textInfo.sdfExponent;
-      uniforms.uTroikaTotalBounds.value.fromArray(blockBounds);
-      uniforms.uTroikaUseGlyphColors.value = !isOutline && !!textInfo.glyphColors;
+      uniforms["uTroikaSDFTexture"]["value"] = sdfTexture;
+      uniforms["uTroikaSDFTextureSize"]["value"].set(sdfTexture.image.width, sdfTexture.image.height);
+      uniforms["uTroikaSDFGlyphSize"]["value"] = textInfo["sdfGlyphSize"];
+      uniforms["uTroikaSDFExponent"]["value"] = textInfo["sdfExponent"];
+      uniforms["uTroikaTotalBounds"]["value"].fromArray(blockBounds);
+      uniforms["uTroikaUseGlyphColors"]["value"] = !isOutline && textInfo["glyphColors"] != null;
 
       var distanceOffset = 0;
       var blurRadius = 0;
       var strokeWidth = 0;
       var fillOpacity;
-      var strokeOpacity;
+      num _strokeOpacity = 1;
       var strokeColor;
       var offsetX = 0;
       var offsetY = 0;
@@ -418,38 +427,38 @@ class Text extends Mesh {
         strokeWidth = Math.max(0, this._parsePercent(this.strokeWidth) ?? 0);
         if (strokeWidth > 0) {
           strokeColor = this.strokeColor;
-          uniforms.uTroikaStrokeColor.value.set(strokeColor == null ? defaultStrokeColor : strokeColor);
-          strokeOpacity = this.strokeOpacity;
-          if (strokeOpacity == null) strokeOpacity = 1;
+          uniforms["uTroikaStrokeColor"]["value"].set(strokeColor == null ? defaultStrokeColor : strokeColor);
+          _strokeOpacity = this.strokeOpacity;
+          if (_strokeOpacity == null) _strokeOpacity = 1;
         }
         fillOpacity = this.fillOpacity;
       }
 
-      uniforms.uTroikaDistanceOffset.value = distanceOffset;
-      uniforms.uTroikaPositionOffset.value.set(offsetX, offsetY);
-      uniforms.uTroikaBlurRadius.value = blurRadius;
-      uniforms.uTroikaStrokeWidth.value = strokeWidth;
-      uniforms.uTroikaStrokeOpacity.value = strokeOpacity;
-      uniforms.uTroikaFillOpacity.value = fillOpacity == null ? 1 : fillOpacity;
-      uniforms.uTroikaCurveRadius.value = this.curveRadius ?? 0;
+      uniforms["uTroikaDistanceOffset"]["value"] = distanceOffset;
+      uniforms["uTroikaPositionOffset"]["value"].set(offsetX, offsetY);
+      uniforms["uTroikaBlurRadius"]["value"] = blurRadius;
+      uniforms["uTroikaStrokeWidth"]["value"] = strokeWidth;
+      uniforms["uTroikaStrokeOpacity"]["value"] = _strokeOpacity;
+      uniforms["uTroikaFillOpacity"]["value"] = fillOpacity == null ? 1 : fillOpacity;
+      uniforms["uTroikaCurveRadius"]["value"] = this.curveRadius ?? 0;
 
       if (clipRect != null && clipRect is List && clipRect!.length == 4) {
-        uniforms.uTroikaClipRect.value.fromArray(clipRect);
+        uniforms["uTroikaClipRect"]["value"].fromArray(clipRect);
       } else {
         // no clipping - choose a finite rect that shouldn't ever be reached by overflowing glyphs or outlines
         var pad = (this.fontSize ?? 0.1) * 100;
-        uniforms.uTroikaClipRect.value.set(
+        uniforms["uTroikaClipRect"]["value"].set(
           blockBounds[0] - pad,
           blockBounds[1] - pad,
           blockBounds[2] + pad,
           blockBounds[3] + pad
         );
       }
-      this.geometry_cast.applyClipRect(uniforms.uTroikaClipRect.value);
+      this.geometry_cast.applyClipRect(uniforms["uTroikaClipRect"]["value"]);
     }
-    uniforms.uTroikaSDFDebug.value = !!this.debugSDF;
+    uniforms["uTroikaSDFDebug"]["value"] = !!this.debugSDF;
     material.polygonOffset = this.depthOffset != 0;
-    material.polygonOffsetFactor = material.polygonOffsetUnits = this.depthOffset ?? 0;
+    material.polygonOffsetFactor = material.polygonOffsetUnits = this.depthOffset;
 
     // Shortcut for setting material color via `color` prop on the mesh; this is
     // applied only to the derived material to avoid mutating a shared base material.
@@ -458,16 +467,16 @@ class Text extends Mesh {
     if (color == null) {
       material.color = null; //inherit from base
     } else {
-      var colorObj = material.hasOwnProperty('color') ? material.color : (material.color = new Color(0,0,1));
-      if (color != colorObj._input || color is Color) {
-        colorObj.set(colorObj._input = color);
+      var colorObj = material.color ?? new Color(0,0,1);
+      if (!(color.equal(colorObj)) || color is Color) {
+        colorObj.copy(color);
       }
     }
 
     // base orientation
-    var orient = this.orientation ?? defaultOrient;
-    if (orient != material._orientation) {
-      var rotMat = uniforms.uTroikaOrient.value;
+    var orient = this.orientation;
+    if (orient != material.orientation) {
+      var rotMat = uniforms["uTroikaOrient"]["value"];
       orient = orient.replaceAll(RegExp(r"[^-+xyz]"), '');
       var _reg = RegExp(r"^([-+])([xyz])([-+])([xyz])$");
       RegExpMatch? match;
@@ -488,7 +497,7 @@ class Text extends Mesh {
       } else {
         rotMat.identity();
       }
-      material._orientation = orient;
+      material.orientation = orient;
     }
   }
 
@@ -528,7 +537,7 @@ class Text extends Mesh {
    */
   raycast(raycaster, intersects) {
     
-    if (textRenderInfo) {
+    if (textRenderInfo != null) {
       var bounds = textRenderInfo.blockBounds;
       var raycastMesh = curveRadius ? getCurvedRaycastMesh() : getFlatRaycastMesh();
       var geom = raycastMesh.geometry;
@@ -538,7 +547,7 @@ class Text extends Mesh {
         var x = bounds[0] + (uv.getX(i) * (bounds[2] - bounds[0]));
         var y = bounds[1] + (uv.getY(i) * (bounds[3] - bounds[1]));
         var z = 0;
-        if (curveRadius) {
+        if (curveRadius != 0) {
           z = curveRadius - Math.cos(x / curveRadius) * curveRadius;
           x = Math.sin(x / curveRadius) * curveRadius;
         }

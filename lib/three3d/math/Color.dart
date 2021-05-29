@@ -196,6 +196,11 @@ class Color {
     return Color(0.0, 0.0, 0.0).setHex(hex);
   }
 
+
+  equal(color) {
+    return r == color.r && g == color.g && b == color.b; 
+  }
+
   setScalar(scalar) {
     this.r = scalar;
     this.g = scalar;
@@ -561,5 +566,19 @@ class Color {
 
   List<num> toJSON() {
     return [this.r, this.g, this.b];
+  }
+
+  Color.fromJson(Map<String, dynamic> json) {
+    r = json['r'];
+    g = json['g'];
+    b = json['b'];
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'r': r,
+      'g': g,
+      'b': b
+    };
   }
 }

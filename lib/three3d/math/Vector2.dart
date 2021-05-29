@@ -18,7 +18,7 @@ class Vector2 {
 		this.y = y;
 	}
 
-  Vector2.fromJSON ( List<num> json ) {
+  Vector2.fromJSON( List<num> json ) {
     if(json != null) {
       this.x = json[0];
       this.y = json[1];
@@ -458,7 +458,6 @@ class Vector2 {
 		this.y = attribute.getY( index );
 
 		return this;
-
 	}
 
 	Vector2 rotateAround(Vector2 center, double angle ) {
@@ -476,13 +475,24 @@ class Vector2 {
 	}
 
 	Vector2 random() {
-
 		this.x = Math.random();
 		this.y = Math.random();
 
 		return this;
-
 	}
+
+
+  Vector2.fromJson(Map<String, dynamic> json) {
+    x = json['x'];
+    y = json['y'];
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'x': x,
+      'y': y
+    };
+  }
 
 }
 

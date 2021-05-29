@@ -3,19 +3,20 @@
 // import { MeshDepthMaterial, MeshDistanceMaterial, RGBADepthPacking, UniformsUtils } from 'three'
 // import { generateUUID } from './generateUUID.js'
 
+part of troika_three_text;
 
-
-import 'package:three_dart/three_dart.dart';
-
-import 'expandShaderIncludes.dart';
 
 
 var voidMainRegExp = RegExp(r"\bvoid\s+main\s*\(\s*\)\s*{");
 
 class DerivedBasicMaterial extends MeshBasicMaterial {
+  String type = "DerivedBasicMaterial";
+  String? shaderid = "MeshBasicMaterial";
+
   bool isDerivedMaterial = true;
   late Map<String, dynamic> options;
-  late MeshBasicMaterial baseMaterial;
+  late Map<String, dynamic> optionsFn;
+  MeshBasicMaterial? baseMaterial;
 
   bool isTextOutlineMaterial = false;
 
@@ -23,6 +24,9 @@ class DerivedBasicMaterial extends MeshBasicMaterial {
   Material? _distanceMaterial;
   DerivedBasicMaterial? _outlineMaterial;
   DerivedBasicMaterial? get outlineMaterial => _outlineMaterial;
+
+  String? orientation;
+
   set outlineMaterial(value) {
     _outlineMaterial = value;
   }
@@ -31,41 +35,49 @@ class DerivedBasicMaterial extends MeshBasicMaterial {
 
   DerivedBasicMaterial.create(parameters) : super(parameters) {}
 
-  factory DerivedBasicMaterial(MeshBasicMaterial baseMaterial, Map<String, dynamic> options) {
-    var _deriveMaterial = DerivedBasicMaterial.create({});
+  factory DerivedBasicMaterial(MeshBasicMaterial baseMaterial, Map<String, dynamic> options, Map<String, dynamic> optionsFn, optionsKey) {
+    var _deriveMaterial = DerivedBasicMaterial.create(null);
     _deriveMaterial.copy(baseMaterial);
     _deriveMaterial.baseMaterial = baseMaterial;
 
     _deriveMaterial.options = options;
+    _deriveMaterial.optionsFn = optionsFn;
     // Private onBeforeCompile handler that injects the modified shaders and uniforms when
     // the renderer switches to this material's program
-    _deriveMaterial.onBeforeCompile = (shaderInfo) {
-      baseMaterial.onBeforeCompile!(shaderInfo);
+    _deriveMaterial.onBeforeCompile = (WebGLParameters shaderInfo, render) {
+      if(baseMaterial.onBeforeCompile != null) {
+        baseMaterial.onBeforeCompile!(shaderInfo, render);
+      }
+      
 
       // Upgrade the shaders, caching the result by incoming source code
-      var cacheKey = optionsKey + '|||' + shaderInfo.vertexShader + '|||' + shaderInfo.fragmentShader;
+      var cacheKey = "${optionsKey}|||${shaderInfo.vertexShader}|||${shaderInfo.fragmentShader}";
       var upgradedShaders = SHADER_UPGRADE_CACHE[cacheKey];
-      if (!upgradedShaders) {
-        var upgraded = upgradeShaders(shaderInfo, options, optionsKey);
+      if (upgradedShaders == null) {
+        var upgraded = upgradeShaders(shaderInfo, options, optionsFn, optionsKey);
         upgradedShaders = SHADER_UPGRADE_CACHE[cacheKey] = upgraded;
       }
 
       // Inject upgraded shaders and uniforms into the program
-      shaderInfo.vertexShader = upgradedShaders.vertexShader;
-      shaderInfo.fragmentShader = upgradedShaders.fragmentShader;
-      assign(shaderInfo.uniforms, this.uniforms);
+      shaderInfo.vertexShader = upgradedShaders["vertexShader"];
+      shaderInfo.fragmentShader = upgradedShaders["fragmentShader"];
+
+   
+      assign(shaderInfo.uniforms!, _deriveMaterial.uniforms);
 
       // Inject auto-updating time uniform if requested
-      if (options.timeUniform) {
-        shaderInfo.uniforms[options.timeUniform] = {
-          get value() {return Date.now() - epoch};
-        };
+      if (options["timeUniform"] != null) {
+        throw("DerivedBasicMaterial timeUniform auto-updating need todo ");
+        // shaderInfo.uniforms[options["timeUniform"]] = {
+        //   get value() {return Date.now() - epoch};
+        // };
       }
 
       // Users can still add their own handlers on top of ours
-      if (this[privateBeforeCompileProp]) {
-        this[privateBeforeCompileProp](shaderInfo);
-      }
+      // if (_deriveMaterial[privateBeforeCompileProp]) {
+      //   _deriveMaterial[privateBeforeCompileProp](shaderInfo);
+      // }
+      // TODO ....
     };
 
     return _deriveMaterial;
@@ -85,9 +97,16 @@ class DerivedBasicMaterial extends MeshBasicMaterial {
   getDepthMaterial() {
     var depthMaterial = this._depthMaterial;
     if (depthMaterial == null) {
-      var _base = baseMaterial.isDerivedMaterial ? baseMaterial.getDepthMaterial() : new MeshDepthMaterial({ "depthPacking": RGBADepthPacking });
+      var _base;
+      if(baseMaterial!.type == "DerivedBasicMaterial") {
+        var _bm = baseMaterial as DerivedBasicMaterial;
+        _base = _bm.getDepthMaterial();
+      } else {
+        _base = new MeshDepthMaterial({ "depthPacking": RGBADepthPacking });
+      }
+    
       depthMaterial = this._depthMaterial = createDerivedMaterial(
-        _base, options
+        _base, options, optionsFn
       );
       depthMaterial!.defines!["IS_DEPTH_MATERIAL"] = '';
       depthMaterial.uniforms = this.uniforms; //automatically recieve same uniform values
@@ -102,9 +121,17 @@ class DerivedBasicMaterial extends MeshBasicMaterial {
   getDistanceMaterial() {
     var distanceMaterial = this._distanceMaterial;
     if (distanceMaterial == null) {
-      var _base = baseMaterial.isDerivedMaterial ? baseMaterial.getDistanceMaterial() : MeshDistanceMaterial({});
+      var _base;
+      if(baseMaterial!.type == "DerivedBasicMaterial") {
+        var _bm = baseMaterial as DerivedBasicMaterial;
+        _base = _bm.getDistanceMaterial();
+      } else {
+        _base = new MeshDistanceMaterial({});
+      }
+
+      // var _base = baseMaterial.isDerivedMaterial ? baseMaterial.getDistanceMaterial() : MeshDistanceMaterial({});
       distanceMaterial = this._distanceMaterial = createDerivedMaterial(
-        _base, options
+        _base, options, optionsFn
       );
       distanceMaterial!.defines!["IS_DISTANCE_MATERIAL"] = '';
       distanceMaterial.uniforms = this.uniforms; //automatically recieve same uniform values
@@ -115,23 +142,23 @@ class DerivedBasicMaterial extends MeshBasicMaterial {
 
   copy(source) {
     super.copy(source);
-    baseMaterial.copy(source);
-    // if (!baseMaterial.isShaderMaterial && !baseMaterial.isDerivedMaterial) {
-    //   assign(this.extensions, source.extensions);
-    //   assign(this.defines, source.defines);
-    //   assign(this.uniforms, UniformsUtils.clone(source.uniforms));
-    // }
+    baseMaterial?.copy(source);
+    if (baseMaterial != null && !(baseMaterial!.isShaderMaterial) && !(baseMaterial!.type == "DerivedBasicMaterial")) {
+      assign(this.extensions!, source.extensions);
+      assign(this.defines!, source.defines);
+      assign(this.uniforms!, UniformsUtils.clone(source.uniforms));
+    }
     return this;
   }
 
   clone () {
-    return DerivedBasicMaterial(MeshBasicMaterial(null), this.options).copy(this); 
+    return DerivedBasicMaterial.create({}).copy(this); 
   }
 
   dispose() {
     if (_depthMaterial != null) _depthMaterial!.dispose();
     if (_distanceMaterial != null) _distanceMaterial!.dispose();
-    baseMaterial.dispose();
+    baseMaterial!.dispose();
   }
 
 }
@@ -139,14 +166,14 @@ class DerivedBasicMaterial extends MeshBasicMaterial {
 
 
 // Local assign polyfill to avoid importing troika-core
-var assign = (Map target, Map? source0, [Map? source1, Map? source2]) {
+assign(Map<String, dynamic> target, Map<String, dynamic>? source0, [Map<String, dynamic>? source1, Map<String, dynamic>? source2]) {
   
   if(source0 != null) target.addAll(source0);
   if(source1 != null) target.addAll(source1);
   if(source2 != null) target.addAll(source2);
 
   return target;
-};
+}
 
 
 var epoch = DateTime.now();
@@ -217,7 +244,7 @@ var materialInstanceId = 1e10;
  * for in your derived shaders with `#ifdef` to customize their behavior for the depth or distance
  * scenarios, e.g. skipping antialiasing or expensive shader logic.
  */
-createDerivedMaterial(baseMaterial, options) {
+createDerivedMaterial(baseMaterial, Map<String, dynamic> options, Map<String, dynamic> optionsFn) {
   // Generate a key that is unique to the content of these `options`. We'll use this
   // throughout for caching and for generating the upgraded shader code. This increases
   // the likelihood that the resulting shaders will line up across multiple calls so
@@ -241,17 +268,22 @@ createDerivedMaterial(baseMaterial, options) {
 
   
 
+
   var derive = (Material base) {
     // Prototype chain to the base material
     var derived;
 
+
     if(base.type == "MeshBasicMaterial") {
       // derived = Object.create(base, descriptor);
-      derived = DerivedBasicMaterial(base as MeshBasicMaterial, options);
+      derived = DerivedBasicMaterial(base as MeshBasicMaterial, options, optionsFn, optionsKey);
     }
 
-    derived.customProgramCacheKey = optionsKey;
+    derived.customProgramCacheKey = () {
+      return optionsKey.toString();
+    };
     // derived.onBeforeCompile = _onBeforeCompile;
+
 
     // Merge uniforms, defines, and extensions
     derived.uniforms = assign({}, base.uniforms, options["uniforms"]);
@@ -259,17 +291,17 @@ createDerivedMaterial(baseMaterial, options) {
 
     //force a program change from the base material
     derived.defines["TROIKA_DERIVED_MATERIAL_${optionsKey}"] = '';
-    derived.extensions = assign({}, base.extensions, options.extensions);
+    derived.extensions = assign({}, base.extensions, options["extensions"]);
 
     // Don't inherit EventDispatcher listeners
-    derived._listeners = null;
+    // derived.clearListeners();
 
     return derived;
   };
 
 
   var _createDerivedMaterial = () {
-    return derive(options.chained ? baseMaterial : baseMaterial.clone());
+    return derive(options["chained"] != null ? baseMaterial : baseMaterial.clone());
   };
 
   ctorsByDerivation[optionsKey] = _createDerivedMaterial;
@@ -277,9 +309,9 @@ createDerivedMaterial(baseMaterial, options) {
 }
 
 
-upgradeShaders(shaderInfo, options, key) {
-  var vertexShader = shaderInfo["vertexShader"];
-  var fragmentShader = shaderInfo["fragmentShader"];
+Map<String, dynamic> upgradeShaders(WebGLParameters shaderInfo, options, optionsFn, key) {
+  String vertexShader = shaderInfo.vertexShader;
+  String fragmentShader = shaderInfo.fragmentShader;
   
   var vertexDefs = options["vertexDefs"];
   var vertexMainIntro = options["vertexMainIntro"];
@@ -289,7 +321,7 @@ upgradeShaders(shaderInfo, options, key) {
   var fragmentMainIntro = options["fragmentMainIntro"];
   var fragmentMainOutro = options["fragmentMainOutro"];
   var fragmentColorTransform = options["fragmentColorTransform"];
-  var customRewriter = options["customRewriter"];
+  var customRewriter = optionsFn["customRewriter"];
   var timeUniform = options["timeUniform"];
 
   vertexDefs = vertexDefs ?? '';
@@ -300,18 +332,26 @@ upgradeShaders(shaderInfo, options, key) {
   fragmentMainOutro = fragmentMainOutro ?? '';
 
   // Expand includes if needed
-  if (vertexTransform || customRewriter) {
+  if (vertexTransform != null || customRewriter != null) {
     vertexShader = expandShaderIncludes(vertexShader);
   }
-  if (fragmentColorTransform || customRewriter) {
+  if (fragmentColorTransform != null || customRewriter != null) {
     // We need to be able to find postprocessing chunks after include expansion in order to
     // put them after the fragmentColorTransform, so mark them with comments first. Even if
     // this particular derivation doesn't have a fragmentColorTransform, other derivations may,
     // so we still mark them.
 
-    var _reg = RegExp("^[ \t]*#include <((?:tonemapping|encodings|fog|premultiplied_alpha|dithering)_fragment)>", multiLine: true);
+    var _reg = RegExp(r"^[ \t]*#include <((?:tonemapping|encodings|fog|premultiplied_alpha|dithering)_fragment)>", multiLine: true);
 
-    fragmentShader = fragmentShader.replace(_reg, '\n//!BEGIN_POST_CHUNK $1\n$&\n//!END_POST_CHUNK\n');
+    var match = _reg.firstMatch(fragmentShader);
+    if(match != null) {
+      var str = "\n//!BEGIN_POST_CHUNK ${match.group(1)}\n${match.group(0)}\n//!END_POST_CHUNK\n";
+      fragmentShader = fragmentShader.replaceFirst(_reg, str);
+    } else {
+      print("DerivedMaterial.dart fragmentColorTransform || customRewriter no match ..... ");
+    }
+
+    
     fragmentShader = expandShaderIncludes(fragmentShader);
   }
 
@@ -326,13 +366,30 @@ upgradeShaders(shaderInfo, options, key) {
   // those and re-insert them into the outro in the correct place:
   if (fragmentColorTransform != null) {
     var postChunks = [];
-    fragmentShader = fragmentShader.replace(
-      /^\/\/!BEGIN_POST_CHUNK[^]+?^\/\/!END_POST_CHUNK/gm, // [^]+? = non-greedy match of any chars including newlines
-      match => {
-        postChunks.push(match)
-        return ''
-      }
-    );
+
+    // [^]+? = non-greedy match of any chars including newlines
+    var _reg = RegExp(r"^\/\/!BEGIN_POST_CHUNK[^]+?^\/\/!END_POST_CHUNK", multiLine: true);
+    // var matches = _reg.allMatches(fragmentShader);
+
+    // for(var match in matches) {
+    //   var _content = match.group(0)!;
+    //   postChunks.add(_content);
+    //   fragmentShader = fragmentShader.replaceFirst(_content, "");
+    // }
+
+    fragmentShader = fragmentShader.replaceAllMapped(_reg, (match) {
+      var _content = match.group(0)!;
+      postChunks.add(_content);
+      return "";
+    });
+
+    // fragmentShader = fragmentShader.replace(
+    //   //gm, 
+    //   match => {
+    //     postChunks.push(match)
+    //     return ''
+    //   }
+    // );
 
     fragmentMainOutro = "${fragmentColorTransform}\n${postChunks.join('\n')}\n${fragmentMainOutro}";
   }
@@ -367,14 +424,41 @@ troikaVertexTransform${key}(troika_position_${key}, troika_normal_${key}, troika
 ${vertexMainIntro}
 """;
 
-    vertexShader = vertexShader.replace(/\b(position|normal|uv)\b/g, (match, match1, index, fullStr) => {
-      return /\battribute\s+vec[23]\s+$/.test(fullStr.substr(0, index)) ? match1 : `troika_${match1}_${key}`
+
+    var _regExp = RegExp(r"\b(position|normal|uv)\b");
+    var _regA = RegExp(r"\battribute\s+vec[23]\s+$");
+
+    var fullStr = vertexShader;
+
+    // for(var match in matches) {
+    //   var match1 = match.group(1);
+    //   bool _isMatch = _regA.hasMatch(fullStr.substring(0, match.start));
+    //   String _str = _isMatch ? match.group(1)! : "troika_${match1}_${key}";
+    //   vertexShader = vertexShader.replaceFirst(match.group(0)!, _str);
+    // }
+
+    vertexShader = vertexShader.replaceAllMapped(_regExp, (match) {
+      bool _isMatch = _regA.hasMatch(fullStr.substring(0, match.start));
+
+      var match1 = match.group(1);
+      return _isMatch ? match.group(1)! : "troika_${match1}_${key}";
     });
+
+
+    // vertexShader = vertexShader.replaceAll(, (match, match1, index, fullStr) => {
+    //   return 
+    // });
   }
 
+
+  // fragmentMainOutro = fragmentMainOutro + """
+  
+  // gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+  // """;
+
   // Inject defs and intro/outro snippets
-  vertexShader = injectIntoShaderCode(vertexShader, key, vertexDefs, vertexMainIntro, vertexMainOutro)
-  fragmentShader = injectIntoShaderCode(fragmentShader, key, fragmentDefs, fragmentMainIntro, fragmentMainOutro)
+  vertexShader = injectIntoShaderCode(vertexShader, key, vertexDefs, vertexMainIntro, vertexMainOutro);
+  fragmentShader = injectIntoShaderCode(fragmentShader, key, fragmentDefs, fragmentMainIntro, fragmentMainOutro);
 
   return {
     "vertexShader": vertexShader,
@@ -383,14 +467,14 @@ ${vertexMainIntro}
 }
 
 injectIntoShaderCode(shaderCode, id, defs, intro, outro) {
-  if (intro || outro || defs) {
+  if (intro != null || outro != null || defs != null) {
 
     var _str = """
 ${defs}
 void troikaOrigMain${id}() {
     """;
 
-    shaderCode = shaderCode.replace(voidMainRegExp, _str);
+    shaderCode = shaderCode.replaceFirst(voidMainRegExp, _str);
     shaderCode += """
 void main() {
   ${intro}
@@ -410,8 +494,9 @@ optionsJsonReplacer(key, value) {
 
 var _idCtr = 0;
 var optionsHashesToIds = new Map();
-getKeyForOptions(options) {
-  var optionsHash = JSON.stringify(options, optionsJsonReplacer);
+getKeyForOptions(Map<String, dynamic> options) {
+  // var optionsHash = JSON.stringify(options, optionsJsonReplacer);
+  var optionsHash = convert.jsonEncode(options);
   var id = optionsHashesToIds[optionsHash];
   if (id == null) {
     optionsHashesToIds[optionsHash] = (id = ++_idCtr);

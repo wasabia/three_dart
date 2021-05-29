@@ -50,6 +50,28 @@ class WebGLAttributes {
         // 保持抛出异常 及时发现异常情况
         throw("WebGLAttributes.createBuffer InterleavedBufferAttribute arrayType: ${array.runtimeType} is not support  ");
       }
+
+    } else if(arrayType == InstancedBufferAttribute) {
+      type = gl.UNSIGNED_BYTE;
+      bytesPerElement = Uint8List.bytesPerElement;
+      arrayList = array;
+
+      final _arrayType = array.runtimeType;
+
+      if(_arrayType == Uint8List) {
+        type = gl.UNSIGNED_BYTE;
+        bytesPerElement = Uint8List.bytesPerElement;
+      } else if(_arrayType == Float32List) {
+        type = gl.FLOAT;
+        bytesPerElement = Float32List.bytesPerElement;
+      } else if(_arrayType == Uint32List) {
+        type = gl.UNSIGNED_INT;
+        bytesPerElement = Uint32List.bytesPerElement;
+      } else {
+        // 保持抛出异常 及时发现异常情况
+        throw("WebGLAttributes.createBuffer InstancedBufferAttribute arrayType: ${array.runtimeType} is not support  ");
+      }
+      print(" _arrayType: ${_arrayType} ");
     } else {
       print("createBuffer array: ${array.runtimeType} ");
       // arrayList = Float32List.fromList(array.map((e) => e.toDouble()).toList());
@@ -131,8 +153,6 @@ class WebGLAttributes {
 			"buffer": buffer,
 			"type": type,
 			"bytesPerElement": bytesPerElement,
-      // TODO
-      // "bytesPerElement": 2,
       "array": arrayList,
 			"version": attribute.version
 		};
@@ -193,9 +213,9 @@ class WebGLAttributes {
     } else {
       var data = buffers.get( attribute );
 
-      if ( data ) {
+      if ( data != null ) {
 
-        gl.deleteBuffer( data.buffer );
+        gl.deleteBuffer( data["buffer"] );
 
         buffers.delete( attribute );
 
@@ -206,21 +226,28 @@ class WebGLAttributes {
 
 	update( BaseBufferAttribute attribute, bufferType, {String? name} ) {
 
+
 		if ( attribute.type == "GLBufferAttribute" ) {
 
 			var cached = buffers.get( attribute );
 
-			if ( ! cached || cached.version < attribute.version ) {
+			if ( cached == null || cached["version"] < attribute.version ) {
 
-				buffers.add( 
+				// buffers.add( 
+        //   key: attribute, 
+        //   value: {
+        //     "buffer": attribute.buffer,
+        //     "type": attribute.type,
+        //     "bytesPerElement": attribute.elementSize,
+        //     "version": attribute.version
+        //   } 
+        // );
+
+        buffers.add( 
           key: attribute, 
-          value: {
-            "buffer": attribute.buffer,
-            "type": attribute.type,
-            "bytesPerElement": attribute.elementSize,
-            "version": attribute.version
-          } 
+          value: createBuffer(attribute, bufferType)
         );
+
 
 			}
 
@@ -229,7 +256,7 @@ class WebGLAttributes {
 		}
 
 		if ( attribute.type == "InterleavedBufferAttribute" ) {
-      print(" WebGLAttributes.update TODO ");
+     
       var data = buffers.get( attribute.data );
 
       if ( data == null ) {

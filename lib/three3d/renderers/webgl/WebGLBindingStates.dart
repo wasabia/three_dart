@@ -289,10 +289,12 @@ class WebGLBindingStates {
 
 		if ( attributeDivisors[ attribute ] != meshPerAttribute ) {
 
-			var extension = capabilities.isWebGL2 ? gl : extensions.get( 'ANGLE_instanced_arrays' );
+			// var extension = capabilities.isWebGL2 ? gl : extensions.get( 'ANGLE_instanced_arrays' );
+			// extension[ capabilities.isWebGL2 ? 'vertexAttribDivisor' : 'vertexAttribDivisorANGLE' ]( attribute, meshPerAttribute );
+			
+      gl.vertexAttribDivisor( attribute, meshPerAttribute );
 
-			extension[ capabilities.isWebGL2 ? 'vertexAttribDivisor' : 'vertexAttribDivisorANGLE' ]( attribute, meshPerAttribute );
-			attributeDivisors[ attribute ] = meshPerAttribute;
+      attributeDivisors[ attribute ] = meshPerAttribute;
 
 		}
 
@@ -364,6 +366,7 @@ class WebGLBindingStates {
 
 				var geometryAttribute = geometryAttributes[ name ];
 
+  
 				if ( geometryAttribute != null ) {
       
 					var normalized = geometryAttribute.normalized;
@@ -373,6 +376,7 @@ class WebGLBindingStates {
 
 					// TODO Attribute may not be available on context restore
 
+     
 					if ( attribute == null ) {
             continue;
           }
@@ -380,6 +384,8 @@ class WebGLBindingStates {
 					var buffer = attribute["buffer"];
 					var type = attribute["type"];
 					var bytesPerElement = attribute["bytesPerElement"];
+
+
 
     
 					if ( geometryAttribute.isInterleavedBufferAttribute ) {
@@ -392,9 +398,9 @@ class WebGLBindingStates {
 
 							enableAttributeAndDivisor( programAttribute, data.meshPerAttribute );
 
-							if ( geometry._maxInstanceCount == null ) {
+							if ( geometry.maxInstanceCount == null ) {
 
-								geometry._maxInstanceCount = data.meshPerAttribute * data.count;
+								geometry.maxInstanceCount = data.meshPerAttribute * data.count;
 
 							}
 
@@ -413,9 +419,10 @@ class WebGLBindingStates {
 
 							enableAttributeAndDivisor( programAttribute, geometryAttribute.meshPerAttribute );
 
-							if ( geometry._maxInstanceCount == null ) {
 
-								geometry._maxInstanceCount = geometryAttribute.meshPerAttribute * geometryAttribute.count;
+							if ( geometry.maxInstanceCount == null ) {
+
+								geometry.maxInstanceCount = geometryAttribute.meshPerAttribute * geometryAttribute.count;
 
 							}
 
@@ -554,7 +561,7 @@ class WebGLBindingStates {
 
 		var programMap = this.bindingStates[ geometry.id ];
 
-		for ( var programId in programMap ) {
+		for ( var programId in programMap.keys ) {
 
 			var stateMap = programMap[ programId ];
 

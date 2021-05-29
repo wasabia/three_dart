@@ -56,7 +56,8 @@ class _MyAppState extends State<ExampleText> {
   var objects = [];
   dynamic? sourceTexture;
   dynamic? controls;
-
+  
+  var myText = THREE.Text();
 
   ui.Image? _image;
 
@@ -246,7 +247,11 @@ class _MyAppState extends State<ExampleText> {
     int _t = DateTime.now().millisecondsSinceEpoch;
 
     final _gl = three3dRender.gl;
-  
+
+     
+
+
+
 
 
     renderer!.render(scene, camera);
@@ -328,11 +333,11 @@ class _MyAppState extends State<ExampleText> {
 
 
     camera = new THREE.PerspectiveCamera( fov: 40, aspect: 1, near: 1, far: 10000 );
-    camera.position.z = 1600;
+    camera.position.z = 5;
 
 
     scene = new THREE.Scene();
-    scene.background = THREE.Color.fromHex( 0xFF00FF );
+    scene.background = THREE.Color.fromHex( 0x000000 );
 
     camera.lookAt(scene.position);
 
@@ -366,28 +371,36 @@ class _MyAppState extends State<ExampleText> {
 
     // // var shapes = font.generateShapes( "O", size: 100 );
 
-    // // var geometry = new THREE.ShapeBufferGeometry( shapes );
+    // var geometry = new THREE.BoxBufferGeometry( width: 100, height: 100, depth: 100 );
     // geometry.center();
-
-
-    // var material = THREE.MeshBasicMaterial( {"color": 0xffffff} );
-
+    // var material = THREE.MeshBasicMaterial( {"color": 0xFF0000} );
     // mesh = new THREE.Mesh(geometry, material);
-
     // mesh.rotation.set(0.1, 0.2, 0.3);
-
     // scene.add(mesh);
 
-    var myText = THREE.Text();
-    myText.text = 'Hello world!';
-    myText.fontSize = 0.2;
-    myText.position.z = -2;
-    myText.color = THREE.Color.fromHex(0x9966FF);
+    myText.debugSDF = false;
+    
+    myText.text = '请输';
+    myText.fontSize = 0.5;
+
+    myText.color = THREE.Color.fromHex(0x00FFFF);
+
+    myText.font = "/fonts/pingfang.ttf";
+    myText.position.set(-1, 0, 0);
+
+    myText.rotation.x += 0.1;
+    myText.rotation.y += 0.2;
+    myText.rotation.y += 0.1;
 
     // Update the rendering:
-    myText.syncText(null);
+    myText.syncText(() {
+      scene.add(myText);
+      print(" text sync done ");
 
-    scene.add(myText);
+
+    });
+
+    
 
 
 

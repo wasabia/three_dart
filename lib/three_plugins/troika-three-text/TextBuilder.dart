@@ -12,6 +12,7 @@
 
 part of troika_three_text;
 
+
 var CONFIG = {
   "defaultFontURL": 'https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxM.woff', //Roboto Regular
   "sdfGlyphSize": 64,
@@ -105,31 +106,53 @@ var atlases = {};
  * @param {TroikaTextRenderInfo} textRenderInfo
  */
 
+
+fontProcessor(args) {
+  var sdfExponent = CONFIG["sdfExponent"];
+  var sdfMargin = CONFIG["sdfMargin"];
+  var defaultFontURL = CONFIG["defaultFontURL"];
+  
+  var sdfGenerator = createSDFGenerator(createGlyphSegmentsIndex, { "sdfExponent": sdfExponent, "sdfMargin": sdfMargin });
+  // return FontProcessor(fontParser, sdfGenerator, { "defaultFontURL": defaultFontURL });
+  return FontProcessor(fontParser, sdfGenerator, { "defaultFontURL": defaultFontURL });
+}
+
+var processInWorker = (args) {
+  var completer = Completer();
+
+  fontProcessor(args).process(args, (result) {
+    completer.complete(result);
+  });
+
+  return completer.future;
+};
+
+
 /**
  * Main entry point for requesting the data needed to render a text string with given font parameters.
  * This is an asynchronous call, performing most of the logic in a web worker thread.
  * @param {object} args
  * @param {getTextRenderInfo~callback} callback
  */
-getTextRenderInfo(args, callback) {
+getTextRenderInfo(Map<String, dynamic> args, callback) async {
   hasRequested = true;
   args = assign({}, args);
 
   // Apply default font here to avoid a 'null' atlas, and convert relative
   // URLs to absolute so they can be resolved in the worker
-  args.font = toAbsoluteURL(args.font ?? CONFIG["defaultFontURL"]);
+  args["font"] = toAbsoluteURL(args["font"] ?? CONFIG["defaultFontURL"]);
 
   // Normalize text to a string
-  args.text = '' + args.text;
+  args["text"] = '' + args["text"];
 
-  args.sdfGlyphSize = args.sdfGlyphSize ?? CONFIG["sdfGlyphSize"];
+  args["sdfGlyphSize"] = args["sdfGlyphSize"] ?? CONFIG["sdfGlyphSize"];
 
   // Normalize colors
-  if (args.colorRanges != null) {
+  if (args["colorRanges"] != null) {
     var colors = {};
-    for (var key in args.colorRanges) {
-      if (args.colorRanges.hasOwnProperty(key)) {
-        var val = args.colorRanges[key];
+    for (var key in args["colorRanges"].keys) {
+      if (args["colorRanges"][key] != null) {
+        var val = args["colorRanges"][key];
         // TODO
         // if (!(val is num)) {
         //   val = tempColor.setHex(val).getHex();
@@ -137,7 +160,7 @@ getTextRenderInfo(args, callback) {
         colors[key] = val;
       }
     }
-    args.colorRanges = colors;
+    args["colorRanges"] = colors;
   }
 
   // TODO
@@ -151,7 +174,7 @@ getTextRenderInfo(args, callback) {
   var sdfExponent = CONFIG["sdfExponent"];
   var sdfGlyphSize = args["sdfGlyphSize"];
   
-  var atlasKey = "${args.font}@${sdfGlyphSize}";
+  var atlasKey = "${args["font"]}@${sdfGlyphSize}";
   var atlas = atlases[atlasKey];
   if (atlas == null) {
     atlas = {
@@ -171,79 +194,81 @@ getTextRenderInfo(args, callback) {
       )
     };
     atlases[atlasKey] = atlas;
-    atlas.sdfTexture.font = args.font;
+    atlas["sdfTexture"].font = args["font"];
   }
 
   // Issue request to the FontProcessor in the worker
-  processInWorker(args).then((result) {
-    // If the response has newGlyphs, copy them into the atlas texture at the specified indices
-    if (result.newGlyphSDFs) {
-      result.newGlyphSDFs.forEach(({textureData, atlasIndex}) {
-        var texImg = atlas.sdfTexture.image;
+  var result = await processInWorker(args);
+  
+  // If the response has newGlyphs, copy them into the atlas texture at the specified indices
+  if (result["newGlyphSDFs"] != null) {
+    result["newGlyphSDFs"].forEach((sdfElm) {
+      var textureData = sdfElm["textureData"];
+      var atlasIndex = sdfElm["atlasIndex"];
+      var texImg = atlas["sdfTexture"].image;
 
-        // Grow the texture by power of 2 if needed
-        while (texImg.data.length < (atlasIndex + 1) * sdfGlyphSize * sdfGlyphSize) {
-          var biggerArray = new Uint8List(texImg.data.length * 2);
-          // biggerArray.set(texImg.data);
+      // Grow the texture by power of 2 if needed
+      while (texImg.data.length < (atlasIndex + 1) * sdfGlyphSize * sdfGlyphSize) {
+        var biggerArray = new Uint8List(texImg.data.length * 2);
+        // biggerArray.set(texImg.data);
 
-          var i = 0;
-          texImg.data.forEach((element) {
-            biggerArray[i] = element;
-            i = i + 1;
-          });
+        var i = 0;
+        texImg.data.forEach((element) {
+          biggerArray[i] = element;
+          i = i + 1;
+        });
 
-          texImg.data = biggerArray;
-          texImg.height *= 2;
+        texImg.data = biggerArray;
+        texImg.height *= 2;
+      }
+
+      // Insert the new glyph's data into the full texture image at the correct offsets
+      // Glyphs are packed sequentially into the R,G,B,A channels of a square, advancing
+      // to the next square every 4 glyphs.
+      var squareIndex = Math.floor(atlasIndex / 4);
+      var cols = texImg.width / sdfGlyphSize;
+      var baseStartIndex = Math.floor(squareIndex / cols) * texImg.width * sdfGlyphSize * 4 //full rows
+        + (squareIndex % cols) * sdfGlyphSize * 4 //partial row
+        + (atlasIndex % 4); //color channel
+      for (var y = 0; y < sdfGlyphSize; y++) {
+        var srcStartIndex = y * sdfGlyphSize;
+        var rowStartIndex = baseStartIndex + (y * texImg.width * 4);
+        for (var x = 0; x < sdfGlyphSize; x++) {
+          texImg.data[rowStartIndex + x * 4] = textureData[srcStartIndex + x];
         }
-
-        // Insert the new glyph's data into the full texture image at the correct offsets
-        // Glyphs are packed sequentially into the R,G,B,A channels of a square, advancing
-        // to the next square every 4 glyphs.
-        var squareIndex = Math.floor(atlasIndex / 4);
-        var cols = texImg.width / sdfGlyphSize;
-        var baseStartIndex = Math.floor(squareIndex / cols) * texImg.width * sdfGlyphSize * 4 //full rows
-          + (squareIndex % cols) * sdfGlyphSize * 4 //partial row
-          + (atlasIndex % 4); //color channel
-        for (var y = 0; y < sdfGlyphSize; y++) {
-          var srcStartIndex = y * sdfGlyphSize;
-          var rowStartIndex = baseStartIndex + (y * texImg.width * 4);
-          for (var x = 0; x < sdfGlyphSize; x++) {
-            texImg.data[rowStartIndex + x * 4] = textureData[srcStartIndex + x];
-          }
-        }
-      });
-      atlas.sdfTexture.needsUpdate = true;
-    }
-
-    // Invoke callback with the text layout arrays and updated texture
-    callback({
-      "parameters": args,
-      "sdfTexture": atlas.sdfTexture,
-      "sdfGlyphSize": sdfGlyphSize,
-      "sdfExponent": sdfExponent,
-      "glyphBounds": result.glyphBounds,
-      "glyphAtlasIndices": result.glyphAtlasIndices,
-      "glyphColors": result.glyphColors,
-      "caretPositions": result.caretPositions,
-      "caretHeight": result.caretHeight,
-      "chunkedBounds": result.chunkedBounds,
-      "ascender": result.ascender,
-      "descender": result.descender,
-      "lineHeight": result.lineHeight,
-      "topBaseline": result.topBaseline,
-      "blockBounds": result.blockBounds,
-      "visibleBounds": result.visibleBounds,
-      "timings": result.timings,
-      // get totalBounds() {
-      //   console.log('totalBounds deprecated, use blockBounds instead')
-      //   return result.blockBounds
-      // },
-      // get totalBlockSize() {
-      //   console.log('totalBlockSize deprecated, use blockBounds instead')
-      //   var [x0, y0, x1, y1] = result.blockBounds
-      //   return [x1 - x0, y1 - y0]
-      // }
+      }
     });
+    atlas["sdfTexture"].needsUpdate = true;
+  }
+
+  // Invoke callback with the text layout arrays and updated texture
+  callback({
+    "parameters": args,
+    "sdfTexture": atlas["sdfTexture"],
+    "sdfGlyphSize": sdfGlyphSize,
+    "sdfExponent": sdfExponent,
+    "glyphBounds": result["glyphBounds"],
+    "glyphAtlasIndices": result["glyphAtlasIndices"],
+    "glyphColors": result["glyphColors"],
+    "caretPositions": result["caretPositions"],
+    "caretHeight": result["caretHeight"],
+    "chunkedBounds": result["chunkedBounds"],
+    "ascender": result["ascender"],
+    "descender": result["descender"],
+    "lineHeight": result["lineHeight"],
+    "topBaseline": result["topBaseline"],
+    "blockBounds": result["blockBounds"],
+    "visibleBounds": result["visibleBounds"],
+    "timings": result["timings"],
+    // get totalBounds() {
+    //   console.log('totalBounds deprecated, use blockBounds instead')
+    //   return result.blockBounds
+    // },
+    // get totalBlockSize() {
+    //   console.log('totalBlockSize deprecated, use blockBounds instead')
+    //   var [x0, y0, x1, y1] = result.blockBounds
+    //   return [x1 - x0, y1 - y0]
+    // }
   });
 }
 
@@ -276,16 +301,6 @@ preloadFont(options, callback) {
 }
 
 
-// Local assign impl so we don't have to import troika-core
-assign(toObj, fromObj) {
-  for (var key in fromObj) {
-    if (fromObj.hasOwnProperty(key)) {
-      toObj[key] = fromObj[key];
-    }
-  }
-  return toObj;
-}
-
 // Utility for making URLs absolute
 
 toAbsoluteURL(path) {
@@ -297,50 +312,53 @@ toAbsoluteURL(path) {
 }
 
 
-var fontProcessorWorkerModule = /*#__PURE__*/defineWorkerModule({
-  name: 'FontProcessor',
-  dependencies: [
-    CONFIG,
-    fontParser,
-    createGlyphSegmentsIndex,
-    createSDFGenerator,
-    createFontProcessor,
-    bidiFactory
-  ],
-  init(config, fontParser, createGlyphSegmentsIndex, createSDFGenerator, createFontProcessor, bidiFactory) {
-    var {sdfExponent, sdfMargin, defaultFontURL} = config
-    var sdfGenerator = createSDFGenerator(createGlyphSegmentsIndex, { sdfExponent, sdfMargin })
-    return createFontProcessor(fontParser, sdfGenerator, bidiFactory(), { defaultFontURL })
-  }
-});
+// var fontProcessorWorkerModule = /*#__PURE__*/defineWorkerModule({
+//   name: 'FontProcessor',
+//   dependencies: [
+//     CONFIG,
+//     fontParser,
+//     createGlyphSegmentsIndex,
+//     createSDFGenerator,
+//     createFontProcessor,
+//     bidiFactory
+//   ],
+//   init(config, fontParser, createGlyphSegmentsIndex, createSDFGenerator, createFontProcessor, bidiFactory) {
+//     var {sdfExponent, sdfMargin, defaultFontURL} = config
+//     var sdfGenerator = createSDFGenerator(createGlyphSegmentsIndex, { sdfExponent, sdfMargin })
+//     return createFontProcessor(fontParser, sdfGenerator, bidiFactory(), { defaultFontURL })
+//   }
+// });
 
-var processInWorker = /*#__PURE__*/defineWorkerModule({
-  name: 'TextBuilder',
-  dependencies: [fontProcessorWorkerModule, ThenableWorkerModule],
-  init(fontProcessor, Thenable) {
-    return function(args) {
-      var thenable = new Thenable()
-      fontProcessor.process(args, thenable.resolve)
-      return thenable;
-    };
-  },
-  getTransferables(result) {
-    // Mark array buffers as transferable to avoid cloning during postMessage
-    var transferables = [
-      result.glyphBounds.buffer,
-      result.glyphAtlasIndices.buffer
-    ]
-    if (result.caretPositions) {
-      transferables.push(result.caretPositions.buffer);
-    }
-    if (result.newGlyphSDFs) {
-      result.newGlyphSDFs.forEach(d => {
-        transferables.push(d.textureData.buffer)
-      });
-    }
-    return transferables;
-  }
-});
+
+
+
+// var processInWorker = /*#__PURE__*/defineWorkerModule({
+//   name: 'TextBuilder',
+//   dependencies: [fontProcessorWorkerModule, ThenableWorkerModule],
+//   init(fontProcessor, Thenable) {
+//     return function(args) {
+//       var thenable = new Thenable()
+//       fontProcessor.process(args, thenable.resolve)
+//       return thenable;
+//     };
+//   },
+//   getTransferables(result) {
+//     // Mark array buffers as transferable to avoid cloning during postMessage
+//     var transferables = [
+//       result.glyphBounds.buffer,
+//       result.glyphAtlasIndices.buffer
+//     ]
+//     if (result.caretPositions) {
+//       transferables.push(result.caretPositions.buffer);
+//     }
+//     if (result.newGlyphSDFs) {
+//       result.newGlyphSDFs.forEach(d => {
+//         transferables.push(d.textureData.buffer)
+//       });
+//     }
+//     return transferables;
+//   }
+// });
 
 dumpSDFTextures() {
   atlases.keys.forEach((font) {

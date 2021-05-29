@@ -363,19 +363,17 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     // console.log( '*VERTEX*', vertexGlsl );
     // console.log( '*FRAGMENT*', fragmentGlsl );
 
+    // print(" 111 ================= VERTEX  ");
+    // print(vertexGlsl);
+    // print("  111 ==================== FRAGMENT ");
+    // print(fragmentGlsl);
 
     var glVertexShader = WebGLShader(gl, gl.VERTEX_SHADER, vertexGlsl);
-
-
     var glFragmentShader = WebGLShader(gl, gl.FRAGMENT_SHADER, fragmentGlsl);
 
     this.vertexShader = glVertexShader.content;
     this.fragmentShader = glFragmentShader.content;
 
-    // print(" 111 VERTEX  ");
-    // print(vertexShader);
-    // print("  111 FRAGMENT ");
-    // print(fragmentShader);
 
     gl.attachShader(this.program, glVertexShader.shader);
     gl.attachShader(this.program, glFragmentShader.shader);

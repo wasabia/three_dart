@@ -216,7 +216,7 @@ createTextDerivedMaterial(baseMaterial) {
       "derivatives": true
     },
     "uniforms": {
-      "uTroikaSDFTexture": {"value": null},
+      "uTroikaSDFTexture": {},
       "uTroikaSDFTextureSize": {"value": new Vector2(null, null)},
       "uTroikaSDFGlyphSize": {"value": 0},
       "uTroikaSDFExponent": {"value": 0},
@@ -238,13 +238,15 @@ createTextDerivedMaterial(baseMaterial) {
     "vertexDefs": VERTEX_DEFS,
     "vertexTransform": VERTEX_TRANSFORM,
     "fragmentDefs": FRAGMENT_DEFS,
-    "fragmentColorTransform": FRAGMENT_TRANSFORM,
+    "fragmentColorTransform": FRAGMENT_TRANSFORM
+  },
+  {
     "customRewriter": (shaderInfo) {
       String vertexShader = shaderInfo["vertexShader"];
       String fragmentShader = shaderInfo["fragmentShader"];
 
       var uDiffuseRE = RegExp(r"\buniform\s+vec3\s+diffuse\b");
-      var voidMainRegExp = RegExp(r"\bvoid\s+main\s*{");
+      var voidMainRegExp = RegExp(r"\bvoid\s+main\s*\(\s*\)\s*{");
       var _bdiffuse = RegExp(r"\bdiffuse\b");
 
       if (uDiffuseRE.hasMatch(fragmentShader)) {
@@ -262,13 +264,16 @@ createTextDerivedMaterial(baseMaterial) {
 
             vertexShader = vertexShader.replaceFirst(voidMainRegExp, _replace);
           } else {
+            print("vertexShader: --------------- ");
+            print(vertexShader);
             throw("voidMainRegExp  match is null ");
           }
         }
       }
       return { "vertexShader": vertexShader, "fragmentShader": fragmentShader };
     }
-  });
+  }
+  );
 
   // Force transparency - TODO is this reasonable?
   textMaterial.transparent = true;

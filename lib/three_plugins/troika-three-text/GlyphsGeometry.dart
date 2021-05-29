@@ -5,7 +5,10 @@ var templateGeometries = {};
 getTemplateGeometry(detail) {
   var geom = templateGeometries[detail];
   if (geom == null) {
-    geom = templateGeometries[detail] = PlaneBufferGeometry(width: 1, height: 1, widthSegments: detail, heightSegments: detail).translate(0.5, 0.5, 0);
+    geom = PlaneBufferGeometry(width: 1, height: 1, widthSegments: detail, heightSegments: detail);
+    geom.translate(0.5, 0.5, 0);
+    
+    templateGeometries[detail] = geom;
   }
   return geom;
 }
@@ -47,7 +50,7 @@ which we could potentially work around with a fallback non-instanced implementat
 */
 class GlyphsGeometry extends InstancedBufferGeometry {
 
-  int _detail = 1;
+  int? _detail;
   num _curveRadius = 0;
 
   late List? _blockBounds;
@@ -65,6 +68,7 @@ class GlyphsGeometry extends InstancedBufferGeometry {
     // Preallocate empty bounding objects
     this.boundingSphere = Sphere(null, null);
     this.boundingBox = new Box3(null, null);
+    this.detail = 1;
   }
 
   computeBoundingSphere () {
@@ -82,9 +86,10 @@ class GlyphsGeometry extends InstancedBufferGeometry {
         detail = 1;
       }
       var tpl = getTemplateGeometry(detail);
-      
+
       ['position', 'normal', 'uv'].forEach((attr) {
-        this.attributes[attr] = tpl.attributes[attr].clone();
+        var _attribute = tpl.attributes[attr];
+        this.attributes[attr] = _attribute.clone();
       });
 
       this.setIndex(tpl.getIndex().clone());
@@ -137,7 +142,7 @@ class GlyphsGeometry extends InstancedBufferGeometry {
     if (bounds != null) {
       var bbox = this.boundingBox;
 
-      if (curveRadius) {
+      if (curveRadius != null && curveRadius != 0) {
         // var { PI, floor, min, max, sin, cos } = Math;
         var halfPi = Math.PI / 2;
         var twoPi = Math.PI * 2;
@@ -177,9 +182,11 @@ class GlyphsGeometry extends InstancedBufferGeometry {
     var count = this.getAttribute(glyphIndexAttrName).count;
     var chunks = this._chunkedBounds;
     if (chunks != null) {
-      for (var i = chunks.length; i > 0; i--) {
-        count = chunks[i].end;
-        var rect = chunks[i].rect;
+      var i = chunks.length;
+      while ( i > 0) {
+        i--;
+        count = chunks[i]["end"];
+        var rect = chunks[i]["rect"];
         // note: both rects are l-b-r-t
         if (rect[1] < clipRect.w && rect[3] > clipRect.y && rect[0] < clipRect.z && rect[2] > clipRect.x) {
           break;
@@ -193,10 +200,12 @@ class GlyphsGeometry extends InstancedBufferGeometry {
 
 
 updateBufferAttr(geom, attrName, newArray, itemSize) {
+
+
   var attr = geom.getAttribute(attrName);
-  if (newArray) {
+  if (newArray != null) {
     // If length isn't changing, just update the attribute's array data
-    if (attr && attr.array.length == newArray.length) {
+    if (attr != null && attr.array.length == newArray.length) {
       attr.array.set(newArray);
       attr.needsUpdate = true;
     } else {
@@ -207,17 +216,18 @@ updateBufferAttr(geom, attrName, newArray, itemSize) {
       // that ticket is ambiguous as to whether replacing a BufferAttribute with one of a
       // different size is supported, but https://github.com/mrdoob/three.js/pull/17418 strongly
       // implies it should be supported. It's possible we need to
-      geom._maxInstanceCount = null; //for r117+, could be fragile
+
+      
       geom.dispose(); //for r118+, more robust feeling, but more heavy-handed than I'd like
     }
-  } else if (attr) {
+  } else if (attr != null) {
     geom.deleteAttribute(attrName);
   }
 }
 
-// Handle maxInstancedCount -> instanceCount rename that happened in three r117
+
 setInstanceCount(geom, count) {
-  geom[geom.hasOwnProperty('instanceCount') ? 'instanceCount' : 'maxInstancedCount'] = count;
+  geom.instanceCount = count;
 }
 
 

@@ -114,6 +114,7 @@ class WebGLMaterials {
 
 	refreshUniformsCommon( Map<String, dynamic> uniforms, Material material ) {
 
+
   
   
 		uniforms["opacity"]["value"] = material.opacity;

@@ -1,6 +1,5 @@
-import 'dart:math' as Math;
-import 'dart:typed_data';
 
+part of troika_three_text;
 /**
  * Initializes and returns a function to generate an SDF texture for a given glyph.
  * @param {function} createGlyphSegmentsIndex - factory for a GlyphSegmentsIndex implementation.
@@ -46,14 +45,14 @@ createSDFGenerator(createGlyphSegmentsIndex, config) {
    *        Larger images encode more details. Must be a power of 2.
    * @return {{textureData: Uint8Array, renderingBounds: *[]}}
    */
-  generateSDF(glyphObj, sdfSize) {
+  generateSDF(Map<String, dynamic> glyphObj, sdfSize) {
     //console.time('glyphSDF')
 
     var textureData = new Uint8List(sdfSize * sdfSize);
 
     // Determine mapping between glyph grid coords and sdf grid coords
-    num glyphW = glyphObj.xMax - glyphObj.xMin;
-    num glyphH = glyphObj.yMax - glyphObj.yMin;
+    num glyphW = glyphObj["xMax"] - glyphObj["xMin"];
+    num glyphH = glyphObj["yMax"] - glyphObj["yMin"];
 
     // Choose a maximum search distance radius in font units, based on the glyph's max dimensions
     var fontUnitsMaxSearchDist = Math.max(glyphW, glyphH);
@@ -63,10 +62,10 @@ createSDFGenerator(createGlyphSegmentsIndex, config) {
     var fontUnitsMargin = Math.max(glyphW, glyphH) / sdfSize * (sdfMargin * sdfSize + 0.5);
 
     // Metrics of the texture/quad in font units
-    var textureMinFontX = glyphObj.xMin - fontUnitsMargin;
-    var textureMinFontY = glyphObj.yMin - fontUnitsMargin;
-    var textureMaxFontX = glyphObj.xMax + fontUnitsMargin;
-    var textureMaxFontY = glyphObj.yMax + fontUnitsMargin;
+    var textureMinFontX = glyphObj["xMin"] - fontUnitsMargin;
+    var textureMinFontY = glyphObj["yMin"] - fontUnitsMargin;
+    var textureMaxFontX = glyphObj["xMax"] + fontUnitsMargin;
+    var textureMaxFontY = glyphObj["yMax"] + fontUnitsMargin;
     num fontUnitsTextureWidth = textureMaxFontX - textureMinFontX;
     num fontUnitsTextureHeight = textureMaxFontY - textureMinFontY;
     var fontUnitsTextureMaxDim = Math.max(fontUnitsTextureWidth, fontUnitsTextureHeight);
@@ -79,11 +78,13 @@ createSDFGenerator(createGlyphSegmentsIndex, config) {
       return textureMinFontY + fontUnitsTextureHeight * y / sdfSize;
     }
 
-    if (glyphObj.pathCommandCount) { //whitespace chars will have no commands, so we can skip all this
+    int pathCommandCount = glyphObj["pathCommandCount"];
+
+    if (pathCommandCount != 0) { //whitespace chars will have no commands, so we can skip all this
       // Decompose all paths into straight line segments and add them to a quadtree
-      var lineSegmentsIndex = createGlyphSegmentsIndex(glyphObj);
+      Map<String, dynamic> lineSegmentsIndex = createGlyphSegmentsIndex();
       var firstX, firstY, prevX, prevY;
-      glyphObj.forEachPathCommand((type, x0, y0, x1, y1, x2, y2) {
+      glyphObj["forEachPathCommand"]((type, x0, y0, x1, y1, x2, y2) {
         switch (type) {
           case 'M':
             prevX = firstX = x0;
@@ -91,7 +92,7 @@ createSDFGenerator(createGlyphSegmentsIndex, config) {
             break;
           case 'L':
             if (x0 != prevX || y0 != prevY) { //yup, some fonts have zero-length line commands
-              lineSegmentsIndex.addLineSegment(prevX, prevY, (prevX = x0), (prevY = y0));
+              lineSegmentsIndex["addLineSegment"](prevX, prevY, (prevX = x0), (prevY = y0));
             }
             break;
           case 'Q': {
@@ -103,7 +104,7 @@ createSDFGenerator(createGlyphSegmentsIndex, config) {
                 x1, y1,
                 i / (CURVE_POINTS - 1)
               );
-              lineSegmentsIndex.addLineSegment(prevPoint["x"], prevPoint["y"], nextPoint["x"], nextPoint["y"]);
+              lineSegmentsIndex["addLineSegment"](prevPoint["x"], prevPoint["y"], nextPoint["x"], nextPoint["y"]);
               prevPoint = nextPoint;
             }
             prevX = x1;
@@ -120,7 +121,7 @@ createSDFGenerator(createGlyphSegmentsIndex, config) {
                 x2, y2,
                 i / (CURVE_POINTS - 1)
               );
-              lineSegmentsIndex.addLineSegment(prevPoint["x"], prevPoint["y"], nextPoint["x"], nextPoint["y"]);
+              lineSegmentsIndex["addLineSegment"](prevPoint["x"], prevPoint["y"], nextPoint["x"], nextPoint["y"]);
               prevPoint = nextPoint;
             }
             prevX = x2;
@@ -129,7 +130,7 @@ createSDFGenerator(createGlyphSegmentsIndex, config) {
           }
           case 'Z':
             if (prevX != firstX || prevY != firstY) {
-              lineSegmentsIndex.addLineSegment(prevX, prevY, firstX, firstY);
+              lineSegmentsIndex["addLineSegment"](prevX, prevY, firstX, firstY);
             }
             break;
         }
@@ -139,10 +140,10 @@ createSDFGenerator(createGlyphSegmentsIndex, config) {
       // map that distance to an alpha value, and write that alpha to the texel
       for (var sdfX = 0; sdfX < sdfSize; sdfX++) {
         for (var sdfY = 0; sdfY < sdfSize; sdfY++) {
-          num signedDist = lineSegmentsIndex.findNearestSignedDistance(
+          num signedDist = lineSegmentsIndex["findNearestSignedDistance"](
             textureXToFontX(sdfX + 0.5),
-            textureYToFontY(sdfY + 0.5),
-            fontUnitsMaxSearchDist
+            textureYToFontY(sdfY + 0.5)
+            // fontUnitsMaxSearchDist
           );
 
           // Use an exponential scale to ensure the texels very near the glyph path have adequate
@@ -161,7 +162,7 @@ createSDFGenerator(createGlyphSegmentsIndex, config) {
 
     //console.timeEnd('glyphSDF')
 
-    return {
+    Map<String, dynamic> _reuslt0 = {
       "textureData": textureData,
 
       "renderingBounds": [
@@ -171,6 +172,8 @@ createSDFGenerator(createGlyphSegmentsIndex, config) {
         textureMaxFontY
       ]
     };
+
+    return _reuslt0;
   }
 
 
