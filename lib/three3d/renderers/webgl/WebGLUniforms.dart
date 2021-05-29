@@ -73,16 +73,13 @@ class WebGLUniforms with WebGLUniform {
   setValue( gl, name, value, WebGLTextures? textures ) {
     var u = this.map[ name ];
 
-    var _vt = value.runtimeType.toString();
-    print("WebGLUniforms.setValue name: ${name}  value: ${_vt} ");
-    if(_vt == "Matrix4" || _vt == "Matrix3" || _vt == "Color") {
-      print(value.toJSON());
-    } else {
-      print(value);
-    }
-
-    
-
+    // var _vt = value.runtimeType.toString();
+    // print("WebGLUniforms.setValue name: ${name}  value: ${_vt} ");
+    // if(_vt == "Matrix4" || _vt == "Matrix3" || _vt == "Color") {
+    //   print(value.toJSON());
+    // } else {
+    //   print(value);
+    // }
 
     if ( u != null ) u.setValue( gl, value, textures );
 
@@ -106,18 +103,18 @@ class WebGLUniforms with WebGLUniform {
       var u = seq[ i ];
       var v = values[ u.id ];
 
-      var v2 = v["value"];
-      var _rt = v2.runtimeType.toString();
-      if(_rt == "Color" || _rt == "Vector2" || _rt == "Vector4" || _rt == "Matrix3") {
-        print(" WebGLUniforms.upload u ${u.id}: ${u} v needsUpdate: ${v["needsUpdate"]} ");
-        print(v2.toJSON());
-      } else if(_rt == "List<dynamic>") {
-        print(" WebGLUniforms.upload u ${u.id}: ${u} v needsUpdate: ${v["needsUpdate"]} ");
-        print(v2.map((e) => e.runtimeType.toString() == "Matrix4" ? e.toJSON() : e ));
-      } else {
-        print(" WebGLUniforms.upload u ${u.id}: ${u}  v needsUpdate: ${v["needsUpdate"]} ${v2.runtimeType.toString()} ");
-        print(v2);
-      }
+      // var v2 = v["value"];
+      // var _rt = v2.runtimeType.toString();
+      // if(_rt == "Color" || _rt == "Vector2" || _rt == "Vector4" || _rt == "Matrix3") {
+      //   print(" WebGLUniforms.upload u ${u.id}: ${u} v needsUpdate: ${v["needsUpdate"]} ");
+      //   print(v2.toJSON());
+      // } else if(_rt == "List<dynamic>") {
+      //   print(" WebGLUniforms.upload u ${u.id}: ${u} v needsUpdate: ${v["needsUpdate"]} ");
+      //   print(v2.map((e) => e.runtimeType.toString() == "Matrix4" ? e.toJSON() : e ));
+      // } else {
+      //   print(" WebGLUniforms.upload u ${u.id}: ${u}  v needsUpdate: ${v["needsUpdate"]} ${v2.runtimeType.toString()} ");
+      //   print(v2);
+      // }
       
       
   

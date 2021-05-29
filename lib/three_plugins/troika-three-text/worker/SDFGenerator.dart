@@ -84,7 +84,8 @@ createSDFGenerator(createGlyphSegmentsIndex, config) {
       // Decompose all paths into straight line segments and add them to a quadtree
       Map<String, dynamic> lineSegmentsIndex = createGlyphSegmentsIndex();
       var firstX, firstY, prevX, prevY;
-      glyphObj["forEachPathCommand"]((type, x0, y0, x1, y1, x2, y2) {
+      glyphObj["forEachPathCommand"](([type, x0, y0, x1, y1, x2, y2]) {
+ 
         switch (type) {
           case 'M':
             prevX = firstX = x0;

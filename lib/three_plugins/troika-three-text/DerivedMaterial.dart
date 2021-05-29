@@ -152,7 +152,8 @@ class DerivedBasicMaterial extends MeshBasicMaterial {
   }
 
   clone () {
-    return DerivedBasicMaterial.create({}).copy(this); 
+    var _p = Map<String, dynamic>();
+    return DerivedBasicMaterial.create(_p).copy(this); 
   }
 
   dispose() {

@@ -182,7 +182,7 @@ class FontProcessor {
    */
   process(args, callback, {metricsOnly=false}) {
     var text = args["text"] ?? "";
-    var font = args["font"] ?? defaultFontURL;
+    var font = args["font"];
     var sdfGlyphSize = args["sdfGlyphSize"] ?? 64;
     var fontSize = args["fontSize"] ?? 1;
     var letterSpacing = args["letterSpacing"] ?? 0;

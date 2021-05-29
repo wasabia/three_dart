@@ -140,7 +140,7 @@ getTextRenderInfo(Map<String, dynamic> args, callback) async {
 
   // Apply default font here to avoid a 'null' atlas, and convert relative
   // URLs to absolute so they can be resolved in the worker
-  args["font"] = toAbsoluteURL(args["font"] ?? CONFIG["defaultFontURL"]);
+  // args["font"] = toAbsoluteURL(args["font"] ?? CONFIG["defaultFontURL"]);
 
   // Normalize text to a string
   args["text"] = '' + args["text"];
@@ -173,8 +173,11 @@ getTextRenderInfo(Map<String, dynamic> args, callback) async {
   var textureWidth = CONFIG["textureWidth"];
   var sdfExponent = CONFIG["sdfExponent"];
   var sdfGlyphSize = args["sdfGlyphSize"];
+
+  Map<String, dynamic> _fontJson = args["font"];
+  String familyName = _fontJson["familyName"];
   
-  var atlasKey = "${args["font"]}@${sdfGlyphSize}";
+  var atlasKey = "${familyName}@${sdfGlyphSize}";
   var atlas = atlases[atlasKey];
   if (atlas == null) {
     atlas = {
@@ -194,7 +197,7 @@ getTextRenderInfo(Map<String, dynamic> args, callback) async {
       )
     };
     atlases[atlasKey] = atlas;
-    atlas["sdfTexture"].font = args["font"];
+    atlas["sdfTexture"].font = familyName;
   }
 
   // Issue request to the FontProcessor in the worker

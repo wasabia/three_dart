@@ -137,7 +137,7 @@ class FontObj {
             "xMax": xMax,
             "yMax": yMax,
             "pathCommandCount": cmds.length,
-            "forEachPathCommand": (callback) {
+            "forEachPathCommand": (callback2) {
               var argsIndex = 0;
               var argsArray = [];
               for (var i = 0, len = cmds.length; i < len; i++) {
@@ -147,7 +147,7 @@ class FontObj {
                 for (var j = 1; j <= numArgs; j++) {
                   argsArray[j] = crds[argsIndex++];
                 }
-                callback.apply(null, argsArray);
+                Function.apply(callback2, argsArray);
               }
             }
           };

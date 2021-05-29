@@ -138,7 +138,8 @@ class Text extends Mesh {
   num outlineOffsetX = 0;
   num outlineOffsetY = 0;
   num strokeWidth = 0;
-  int strokeColor = defaultStrokeColor;
+
+  Color strokeColor = Color.fromHex(defaultStrokeColor);
   num strokeOpacity = 1;
   num fillOpacity = 1;
   /**
@@ -257,11 +258,11 @@ class Text extends Mesh {
         }, (textRenderInfo) {
           this._isSyncing = false;
 
-          print(" --------------textRenderInfo----------------");
-          print(textRenderInfo);
-          var __sdfTexture = textRenderInfo["sdfTexture"];
-          print(__sdfTexture);
-          print(__sdfTexture.image);
+          // print(" --------------textRenderInfo----------------");
+          // print(textRenderInfo);
+          // var __sdfTexture = textRenderInfo["sdfTexture"];
+          // print(__sdfTexture);
+          // print(__sdfTexture.image);
           // print(__sdfTexture.image.data);
 
           // Save result for later use in onBeforeRender
@@ -343,7 +344,7 @@ class Text extends Mesh {
     if (this.outlineWidth > 0 || this.outlineBlur > 0 || this.outlineOffsetX > 0 || this.outlineOffsetY > 0) {
       var outlineMaterial = derivedMaterial.outlineMaterial;
       if (outlineMaterial == null) {
-        derivedMaterial.outlineMaterial = derivedMaterial;
+        derivedMaterial.outlineMaterial = createTextDerivedMaterial(derivedMaterial.baseMaterial);
         outlineMaterial = derivedMaterial.outlineMaterial;
         outlineMaterial!.isTextOutlineMaterial = true;
         outlineMaterial.depthWrite = false;
@@ -407,14 +408,14 @@ class Text extends Mesh {
       uniforms["uTroikaTotalBounds"]["value"].fromArray(blockBounds);
       uniforms["uTroikaUseGlyphColors"]["value"] = !isOutline && textInfo["glyphColors"] != null;
 
-      var distanceOffset = 0;
-      var blurRadius = 0;
-      var strokeWidth = 0;
-      var fillOpacity;
+      num distanceOffset = 0;
+      num blurRadius = 0;
+      num strokeWidth = 0;
+      num fillOpacity;
       num _strokeOpacity = 1;
-      var strokeColor;
-      var offsetX = 0;
-      var offsetY = 0;
+
+      num offsetX = 0;
+      num offsetY = 0;
 
       if (isOutline) {
         
@@ -426,13 +427,13 @@ class Text extends Mesh {
       } else {
         strokeWidth = Math.max(0, this._parsePercent(this.strokeWidth) ?? 0);
         if (strokeWidth > 0) {
-          strokeColor = this.strokeColor;
-          uniforms["uTroikaStrokeColor"]["value"].set(strokeColor == null ? defaultStrokeColor : strokeColor);
+          uniforms["uTroikaStrokeColor"]["value"].copy(this.strokeColor);
           _strokeOpacity = this.strokeOpacity;
           if (_strokeOpacity == null) _strokeOpacity = 1;
         }
         fillOpacity = this.fillOpacity;
       }
+
 
       uniforms["uTroikaDistanceOffset"]["value"] = distanceOffset;
       uniforms["uTroikaPositionOffset"]["value"].set(offsetX, offsetY);

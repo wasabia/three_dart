@@ -578,9 +578,6 @@ class WebGLRenderer {
 
     BufferAttribute? position = geometry.attributes["position"];
 
-    print(" index---------position ");
-    print(index.array);
-    print(position?.array);
  
     if (index == null) {
       if (position == null || position.count == 0) return;

@@ -250,7 +250,10 @@ class _MyAppState extends State<ExampleText> {
 
      
 
-
+    // myText.rotation.x += 0.1;
+    // myText.rotation.y += 0.2;
+    // myText.rotation.y += 0.1;
+    // myText.syncText(null);
 
 
 
@@ -317,7 +320,7 @@ class _MyAppState extends State<ExampleText> {
     renderer = THREE.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize( width, height, false );
-    renderer!.shadowMap.enabled = true;
+    renderer!.shadowMap.enabled = false;
     
     if(!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({ "minFilter": THREE.LinearFilter, "magFilter": THREE.LinearFilter, "format": THREE.RGBAFormat });
@@ -342,17 +345,17 @@ class _MyAppState extends State<ExampleText> {
     camera.lookAt(scene.position);
 
     // var loader = new THREE.FontLoader(null);
-    // var loader = new THREE.TYPRLoader(null);
+    var loader = new THREE.TYPRLoader(null);
     // var loader = new THREE.TTFLoader(null);
 
     // String _fontPath = 'assets/kenpixel.ttf';
     // String _fontPath = "fonts/ttf/DMFT.ttf";
     // String _fontPath = "assets/pingfang.ttf";
     // String _fontPath = 'fonts/kenpixel.ttf';
-    // String _fontPath = 'fonts/pingfang.ttf';
-    String _fontPath = "fonts/PingFang SC_Medium.json";
+    String _fontPath = 'fonts/pingfang.ttf';
+    // String _fontPath = "fonts/PingFang SC_Medium.json";
 
-    // var font = await loader.loadAsync( _fontPath, null );
+    var dataJson = await loader.loadAsync( _fontPath, null );
     // var font = THREE.TYPRFont(dataJson);
     // var font = THREE.TTFFont(dataJson);
 
@@ -381,16 +384,24 @@ class _MyAppState extends State<ExampleText> {
     myText.debugSDF = false;
     
     myText.text = '请输';
-    myText.fontSize = 0.5;
+    myText.fontSize = 1;
 
-    myText.color = THREE.Color.fromHex(0x00FFFF);
+    myText.color = THREE.Color.fromHex(0xFF00FF);
 
-    myText.font = "/fonts/pingfang.ttf";
+    // myText.font = "/fonts/pingfang.ttf";
+    // myText.font = "assets/pingfang.ttf";
+
+    myText.font = dataJson;
     myText.position.set(-1, 0, 0);
 
-    myText.rotation.x += 0.1;
-    myText.rotation.y += 0.2;
-    myText.rotation.y += 0.1;
+    myText.anchorX = 0.5;
+    myText.anchorY = 0.5;
+
+    myText.outlineColor = THREE.Color.fromHex(0xFFFFFF);
+    myText.outlineWidth = 0.02;
+
+    myText.strokeColor = THREE.Color.fromHex(0x0000FF);
+    myText.strokeWidth = 0.02;
 
     // Update the rendering:
     myText.syncText(() {
