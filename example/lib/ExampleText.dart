@@ -359,6 +359,9 @@ class _MyAppState extends State<ExampleText> {
     // var font = THREE.TYPRFont(dataJson);
     // var font = THREE.TTFFont(dataJson);
 
+    print(" font JSON ---------------- ");
+    print(dataJson);
+
 
 
     // var geometry = new THREE.TextBufferGeometry( "O", {

@@ -28,9 +28,9 @@ var joiningTypeRawData = {"C":"18g,ca,368,1kz","D":"17k,6,2,2+4,5+c,2+6,2+1,10+1
 
 class ParserFactory {
 
-  Uint8List buffer;
+  Map<String, dynamic> fontJson;
 
-  ParserFactory(this.buffer) {
+  ParserFactory(this.fontJson) {
 
   }
   
@@ -44,21 +44,24 @@ class ParserFactory {
 
   parse() {
     // Look to see if we have a WOFF file and convert it if so:
-    var peek = new Uint8List.sublistView(buffer, 0, 4);
-    var tag = typr_dart.TyprBin.readASCII(peek, 0, 4);
-    if (tag == 'wOFF') {
-      // buffer = woff2otf(buffer);
-      // todo use native like rust ???
-      throw('woff fonts not supported');
-    } else if (tag == 'wOF2') {
-      throw('woff2 fonts not supported');
-    }
-    return wrapFontObj(typr_dart.Font(buffer));
+    // var peek = new Uint8List.sublistView(buffer, 0, 4);
+    // var tag = typr_dart.TyprBin.readASCII(peek, 0, 4);
+    // if (tag == 'wOFF') {
+    //   // buffer = woff2otf(buffer);
+    //   // todo use native like rust ???
+    //   throw('woff fonts not supported');
+    // } else if (tag == 'wOF2') {
+    //   throw('woff2 fonts not supported');
+    // }
+    // return wrapFontObj(typr_dart.Font(buffer));
+
+    var _typrFont = fontJson["font"];
+    return wrapFontObj(_typrFont);
   }
 }
 
-fontParser(buffer) {
-  return ParserFactory(buffer).parse();
+fontParser(fontJson) {
+  return ParserFactory(fontJson).parse();
 }
 
 

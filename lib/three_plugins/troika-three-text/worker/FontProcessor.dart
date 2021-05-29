@@ -131,24 +131,28 @@ class FontProcessor {
    * Load a given font url if needed, invoking a callback when it's loaded. If already
    * loaded, the callback will be called synchronously.
    */
-  loadFont(fontUrl, callback) {
-    if (fontUrl == null) fontUrl = defaultFontURL;
-    var font = fonts[fontUrl];
-    if (font != null) {
-      // if currently loading font, add to callbacks, otherwise execute immediately
-      if (font.pending) {
-        font.pending.add(callback);
-      } else {
-        callback(font);
-      }
-    } else {
-      fonts[fontUrl] = {"pending": [callback]};
-      doLoadFont(fontUrl, (fontObj) {
-        var callbacks = fonts[fontUrl]["pending"];
-        fonts[fontUrl] = fontObj;
-        callbacks.forEach((cb) => cb(fontObj));
-      });
-    }
+  loadFont(Map<String, dynamic> font, callback) {
+
+    var fontObj = fontParser(font);
+    callback(fontObj);
+
+    // if (fontUrl == null) fontUrl = defaultFontURL;
+    // var font = fonts[fontUrl];
+    // if (font != null) {
+    //   // if currently loading font, add to callbacks, otherwise execute immediately
+    //   if (font.pending) {
+    //     font.pending.add(callback);
+    //   } else {
+    //     callback(font);
+    //   }
+    // } else {
+    //   fonts[fontUrl] = {"pending": [callback]};
+    //   doLoadFont(fontUrl, (fontObj) {
+    //     var callbacks = fonts[fontUrl]["pending"];
+    //     fonts[fontUrl] = fontObj;
+    //     callbacks.forEach((cb) => cb(fontObj));
+    //   });
+    // }
   }
 
 
@@ -156,14 +160,15 @@ class FontProcessor {
    * Get the atlas data for a given font url, loading it from the network and initializing
    * its atlas data objects if necessary.
    */
-  getSdfAtlas(fontUrl, sdfGlyphSize, callback) {
-    if (fontUrl == null) fontUrl = defaultFontURL;
-    var atlasKey = "${fontUrl}@${sdfGlyphSize}";
+  getSdfAtlas(Map<String, dynamic> font, sdfGlyphSize, callback) {
+    String _familyName = font["familyName"];
+
+    var atlasKey = "${_familyName}@${sdfGlyphSize}";
     var atlas = fontAtlases[atlasKey];
     if (atlas != null) {
       callback(atlas);
     } else {
-      loadFont(fontUrl, (fontObj) {
+      loadFont(font, (fontObj) {
         atlas = fontAtlases[atlasKey] ?? (fontAtlases[atlasKey] = {
           "fontObj": fontObj,
           "glyphs": {},

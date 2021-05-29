@@ -107,7 +107,7 @@ var atlases = {};
  */
 
 
-fontProcessor(args) {
+fontProcessor() {
   var sdfExponent = CONFIG["sdfExponent"];
   var sdfMargin = CONFIG["sdfMargin"];
   var defaultFontURL = CONFIG["defaultFontURL"];
@@ -120,7 +120,7 @@ fontProcessor(args) {
 var processInWorker = (args) {
   var completer = Completer();
 
-  fontProcessor(args).process(args, (result) {
+  fontProcessor().process(args, (result) {
     completer.complete(result);
   });
 

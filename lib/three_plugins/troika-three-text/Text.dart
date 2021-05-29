@@ -586,7 +586,7 @@ class Text extends Mesh {
 
 
   // Create setters for properties that affect text layout: SYNCABLE_PROPS
-  String? _font;
+  late Map<String, dynamic> _font;
   get font => _font;
   set font(value) {
     this._font = value;
