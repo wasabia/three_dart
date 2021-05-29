@@ -218,8 +218,8 @@ createTextDerivedMaterial(baseMaterial) {
     "uniforms": {
       "uTroikaSDFTexture": {},
       "uTroikaSDFTextureSize": {"value": Vector2(null, null)},
-      "uTroikaSDFGlyphSize": {"value": 0.0},
-      "uTroikaSDFExponent": {"value": 0.0},
+      "uTroikaSDFGlyphSize": {"value": 0},
+      "uTroikaSDFExponent": {"value": 0},
       "uTroikaTotalBounds": {"value": Vector4(0,0,0,0)},
       "uTroikaClipRect": {"value": Vector4(0,0,0,0)},
       "uTroikaDistanceOffset": {"value": 0.0},

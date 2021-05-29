@@ -26,14 +26,26 @@ class Matrix4 {
 		]);
 	}
 
-	set( double n11, double n12, double n13, double n14, double n21, double n22, double n23, double n24, double n31, double n32, double n33, double n34, double n41, double n42, double n43, double n44 ) {
+	set( num n11, num n12, num n13, num n14, num n21, num n22, num n23, num n24, num n31, num n32, num n33, num n34, num n41, num n42, num n43, num n44 ) {
 
 		var te = this.elements;
 
-		te[ 0 ] = n11; te[ 4 ] = n12; te[ 8 ] = n13; te[ 12 ] = n14;
-		te[ 1 ] = n21; te[ 5 ] = n22; te[ 9 ] = n23; te[ 13 ] = n24;
-		te[ 2 ] = n31; te[ 6 ] = n32; te[ 10 ] = n33; te[ 14 ] = n34;
-		te[ 3 ] = n41; te[ 7 ] = n42; te[ 11 ] = n43; te[ 15 ] = n44;
+		te[ 0 ] = n11.toDouble(); 
+    te[ 4 ] = n12.toDouble(); 
+    te[ 8 ] = n13.toDouble(); 
+    te[ 12 ] = n14.toDouble();
+		te[ 1 ] = n21.toDouble(); 
+    te[ 5 ] = n22.toDouble(); 
+    te[ 9 ] = n23.toDouble(); 
+    te[ 13 ] = n24.toDouble();
+		te[ 2 ] = n31.toDouble(); 
+    te[ 6 ] = n32.toDouble(); 
+    te[ 10 ] = n33.toDouble(); 
+    te[ 14 ] = n34.toDouble();
+		te[ 3 ] = n41.toDouble(); 
+    te[ 7 ] = n42.toDouble(); 
+    te[ 11 ] = n43.toDouble(); 
+    te[ 15 ] = n44.toDouble();
 	}
 
 	Matrix4 identity() {

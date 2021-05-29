@@ -175,9 +175,9 @@ getTextRenderInfo(Map<String, dynamic> args, callback) async {
   var sdfGlyphSize = args["sdfGlyphSize"];
 
   Map<String, dynamic> _fontJson = args["font"];
-  String familyName = _fontJson["familyName"];
+  String _fullName = _fontJson["fullName"];
   
-  var atlasKey = "${familyName}@${sdfGlyphSize}";
+  var atlasKey = "${_fullName}@${sdfGlyphSize}";
   var atlas = atlases[atlasKey];
   if (atlas == null) {
     atlas = {
@@ -197,7 +197,7 @@ getTextRenderInfo(Map<String, dynamic> args, callback) async {
       )
     };
     atlases[atlasKey] = atlas;
-    atlas["sdfTexture"].font = familyName;
+    atlas["sdfTexture"].font = _fullName;
   }
 
   // Issue request to the FontProcessor in the worker
@@ -230,9 +230,9 @@ getTextRenderInfo(Map<String, dynamic> args, callback) async {
       // to the next square every 4 glyphs.
       var squareIndex = Math.floor(atlasIndex / 4);
       var cols = texImg.width / sdfGlyphSize;
-      var baseStartIndex = Math.floor(squareIndex / cols) * texImg.width * sdfGlyphSize * 4 //full rows
+      int baseStartIndex = (Math.floor(squareIndex / cols) * texImg.width * sdfGlyphSize * 4 //full rows
         + (squareIndex % cols) * sdfGlyphSize * 4 //partial row
-        + (atlasIndex % 4); //color channel
+        + (atlasIndex % 4)).toInt(); //color channel
       for (var y = 0; y < sdfGlyphSize; y++) {
         var srcStartIndex = y * sdfGlyphSize;
         var rowStartIndex = baseStartIndex + (y * texImg.width * 4);

@@ -3,7 +3,7 @@ part of three_geometries;
 
 class PlaneBufferGeometry extends BufferGeometry {
 
-	PlaneBufferGeometry( {num width = 1, num height = 1, double widthSegments = 1, double heightSegments = 1} ) : super() {
+	PlaneBufferGeometry( {num width = 1, num height = 1, num widthSegments = 1, num heightSegments = 1} ) : super() {
 
 		this.type = 'PlaneBufferGeometry';
 

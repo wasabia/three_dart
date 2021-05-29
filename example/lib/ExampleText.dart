@@ -350,9 +350,9 @@ class _MyAppState extends State<ExampleText> {
 
     // String _fontPath = 'assets/kenpixel.ttf';
     // String _fontPath = "fonts/ttf/DMFT.ttf";
-    // String _fontPath = "assets/pingfang.ttf";
+    String _fontPath = "assets/pingfang.ttf";
     // String _fontPath = 'fonts/kenpixel.ttf';
-    String _fontPath = 'fonts/pingfang.ttf';
+    // String _fontPath = 'fonts/pingfang.ttf';
     // String _fontPath = "fonts/PingFang SC_Medium.json";
 
     var dataJson = await loader.loadAsync( _fontPath, null );

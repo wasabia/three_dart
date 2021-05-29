@@ -5,7 +5,7 @@ var templateGeometries = {};
 getTemplateGeometry(detail) {
   var geom = templateGeometries[detail];
   if (geom == null) {
-    geom = PlaneBufferGeometry(width: 1, height: 1, widthSegments: detail, heightSegments: detail);
+    geom = PlaneBufferGeometry(width: 1.0, height: 1.0, widthSegments: detail, heightSegments: detail);
     geom.translate(0.5, 0.5, 0);
     
     templateGeometries[detail] = geom;

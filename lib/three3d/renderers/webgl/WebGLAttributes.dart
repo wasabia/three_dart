@@ -56,22 +56,21 @@ class WebGLAttributes {
       bytesPerElement = Uint8List.bytesPerElement;
       arrayList = array;
 
-      final _arrayType = array.runtimeType;
+      String _arrayType = array.runtimeType.toString();
 
-      if(_arrayType == Uint8List) {
+      if(_arrayType == "Uint8List") {
         type = gl.UNSIGNED_BYTE;
         bytesPerElement = Uint8List.bytesPerElement;
-      } else if(_arrayType == Float32List) {
+      } else if(_arrayType == "Float32List") {
         type = gl.FLOAT;
         bytesPerElement = Float32List.bytesPerElement;
-      } else if(_arrayType == Uint32List) {
+      } else if(_arrayType == "Uint32List") {
         type = gl.UNSIGNED_INT;
         bytesPerElement = Uint32List.bytesPerElement;
       } else {
         // 保持抛出异常 及时发现异常情况
         throw("WebGLAttributes.createBuffer InstancedBufferAttribute arrayType: ${array.runtimeType} is not support  ");
       }
-      print(" _arrayType: ${_arrayType} ");
     } else {
       print("createBuffer array: ${array.runtimeType} ");
       // arrayList = Float32List.fromList(array.map((e) => e.toDouble()).toList());

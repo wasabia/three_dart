@@ -103,6 +103,7 @@ class TYPRLoader extends Loader {
   
 				"font": font,
 				"familyName": font.getFamilyName(),
+        "fullName": font.getFullName(),
 				"underlinePosition": font.post["underlinePosition"],
 				"underlineThickness": font.post["underlineThickness"],
 				"boundingBox": {

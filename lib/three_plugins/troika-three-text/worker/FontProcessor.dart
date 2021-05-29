@@ -161,9 +161,9 @@ class FontProcessor {
    * its atlas data objects if necessary.
    */
   getSdfAtlas(Map<String, dynamic> font, sdfGlyphSize, callback) {
-    String _familyName = font["familyName"];
+    String _fullName = font["fullName"];
 
-    var atlasKey = "${_familyName}@${sdfGlyphSize}";
+    var atlasKey = "${_fullName}@${sdfGlyphSize}";
     var atlas = fontAtlases[atlasKey];
     if (atlas != null) {
       callback(atlas);
@@ -602,7 +602,7 @@ class FontProcessor {
                 if (visY1 > chunkRect[3]) chunkRect[3] = visY1;
 
                 // Add to atlas indices array
-                glyphAtlasIndices[idx] = glyphAtlasInfo["atlasIndex"];
+                glyphAtlasIndices[idx] = glyphAtlasInfo["atlasIndex"].toDouble();
 
                 // Add colors
                 if (colorRanges != null) {

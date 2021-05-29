@@ -409,7 +409,7 @@ class Text extends Mesh {
       uniforms["uTroikaUseGlyphColors"]["value"] = !isOutline && textInfo["glyphColors"] != null;
 
       num distanceOffset = 0;
-      num blurRadius = 0;
+      num blurRadius = 0.0;
       num strokeWidth = 0;
       num fillOpacity;
       num _strokeOpacity = 1;
@@ -420,7 +420,7 @@ class Text extends Mesh {
       if (isOutline) {
         
         distanceOffset = this._parsePercent(outlineWidth) ?? 0;
-        blurRadius = Math.max(0, this._parsePercent(outlineBlur) ?? 0);
+        blurRadius = Math.max(0.0, this._parsePercent(outlineBlur) ?? 0);
         fillOpacity = outlineOpacity;
         offsetX = this._parsePercent(outlineOffsetX) ?? 0;
         offsetY = this._parsePercent(outlineOffsetY) ?? 0;
@@ -435,13 +435,13 @@ class Text extends Mesh {
       }
 
 
-      uniforms["uTroikaDistanceOffset"]["value"] = distanceOffset;
+      uniforms["uTroikaDistanceOffset"]["value"] = distanceOffset.toDouble();
       uniforms["uTroikaPositionOffset"]["value"].set(offsetX, offsetY);
-      uniforms["uTroikaBlurRadius"]["value"] = blurRadius;
-      uniforms["uTroikaStrokeWidth"]["value"] = strokeWidth;
-      uniforms["uTroikaStrokeOpacity"]["value"] = _strokeOpacity;
-      uniforms["uTroikaFillOpacity"]["value"] = fillOpacity == null ? 1 : fillOpacity;
-      uniforms["uTroikaCurveRadius"]["value"] = this.curveRadius ?? 0;
+      uniforms["uTroikaBlurRadius"]["value"] = blurRadius.toDouble();
+      uniforms["uTroikaStrokeWidth"]["value"] = strokeWidth.toDouble();
+      uniforms["uTroikaStrokeOpacity"]["value"] = _strokeOpacity.toDouble();
+      uniforms["uTroikaFillOpacity"]["value"] = fillOpacity == null ? 1.0 : fillOpacity.toDouble();
+      uniforms["uTroikaCurveRadius"]["value"] = (this.curveRadius ?? 0.0).toDouble();
 
       if (clipRect != null && clipRect is List && clipRect!.length == 4) {
         uniforms["uTroikaClipRect"]["value"].fromArray(clipRect);
@@ -702,7 +702,7 @@ class Text extends Mesh {
    * the sharpness of corners and preventing loss of very thin lines, at the expense of
    * increased memory footprint and longer SDF generation time.
    */
-  num? _sdfGlyphSize;
+  int? _sdfGlyphSize;
   get sdfGlyphSize => _sdfGlyphSize;
   set sdfGlyphSize(value) {
     this._sdfGlyphSize = value;
