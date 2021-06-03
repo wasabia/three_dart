@@ -16,6 +16,7 @@ class TextureLoader extends Loader {
       texture = Texture(null, null, null,null, null, null,null, null, null, null);
     } else {
       texture = DataTexture(null, null, null, null, null,null, null, null,null, null, null, null);
+      
     }
     
 

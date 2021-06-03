@@ -14,7 +14,7 @@ part of troika_three_text;
 
 
 var CONFIG = {
-  "defaultFontURL": 'https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxM.woff', //Roboto Regular
+  // "defaultFontURL": 'https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxM.woff', //Roboto Regular
   "sdfGlyphSize": 64,
   "sdfMargin": 1 / 16,
   "sdfExponent": 9,
@@ -27,10 +27,6 @@ var hasRequested = false;
 /**
  * Customizes the text builder configuration. This must be called prior to the first font processing
  * request, and applies to all fonts.
- *
- * @param {String} config.defaultFontURL - The URL of the default font to use for text processing
- *                 requests, in case none is specified or the specifiede font fails to load or parse.
- *                 Defaults to "Roboto Regular" from Google Fonts.
  * @param {Number} config.sdfGlyphSize - The default size of each glyph's SDF (signed distance field)
  *                 texture used for rendering. Must be a power-of-two number, and applies to all fonts,
  *                 but note that this can also be overridden per call to `getTextRenderInfo()`.
@@ -106,25 +102,22 @@ var atlases = {};
  * @param {TroikaTextRenderInfo} textRenderInfo
  */
 
+FontProcessor? _fontProcessor; 
 
 fontProcessor() {
   var sdfExponent = CONFIG["sdfExponent"];
   var sdfMargin = CONFIG["sdfMargin"];
-  var defaultFontURL = CONFIG["defaultFontURL"];
-  
-  var sdfGenerator = createSDFGenerator(createGlyphSegmentsIndex, { "sdfExponent": sdfExponent, "sdfMargin": sdfMargin });
-  // return FontProcessor(fontParser, sdfGenerator, { "defaultFontURL": defaultFontURL });
-  return FontProcessor(fontParser, sdfGenerator, { "defaultFontURL": defaultFontURL });
+
+  if(_fontProcessor == null) {
+    var sdfGenerator = createSDFGenerator(createGlyphSegmentsIndex, { "sdfExponent": sdfExponent, "sdfMargin": sdfMargin });
+    _fontProcessor = FontProcessor(fontParser, sdfGenerator);
+  }
+  return _fontProcessor!;
 }
 
 var processInWorker = (args) {
-  var completer = Completer();
-
-  fontProcessor().process(args, (result) {
-    completer.complete(result);
-  });
-
-  return completer.future;
+  var _result = fontProcessor().process(args);
+  return _result;
 };
 
 
@@ -134,13 +127,9 @@ var processInWorker = (args) {
  * @param {object} args
  * @param {getTextRenderInfo~callback} callback
  */
-getTextRenderInfo(Map<String, dynamic> args, callback) async {
+getTextRenderInfo(Map<String, dynamic> args, callback) {
   hasRequested = true;
   args = assign({}, args);
-
-  // Apply default font here to avoid a 'null' atlas, and convert relative
-  // URLs to absolute so they can be resolved in the worker
-  // args["font"] = toAbsoluteURL(args["font"] ?? CONFIG["defaultFontURL"]);
 
   // Normalize text to a string
   args["text"] = '' + args["text"];
@@ -200,12 +189,15 @@ getTextRenderInfo(Map<String, dynamic> args, callback) async {
     atlas["sdfTexture"].font = _fullName;
   }
 
+
   // Issue request to the FontProcessor in the worker
-  var result = await processInWorker(args);
-  
+  var result = processInWorker(args);
+
   // If the response has newGlyphs, copy them into the atlas texture at the specified indices
   if (result["newGlyphSDFs"] != null) {
     result["newGlyphSDFs"].forEach((sdfElm) {
+
+
       var textureData = sdfElm["textureData"];
       var atlasIndex = sdfElm["atlasIndex"];
       var texImg = atlas["sdfTexture"].image;
@@ -243,6 +235,7 @@ getTextRenderInfo(Map<String, dynamic> args, callback) async {
     });
     atlas["sdfTexture"].needsUpdate = true;
   }
+
 
   // Invoke callback with the text layout arrays and updated texture
   callback({
@@ -303,71 +296,10 @@ preloadFont(options, callback) {
     "text": text }, callback);
 }
 
-
-// Utility for making URLs absolute
-
-toAbsoluteURL(path) {
-  // if (!linkEl) {
-  //   linkEl = document == null ? {} : document.createElement('a');
-  // }
-  // linkEl.href = path;
-  return path;
-}
-
-
-// var fontProcessorWorkerModule = /*#__PURE__*/defineWorkerModule({
-//   name: 'FontProcessor',
-//   dependencies: [
-//     CONFIG,
-//     fontParser,
-//     createGlyphSegmentsIndex,
-//     createSDFGenerator,
-//     createFontProcessor,
-//     bidiFactory
-//   ],
-//   init(config, fontParser, createGlyphSegmentsIndex, createSDFGenerator, createFontProcessor, bidiFactory) {
-//     var {sdfExponent, sdfMargin, defaultFontURL} = config
-//     var sdfGenerator = createSDFGenerator(createGlyphSegmentsIndex, { sdfExponent, sdfMargin })
-//     return createFontProcessor(fontParser, sdfGenerator, bidiFactory(), { defaultFontURL })
-//   }
-// });
-
-
-
-
-// var processInWorker = /*#__PURE__*/defineWorkerModule({
-//   name: 'TextBuilder',
-//   dependencies: [fontProcessorWorkerModule, ThenableWorkerModule],
-//   init(fontProcessor, Thenable) {
-//     return function(args) {
-//       var thenable = new Thenable()
-//       fontProcessor.process(args, thenable.resolve)
-//       return thenable;
-//     };
-//   },
-//   getTransferables(result) {
-//     // Mark array buffers as transferable to avoid cloning during postMessage
-//     var transferables = [
-//       result.glyphBounds.buffer,
-//       result.glyphAtlasIndices.buffer
-//     ]
-//     if (result.caretPositions) {
-//       transferables.push(result.caretPositions.buffer);
-//     }
-//     if (result.newGlyphSDFs) {
-//       result.newGlyphSDFs.forEach(d => {
-//         transferables.push(d.textureData.buffer)
-//       });
-//     }
-//     return transferables;
-//   }
-// });
-
 dumpSDFTextures() {
   atlases.keys.forEach((font) {
     var atlas = atlases[font];
 
-    print(" font: ${font} ");
 
     // var canvas = document.createElement('canvas');
     // var image = atlas["sdfTexture"].image;

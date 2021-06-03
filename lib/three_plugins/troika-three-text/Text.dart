@@ -87,7 +87,7 @@ var defaultMaterial = new MeshBasicMaterial({
 class Text extends Mesh {
   num _curveRadius = 0;
   
-  Color? color;  
+  Color color = Color.fromHex(0xFFFFFF);
 
   /**
    * @member {number|string} outlineWidth
@@ -221,6 +221,33 @@ class Text extends Mesh {
 
   GlyphsGeometry get geometry_cast => this.geometry as GlyphsGeometry;
 
+
+  Map<String, dynamic> getOptions() {
+    return {
+      "text": this.text,
+      "font": this.font,
+      "fontSize": this.fontSize ?? 0.1,
+      "letterSpacing": this.letterSpacing ?? 0,
+      "lineHeight": this.lineHeight ?? 'normal',
+      "maxWidth": this.maxWidth,
+      "direction": this.direction,
+      "textAlign": this.textAlign,
+      "textIndent": this.textIndent,
+      "whiteSpace": this.whiteSpace,
+      "overflowWrap": this.overflowWrap,
+      "anchorX": this.anchorX,
+      "anchorY": this.anchorY,
+      "colorRanges": this.colorRanges,
+      "includeCaretPositions": true, //TODO parameterize
+      "sdfGlyphSize": this.sdfGlyphSize
+    };
+  }
+
+  measure() {
+    var _args = getOptions();
+    return fontProcessor().measure(_args);
+  }
+
   /**
    * Updates the text rendering according to the current text-related configuration properties.
    * This is an async process, so you can pass in a callback function to be executed when it
@@ -238,24 +265,8 @@ class Text extends Mesh {
         this._isSyncing = true;
         this.dispatchEvent(syncStartEvent);
 
-        getTextRenderInfo({
-          "text": this.text,
-          "font": this.font,
-          "fontSize": this.fontSize ?? 0.1,
-          "letterSpacing": this.letterSpacing ?? 0,
-          "lineHeight": this.lineHeight ?? 'normal',
-          "maxWidth": this.maxWidth,
-          "direction": this.direction,
-          "textAlign": this.textAlign,
-          "textIndent": this.textIndent,
-          "whiteSpace": this.whiteSpace,
-          "overflowWrap": this.overflowWrap,
-          "anchorX": this.anchorX,
-          "anchorY": this.anchorY,
-          "colorRanges": this.colorRanges,
-          "includeCaretPositions": true, //TODO parameterize
-          "sdfGlyphSize": this.sdfGlyphSize
-        }, (textRenderInfo) {
+        var _args = getOptions();
+        getTextRenderInfo(_args, (textRenderInfo) {
           this._isSyncing = false;
 
           // print(" --------------textRenderInfo----------------");
@@ -281,6 +292,7 @@ class Text extends Mesh {
           // If we had extra sync requests queued up, kick it off
           var queued = this._queuedSyncs;
           if (queued.length > 0) {
+          
             this._queuedSyncs.clear();
             this._needsSync = true;
             this.syncText(() => {
@@ -586,7 +598,7 @@ class Text extends Mesh {
 
 
   // Create setters for properties that affect text layout: SYNCABLE_PROPS
-  late Map<String, dynamic> _font;
+  Map<String, dynamic>? _font;
   get font => _font;
   set font(value) {
     this._font = value;

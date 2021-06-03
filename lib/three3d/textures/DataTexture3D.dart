@@ -10,8 +10,8 @@ class DataTexture3D extends Texture {
     this.image = ImageElement(data: data, width: width, height: height, depth: depth );
 
 
-    this.magFilter = NearestFilter;
-    this.minFilter = NearestFilter;
+    this.magFilter = LinearFilter;
+    this.minFilter = LinearFilter;
 
     this.wrapR = ClampToEdgeWrapping;
 

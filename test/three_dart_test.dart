@@ -1,20 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:three_dart/three_dart.dart';
 
 void main() {
   test('adds one to input values', () {
-    var voidMainRegExp = RegExp(r"\bvoid\s+main\s*\(\s*\)\s*{");
+    
+    List<int> _l = [0,2,3,10];
 
-    var str = """
-      void main {
-        hello worl
-      }
-    """;
+    var a = _l.asMap();
 
-    var matches = voidMainRegExp.firstMatch(str);
+    print(" ——a: ${a} ");
 
-    print(matches!.group(0));
 
   });
 }

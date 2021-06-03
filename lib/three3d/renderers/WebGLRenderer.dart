@@ -117,8 +117,7 @@ class WebGLRenderer {
   var _emptyScene = Scene();
 
   getTargetPixelRatio() {
-    // return _currentRenderTarget == null ? _pixelRatio : 1;
-    return 1;
+    return _currentRenderTarget == null ? _pixelRatio : 1;
   }
 
   // initialize
@@ -322,15 +321,18 @@ class WebGLRenderer {
     this.setViewport(0, 0, width, height);
   }
 
-  getDrawingBufferSize(target) {
+  Vector2 getDrawingBufferSize(target) {
     if (target == null) {
       print(
           'WebGLRenderer: .getdrawingBufferSize() now requires a Vector2 as an argument');
 
       target = new Vector2(0, 0);
     }
+    target.set(width * _pixelRatio, height * _pixelRatio);
 
-    return target.set(width * _pixelRatio, height * _pixelRatio).floor();
+    target.floor();
+
+    return target;
   }
 
   setDrawingBufferSize(width, height, pixelRatio) {
@@ -372,12 +374,14 @@ class WebGLRenderer {
     return target.copy(_scissor);
   }
 
-  setScissor(x, y, width, height) {
-    if (x.isVector4) {
-      _scissor.set(x.x, x.y, x.z, x.w);
-    } else {
-      _scissor.set(x, y, width, height);
-    }
+  setScissor(num x, num y, num width, num height) {
+    // if (x.isVector4) {
+    //   _scissor.set(x.x, x.y, x.z, x.w);
+    // } else {
+    //   _scissor.set(x, y, width, height);
+    // }
+
+    _scissor.set(x, y, width, height);
 
     state.scissor(
         _currentScissor.copy(_scissor).multiplyScalar(_pixelRatio).floor());
@@ -563,7 +567,7 @@ class WebGLRenderer {
     var frontFaceCW = (object.isMesh && object.matrixWorld.determinant() < 0);
 
 
-    print("WebGLRenderer.renderBufferDirect object: ${object.type} ${object.id} material: ${material.type} ${material.id} geometry: ${geometry.type} ${geometry.id} object.isMesh: ${object.isMesh} frontFaceCW: ${frontFaceCW} ");
+    // print("WebGLRenderer.renderBufferDirect object: ${object.type} ${object.id} material: ${material.type} ${material.id} geometry: ${geometry.type} ${geometry.id} object.isMesh: ${object.isMesh} frontFaceCW: ${frontFaceCW} ");
 
    
     WebGLProgram program = setProgram(camera, scene, material, object);

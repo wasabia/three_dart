@@ -560,22 +560,14 @@ class WebGLBindingStates {
 		if ( this.bindingStates[ geometry.id ] == null ) return;
 
 		var programMap = this.bindingStates[ geometry.id ];
-
 		for ( var programId in programMap.keys ) {
-
 			var stateMap = programMap[ programId ];
-
-			for ( var wireframe in stateMap ) {
-
-				deleteVertexArrayObject( stateMap[ wireframe ].object );
-
-				stateMap.remove(wireframe);
-
+			for ( var wireframe in stateMap.keys ) {
+				deleteVertexArrayObject( stateMap[ wireframe ]["object"] );
 			}
-
-			programMap.remove( programId );
-
+      stateMap.clear();
 		}
+    programMap.clear();
 
 		bindingStates.remove( geometry.id );
 

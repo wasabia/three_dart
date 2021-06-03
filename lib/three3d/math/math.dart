@@ -74,7 +74,7 @@ class Math {
     return math.pow(x, y);
   }
 
-  static double log(double x) {
+  static num log(num x) {
     return math.log(x);
   }
 

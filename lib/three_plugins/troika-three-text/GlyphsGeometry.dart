@@ -53,8 +53,11 @@ class GlyphsGeometry extends InstancedBufferGeometry {
   int? _detail;
   num _curveRadius = 0;
 
-  late List? _blockBounds;
-  late List? _chunkedBounds;
+  List? _blockBounds;
+  List? _chunkedBounds;
+
+
+  List? get blockBounds => _blockBounds;
 
   // Define groups for rendering text outline as a separate pass; these will only
   // be used when the `material` getter returns an array, i.e. outlineWidth > 0.
@@ -206,7 +209,8 @@ updateBufferAttr(geom, attrName, newArray, itemSize) {
   if (newArray != null) {
     // If length isn't changing, just update the attribute's array data
     if (attr != null && attr.array.length == newArray.length) {
-      attr.array.set(newArray);
+      // Float32List 
+      attr.array.setAll(0, newArray);
       attr.needsUpdate = true;
     } else {
       geom.setAttribute(attrName, new InstancedBufferAttribute(newArray, itemSize, null, null));

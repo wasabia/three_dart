@@ -12,8 +12,8 @@ class DataTexture2DArray extends Texture {
 
     this.image = ImageElement(width: width, height: height);
 
-    this.magFilter = NearestFilter;
-    this.minFilter = NearestFilter;
+    this.magFilter = LinearFilter;
+    this.minFilter = LinearFilter;
 
     this.wrapR = ClampToEdgeWrapping;
 
