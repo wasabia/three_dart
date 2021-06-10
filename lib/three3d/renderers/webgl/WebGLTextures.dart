@@ -212,9 +212,11 @@ class WebGLTextures {
 		deallocateTexture( texture );
 
 		if ( texture.isVideoTexture ) {
-
 			_videoTextures.remove( texture );
+		}
 
+    if ( texture.isOpenGLTexture ) {
+			_videoTextures.remove( texture );
 		}
 
 		info.memory["textures"] = info.memory["textures"]! - 1;
@@ -325,26 +327,24 @@ class WebGLTextures {
 		var textureProperties = properties.get( texture );
 
 		if ( texture.isVideoTexture ) updateVideoTexture( texture );
+    if( texture.isOpenGLTexture ) {
+      uploadOpenGLTexture( textureProperties, texture, slot );
+      return;
+    }
+ 
 
     // print("WebGLTextures setTexture2D texture: ${texture.runtimeType} ${texture.version} extureProperties: ${textureProperties["__webglTexture"]} ");
-
-  
 		if ( texture.version > 0 && textureProperties["__version"] != texture.version ) {
 
-      if(texture.isOpenGLTexture) {
-        uploadOpenGLTexture( textureProperties, texture, slot );
-        return;
-      } else {
-        var image = texture.image;
+      var image = texture.image;
 
-        if ( image == null ) {
-          print( 'THREE.WebGLRenderer: Texture marked for update but image is null' );
-        } else if ( image.complete == false ) {
-          print( 'THREE.WebGLRenderer: Texture marked for update but image is incomplete' );
-        } else {
-          uploadTexture( textureProperties, texture, slot );
-          return;
-        }
+      if ( !texture.isOpenGLTexture && image == null ) {
+        print( 'THREE.WebGLRenderer: Texture marked for update but image is null' );
+      } else if ( !texture.isOpenGLTexture && image.complete == false ) {
+        print( 'THREE.WebGLRenderer: Texture marked for update but image is incomplete' );
+      } else {
+        uploadTexture( textureProperties, texture, slot );
+        return;
       }
 
 		}
@@ -483,21 +483,6 @@ class WebGLTextures {
 
 		}
 
-	}
-
-  uploadOpenGLTexture(textureProperties, Texture texture, int slot) {
-		var textureType = gl.TEXTURE_2D;
-
-		initTexture( textureProperties, texture );
-
-		state.activeTexture( gl.TEXTURE0 + slot );
-		state.bindTexture( textureType, textureProperties["__webglTexture"] );
-
-    textureProperties["__maxMipLevel"] = 0;
-
-		textureProperties["__version"] = texture.version;
-
-		if ( texture.onUpdate != null ) texture.onUpdate!( texture );
 	}
 
 	uploadTexture( textureProperties, Texture texture, int slot ) {
@@ -1225,7 +1210,7 @@ class WebGLTextures {
 
 	}
 
-	updateVideoTexture( texture ) {
+	updateVideoTexture(VideoTexture texture ) {
 
 		var frame = info.render["frame"];
 
@@ -1237,7 +1222,27 @@ class WebGLTextures {
 			texture.update();
 
 		}
+	}
 
+  uploadOpenGLTexture(textureProperties, OpenGLTexture texture, int slot) {
+		
+    var frame = info.render["frame"];
+		if ( _videoTextures[texture] != frame ) {
+			_videoTextures[texture] = frame;
+			texture.update();
+		}
+    
+    var textureType = gl.TEXTURE_2D;
+
+
+		initTexture( textureProperties, texture );
+
+		state.activeTexture( gl.TEXTURE0 + slot );
+		state.bindTexture( textureType, textureProperties["__webglTexture"] );
+
+		gl.pixelStorei( gl.UNPACK_FLIP_Y_WEBGL, texture.flipY ? 1 : 0 );
+		gl.pixelStorei( gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, texture.premultiplyAlpha ? 1 : 0 );
+		gl.pixelStorei( gl.UNPACK_ALIGNMENT, texture.unpackAlignment);
 	}
 
 	// backwards compatibility
@@ -1246,6 +1251,8 @@ class WebGLTextures {
 	bool warnedTextureCube = false;
 
 	safeSetTexture2D( texture, slot ) {
+
+    // print(" WebGLTextures.safeSetTexture2D  texture: ${texture}  isOpenGLTexture: ${texture.isOpenGLTexture} " );
 
 		if ( texture != null && texture.isWebGLRenderTarget ) {
 

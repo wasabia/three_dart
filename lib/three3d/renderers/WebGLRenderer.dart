@@ -124,6 +124,8 @@ class WebGLRenderer {
 
   late dynamic _gl;
 
+  dynamic get gl => _gl;
+
   late WebGLExtensions extensions;
   late WebGLCapabilities capabilities;
   late WebGLState state;
@@ -791,8 +793,6 @@ class WebGLRenderer {
     if (this.sortObjects == true) {
       currentRenderList!.sort(_opaqueSort, _transparentSort);
     }
-
-    //
 
     if (_clippingEnabled == true) clipping.beginShadows();
 
@@ -1465,7 +1465,7 @@ class WebGLRenderer {
     _currentActiveMipmapLevel = activeMipmapLevel;
 
 
-    if (renderTarget != null &&  properties.get(renderTarget)["__webglFramebuffer"] == null) {
+    if (renderTarget != null && properties.get(renderTarget)["__webglFramebuffer"] == null) {
       textures.setupRenderTarget(renderTarget);
     }
 

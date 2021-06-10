@@ -7,10 +7,9 @@ class VideoTexture extends Texture {
 
   VideoTexture( video, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy ) : super(video, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy, null) {
 
-    this.format = format != null ? format : RGBFormat;
-
-    this.minFilter = minFilter != null ? minFilter : LinearFilter;
-    this.magFilter = magFilter != null ? magFilter : LinearFilter;
+    this.format = format ?? RGBAFormat;
+    this.minFilter = minFilter ?? LinearFilter;
+    this.magFilter = magFilter ?? LinearFilter;
 
     this.generateMipmaps = false;
 
@@ -26,18 +25,15 @@ class VideoTexture extends Texture {
 
 	
 
-	// update() {
+	update() {
 
-	// 	const video = this.image;
-	// 	const hasVideoFrameCallback = 'requestVideoFrameCallback' in video;
+		// var video = this.image;
+		// var hasVideoFrameCallback = 'requestVideoFrameCallback' in video;
+		// if ( hasVideoFrameCallback == false && video.readyState >= video.HAVE_CURRENT_DATA ) {
+		// 	this.needsUpdate = true;
+		// }
 
-	// 	if ( hasVideoFrameCallback == false && video.readyState >= video.HAVE_CURRENT_DATA ) {
-
-	// 		this.needsUpdate = true;
-
-	// 	}
-
-	// }
+	}
 
 	// updateVideo() {
 

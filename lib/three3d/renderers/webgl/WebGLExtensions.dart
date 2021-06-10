@@ -55,11 +55,7 @@ class WebGLExtensions {
 
   hasForApp(name) {
     if(extensions == null) {
-
-      print("getExtension  1 --------------");
-
       List<String> _extensions = gl.getExtension(name);
-      print("getExtension  2 --------------");
 
       extensions = {};
       _extensions.forEach((element) {
@@ -91,9 +87,9 @@ class WebGLExtensions {
     // print(" WebGLExtensions get name: ${name} ");
 
     if ( ! this.has( name ) ) {
-      extensions?.keys.forEach((element) {
-        print(element);
-      });
+      // extensions?.keys.forEach((element) {
+      //   print(element);
+      // });
       print( 'ERROR: ------ THREE.WebGLRenderer: ' + name + ' extension not supported.-------------' );
       return false;
     }

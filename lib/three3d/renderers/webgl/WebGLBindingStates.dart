@@ -106,7 +106,14 @@ class WebGLBindingStates {
 
 	bindVertexArrayObject( vao ) {
 
-		if ( capabilities.isWebGL2 ) return gl.bindVertexArray( vao );
+		if ( capabilities.isWebGL2 ) {
+      if(vao != null) {
+        return gl.bindVertexArray( vao );
+      } else {
+        print(" WebGLBindingStates.dart  bindVertexArrayObject VAO is null");
+        return;
+      }
+    }
 
 		return extension.bindVertexArrayOES( vao );
 

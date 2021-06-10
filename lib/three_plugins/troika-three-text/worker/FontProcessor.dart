@@ -281,7 +281,7 @@ class FontProcessor {
     // Find overall position adjustments for anchoring
     num _height = lines.length * lineHeight;
     num anchorXOffset = -anchorX * maxLineWidth;
-    num anchorYOffset = -anchorY * _height;
+    num anchorYOffset = anchorY * _height;
     
     if (!metricsOnly) {
 

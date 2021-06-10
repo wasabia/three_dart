@@ -9,10 +9,10 @@ class OpenGLTexture extends Texture {
   OpenGLTexture( openGLTexture, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy ) : super(null, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy, null) {
     this.openGLTexture = openGLTexture;
 
-    this.format = format != null ? format : RGBFormat;
+    this.format = format ?? RGBFormat;
 
-    this.minFilter = minFilter != null ? minFilter : LinearFilter;
-    this.magFilter = magFilter != null ? magFilter : LinearFilter;
+    this.minFilter = minFilter ?? LinearFilter;
+    this.magFilter = magFilter ?? LinearFilter;
 
     this.generateMipmaps = false;
     this.needsUpdate = true;
@@ -25,5 +25,8 @@ class OpenGLTexture extends Texture {
 
 	}
 
+  update() {
+    this.needsUpdate = true;
+  }
 
 }
