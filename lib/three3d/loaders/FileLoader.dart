@@ -85,14 +85,24 @@ class FileLoader extends Loader {
 
     dynamic respData;
     if(!kIsWeb && !url.startsWith("http")) {
-      if(this.responseType == "text") {
-        respData = await rootBundle.loadString(url);
-      } else if(url.startsWith("assets")) {
-        ByteData resp = await rootBundle.load(url);
-        respData = Uint8List.view(resp.buffer);
+      
+      if(url.startsWith("assets")) {
+        if(this.responseType == "text") {
+          respData = await rootBundle.loadString(url);
+        } else {
+          ByteData resp = await rootBundle.load(url);
+          respData = Uint8List.view(resp.buffer);
+        }
       } else {
+
         var file = File(url);
-        respData = file.readAsBytesSync();
+
+        if(this.responseType == "text") {
+          respData = await file.readAsString();
+        } else {
+          respData = await file.readAsBytes();
+        }
+        
       }
     } else {
       http.Response response = await http.get(Uri.parse(url));

@@ -270,7 +270,7 @@ class Text extends Mesh {
           this._isSyncing = false;
 
           // print(" --------------textRenderInfo----------------");
-          // print(textRenderInfo);
+          // print(textRenderInfo["glyphBounds"]);
           // var __sdfTexture = textRenderInfo["sdfTexture"];
           // print(__sdfTexture);
           // print(__sdfTexture.image);
@@ -475,14 +475,19 @@ class Text extends Mesh {
 
     // Shortcut for setting material color via `color` prop on the mesh; this is
     // applied only to the derived material to avoid mutating a shared base material.
-    var color = isOutline ? this.outlineColor : this.color;
+    var _color = isOutline ? this.outlineColor : this.color;
 
-    if (color == null) {
+    if (_color == null) {
       material.color = null; //inherit from base
     } else {
-      var colorObj = material.color ?? new Color(0,0,1);
-      if (!(color.equal(colorObj)) || color is Color) {
-        colorObj.copy(color);
+
+      if(material.color == null) {
+        material.color = Color(0,0,1);
+      }
+
+      var colorObj = material.color;
+      if (!(_color.equal(colorObj)) || _color is Color) {
+        colorObj.copy(_color);
       }
     }
 

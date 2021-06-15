@@ -45,8 +45,7 @@ class EffectComposer {
         (this._height * this._pixelRatio).toInt(), 
         WebGLRenderTargetOptions(parameters) 
       );
-      renderTarget.texture.name = 'EffectComposer.rt1';
-
+  
     } else {
 
       this._pixelRatio = 1;

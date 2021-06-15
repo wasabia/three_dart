@@ -118,6 +118,8 @@ class Matrix4 {
 
 	}
 
+  
+
 	extractRotation( m ) {
 
 		// this method does not support reflection matrices
@@ -578,8 +580,7 @@ class Matrix4 {
 
 		);
 
-
-
+    return this;
 	}
 
 	makeRotationX( theta ) {

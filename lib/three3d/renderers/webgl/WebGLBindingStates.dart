@@ -79,6 +79,8 @@ class WebGLBindingStates {
 		}
 
 
+    // print(" WebGLBindingStates.setup updateBuffers: ${updateBuffers} ");
+
 		if ( updateBuffers ) {
 
 			setupVertexAttributes( object, material, program, geometry );
@@ -195,7 +197,6 @@ class WebGLBindingStates {
 	}
 
 	needsUpdate( geometry, index ) {
-
 		var cachedAttributes = currentState["attributes"];
 		var geometryAttributes = geometry.attributes;
 
@@ -351,6 +352,7 @@ class WebGLBindingStates {
 
 		if ( capabilities.isWebGL2 == false && ( object.isInstancedMesh || geometry.isInstancedBufferGeometry ) ) {
 
+      print("  geometry.isInstancedBufferGeometry: ${geometry.isInstancedBufferGeometry} ");
 			if ( extensions.get( 'ANGLE_instanced_arrays' ) == null ) return;
 
 		}
@@ -365,6 +367,8 @@ class WebGLBindingStates {
 
 
 		for( var name in programAttributes.keys ) {
+
+      print("WebGLBindingState setupVertexAttributes name: ${name} ");
 
 			var programAttribute = programAttributes[ name ];
 

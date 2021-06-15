@@ -11,6 +11,16 @@ class LUTCubeLoader extends Loader {
 
   }
 
+  loadAsync( String url, Function? onProgress ) async {
+
+		var loader = new FileLoader( this.manager );
+		loader.setPath( this.path );
+		loader.setResponseType( 'text' );
+		final resp = await loader.loadAsync( url, null );
+
+    return this.parse( resp );
+	}
+
 	load( String url, Function? onLoad, Function? onProgress, Function? onError ) async {
 
 		var loader = new FileLoader( this.manager );

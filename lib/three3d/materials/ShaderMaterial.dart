@@ -24,9 +24,6 @@ part of three_materials;
 class ShaderMaterial extends Material {
 
 
-
-
-
   bool isShaderMaterial = true;
 
 

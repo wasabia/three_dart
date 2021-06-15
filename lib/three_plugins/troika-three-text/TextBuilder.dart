@@ -127,9 +127,9 @@ var processInWorker = (args) {
  * @param {object} args
  * @param {getTextRenderInfo~callback} callback
  */
-getTextRenderInfo(Map<String, dynamic> args, callback) {
+getTextRenderInfo(Map<String, dynamic> args2, callback) {
   hasRequested = true;
-  args = assign({}, args);
+  Map<String, dynamic> args = assign({}, args2);
 
   // Normalize text to a string
   args["text"] = '' + args["text"];

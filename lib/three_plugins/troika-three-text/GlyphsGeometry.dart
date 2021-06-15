@@ -203,15 +203,15 @@ class GlyphsGeometry extends InstancedBufferGeometry {
 
 
 updateBufferAttr(geom, attrName, newArray, itemSize) {
-
-
   var attr = geom.getAttribute(attrName);
   if (newArray != null) {
     // If length isn't changing, just update the attribute's array data
     if (attr != null && attr.array.length == newArray.length) {
-      // Float32List 
+      
       attr.array.setAll(0, newArray);
       attr.needsUpdate = true;
+      // geom.setAttribute(attrName, new InstancedBufferAttribute(newArray, itemSize, null, null));
+  
     } else {
       geom.setAttribute(attrName, new InstancedBufferAttribute(newArray, itemSize, null, null));
       // If the new attribute has a different size, we also have to (as of r117) manually clear the
@@ -221,6 +221,7 @@ updateBufferAttr(geom, attrName, newArray, itemSize) {
       // different size is supported, but https://github.com/mrdoob/three.js/pull/17418 strongly
       // implies it should be supported. It's possible we need to
 
+      geom.instanceCount = null;
       
       geom.dispose(); //for r118+, more robust feeling, but more heavy-handed than I'd like
     }

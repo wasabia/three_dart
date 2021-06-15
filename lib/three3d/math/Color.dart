@@ -192,6 +192,16 @@ class Color {
     this.b = b ?? 1.0;
   }
 
+
+  // 
+  factory Color.setRGB255(int r, int g, int b) {
+
+    var _color = Color(r / 255.0, g / 255.0, b / 255.0);
+  
+    return _color;
+  }
+
+
   static Color fromHex(hex) {
     return Color(0.0, 0.0, 0.0).setHex(hex);
   }
