@@ -19,10 +19,6 @@ class TTFFont extends Font {
   List<Shape> generateShapes(text, {int size = 100}) {
     List<Shape> shapes = [];
     var paths = createPaths(text, size, this.data);
-
-    print(paths);
-    print(" --------------paths ------------- ");
-
     for (var p = 0, pl = paths.length; p < pl; p++) {
       // Array.prototype.push.apply( shapes, paths[ p ].toShapes() );
       shapes.addAll(paths[p].toShapes(false, false));

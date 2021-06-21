@@ -11,15 +11,17 @@ import 'package:flutter_gl/flutter_gl.dart';
 
 
 import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_bas/three_bas.dart' as THREE_BAS;
+
+import 'Slide.dart';
 
 
 
-
-class ExampleTextBufferGeometry extends StatefulWidget {
+class ExampleSlide extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<ExampleTextBufferGeometry> {
+class _MyAppState extends State<ExampleSlide> {
   
 
 
@@ -51,6 +53,8 @@ class _MyAppState extends State<ExampleTextBufferGeometry> {
   late THREE.AnimationMixer mixer;
   late THREE.Clock clock;
   late THREE.WebGLRenderTarget renderTarget;
+  late Slide slide;
+  late Slide slide2;
 
   var mixers = [];
   var objects = [];
@@ -219,7 +223,7 @@ class _MyAppState extends State<ExampleTextBufferGeometry> {
 
   _addX() {
    
-    mesh.rotation.x = mesh.rotation.x + 0.1;
+    slide.mesh.material.uniforms["uTime"]["value"] += 0.1;
 
     render();
   }
@@ -327,8 +331,8 @@ class _MyAppState extends State<ExampleTextBufferGeometry> {
     
 
 
-    camera = new THREE.PerspectiveCamera( fov: 40, aspect: 1, near: 1, far: 10000 );
-    camera.position.z = 1600;
+    camera = new THREE.PerspectiveCamera( fov: 60, aspect: 1, near: 1, far: 10000 );
+    camera.position.z = 60;
 
 
     scene = new THREE.Scene();
@@ -336,50 +340,56 @@ class _MyAppState extends State<ExampleTextBufferGeometry> {
 
     camera.lookAt(scene.position);
 
-    // var loader = new THREE.FontLoader(null);
-    var loader = new THREE.TYPRLoader(null);
-    // var loader = new THREE.TTFLoader(null);
-
-    // String _fontPath = 'assets/kenpixel.ttf';
-    // String _fontPath = "fonts/ttf/DMFT.ttf";
-    String _fontPath = "assets/pingfang.ttf";
-    // String _fontPath = 'fonts/kenpixel.ttf';
-    // String _fontPath = 'fonts/pingfang.ttf';
-    // String _fontPath = "fonts/PingFang SC_Medium.json";
-
-    var dataJson = await loader.loadAsync( _fontPath, null );
-    var font = THREE.TYPRFont(dataJson);
-    // var font = THREE.TTFFont(dataJson);
 
 
+    var width = 100;
+    var height = 90;
 
-    var geometry = new THREE.TextBufferGeometry( "three.jso0", {
-      "font": font,
-      "size": 100,
-      "height": 25,
-      "curveSegments": 3,
-      "bevelThickness": 3,
-      "bevelSize": 5,
-      "bevelEnabled": true
-    } );
+    print(" slide 1............. ");
+
+    slide = new Slide(width, height, "in");
 
 
-    // var shapes = font.generateShapes( "O", size: 100 );
+    
+    var l1 = new THREE.ImageLoader(null);
+    l1.setCrossOrigin("Anonymous");
+    // var img1 = await l1.loadAsync(
+    //   "https://s3-us-west-2.amazonaws.com/s.cdpn.io/175711/winter.jpg",
+    //   null
+    // );
+    var img1 = await l1.loadAsync("assets/winter.jpg", null);
 
-    // var geometry = new THREE.ShapeBufferGeometry( shapes );
+    slide.setImage(img1);
 
 
 
-    geometry.center();
+    print(" slide 2............. ");
 
+    // var loader = THREE.TextureLoader(null);
+    // var _texture = await loader.loadAsync("https://s3-us-west-2.amazonaws.com/s.cdpn.io/175711/winter.jpg", null);
+    
+    // var _texture = await loader.loadAsync("assets/winter.jpg", null);
 
-    var material = THREE.MeshBasicMaterial( {"color": 0xffffff} );
+    // print(" _texture load ${_texture} ");
+    
+    // slide.mesh.material.map = _texture;
+    // slide.mesh.material.map.needsUpdate = true;
+    // slide.mesh.material.needsUpdate = true;
 
-    mesh = new THREE.Mesh(geometry, material);
+    // slide.setImage(img1);
 
-    mesh.rotation.set(0.1, 0.2, 0.3);
+    scene.add(slide.mesh);
 
-    scene.add(mesh);
+    // slide2 = new Slide(width, height, "in");
+    // var l2 = new THREE.ImageLoader(null);
+    // l2.setCrossOrigin("Anonymous");
+    // var img2 = await l2.loadAsync(
+    //   "https://s3-us-west-2.amazonaws.com/s.cdpn.io/175711/spring.jpg",
+    //   null
+    // );
+
+    // slide2.setImage(img2);
+    // scene.add(slide2.mesh);
 
     print("renderer!.setSize width: ${width} height: ${height}  ");
   }
@@ -393,3 +403,7 @@ class _MyAppState extends State<ExampleTextBufferGeometry> {
 
  
 }
+
+
+
+

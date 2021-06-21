@@ -16,7 +16,10 @@ part './CylinderGeometry.dart';
 part './DodecahedronBufferGeometry.dart';
 part './DodecahedronGeometry.dart';
 part './ExtrudeBufferGeometry.dart';
+
 part './PlaneBufferGeometry.dart';
+part './PlaneGeometry.dart';
+
 part './PolyhedronBufferGeometry.dart';
 part './ShapeBufferGeometry.dart';
 part './IcosahedronBufferGeometry.dart';

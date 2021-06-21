@@ -16,7 +16,6 @@ import 'package:three_dart/three3d/objects/index.dart';
 import 'package:three_dart/three3d/renderers/index.dart';
 import 'package:three_dart/three3d/renderers/index.dart';
 
-import 'package:three_dart/three3d/renderers/shaders/UniformsUtils.dart';
 import 'package:three_dart/three3d/scenes/index.dart';
 import 'package:three_dart/three3d/textures/index.dart';
 import '../../constants.dart';

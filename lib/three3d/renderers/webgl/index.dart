@@ -21,7 +21,6 @@ import 'package:three_dart/three3d/renderers/shaders/ShaderLib.dart';
 import 'package:three_dart/three3d/renderers/shaders/ShaderLib/vsm_frag.glsl.dart';
 import 'package:three_dart/three3d/renderers/shaders/ShaderLib/vsm_vert.glsl.dart';
 import 'package:three_dart/three3d/renderers/shaders/UniformsLib.dart';
-import 'package:three_dart/three3d/renderers/shaders/UniformsUtils.dart';
 import 'package:three_dart/three3d/textures/index.dart';
 import 'package:three_dart/three3d/utils.dart';
 

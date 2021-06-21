@@ -13,7 +13,7 @@ class TYPRFont extends Font {
 
     for (var p = 0, pl = paths.length; p < pl; p++) {
       // Array.prototype.push.apply( shapes, paths[ p ].toShapes() );
-      shapes.addAll(paths[p].toShapes(false, false));
+      shapes.addAll(paths[p].toShapes(true, true));
     }
 
     return shapes;
@@ -75,15 +75,14 @@ class TYPRFont extends Font {
     var cmds = charPath["cmds"];
     List<num> crds = List<num>.from(charPath["crds"]);
 
-    print(" charPath  before scale ....");
-
-    print(crds);
+    // print(" charPath  before scale ....");
+    // print(crds);
 
     crds = crds.map((n) => Math.round(n * _preScale)).toList();
 
-    print(" charPath ha: ${ha} _preScale: ${_preScale} ");
-    print(cmds);
-    print(crds);
+    // print(" charPath ha: ${ha} _preScale: ${_preScale} ");
+    // print(cmds);
+    // print(crds);
 
     int i = 0;
     int l = cmds.length;

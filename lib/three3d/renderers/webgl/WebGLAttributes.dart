@@ -35,20 +35,21 @@ class WebGLAttributes {
       arrayList = Uint32List.fromList(array.map((e) => e.toInt()).toList());
     } else if (arrayType == InterleavedBufferAttribute || arrayType == BufferAttribute) {
       arrayList = array;
-      final arrayType = array.runtimeType;
-      if(arrayType == Uint8List) {
+      String arrayType = array.runtimeType.toString();
+      if(arrayType == "Uint8List") {
         type = gl.UNSIGNED_BYTE;
         bytesPerElement = Uint8List.bytesPerElement;
-      } else if(arrayType == Float32List) {
+      } else if(arrayType == "Float32List") {
+        
         type = gl.FLOAT;
         bytesPerElement = Float32List.bytesPerElement;
-      } else if(arrayType == Uint32List) {
+      } else if(arrayType == "Uint32List") {
         type = gl.UNSIGNED_INT;
         bytesPerElement = Uint32List.bytesPerElement;
       } else {
 
         // 保持抛出异常 及时发现异常情况
-        throw("WebGLAttributes.createBuffer InterleavedBufferAttribute arrayType: ${array.runtimeType} is not support  ");
+        throw("WebGLAttributes.createBuffer InterleavedBufferAttribute arrayType: ${arrayType} ${arrayType == "Float32List"} is not support  ");
       }
 
     } else if(arrayType == InstancedBufferAttribute) {

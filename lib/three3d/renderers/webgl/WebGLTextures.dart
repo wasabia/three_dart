@@ -333,7 +333,7 @@ class WebGLTextures {
     }
  
 
-    // print("WebGLTextures setTexture2D texture: ${texture.runtimeType} ${texture.version} extureProperties: ${textureProperties["__webglTexture"]} ");
+    print("WebGLTextures setTexture2D texture: ${texture.runtimeType} ${texture.version} extureProperties: ${textureProperties["__webglTexture"]} ");
 		if ( texture.version > 0 && textureProperties["__version"] != texture.version ) {
 
       var image = texture.image;
@@ -1252,7 +1252,7 @@ class WebGLTextures {
 
 	safeSetTexture2D( texture, slot ) {
 
-    // print(" WebGLTextures.safeSetTexture2D  texture: ${texture}  isOpenGLTexture: ${texture.isOpenGLTexture} " );
+    print(" WebGLTextures.safeSetTexture2D  texture: ${texture}  isOpenGLTexture: ${texture.isOpenGLTexture} " );
 
 		if ( texture != null && texture.isWebGLRenderTarget ) {
 

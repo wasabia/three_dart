@@ -6,7 +6,7 @@ import 'package:three_dart/three3d/math/index.dart';
 
 Map<String, dynamic> UniformsLib = {
   "common": {
-    "diffuse": {"value": new Color(0, 0, 0)},
+    "diffuse": {"value": Color.setRGB255(238, 238, 238)},
     "opacity": {"value": 1.0},
     "map": {"value": null},
     "uvTransform": {"value": new Matrix3()},
@@ -146,7 +146,7 @@ Map<String, dynamic> UniformsLib = {
     "ltc_2": {"value": null}
   },
   "points": {
-    "diffuse": {"value": new Color(200, 200, 200)},
+    "diffuse": {"value": Color.setRGB255(238, 238, 238)},
     "opacity": {"value": 1.0},
     "size": {"value": 1.0},
     "scale": {"value": 1.0},
@@ -155,7 +155,7 @@ Map<String, dynamic> UniformsLib = {
     "uvTransform": {"value": new Matrix3()}
   },
   "sprite": {
-    "diffuse": {"value": new Color(200, 200, 200)},
+    "diffuse": {"value": Color.setRGB255(238, 238, 238)},
     "opacity": {"value": 1.0},
     "center": {"value": new Vector2(0.5, 0.5)},
     "rotation": {"value": 0.0},

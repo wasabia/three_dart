@@ -7,8 +7,8 @@ class ShapePath {
 
   String type = "ShapePath";
   Color color = Color(1,1,1);
-  List subPaths = [];
-  Path? currentPath;
+  List<Path> subPaths = [];
+  late Path currentPath;
   Map<String, dynamic>? userData;
 
   ShapePath() {}
@@ -16,24 +16,24 @@ class ShapePath {
   moveTo( num x, num y ) {
 		this.currentPath = Path(null);
 		this.subPaths.add( this.currentPath );
-		this.currentPath!.moveTo( x, y );
+		this.currentPath.moveTo( x, y );
 		return this;
 	}
 
 	lineTo( x, y ) {
-		this.currentPath!.lineTo( x, y );
+		this.currentPath.lineTo( x, y );
 		return this;
 	}
 
 	quadraticCurveTo ( aCPx, aCPy, aX, aY ) {
 
-		this.currentPath!.quadraticCurveTo( aCPx, aCPy, aX, aY );
+		this.currentPath.quadraticCurveTo( aCPx, aCPy, aX, aY );
 		return this;
 	}
 
 	bezierCurveTo ( aCP1x, aCP1y, aCP2x, aCP2y, aX, aY ) {
 
-		this.currentPath!.bezierCurveTo( aCP1x, aCP1y, aCP2x, aCP2y, aX, aY );
+		this.currentPath.bezierCurveTo( aCP1x, aCP1y, aCP2x, aCP2y, aX, aY );
 
 		return this;
 
@@ -41,7 +41,7 @@ class ShapePath {
 
 	splineThru ( pts ) {
 
-		this.currentPath!.splineThru( pts );
+		this.currentPath.splineThru( pts );
 
 		return this;
 

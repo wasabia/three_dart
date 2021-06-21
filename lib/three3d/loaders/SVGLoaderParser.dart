@@ -1,11 +1,4 @@
-import 'package:three_dart/three3d/extras/index.dart';
-import "package:universal_html/html.dart";
-
-
-
-import 'package:three_dart/three3d/math/index.dart';
-
-import '../dartHelpers.dart';
+part of three_loaders;
 
 class SVGLoaderParser {
   //
@@ -72,14 +65,16 @@ class SVGLoaderParser {
   };
 
   SVGLoaderParser(String text, {num defaultDPI = 90, String defaultUnit = "px"}) {
-    xml = new DomParser().parseFromString(text, 'image/svg+xml'); // application/xml
+    xml = parseXmlDocument(text); // application/xml
 
     this.defaultDPI = defaultDPI;
     this.defaultUnit = defaultUnit;
   }
 
+  SVGLoaderParser.parser() {}
+
   // Function parse =========== start
-  parse(text) {
+  Map<String, dynamic> parse(text) {
     parseNode(xml.documentElement, {
       "fill": '#000',
       "fillOpacity": 1,
@@ -104,7 +99,7 @@ class SVGLoaderParser {
 
     var theUnit = 'px';
 
-    // print("SvgLoader.parseFloatWithUnits string runtimeType: ${string.runtimeType} ");
+    // print("SvgLoader.parseFloatWithUnits ${string} runtimeType: ${string.runtimeType} ");
 
     if (string.runtimeType == String) {
       for (var i = 0, n = units.length; i < n; i++) {
@@ -134,12 +129,27 @@ class SVGLoaderParser {
       }
     }
 
-    return scale * num.parse("${string}");
+
+    String _str = string;
+    // if(_str.startsWith("-.")) {
+    //   _str = _str.replaceFirst("-.", "-0.");
+    // }
+
+    List<String> _strs = _str.split(".");
+
+    if(_strs.length >= 3) {
+      _strs = _strs.sublist(0, 2);
+
+      _str = _strs.join(".");
+    }
+
+    // print(" string: ${_str} ");
+
+    return scale * num.parse("${_str}");
   }
 
   parseFloats(String string) {
-    // print("SvgLoader.parseFloats string: ${string} ");
-
+   
     RegExp reg = RegExp(r"[\s,]+|(?=\s?[+\-])");
     var array = string.split(reg);
 
@@ -165,6 +175,8 @@ class SVGLoaderParser {
       // array[i] = parseFloatWithUnits(number);
       array2.add(parseFloatWithUnits(number));
     }
+
+
 
     return array2;
   }
@@ -510,7 +522,7 @@ class SVGLoaderParser {
         cx, cy, rx, ry, theta, theta + delta, sweep_flag == 0, x_axis_rotation);
   }
 
-  parsePathNode(node) {
+  ShapePath parsePath(String d) {
     var path = new ShapePath();
 
     var point = new Vector2(null, null);
@@ -520,20 +532,14 @@ class SVGLoaderParser {
     var isFirstPoint = true;
     var doSetFirstPoint = false;
 
-    var d = node.getAttribute('d');
-
-    // print( d );
-
     var _reg = RegExp(r"[a-df-z][^a-df-z]*", caseSensitive: false);
     var commands = _reg.allMatches(d);
 
     // var commands = d.match( /[a-df-z][^a-df-z]*/ig );
 
-    // for ( var i = 0, l = commands.length; i < l; i ++ ) {
     commands.forEach((item) {
       var command = item.group(0)!;
 
-      // print("l: ${commands.length} ${item.groupCount} command: ${command} ");
 
       var type = charAt(command, 0);
       var data = substr(command, 1).trim();
@@ -542,8 +548,6 @@ class SVGLoaderParser {
         doSetFirstPoint = true;
         isFirstPoint = false;
       }
-
-      // print(" type: ${type} ");
 
       switch (type) {
         case 'M':
@@ -866,12 +870,12 @@ class SVGLoaderParser {
 
           // print("path.currentPath: ${path.currentPath} ");
 
-          path.currentPath!.autoClose = true;
+          path.currentPath.autoClose = true;
 
-          if (path.currentPath!.curves.length > 0) {
+          if (path.currentPath.curves.length > 0) {
             // Reset point to beginning of Path
             point.copy(firstPoint);
-            path.currentPath!.currentPoint.copy(point);
+            path.currentPath.currentPoint.copy(point);
             isFirstPoint = true;
           }
 
@@ -888,6 +892,11 @@ class SVGLoaderParser {
     });
 
     return path;
+  }
+
+  parsePathNode(node) {
+    var d = node.getAttribute('d');
+    return parsePath(d);
   }
 
   /*
@@ -949,14 +958,14 @@ class SVGLoaderParser {
     String _points = node.getAttribute('points');
     var matches = regex.allMatches(_points);
 
-    print(" _points: ${_points} ");
+    // print(" _points: ${_points} ");
     
     for(var match in matches) {
       
       var a = match.group(1);
       var b = match.group(2);
 
-      print("index: ${index} a: ${a} b: ${b} ");
+      // print("index: ${index} a: ${a} b: ${b} ");
 
       var x = parseFloatWithUnits(a);
       var y = parseFloatWithUnits(b);
@@ -970,7 +979,7 @@ class SVGLoaderParser {
       index++;
     }
 
-    path.currentPath!.autoClose = true;
+    path.currentPath.autoClose = true;
 
     return path;
   }
@@ -1000,7 +1009,7 @@ class SVGLoaderParser {
 
     node.getAttribute('points').replace(regex, iterator);
 
-    path.currentPath!.autoClose = false;
+    path.currentPath.autoClose = false;
 
     return path;
   }
@@ -1043,7 +1052,7 @@ class SVGLoaderParser {
     var path = new ShapePath();
     path.moveTo(x1, y1);
     path.lineTo(x2, y2);
-    path.currentPath!.autoClose = false;
+    path.currentPath.autoClose = false;
 
     return path;
   }
@@ -1136,7 +1145,9 @@ class SVGLoaderParser {
 
       case 'path':
         style = parseStyle(node, style);
-        if (node.hasAttribute('d')) path = parsePathNode(node);
+        if (node.hasAttribute('d')) {
+          path = parsePathNode(node);
+        }
         break;
 
       case 'rect':

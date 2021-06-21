@@ -6,6 +6,7 @@ import 'ExampleMultiSamples.dart';
 import 'MyApp1.dart';
 import 'MyApp2.dart';
 import 'MyApp3.dart';
+import 'ExampleSlide.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
     // return MyApp3();
     // return ExampleTextBufferGeometry();
     // return ExampleText();
-    return ExampleMultiSamples();
+    // return ExampleMultiSamples();
+    return ExampleSlide();
   }
 }

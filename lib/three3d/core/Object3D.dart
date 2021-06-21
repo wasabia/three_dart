@@ -1033,6 +1033,10 @@ class Object3D with EventDispatcher {
     }
   }
 
+  dispose() {
+    
+  }
+
 }
 
 

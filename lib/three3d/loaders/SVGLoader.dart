@@ -11,6 +11,23 @@ class SVGLoader extends Loader {
 
 	SVGLoader(manager) : super(manager) {}
 
+  loadAsync( url, onProgress ) async {
+    var completer = Completer();
+
+    load(
+      url,
+      (result) {
+        completer.complete(result);
+      }, 
+      onProgress, 
+      () {
+
+      }
+    );
+
+    return completer.future;
+  }
+
 
   load( url, onLoad, onProgress, onError ) {
 

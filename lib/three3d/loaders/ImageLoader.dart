@@ -8,6 +8,23 @@ class ImageLoader extends Loader {
 
   }
 
+  loadAsync(String url, Function? onProgress) async {
+    var completer = Completer();
+
+    load(
+      url, 
+      (buffer) {
+        completer.complete(buffer);
+      }, 
+      onProgress, 
+      () {
+
+      }
+    );
+
+    return completer.future;
+  }
+
   load ( String url, onLoad, onProgress, onError ) async {
 
 		if ( this.path != null ) {

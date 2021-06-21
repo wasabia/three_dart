@@ -1,6 +1,4 @@
-
-import 'package:three_dart/three3d/dartHelpers.dart';
-import 'package:three_dart/three3d/math/index.dart';
+part of three_loaders;
 
 class SVGLoaderPointsToStroke {
   

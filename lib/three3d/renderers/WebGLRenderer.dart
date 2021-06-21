@@ -190,7 +190,7 @@ class WebGLRenderer {
     extensions = WebGLExtensions(_gl);
     capabilities = WebGLCapabilities(_gl, extensions, parameters);
 
-    print("1 initGLContext ..... ");
+    // print("1 initGLContext ..... ");
 
     if (capabilities.isWebGL2 == false) {
       extensions.get('WEBGL_depth_texture');
@@ -205,7 +205,7 @@ class WebGLRenderer {
 
     extensions.get('OES_texture_float_linear');
 
-    print("2 initGLContext ..... ");
+    // print("2 initGLContext ..... ");
 
     utils = WebGLUtils(_gl, extensions, capabilities);
 
@@ -253,7 +253,7 @@ class WebGLRenderer {
 
     shadowMap = WebGLShadowMap(this, objects, capabilities.maxTextureSize);
 
-    print("3 initGLContext ..... ");
+    // print("3 initGLContext ..... ");
   }
 
   // API
@@ -569,7 +569,7 @@ class WebGLRenderer {
     var frontFaceCW = (object.isMesh && object.matrixWorld.determinant() < 0);
 
 
-    // print("WebGLRenderer.renderBufferDirect object: ${object.type} ${object.id} material: ${material.type} ${material.id} geometry: ${geometry.type} ${geometry.id} object.isMesh: ${object.isMesh} frontFaceCW: ${frontFaceCW} ");
+    print("WebGLRenderer.renderBufferDirect object: ${object.type} ${object.id} material: ${material.type} map: ${material.map} id: ${material.id} geometry: ${geometry.type} ${geometry.id} object.isMesh: ${object.isMesh} frontFaceCW: ${frontFaceCW} ");
 
    
     WebGLProgram program = setProgram(camera, scene, material, object);
@@ -1139,8 +1139,16 @@ class WebGLRenderer {
     var progUniforms = materialProperties["program"].getUniforms();
     var uniformsList = WebGLUniforms.seqWithValue(progUniforms.seq, uniforms);
 
-    // print(" init material ...............object: ${object.type} ");
+    // print(" init material ...............object: ${object.type} material: ${material} id: ${material.id} map: ${material.map} ");
+    // print(uniforms);
+    // print("uniformsList ------------------- ");
     // print(uniformsList);
+
+    // print(" -------------progUniforms ");
+    // print(progUniforms.seq.map((e) => e.id));
+
+    // print(" -------------uniforms ");
+    // print(uniforms);
 
     materialProperties["uniformsList"] = uniformsList;
   }

@@ -1,5 +1,7 @@
-import 'package:three_dart/three3d/math/index.dart';
-import 'package:three_dart/three3d/textures/index.dart';
+// import 'package:three_dart/three3d/math/index.dart';
+// import 'package:three_dart/three3d/textures/index.dart';
+
+part of three_renderers;
 
 /**
  * Uniform Utilities

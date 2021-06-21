@@ -9,11 +9,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/dartHelpers.dart';
 import 'package:three_dart/three3d/extras/index.dart';
 import 'package:three_dart/three3d/loaders/Cache.dart';
-import 'package:three_dart/three3d/loaders/SVGLoaderParser.dart';
-import 'package:three_dart/three3d/loaders/SVGLoaderPointsToStroke.dart';
+
+
+import 'package:three_dart/three3d/math/index.dart';
 import 'package:three_dart/three3d/textures/index.dart';
+import 'package:universal_html/parsing.dart';
 import 'ImageLoaderForApp.dart' if (dart.library.js) 'ImageLoaderForWeb.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,3 +29,5 @@ part './ImageLoader.dart';
 part './SVGLoader.dart';
 part './TextureLoader.dart';
 part './LoaderUtils.dart';
+part './SVGLoaderParser.dart';
+part './SVGLoaderPointsToStroke.dart';

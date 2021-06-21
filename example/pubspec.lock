@@ -14,7 +14,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.6.0"
+    version: "2.6.1"
   bidi_dart:
     dependency: transitive
     description:
@@ -259,6 +259,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.0"
+  three_bas:
+    dependency: "direct main"
+    description:
+      path: "../../three_bas"
+      relative: true
+    source: path
+    version: "0.0.1"
   three_dart:
     dependency: "direct main"
     description:

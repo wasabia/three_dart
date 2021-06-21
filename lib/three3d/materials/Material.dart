@@ -618,7 +618,7 @@ class Material with EventDispatcher {
 
 
   getProperty(propertyName) {
-    if(propertyName == "color") {
+    if(propertyName == "vertexParameters") {
       return this.color;
     } else if(propertyName == "opacity") {
       return this.opacity;

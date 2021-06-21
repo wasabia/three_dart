@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
-import 'package:three_dart/three3d/renderers/shaders/UniformsUtils.dart';
 import 'package:three_dart/three3d/renderers/webgl/index.dart';
 import 'package:typr_dart/typr_dart.dart' as typr_dart;
 import 'package:bidi_dart/bidi_dart.dart' as bidi;

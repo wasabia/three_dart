@@ -6,6 +6,22 @@ class TextureLoader extends Loader {
 
   }
 
+  Future<Texture> loadAsync(String url, Function? onProgress) async {
+    var completer = Completer<Texture>();
+
+    load(
+      url, 
+      (texture) {
+        completer.complete(texture);
+      }, 
+      onProgress, 
+      () {
+
+      }
+    );
+
+    return completer.future;
+  }
 
 
   Future<Texture> load(String url, Function? onLoad, Function? onProgress, Function? onError ) {
@@ -16,7 +32,6 @@ class TextureLoader extends Loader {
       texture = Texture(null, null, null,null, null, null,null, null, null, null);
     } else {
       texture = DataTexture(null, null, null, null, null,null, null, null,null, null, null, null);
-      
     }
     
 

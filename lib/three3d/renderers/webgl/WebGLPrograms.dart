@@ -130,6 +130,8 @@ class WebGLPrograms {
 
 	WebGLParameters getParameters(Material material, LightState lights, shadows, scene, object ) {
 
+    print(" WebGLParameters.getParameters material: ${material} map: ${material.map} id: ${material.id}");
+
 		var fog = scene.fog;
 		var environment = material.isMeshStandardMaterial ? scene.environment : null;
 

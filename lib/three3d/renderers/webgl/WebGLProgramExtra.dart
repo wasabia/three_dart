@@ -164,7 +164,7 @@ class WebGLProgramExtra {
       var info = gl.getActiveAttrib(program, i);
       var name = info.name;
 
-      // print( "THREE.WebGLProgram: ACTIVE VERTEX ATTRIBUTE: name: ${name} i: ${i}");
+      print( "THREE.WebGLProgram: ACTIVE VERTEX ATTRIBUTE: name: ${name} i: ${i}");
 
       attributes[name] = gl.getAttribLocation(program, name);
     }
