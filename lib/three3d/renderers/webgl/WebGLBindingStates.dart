@@ -368,7 +368,7 @@ class WebGLBindingStates {
 
 		for( var name in programAttributes.keys ) {
 
-      print("WebGLBindingState setupVertexAttributes name: ${name} ");
+      // print("WebGLBindingState setupVertexAttributes name: ${name} ");
 
 			var programAttribute = programAttributes[ name ];
 
@@ -377,7 +377,7 @@ class WebGLBindingStates {
 
 				var geometryAttribute = geometryAttributes[ name ];
 
-        print("WebGLBindingState setupVertexAttributes name: ${name} geometryAttribute ${geometryAttribute} ");
+        // print("WebGLBindingState setupVertexAttributes name: ${name} geometryAttribute ${geometryAttribute} ");
 
 
 				if ( geometryAttribute != null ) {
@@ -391,7 +391,7 @@ class WebGLBindingStates {
 
      
 					if ( attribute == null ) {
-            print("WebGLBindingState setupVertexAttributes name: ${name} attribute == null ");
+            // print("WebGLBindingState setupVertexAttributes name: ${name} attribute == null ");
             continue;
           }
 
@@ -400,7 +400,7 @@ class WebGLBindingStates {
 					var bytesPerElement = attribute["bytesPerElement"];
 
 
-          print("WebGLBindingState setupVertexAttributes name: ${name} buffer: ${buffer} type: ${type} bytesPerElement: ${bytesPerElement} ");
+          // print("WebGLBindingState setupVertexAttributes name: ${name} buffer: ${buffer} type: ${type} bytesPerElement: ${bytesPerElement} ");
     
 					if ( geometryAttribute.isInterleavedBufferAttribute ) {
     

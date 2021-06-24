@@ -46,7 +46,7 @@ class WebGLIndexedBufferRenderer extends BaseWebGLBufferRenderer {
 
 	renderInstances( start, count, primcount ) {
 
-    print(" WebGLIndexedBufferRenderer.renderInstances start: ${start} count: ${count} primcount: ${primcount}  ");
+    // print(" WebGLIndexedBufferRenderer.renderInstances start: ${start} count: ${count} primcount: ${primcount}  ");
 
 		if ( primcount == 0 ) return;
 

@@ -340,13 +340,10 @@ class _MyAppState extends State<ExampleSlide> {
 
     camera.lookAt(scene.position);
 
-
-
     var width = 100;
     var height = 90;
 
-    print(" slide 1............. ");
-
+ 
     slide = new Slide(width, height, "in");
 
 
@@ -360,10 +357,6 @@ class _MyAppState extends State<ExampleSlide> {
     var img1 = await l1.loadAsync("assets/winter.jpg", null);
 
     slide.setImage(img1);
-
-
-
-    print(" slide 2............. ");
 
     // var loader = THREE.TextureLoader(null);
     // var _texture = await loader.loadAsync("https://s3-us-west-2.amazonaws.com/s.cdpn.io/175711/winter.jpg", null);

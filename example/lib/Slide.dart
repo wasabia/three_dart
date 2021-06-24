@@ -66,8 +66,7 @@ class Slide {
       // create a different delayY mapping based on the animation phase (in or out)
       if (animationPhase == 'in') {
         delayY = MathUtils.mapLinear(Math.abs(centroid.y), 0, height * 0.5, 0.0, maxDelayY);
-      }
-      else {
+      } else {
         delayY = MathUtils.mapLinear(Math.abs(centroid.y), 0, height * 0.5, maxDelayY, 0.0);
       }
 

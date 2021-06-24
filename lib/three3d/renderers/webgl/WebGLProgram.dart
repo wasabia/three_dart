@@ -415,7 +415,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
         print('THREE.WebGLProgram: shader error: ${gl.getError()} gl.VALIDATE_STATUS ${gl.getProgramParameter(program, gl.VALIDATE_STATUS)} gl.getProgramInfoLog ${programLog}  ${vertexErrors} ${fragmentErrors} ');
       } else if (programLog != '') {
-        print('THREE.WebGLProgram: gl.getProgramInfoLog() ${programLog} ');
+        print('THREE.WebGLProgram: gl.getProgramInfoLog() programLog: ${programLog} vertexLog: ${vertexLog} fragmentLog: ${fragmentLog} ');
       } else if (vertexLog == '' || fragmentLog == '') {
         haveDiagnostics = false;
       }
