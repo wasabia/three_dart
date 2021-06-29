@@ -17,10 +17,7 @@ import 'package:three_dart/three3d/math/index.dart';
 import 'package:three_dart/three3d/objects/index.dart';
 import 'package:three_dart/three3d/renderers/index.dart';
 import 'package:three_dart/three3d/renderers/shaders/ShaderChunk.dart';
-import 'package:three_dart/three3d/renderers/shaders/ShaderLib.dart';
-import 'package:three_dart/three3d/renderers/shaders/ShaderLib/vsm_frag.glsl.dart';
-import 'package:three_dart/three3d/renderers/shaders/ShaderLib/vsm_vert.glsl.dart';
-import 'package:three_dart/three3d/renderers/shaders/UniformsLib.dart';
+import 'package:three_dart/three3d/renderers/shaders/index.dart';
 import 'package:three_dart/three3d/textures/index.dart';
 import 'package:three_dart/three3d/utils.dart';
 

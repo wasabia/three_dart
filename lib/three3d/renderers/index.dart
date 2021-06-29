@@ -17,10 +17,10 @@ import 'package:three_dart/three3d/objects/index.dart';
 import 'package:three_dart/three3d/scenes/index.dart';
 import 'package:three_dart/three3d/textures/index.dart';
 import 'package:three_dart/three3d/renderers/webgl/index.dart';
+import 'package:three_dart/three3d/renderers/shaders/ShaderChunk.dart';
+import 'package:three_dart/three3d/renderers/shaders/index.dart';
 
 
-
-part './shaders/UniformsUtils.dart';
 part './WebGLCubeRenderTarget.dart';
 part './WebGLRenderer.dart';
 part './WebGLRenderTarget.dart';

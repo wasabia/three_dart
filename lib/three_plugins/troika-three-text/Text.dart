@@ -106,7 +106,7 @@ class Text extends Mesh {
    * The color of the text outline, if `outlineWidth`/`outlineBlur`/`outlineOffsetX/Y` are set.
    * Defaults to black.
    */
-  Color outlineColor = Color.fromHex(0x000000);
+  Color outlineColor = Color.fromHex(0xFFFFFF);
 
   /**
    * @member {number} outlineOpacity

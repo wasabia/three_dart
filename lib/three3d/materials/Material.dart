@@ -189,149 +189,128 @@ class Material with EventDispatcher {
 
   // onBeforeCompile(shaderobject, renderer) {}
 
-  
-
   setValues(Map<String, dynamic>? values) {
 
-    	if ( values == null ) return;
+    if ( values == null ) return;
 
-    	for ( var key in values.keys ) {
+    for ( var key in values.keys ) {
 
-    		var newValue = values[ key ];
+      var newValue = values[ key ];
 
-    		if ( newValue == null ) {
+      if ( newValue == null ) {
 
-    			print( 'THREE.Material: ${key} parameter is null.' );
-    			continue;
+        print( 'THREE.Material: ${key} parameter is null.' );
+        continue;
 
-    		}
+      }
 
-    		
- 
-    		// var currentValue = this[ key ];
+      setValue(key, newValue);
 
-    		// if ( currentValue == null ) {
+    }
+  }
 
-    		// 	print( 'THREE.' + this.type + ': \'' + key + '\' is not a property of this material.' );
-    		// 	continue;
 
-    		// }
+  setValue(String key, dynamic newValue) {
+    if(key == "alphaTest") {
+      alphaTest = newValue;
+    } else if(key == "blendDst") {
+      blendDst = newValue;
+    } else if(key == "blendDstAlpha") {
+      blendDstAlpha = newValue;
+    } else if(key == "blendSrcAlpha") {
+      blendSrcAlpha = newValue;
+    } else if(key == "blendEquation") {
+      blendEquation = newValue;  
+    } else if(key == "blending") {
+      blending = newValue;
+    } else if(key == "blendSrc") {
+      blendSrc = newValue;
+    } else if(key == "blendSrcAlpha") {
+      blendSrcAlpha = newValue;    
+    } else if(key == "clipIntersection") {
+      clipIntersection = newValue;
+    } else if(key == "clipping") {
+      clipping = newValue; 
+    } else if(key == "clippingPlanes") {
+      clippingPlanes = newValue;
+    } else if(key == "clipShadows") {
+      clipShadows = newValue;
+    } else if(key == "color") {
+      if(newValue.runtimeType == Color) {
+        color = newValue;
+      } else {
+        color = Color(0,0,0).setHex(newValue);
+      }
+    } else if(key == "defines") {
+      defines = newValue;
+    } else if(key == "depthPacking") {
+      depthPacking = newValue;
+    } else if(key == "depthTest") {
+      depthTest = newValue;  
+    } else if(key == "depthWrite") {
+      depthWrite = newValue;
+    } else if(key == "dithering") {
+      dithering = newValue;  
+    } else if(key == "emissive") {
+      if(newValue.runtimeType == Color) {
+        emissive = newValue;
+      } else {
+        emissive = Color(0,0,0).setHex(newValue);
+      }
+    } else if(key == "flatShading") {
+      flatShading = newValue;
+    } else if(key == "fog") {
+      fog = newValue;
+    } else if(key == "fragmentShader") {
+      fragmentShader = newValue;
+    } else if(key == "lights") {
+      lights = newValue;
+    } else if(key == "linewidth") {
+      linewidth = newValue;  
+    } else if(key == "map") {
+      map = newValue;
+    } else if(key == "metalness") {
+      metalness = newValue;  
+    } else if(key == "morphNormals") {
+      morphNormals = newValue;
+    } else if(key == "morphTargets") {
+      morphTargets = newValue;
+    } else if(key == "normalScale") {
+      normalScale = newValue;  
+    } else if(key == "opacity") {
+      opacity = newValue;  
+    } else if(key == "roughness") {
+      roughness = newValue;
+    } else if(key == "shading") {
+      // for backward compatability if shading is set in the constructor
+      print( 'THREE.' + this.type + ': .shading has been removed. Use the boolean .flatShading instead.' );
+      this.flatShading = ( newValue == FlatShading ) ? true : false;
 
-        // print("Material.setValues key: ${key}  newValue: ${newValue.runtimeType} ");
-        if(key == "alphaTest") {
-          alphaTest = newValue;
-        } else if(key == "blendDst") {
-          blendDst = newValue;
-        } else if(key == "blendDstAlpha") {
-          blendDstAlpha = newValue;
-        } else if(key == "blendSrcAlpha") {
-          blendSrcAlpha = newValue;
-        } else if(key == "blendEquation") {
-          blendEquation = newValue;  
-        } else if(key == "blending") {
-          blending = newValue;
-        } else if(key == "blendSrc") {
-          blendSrc = newValue;
-        } else if(key == "blendSrcAlpha") {
-          blendSrcAlpha = newValue;    
-        } else if(key == "clipIntersection") {
-          clipIntersection = newValue;
-        } else if(key == "clippingPlanes") {
-          clippingPlanes = newValue;
-        } else if(key == "clipShadows") {
-          clipShadows = newValue;
-        } else if(key == "color") {
-          if(newValue.runtimeType == Color) {
-            color = newValue;
-          } else {
-            color = Color(0,0,0).setHex(newValue);
-          }
-        } else if(key == "defines") {
-          defines = newValue;
-        } else if(key == "depthPacking") {
-          depthPacking = newValue;
-        } else if(key == "depthTest") {
-          depthTest = newValue;  
-        } else if(key == "depthWrite") {
-          depthWrite = newValue;
-        } else if(key == "dithering") {
-          dithering = newValue;  
-        } else if(key == "emissive") {
-          if(newValue.runtimeType == Color) {
-            emissive = newValue;
-          } else {
-            emissive = Color(0,0,0).setHex(newValue);
-          }
-        } else if(key == "flatShading") {
-          flatShading = newValue;
-        } else if(key == "fog") {
-          fog = newValue;
-        } else if(key == "fragmentShader") {
-          fragmentShader = newValue;
-        } else if(key == "lights") {
-          lights = newValue;  
-        } else if(key == "map") {
-          map = newValue;
-        } else if(key == "metalness") {
-          metalness = newValue;  
-        } else if(key == "morphNormals") {
-          morphNormals = newValue;
-        } else if(key == "morphTargets") {
-          morphTargets = newValue;
-        } else if(key == "normalScale") {
-          normalScale = newValue;  
-        } else if(key == "opacity") {
-          opacity = newValue;  
-        } else if(key == "roughness") {
-          roughness = newValue;
-        } else if(key == "shading") {
-          // for backward compatability if shading is set in the constructor
-          print( 'THREE.' + this.type + ': .shading has been removed. Use the boolean .flatShading instead.' );
-    			this.flatShading = ( newValue == FlatShading ) ? true : false;
-
-        } else if(key == "shininess") {
-          shininess = newValue;
-        } else if(key == "side") {
-          side = newValue;
-        } else if(key == "size") {
-          size = newValue;
-        } else if(key == "skinning") {
-          skinning = newValue;
-        } else if(key == "toneMapped") {
-          toneMapped = newValue;
-        } else if(key == "transparent") {
-          transparent = newValue;  
-        } else if(key == "uniforms") {
-          uniforms = newValue;
-        } else if(key == "vertexShader") {
-          vertexShader = newValue;
-        } else if(key == "vertexColors") {
-          vertexColors = newValue;
-        } else if(key == "wireframe") {
-          wireframe = newValue;
-        } else if(key == "wireframeLinewidth") {
-          wireframeLinewidth = newValue;
-        
-        
-        } else {
-          throw("Material.setValues key: ${key} newValue: ${newValue} is not support");
-        }
-
-    		// if ( currentValue && currentValue.isColor ) {
-
-    		// 	currentValue.set( newValue );
-
-    		// } else if ( ( currentValue && currentValue.isVector3 ) && ( newValue && newValue.isVector3 ) ) {
-
-    		// 	currentValue.copy( newValue );
-
-    		// } else {
-
-    		// 	this[ key ] = newValue;
-
-    		// }
-
-    	}
+    } else if(key == "shininess") {
+      shininess = newValue;
+    } else if(key == "side") {
+      side = newValue;
+    } else if(key == "size") {
+      size = newValue;
+    } else if(key == "skinning") {
+      skinning = newValue;
+    } else if(key == "toneMapped") {
+      toneMapped = newValue;
+    } else if(key == "transparent") {
+      transparent = newValue;  
+    } else if(key == "uniforms") {
+      uniforms = newValue;
+    } else if(key == "vertexShader") {
+      vertexShader = newValue;
+    } else if(key == "vertexColors") {
+      vertexColors = newValue;
+    } else if(key == "wireframe") {
+      wireframe = newValue;
+    } else if(key == "wireframeLinewidth") {
+      wireframeLinewidth = newValue;
+    } else {
+      throw("Material.setValues key: ${key} newValue: ${newValue} is not support");
+    }
   }
 
   toJSON ( {Object3dMeta? meta} ) {

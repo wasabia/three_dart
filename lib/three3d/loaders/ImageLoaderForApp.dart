@@ -22,7 +22,6 @@ class ImageLoaderLoader {
       // bytes = Uint8List.view(fileData.buffer);
     }
     
-   
     var receivePort = ReceivePort();
     await Isolate.spawn(decodeIsolate, DecodeParam(bytes, receivePort.sendPort));
 

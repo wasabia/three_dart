@@ -1,7 +1,7 @@
 // import 'package:three_dart/three3d/math/index.dart';
 // import 'package:three_dart/three3d/textures/index.dart';
 
-part of three_renderers;
+part of three_shaders;
 
 /**
  * Uniform Utilities
@@ -36,7 +36,7 @@ Map<String, dynamic> cloneUniforms(Map<String, dynamic> src) {
   return dst;
 }
 
-Map<String, dynamic> mergeUniforms(List<Map<String, dynamic>> uniforms) {
+Map<String, dynamic> mergeUniforms(uniforms) {
   Map<String, dynamic> merged = Map<String, dynamic>();
 
   for (var u = 0; u < uniforms.length; u++) {

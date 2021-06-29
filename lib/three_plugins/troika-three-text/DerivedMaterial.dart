@@ -61,7 +61,6 @@ class DerivedBasicMaterial extends MeshBasicMaterial {
       // Inject upgraded shaders and uniforms into the program
       shaderInfo.vertexShader = upgradedShaders["vertexShader"];
       shaderInfo.fragmentShader = upgradedShaders["fragmentShader"];
-
    
       assign(shaderInfo.uniforms!, _deriveMaterial.uniforms);
 

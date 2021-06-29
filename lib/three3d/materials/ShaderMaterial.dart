@@ -69,8 +69,6 @@ class ShaderMaterial extends Material {
 
     this.glslVersion = null;
 
-
-
     if ( parameters != null ) {
       if ( parameters["attributes"] != null ) {
         print( 'THREE.ShaderMaterial: attributes should now be defined in THREE.BufferGeometry instead.' );

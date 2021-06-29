@@ -200,7 +200,7 @@ gl_FragColor = mix(fillRGBA, strokeRGBA, smoothstep(
 gl_FragColor.a *= edgeAlpha;
 #endif
 
-if (edgeAlpha == 0.0) {
+if (edgeAlpha < 0.001) {
   discard;
 }
 """;

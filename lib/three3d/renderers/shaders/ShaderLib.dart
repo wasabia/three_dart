@@ -1,10 +1,4 @@
-
-import 'package:three_dart/three3d/math/index.dart';
-import 'package:three_dart/three3d/renderers/index.dart';
-
-import 'ShaderChunk.dart';
-
-import 'UniformsLib.dart';
+part of three_shaders;
 
 
 Map<String, dynamic> ShaderLibStandard = {

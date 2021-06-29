@@ -1,4 +1,4 @@
-import 'package:three_dart/three3d/math/index.dart';
+part of three_shaders;
 
 /**
  * Uniforms library for shared webgl shaders
