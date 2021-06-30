@@ -8,6 +8,8 @@ import 'package:three_dart/three3d/math/index.dart';
 part './BoxBufferGeometry.dart';
 part './BoxGeometry.dart';
 
+part './CircleBufferGeometry.dart';
+part './CircleGeometry.dart';
 
 part './ConvexBufferGeometry.dart';
 part './ConvexGeometry.dart';
@@ -15,7 +17,10 @@ part './CylinderBufferGeometry.dart';
 part './CylinderGeometry.dart';
 part './DodecahedronBufferGeometry.dart';
 part './DodecahedronGeometry.dart';
+
+part './EdgesGeometry.dart';
 part './ExtrudeBufferGeometry.dart';
+
 
 part './PlaneBufferGeometry.dart';
 part './PlaneGeometry.dart';

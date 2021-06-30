@@ -265,8 +265,12 @@ class Material with EventDispatcher {
       fragmentShader = newValue;
     } else if(key == "lights") {
       lights = newValue;
+    } else if( key == "linecap" ) {
+      linecap = newValue;
+    } else if( key == "linejoin" ) {
+      linejoin = newValue;
     } else if(key == "linewidth") {
-      linewidth = newValue;  
+      linewidth = newValue;
     } else if(key == "map") {
       map = newValue;
     } else if(key == "metalness") {

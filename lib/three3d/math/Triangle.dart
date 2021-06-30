@@ -41,6 +41,17 @@ class Triangle {
 
 	}
 
+  getValue(String key) {
+    if(key == "a") {
+      return a;
+    } else if(key == "b") {
+      return b;
+    } else if(key == "c") {
+      return c;
+    } else {
+      throw("Triangle getValue key: ${key} not support .....");
+    }
+  }
 
 	static static_getNormal( a, b, c, target ) {
 
