@@ -727,6 +727,7 @@ class WebGLTextures {
 
 		var isCompressed = ( texture && ( texture.isCompressedTexture || texture.image[ 0 ].isCompressedTexture ) );
 		var isDataTexture = ( texture.image[ 0 ] && texture.image[ 0 ].isDataTexture );
+    if ( texture.image[ 0 ] ) gl.pixelStorei(gl.UNPACK_ALIGNMENT, texture.image[ 0 ].unpackAlignment);
 
 		var cubeImage = [];
 
