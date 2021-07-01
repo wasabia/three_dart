@@ -49,6 +49,21 @@ class MathUtils {
 
 	}
 
+  // https://www.desmos.com/calculator/vcsjnyz7x4
+
+	static pingPong ( x, {length = 1} ) {
+
+		return length - Math.abs( x % ( length * 2 ) - length );
+
+	}
+
+  static damp ( num x, num y, num lambda, num dt ) {
+
+		return MathUtils.lerp( x, y, 1 - Math.exp( - lambda * dt ) );
+
+	}
+
+
 	// http://en.wikipedia.org/wiki/Smoothstep
 
 	static smoothstep( x, min, max ) {

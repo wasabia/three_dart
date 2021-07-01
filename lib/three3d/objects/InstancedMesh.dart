@@ -36,6 +36,9 @@ class InstancedMesh extends Mesh {
 
 
 		this.instanceMatrix.copy( source1.instanceMatrix );
+
+    if ( source.instanceColor != null ) this.instanceColor = source.instanceColor!.clone();
+
 		this.count = source1.count;
 
 		return this;

@@ -356,7 +356,7 @@ class KeyframeTrack {
 
 			// remove adjacent keyframes scheduled at the same time
 
-			if ( time != timeNext && ( i != 1 || time != time[ 0 ] ) ) {
+			if ( time != timeNext && ( i != 1 || time != times[ 0 ] ) ) {
 
 				if ( ! smoothInterpolation ) {
 

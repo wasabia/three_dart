@@ -190,22 +190,7 @@ class WebGLRenderer {
     extensions = WebGLExtensions(_gl);
     capabilities = WebGLCapabilities(_gl, extensions, parameters);
 
-    // print("1 initGLContext ..... ");
-
-    if (capabilities.isWebGL2 == false) {
-      extensions.get('WEBGL_depth_texture');
-      extensions.get('OES_texture_float');
-      extensions.get('OES_texture_half_float');
-      extensions.get('OES_texture_half_float_linear');
-      extensions.get('OES_standard_derivatives');
-      extensions.get('OES_element_index_uint');
-      extensions.get('OES_vertex_array_object');
-      extensions.get('ANGLE_instanced_arrays');
-    }
-
-    extensions.get('OES_texture_float_linear');
-
-    // print("2 initGLContext ..... ");
+    extensions.init( capabilities );
 
     utils = WebGLUtils(_gl, extensions, capabilities);
 
@@ -1051,6 +1036,10 @@ class WebGLRenderer {
     var program = materialProperties["program"];
     var programChange = true;
 
+    // always update environment and fog - changing these trigger an initMaterial call, but it's possible that the program doesn't change
+		materialProperties["environment"] = material.isMeshStandardMaterial ? scene.environment : null;
+		materialProperties["fog"] = scene.fog;
+    materialProperties["envMap"] = cubemaps.get( material.envMap ?? materialProperties["environment"] );
 
     if (program == null) {
       // new material
@@ -1063,8 +1052,6 @@ class WebGLRenderer {
     } else if (parameters.shaderID != null) {
       // same glsl and uniform list, envMap still needs the update here to avoid a frame-late effect
 
-      var environment = material.isMeshStandardMaterial ? scene.environment : null;
-      materialProperties["envMap"] = cubemaps.get(material.envMap ?? environment);
 
       return;
     } else {
@@ -1095,12 +1082,6 @@ class WebGLRenderer {
       materialProperties["numIntersection"] = clipping.numIntersection;
       uniforms["clippingPlanes"] = clipping.uniform;
     }
-
-    materialProperties["environment"] =
-        material.isMeshStandardMaterial ? scene.environment : null;
-    materialProperties["fog"] = scene.fog;
-    materialProperties["envMap"] =
-        cubemaps.get(material.envMap ?? materialProperties["environment"]);
 
     // store the light setup it was created for
 

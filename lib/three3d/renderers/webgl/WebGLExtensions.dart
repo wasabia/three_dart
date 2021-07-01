@@ -2,12 +2,74 @@ part of three_webgl;
 
 class WebGLExtensions {
 
-  Map<String, dynamic>? extensions;
+  Map<String, dynamic> extensions = {};
   dynamic gl;
 
   WebGLExtensions(this.gl) {
   }
 
+  getExtension( name ) {
+
+		if ( extensions[ name ] != null ) {
+
+			return extensions[ name ];
+
+		}
+
+		var extension;
+
+		switch ( name ) {
+
+			case 'WEBGL_depth_texture':
+				extension = gl.getExtension( 'WEBGL_depth_texture' ) || gl.getExtension( 'MOZ_WEBGL_depth_texture' ) || gl.getExtension( 'WEBKIT_WEBGL_depth_texture' );
+				break;
+
+			case 'EXT_texture_filter_anisotropic':
+				extension = gl.getExtension( 'EXT_texture_filter_anisotropic' ) || gl.getExtension( 'MOZ_EXT_texture_filter_anisotropic' ) || gl.getExtension( 'WEBKIT_EXT_texture_filter_anisotropic' );
+				break;
+
+			case 'WEBGL_compressed_texture_s3tc':
+				extension = gl.getExtension( 'WEBGL_compressed_texture_s3tc' ) || gl.getExtension( 'MOZ_WEBGL_compressed_texture_s3tc' ) || gl.getExtension( 'WEBKIT_WEBGL_compressed_texture_s3tc' );
+				break;
+
+			case 'WEBGL_compressed_texture_pvrtc':
+				extension = gl.getExtension( 'WEBGL_compressed_texture_pvrtc' ) || gl.getExtension( 'WEBKIT_WEBGL_compressed_texture_pvrtc' );
+				break;
+
+			default:
+				extension = gl.getExtension( name );
+
+		}
+
+		extensions[ name ] = extension;
+
+		return extension;
+
+	}
+
+  init( capabilities ) {
+
+    if ( capabilities.isWebGL2 ) {
+
+      getExtension( 'EXT_color_buffer_float' );
+
+    } else {
+
+      getExtension( 'WEBGL_depth_texture' );
+      getExtension( 'OES_texture_float' );
+      getExtension( 'OES_texture_half_float' );
+      getExtension( 'OES_texture_half_float_linear' );
+      getExtension( 'OES_standard_derivatives' );
+      getExtension( 'OES_element_index_uint' );
+      getExtension( 'OES_vertex_array_object' );
+      getExtension( 'ANGLE_instanced_arrays' );
+
+    }
+
+    getExtension( 'OES_texture_float_linear' );
+    getExtension( 'EXT_color_buffer_half_float' );
+
+  }
 
   has( name ) {
     if(kIsWeb) {
@@ -18,9 +80,9 @@ class WebGLExtensions {
   }
 
   hasForWeb(name) {
-    extensions = extensions ?? {};
-    if ( extensions![ name ] != null ) {
-      return extensions![ name ] != null;
+ 
+    if ( extensions[ name ] != null ) {
+      return extensions[ name ] != null;
     }
     
     var extension;
@@ -59,7 +121,7 @@ class WebGLExtensions {
 
       extensions = {};
       _extensions.forEach((element) {
-        extensions![element] = element;
+        extensions[element] = element;
       });
     }
 
@@ -75,8 +137,8 @@ class WebGLExtensions {
 
     var _name = _names[name] ?? name;
 
-    if ( extensions!.containsKey( _name ) ) {
-      return extensions!.containsKey( _name );
+    if ( extensions.containsKey( _name ) ) {
+      return extensions.containsKey( _name );
     } else {
       return false;
     }
@@ -84,18 +146,13 @@ class WebGLExtensions {
 
   get( String name ) {
 
-    // print(" WebGLExtensions get name: ${name} ");
+    var extension = getExtension( name );
 
-    if ( ! this.has( name ) ) {
-      // extensions?.keys.forEach((element) {
-      //   print(element);
-      // });
-      print( 'ERROR: ------ THREE.WebGLRenderer: ' + name + ' extension not supported.-------------' );
-      return false;
+    if ( extension == null ) {
+      print( 'THREE.WebGLExtensions.get: ${name} extension not supported.' );
     }
 
-    return extensions![ name ];
-
+    return extension;
   }
 
 }

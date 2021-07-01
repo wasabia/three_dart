@@ -151,7 +151,7 @@ var _colorKeywords = {
   'yellowgreen': 0x9ACD32
 };
 
-var _hslA = {"h": 0, "s": 0, "l": 0};
+Map<String, num> _hslA = {"h": 0, "s": 0, "l": 0};
 var _hslB = {"h": 0, "s": 0, "l": 0};
 
 hue2rgb(p, q, t) {
@@ -482,6 +482,77 @@ class Color {
     return ('000000' + this.getHex().toString(16)).substring(-6);
   }
 
+  getHSL( target ) {
+
+		// h,s,l ranges are in 0.0 - 1.0
+
+		if ( target == null ) {
+
+			print( 'THREE.Color: .getHSL() target is now required' );
+			target = { "h": 0, "s": 0, "l": 0 };
+
+		}
+
+		var r = this.r, g = this.g, b = this.b;
+
+		var max = Math.max3( r, g, b );
+		var min = Math.min3( r, g, b );
+
+		var hue, saturation;
+		var lightness = ( min + max ) / 2.0;
+
+		if ( min == max ) {
+
+			hue = 0;
+			saturation = 0;
+
+		} else {
+
+			var delta = max - min;
+
+			saturation = lightness <= 0.5 ? delta / ( max + min ) : delta / ( 2 - max - min );
+
+			if ( max == r ) {
+        hue = ( g - b ) / delta + ( g < b ? 6 : 0 );
+      } else if (max == g) {
+        hue = ( b - r ) / delta + 2;
+      } else if(max == b) {
+        hue = ( r - g ) / delta + 4;
+      }
+	
+
+			hue /= 6;
+
+		}
+
+		target["h"] = hue;
+		target["s"] = saturation;
+		target["l"] = lightness;
+
+		return target;
+
+	}
+
+  getStyle() {
+
+		return 'rgb(${( ( this.r * 255 ).toInt() | 0 )},${( ( this.g * 255 ).toInt() | 0 )},${( ( this.b * 255 ).toInt() | 0 )})';
+
+	}
+
+	offsetHSL( h, s, l ) {
+
+		this.getHSL( _hslA );
+
+		_hslA["h"] = _hslA["h"]! + h; 
+    _hslA["s"] = _hslA["s"]! + s; 
+    _hslA["l"] = _hslA["l"]! + l;
+
+		this.setHSL( _hslA["h"], _hslA["s"], _hslA["l"] );
+
+		return this;
+
+	}
+
   add(color) {
     this.r += color.r;
     this.g += color.g;
@@ -537,6 +608,32 @@ class Color {
 
     return this;
   }
+
+  lerpColors( Color color1, Color color2, num alpha ) {
+
+		this.r = color1.r + ( color2.r - color1.r ) * alpha;
+		this.g = color1.g + ( color2.g - color1.g ) * alpha;
+		this.b = color1.b + ( color2.b - color1.b ) * alpha;
+
+		return this;
+
+	}
+
+	lerpHSL( color, alpha ) {
+
+		this.getHSL( _hslA );
+		color.getHSL( _hslB );
+
+		var h = MathUtils.lerp( _hslA["h"], _hslB["h"], alpha );
+		var s = MathUtils.lerp( _hslA["s"], _hslB["s"], alpha );
+		var l = MathUtils.lerp( _hslA["l"], _hslB["l"], alpha );
+
+		this.setHSL( h, s, l );
+
+		return this;
+
+	}
+
 
   equals(c) {
     return (c.r == this.r) && (c.g == this.g) && (c.b == this.b);

@@ -95,6 +95,23 @@ class Matrix4 {
 
 	}
 
+  Matrix4 setFromMatrix3( Matrix3 m ) {
+
+		var me = m.elements;
+
+		this.set(
+
+			me[ 0 ], me[ 3 ], me[ 6 ], 0,
+			me[ 1 ], me[ 4 ], me[ 7 ], 0,
+			me[ 2 ], me[ 5 ], me[ 8 ], 0,
+			0, 0, 0, 1
+
+		);
+
+		return this;
+
+	}
+
 	Matrix4 extractBasis( xAxis, yAxis, zAxis ) {
 
 		xAxis.setFromMatrixColumn( this, 0 );

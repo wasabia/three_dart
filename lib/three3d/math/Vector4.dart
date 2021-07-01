@@ -251,6 +251,28 @@ class Vector4 {
 
 	}
 
+  // multiply( v, w ) {
+
+  multiply( v ) {  
+
+		// if ( w != null ) {
+		// 	print( 'THREE.Vector4: .multiply() now only accepts one argument. Use .multiplyVectors( a, b ) instead.' );
+		// 	return this.multiplyVectors( v, w );
+		// }
+
+		this.x *= v.x;
+		this.y *= v.y;
+		this.z *= v.z;
+		this.w *= v.w;
+
+		return this;
+
+	}
+
+  // multiplyVectors(v, w) {
+
+  // }
+
 	multiplyScalar( scalar ) {
 
 		this.x *= scalar;
