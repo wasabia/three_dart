@@ -5,12 +5,12 @@ class BloomPass extends Pass {
 
   late WebGLRenderTarget renderTargetX;
 	late WebGLRenderTarget renderTargetY;
-  late Map<String, dynamic> copyUniforms;
+  late Map<String, dynamic> uniforms;
   late ShaderMaterial materialCopy;
   late Map<String, dynamic> convolutionUniforms;
   late ShaderMaterial materialConvolution;
 
-  BloomPass( strength, num? kernelSize, sigma, resolution ) : super() {
+  BloomPass( num? strength, num? kernelSize, sigma, resolution ) : super() {
       
     strength = ( strength != null ) ? strength : 1;
     kernelSize = ( kernelSize != null ) ? kernelSize : 25;
@@ -32,13 +32,13 @@ class BloomPass extends Pass {
 
     var copyShader = CopyShader;
 
-    this.copyUniforms = UniformsUtils.clone( copyShader["uniforms"] );
+    this.uniforms = UniformsUtils.clone( copyShader["uniforms"] );
 
-    this.copyUniforms[ 'opacity' ]["value"] = strength;
+    this.uniforms[ 'opacity' ]["value"] = strength;
 
     this.materialCopy = new ShaderMaterial( {
 
-      "uniforms": this.copyUniforms,
+      "uniforms": this.uniforms,
       "vertexShader": copyShader["vertexShader"],
       "fragmentShader": copyShader["fragmentShader"],
       "blending": AdditiveBlending,
@@ -104,7 +104,7 @@ class BloomPass extends Pass {
 
 		this.fsQuad.material = this.materialCopy;
 
-		this.copyUniforms[ 'tDiffuse' ]["value"] = this.renderTargetY.texture;
+		this.uniforms[ 'tDiffuse' ]["value"] = this.renderTargetY.texture;
 
 		if ( maskActive == true ) renderer.state.buffers.stencil.setTest( true );
 

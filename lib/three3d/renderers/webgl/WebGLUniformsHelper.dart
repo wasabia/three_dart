@@ -515,7 +515,7 @@ class WebGLUniformsHelper {
         cache[ 3 ] = v.w;
 
       }
-    } else if(v.runtimeType == Color) {
+    } else if(v is Color) {
       if ( cache[ 0 ] != v.r || cache[ 1 ] != v.g || cache[ 2 ] != v.b || cache[ 3 ] != 1.0 ) {
 
         gl.uniform4f( this.addr, v.r, v.g, v.b, 1.0 );
@@ -723,7 +723,7 @@ class WebGLUniformsHelper {
         gl.uniform1i( this.addr, 0 );
       }
     } else {
-      gl.uniform1i( this.addr, v );
+      gl.uniform1i( this.addr, v.toInt() );
     }
 
     cache[ 0 ] = v;

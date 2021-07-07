@@ -29,7 +29,7 @@ class UnrealBloomPass extends Pass {
 	late List<ShaderMaterial> separableBlurMaterials;
 	late ShaderMaterial compositeMaterial;
 	late List<Vector3> bloomTintColors;
-	late dynamic copyUniforms;
+  late Map<String, dynamic> copyUniforms;
 	late ShaderMaterial materialCopy;
 	late Color oldClearColor;
 	late num oldClearAlpha;
@@ -41,6 +41,10 @@ class UnrealBloomPass extends Pass {
     this.radius = radius;
     this.threshold = threshold;
     this.resolution = ( resolution != null ) ? new Vector2( resolution.x, resolution.y ) : new Vector2( 256, 256 );
+
+    this.uniforms = {
+      "strength": {"value": strength}
+    };
 
     // create color only once here, reuse it later inside the render function
     this.clearColor = new Color( 0, 0, 0 );
@@ -159,7 +163,7 @@ class UnrealBloomPass extends Pass {
     this.needsSwap = false;
 
     this.oldClearColor = Color.fromHex(0xffffff);
-    this.oldClearAlpha = 1;
+    this.oldClearAlpha = 0.0;
 
     this.basic = new MeshBasicMaterial(Map<String, dynamic>());
 
@@ -212,7 +216,7 @@ class UnrealBloomPass extends Pass {
 		var oldAutoClear = renderer.autoClear;
 		renderer.autoClear = false;
 
-		renderer.setClearColor( this.clearColor, alpha: 0 );
+		renderer.setClearColor( this.clearColor, alpha: 1 );
 
 		if ( maskActive == true ) renderer.state.buffers.stencil.setTest( false );
 
@@ -346,6 +350,7 @@ class UnrealBloomPass extends Pass {
 					}
 					gl_FragColor = vec4(diffuseSum/weightSum, 1.0);
 				}
+        
       """  
 		} );
 

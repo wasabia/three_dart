@@ -28,6 +28,7 @@ part './EffectComposer.dart';
 part './Pass.dart';
 part './MaskPass.dart';
 part './ShaderPass.dart';
+part './ShaderPasses.dart';
 part './RenderPass.dart';
 part './GlitchPass.dart';
 part './LUTPass.dart';

@@ -9,6 +9,7 @@ export './geometries/index.dart';
 export './helpers/index.dart';
 export './jsm/index.dart';
 
+export './renderers/shaders/index.dart';
 
 export './lights/index.dart';
 export './loaders/index.dart';

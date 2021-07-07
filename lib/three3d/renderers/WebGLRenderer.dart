@@ -411,10 +411,8 @@ class WebGLRenderer {
     return background.getClearAlpha();
   }
 
-  setClearAlpha() {
-    print(" WebGLRenderer setClearAlpha TODO need fix");
-
-    // background.setClearAlpha.apply( background, arguments );
+  setClearAlpha(alpha) {
+    background.setClearAlpha(alpha);
   }
 
   clear(color, depth, stencil) {

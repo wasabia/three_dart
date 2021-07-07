@@ -62,7 +62,7 @@ class WebGLUniforms with WebGLUniform {
       var info = gl.getActiveUniform( program.program, i );
       var addr = gl.getUniformLocation( program.program, info.name );
 
-      // print(" WebGLUniforms info.name: ${info.name} addr: ${addr}  ");
+      print(" WebGLUniforms info.name: ${info.name} addr: ${addr}  ");
 
       parseUniform( info, addr, this );
 

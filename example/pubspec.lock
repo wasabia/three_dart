@@ -103,7 +103,7 @@ packages:
       path: "../../flutter_gl/flutter_gl"
       relative: true
     source: path
-    version: "0.0.3"
+    version: "0.0.4"
   flutter_gl_platform_interface:
     dependency: transitive
     description:
