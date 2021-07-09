@@ -360,9 +360,6 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     var vertexGlsl = versionString + prefixVertex + vertexShader;
     var fragmentGlsl = versionString + prefixFragment + fragmentShader;
 
-    // console.log( '*VERTEX*', vertexGlsl );
-    // console.log( '*FRAGMENT*', fragmentGlsl );
-
     // print(" USE_MAP: ${parameters.map}  vertexUvs: ${parameters.vertexUvs}-------------- ");
     // print(" 111 ================= VERTEX  ");
     // print(vertexGlsl);

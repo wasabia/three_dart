@@ -552,7 +552,7 @@ class WebGLRenderer {
     var frontFaceCW = (object.isMesh && object.matrixWorld.determinant() < 0);
 
 
-    // print("WebGLRenderer.renderBufferDirect object: ${object.type} ${object.id} material: ${material.type} map: ${material.map} id: ${material.id} geometry: ${geometry.type} ${geometry.id} object.isMesh: ${object.isMesh} frontFaceCW: ${frontFaceCW} ");
+    print("WebGLRenderer.renderBufferDirect object: ${object.type} ${object.id} material: ${material.type} map: ${material.map} id: ${material.id} geometry: ${geometry.type} ${geometry.id} object.isMesh: ${object.isMesh} frontFaceCW: ${frontFaceCW} ");
 
    
     WebGLProgram program = setProgram(camera, scene, material, object);

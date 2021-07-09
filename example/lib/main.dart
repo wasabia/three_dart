@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     // return ExampleTextBufferGeometry();
     // return ExampleText();
     // return ExampleMultiSamples();
-    // return ExampleSlide();
-    return ExampleUnrealBloom();
+    return ExampleSlide();
+    // return ExampleUnrealBloom();
   }
 }

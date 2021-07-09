@@ -48,7 +48,7 @@ class TexturePass extends Pass {
 		this.material.transparent = ( this.opacity < 1.0 );
 
 		renderer.setRenderTarget( this.renderToScreen ? null : readBuffer );
-		if ( this.clear ) renderer.clear();
+		if ( this.clear ) renderer.clear(true, true, true);
 		this.fsQuad.render( renderer );
 
 		renderer.autoClear = oldAutoClear;

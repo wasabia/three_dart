@@ -72,8 +72,8 @@ class _MyAppState extends State<ExampleSlide> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    width = screenSize!.width;
-    height = width;
+    width = 500;
+    height = 500;
 
     three3dRender = FlutterGlPlugin(width.toInt(), height.toInt(), dpr: dpr);
 
@@ -228,7 +228,8 @@ class _MyAppState extends State<ExampleSlide> {
     render();
   }
   _addY() {
-    mesh.rotation.y = mesh.rotation.y + 0.1;
+    slide.mesh.material.uniforms["uTime"]["value"] -= 0.1;
+
     render();
   }
   _addZ() {
@@ -330,49 +331,41 @@ class _MyAppState extends State<ExampleSlide> {
     initRenderer();
     
 
+    // camera = new THREE.PerspectiveCamera( fov: 60, aspect: 1, near: 1, far: 10000 );
 
-    camera = new THREE.PerspectiveCamera( fov: 60, aspect: 1, near: 1, far: 10000 );
+    var width = 128;
+    var height = 80;
+
+    int w = width ~/ 2;
+    int h = height ~/ 2;
+    camera = new THREE.OrthographicCamera(left: -w, right: w, top: h, bottom: -h);
     camera.position.z = 60;
 
 
     scene = new THREE.Scene();
-    scene.background = THREE.Color.fromHex( 0xFF00FF );
+    // scene.background = THREE.Color.fromHex( 0xFF00FF );
 
     camera.lookAt(scene.position);
 
-    var width = 100;
-    var height = 90;
+    var loader = THREE.TextureLoader(null);
+    var _texture = await loader.loadAsync("assets/winter.jpg", null);
+   
 
- 
-    slide = new Slide(width, height, "in");
-
+    slide = new Slide(width, height, "in", null);
+    // slide.setImage(_texture.image);
+    slide.setTexture(_texture);
 
     
-    var l1 = new THREE.ImageLoader(null);
-    l1.setCrossOrigin("Anonymous");
-    // var img1 = await l1.loadAsync(
-    //   "https://s3-us-west-2.amazonaws.com/s.cdpn.io/175711/winter.jpg",
-    //   null
-    // );
-    var img1 = await l1.loadAsync("assets/winter.jpg", null);
-
-    slide.setImage(img1);
-
-    // var loader = THREE.TextureLoader(null);
-    // var _texture = await loader.loadAsync("https://s3-us-west-2.amazonaws.com/s.cdpn.io/175711/winter.jpg", null);
-    
-    // var _texture = await loader.loadAsync("assets/winter.jpg", null);
-
-    // print(" _texture load ${_texture} ");
-    
-    // slide.mesh.material.map = _texture;
-    // slide.mesh.material.map.needsUpdate = true;
-    // slide.mesh.material.needsUpdate = true;
-
+    // var l1 = new THREE.ImageLoader(null);
+    // var img1 = await l1.loadAsync("assets/winter.jpg", null);
     // slide.setImage(img1);
+
+
+
 
     scene.add(slide.mesh);
 
+  
     // slide2 = new Slide(width, height, "in");
     // var l2 = new THREE.ImageLoader(null);
     // l2.setCrossOrigin("Anonymous");

@@ -8,7 +8,7 @@ class Slide {
   late num totalDuration;
   late Mesh mesh;
 
-  Slide(width, height, animationPhase) {
+  Slide(width, height, animationPhase, Texture? texture) {
     // create a geometry that will be used by BAS.ModelBufferGeometry
     // its a plane with a bunch of segments
     var _plane = PlaneBufferGeometry(
@@ -137,16 +137,19 @@ class Slide {
       i++;
     }
 
-    var texture = Texture(null, null, null, null, null, null, null, null, null, null);
-    texture.minFilter = NearestFilter;
+    // if(texture == null) {
+    //   texture = Texture(null, null, null, null, null, null, null, null, null, null);
+    // }
 
-    var material = new THREE_BAS.BasicAnimationMaterial({
+    // texture.minFilter = NearestFilter;
+
+    var material = THREE_BAS.BasicAnimationMaterial({
       "flatShading": true,
       "side": DoubleSide,
       "uniforms": {
         "uTime": {"value": 0}
       },
-      "map": texture,
+
       "vertexFunctions": [
         THREE_BAS.ShaderChunk['cubic_bezier'],
         THREE_BAS.ShaderChunk['ease_cubic_in_out'],
@@ -182,6 +185,12 @@ class Slide {
   setImage(image) {
     this.mesh.material.map.image = image;
     this.mesh.material.map.needsUpdate = true;
+  }
+
+  setTexture(texture) {
+    this.mesh.material.map = texture;
+    this.mesh.material.uniforms["map"] = {"value": texture};
+    this.mesh.material.needsUpdate = true;
   }
   
 }

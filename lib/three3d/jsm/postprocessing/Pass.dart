@@ -23,7 +23,12 @@ class Pass {
 
   late FullScreenQuad fsQuad;
 
-  Pass() { }
+  Pass() {}
+
+
+  setProperty(String key, dynamic newValue) {
+    this.uniforms[key] = {"value": newValue};
+  }
 
   setSize ( width, height ) {
     
@@ -48,13 +53,17 @@ class Pass {
 class FullScreenQuad {
 
 	var camera = new OrthographicCamera( left: -1, right: 1, top: 1, bottom: -1, near: 0, far: 1 );
-	var geometry = new PlaneBufferGeometry( width: 2, height: 2 );
+	BufferGeometry geometry = new PlaneBufferGeometry( width: 2, height: 2 );
   
-  late Mesh _mesh;
+  late Object3D _mesh;
 
   FullScreenQuad(material) {
     geometry.name = "FullScreenQuadGeometry";
     this._mesh = new Mesh( geometry, material );
+  }
+
+  set mesh(value) {
+    this._mesh = value;
   }
 
   get material => this._mesh.material;
