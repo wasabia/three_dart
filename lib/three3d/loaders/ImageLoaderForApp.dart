@@ -8,7 +8,7 @@ import 'package:three_dart/three3d/textures/index.dart';
 
 class ImageLoaderLoader {
 
-  static Future<ImageElement> loadImage(String url) async {
+  static Future<ImageElement> loadImage(String url, {Function? imageDecoder}) async {
     Uint8List bytes;
     if(url.startsWith("http")) {
       var response = await http.get(Uri.parse(url));
@@ -16,19 +16,26 @@ class ImageLoaderLoader {
     } else if(url.startsWith("assets")) {
       final fileData = await rootBundle.load(url);
       bytes = Uint8List.view(fileData.buffer);
-    } else {
-      var file = File(url);
-      bytes = file.readAsBytesSync();
-      // bytes = Uint8List.view(fileData.buffer);
     }
     
-    var receivePort = ReceivePort();
-    await Isolate.spawn(decodeIsolate, DecodeParam(bytes, receivePort.sendPort));
+    ImageElement? imageElement;
+    if(imageDecoder == null) {
+      var file = File(url);
+      bytes = file.readAsBytesSync();
+      // print(" load image and decode 1: ${DateTime.now().millisecondsSinceEpoch}............ ");
+      var receivePort = ReceivePort();
+      await Isolate.spawn(decodeIsolate, DecodeParam(bytes, receivePort.sendPort));
+      // Get the processed image from the isolate.
+      var image = await receivePort.first as Image;
 
-    // Get the processed image from the isolate.
-    var image = await receivePort.first as Image;
-    
-    var imageElement = ImageElement(data: image.getBytes(format: Format.rgba), width: image.width, height: image.height);
+      // print(" load image and decode 2: ${DateTime.now().millisecondsSinceEpoch}............ ");
+      
+      imageElement = ImageElement(data: image.getBytes(format: Format.rgba), width: image.width, height: image.height);
+    } else {
+      var image = await imageDecoder(null, url);
+      imageElement = ImageElement(data: image.pixels, width: image.width, height: image.height);
+    }
+  
     return imageElement;
   }
 

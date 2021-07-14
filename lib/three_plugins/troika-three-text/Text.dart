@@ -374,13 +374,21 @@ class Text extends Mesh {
       return derivedMaterial;
     }
   }
+  
   set material(baseMaterial) {
-    if (baseMaterial != null && baseMaterial.isTroikaTextMaterial) { //prevent double-derivation
-      this._derivedMaterial = baseMaterial;
-      this._baseMaterial = baseMaterial.baseMaterial;
+
+    if(baseMaterial != null && baseMaterial.type == "DerivedBasicMaterial") {
+      var _baseMat = baseMaterial as DerivedBasicMaterial;
+      if(_baseMat.isTroikaTextMaterial) {
+        this._derivedMaterial = baseMaterial;
+        this._baseMaterial = baseMaterial.baseMaterial;
+      } else {
+        this._baseMaterial = baseMaterial;
+      }
     } else {
       this._baseMaterial = baseMaterial;
     }
+
   }
 
   get glyphGeometryDetail {
