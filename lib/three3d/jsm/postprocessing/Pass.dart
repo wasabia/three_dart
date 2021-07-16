@@ -59,6 +59,7 @@ class FullScreenQuad {
 
   FullScreenQuad(material) {
     geometry.name = "FullScreenQuadGeometry";
+
     this._mesh = new Mesh( geometry, material );
   }
 

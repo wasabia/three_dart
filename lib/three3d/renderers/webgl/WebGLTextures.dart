@@ -205,6 +205,7 @@ class WebGLTextures {
 
 	onTextureDispose( Event event ) {
 
+
 		var texture = event.target;
 
 		texture.removeEventListener( 'dispose', onTextureDispose );
@@ -220,7 +221,6 @@ class WebGLTextures {
 		}
 
 		info.memory["textures"] = info.memory["textures"]! - 1;
-
 	}
 
 	onRenderTargetDispose( Event event ) {
@@ -1292,6 +1292,8 @@ class WebGLTextures {
 
 	}
 
+  dispose() {
 
+  }
 
 }

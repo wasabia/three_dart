@@ -31,7 +31,7 @@ class WebGLProperties {
 	}
 
 	dispose() {
-		properties.clear();
+    
 	}
 
 }

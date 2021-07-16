@@ -181,7 +181,6 @@ class WebGLRenderer {
       this.domElement = this.parameters["canvas"];
     }
     
-    print(" initGLContext ..... ");
 
     initGLContext();
   }
@@ -446,10 +445,6 @@ class WebGLRenderer {
     cubemaps.dispose();
     objects.dispose();
     bindingStates.dispose();
-
-    // xr.dispose();
-
-    // animation.stop();
   }
 
   // Events

@@ -16,6 +16,8 @@ class WebGLGeometries {
 
 	onGeometryDispose( event ) {
 
+    print(" WebGLGeometries onGeometryDispose");
+
 		var geometry = event.target;
 		var buffergeometry = geometries.get( geometry );
 
@@ -218,7 +220,9 @@ class WebGLGeometries {
 
 	}
 
-	
+	dispose() {
+    
+  }
 
 }
 

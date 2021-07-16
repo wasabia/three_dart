@@ -51,6 +51,10 @@ class WeakMap<K, V> {
 
   void operator []=(K key, V value) => add(key: key, value: value);
 
+  get keys => _map.keys;
+
+  get map => _map;
+
   V? operator [](K key) => get(key);
 
   void add({required K key, required V value}) {

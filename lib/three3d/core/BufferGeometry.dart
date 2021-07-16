@@ -1304,6 +1304,7 @@ class BufferGeometry with EventDispatcher {
 	}
 
 	dispose() {
+    print(" BufferGeometry dispose ........... ");
 
 		this.dispatchEvent( Event({"type": "dispose"}) );
 
