@@ -7,10 +7,10 @@ class Shape extends Path {
   String type = "Shape";
 
 
-   Shape( points ) : super(points) {
+  Shape( points ) : super(points) {
     this.uuid = MathUtils.generateUUID();
     this.holes = [];
-   }
+  }
 
   Shape.fromJSON (Map<String, dynamic> json ): super.fromJSON(json) {
 

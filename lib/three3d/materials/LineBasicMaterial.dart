@@ -20,8 +20,8 @@ class LineBasicMaterial extends Material {
     
     this.color = new Color( 1,1,1 );
     this.linewidth = 1;
-    this.linecap = 'round';
-    this.linejoin = 'round';
+    this.linecap = 'round'; // 'butt', 'round' and 'square'.
+    this.linejoin = 'round'; // 'round', 'bevel' and 'miter'.
 
     this.morphTargets = false;
 

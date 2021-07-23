@@ -895,5 +895,10 @@ class Matrix4 {
     return this.elements.sublist(0);
   }
 
+  getInverse( matrix ) {
+    print( 'THREE.Matrix4: .getInverse() has been removed. Use matrixInv.copy( matrix ).invert(); instead.' );
+    return this.copy( matrix ).invert();
+  }
+
 }
 

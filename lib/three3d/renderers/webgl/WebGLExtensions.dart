@@ -9,42 +9,7 @@ class WebGLExtensions {
   }
 
   getExtension( name ) {
-
-		if ( extensions[ name ] != null ) {
-
-			return extensions[ name ];
-
-		}
-
-		var extension;
-
-		switch ( name ) {
-
-			case 'WEBGL_depth_texture':
-				extension = gl.getExtension( 'WEBGL_depth_texture' ) ?? gl.getExtension( 'MOZ_WEBGL_depth_texture' ) ?? gl.getExtension( 'WEBKIT_WEBGL_depth_texture' );
-				break;
-
-			case 'EXT_texture_filter_anisotropic':
-				extension = gl.getExtension( 'EXT_texture_filter_anisotropic' ) ?? gl.getExtension( 'MOZ_EXT_texture_filter_anisotropic' ) ?? gl.getExtension( 'WEBKIT_EXT_texture_filter_anisotropic' );
-				break;
-
-			case 'WEBGL_compressed_texture_s3tc':
-				extension = gl.getExtension( 'WEBGL_compressed_texture_s3tc' ) ?? gl.getExtension( 'MOZ_WEBGL_compressed_texture_s3tc' ) ?? gl.getExtension( 'WEBKIT_WEBGL_compressed_texture_s3tc' );
-				break;
-
-			case 'WEBGL_compressed_texture_pvrtc':
-				extension = gl.getExtension( 'WEBGL_compressed_texture_pvrtc' ) ?? gl.getExtension( 'WEBKIT_WEBGL_compressed_texture_pvrtc' );
-				break;
-
-			default:
-				extension = gl.getExtension( name );
-
-		}
-
-		extensions[ name ] = extension;
-
-		return extension;
-
+    return has(name);
 	}
 
   init( capabilities ) {
@@ -126,7 +91,9 @@ class WebGLExtensions {
     }
 
     Map<String, dynamic> _names = {
+      "EXT_color_buffer_float": "GL_EXT_color_buffer_float",
       "EXT_texture_filter_anisotropic": "GL_EXT_texture_filter_anisotropic",
+      "EXT_color_buffer_half_float": "GL_EXT_color_buffer_half_float",
       "GL_OES_texture_compression_astc": "GL_OES_texture_compression_astc",
       "GL_KHR_texture_compression_astc_ldr": "GL_KHR_texture_compression_astc_ldr",
       "GL_KHR_texture_compression_astc_hdr": "GL_KHR_texture_compression_astc_hdr",
@@ -136,6 +103,10 @@ class WebGLExtensions {
     };
 
     var _name = _names[name] ?? name;
+
+
+    // print(" has for app : ${name} ");
+    // developer.log( extensions.keys.toList().toString() );
 
     if ( extensions.containsKey( _name ) ) {
       return extensions.containsKey( _name );

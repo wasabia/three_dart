@@ -27,9 +27,9 @@ class SVGLoaderPointsToStroke {
   late List points;
   late dynamic style;
 
-  List<double> vertices = List<double>.of([], growable: true);
-  List<double> normals = List<double>.of([], growable: true);
-  List<double> uvs = List<double>.of([], growable: true);
+  List<num> vertices = List<num>.of([], growable: true);
+  List<num> normals = List<num>.of([], growable: true);
+  List<num> uvs = List<num>.of([], growable: true);
 
   int numVertices = 0;
   var currentPoint;

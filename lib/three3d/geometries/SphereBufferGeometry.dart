@@ -4,7 +4,7 @@ class SphereBufferGeometry extends BufferGeometry {
 
   String type = "SphereBufferGeometry";
 
-	SphereBufferGeometry( {radius = 1, widthSegments = 8, double heightSegments = 6, phiStart = 0, phiLength = Math.PI * 2, thetaStart = 0, thetaLength = Math.PI} ): super() {
+	SphereBufferGeometry( {radius = 1, num widthSegments = 8, num heightSegments = 6, phiStart = 0, phiLength = Math.PI * 2, thetaStart = 0, thetaLength = Math.PI} ): super() {
 
 		this.parameters = {
 			"radius": radius,

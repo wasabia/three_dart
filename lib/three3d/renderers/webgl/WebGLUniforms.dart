@@ -103,6 +103,7 @@ class WebGLUniforms with WebGLUniform {
       var u = seq[ i ];
       var v = values[ u.id ];
 
+
       // var v2 = v["value"];
       // var _rt = v2.runtimeType.toString();
       // if(_rt == "Color" || _rt == "Vector2" || _rt == "Vector4" || _rt == "Matrix3") {
@@ -115,6 +116,7 @@ class WebGLUniforms with WebGLUniform {
       //   print(" WebGLUniforms.upload u ${u.id}: ${u}  v needsUpdate: ${v["needsUpdate"]} ${v2.runtimeType.toString()} ");
       //   print(v2);
       // }
+
   
       if ( v["needsUpdate"] != false ) {
         // note: always updating when .needsUpdate is null

@@ -19,7 +19,70 @@ class TYPRFont extends Font {
     return shapes;
   }
 
+  Map<String, dynamic> generateShapes2(text, {int size = 100}) {
+    return createPaths2(text, size, this.data);
+  }
+  // 同样文字路径不重复生成
+  // 生成唯一文字路径
+  // 记录 offset
+  Map<String, dynamic> createPaths2(String text, num size, Map<String, dynamic> data) {
+    List<String> chars = text.split("");
 
+    num scale = size / data["resolution"];
+    num line_height = (data["boundingBox"]["yMax"] - data["boundingBox"]["yMin"] +
+            data["underlineThickness"]) * scale;
+
+    // List<ShapePath> paths = [];
+
+    Map<String, Map<String, dynamic>> paths = {};
+    List<Map<String, dynamic>> result = [];
+
+    num offsetX = 0.0;
+    num offsetY = 0.0;
+
+    num maxWidth = 0.0;
+
+    for (var i = 0; i < chars.length; i++) {
+      var char = chars[i];
+
+      if (char == '\n') {
+        offsetX = 0;
+        offsetY -= line_height;
+      } else {
+        var charPath = paths[char];
+        if(charPath == null) {
+          var ret = createPath(char, scale, 0.0, 0.0, data);
+          paths[char] = ret;
+          charPath = ret;
+        }
+        
+        Map<String, dynamic> charData = {
+          "char": char,
+          "offsetX": offsetX,
+          "offsetY": offsetY
+        };
+
+        result.add(charData);
+
+        offsetX += charPath["offsetX"];
+        // paths.add(ret["path"]);
+
+        if(offsetX > maxWidth) {
+          maxWidth = offsetX;
+        }
+      }
+    }
+
+    Map<String, dynamic> _data = {
+      "paths": paths,
+      "chars": result,
+      "height": offsetY + line_height,
+      "width": maxWidth
+    };
+
+    return _data;
+  }
+  
   List<ShapePath> createPaths(String text, num size, Map<String, dynamic> data) {
     // var chars = Array.from ? Array.from( text ) : String( text ).split( '' ); // workaround for IE11, see #13988
     List<String> chars = text.split("");
@@ -76,7 +139,7 @@ class TYPRFont extends Font {
     List<num> crds = List<num>.from(charPath["crds"]);
 
     // print(" charPath  before scale ....");
-    // print(crds);
+    // print(charPath);
 
     crds = crds.map((n) => Math.round(n * _preScale)).toList();
 

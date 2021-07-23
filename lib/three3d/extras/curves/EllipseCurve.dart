@@ -2,17 +2,17 @@ part of three_extra;
 
 class EllipseCurve extends Curve {
 
-  late double aX;
-  late double aY;
-  late double xRadius;
-  late double yRadius;
+  late num aX;
+  late num aY;
+  late num xRadius;
+  late num yRadius;
 
-  late double aStartAngle;
-  late double aEndAngle;
+  late num aStartAngle;
+  late num aEndAngle;
 
   late bool aClockwise;
 
-  late double aRotation;
+  late num aRotation;
 
   bool isEllipseCurve = true;
 

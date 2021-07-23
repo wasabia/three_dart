@@ -10,7 +10,7 @@ import 'package:typr_dart/typr_dart.dart' as typr_dart;
 import 'package:bidi_dart/bidi_dart.dart' as bidi;
 
 import 'package:three_dart/three3d/dartHelpers.dart';
-import 'package:three_dart/three3d/renderers/shaders/ShaderChunk.dart';
+
 import 'package:three_dart/three_dart.dart';
 
 part './Text.dart';

@@ -3,6 +3,15 @@ part of three_geometries;
 
 class PlaneBufferGeometry extends BufferGeometry {
 
+  factory PlaneBufferGeometry.fromJson(Map<String, dynamic> options) {
+    return PlaneBufferGeometry(
+      width: options["width"],
+      height: options["height"],
+      widthSegments: options["widthSegments"],
+      heightSegments: options["heightSegments"]
+    );
+  }
+
 	PlaneBufferGeometry( {num width = 1, num height = 1, num widthSegments = 1, num heightSegments = 1} ) : super() {
 
 		this.type = 'PlaneBufferGeometry';

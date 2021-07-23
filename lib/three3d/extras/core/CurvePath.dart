@@ -143,13 +143,18 @@ class CurvePath extends Curve {
 
 	}
 
-	getSpacedPoints ( {num divisions = 40} ) {
+	getSpacedPoints ( {num divisions = 40, num offset = 0.0} ) {
 
 		var points = [];
 
 		for ( var i = 0; i <= divisions; i ++ ) {
 
-			points.add( this.getPoint( i / divisions, null ) );
+      var _offset = offset + i / divisions;
+      if(_offset > 1.0) {
+        _offset = _offset - 1.0;
+      }
+
+			points.add( this.getPoint( _offset, null ) );
 
 		}
 

@@ -65,6 +65,7 @@ class SVGLoaderParser {
   };
 
   SVGLoaderParser(String text, {num defaultDPI = 90, String defaultUnit = "px"}) {
+    
     xml = parseXmlDocument(text); // application/xml
 
     this.defaultDPI = defaultDPI;

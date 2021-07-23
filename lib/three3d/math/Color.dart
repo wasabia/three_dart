@@ -201,6 +201,12 @@ class Color {
     return _color;
   }
 
+  // 0 ~ 255 
+  factory Color.fromArray(List<int> list) {
+    var _color = Color.setRGB255(list[0], list[1], list[2]);
+  
+    return _color;
+  }
 
   static Color fromHex(hex) {
     return Color(0.0, 0.0, 0.0).setHex(hex);
