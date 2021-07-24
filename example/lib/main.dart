@@ -1,6 +1,7 @@
 import 'package:example/ExampleText.dart';
 import 'package:example/ExampleTextBufferGeometry.dart';
 import 'package:example/ExampleUnrealBloom.dart';
+import 'package:example/MyAppLut.dart';
 import 'package:flutter/material.dart';
 
 import 'ExampleMultiSamples.dart';
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
     // return ExampleTextBufferGeometry();
     // return ExampleText();
     // return ExampleMultiSamples();
-    return ExampleSlide();
+    // return ExampleSlide();
     // return ExampleUnrealBloom();
+    return MyAppLut();
   }
 }

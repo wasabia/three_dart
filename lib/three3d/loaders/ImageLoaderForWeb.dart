@@ -6,7 +6,7 @@ import 'package:universal_html/html.dart' as html;
 
 class ImageLoaderLoader {
 
-  static Future<ImageElement> loadImage(String url) {
+  static Future<ImageElement> loadImage(String url, {Function? imageDecoder}) {
     var completer = Completer<ImageElement>();
     var imageDom = html.ImageElement();
     imageDom.onLoad.listen((e) {

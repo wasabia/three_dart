@@ -9,22 +9,22 @@ import 'package:three_dart/three3d/textures/index.dart';
 class ImageLoaderLoader {
 
   static Future<ImageElement> loadImage(String url, {Function? imageDecoder}) async {
-    Uint8List bytes;
-    if(url.startsWith("http")) {
-      var response = await http.get(Uri.parse(url));
-      bytes = response.bodyBytes;
-    } else if(url.startsWith("assets")) {
-      final fileData = await rootBundle.load(url);
-      bytes = Uint8List.view(fileData.buffer);
-    }
-    
+  
     ImageElement? imageElement;
     if(imageDecoder == null) {
-      var file = File(url);
-      bytes = file.readAsBytesSync();
+      Uint8List? bytes;
+      if(url.startsWith("http")) {
+        var response = await http.get(Uri.parse(url));
+        bytes = response.bodyBytes;
+      } else if(url.startsWith("assets")) {
+        final fileData = await rootBundle.load(url);
+        bytes = Uint8List.view(fileData.buffer);
+      }
+      // var file = File(url);
+      // bytes = file.readAsBytesSync();
       // print(" load image and decode 1: ${DateTime.now().millisecondsSinceEpoch}............ ");
       var receivePort = ReceivePort();
-      await Isolate.spawn(decodeIsolate, DecodeParam(bytes, receivePort.sendPort));
+      await Isolate.spawn(decodeIsolate, DecodeParam(bytes!, receivePort.sendPort));
       // Get the processed image from the isolate.
       var image = await receivePort.first as Image;
 
