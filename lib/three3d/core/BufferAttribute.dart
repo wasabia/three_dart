@@ -10,12 +10,11 @@ class BufferAttribute extends BaseBufferAttribute {
   var _vector = new Vector3.init();
   var _vector2 = new Vector2(null, null);
 
-
   String name = '';
   bool isBufferAttribute = true;
   
 
-  BufferAttribute(List<num> array, itemSize, normalized ) {
+  BufferAttribute(ThreeArray array, itemSize, normalized ) {
     this.array = array;
     this.itemSize = itemSize;
     this.count = array != null ? (array.length / itemSize).toInt() : 0;

@@ -296,6 +296,8 @@ class Material with EventDispatcher {
       side = newValue;
     } else if(key == "size") {
       size = newValue;
+    } else if(key == "sizeAttenuation") {
+      sizeAttenuation = newValue;
     } else if(key == "skinning") {
       skinning = newValue;
     } else if(key == "toneMapped") {

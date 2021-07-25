@@ -167,12 +167,15 @@ class WebGLAttributes {
 		var array = attribute.array;
 		var updateRange = attribute.updateRange;
 
+    print("updateBuffer  updateRange: ${updateRange}   ");
 
 		gl.bindBuffer( bufferType, buffer );
 
 		if ( updateRange["count"] == - 1 ) {
 
 			// Not using update ranges
+
+      print(" WebGLAttributes.dart Not using update ranges "); 
 
 			gl.bufferSubData( bufferType, 0, array, 0, array.length );
 
@@ -280,7 +283,12 @@ class WebGLAttributes {
 
       } else if ( data["version"] < attribute.version ) {
 
+        print(" 1 update BUffer name ${attribute.name} attribute.version: ${attribute.version}  ${DateTime.now().millisecondsSinceEpoch }  ");
+
         updateBuffer( data["buffer"], attribute, bufferType );
+
+        print(" 2 update BUffer attribute.version: ${attribute.version}  ${DateTime.now().millisecondsSinceEpoch }  ");
+
 
         data["version"] = attribute.version;
 

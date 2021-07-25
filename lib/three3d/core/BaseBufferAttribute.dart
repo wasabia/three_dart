@@ -4,7 +4,7 @@ part of three_core;
 class BaseBufferAttribute {
 
 
-  late List<num> array;
+  late ThreeArray array;
   late int itemSize;
 
   InterleavedBuffer? data;

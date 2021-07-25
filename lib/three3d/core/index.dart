@@ -3,6 +3,7 @@ library three_core;
 import 'dart:convert';
 
 
+import 'package:three_dart/three3d/Float32Array.dart';
 import 'package:three_dart/three3d/cameras/index.dart';
 import 'package:three_dart/three3d/extras/index.dart';
 import 'package:three_dart/three3d/geometries/index.dart';
@@ -38,3 +39,4 @@ part './Layers.dart';
 part './Object3D.dart';
 part './Raycaster.dart';
 // part './Uniform.js';
+
