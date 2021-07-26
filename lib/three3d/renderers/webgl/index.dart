@@ -6,7 +6,8 @@ import 'dart:typed_data';
 import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
-import 'package:three_dart/three3d/Float32Array.dart';
+import 'package:three_dart/three3d/Float32Array.app.dart' if (dart.library.js) 'package:three_dart/three3d/Float32Array.web.dart';
+
 import 'package:three_dart/three3d/WeakMap.dart';
 import 'package:three_dart/three3d/cameras/index.dart';
 import 'package:three_dart/three3d/constants.dart';

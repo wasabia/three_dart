@@ -512,7 +512,7 @@ class GLTFParser {
       if ( bufferView != null ) {
 
         // Avoid modifying the original ArrayBuffer, if the bufferView wasn't initialized with zeroes.
-        bufferAttribute = BufferAttribute( slice(bufferAttribute.array, 0).cast(), bufferAttribute.itemSize, bufferAttribute.normalized );
+        bufferAttribute = BufferAttribute( bufferAttribute.array.clone(), bufferAttribute.itemSize, bufferAttribute.normalized );
 
       }
 

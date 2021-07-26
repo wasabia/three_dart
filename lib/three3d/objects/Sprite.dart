@@ -32,12 +32,12 @@ class Sprite extends Object3D {
 
       _geometry = new BufferGeometry();
 
-      var float32Array = [
+      var float32Array = Float32Array(20).set([
         - 0.5, - 0.5, 0, 0, 0,
         0.5, - 0.5, 0, 1, 0,
         0.5, 0.5, 0, 1, 1,
         - 0.5, 0.5, 0, 0, 1
-      ];
+      ]);
 
       var interleavedBuffer = new InterleavedBuffer( float32Array, 5 );
 

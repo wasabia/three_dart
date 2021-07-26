@@ -119,7 +119,7 @@ class WebGLMorphtargets {
 
 				}
 
-				morphInfluences.updateValue(i, value);
+				morphInfluences[i] = value;
 				morphInfluencesSum += value;
 
 			} else {
@@ -137,7 +137,7 @@ class WebGLMorphtargets {
 
 				}
 
-				morphInfluences.updateValue(i, 0);
+				morphInfluences[i] = 0;
 
 			}
 

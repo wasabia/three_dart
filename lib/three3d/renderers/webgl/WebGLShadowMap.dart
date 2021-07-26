@@ -62,14 +62,12 @@ class WebGLShadowMap {
 
     } );
 
+    var _float32Array = Float32Array(9);
+    _float32Array.set([ - 1.0, - 1.0, 0.5, 3.0, - 1.0, 0.5, - 1.0, 3.0, 0.5 ]);
 
     fullScreenTri.setAttribute(
       'position',
-      BufferAttribute(
-        [ - 1, - 1, 0.5, 3, - 1, 0.5, - 1, 3, 0.5 ],
-        3,
-        false
-      )
+      BufferAttribute( _float32Array, 3, false )
     );
     
     fullScreenMesh = new Mesh( fullScreenTri, shadowMaterialVertical );

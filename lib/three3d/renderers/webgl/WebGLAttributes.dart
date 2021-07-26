@@ -17,24 +17,26 @@ class WebGLAttributes {
 
 	createBuffer( BaseBufferAttribute attribute, int bufferType ) {
 
+
 		final array = attribute.array;
 		var usage = attribute.usage;
 
+
     dynamic arrayType = attribute.runtimeType;
 
-    dynamic arrayList;
+    // dynamic arrayList;
 
     var type = gl.FLOAT;
     int bytesPerElement = 4;
 
     if(arrayType == Float32BufferAttribute) {
-      arrayList = Float32List.fromList(array.map((e) => e.toDouble()).toList());
+      // arrayList = Float32List.fromList(array.map((e) => e.toDouble()).toList());
     } else if (arrayType == Uint16BufferAttribute) {
-      arrayList = Uint16List.fromList(array.map((e) => e.toInt()).toList());
+      // arrayList = Uint16List.fromList(array.map((e) => e.toInt()).toList());
     } else if (arrayType == Uint32BufferAttribute) {
-      arrayList = Uint32List.fromList(array.map((e) => e.toInt()).toList());
+      // arrayList = Uint32List.fromList(array.map((e) => e.toInt()).toList());
     } else if (arrayType == InterleavedBufferAttribute || arrayType == BufferAttribute) {
-      arrayList = array;
+      // arrayList = array;
       String arrayType = array.runtimeType.toString();
       if(arrayType == "Uint8List") {
         type = gl.UNSIGNED_BYTE;
@@ -55,7 +57,7 @@ class WebGLAttributes {
     } else if(arrayType == InstancedBufferAttribute) {
       type = gl.UNSIGNED_BYTE;
       bytesPerElement = Uint8List.bytesPerElement;
-      arrayList = array;
+      // arrayList = array;
 
       String _arrayType = array.runtimeType.toString();
 
@@ -84,7 +86,7 @@ class WebGLAttributes {
 		var buffer = gl.createBuffer();
 
 		gl.bindBuffer( bufferType, buffer );
-		gl.bufferData( bufferType, arrayList, usage );
+		gl.bufferData( bufferType, array.bytesLength, array.data, usage);
 
 
 		attribute.onUploadCallback();
@@ -153,7 +155,7 @@ class WebGLAttributes {
 			"buffer": buffer,
 			"type": type,
 			"bytesPerElement": bytesPerElement,
-      "array": arrayList,
+      "array": array,
 			"version": attribute.version
 		};
 
@@ -167,22 +169,17 @@ class WebGLAttributes {
 		var array = attribute.array;
 		var updateRange = attribute.updateRange;
 
-    print("updateBuffer  updateRange: ${updateRange}   ");
-
 		gl.bindBuffer( bufferType, buffer );
 
 		if ( updateRange["count"] == - 1 ) {
 
 			// Not using update ranges
-
-      print(" WebGLAttributes.dart Not using update ranges "); 
-
-			gl.bufferSubData( bufferType, 0, array, 0, array.length );
+			gl.bufferSubData( bufferType, 0, array.data, 0, array.bytesLength );
 
 		} else {
 
       print(" WebGLAttributes.dart gl.bufferSubData need debug confirm.... ");  
-			gl.bufferSubData( bufferType, updateRange["offset"] * attribute.itemSize, array, updateRange["offset"], updateRange["count"] );
+			gl.bufferSubData( bufferType, updateRange["offset"] * attribute.itemSize, array.data, updateRange["offset"], updateRange["count"] );
 
 			updateRange["count"] = - 1; // reset range
 
@@ -282,14 +279,7 @@ class WebGLAttributes {
         buffers.add( key: attribute, value: createBuffer( attribute, bufferType ) );
 
       } else if ( data["version"] < attribute.version ) {
-
-        print(" 1 update BUffer name ${attribute.name} attribute.version: ${attribute.version}  ${DateTime.now().millisecondsSinceEpoch }  ");
-
         updateBuffer( data["buffer"], attribute, bufferType );
-
-        print(" 2 update BUffer attribute.version: ${attribute.version}  ${DateTime.now().millisecondsSinceEpoch }  ");
-
-
         data["version"] = attribute.version;
 
       }

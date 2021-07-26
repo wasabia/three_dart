@@ -17,10 +17,10 @@ class CircleBufferGeometry extends BufferGeometry {
 
 		// buffers
 
-		List<num> indices = [];
-		List<num> vertices = [];
-		List<num> normals = [];
-		List<num> uvs = [];
+		List<int> indices = [];
+		List<double> vertices = [];
+		List<double> normals = [];
+		List<double> uvs = [];
 
 		// helper variables
 
@@ -42,18 +42,18 @@ class CircleBufferGeometry extends BufferGeometry {
 			vertex.x = radius * Math.cos( segment );
 			vertex.y = radius * Math.sin( segment );
 
-			vertices.addAll( [vertex.x, vertex.y, vertex.z] );
+			vertices.addAll( [vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()] );
 
 			// normal
 
-			normals.addAll( [0, 0, 1] );
+			normals.addAll( [0.0, 0.0, 1.0] );
 
 			// uvs
 
 			uv.x = ( vertices[ i ] / radius + 1 ) / 2;
 			uv.y = ( vertices[ i + 1 ] / radius + 1 ) / 2;
 
-			uvs.addAll( [uv.x, uv.y] );
+			uvs.addAll( [uv.x.toDouble(), uv.y.toDouble()] );
 
 		}
 
@@ -68,9 +68,9 @@ class CircleBufferGeometry extends BufferGeometry {
 		// build geometry
 
 		this.setIndex( indices );
-		this.setAttribute( 'position', new Float32BufferAttribute( vertices, 3, false ) );
-		this.setAttribute( 'normal', new Float32BufferAttribute( normals, 3, false ) );
-		this.setAttribute( 'uv', new Float32BufferAttribute( uvs, 2, false ) );
+		this.setAttribute( 'position', new Float32BufferAttribute( Float32Array.from(vertices), 3, false ) );
+		this.setAttribute( 'normal', new Float32BufferAttribute( Float32Array.from(normals), 3, false ) );
+		this.setAttribute( 'uv', new Float32BufferAttribute( Float32Array.from(uvs), 2, false ) );
 
 	}
 

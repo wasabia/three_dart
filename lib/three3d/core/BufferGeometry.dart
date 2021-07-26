@@ -39,10 +39,10 @@ class BufferGeometry with EventDispatcher {
   bool groupsNeedUpdate = false;
   bool isInstancedBufferGeometry = false;
 
-  late List<num> vertices;
-  late List<num> indices;
-  late List<num> normals;
-  late List<num> uvs;
+  late List<double> vertices;
+  late List<int> indices;
+  late List<double> normals;
+  late List<double> uvs;
 
   late List<Color> colors;
   bool isGeometry = false;
@@ -104,9 +104,9 @@ class BufferGeometry with EventDispatcher {
 
     if( index is List ) {
       if( arrayMax( index ) > 65535 ) {
-        this.index = Uint32BufferAttribute(index, 1, false);
+        this.index = Uint32BufferAttribute(Uint32Array(index.length).set(index), 1, false);
       } else {
-        this.index = Uint16BufferAttribute(index, 1, false);
+        this.index = Uint16BufferAttribute(Uint16Array(index.length).set(index), 1, false);
       }
     } else {
       this.index = index;
@@ -958,12 +958,14 @@ class BufferGeometry with EventDispatcher {
 	toNonIndexed() {
 
 		convertBufferAttribute( attribute, indices ) {
+      
+      print("BufferGeometry.convertBufferAttribute todo  ");
 
 			var array = attribute.array;
 			var itemSize = attribute.itemSize;
 			var normalized = attribute.normalized;
 
-			var array2 = List<num>.filled( indices.length * itemSize, 0 );
+			var array2 = Float32Array( indices.length * itemSize);
 
 			var index = 0, index2 = 0;
 
@@ -979,7 +981,7 @@ class BufferGeometry with EventDispatcher {
 
 			}
 
-			return new BufferAttribute( array2, itemSize, normalized );
+			return new Float32BufferAttribute( array2, itemSize, normalized );
 
 		}
 

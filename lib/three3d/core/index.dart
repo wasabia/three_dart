@@ -3,7 +3,9 @@ library three_core;
 import 'dart:convert';
 
 
-import 'package:three_dart/three3d/Float32Array.dart';
+import 'package:three_dart/three3d/Float32Array.app.dart' if (dart.library.js) 'package:three_dart/three3d/Float32Array.web.dart';
+
+
 import 'package:three_dart/three3d/cameras/index.dart';
 import 'package:three_dart/three3d/extras/index.dart';
 import 'package:three_dart/three3d/geometries/index.dart';

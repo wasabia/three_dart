@@ -126,7 +126,7 @@ class WebGLGeometries {
 
 	updateWireframeAttribute( geometry ) {
 
-		List<num> indices = [];
+		List<int> indices = [];
 
 		var geometryIndex = geometry.index;
 		var geometryPosition = geometry.attributes["position"];
@@ -169,9 +169,9 @@ class WebGLGeometries {
     BufferAttribute attribute;
 
     if(arrayMax( indices ) > 65535) {
-      attribute = Uint32BufferAttribute(indices, 1, false);
+      attribute = Uint32BufferAttribute(Uint32Array.from(indices), 1, false);
     } else {
-      attribute = Uint16BufferAttribute(indices, 1, false);
+      attribute = Uint16BufferAttribute(Uint16Array.from(indices), 1, false);
     }
 
     attribute.version = version;

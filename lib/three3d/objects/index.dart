@@ -7,7 +7,8 @@ import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/materials/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 import 'package:three_dart/three3d/textures/index.dart';
-import '../Float32Array.dart';
+import 'package:three_dart/three3d/Float32Array.app.dart' if (dart.library.js) 'package:three_dart/three3d/Float32Array.web.dart';
+
 import '../constants.dart';
 
 

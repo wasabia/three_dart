@@ -95,8 +95,8 @@ class ShapeBufferGeometry extends BufferGeometry {
 
 				var vertex = shapeVertices[ i ];
 
-				vertices.addAll( [vertex.x, vertex.y, 0] );
-				normals.addAll( [0, 0, 1] );
+				vertices.addAll( [vertex.x, vertex.y, 0.0] );
+				normals.addAll( [0.0, 0.0, 1.0] );
 				uvs.addAll( [vertex.x, vertex.y] ); // world uvs
 
 			}
@@ -111,7 +111,8 @@ class ShapeBufferGeometry extends BufferGeometry {
 				var b = face[ 1 ] + indexOffset;
 				var c = face[ 2 ] + indexOffset;
 
-				indices.addAll( [a, b, c] );
+  
+				indices.addAll( [a.toInt(), b.toInt(), c.toInt()] );
 				groupCount += 3;
 
 			}
@@ -145,12 +146,11 @@ class ShapeBufferGeometry extends BufferGeometry {
 
 		// build geometry
 
-   
-
+    
 		this.setIndex( indices );
-		this.setAttribute( 'position', new Float32BufferAttribute( vertices, 3, false ) );
-		this.setAttribute( 'normal', new Float32BufferAttribute( normals, 3, false ) );
-		this.setAttribute( 'uv', new Float32BufferAttribute( uvs, 2, false ) );
+		this.setAttribute( 'position', new Float32BufferAttribute( Float32Array.from(vertices), 3, false ) );
+		this.setAttribute( 'normal', new Float32BufferAttribute( Float32Array.from(normals), 3, false ) );
+		this.setAttribute( 'uv', new Float32BufferAttribute( Float32Array.from(uvs), 2, false ) );
 
 
 		// helper functions

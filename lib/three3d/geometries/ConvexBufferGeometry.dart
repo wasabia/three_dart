@@ -4,10 +4,12 @@ part of three_geometries;
 
 
 class ConvexBufferGeometry extends BufferGeometry {
-  List<num> vertices = [];
-  List<num> normals = [];
 
 	ConvexBufferGeometry(points) : super() {
+
+    vertices = [];
+    normals = [];
+
 
     // buffers
 

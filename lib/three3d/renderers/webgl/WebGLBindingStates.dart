@@ -29,7 +29,7 @@ class WebGLBindingStates {
 
 	setup( object, material, program, geometry, index ) {
 
-    print(" WebGLBindingStates.setup object: ${object.type} ${object.id} vaoAvailable: ${vaoAvailable} index: ${index} ");
+    // print(" WebGLBindingStates.setup object: ${object.type} ${object.id} vaoAvailable: ${vaoAvailable} index: ${index} ");
 
 		bool updateBuffers = false;
 
@@ -37,8 +37,7 @@ class WebGLBindingStates {
 			var state = getBindingState( geometry, program, material );
 
 			if ( currentState != state ) {
-        print(" currentState != state ");
-        
+
 				currentState = state;
 				bindVertexArrayObject( currentState["object"] );
 
@@ -46,8 +45,7 @@ class WebGLBindingStates {
 
 			updateBuffers = needsUpdate( geometry, index );
 
-      print(" updateBuffers: ${updateBuffers} ");
-  
+
 			if ( updateBuffers ) saveCache( geometry, index );
 
 		} else {
@@ -353,7 +351,7 @@ class WebGLBindingStates {
 
 		if ( capabilities.isWebGL2 == false && ( object.isInstancedMesh || geometry.isInstancedBufferGeometry ) ) {
 
-      print("  geometry.isInstancedBufferGeometry: ${geometry.isInstancedBufferGeometry} ");
+      // print("  geometry.isInstancedBufferGeometry: ${geometry.isInstancedBufferGeometry} ");
 			if ( extensions.get( 'ANGLE_instanced_arrays' ) == null ) return;
 
 		}
@@ -369,7 +367,7 @@ class WebGLBindingStates {
 
 		for( var name in programAttributes.keys ) {
 
-      print("WebGLBindingState setupVertexAttributes name: ${name} ");
+      // print("WebGLBindingState setupVertexAttributes name: ${name} ");
 
 			var programAttribute = programAttributes[ name ];
 
@@ -378,7 +376,7 @@ class WebGLBindingStates {
 
 				var geometryAttribute = geometryAttributes[ name ];
 
-        print("WebGLBindingState setupVertexAttributes name: ${name} geometryAttribute ${geometryAttribute} ");
+        // print("WebGLBindingState setupVertexAttributes name: ${name} geometryAttribute ${geometryAttribute} ");
 
 
 				if ( geometryAttribute != null ) {

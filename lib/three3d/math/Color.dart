@@ -201,6 +201,13 @@ class Color {
     return _color;
   }
 
+  factory Color.setRGBArray(List<num> cl) {
+
+    var _color = Color(cl[0], cl[1], cl[2]);
+  
+    return _color;
+  }
+
   // 0 ~ 255 
   factory Color.fromArray(List<int> list) {
     var _color = Color.setRGB255(list[0], list[1], list[2]);

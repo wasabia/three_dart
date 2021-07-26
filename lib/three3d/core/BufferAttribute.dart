@@ -376,18 +376,18 @@ class BufferAttribute extends BaseBufferAttribute {
 	}
 
 	clone () {
-    if(type == "BufferAttribute") {
-      return BufferAttribute( this.array, this.itemSize, false ).copy( this );
-    } else if(type == "Float32BufferAttribute") {
-      return Float32BufferAttribute(this.array, this.itemSize, false).copy(this);
-    } else if(type == "Uint8BufferAttribute") {
-      return Uint8BufferAttribute(this.array, this.itemSize, false).copy(this);
-    } else if(type == "Uint16BufferAttribute") {
-      return Uint16BufferAttribute(this.array, this.itemSize, false).copy(this);  
+    // if(type == "BufferAttribute") {
+    //   return BufferAttribute( this.array, this.itemSize, false ).copy( this );
+    // } else if(type == "Float32BufferAttribute") {
+    //   return Float32BufferAttribute(this.array, this.itemSize, false).copy(this);
+    // } else if(type == "Uint8BufferAttribute") {
+    //   return Uint8BufferAttribute(this.array, this.itemSize, false).copy(this);
+    // } else if(type == "Uint16BufferAttribute") {
+    //   return Uint16BufferAttribute(this.array, this.itemSize, false).copy(this);  
       
-    } else {
+    // } else {
       throw("BufferAttribute type: ${type} clone need support ....  ");
-    }
+    // }
 	}
 
 	toJSON () {
@@ -409,18 +409,17 @@ class BufferAttribute extends BaseBufferAttribute {
 
 class Int8BufferAttribute extends BufferAttribute {
   String type = "Int8BufferAttribute";
-  Int8BufferAttribute( array, itemSize, normalized ): super(array, itemSize, normalized) {
+  
+  Int8BufferAttribute( Int8Array array, itemSize, normalized ): super(array, itemSize, normalized) {
 
   }
-
-
 }
 
 
 
 class Uint8BufferAttribute extends BufferAttribute {
   String type = "Uint8BufferAttribute";
-  Uint8BufferAttribute( array, itemSize, normalized ): super( array, itemSize, normalized ) {
+  Uint8BufferAttribute(Uint8Array array, itemSize, normalized ): super( array, itemSize, normalized ) {
 
   }
 
@@ -433,14 +432,13 @@ class Uint8ClampedBufferAttribute extends BufferAttribute {
 
   }
 
-
 }
 
 
 
 class Int16BufferAttribute extends BufferAttribute {
   String type = "Int16BufferAttribute";
-  Int16BufferAttribute( array, itemSize, normalized ): super( array, itemSize, normalized ) {
+  Int16BufferAttribute(Int16Array array, itemSize, normalized ): super( array, itemSize, normalized ) {
 
   }
 
@@ -453,7 +451,7 @@ class Int16BufferAttribute extends BufferAttribute {
 
 class Uint16BufferAttribute extends BufferAttribute {
   String type = "Uint16BufferAttribute";
-  Uint16BufferAttribute( array, itemSize, normalized ): super(array, itemSize, normalized) {
+  Uint16BufferAttribute(Uint16Array array, itemSize, normalized ): super(array, itemSize, normalized) {
 
   }
 
@@ -463,7 +461,7 @@ class Uint16BufferAttribute extends BufferAttribute {
 
 class Int32BufferAttribute extends BufferAttribute {
   String type = "Int32BufferAttribute";
-  Int32BufferAttribute( array, itemSize, normalized ): super(array, itemSize, normalized) {
+  Int32BufferAttribute(Int32Array array, itemSize, normalized ): super(array, itemSize, normalized) {
 
   }
 

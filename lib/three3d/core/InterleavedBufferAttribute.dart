@@ -21,7 +21,6 @@ class InterleavedBufferAttribute extends BaseBufferAttribute {
 
 	get array {
     return this.data!.array;
-
 	}
 
 	set needsUpdate(value) {

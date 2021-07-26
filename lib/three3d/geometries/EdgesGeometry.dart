@@ -36,7 +36,7 @@ class EdgesGeometry extends BufferGeometry {
 		var hashes = List<String>.filled(3, "");
 
 		var edgeData = {};
-		List<num> vertices = [];
+		List<double> vertices = [];
 		for ( var i = 0; i < indexCount; i += 3 ) {
 
 			if ( indexAttr != null ) {
@@ -127,14 +127,14 @@ class EdgesGeometry extends BufferGeometry {
 				_v0.fromBufferAttribute( positionAttr, index0 );
 				_v1.fromBufferAttribute( positionAttr, index1 );
 
-				vertices.addAll( [_v0.x, _v0.y, _v0.z] );
-				vertices.addAll( [_v1.x, _v1.y, _v1.z] );
+				vertices.addAll( [_v0.x.toDouble(), _v0.y.toDouble(), _v0.z.toDouble()] );
+				vertices.addAll( [_v1.x.toDouble(), _v1.y.toDouble(), _v1.z.toDouble()] );
 
 			}
 
 		}
 
-		this.setAttribute( 'position', Float32BufferAttribute( vertices, 3, false ) );
+		this.setAttribute( 'position', Float32BufferAttribute( Float32Array.from(vertices), 3, false ) );
 
 	}
 

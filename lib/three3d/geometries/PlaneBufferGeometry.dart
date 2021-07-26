@@ -38,9 +38,9 @@ class PlaneBufferGeometry extends BufferGeometry {
 		//
 
 		List<num> indices = [];
-		List<num> vertices = [];
-		List<num> normals = [];
-		List<num> uvs = [];
+		List<double> vertices = [];
+		List<double> normals = [];
+		List<double> uvs = [];
 
 		for ( var iy = 0; iy < gridY1; iy ++ ) {
 
@@ -50,9 +50,9 @@ class PlaneBufferGeometry extends BufferGeometry {
 
 				var x = ix * segment_width - width_half;
 
-				vertices.addAll( [x, - y, 0] );
+				vertices.addAll( [x.toDouble(), - y.toDouble(), 0.0] );
 
-				normals.addAll( [0, 0, 1] );
+				normals.addAll( [0.0, 0.0, 1.0] );
 
 				uvs.add( ix / gridX );
 				uvs.add( 1 - ( iy / gridY ) );
@@ -77,12 +77,10 @@ class PlaneBufferGeometry extends BufferGeometry {
 
 		}
 
-
-
 		this.setIndex( indices );
-		this.setAttribute( 'position', new Float32BufferAttribute( vertices, 3, false ) );
-		this.setAttribute( 'normal', new Float32BufferAttribute( normals, 3, false ) );
-		this.setAttribute( 'uv', new Float32BufferAttribute( uvs, 2, false ) );
+		this.setAttribute( 'position', new Float32BufferAttribute( Float32Array.from(vertices), 3, false ) );
+		this.setAttribute( 'normal', new Float32BufferAttribute( Float32Array.from(normals), 3, false ) );
+		this.setAttribute( 'uv', new Float32BufferAttribute( Float32Array.from(uvs), 2, false ) );
 
 	}
 

@@ -24,6 +24,6 @@ export './constants.dart';
 export './WeakMap.dart';
 
 
-export './Float32Array.dart';
+export './Float32Array.app.dart';
 
 

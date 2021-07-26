@@ -363,7 +363,10 @@ class _MyAppState extends State<MyAppLut> {
     var loader = THREE.TextureLoader(null);
     var _texture = await loader.loadAsync("assets/demo.png", null);
    
-    var textureData = await THREE.LUTCubeLoader(null).loadAsync("assets/MOA_5.cube", null);
+    // var textureData = await THREE.LUTCubeLoader(null).loadAsync("assets/MOA_5.cube", null);
+    var textureData = await THREE.LUTCubeLoader(null).loadAsync("assets/KOMO-v5.cube", null);
+
+
     var lut_cube_texture = textureData["texture3D"];
     // var lut_cube_texture = textureData["texture"];
 
