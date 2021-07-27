@@ -104,9 +104,9 @@ class BufferGeometry with EventDispatcher {
 
     if( index is List ) {
       if( arrayMax( index ) > 65535 ) {
-        this.index = Uint32BufferAttribute(Uint32Array(index.length).set(index), 1, false);
+        this.index = Uint32BufferAttribute(Uint32Array.from(index), 1, false);
       } else {
-        this.index = Uint16BufferAttribute(Uint16Array(index.length).set(index), 1, false);
+        this.index = Uint16BufferAttribute(Uint16Array.from(index), 1, false);
       }
     } else {
       this.index = index;

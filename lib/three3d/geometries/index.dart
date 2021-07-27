@@ -35,3 +35,4 @@ part './TextGeometry.dart';
 part './SphereBufferGeometry.dart';
 part './TorusKnotBufferGeometry.dart';
 part './ExtrudeGeometry.dart';
+part './WireframeGeometry.dart';

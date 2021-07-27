@@ -1,24 +1,21 @@
-import { LineSegmentsGeometry } from '../lines/LineSegmentsGeometry.js';
+part of jsm_lines;
 
-var LineGeometry = function () {
+// import { LineSegmentsGeometry } from '../lines/LineSegmentsGeometry.js';
 
-	LineSegmentsGeometry.call( this );
+class LineGeometry extends LineSegmentsGeometry {
 
-	this.type = 'LineGeometry';
+	String type = 'LineGeometry';
+  bool isLineGeometry = true;
 
-};
+  LineGeometry() : super() {
 
-LineGeometry.prototype = Object.assign( Object.create( LineSegmentsGeometry.prototype ), {
+  }
 
-	constructor: LineGeometry,
-
-	isLineGeometry: true,
-
-	setPositions: function ( array ) {
+  setPositions( array ) {
 
 		// converts [ x1, y1, z1,  x2, y2, z2, ... ] to pairs format
 
-		var length = array.length - 3;
+		int length = array.length - 3;
 		var points = new Float32Array( 2 * length );
 
 		for ( var i = 0; i < length; i += 3 ) {
@@ -33,17 +30,17 @@ LineGeometry.prototype = Object.assign( Object.create( LineSegmentsGeometry.prot
 
 		}
 
-		LineSegmentsGeometry.prototype.setPositions.call( this, points );
+		super.setPositions( points );
 
 		return this;
 
-	},
+	}
 
-	setColors: function ( array ) {
+	setColors( array ) {
 
 		// converts [ r1, g1, b1,  r2, g2, b2, ... ] to pairs format
 
-		var length = array.length - 3;
+		int length = array.length - 3;
 		var colors = new Float32Array( 2 * length );
 
 		for ( var i = 0; i < length; i += 3 ) {
@@ -58,13 +55,13 @@ LineGeometry.prototype = Object.assign( Object.create( LineSegmentsGeometry.prot
 
 		}
 
-		LineSegmentsGeometry.prototype.setColors.call( this, colors );
+		super.setColors( colors );
 
 		return this;
 
-	},
+	}
 
-	fromLine: function ( line ) {
+	fromLine( line ) {
 
 		var geometry = line.geometry;
 
@@ -82,9 +79,9 @@ LineGeometry.prototype = Object.assign( Object.create( LineSegmentsGeometry.prot
 
 		return this;
 
-	},
+	}
 
-	copy: function ( /* source */ ) {
+	copy( source ) {
 
 		// todo
 
@@ -92,6 +89,5 @@ LineGeometry.prototype = Object.assign( Object.create( LineSegmentsGeometry.prot
 
 	}
 
-} );
+}
 
-export { LineGeometry };

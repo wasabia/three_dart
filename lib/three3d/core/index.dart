@@ -37,6 +37,7 @@ part './InstancedBufferGeometry.dart';
 
 part './InterleavedBuffer.dart';
 part './InterleavedBufferAttribute.dart';
+part './InstancedInterleavedBuffer.dart';
 part './Layers.dart';
 part './Object3D.dart';
 part './Raycaster.dart';
