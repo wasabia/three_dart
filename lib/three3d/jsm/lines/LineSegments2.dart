@@ -42,7 +42,7 @@ class LineSegments2 extends Mesh {
       start.fromBufferAttribute( instanceStart, i );
       end.fromBufferAttribute( instanceEnd, i );
 
-      lineDistances[ j ] = ( j == 0 ) ? 0 : lineDistances[ j - 1 ];
+      lineDistances[ j ] = ( j == 0 ) ? 0.0 : lineDistances[ j - 1 ];
       lineDistances[ j + 1 ] = lineDistances[ j ] + start.distanceTo( end );
 
     }

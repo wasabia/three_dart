@@ -24,7 +24,7 @@ class LineSegments extends Line {
 			if ( geometry.index == null ) {
 
 				var positionAttribute = geometry.attributes["position"];
-				var lineDistances = [];
+				var lineDistances = new Float32Array( positionAttribute.count );
 
 				for ( var i = 0, l = positionAttribute.count; i < l; i += 2 ) {
 

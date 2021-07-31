@@ -88,7 +88,6 @@ class WebGLBindingStates {
 
         var _buffer = attributes.get( index )["buffer"];
 
-      
 				gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, _buffer);
 
 			}
@@ -285,13 +284,9 @@ class WebGLBindingStates {
 
 		newAttributes[ attribute ] = 1;
 
-
 		if ( enabledAttributes[ attribute ] == 0 ) {
-
- 
 			gl.enableVertexAttribArray( attribute );
 			enabledAttributes[ attribute ] = 1;
-
 		}
 
 		if ( attributeDivisors[ attribute ] != meshPerAttribute ) {
@@ -300,9 +295,7 @@ class WebGLBindingStates {
 			// extension[ capabilities.isWebGL2 ? 'vertexAttribDivisor' : 'vertexAttribDivisorANGLE' ]( attribute, meshPerAttribute );
 			
       gl.vertexAttribDivisor( attribute, meshPerAttribute );
-
       attributeDivisors[ attribute ] = meshPerAttribute;
-
 		}
 
 	}
@@ -330,28 +323,20 @@ class WebGLBindingStates {
 	vertexAttribPointer( index, size, type, normalized, stride, offset ) {
 
 
+
 		if ( capabilities.isWebGL2 == true && ( type == gl.INT || type == gl.UNSIGNED_INT ) ) {
-
-
 			gl.vertexAttribIPointer( index, size, type, stride, offset );
-
 		} else {
-
-   
-
 			gl.vertexAttribPointer( index, size, type, normalized, stride, offset );
-
 		}
-
 	}
 
 	setupVertexAttributes( object, material, program, geometry ) {
 
 
-
 		if ( capabilities.isWebGL2 == false && ( object.isInstancedMesh || geometry.isInstancedBufferGeometry ) ) {
 
-      // print("  geometry.isInstancedBufferGeometry: ${geometry.isInstancedBufferGeometry} ");
+      print("  geometry.isInstancedBufferGeometry: ${geometry.isInstancedBufferGeometry} ");
 			if ( extensions.get( 'ANGLE_instanced_arrays' ) == null ) return;
 
 		}
@@ -367,17 +352,17 @@ class WebGLBindingStates {
 
 		for( var name in programAttributes.keys ) {
 
-      // print("WebGLBindingState setupVertexAttributes name: ${name} ");
-
 			var programAttribute = programAttributes[ name ];
+
+      // print(" WebGLBindingStates setupVertexAttributes programAttributes: name ${name} programAttribute: ${programAttribute} ");
+
 
 
 			if ( programAttribute >= 0 ) {
 
 				var geometryAttribute = geometryAttributes[ name ];
 
-        // print("WebGLBindingState setupVertexAttributes name: ${name} geometryAttribute ${geometryAttribute} ");
-
+      
 
 				if ( geometryAttribute != null ) {
       
@@ -388,9 +373,10 @@ class WebGLBindingStates {
 
 					// TODO Attribute may not be available on context restore
 
+ 
      
 					if ( attribute == null ) {
-            // print("WebGLBindingState setupVertexAttributes name: ${name} attribute == null ");
+            print("WebGLBindingState setupVertexAttributes name: ${name} attribute == null ");
             continue;
           }
 
@@ -398,16 +384,15 @@ class WebGLBindingStates {
 					var type = attribute["type"];
 					var bytesPerElement = attribute["bytesPerElement"];
 
-
-          // print("WebGLBindingState setupVertexAttributes name: ${name} buffer: ${buffer} type: ${type} bytesPerElement: ${bytesPerElement} ");
-    
 					if ( geometryAttribute.isInterleavedBufferAttribute ) {
     
+          
+
 						var data = geometryAttribute.data;
 						var stride = data.stride;
 						var offset = geometryAttribute.offset;
 
-						if ( data && data.isInstancedInterleavedBuffer ) {
+						if ( data != null && data.isInstancedInterleavedBuffer ) {
 
 							enableAttributeAndDivisor( programAttribute, data.meshPerAttribute );
 
@@ -418,12 +403,12 @@ class WebGLBindingStates {
 							}
 
 						} else {
-
 							enableAttribute( programAttribute );
-
 						}
 
 						gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
+
+
 						vertexAttribPointer( programAttribute, size, type, normalized, stride * bytesPerElement, offset * bytesPerElement );
 
 					} else {
@@ -440,11 +425,7 @@ class WebGLBindingStates {
 							}
 
 						} else {
-
-    
-
 							enableAttribute( programAttribute );
-
 						}
 
       

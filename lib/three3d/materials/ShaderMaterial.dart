@@ -22,14 +22,12 @@ part of three_materials;
  */
 
 class ShaderMaterial extends Material {
-
+  String type = 'ShaderMaterial';
 
   bool isShaderMaterial = true;
 
-
   ShaderMaterial( Map<String, dynamic>? parameters ) : super() {
-    this.type = 'ShaderMaterial';
-
+  
     this.defines = {};
     this.uniforms = {};
 

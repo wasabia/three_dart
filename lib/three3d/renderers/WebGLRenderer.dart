@@ -547,8 +547,7 @@ class WebGLRenderer {
     var frontFaceCW = (object.isMesh && object.matrixWorld.determinant() < 0);
 
 
-    // print(" time at: ${DateTime.now().millisecondsSinceEpoch} ");
-    // print("WebGLRenderer.renderBufferDirect object: ${object.type} ${object.id} material: ${material.type} map: ${material.map} id: ${material.id} geometry: ${geometry.type} ${geometry.id} object.isMesh: ${object.isMesh} frontFaceCW: ${frontFaceCW} ");
+    // print(" WebGLRenderer.renderBufferDirect object: ${object.type} ${object.id} material: ${material.type} map: ${material.map} id: ${material.id} geometry: ${geometry.type} ${geometry.id} object.isMesh: ${object.isMesh} frontFaceCW: ${frontFaceCW} ");
 
    
     WebGLProgram program = setProgram(camera, scene, material, object);
@@ -614,8 +613,7 @@ class WebGLRenderer {
 
     if (object.isMesh) {
       if (material.wireframe == true) {
-        state
-            .setLineWidth(material.wireframeLinewidth! * getTargetPixelRatio());
+        state.setLineWidth(material.wireframeLinewidth! * getTargetPixelRatio());
         renderer.setMode(_gl.LINES);
       } else {
         renderer.setMode(_gl.TRIANGLES);
@@ -644,8 +642,6 @@ class WebGLRenderer {
     if (object.isInstancedMesh) {
       renderer.renderInstances(drawStart, drawCount, object.count);
     } else if (geometry.isInstancedBufferGeometry) {
-
-
       var instanceCount = Math.min(geometry.instanceCount, geometry.maxInstanceCount);
 
       renderer.renderInstances(drawStart, drawCount, instanceCount);
@@ -883,14 +879,13 @@ class WebGLRenderer {
           }
         }
 
+        // print("object: ${object.type} ${object.frustumCulled} ${_frustum.intersectsObject(object)} ");
+
         if (!object.frustumCulled || _frustum.intersectsObject(object)) {
 
           if (sortObjects) {
             _vector3.setFromMatrixPosition(object.matrixWorld).applyMatrix4(projScreenMatrix);
           }
-
-          // var groups2 = object.geometry.groups;
-          // print(" groups2 length : ${groups2.length} ");
 
           var geometry = objects.update(object);
 

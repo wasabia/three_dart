@@ -12,7 +12,7 @@ class InterleavedBuffer {
   late int version;
   late String uuid;
   bool isInterleavedBuffer = true;
-  late Function onUploadCallback;
+  Function? onUploadCallback;
 
 
   InterleavedBuffer( this.array, this.stride ) {

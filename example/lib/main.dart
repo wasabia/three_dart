@@ -1,3 +1,5 @@
+import 'package:example/ExampleLineDrawRange.dart';
+import 'package:example/ExampleLineFat.dart';
 import 'package:example/ExampleText.dart';
 import 'package:example/ExampleTextBufferGeometry.dart';
 import 'package:example/ExampleUnrealBloom.dart';
@@ -26,6 +28,8 @@ class MyApp extends StatelessWidget {
     // return ExampleMultiSamples();
     // return ExampleSlide();
     // return ExampleUnrealBloom();
-    return MyAppLut();
+    // return MyAppLut();
+    // return ExampleLineFat();
+    return ExampleLineDrawRange();
   }
 }

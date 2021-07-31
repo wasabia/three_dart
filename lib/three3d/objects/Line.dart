@@ -46,7 +46,11 @@ class Line extends Object3D {
 			if ( geometry.index == null ) {
 
 				var positionAttribute = geometry.attributes["position"];
-				List<num> lineDistances = [ 0.0 ];
+
+				// List<num> lineDistances = [ 0.0 ];
+        var lineDistances = new Float32Array( positionAttribute.count + 1 );
+
+        lineDistances[0] = 0.0;
 
 				for ( var i = 1, l = positionAttribute.count; i < l; i ++ ) {
 

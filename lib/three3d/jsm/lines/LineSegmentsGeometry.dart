@@ -20,9 +20,9 @@ class LineSegmentsGeometry extends InstancedBufferGeometry {
 
   LineSegmentsGeometry() : super() {
 
-    var positions = [ - 1, 2, 0, 1, 2, 0, - 1, 1, 0, 1, 1, 0, - 1, 0, 0, 1, 0, 0, - 1, - 1, 0, 1, - 1, 0 ];
-    var uvs = [ - 1, 2, 1, 2, - 1, 1, 1, 1, - 1, - 1, 1, - 1, - 1, - 2, 1, - 2 ];
-    var index = [ 0, 2, 1, 2, 3, 1, 2, 4, 3, 4, 5, 3, 4, 6, 5, 6, 7, 5 ];
+    List<double> positions = [ - 1, 2, 0, 1, 2, 0, - 1, 1, 0, 1, 1, 0, - 1, 0, 0, 1, 0, 0, - 1, - 1, 0, 1, - 1, 0 ];
+    List<double> uvs = [ - 1, 2, 1, 2, - 1, 1, 1, 1, - 1, - 1, 1, - 1, - 1, - 2, 1, - 2 ];
+    List<int> index = [ 0, 2, 1, 2, 3, 1, 2, 4, 3, 4, 5, 3, 4, 6, 5, 6, 7, 5 ];
 
     this.setIndex( index );
     this.setAttribute( 'position', new Float32BufferAttribute( Float32Array.from(positions), 3, false ) );
@@ -208,7 +208,7 @@ class LineSegmentsGeometry extends InstancedBufferGeometry {
 
       this.boundingBox!.getCenter( center );
 
-      var maxRadiusSq = 0;
+      num maxRadiusSq = 0;
 
       for ( var i = 0, il = start.count; i < il; i ++ ) {
 

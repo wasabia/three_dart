@@ -50,15 +50,11 @@ class WebGLBufferRenderer extends BaseWebGLBufferRenderer {
 		gl.drawArrays( mode, start, count );
 
 		info.update( count, mode, 1 );
-
-    // print("WebGLBufferRenderer.render(start: ${start}, count: ${count}) mode: ${mode} ");
-
-
 	}
 
 	renderInstances( start, count, primcount ) {
-    // print("WebGLBufferRenderer renderInstances ");
-    // print(" WebGLBufferRenderer.renderInstances start: ${start} count: ${count} primcount: ${primcount} ");
+   
+    // print(" WebGLBufferRenderer.renderInstances mode: ${mode}  start: ${start} count: ${count} primcount: ${primcount} ");
 
 		if ( primcount == 0 ) return;
 

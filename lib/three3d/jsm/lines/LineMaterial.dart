@@ -255,6 +255,8 @@ class LineMaterial extends ShaderMaterial {
   setValue(String key, dynamic newValue) {
     if(key == "dashed") {
       dashed = newValue;
+    } else if(key == "resolution") {
+      resolution = newValue;  
     } else {
       super.setValue(key, newValue);
     }

@@ -1,6 +1,7 @@
 library three_core;
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 
 import 'package:three_dart/three3d/Float32Array.app.dart' if (dart.library.js) 'package:three_dart/three3d/Float32Array.web.dart';

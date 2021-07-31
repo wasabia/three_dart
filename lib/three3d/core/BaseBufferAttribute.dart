@@ -18,7 +18,7 @@ class BaseBufferAttribute {
   int version = 0;
   Map<String, int>? updateRange;
 
-  Function onUploadCallback = () {};
+  Function? onUploadCallback;
   
   int? buffer;
   int? elementSize;

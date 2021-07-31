@@ -14,6 +14,8 @@ class ThreeArray {
 
   get data => list;
 
+  get bytesLength => data.length;
+
   ThreeArray(int size) {
     _size = size;
   }
@@ -29,6 +31,8 @@ class ThreeArray {
   sublist(int len) {
     return this.toDartList().sublist(len);
   }
+
+
 
   toDartList() {
     return data.asTypedList(length);

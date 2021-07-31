@@ -12,7 +12,7 @@ class InterleavedBufferAttribute extends BaseBufferAttribute {
   bool isInterleavedBufferAttribute = true;
   String type = "InterleavedBufferAttribute";
 
-  InterleavedBufferAttribute( this.data, this.itemSize, this.offset, this.normalized ) {
+  InterleavedBufferAttribute( this.data, this.itemSize, this.offset, this.normalized ) : super() {
   }
 
   get count {

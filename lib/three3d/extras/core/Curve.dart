@@ -42,7 +42,7 @@ class Curve {
 
   bool autoClose = false;
   List<Curve> curves = [];
-  late List<Vector2> points;
+  late List points;
 
   bool isEllipseCurve = false;
   bool isLineCurve3 = false;

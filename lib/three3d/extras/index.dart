@@ -20,6 +20,7 @@ part './curves/EllipseCurve.dart';
 part './curves/LineCurve.dart';
 part './curves/QuadraticBezierCurve.dart';
 part './curves/SplineCurve.dart';
+part './curves/CatmullRomCurve3.dart';
 
 part './Earcut.dart';
 part './ShapeUtils.dart';

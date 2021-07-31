@@ -208,7 +208,9 @@ updateBufferAttr(geom, attrName, newArray, itemSize) {
     // If length isn't changing, just update the attribute's array data
     if (attr != null && attr.array.length == newArray.length) {
       
-      attr.array.setAll(0, newArray);
+      // attr.array.setAll(0, newArray);
+      attr.array.set(newArray);
+      
       attr.needsUpdate = true;
       // geom.setAttribute(attrName, new InstancedBufferAttribute(newArray, itemSize, null, null));
   

@@ -57,7 +57,7 @@ flutter:
     # - images/a_dot_ham.jpeg
 
   assets:
-    - assets/helvetiker_bold.typeface.json
+    # - assets/helvetiker_bold.typeface.json
     - assets/pingfang.ttf
     - assets/kenpixel.ttf
     - assets/winter.jpg
