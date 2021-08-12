@@ -60,7 +60,7 @@ class Float32Array extends ThreeArray {
   }
 
   void operator []=(int index, value) {
-    this.list[index] = value;
+    this.list[index] = value.toDouble();
   }
 
   Float32Array(int size) : super(size) {

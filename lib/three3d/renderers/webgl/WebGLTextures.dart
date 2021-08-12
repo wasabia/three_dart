@@ -600,6 +600,7 @@ class WebGLTextures {
 
 
       print("uploadTexture texture isDataTexture  ----------------- ");
+      // print(image.data);
 			// use manually created mipmaps if available
 			// if there are no manual mipmaps
 			// set 0 level mipmap and then use GL to generate other mipmap levels

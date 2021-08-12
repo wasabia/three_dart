@@ -170,17 +170,12 @@ class OrbitControls with EventDispatcher {
     this.zoom0 = this.object.zoom;
 
 
-    //
-
     this.domElement.addEventListener( 'contextmenu', onContextMenu, false );
-
     this.domElement.addEventListener( 'pointerdown', onPointerDown, false );
     this.domElement.addEventListener( 'wheel', onMouseWheel, false );
-
     this.domElement.addEventListener( 'touchstart', onTouchStart, false );
     this.domElement.addEventListener( 'touchend', onTouchEnd, false );
     this.domElement.addEventListener( 'touchmove', onTouchMove, false );
-
     this.domElement.addEventListener( 'keydown', onKeyDown, false );
 
     // force an update at start

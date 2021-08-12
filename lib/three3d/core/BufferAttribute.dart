@@ -19,6 +19,8 @@ class BufferAttribute extends BaseBufferAttribute {
       this.array = arrayList;
     } else if (arrayList is Float32List ) {
       this.array = Float32Array.from(arrayList);
+    } else if (arrayList is List ) {
+      this.array = Float32Array.from(arrayList);  
     } else {
       throw("BufferAttribute  arrayList: ${arrayList.runtimeType} is need support ....  ");
     }

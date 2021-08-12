@@ -508,39 +508,35 @@ class Object3D with EventDispatcher {
 
 	}
 
-	// getObjectById ( id ) {
+	getObjectById ( id ) {
+		return this.getObjectByProperty( 'id', id );
+	}
 
-	// 	return this.getObjectByProperty( 'id', id );
-
-	// }
-
-	// getObjectByName ( name ) {
-
-	// 	return this.getObjectByProperty( 'name', name );
-
-	// }
+	getObjectByName ( name ) {
+		return this.getObjectByProperty( 'name', name );
+	}
 
   // TODO
-	// getObjectByProperty (String name, String value ) {
+	getObjectByProperty (String name, String value ) {
 
-	// 	if ( this[ name ] == value ) return this;
+		if ( this.getProperty(name) == value ) return this;
 
-	// 	for ( var i = 0, l = this.children.length; i < l; i ++ ) {
+		for ( var i = 0, l = this.children.length; i < l; i ++ ) {
 
-	// 		const child = this.children[ i ];
-	// 		const object = child.getObjectByProperty( name, value );
+			var child = this.children[ i ];
+			var object = child.getObjectByProperty( name, value );
 
-	// 		if ( object !== null ) {
+			if ( object != null ) {
 
-	// 			return object;
+				return object;
 
-	// 		}
+			}
 
-	// 	}
+		}
 
-	// 	return null;
+		return null;
 
-	// }
+	}
 
 	getWorldPosition ( Vector3 target ) {
 
@@ -1013,10 +1009,14 @@ class Object3D with EventDispatcher {
     }
   }
 
-  // 用于animations PropertyBinding.dart
+
   getProperty(propertyName) {
-    if(propertyName == "scale") {
-      return this.scale;
+    if(propertyName == "id") {
+      return this.id;
+    } else if(propertyName == "name") {
+      return this.name;
+    } else if(propertyName == "scale") {
+      return this.scale;  
     } else if(propertyName == "position") {
       return this.position;
     } else if(propertyName == "quaternion") {
@@ -1028,6 +1028,7 @@ class Object3D with EventDispatcher {
       return null; 
     } else if(propertyName == "morphTargetInfluences") {
       return this.morphTargetInfluences;
+
     } else {
       throw("Object3D.getProperty type: ${type} propertyName: ${propertyName} is not support ");
     }

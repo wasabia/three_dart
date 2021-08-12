@@ -6,15 +6,15 @@
 
 var AfterimageShader = {
 
-	uniforms: {
+	"uniforms": {
 
-		'damp': { value: 0.96 },
-		'tOld': { value: null },
-		'tNew': { value: null }
+		'damp': { "value": 0.96 },
+		'tOld': { },
+		'tNew': { }
 
 	},
 
-	vertexShader: [
+	"vertexShader": [
 
 		'varying vec2 vUv;',
 
@@ -27,7 +27,7 @@ var AfterimageShader = {
 
 	].join( '\n' ),
 
-	fragmentShader: [
+	"fragmentShader": [
 
 		'uniform float damp;',
 
@@ -56,5 +56,3 @@ var AfterimageShader = {
 	].join( '\n' )
 
 };
-
-export { AfterimageShader };

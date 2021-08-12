@@ -37,3 +37,4 @@ part './BloomPass.dart';
 part './UnrealBloomPass.dart';
 part './TexturePass.dart';
 part './DotScreenPass.dart';
+part './AfterimagePass.dart';

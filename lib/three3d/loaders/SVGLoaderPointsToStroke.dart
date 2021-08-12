@@ -506,18 +506,18 @@ class SVGLoaderPointsToStroke {
       listSetter(vertices, currentCoordinate + 1, position.y);
 
       // vertices[ currentCoordinate + 2 ] = 0;
-      listSetter(vertices, currentCoordinate + 2, 0);
+      listSetter(vertices, currentCoordinate + 2, 0.0);
 
       if ( normals != null ) {
 
         // normals[ currentCoordinate ] = 0;
-        listSetter(normals, currentCoordinate, 0);
+        listSetter(normals, currentCoordinate, 0.0);
 
         // normals[ currentCoordinate + 1 ] = 0;
-        listSetter(normals, currentCoordinate + 1, 0);
+        listSetter(normals, currentCoordinate + 1, 0.0);
 
         // normals[ currentCoordinate + 2 ] = 1;
-        listSetter(normals, currentCoordinate + 2, 1);
+        listSetter(normals, currentCoordinate + 2, 1.0);
       }
 
       currentCoordinate += 3;
@@ -525,10 +525,10 @@ class SVGLoaderPointsToStroke {
       if ( uvs != null ) {
 
         // uvs[ currentCoordinateUV ] = u;
-        listSetter(uvs, currentCoordinateUV, u);
+        listSetter(uvs, currentCoordinateUV, u.toDouble());
 
         // uvs[ currentCoordinateUV + 1 ] = v;
-        listSetter(uvs, currentCoordinateUV + 1, v);
+        listSetter(uvs, currentCoordinateUV + 1, v.toDouble());
 
         currentCoordinateUV += 2;
 

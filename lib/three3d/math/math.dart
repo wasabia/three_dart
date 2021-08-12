@@ -9,6 +9,7 @@ class Math {
   static double EPSILON = 4.94065645841247E-324;
   static double LOG2E = math.log2e;
   static double MAX_VALUE = double.maxFinite;
+  static double LN10 = math.ln10;
 
   static min(num x, num y) {
     return math.min(x, y);

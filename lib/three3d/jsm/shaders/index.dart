@@ -15,5 +15,5 @@ export './DotScreenShader.dart';
 export './GammaCorrectionShader.dart';
 export './VerticalBlurShader.dart';
 export './VignetteShader.dart';
-
+export './AfterimageShader.dart';
 

@@ -110,9 +110,9 @@ class SVGLoader extends Loader {
     // Param minDistance: Points closer to this distance will be merged. (Optional)
     // Returns BufferGeometry with stroke triangles (In plane z = 0). UV coordinates are generated ('u' along path. 'v' across it, from left to right)
 
-    List<num> vertices = [];
-    List<num> normals = [];
-    List<num> uvs = [];
+    List<double> vertices = [];
+    List<double> normals = [];
+    List<double> uvs = [];
 
     if ( SVGLoader.pointsToStrokeWithBuffers( points, style, arcDivisions, minDistance, vertices, normals, uvs, 0 ) == 0 ) {
       return null;
