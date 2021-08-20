@@ -243,6 +243,8 @@ class WebGLTextures {
 
 		if ( textureProperties["__webglInit"] == null ) return;
 
+    print("WebGLTextures.deallocateTexture texture: ${texture} ");
+
 		gl.deleteTexture( textureProperties["__webglTexture"] );
 
 		properties.remove( texture );
@@ -250,6 +252,8 @@ class WebGLTextures {
 	}
 
 	deallocateRenderTarget( renderTarget ) {
+
+    print("WebGLTextures.deallocateRenderTarget texture: ${renderTarget} ");
 
 		var renderTargetProperties = properties.get( renderTarget );
 		var textureProperties = properties.get( renderTarget.texture );
@@ -599,7 +603,7 @@ class WebGLTextures {
 		} else if ( texture.isDataTexture ) {
 
 
-      print("uploadTexture texture isDataTexture  ----------------- ");
+      // print("uploadTexture texture isDataTexture  ----------------- ");
       // print(image.data);
 			// use manually created mipmaps if available
 			// if there are no manual mipmaps
@@ -631,7 +635,7 @@ class WebGLTextures {
 
 				mipmap = mipmaps[ i ];
 
-				if ( texture.format != "RGBAFormat" && texture.format != "RGBFormat" ) {
+				if ( texture.format != RGBAFormat && texture.format != RGBFormat ) {
 
 					if ( glFormat != null ) {
 

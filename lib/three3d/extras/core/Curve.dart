@@ -93,7 +93,7 @@ class Curve {
 	// Virtual base class method to overwrite and implement in subclasses
 	//	- t [0 .. 1]
 
-	getPoint ( double t, optionalTarget ) {
+	getPoint ( num t, optionalTarget ) {
 
 		print( 'THREE.Curve: .getPoint() not implemented.' );
 		return null;
@@ -280,8 +280,8 @@ class Curve {
 	getTangent ( t, optionalTarget ) {
 
 		var delta = 0.0001;
-		var t1 = t - delta;
-		var t2 = t + delta;
+		num t1 = t - delta;
+		num t2 = t + delta;
 
 		// Capping in case of danger
 
@@ -325,7 +325,7 @@ class Curve {
 
 			var u = i / segments;
 
-			tangents[ i ] = this.getTangentAt( u, new Vector3.init() );
+			tangents.add( this.getTangentAt( u, new Vector3.init() ) );
 			tangents[ i ].normalize();
 
 		}
@@ -333,8 +333,8 @@ class Curve {
 		// select an initial normal vector perpendicular to the first tangent vector,
 		// and in the direction of the minimum tangent xyz component
 
-		normals[ 0 ] = new Vector3.init();
-		binormals[ 0 ] = new Vector3.init();
+		normals.add( new Vector3.init() );
+		binormals.add( new Vector3.init() );
 		var min = Math.MAX_VALUE;
 		var tx = Math.abs( tangents[ 0 ].x );
 		var ty = Math.abs( tangents[ 0 ].y );
@@ -370,9 +370,9 @@ class Curve {
 
 		for ( var i = 1; i <= segments; i ++ ) {
 
-			normals[ i ] = normals[ i - 1 ].clone();
+			normals.add( normals[ i - 1 ].clone() );
 
-			binormals[ i ] = binormals[ i - 1 ].clone();
+			binormals.add( binormals[ i - 1 ].clone() );
 
 			vec.crossVectors( tangents[ i - 1 ], tangents[ i ] );
 
@@ -414,9 +414,9 @@ class Curve {
 		}
 
 		return {
-			tangents: tangents,
-			normals: normals,
-			binormals: binormals
+			"tangents": tangents,
+			"normals": normals,
+			"binormals": binormals
 		};
 
 	}

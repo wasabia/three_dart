@@ -1,16 +1,7 @@
-import 'package:example/ExampleLineDrawRange.dart';
-import 'package:example/ExampleLineFat.dart';
-import 'package:example/ExampleText.dart';
-import 'package:example/ExampleTextBufferGeometry.dart';
-import 'package:example/ExampleUnrealBloom.dart';
-import 'package:example/MyAppLut.dart';
 import 'package:flutter/material.dart';
+// import 'package:example/ExampleModifierCurve.dart';
 
-import 'ExampleMultiSamples.dart';
-import 'MyApp1.dart';
-import 'MyApp2.dart';
-import 'MyApp3.dart';
-import 'ExampleSlide.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -30,6 +21,8 @@ class MyApp extends StatelessWidget {
     // return ExampleUnrealBloom();
     // return MyAppLut();
     // return ExampleLineFat();
-    return ExampleLineDrawRange();
+    // return ExampleLineDrawRange();
+    // return ExampleModifierCurve();
+    return Container();
   }
 }

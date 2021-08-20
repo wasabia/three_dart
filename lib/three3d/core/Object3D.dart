@@ -69,6 +69,7 @@ class Object3D with EventDispatcher {
 
 	Map<String, dynamic> userData = {};
 
+  Map<String, dynamic> extra = {};
 
 	bool isObject3D = true;
   late BufferGeometry geometry;
@@ -84,11 +85,11 @@ class Object3D with EventDispatcher {
 
   dynamic? material;
 
-  late List<num> morphTargetInfluences;
-  late Map<String, dynamic> morphTargetDictionary;
+  List<num>? morphTargetInfluences;
+  Map<String, dynamic>? morphTargetDictionary;
 
   // InstancedMesh
-  late int count;
+  int? count;
 
   Matrix4? bindMatrix;
   Skeleton? skeleton;

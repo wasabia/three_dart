@@ -128,10 +128,18 @@ class Vector3 {
 	}
 
 	copy( v ) {
+    // TODO
 
 		this.x = v.x;
 		this.y = v.y;
-		this.z = v.z;
+
+    if(v.runtimeType == Vector2) {
+
+    } else {
+      this.z = v.z;
+    }
+
+    
 
 		return this;
 
@@ -176,7 +184,7 @@ class Vector3 {
 
 	}
 
-	sub( Vector3 v, {Vector3? w}) {
+	sub(v, {w}) {
 
 		if ( w != null ) {
 
@@ -187,7 +195,13 @@ class Vector3 {
 
 		this.x -= v.x;
 		this.y -= v.y;
-		this.z -= v.z;
+
+    if(v.runtimeType == Vector2) {
+
+    } else {
+      this.z -= v.z;
+    }
+	
 
 		return this;
 
@@ -696,7 +710,7 @@ class Vector3 {
 
 	}
 
-	fromArray( List<num?> array, {int offset = 0} ) {
+	fromArray( array, {int offset = 0} ) {
 
 		this.x = array[ offset ]!;
 		this.y = array[ offset + 1 ]!;

@@ -24,12 +24,12 @@ class SplineCurve extends Curve {
   }
 
 
-  getPoint(double t, optionalTarget ) {
+  getPoint(num t, optionalTarget ) {
 
     var point = optionalTarget ?? Vector2(null,null);
 
     var points = this.points;
-    double p = ( points.length - 1 ) * t;
+    num p = ( points.length - 1 ) * t;
 
     var intPoint = Math.floor( p ).toInt();
     var weight = p - intPoint;

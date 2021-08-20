@@ -8,7 +8,7 @@ import 'package:three_dart/three3d/textures/index.dart';
 
 class ImageLoaderLoader {
 
-  static Future<ImageElement> loadImage(String url, {Function? imageDecoder}) async {
+  static Future<ImageElement?> loadImage(String url, {Function? imageDecoder}) async {
   
     ImageElement? imageElement;
     if(imageDecoder == null) {
@@ -33,7 +33,10 @@ class ImageLoaderLoader {
       imageElement = ImageElement(data: image.getBytes(format: Format.rgba), width: image.width, height: image.height);
     } else {
       var image = await imageDecoder(null, url);
-      imageElement = ImageElement(data: image.pixels, width: image.width, height: image.height);
+      if(image != null) {
+        imageElement = ImageElement(data: image.pixels, width: image.width, height: image.height);
+      }
+      
     }
   
     return imageElement;

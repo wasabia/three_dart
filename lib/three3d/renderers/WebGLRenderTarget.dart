@@ -110,6 +110,7 @@ class WebGLRenderTarget extends RenderTarget {
   }
 
   dispose() {
+    print(" WebGLRenderTarget dispose() ......... ");
     this.dispatchEvent(Event({"type": "dispose"}));
   }
 }

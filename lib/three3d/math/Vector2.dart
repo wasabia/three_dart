@@ -425,7 +425,7 @@ class Vector2 {
 
 	}
 
-	Vector2 fromArray( List<num> array, {int offset = 0} ) {
+	Vector2 fromArray(array, {int offset = 0} ) {
 
 		this.x = array[ offset ];
 		this.y = array[ offset + 1 ];

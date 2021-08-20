@@ -241,10 +241,7 @@ class Texture with EventDispatcher {
 	}
 
 	dispose () {
-
-
 		this.dispatchEvent( Event({"type": "dispose"}) );
-
 	}
 
 	transformUv ( uv ) {

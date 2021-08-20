@@ -165,6 +165,7 @@ class Material with EventDispatcher {
   Function? onBeforeCompile;
   late Function customProgramCacheKey;
 
+  Map<String, dynamic> extra = {};
 
   String? shaderid;
 

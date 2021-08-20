@@ -41,6 +41,9 @@ class Mesh extends Object3D {
    
   }
 
+  clone( [bool recursive = false] ) {
+		return Mesh(this.geometry, this.material).copy( this, recursive );
+	}
 
 
   copy ( Object3D source, bool recursive) {
@@ -52,7 +55,7 @@ class Mesh extends Object3D {
 
 		if ( source1.morphTargetInfluences != null ) {
 
-			this.morphTargetInfluences = source1.morphTargetInfluences.sublist(0);
+			this.morphTargetInfluences = source1.morphTargetInfluences!.sublist(0);
 
 		}
 
@@ -92,8 +95,8 @@ class Mesh extends Object3D {
 
 						var name = morphAttribute[ m ].name;
 
-						this.morphTargetInfluences.add( 0 );
-						this.morphTargetDictionary[ name ] = m;
+						this.morphTargetInfluences!.add( 0 );
+						this.morphTargetDictionary![ name ] = m;
 
 					}
 

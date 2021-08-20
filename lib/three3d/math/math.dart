@@ -63,7 +63,7 @@ class Math {
     return math.acos(x);
   }
 
-  static double asin(double x) {
+  static double asin(num x) {
     return math.asin(x);
   }
 

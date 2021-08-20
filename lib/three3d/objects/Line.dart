@@ -255,8 +255,8 @@ class Line extends Object3D {
 
 						var name = morphAttribute[ m ].name;
 
-						this.morphTargetInfluences.add( 0 );
-						this.morphTargetDictionary[ name ] = m;
+						this.morphTargetInfluences!.add( 0 );
+						this.morphTargetDictionary![ name ] = m;
 
 					}
 

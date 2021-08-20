@@ -78,7 +78,7 @@ class Float32Array extends ThreeArray {
   }
 
   set(newList) {
-    this.toDartList().setAll( 0, List<double>.from(newList) );
+    this.toDartList().setAll( 0, List<double>.from(newList.map((e) => e.toDouble())) );
     return this;
   }
 

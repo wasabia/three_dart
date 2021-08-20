@@ -8,3 +8,4 @@ export './controls/index.dart';
 export './shaders/index.dart';
 export './lines/index.dart';
 export './utils/index.dart';
+export './math/index.dart';

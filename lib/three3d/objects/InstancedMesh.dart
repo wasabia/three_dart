@@ -67,7 +67,7 @@ class InstancedMesh extends Mesh {
 
 		if ( _mesh.material == null ) return;
 
-		for ( var instanceId = 0; instanceId < raycastTimes; instanceId ++ ) {
+		for ( var instanceId = 0; instanceId < raycastTimes!; instanceId ++ ) {
 
 			// calculate the world matrix for each instance
 
@@ -102,7 +102,7 @@ class InstancedMesh extends Mesh {
 
 		if ( this.instanceColor == null ) {
 
-			this.instanceColor = new BufferAttribute( Float32Array( this.count * 3 ), 3, false );
+			this.instanceColor = new BufferAttribute( Float32Array( (this.count! * 3).toInt() ), 3, false );
 
 		}
 
