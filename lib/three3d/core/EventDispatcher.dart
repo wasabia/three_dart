@@ -79,7 +79,10 @@ mixin EventDispatcher {
 
         _fn(event);
       }
+
+      event.target = null;
     }
+
   }
 
   clearListeners() {

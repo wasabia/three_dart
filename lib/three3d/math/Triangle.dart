@@ -41,7 +41,11 @@ class Triangle {
 
 	}
 
-  getValue(String key) {
+  operator [](Object? key) {
+    return getValue(key);
+  }
+
+  getValue(Object? key) {
     if(key == "a") {
       return a;
     } else if(key == "b") {

@@ -29,6 +29,9 @@ class WebGLCapabilities {
 
   late int maxSamples;
 
+  bool get drawBuffers => isWebGL2 || extensions.has( 'WEBGL_draw_buffers' );
+
+
   WebGLCapabilities(this.gl, this.extensions, this.parameters) {
     this.precision = parameters["precision"] ?? "highp";
 

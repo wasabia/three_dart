@@ -17,6 +17,8 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
 
     this.texture = CubeTexture( null, options.mapping, options.wrapS, options.wrapT, options.magFilter, options.minFilter, options.format, options.type, options.anisotropy, options.encoding );
 
+    this.texture.generateMipmaps = options.generateMipmaps ?? false;
+		this.texture.minFilter = options.minFilter ?? LinearFilter;
 
     CubeTexture cubeTexture = texture as CubeTexture;
 	  cubeTexture.needsFlipEnvMap = false;
@@ -81,7 +83,7 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
       """
     };
 
-    var geometry = new BoxBufferGeometry( width: 5, height: 5, depth: 5 );
+    var geometry = new BoxGeometry( width: 5, height: 5, depth: 5 );
 
     var material = new ShaderMaterial( {
 

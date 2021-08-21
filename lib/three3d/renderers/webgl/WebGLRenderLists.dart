@@ -10,20 +10,26 @@ class WebGLRenderLists {
 
   var lists = new WeakMap();
 
-  WebGLRenderList get(scene, camera) {
-    var cameras = lists.get(scene);
+  WebGLRenderList get(scene, renderCallDepth) {
+    
     var list;
 
-    if (cameras == null) {
+    if ( lists.has( scene ) == false ) {
       list = new WebGLRenderList(properties);
-      lists.add(key: scene, value: WeakMap());
-      lists.get(scene).add(key: camera, value: list);
+      lists.add(key: scene, value: [list]);
+  
     } else {
-      list = cameras.get(camera);
-      if (list == null) {
-        list = new WebGLRenderList(properties);
-        cameras.add(key: camera, value: list);
-      }
+      if ( renderCallDepth >= lists.get( scene ).length ) {
+
+				list = new WebGLRenderList( properties );
+				lists.get( scene ).add( list );
+
+			} else {
+
+				list = lists.get( scene )[ renderCallDepth ];
+
+			}
+
     }
 
     return list;

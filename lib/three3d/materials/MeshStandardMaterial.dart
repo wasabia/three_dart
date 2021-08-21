@@ -122,6 +122,7 @@ class MeshStandardMaterial extends Material {
     this.setValues( parameters );
   }
 
+
   clone() {
     return MeshStandardMaterial(Map<String, dynamic>()).copy(this);
   }
@@ -180,6 +181,8 @@ class MeshStandardMaterial extends Material {
     this.morphNormals = source.morphNormals;
 
     this.vertexTangents = source.vertexTangents;
+
+    this.flatShading = source.flatShading;
 
     return this;
 

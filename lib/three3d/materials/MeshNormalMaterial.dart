@@ -57,32 +57,4 @@ class MeshNormalMaterial extends Material {
   }
 
 
-
 }
-
-// MeshNormalMaterial.prototype.copy = function ( source ) {
-
-// 	Material.prototype.copy.call( this, source );
-
-// 	this.bumpMap = source.bumpMap;
-// 	this.bumpScale = source.bumpScale;
-
-// 	this.normalMap = source.normalMap;
-// 	this.normalMapType = source.normalMapType;
-// 	this.normalScale.copy( source.normalScale );
-
-// 	this.displacementMap = source.displacementMap;
-// 	this.displacementScale = source.displacementScale;
-// 	this.displacementBias = source.displacementBias;
-
-// 	this.wireframe = source.wireframe;
-// 	this.wireframeLinewidth = source.wireframeLinewidth;
-
-// 	this.skinning = source.skinning;
-// 	this.morphTargets = source.morphTargets;
-// 	this.morphNormals = source.morphNormals;
-
-// 	return this;
-
-// };
-

@@ -1,4 +1,4 @@
-part of three_core;
+part of jsm_deprecated;
 
 int _geometryId = 0; // Geometry uses even numbers as Id
 var _geometrym1 = new Matrix4();
@@ -1351,6 +1351,50 @@ class Geometry with EventDispatcher {
 	dispose() {
 
 		this.dispatchEvent( Event({"type": "dispose"}) );
+
+	}
+
+  static createBufferGeometryFromObject( object ) {
+
+		var buffergeometry = new BufferGeometry();
+
+		var geometry = object.geometry;
+
+		if ( object.isPoints || object.isLine ) {
+
+			var positions = new Float32BufferAttribute( geometry.vertices.length * 3, 3, false );
+			var colors = new Float32BufferAttribute( geometry.colors.length * 3, 3, false );
+
+			buffergeometry.setAttribute( 'position', positions.copyVector3sArray( geometry.vertices ) );
+			buffergeometry.setAttribute( 'color', colors.copyColorsArray( geometry.colors ) );
+
+			if ( geometry.lineDistances && geometry.lineDistances.length == geometry.vertices.length ) {
+
+				var lineDistances = new Float32BufferAttribute( geometry.lineDistances.length, 1, false );
+
+				buffergeometry.setAttribute( 'lineDistance', lineDistances.copyArray( geometry.lineDistances ) );
+
+			}
+
+			if ( geometry.boundingSphere != null ) {
+
+				buffergeometry.boundingSphere = geometry.boundingSphere.clone();
+
+			}
+
+			if ( geometry.boundingBox != null ) {
+
+				buffergeometry.boundingBox = geometry.boundingBox.clone();
+
+			}
+
+		} else if ( object.isMesh ) {
+
+			buffergeometry = geometry.toBufferGeometry();
+
+		}
+
+		return buffergeometry;
 
 	}
 

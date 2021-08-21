@@ -201,8 +201,8 @@ class Object3D with EventDispatcher {
       return Sprite.fromJSON(json, rootJSON);
     } else if(_type == "SpriteMaterial") {
       return SpriteMaterial.fromJSON(json, rootJSON);
-    } else if(_type == "ShapeBufferGeometry") {
-      return ShapeBufferGeometry.fromJSON(json, rootJSON);
+    } else if(_type == "ShapeGeometry") {
+      return ShapeGeometry.fromJSON(json, rootJSON);
     } else {
       throw " type: ${_type} Object3D.castJSON is not support yet... ";
     }
@@ -501,9 +501,8 @@ class Object3D with EventDispatcher {
 
 		object.applyMatrix4( _m1 );
 
-		object.updateWorldMatrix( false, false );
-
 		this.add( object );
+    object.updateWorldMatrix( false, false );
 
 		return this;
 
@@ -790,11 +789,13 @@ class Object3D with EventDispatcher {
 		// object specific properties
 
 		if ( this.type == "InstancedMesh" ) {
-      // InstancedMesh _instanceMesh = this;
+      InstancedMesh _instanceMesh = this as InstancedMesh;
 
-			// object["type"] = 'InstancedMesh';
-			// object["count"] = _instanceMesh.count;
-			// object["instanceMatrix"] = _instanceMesh.instanceMatrix.toJSON();
+			object["type"] = 'InstancedMesh';
+			object["count"] = _instanceMesh.count;
+			object["instanceMatrix"] = _instanceMesh.instanceMatrix.toJSON();
+
+      if ( _instanceMesh.instanceColor != null ) object["instanceColor"] = _instanceMesh.instanceColor!.toJSON();
 		}
 
 		// //

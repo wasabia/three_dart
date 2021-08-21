@@ -24,3 +24,4 @@ part './WebGLCubeRenderTarget.dart';
 part './WebGLRenderer.dart';
 part './WebGLRenderTarget.dart';
 part './WebGLMultisampleRenderTarget.dart';
+part './WebGLMultipleRenderTargets.dart';

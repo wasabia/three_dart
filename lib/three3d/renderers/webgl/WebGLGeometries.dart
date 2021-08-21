@@ -7,46 +7,46 @@ class WebGLGeometries {
   WebGLInfo info;
   WebGLBindingStates bindingStates;
 
+
+	Map<int, bool> geometries = {};
+	var wireframeAttributes = new WeakMap();
+
+
   WebGLGeometries(this.gl, this.attributes, this.info, this.bindingStates ) {
   }
 
 
-	var geometries = new WeakMap();
-	var wireframeAttributes = new WeakMap();
-
 	onGeometryDispose( event ) {
 
-    print(" WebGLGeometries onGeometryDispose");
 
 		var geometry = event.target;
-		var buffergeometry = geometries.get( geometry );
 
-		if ( buffergeometry.index != null ) {
+		if ( geometry.index != null ) {
 
-			attributes.remove( buffergeometry.index );
+			attributes.remove( geometry.index );
 
 		}
 
-		for ( var name in buffergeometry.attributes.keys ) {
+		for ( var name in geometry.attributes.keys ) {
 
-			attributes.remove( buffergeometry.attributes[ name ] );
+			attributes.remove( geometry.attributes[ name ] );
 
 		}
 
 		geometry.removeEventListener( 'dispose', onGeometryDispose );
 
-		geometries.delete( geometry );
+		geometries.remove( geometry.id );
 
-		var attribute = wireframeAttributes.get( buffergeometry );
+		var attribute = wireframeAttributes.get( geometry );
 
 		if ( attribute != null ) {
 
 			attributes.remove( attribute );
-			wireframeAttributes.delete( buffergeometry );
+			wireframeAttributes.delete( geometry );
 
 		}
 
-		bindingStates.releaseStatesOfGeometry( buffergeometry );
+		bindingStates.releaseStatesOfGeometry( geometry );
 
 		if ( geometry.isInstancedBufferGeometry == true ) {
 			// geometry.remove("maxInstanceCount");
@@ -59,37 +59,16 @@ class WebGLGeometries {
 
 	}
 
-	BufferGeometry get( object, geometry ) {
-		var buffergeometry = geometries.get( geometry );
-
-    // print("WebGLGeometries get object: ${object.type} ${object.id} geometry: ${geometry.name} geometry: ${geometry.type} ${geometry.id} ");
-    // print("WebGLGeometries buffergeometry: ${buffergeometry} ");
-
-		if ( buffergeometry != null ) return buffergeometry;
+	BufferGeometry get( object, BufferGeometry geometry ) {
+    if ( geometries[ geometry.id ] == true ) return geometry;
 
 		geometry.addEventListener( 'dispose', onGeometryDispose );
 
-		if ( geometry.isBufferGeometry ) {
-
-			buffergeometry = geometry;
-
-		} else if ( geometry.isGeometry ) {
-
-			if ( geometry._bufferGeometry == null ) {
-
-				geometry._bufferGeometry = new BufferGeometry().setFromObject( object );
-
-			}
-
-			buffergeometry = geometry._bufferGeometry;
-
-		}
-
-		geometries.add( key: geometry, value: buffergeometry );
+		geometries[ geometry.id ] = true;
 
 		info.memory["geometries"] = info.memory["geometries"]! + 1;
 
-		return buffergeometry;
+		return geometry;
 
 	}
 

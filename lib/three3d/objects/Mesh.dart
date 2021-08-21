@@ -282,49 +282,8 @@ class Mesh extends Object3D {
 
 		} else if ( geometry.isGeometry ) {
 
-      // TODO Material 类型
-			var isMultiMaterial = material.runtimeType.toString().indexOf("List<") == 0;
+      print( 'THREE.Mesh.raycast() no longer supports THREE.Geometry. Use THREE.BufferGeometry instead.' );
 
-			var vertices = geometry.vertices;
-			var faces = geometry.faces;
-			var uvs;
-
-			var faceVertexUvs = geometry.faceVertexUvs[ 0 ];
-			if ( faceVertexUvs.length > 0 ) uvs = faceVertexUvs;
-
-			for ( var f = 0, fl = faces.length; f < fl; f ++ ) {
-
-				var face = faces[ f ];
-				var faceMaterial = isMultiMaterial ? material[ face.materialIndex ] : material;
-
-				if ( faceMaterial == null ) continue;
-
-				var fvA = vertices[ face.a ];
-				var fvB = vertices[ face.b ];
-				var fvC = vertices[ face.c ];
-
-				intersection = checkIntersection( this, faceMaterial, raycaster, _meshray, fvA, fvB, fvC, _intersectionPoint );
-
-				if ( intersection ) {
-
-					if ( uvs && uvs[ f ] ) {
-
-						var uvs_f = uvs[ f ];
-						_uvA.copy( uvs_f[ 0 ] );
-						_uvB.copy( uvs_f[ 1 ] );
-						_uvC.copy( uvs_f[ 2 ] );
-
-						intersection.uv = Triangle.static_getUV( _intersectionPoint, fvA, fvB, fvC, _uvA, _uvB, _uvC, Vector2(null, null) );
-
-					}
-
-					intersection.face = face;
-					intersection.faceIndex = f;
-					intersects.add( intersection );
-
-				}
-
-			}
 
 		}
 
@@ -357,9 +316,9 @@ checkIntersection( object, material, raycaster, ray, pA, pB, pC, point ) {
 	if ( distance < raycaster.near || distance > raycaster.far ) return null;
 
 	return {
-		distance: distance,
-		point: _intersectionPointWorld.clone(),
-		object: object
+		"distance": distance,
+		"point": _intersectionPointWorld.clone(),
+		"object": object
 	};
 
 }
@@ -411,7 +370,7 @@ checkBufferGeometryIntersection( object, material, raycaster, ray, position, mor
 
 	}
 
-	if ( object.isSkinnedMesh ) {
+	if ( object.isSkinnedMesh && material.skinning ) {
 
 		object.boneTransform( a, _vA );
 		object.boneTransform( b, _vB );
@@ -421,7 +380,7 @@ checkBufferGeometryIntersection( object, material, raycaster, ray, position, mor
 
 	var intersection = checkIntersection( object, material, raycaster, ray, _vA, _vB, _vC, _intersectionPoint );
 
-	if ( intersection ) {
+	if ( intersection != null ) {
 
 		if ( uv ) {
 
@@ -443,7 +402,14 @@ checkBufferGeometryIntersection( object, material, raycaster, ray, position, mor
 
 		}
 
-		var face = new Face3( a, b, c, null, null );
+		var face = Face.fromJSON({
+			"a": a,
+			"b": b,
+			"c": c,
+			"normal": new Vector3.init(),
+			"materialIndex": 0
+		});
+
 		Triangle.static_getNormal( _vA, _vB, _vC, face.normal );
 
 		intersection.face = face;

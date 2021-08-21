@@ -93,13 +93,7 @@ class Points extends Object3D {
 
 		} else {
 
-			var vertices = geometry.vertices;
-
-			for ( var i = 0, l = vertices.length; i < l; i ++ ) {
-
-				testPoint( vertices[ i ], i, localThresholdSq, matrixWorld, raycaster, intersects, this );
-
-			}
+			throw( 'THREE.Points.raycast() no longer supports THREE.Geometry. Use THREE.BufferGeometry instead.' );
 
 		}
 

@@ -1,11 +1,11 @@
 
 part of three_geometries;
 
-class PolyhedronBufferGeometry extends BufferGeometry {
+class PolyhedronGeometry extends BufferGeometry {
 
-  String type = "PolyhedronBufferGeometry";
+  String type = "PolyhedronGeometry";
 
-	PolyhedronBufferGeometry( vertices, indices, {radius = 1, detail = 0} ) : super() {
+	PolyhedronGeometry( vertices, indices, {radius = 1, detail = 0} ) : super() {
     // default buffer data
 		List<num> vertexBuffer = [];
 		List<num> uvBuffer = [];

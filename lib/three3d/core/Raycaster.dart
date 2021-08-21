@@ -15,7 +15,7 @@ class Raycaster {
     // direction is assumed to be normalized (for accurate distance calculations)
 
     this.near = near ?? 0;
-    this.far = far ?? 999999999999;
+    this.far = far ?? double.infinity;
     this.layers = new Layers();
 
     this.params = {
@@ -87,11 +87,9 @@ class Raycaster {
 
 	}
 
-	intersectObject( object, recursive, optionalTarget ) {
+	intersectObject( object, recursive, intersects ) {
 
-		var intersects = optionalTarget ?? [];
-
-		intersectObject4( object, this, intersects, recursive );
+		intersectObject4( object, this, intersects ?? [], recursive );
 
 		intersects.sort( ascSort );
 
@@ -99,16 +97,7 @@ class Raycaster {
 
 	}
 
-	intersectObjects( objects, recursive, optionalTarget ) {
-
-		var intersects = optionalTarget ?? [];
-
-		if ( !(objects is List) ) {
-
-			print( 'THREE.Raycaster.intersectObjects: objects is not an Array.' );
-			return intersects;
-
-		}
+	intersectObjects( objects, recursive, intersects ) {
 
 		for ( var i = 0, l = objects.length; i < l; i ++ ) {
 
@@ -133,7 +122,7 @@ class Intersection {
   late num distanceToRay;
   late Vector3 point;
   late num index;
-  late Face3 face;
+  late Face? face;
   late num faceIndex;
   late Object3D object;
   late Vector2 uv;
@@ -152,4 +141,18 @@ class Intersection {
   }
 
   
+}
+
+class Face {
+  late num a;
+  late num b;
+  late num c;
+  late Vector3 normal;
+  late num materialIndex;
+  
+  Face(this.a, this.b, this.c, this.normal, this.materialIndex) {}
+
+  factory Face.fromJSON(json) {
+    return Face(json["a"], json["b"], json["c"], json["normal"], json["materialIndex"]);
+  }
 }

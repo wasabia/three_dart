@@ -54,6 +54,7 @@ class GLTFParser {
     // }
     
     this.textureLoader.setCrossOrigin( this.options["crossOrigin"] );
+    this.textureLoader.setRequestHeader( this.options["requestHeader"]);
 
     this.fileLoader = new FileLoader( this.options["manager"] );
     this.fileLoader.setResponseType( 'arraybuffer' );

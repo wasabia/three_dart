@@ -401,14 +401,27 @@ class BufferAttribute extends BaseBufferAttribute {
 
 	toJSON () {
 
-    print(" BufferAttribute to JSON todo  ${this.array.runtimeType} ");
+    // print(" BufferAttribute to JSON todo  ${this.array.runtimeType} ");
 
-		return {
+		// return {
+		// 	"itemSize": this.itemSize,
+		// 	"type": this.array.runtimeType.toString(),
+		// 	"array": this.array.sublist(0),
+		// 	"normalized": this.normalized
+		// };
+
+    var data = {
 			"itemSize": this.itemSize,
 			"type": this.array.runtimeType.toString(),
 			"array": this.array.sublist(0),
 			"normalized": this.normalized
 		};
+
+		if ( this.name != '' ) data["name"] = this.name;
+		if ( this.usage != StaticDrawUsage ) data["usage"] = this.usage;
+		if ( this.updateRange?["offset"] != 0 || this.updateRange?["count"] != - 1 ) data["updateRange"] = this.updateRange;
+
+		return data;
 
 	}
 

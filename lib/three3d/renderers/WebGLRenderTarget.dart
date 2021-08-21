@@ -11,13 +11,19 @@ part of three_renderers;
 class RenderTarget with EventDispatcher {
   late int width;
   late int height;
+  int depth = 1;
+  
   late bool depthBuffer;
   bool isWebGLCubeRenderTarget = false;
   bool isWebGLMultisampleRenderTarget = false;
-  late Texture texture;
+  bool isWebGLMultipleRenderTargets = false;
+
+  // Texture or List<Texture> ???
+  dynamic texture;
   late Vector4 scissor;
   late bool scissorTest;
   late Vector4 viewport;
+
 
   late bool stencilBuffer;
   DepthTexture? depthTexture;
@@ -30,6 +36,10 @@ class RenderTarget with EventDispatcher {
     throw("RenderTarget setSize need implemnt ");
   }
 
+  is3D() {
+    throw("RenderTarget is3D need implemnt ");
+  }
+
   dispose() {
     throw("RenderTarget dispose need implemnt ");
   }
@@ -39,6 +49,7 @@ class WebGLRenderTarget extends RenderTarget {
   
   bool isWebGLRenderTarget = true;
   late WebGLRenderTargetOptions options;
+  
 
   WebGLRenderTarget(int width, int height, WebGLRenderTargetOptions? options) {
     this.width = width;
@@ -74,20 +85,36 @@ class WebGLRenderTarget extends RenderTarget {
     this.depthTexture = this.options.depthTexture != null ? this.options.depthTexture : null;
   }
 
-  setSize(width, height) {
-    if (this.width != width || this.height != height) {
-      this.width = width;
-      this.height = height;
+  setTexture( texture ) {
+    texture.image!.width = this.width;
+    texture.image!.height = this.height;
+    texture.image!.depth = this.depth;
 
-      this.texture.image!.width = width;
-      this.texture.image!.height = height;
+		this.texture = texture;
 
-      this.dispose();
-    }
+	}
 
-    this.viewport.set(0, 0, width, height);
-    this.scissor.set(0, 0, width, height);
-  }
+	setSize( width, height, {depth = 1} ) {
+
+		if ( this.width != width || this.height != height || this.depth != depth ) {
+
+			this.width = width;
+			this.height = height;
+			this.depth = depth;
+
+			this.texture.image!.width = width;
+			this.texture.image!.height = height;
+			this.texture.image!.depth = depth;
+
+			this.dispose();
+
+		}
+
+		this.viewport.set( 0, 0, width, height );
+		this.scissor.set( 0, 0, width, height );
+
+	}
+
 
   clone() {
     return WebGLRenderTarget(this.width, this.height, this.options).copy(this);
@@ -96,6 +123,7 @@ class WebGLRenderTarget extends RenderTarget {
   copy(source) {
     this.width = source.width;
     this.height = source.height;
+    this.depth = source.depth;
 
     this.viewport.copy(source.viewport);
     this.scissor.copy(source.scissor);
@@ -108,6 +136,10 @@ class WebGLRenderTarget extends RenderTarget {
 
     return this;
   }
+
+  is3D() {
+		return this.texture.isDataTexture3D || this.texture.isDataTexture2DArray;
+	}
 
   dispose() {
     print(" WebGLRenderTarget dispose() ......... ");

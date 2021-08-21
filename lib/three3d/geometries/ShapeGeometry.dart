@@ -1,11 +1,11 @@
 
 part of three_geometries;
 
-class ShapeBufferGeometry extends BufferGeometry {
+class ShapeGeometry extends BufferGeometry {
 
-  String type = 'ShapeBufferGeometry';
+  String type = 'ShapeGeometry';
 
-	ShapeBufferGeometry( List<Shape> shapes, {num curveSegments = 12 } ) : super() {
+	ShapeGeometry( List<Shape> shapes, {num curveSegments = 12 } ) : super() {
 
     this.curveSegments = curveSegments;
     this.shapes = shapes;
@@ -13,7 +13,7 @@ class ShapeBufferGeometry extends BufferGeometry {
     init();
 	}
 
-  ShapeBufferGeometry.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) : super.fromJSON(json, rootJSON) {
+  ShapeGeometry.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) : super.fromJSON(json, rootJSON) {
     curveSegments = json["curveSegments"];
     
     var _shapes;

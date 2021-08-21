@@ -26,7 +26,10 @@ class WebGLState {
 
   Map<int, bool> enabledCapabilities = Map<int, bool>();
 
-  dynamic? currentProgram;
+  dynamic xrFramebuffer;
+  Map currentBoundFramebuffers = {};
+
+  dynamic currentProgram;
 
   bool currentBlendingEnabled = false;
 
@@ -149,6 +152,42 @@ class WebGLState {
       enabledCapabilities[id] = false;
     }
   }
+
+  bindFramebuffer( target, framebuffer ) {
+
+		if ( framebuffer == null && xrFramebuffer != null ) framebuffer = xrFramebuffer; // use active XR framebuffer if available
+
+		if ( currentBoundFramebuffers[ target ] != framebuffer ) {
+
+			gl.bindFramebuffer( target, framebuffer );
+
+			currentBoundFramebuffers[ target ] = framebuffer;
+
+			if ( isWebGL2 ) {
+
+				// gl.DRAW_FRAMEBUFFER is equivalent to gl.FRAMEBUFFER
+
+				if ( target == gl.DRAW_FRAMEBUFFER ) {
+
+					currentBoundFramebuffers[ gl.FRAMEBUFFER ] = framebuffer;
+
+				}
+
+				if ( target == gl.FRAMEBUFFER ) {
+
+					currentBoundFramebuffers[ gl.DRAW_FRAMEBUFFER ] = framebuffer;
+
+				}
+
+			}
+
+			return true;
+
+		}
+
+		return false;
+
+	}
 
   useProgram(program) {
     if (currentProgram != program) {
@@ -483,6 +522,48 @@ class WebGLState {
   //
 
   reset() {
+    // reset state
+
+		gl.disable( gl.BLEND );
+		gl.disable( gl.CULL_FACE );
+		gl.disable( gl.DEPTH_TEST );
+		gl.disable( gl.POLYGON_OFFSET_FILL );
+		gl.disable( gl.SCISSOR_TEST );
+		gl.disable( gl.STENCIL_TEST );
+
+		gl.blendEquation( gl.FUNC_ADD );
+		gl.blendFunc( gl.ONE, gl.ZERO );
+		gl.blendFuncSeparate( gl.ONE, gl.ZERO, gl.ONE, gl.ZERO );
+
+		gl.colorMask( true, true, true, true );
+		gl.clearColor( 0, 0, 0, 0 );
+
+		gl.depthMask( true );
+		gl.depthFunc( gl.LESS );
+		gl.clearDepth( 1 );
+
+		gl.stencilMask( 0xffffffff );
+		gl.stencilFunc( gl.ALWAYS, 0, 0xffffffff );
+		gl.stencilOp( gl.KEEP, gl.KEEP, gl.KEEP );
+		gl.clearStencil( 0 );
+
+		gl.cullFace( gl.BACK );
+		gl.frontFace( gl.CCW );
+
+		gl.polygonOffset( 0, 0 );
+
+		gl.activeTexture( gl.TEXTURE0 );
+
+		gl.useProgram( null );
+
+		gl.lineWidth( 1 );
+
+    // TODO app gl no canvas ???
+		gl.scissor( 0, 0, gl.canvas.width, gl.canvas.height );
+		gl.viewport( 0, 0, gl.canvas.width, gl.canvas.height );
+
+		// reset internals
+
     enabledCapabilities = {};
 
     currentTextureSlot = null;

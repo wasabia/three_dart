@@ -1,5 +1,4 @@
-
-part of three_core;
+part of jsm_deprecated;
 
 
 class DirectGeometry {

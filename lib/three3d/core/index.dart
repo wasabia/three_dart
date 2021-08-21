@@ -27,10 +27,9 @@ part './BaseBufferAttribute.dart';
 part './BufferAttribute.dart';
 part './BufferGeometry.dart';
 part './Clock.dart';
-part './DirectGeometry.dart';
+
 part './EventDispatcher.dart';
-part './Face3.dart';
-part './Geometry.dart';
+
 part './GLBufferAttribute.dart';
 
 part './InstancedBufferAttribute.dart';
@@ -42,5 +41,5 @@ part './InstancedInterleavedBuffer.dart';
 part './Layers.dart';
 part './Object3D.dart';
 part './Raycaster.dart';
-// part './Uniform.js';
+
 

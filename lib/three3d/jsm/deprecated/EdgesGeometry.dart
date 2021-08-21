@@ -1,22 +1,27 @@
-part of three_geometries;
+part of jsm_deprecated;
 
+var _v0 = new Vector3.init();
+var _v1 = new Vector3.init();
+var _normal = new Vector3.init();
+var _triangle = new Triangle(null, null, null);
 
-class EdgesGeometry extends BufferGeometry {
+class EdgesGeometry extends Geometry {
 
-  var _v0 = new Vector3.init();
-  var _v1 = new Vector3.init();
-  var _normal = new Vector3.init();
-  var _triangle = new Triangle.init();
+  String type = 'EdgesGeometry';
 
-  String type = "EdgesGeometry";
-
-	EdgesGeometry( BufferGeometry geometry, thresholdAngle ) : super() {
+	EdgesGeometry( geometry, thresholdAngle ) : super() {
 
 		this.parameters = {
 			"thresholdAngle": thresholdAngle
 		};
 
 		thresholdAngle = ( thresholdAngle != null ) ? thresholdAngle : 1;
+
+		if ( geometry.isGeometry ) {
+
+			geometry = new BufferGeometry().fromGeometry( geometry );
+
+		}
 
 		var precisionPoints = 4;
 		var precision = Math.pow( 10, precisionPoints );
@@ -28,10 +33,10 @@ class EdgesGeometry extends BufferGeometry {
 
 		var indexArr = [ 0, 0, 0 ];
 		var vertKeys = [ 'a', 'b', 'c' ];
-		var hashes = Map();
+		var hashes = List<String>.filled(3, "");
 
 		var edgeData = {};
-		var vertices = [];
+		List<double> vertices = [];
 		for ( var i = 0; i < indexCount; i += 3 ) {
 
 			if ( indexAttr != null ) {
@@ -64,9 +69,7 @@ class EdgesGeometry extends BufferGeometry {
 
 			// skip degenerate triangles
 			if ( hashes[ 0 ] == hashes[ 1 ] || hashes[ 1 ] == hashes[ 2 ] || hashes[ 2 ] == hashes[ 0 ] ) {
-
 				continue;
-
 			}
 
 			// iterate over every edge
@@ -76,13 +79,13 @@ class EdgesGeometry extends BufferGeometry {
 				var jNext = ( j + 1 ) % 3;
 				var vecHash0 = hashes[ j ];
 				var vecHash1 = hashes[ jNext ];
-				var v0 = _triangle[ vertKeys[ j ] ];
-				var v1 = _triangle[ vertKeys[ jNext ] ];
+				var v0 = _triangle.getValue( vertKeys[ j ] );
+				var v1 = _triangle.getValue( vertKeys[ jNext ] );
 
 				var hash = "${ vecHash0 }_${ vecHash1 }";
 				var reverseHash = "${ vecHash1 }_${ vecHash0 }";
-
-				if ( edgeData.containsKey(reverseHash) && edgeData[ reverseHash ] != null ) {
+     
+				if ( edgeData.keys.toList().indexOf(reverseHash) >= 0 && [ reverseHash ] != null ) {
 
 					// if we found a sibling edge add it into the vertex array if
 					// it meets the angle threshold and delete the edge from the map.
@@ -95,7 +98,7 @@ class EdgesGeometry extends BufferGeometry {
 
 					edgeData[ reverseHash ] = null;
 
-				} else if ( ! ( edgeData.containsKey(hash) ) ) {
+				} else if ( ! ( edgeData.keys.toList().indexOf(hash) >= 0) ) {
 
 					// if we've already got an edge here then skip adding a new one
 					edgeData[ hash ] = {
@@ -116,20 +119,22 @@ class EdgesGeometry extends BufferGeometry {
 		for ( var key in edgeData.keys ) {
 
 			if ( edgeData[ key ] != null ) {
-        var _ed = edgeData[ key ];
-        var index0 = _ed["index0"];
-        var index1 = _ed["index1"];
+
+        var edv = edgeData[ key ];
+        var index0 = edv["index0"];
+        var index1 = edv["index1"];
+
 				_v0.fromBufferAttribute( positionAttr, index0 );
 				_v1.fromBufferAttribute( positionAttr, index1 );
 
-				vertices.addAll( [_v0.x, _v0.y, _v0.z] );
-				vertices.addAll( [_v1.x, _v1.y, _v1.z] );
+				vertices.addAll( [_v0.x.toDouble(), _v0.y.toDouble(), _v0.z.toDouble()] );
+				vertices.addAll( [_v1.x.toDouble(), _v1.y.toDouble(), _v1.z.toDouble()] );
 
 			}
 
 		}
 
-		this.setAttribute( 'position', new Float32BufferAttribute( vertices, 3, false ) );
+		this.setAttribute( 'position', Float32BufferAttribute( Float32Array.from(vertices), 3, false ) );
 
 	}
 

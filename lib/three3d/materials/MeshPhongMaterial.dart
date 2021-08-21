@@ -107,6 +107,8 @@ class MeshPhongMaterial extends Material {
   }
 
 
+  
+
 
   copy( source ) {
 
@@ -156,6 +158,7 @@ class MeshPhongMaterial extends Material {
     this.skinning = source.skinning;
     this.morphTargets = source.morphTargets;
     this.morphNormals = source.morphNormals;
+    this.flatShading = source.flatShading;
 
     return this;
 

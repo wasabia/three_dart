@@ -71,19 +71,7 @@ class Line extends Object3D {
 			}
 
 		} else if ( geometry.isGeometry ) {
-
-			var vertices = geometry.vertices;
-			var lineDistances = geometry.lineDistances;
-
-			lineDistances[ 0 ] = 0;
-
-			for ( var i = 1, l = vertices.length; i < l; i ++ ) {
-
-				lineDistances[ i ] = lineDistances[ i - 1 ];
-				// lineDistances[ i ] += vertices[ i - 1 ].distanceTo( vertices[ i ] );
-        print("Line.computeLineDistances() todo ");
-			}
-
+      throw( 'THREE.Line.computeLineDistances() no longer supports THREE.Geometry. Use THREE.BufferGeometry instead.' );
 		}
 
 		return this;
@@ -198,36 +186,7 @@ class Line extends Object3D {
 			}
 
 		} else if ( geometry.isGeometry ) {
-
-			var vertices = geometry.vertices;
-			var nbVertices = vertices.length;
-
-			for ( var i = 0; i < nbVertices - 1; i += step ) {
-
-				var distSq = _ray.distanceSqToSegment( vertices[ i ], vertices[ i + 1 ], interRay, interSegment );
-
-				if ( distSq > localThresholdSq ) continue;
-
-				interRay.applyMatrix4( this.matrixWorld ); //Move back to world space for distance calculation
-
-				var distance = raycaster.ray.origin.distanceTo( interRay );
-
-				if ( distance < raycaster.near || distance > raycaster.far ) continue;
-
-				intersects.add( Intersection({
-
-					"distance": distance,
-					// What do we want? intersection point on the ray or on the segment??
-					// point: raycaster.ray.at( distance ),
-					"point": interSegment.clone().applyMatrix4( this.matrixWorld ),
-					"index": i,
-					"face": null,
-					"faceIndex": null,
-					"object": this
-
-				}) );
-
-			}
+      print( 'THREE.Line.raycast() no longer supports THREE.Geometry. Use THREE.BufferGeometry instead.' );
 
 		}
 

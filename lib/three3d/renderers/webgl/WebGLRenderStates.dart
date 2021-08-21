@@ -70,8 +70,8 @@ class WebGLRenderStates {
 		if ( renderStates.has( scene ) == false ) {
 
 			renderState = new WebGLRenderState( extensions, capabilities );
-			renderStates.add( key: scene, value: [] );
-			renderStates.get( scene ).add( renderState );
+			renderStates.add( key: scene, value: [renderState] );
+
 
 		} else {
 

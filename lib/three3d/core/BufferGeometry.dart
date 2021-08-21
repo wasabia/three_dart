@@ -48,9 +48,6 @@ class BufferGeometry with EventDispatcher {
   bool isGeometry = false;
   late List<num> lineDistances;
 
-  late List<Face3> faces;
-  late List faceVertexUvs;
-
   Map<String, dynamic> parameters = {};
 
   late num curveSegments;
@@ -76,9 +73,9 @@ class BufferGeometry with EventDispatcher {
     if(_type == "BufferGeometry") {
       return BufferGeometry.fromJSON(json, rootJSON);
     } else if(_type == "ShapeBufferGeometry") {
-      return ShapeBufferGeometry.fromJSON(json, rootJSON);
+      return ShapeGeometry.fromJSON(json, rootJSON);
     } else if(_type == "ExtrudeBufferGeometry") {
-      return ExtrudeBufferGeometry.fromJSON(json, rootJSON);
+      return ExtrudeGeometry.fromJSON(json, rootJSON);
     } else {
       throw(" BufferGeometry castJSON _type: ${_type} is not support yet ");
     }
@@ -367,236 +364,6 @@ class BufferGeometry with EventDispatcher {
 		}
 
 		this.setAttribute( 'position', new Float32BufferAttribute( position, 3, false ) );
-
-		return this;
-
-	}
-
-	updateFromObject( object ) {
-
-		var geometry = object.geometry;
-
-		if ( object.isMesh ) {
-
-			var direct = geometry.directGeometry;
-
-			if ( geometry.elementsNeedUpdate == true ) {
-
-				direct = null;
-				geometry.elementsNeedUpdate = false;
-
-			}
-
-			if ( direct == null ) {
-
-				return this.fromGeometry( geometry );
-
-			}
-
-			direct.verticesNeedUpdate = geometry.verticesNeedUpdate;
-			direct.normalsNeedUpdate = geometry.normalsNeedUpdate;
-			direct.colorsNeedUpdate = geometry.colorsNeedUpdate;
-			direct.uvsNeedUpdate = geometry.uvsNeedUpdate;
-			direct.groupsNeedUpdate = geometry.groupsNeedUpdate;
-
-			geometry.verticesNeedUpdate = false;
-			geometry.normalsNeedUpdate = false;
-			geometry.colorsNeedUpdate = false;
-			geometry.uvsNeedUpdate = false;
-			geometry.groupsNeedUpdate = false;
-
-			geometry = direct;
-
-		}
-
-		if ( geometry.verticesNeedUpdate == true ) {
-
-			var attribute = this.attributes["position"];
-
-			if ( attribute != null ) {
-
-				attribute.copyVector3sArray( geometry.vertices );
-				attribute.needsUpdate = true;
-
-			}
-
-			geometry.verticesNeedUpdate = false;
-
-		}
-
-		if ( geometry.normalsNeedUpdate == true ) {
-
-			var attribute = this.attributes["normal"];
-
-			if ( attribute != null ) {
-
-				attribute.copyVector3sArray( geometry.normals );
-				attribute.needsUpdate = true;
-
-			}
-
-			geometry.normalsNeedUpdate = false;
-
-		}
-
-		if ( geometry.colorsNeedUpdate == true ) {
-
-			var attribute = this.attributes["color"];
-
-			if ( attribute != null ) {
-
-				attribute.copyColorsArray( geometry.colors );
-				attribute.needsUpdate = true;
-
-			}
-
-			geometry.colorsNeedUpdate = false;
-
-		}
-
-		if ( geometry.uvsNeedUpdate ) {
-
-			var attribute = this.attributes["uv"];
-
-			if ( attribute != null ) {
-
-				attribute.copyVector2sArray( geometry.uvs );
-				attribute.needsUpdate = true;
-
-			}
-
-			geometry.uvsNeedUpdate = false;
-
-		}
-
-		if ( geometry.lineDistancesNeedUpdate ) {
-
-			var attribute = this.attributes["lineDistance"];
-
-			if ( attribute != null ) {
-
-				attribute.copyArray( geometry.lineDistances );
-				attribute.needsUpdate = true;
-
-			}
-
-			geometry.lineDistancesNeedUpdate = false;
-
-		}
-
-		if ( geometry.groupsNeedUpdate ) {
-
-			geometry.computeGroups( object.geometry );
-			this.groups = geometry.groups;
-
-			geometry.groupsNeedUpdate = false;
-
-		}
-
-		return this;
-
-	}
-
-	fromGeometry( Geometry geometry ) {
-
-		geometry.directGeometry = new DirectGeometry().fromGeometry( geometry );
-
-		return this.fromDirectGeometry( geometry.directGeometry! );
-
-	}
-
-	fromDirectGeometry( DirectGeometry geometry ) {
-
-		var positions = List<num>.filled( geometry.vertices.length * 3, 0 );
-		this.setAttribute( 'position', Float32BufferAttribute( positions, 3, false ).copyVector3sArray( geometry.vertices ) );
-
-		if ( geometry.normals.length > 0 ) {
-
-			var normals = List<num>.filled( geometry.normals.length * 3, 0 );
-			this.setAttribute( 'normal', Float32BufferAttribute( normals, 3, false ).copyVector3sArray( geometry.normals ) );
-
-		}
-
-		if ( geometry.colors.length > 0 ) {
-
-			var colors = List<num>.filled( geometry.colors.length * 3, 0 );
-			this.setAttribute( 'color', Float32BufferAttribute( colors, 3, false ).copyColorsArray( geometry.colors ) );
-
-		}
-
-		if ( geometry.uvs.length > 0 ) {
-
-			var uvs = List<num>.filled( geometry.uvs.length * 2, 0 );
-			this.setAttribute( 'uv', Float32BufferAttribute( uvs, 2, false ).copyVector2sArray( geometry.uvs ) );
-
-		}
-
-		if ( geometry.uvs2.length > 0 ) {
-
-			var uvs2 = List<num>.filled( geometry.uvs2.length * 2, 0 );
-			this.setAttribute( 'uv2', Float32BufferAttribute( uvs2, 2, false ).copyVector2sArray( geometry.uvs2 ) );
-
-		}
-
-		// groups
-
-		this.groups = geometry.groups;
-
-		// morphs
-
-		geometry.morphTargets.keys.forEach(( name ) {
-
-			List<BufferAttribute> array = [];
-			var morphTargets = geometry.morphTargets[ name ];
-
-			for ( var i = 0, l = morphTargets.length; i < l; i ++ ) {
-
-				var morphTarget = morphTargets[ i ];
-
-        List<num> _lvs = List<num>.filled(morphTarget["data"].length * 3, 0);
-				var attribute = new Float32BufferAttribute( _lvs, 3, false );
-				attribute.name = morphTarget["name"];
-
-				array.add( attribute.copyVector3sArray( morphTarget["data"] ) );
-
-			}
-
-			this.morphAttributes[ name ] = array;
-
-		});
-
-		// skinning
-
-		if ( geometry.skinIndices.length > 0 ) {
-
-      List<num> _lvs = List<num>.filled(geometry.skinIndices.length * 4, 0);
-
-			var skinIndices = Float32BufferAttribute( _lvs, 4, false );
-			this.setAttribute( 'skinIndex', skinIndices.copyVector4sArray( geometry.skinIndices ) );
-
-		}
-
-		if ( geometry.skinWeights.length > 0 ) {
-      List<num> _lvs = List<num>.filled(geometry.skinWeights.length * 4, 0);
-
-			var skinWeights = Float32BufferAttribute( _lvs, 4, false );
-			this.setAttribute( 'skinWeight', skinWeights.copyVector4sArray( geometry.skinWeights ) );
-
-		}
-
-		//
-
-		if ( geometry.boundingSphere != null ) {
-
-			this.boundingSphere = geometry.boundingSphere!.clone();
-
-		}
-
-		if ( geometry.boundingBox != null ) {
-
-			this.boundingBox = geometry.boundingBox!.clone();
-
-		}
 
 		return this;
 
@@ -1081,6 +848,9 @@ class BufferGeometry with EventDispatcher {
 
 		}
 
+
+    // for simplicity the code assumes attributes are not shared across geometries, see #15811
+
 		data["data"] = { "attributes": {} };
 
 		var index = this.index;
@@ -1101,12 +871,9 @@ class BufferGeometry with EventDispatcher {
 
 			var attribute = attributes[ key ];
 
-			var attributeData = attribute.toJSON( data["data"] );
-
-			if ( attribute.name != '' ) attributeData["name"] = attribute.name;
-
-			data["data"]["attributes"][ key ] = attributeData;
-
+      // TODO
+      // data["data"]["attributes"][ key ] = attribute.toJSON( data["data"] );
+      data["data"]["attributes"][ key ] = attribute.toJSON();
 		});
 
 		var morphAttributes = {};
@@ -1122,9 +889,10 @@ class BufferGeometry with EventDispatcher {
 
 				var attribute = attributeArray[ i ];
 
-				var attributeData = attribute.toJSON();
+        // TODO
+				// var attributeData = attribute.toJSON( data["data"] );
+        	var attributeData = attribute.toJSON();
 
-				if ( attribute.name != '' ) attributeData.name = attribute.name;
 
 				array.add( attributeData );
 

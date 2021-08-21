@@ -1,114 +1,57 @@
-// import { BufferGeometry } from '../core/BufferGeometry.js';
-// import { Float32BufferAttribute } from '../core/BufferAttribute.js';
-// import { Vector3 } from '../math/Vector3.js';
-
 part of three_geometries;
-
 
 class WireframeGeometry extends BufferGeometry {
 
-  String type = 'WireframeGeometry';
+  String type = "WireframeGeometry";
 
-	WireframeGeometry( geometry ) : super() {
-
-
+	WireframeGeometry( BufferGeometry geometry ) : super() {
 		// buffer
 
 		var vertices = [];
+		var edges = {};
 
 		// helper variables
 
-		var edge = [ 0, 0 ], edges = {};
-		var keys = [ 'a', 'b', 'c' ];
+		var start = new Vector3.init();
+		var end = new Vector3.init();
 
-		// different logic for Geometry and BufferGeometry
+		if ( geometry.index != null ) {
 
-		if ( geometry && geometry.isGeometry ) {
+			// indexed BufferGeometry
 
-			// create a data structure that contains all edges without duplicates
+			var position = geometry.attributes["position"];
+			var indices = geometry.index;
+			var groups = geometry.groups;
 
-			var faces = geometry.faces;
+			if ( groups.length == 0 ) {
 
-			for ( var i = 0, l = faces.length; i < l; i ++ ) {
-
-				var face = faces[ i ];
-
-				for ( var j = 0; j < 3; j ++ ) {
-
-					var edge1 = face[ keys[ j ] ];
-					var edge2 = face[ keys[ ( j + 1 ) % 3 ] ];
-					edge[ 0 ] = Math.min( edge1, edge2 ); // sorting prevents duplicates
-					edge[ 1 ] = Math.max( edge1, edge2 );
-
-					var key = '${edge[ 0 ]},${edge[ 1 ]}';
-
-					if ( edges[ key ] == null ) {
-
-						edges[ key ] = { "index1": edge[ 0 ], "index2": edge[ 1 ] };
-
-					}
-
-				}
+				groups = [ { "start": 0, "count": indices!.count, "materialIndex": 0 } ];
 
 			}
 
-			// generate vertices
+			// create a data structure that contains all eges without duplicates
 
-			for ( var key in edges.keys ) {
+			for ( var o = 0, ol = groups.length; o < ol; ++ o ) {
 
-				var e = edges[ key ];
+				var group = groups[ o ];
 
-				var vertex = geometry.vertices[ e.index1 ];
-				vertices.addAll( [vertex.x, vertex.y, vertex.z] );
+				var groupStart = group["start"];
+				var groupCount = group["count"];
 
-				vertex = geometry.vertices[ e.index2 ];
-				vertices.addAll( [vertex.x, vertex.y, vertex.z] );
+				for ( var i = groupStart, l = ( groupStart + groupCount ); i < l; i += 3 ) {
 
-			}
+					for ( var j = 0; j < 3; j ++ ) {
 
-		} else if ( geometry && geometry.isBufferGeometry ) {
+						var index1 = indices!.getX( i + j );
+						var index2 = indices.getX( i + ( j + 1 ) % 3 );
 
-			var vertex = new Vector3.init();
+						start.fromBufferAttribute( position, index1 );
+						end.fromBufferAttribute( position, index2 );
 
-			if ( geometry.index != null ) {
+						if ( isUniqueEdge( start, end, edges ) == true ) {
 
-				// indexed BufferGeometry
-
-				var position = geometry.attributes.position;
-				var indices = geometry.index;
-				var groups = geometry.groups;
-
-				if ( groups.length == 0 ) {
-
-					groups = [ { "start": 0, "count": indices.count, "materialIndex": 0 } ];
-
-				}
-
-				// create a data structure that contains all eges without duplicates
-
-				for ( var o = 0, ol = groups.length; o < ol; ++ o ) {
-
-					var group = groups[ o ];
-
-					var start = group.start;
-					var count = group.count;
-
-					for ( var i = start, l = ( start + count ); i < l; i += 3 ) {
-
-						for ( var j = 0; j < 3; j ++ ) {
-
-							var edge1 = indices.getX( i + j );
-							var edge2 = indices.getX( i + ( j + 1 ) % 3 );
-							edge[ 0 ] = Math.min( edge1, edge2 ); // sorting prevents duplicates
-							edge[ 1 ] = Math.max( edge1, edge2 );
-
-							var key = '${edge[ 0 ]},${edge[ 1 ]}';
-
-							if ( edges[ key ] == null ) {
-
-								edges[ key ] = { "index1": edge[ 0 ], "index2": edge[ 1 ] };
-
-							}
+							vertices.addAll( [start.x, start.y, start.z] );
+							vertices.addAll( [end.x, end.y, end.z] );
 
 						}
 
@@ -116,40 +59,31 @@ class WireframeGeometry extends BufferGeometry {
 
 				}
 
-				// generate vertices
+			}
 
-				for ( var key in edges.keys ) {
+		} else {
 
-					var e = edges[ key ];
+			// non-indexed BufferGeometry
 
-					vertex.fromBufferAttribute( position, e.index1 );
-					vertices.addAll( [vertex.x, vertex.y, vertex.z] );
+			var position = geometry.attributes["position"];
 
-					vertex.fromBufferAttribute( position, e.index2 );
-					vertices.addAll( [vertex.x, vertex.y, vertex.z] );
+			for ( var i = 0, l = ( position.count / 3 ); i < l; i ++ ) {
 
-				}
+				for ( var j = 0; j < 3; j ++ ) {
 
-			} else {
+					// three edges per triangle, an edge is represented as (index1, index2)
+					// e.g. the first triangle has the following edges: (0,1),(1,2),(2,0)
 
-				// non-indexed BufferGeometry
+					var index1 = 3 * i + j;
+					var index2 = 3 * i + ( ( j + 1 ) % 3 );
 
-				var position = geometry.attributes.position;
+					start.fromBufferAttribute( position, index1 );
+					end.fromBufferAttribute( position, index2 );
 
-				for ( var i = 0, l = ( position.count / 3 ); i < l; i ++ ) {
+					if ( isUniqueEdge( start, end, edges ) == true ) {
 
-					for ( var j = 0; j < 3; j ++ ) {
-
-						// three edges per triangle, an edge is represented as (index1, index2)
-						// e.g. the first triangle has the following edges: (0,1),(1,2),(2,0)
-
-						var index1 = 3 * i + j;
-						vertex.fromBufferAttribute( position, index1 );
-						vertices.addAll( [vertex.x, vertex.y, vertex.z] );
-
-						var index2 = 3 * i + ( ( j + 1 ) % 3 );
-						vertex.fromBufferAttribute( position, index2 );
-						vertices.addAll( [vertex.x, vertex.y, vertex.z] );
+						vertices.addAll( [start.x, start.y, start.z] );
+						vertices.addAll( [end.x, end.y, end.z] );
 
 					}
 
@@ -166,3 +100,22 @@ class WireframeGeometry extends BufferGeometry {
 	}
 
 }
+
+isUniqueEdge( start, end, edges ) {
+
+	var hash1 = "${start.x},${start.y},${start.z}-${end.x},${end.y},${end.z}";
+	var hash2 = "${end.x},${end.y},${end.z}-${start.x},${start.y},${start.z}"; // coincident edge
+
+	if ( edges.has( hash1 ) == true || edges.has( hash2 ) == true ) {
+
+		return false;
+
+	} else {
+
+		edges.add( hash1, hash2 );
+		return true;
+
+	}
+
+}
+

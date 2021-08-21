@@ -231,6 +231,7 @@ class GLTFLoader extends Loader {
 
       "path": path != null ? path : this.resourcePath != null ? this.resourcePath : '',
       "crossOrigin": this.crossOrigin,
+      "requestHeader": this.requestHeader,
       "manager": this.manager,
       "ktx2Loader": this.ktx2Loader,
       "meshoptDecoder": this.meshoptDecoder

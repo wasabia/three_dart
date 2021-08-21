@@ -45,20 +45,7 @@ class LineSegments extends Line {
 			}
 
 		} else if ( geometry.isGeometry ) {
-
-			var vertices = geometry.vertices;
-			var lineDistances = geometry.lineDistances;
-
-			for ( var i = 0, l = vertices.length; i < l; i += 2 ) {
-
-				_lsstart.copy( vertices[ i ] );
-				_lsend.copy( vertices[ i + 1 ] );
-
-				lineDistances[ i ] = ( i == 0 ) ? 0 : lineDistances[ i - 1 ];
-				lineDistances[ i + 1 ] = lineDistances[ i ] + _lsstart.distanceTo( _lsend );
-
-			}
-
+			throw( 'THREE.LineSegments.computeLineDistances() no longer supports THREE.Geometry. Use THREE.BufferGeometry instead.' );
 		}
 
 		return this;

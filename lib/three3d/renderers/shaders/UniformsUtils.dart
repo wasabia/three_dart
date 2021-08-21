@@ -23,7 +23,8 @@ Map<String, dynamic> cloneUniforms(Map<String, dynamic> src) {
               property.runtimeType == Vector2 ||
               property.runtimeType == Vector3 ||
               property.runtimeType == Vector4 ||
-              property.runtimeType == Texture)) {
+              property.runtimeType == Texture || 
+              property.runtimeType == Quaternion)) {
         dst[u][p] = property.clone();
       } else if (property is List) {
         dst[u][p] = property.sublist(0);

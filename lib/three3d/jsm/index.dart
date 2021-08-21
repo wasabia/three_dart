@@ -9,3 +9,4 @@ export './shaders/index.dart';
 export './lines/index.dart';
 export './utils/index.dart';
 export './math/index.dart';
+export './deprecated/index.dart';

@@ -12,7 +12,6 @@ class Material with EventDispatcher {
   bool fog = true;
   int blending = NormalBlending;
   int side = FrontSide;
-  bool flatShading = false;
   bool vertexColors = false;
 
   bool sizeAttenuation = false;
@@ -70,7 +69,7 @@ class Material with EventDispatcher {
   int version = 0;
 
   bool isMaterial = true;
-
+  bool flatShading = false;
   Color? color;
 
   num metalness = 0.0;
@@ -258,8 +257,6 @@ class Material with EventDispatcher {
       } else {
         emissive = Color(0,0,0).setHex(newValue);
       }
-    } else if(key == "flatShading") {
-      flatShading = newValue;
     } else if(key == "fog") {
       fog = newValue;
     } else if(key == "fragmentShader") {
@@ -286,10 +283,10 @@ class Material with EventDispatcher {
       opacity = newValue;  
     } else if(key == "roughness") {
       roughness = newValue;
-    } else if(key == "shading") {
-      // for backward compatability if shading is set in the constructor
-      print( 'THREE.' + this.type + ': .shading has been removed. Use the boolean .flatShading instead.' );
-      this.flatShading = ( newValue == FlatShading ) ? true : false;
+    } else if(key == "flatShading") {
+    //   // for backward compatability if shading is set in the constructor
+      throw( 'THREE.' + this.type + ': .shading has been removed. Use the boolean .flatShading instead.' );
+    //   this.flatShading = ( newValue == FlatShading ) ? true : false;
 
     } else if(key == "shininess") {
       shininess = newValue;
@@ -380,6 +377,15 @@ class Material with EventDispatcher {
   	// if ( this.alphaMap && this.alphaMap.isTexture ) data.alphaMap = this.alphaMap.toJSON( meta ).uuid;
   	// if ( this.lightMap && this.lightMap.isTexture ) data.lightMap = this.lightMap.toJSON( meta ).uuid;
 
+
+		// if ( this.lightMap && this.lightMap.isTexture ) {
+
+		// 	data.lightMap = this.lightMap.toJSON( meta ).uuid;
+		// 	data.lightMapIntensity = this.lightMapIntensity;
+
+		// }
+
+
   	// if ( this.aoMap && this.aoMap.isTexture ) {
 
   	// 	data.aoMap = this.aoMap.toJSON( meta ).uuid;
@@ -437,7 +443,6 @@ class Material with EventDispatcher {
   	// if ( this.sizeAttenuation != null ) data.sizeAttenuation = this.sizeAttenuation;
 
   	if ( this.blending != NormalBlending ) data["blending"] = this.blending;
-  	if ( this.flatShading == true ) data["flatShading"] = this.flatShading;
   	if ( this.side != FrontSide ) data["side"] = this.side;
   	if ( this.vertexColors ) data["vertexColors"] = true;
 
@@ -532,7 +537,6 @@ class Material with EventDispatcher {
 
     this.blending = source.blending;
     this.side = source.side;
-    this.flatShading = source.flatShading;
     this.vertexColors = source.vertexColors;
 
     this.opacity = source.opacity;

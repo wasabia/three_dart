@@ -18,7 +18,6 @@ class SkinnedMesh extends Mesh {
   Skeleton? skeleton;
   String type = "SkinnedMesh";
 
-  // 'THREE.SkinnedMesh no longer supports THREE.Geometry. Use THREE.BufferGeometry instead.'
   SkinnedMesh( BufferGeometry geometry, material ) : super(geometry, material) {
 
   }

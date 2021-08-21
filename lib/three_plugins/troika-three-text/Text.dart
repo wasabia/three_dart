@@ -28,7 +28,7 @@ var defaultMaterial = new MeshBasicMaterial({
   getFlatRaycastMesh() {
     if(flatRaycastMesh == null) {
       flatRaycastMesh = new Mesh(
-        new PlaneBufferGeometry(width: 1, height: 1),
+        new PlaneGeometry(width: 1, height: 1),
         defaultMaterial
       );
     }
@@ -39,7 +39,7 @@ var defaultMaterial = new MeshBasicMaterial({
   getCurvedRaycastMesh() {
     if(curvedRaycastMesh == null) {
       curvedRaycastMesh = new Mesh(
-        new PlaneBufferGeometry(width: 1, height: 1, widthSegments: 32, heightSegments: 1),
+        new PlaneGeometry(width: 1, height: 1, widthSegments: 32, heightSegments: 1),
         defaultMaterial
       );
     }

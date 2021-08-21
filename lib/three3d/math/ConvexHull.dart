@@ -11,8 +11,8 @@ class ConvexHull {
   Vector3 v1 = new Vector3.init();
 
   num tolerance = -1;
-  List<Face> faces = []; // the generated faces of the convex hull
-  List<Face> newFaces =
+  List<Face2> faces = []; // the generated faces of the convex hull
+  List<Face2> newFace2s =
       []; // this array holds the faces that are generated within a single iteration
 
   VertexList assigned = VertexList();
@@ -23,7 +23,7 @@ class ConvexHull {
 
   // the vertex lists work as follows:
   //
-  // let 'a' and 'b' be 'Face' instances
+  // let 'a' and 'b' be 'Face2' instances
   // let 'v' be points wrapped as instance of 'Vertex'
   //
   //     [v, v, ..., v, v, v, ...]
@@ -180,7 +180,7 @@ class ConvexHull {
 
   // Adds a vertex to the 'assigned' list of vertices and assigns it to the given face
 
-  addVertexToFace(vertex, face) {
+  addVertexToFace2(vertex, face) {
     vertex.face = face;
 
     if (face.outside == null) {
@@ -196,7 +196,7 @@ class ConvexHull {
 
   // Removes a vertex from the 'assigned' list of vertices and from the given face
 
-  removeVertexFromFace(vertex, face) {
+  removeVertexFromFace2(vertex, face) {
     if (vertex == face.outside) {
       // fix face.outside link
 
@@ -218,7 +218,7 @@ class ConvexHull {
 
   // Removes all the visible vertices that a given face is able to see which are stored in the 'assigned' vertext list
 
-  removeAllVerticesFromFace(face) {
+  removeAllVerticesFromFace2(face) {
     if (face.outside != null) {
       // reference to the first and last vertex of this face
 
@@ -242,11 +242,11 @@ class ConvexHull {
 
   // Removes all the visible vertices that 'face' is able to see
 
-  deleteFaceVertices(face, absorbingFace) {
-    var faceVertices = this.removeAllVerticesFromFace(face);
+  deleteFace2Vertices(face, absorbingFace2) {
+    var faceVertices = this.removeAllVerticesFromFace2(face);
 
     if (faceVertices != null) {
-      if (absorbingFace == null) {
+      if (absorbingFace2 == null) {
         // mark the vertices to be reassigned to some other face
 
         this.unassigned.appendChain(faceVertices);
@@ -261,12 +261,12 @@ class ConvexHull {
 
           var nextVertex = vertex.next;
 
-          var distance = absorbingFace.distanceToPoint(vertex.point);
+          var distance = absorbingFace2.distanceToPoint(vertex.point);
 
-          // check if 'vertex' is able to see 'absorbingFace'
+          // check if 'vertex' is able to see 'absorbingFace2'
 
           if (distance > this.tolerance) {
-            this.addVertexToFace(vertex, absorbingFace);
+            this.addVertexToFace2(vertex, absorbingFace2);
           } else {
             this.unassigned.append(vertex);
           }
@@ -283,38 +283,38 @@ class ConvexHull {
 
   // Reassigns as many vertices as possible from the unassigned list to the new faces
 
-  resolveUnassignedPoints(newFaces) {
+  resolveUnassignedPoints(newFace2s) {
     if (this.unassigned.isEmpty() == false) {
       var vertex = this.unassigned.first();
 
       do {
-        // buffer 'next' reference, see .deleteFaceVertices()
+        // buffer 'next' reference, see .deleteFace2Vertices()
 
         var nextVertex = vertex.next;
 
         var maxDistance = this.tolerance;
 
-        var maxFace = null;
+        var maxFace2 = null;
 
-        for (var i = 0; i < newFaces.length; i++) {
-          var face = newFaces[i];
+        for (var i = 0; i < newFace2s.length; i++) {
+          var face = newFace2s[i];
 
           if (face.mark == Visible) {
             var distance = face.distanceToPoint(vertex.point);
 
             if (distance > maxDistance) {
               maxDistance = distance;
-              maxFace = face;
+              maxFace2 = face;
             }
 
             if (maxDistance > 1000 * this.tolerance) break;
           }
         }
 
-        // 'maxFace' can be null e.g. if there are identical vertices
+        // 'maxFace2' can be null e.g. if there are identical vertices
 
-        if (maxFace != null) {
-          this.addVertexToFace(vertex, maxFace);
+        if (maxFace2 != null) {
+          this.addVertexToFace2(vertex, maxFace2);
         }
 
         vertex = nextVertex;
@@ -461,16 +461,16 @@ class ConvexHull {
       }
     }
 
-    List<Face> _faces = [];
+    List<Face2> _faces = [];
 
     if (plane.distanceToPoint(v3.point) < 0) {
       // the face is not able to see the point so 'plane.normal' is pointing outside the tetrahedron
 
       _faces.addAll([
-        Face.create(v0, v1, v2),
-        Face.create(v3, v1, v0),
-        Face.create(v3, v2, v1),
-        Face.create(v3, v0, v2)
+        Face2.create(v0, v1, v2),
+        Face2.create(v3, v1, v0),
+        Face2.create(v3, v2, v1),
+        Face2.create(v3, v0, v2)
       ]);
 
       // set the twin edge
@@ -490,10 +490,10 @@ class ConvexHull {
       // the face is able to see the point so 'plane.normal' is pointing inside the tetrahedron
 
       _faces.addAll([
-        Face.create(v0, v2, v1),
-        Face.create(v3, v0, v1),
-        Face.create(v3, v1, v2),
-        Face.create(v3, v2, v0)
+        Face2.create(v0, v2, v1),
+        Face2.create(v3, v0, v1),
+        Face2.create(v3, v1, v2),
+        Face2.create(v3, v2, v0)
       ]);
 
       // set the twin edge
@@ -524,19 +524,19 @@ class ConvexHull {
 
       if (vertex != v0 && vertex != v1 && vertex != v2 && vertex != v3) {
         maxDistance = this.tolerance;
-        var maxFace = null;
+        var maxFace2 = null;
 
         for (j = 0; j < 4; j++) {
           distance = this.faces[j].distanceToPoint(vertex.point);
 
           if (distance > maxDistance) {
             maxDistance = distance;
-            maxFace = this.faces[j];
+            maxFace2 = this.faces[j];
           }
         }
 
-        if (maxFace != null) {
-          this.addVertexToFace(vertex, maxFace);
+        if (maxFace2 != null) {
+          this.addVertexToFace2(vertex, maxFace2);
         }
       }
     }
@@ -546,18 +546,18 @@ class ConvexHull {
 
   // Removes inactive faces
 
-  reindexFaces() {
-    List<Face> activeFaces = [];
+  reindexFace2s() {
+    List<Face2> activeFace2s = [];
 
     for (var i = 0; i < this.faces.length; i++) {
       var face = this.faces[i];
 
       if (face.mark == Visible) {
-        activeFaces.add(face);
+        activeFace2s.add(face);
       }
     }
 
-    this.faces = activeFaces;
+    this.faces = activeFace2s;
 
     return this;
   }
@@ -573,13 +573,13 @@ class ConvexHull {
 
       // grap the first available face and start with the first visible vertex of that face
 
-      var eyeFace = this.assigned.first().face;
-      var vertex = eyeFace.outside;
+      var eyeFace2 = this.assigned.first().face;
+      var vertex = eyeFace2.outside;
 
       // now calculate the farthest vertex that face can see
 
       do {
-        var distance = eyeFace.distanceToPoint(vertex.point);
+        var distance = eyeFace2.distanceToPoint(vertex.point);
 
         if (distance > maxDistance) {
           maxDistance = distance;
@@ -587,7 +587,7 @@ class ConvexHull {
         }
 
         vertex = vertex.next;
-      } while (vertex != null && vertex.face == eyeFace);
+      } while (vertex != null && vertex.face == eyeFace2);
 
       return eyeVertex;
     }
@@ -600,7 +600,7 @@ class ConvexHull {
   computeHorizon(eyePoint, crossEdge, face, horizon) {
     // moves face's vertices to the 'unassigned' vertex list
 
-    this.deleteFaceVertices(face, null);
+    this.deleteFace2Vertices(face, null);
 
     face.mark = Deleted;
 
@@ -617,13 +617,13 @@ class ConvexHull {
 
     do {
       var twinEdge = edge.twin;
-      var oppositeFace = twinEdge.face;
+      var oppositeFace2 = twinEdge.face;
 
-      if (oppositeFace.mark == Visible) {
-        if (oppositeFace.distanceToPoint(eyePoint) > this.tolerance) {
+      if (oppositeFace2.mark == Visible) {
+        if (oppositeFace2.distanceToPoint(eyePoint) > this.tolerance) {
           // the opposite face can see the vertex, so proceed with next edge
 
-          this.computeHorizon(eyePoint, twinEdge, oppositeFace, horizon);
+          this.computeHorizon(eyePoint, twinEdge, oppositeFace2, horizon);
         } else {
           // the opposite face can't see the vertex, so this edge is part of the horizon
 
@@ -639,10 +639,10 @@ class ConvexHull {
 
   // Creates a face with the vertices 'eyeVertex.point', 'horizonEdge.tail' and 'horizonEdge.head' in CCW order
 
-  addAdjoiningFace(eyeVertex, horizonEdge) {
+  addAdjoiningFace2(eyeVertex, horizonEdge) {
     // all the half edges are created in ccw order thus the face is always pointing outside the hull
 
-    var face = Face.create(eyeVertex, horizonEdge.tail(), horizonEdge.head());
+    var face = Face2.create(eyeVertex, horizonEdge.tail(), horizonEdge.head());
 
     this.faces.add(face);
 
@@ -656,8 +656,8 @@ class ConvexHull {
   //  Adds 'horizon.length' faces to the hull, each face will be linked with the
   //  horizon opposite face and the face on the left/right
 
-  addNewFaces(eyeVertex, horizon) {
-    this.newFaces = [];
+  addNewFace2s(eyeVertex, horizon) {
+    this.newFace2s = [];
 
     var firstSideEdge = null;
     var previousSideEdge = null;
@@ -667,17 +667,17 @@ class ConvexHull {
 
       // returns the right side edge
 
-      var sideEdge = this.addAdjoiningFace(eyeVertex, horizonEdge);
+      var sideEdge = this.addAdjoiningFace2(eyeVertex, horizonEdge);
 
       if (firstSideEdge == null) {
         firstSideEdge = sideEdge;
       } else {
-        // joins face.getEdge( 1 ) with previousFace.getEdge( 0 )
+        // joins face.getEdge( 1 ) with previousFace2.getEdge( 0 )
 
         sideEdge.next.setTwin(previousSideEdge);
       }
 
-      this.newFaces.add(sideEdge.face);
+      this.newFace2s.add(sideEdge.face);
       previousSideEdge = sideEdge;
     }
 
@@ -697,15 +697,15 @@ class ConvexHull {
 
     // remove 'eyeVertex' from 'eyeVertex.face' so that it can't be added to the 'unassigned' vertex list
 
-    this.removeVertexFromFace(eyeVertex, eyeVertex.face);
+    this.removeVertexFromFace2(eyeVertex, eyeVertex.face);
 
     this.computeHorizon(eyeVertex.point, null, eyeVertex.face, horizon);
 
-    this.addNewFaces(eyeVertex, horizon);
+    this.addNewFace2s(eyeVertex, horizon);
 
     // reassign 'unassigned' vertices to the new faces
 
-    this.resolveUnassignedPoints(this.newFaces);
+    this.resolveUnassignedPoints(this.newFace2s);
 
     return this;
   }
@@ -713,7 +713,7 @@ class ConvexHull {
   cleanup() {
     this.assigned.clear();
     this.unassigned.clear();
-    this.newFaces = [];
+    this.newFace2s = [];
 
     return this;
   }
@@ -729,7 +729,7 @@ class ConvexHull {
       this.addVertexToHull(vertex);
     }
 
-    this.reindexFaces();
+    this.reindexFace2s();
 
     this.cleanup();
 
@@ -737,7 +737,7 @@ class ConvexHull {
   }
 }
 
-class Face {
+class Face2 {
   Vector3 normal = Vector3.init();
   Vector3 midpoint = Vector3.init();
   num area = 0;
@@ -749,7 +749,7 @@ class Face {
   HalfEdge? edge;
 
   static create(a, b, c) {
-    var face = new Face();
+    var face = new Face2();
 
     var e0 = new HalfEdge(a, face);
     var e1 = new HalfEdge(b, face);
@@ -815,7 +815,7 @@ class Face {
 
 class HalfEdge {
   VertexNode vertex;
-  Face face;
+  Face2 face;
 
   HalfEdge? prev;
   HalfEdge? next;
@@ -867,7 +867,7 @@ class VertexNode {
   Vector3 point;
   VertexNode? prev;
   VertexNode? next;
-  Face? face;
+  Face2? face;
   // the face that is able to see this vertex
 
   VertexNode(this.point) {}

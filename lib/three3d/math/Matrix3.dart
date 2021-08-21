@@ -203,7 +203,7 @@ class Matrix3 {
 
 	Matrix3 getNormalMatrix( Matrix4 matrix4 ) {
 
-		return this.setFromMatrix4( matrix4 ).copy( this ).invert().transpose();
+		return this.setFromMatrix4( matrix4 ).invert().transpose();
 
 	}
 
