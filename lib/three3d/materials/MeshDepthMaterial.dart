@@ -23,7 +23,6 @@ class MeshDepthMaterial extends Material {
   bool isMeshDepthMaterial = true;
   String type = "MeshDepthMaterial";
   int? depthPacking = BasicDepthPacking;
-  bool skinning = false;
   bool morphTargets = false;
 
   num? displacementScale = 1.0;
@@ -48,7 +47,6 @@ class MeshDepthMaterial extends Material {
 
     this.depthPacking = source.depthPacking;
 
-    this.skinning = source.skinning;
     this.morphTargets = source.morphTargets;
 
     this.map = source.map;

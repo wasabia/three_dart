@@ -113,9 +113,12 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.roughnessMap ? '#define USE_ROUGHNESSMAP' : '',
         parameters.metalnessMap ? '#define USE_METALNESSMAP' : '',
         parameters.alphaMap ? '#define USE_ALPHAMAP' : '',
+        parameters.transmission ? '#define USE_TRANSMISSION' : '',
         parameters.transmissionMap ? '#define USE_TRANSMISSIONMAP' : '',
+        parameters.thicknessMap ? '#define USE_THICKNESSMAP' : '',
         parameters.vertexTangents ? '#define USE_TANGENT' : '',
         parameters.vertexColors ? '#define USE_COLOR' : '',
+        parameters.vertexAlphas ? '#define USE_COLOR_ALPHA' : '',
         parameters.vertexUvs ? '#define USE_UV' : '',
         parameters.uvsVertexOnly ? '#define UVS_VERTEX_ONLY' : '',
         parameters.flatShading ? '#define FLAT_SHADED' : '',
@@ -154,7 +157,9 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         '#ifdef USE_TANGENT',
         '	attribute vec4 tangent;',
         '#endif',
-        '#ifdef USE_COLOR',
+        '#if defined( USE_COLOR_ALPHA )',
+        '	attribute vec4 color;',
+        '#elif defined( USE_COLOR )',
         '	attribute vec3 color;',
         '#endif',
         '#ifdef USE_MORPHTARGETS',
@@ -227,12 +232,13 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.alphaMap ? '#define USE_ALPHAMAP' : '',
 
         parameters.sheen ? '#define USE_SHEEN' : '',
+        parameters.transmission ? '#define USE_TRANSMISSION' : '',
         parameters.transmissionMap ? '#define USE_TRANSMISSIONMAP' : '',
+        parameters.thicknessMap ? '#define USE_THICKNESSMAP' : '',
 
         parameters.vertexTangents ? '#define USE_TANGENT' : '',
-        parameters.vertexColors || parameters.instancingColor
-            ? '#define USE_COLOR'
-            : '',
+        parameters.vertexColors || parameters.instancingColor ? '#define USE_COLOR' : '',
+        parameters.vertexAlphas ? '#define USE_COLOR_ALPHA' : '',
         parameters.vertexUvs ? '#define USE_UV' : '',
         parameters.uvsVertexOnly ? '#define UVS_VERTEX_ONLY' : '',
 
@@ -258,7 +264,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
             ? '#define USE_LOGDEPTHBUF_EXT'
             : '',
 
-        ((parameters.extensionShaderTextureLOD || parameters.envMap) &&
+        ((parameters.extensionShaderTextureLOD || parameters.envMap || parameters.transmission) &&
                 parameters.rendererExtensionShaderTextureLod)
             ? '#define TEXTURE_LOD_EXT'
             : '',

@@ -551,7 +551,7 @@ class WebGLUniformsHelper {
 
   }
 
-  // Single matrix (from flat array or MatrixN)
+  // Single matrix (from flat array or THREE.MatrixN)
 
   setValueM2( gl, v, textures ) {
 
@@ -713,7 +713,7 @@ class WebGLUniformsHelper {
   setValueV1i( gl, v, textures ) {
     var cache = this.cache;
 
-    if (cache != null && cache.length >= 1 && cache[ 0 ] == v ) return;
+    if (cache[ 0 ] == v ) return;
 
 
     if(v.runtimeType == bool) {
@@ -780,6 +780,36 @@ class WebGLUniformsHelper {
 
   }
 
+  setValueV2ui(gl, v, textures) {
+    var cache = this.cache;
+
+    if ( arraysEqual( cache, v ) ) return;
+
+    gl.uniform2uiv( this.addr, v );
+
+    copyArray( cache, v );
+  }
+
+  setValueV3ui(gl, v, textures) {
+    var cache = this.cache;
+
+    if ( arraysEqual( cache, v ) ) return;
+
+    gl.uniform3uiv( this.addr, v );
+
+    copyArray( cache, v );
+  }
+
+  setValueV4ui(gl, v, textures) {
+    var cache = this.cache;
+
+    if ( arraysEqual( cache, v ) ) return;
+
+    gl.uniform4uiv( this.addr, v );
+
+    copyArray( cache, v );
+  }
+
   // Helper to pick the right setter for the singular case
 
   getSingularSetter( id, activeInfo ) {
@@ -806,6 +836,9 @@ class WebGLUniformsHelper {
       case 0x8b55: case 0x8b59: return setValueV4i; // _VEC4
 
       case 0x1405: return setValueV1ui; // UINT
+      case 0x8dc6: return setValueV2ui; // _VEC2
+      case 0x8dc7: return setValueV3ui; // _VEC3
+      case 0x8dc8: return setValueV4ui; // _VEC4
 
       case 0x8b5e: // SAMPLER_2D
       case 0x8d66: // SAMPLER_EXTERNAL_OES
@@ -921,6 +954,36 @@ class WebGLUniformsHelper {
 
   }
 
+
+  // Array of unsigned integer
+
+  setValueV1uiArray( gl, v, textures ) {
+
+    gl.uniform1uiv( this.addr, v );
+
+  }
+
+  // Array of unsigned integer vectors (from flat array)
+
+  setValueV2uiArray( gl, v, textures ) {
+
+    gl.uniform2uiv( this.addr, v );
+
+  }
+
+  setValueV3uiArray( gl, v, textures ) {
+
+    gl.uniform3uiv( this.addr, v );
+
+  }
+
+  setValueV4uiArray( gl, v, textures ) {
+
+    gl.uniform4uiv( this.addr, v );
+
+  }
+
+
   // Array of textures (2D / Cube)
   setValueT1Array( gl, v, WebGLTextures textures ) {
     var n = v.length;
@@ -977,6 +1040,11 @@ class WebGLUniformsHelper {
       case 0x8b53: case 0x8b57: return setValueV2iArray; // _VEC2
       case 0x8b54: case 0x8b58: return setValueV3iArray; // _VEC3
       case 0x8b55: case 0x8b59: return setValueV4iArray; // _VEC4
+
+      case 0x1405: return setValueV1uiArray; // UINT
+      case 0x8dc6: return setValueV2uiArray; // _VEC2
+      case 0x8dc7: return setValueV3uiArray; // _VEC3
+      case 0x8dc8: return setValueV4uiArray; // _VEC4
 
       case 0x8b5e: // SAMPLER_2D
       case 0x8d66: // SAMPLER_EXTERNAL_OES

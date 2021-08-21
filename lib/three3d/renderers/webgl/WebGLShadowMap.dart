@@ -39,9 +39,12 @@ class WebGLShadowMap {
 
   WebGLRenderer _renderer;
   WebGLObjects _objects;
-  num maxTextureSize;
+  WebGLCapabilities _capabilities;
+  late int _maxTextureSize;
 
-  WebGLShadowMap(this._renderer, this._objects, this.maxTextureSize ) {
+  WebGLShadowMap(this._renderer, this._objects, this._capabilities ) {
+
+    _maxTextureSize = _capabilities.maxTextureSize;
 
     shadowMaterialVertical = ShaderMaterial( {
 
@@ -122,19 +125,19 @@ class WebGLShadowMap {
 			_shadowMapSize.multiply( shadowFrameExtents );
 			_viewportSize.copy( shadow.mapSize );
 
-			if ( _shadowMapSize.x > maxTextureSize || _shadowMapSize.y > maxTextureSize ) {
+			if ( _shadowMapSize.x > _maxTextureSize || _shadowMapSize.y > _maxTextureSize ) {
 
-				if ( _shadowMapSize.x > maxTextureSize ) {
+				if ( _shadowMapSize.x > _maxTextureSize ) {
 
-					_viewportSize.x = Math.floor( maxTextureSize / shadowFrameExtents.x ).toDouble();
+					_viewportSize.x = Math.floor( _maxTextureSize / shadowFrameExtents.x ).toDouble();
 					_shadowMapSize.x = _viewportSize.x * shadowFrameExtents.x;
 					shadow.mapSize.x = _viewportSize.x;
 
 				}
 
-				if ( _shadowMapSize.y > maxTextureSize ) {
+				if ( _shadowMapSize.y > _maxTextureSize ) {
 
-					_viewportSize.y = Math.floor( maxTextureSize / shadowFrameExtents.y ).toDouble();
+					_viewportSize.y = Math.floor( _maxTextureSize / shadowFrameExtents.y ).toDouble();
 					_shadowMapSize.y = _viewportSize.y * shadowFrameExtents.y;
 					shadow.mapSize.y = _viewportSize.y;
 
@@ -238,10 +241,10 @@ class WebGLShadowMap {
 
 	}
 
-	Material getDepthMaterialVariant( bool useMorphing, bool useSkinning, bool useInstancing ) {
+	Material getDepthMaterialVariant( bool useMorphing ) {
 
   
-		int index = (useMorphing ? 1 : 0) << 0 | (useSkinning ? 1 : 0) << 1 | (useInstancing ? 1 : 0) << 2;
+		int index = (useMorphing ? 1 : 0) << 0;
 
 
 		Material? material = _depthMaterials[ index ];
@@ -251,12 +254,8 @@ class WebGLShadowMap {
 
     
 			material = MeshDepthMaterial( {
-
 				"depthPacking": RGBADepthPacking,
-
-				"morphTargets": useMorphing,
-				"skinning": useSkinning
-
+				"morphTargets": useMorphing
 			} );
 
      
@@ -269,19 +268,16 @@ class WebGLShadowMap {
 
 	}
 
-	Material getDistanceMaterialVariant( bool useMorphing, bool useSkinning, bool useInstancing ) {
+	Material getDistanceMaterialVariant( bool useMorphing ) {
 
-		var index = (useMorphing ? 1 : 0) << 0 | (useSkinning ? 1 : 0) << 1 | (useInstancing ? 1 : 0) << 2;
+		var index = (useMorphing ? 1 : 0) << 0;
 
 		var material = _distanceMaterials[ index ];
 
 		if ( material == null ) {
 
 			material = MeshDistanceMaterial( {
-
-				"morphTargets": useMorphing,
-				"skinning": useSkinning
-
+				"morphTargets": useMorphing
 			} );
 
 			_distanceMaterials[ index ] = material;
@@ -294,7 +290,7 @@ class WebGLShadowMap {
 
 	getDepthMaterial( object, geometry, material, light, shadowCameraNear, shadowCameraFar, type ) {
 
-		Material? result = null;
+		Material? result;
 
 		var getMaterialVariant = getDepthMaterialVariant;
 		var customMaterial = object.customDepthMaterial;
@@ -316,25 +312,7 @@ class WebGLShadowMap {
 
 			}
 
-			var useSkinning = false;
-
-			if ( object.isSkinnedMesh == true ) {
-
-				if ( material.skinning == true ) {
-
-					useSkinning = true;
-
-				} else {
-
-					print( 'THREE.WebGLShadowMap: THREE.SkinnedMesh with material.skinning set to false: ${object}' );
-
-				}
-
-			}
-
-			var useInstancing = object.isInstancedMesh == true;
-
-			result = getMaterialVariant( useMorphing, useSkinning, useInstancing );
+			result = getMaterialVariant( useMorphing );
 
 		} else {
 

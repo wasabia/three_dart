@@ -785,7 +785,7 @@ class WorldUVGenerator {
 		num d_y = vertices[ indexD.toInt() * 3 + 1 ];
 		num d_z = vertices[ indexD.toInt() * 3 + 2 ];
 
-		if ( Math.abs( a_y - b_y ) < 0.01 ) {
+		if ( Math.abs( a_y - b_y ) < Math.abs( a_x - b_x ) ) {
 
 			return [
 				new Vector2( a_x, 1 - a_z ),

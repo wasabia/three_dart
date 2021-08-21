@@ -438,7 +438,31 @@ Function createAttributesKey = ( Map<String, dynamic> attributes ) {
 
 
 
+getNormalizedComponentScale( constructor ) {
 
+  // Reference:
+  // https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_mesh_quantization#encoding-quantized-data
+
+  switch ( constructor.toString() ) {
+
+    case "Int8Array":
+      return 1 / 127;
+
+    case "Uint8Array":
+      return 1 / 255;
+
+    case "Int16Array":
+      return 1 / 32767;
+
+    case "Uint16Array":
+      return 1 / 65535;
+
+    default:
+      throw( 'THREE.GLTFLoader: Unsupported normalized accessor component type.' );
+
+  }
+
+}
 
 
 /**
@@ -465,7 +489,16 @@ Function computeBounds = ( geometry, Map<String, dynamic> primitiveDef, GLTFPars
 
       box.set(
         new Vector3( min[ 0 ], min[ 1 ], min[ 2 ] ),
-        new Vector3( max[ 0 ], max[ 1 ], max[ 2 ] ) );
+        new Vector3( max[ 0 ], max[ 1 ], max[ 2 ] ) 
+      );
+
+      if ( accessor.normalized ) {
+
+				var boxScale = getNormalizedComponentScale( WEBGL_COMPONENT_TYPES[ accessor.componentType ] );
+				box.min.multiplyScalar( boxScale );
+				box.max.multiplyScalar( boxScale );
+
+			}
 
     } else {
 
@@ -507,11 +540,18 @@ Function computeBounds = ( geometry, Map<String, dynamic> primitiveDef, GLTFPars
           vector.setY( Math.max( Math.abs( min[ 1 ] ), Math.abs( max[ 1 ] ) ) );
           vector.setZ( Math.max( Math.abs( min[ 2 ] ), Math.abs( max[ 2 ] ) ) );
 
+          if ( accessor.normalized ) {
+
+						var boxScale = getNormalizedComponentScale( WEBGL_COMPONENT_TYPES[ accessor.componentType ] );
+						vector.multiplyScalar( boxScale );
+
+					}
+
           // Note: this assumes that the sum of all weights is at most 1. This isn't quite correct - it's more conservative
-          // to assume that each target can have a max weight of 1. However, for some use cases - notably, when morph targets
-          // are used to implement key-frame animations and as such only two are active at a time - this results in very large
-          // boxes. So for now we make a box that's sometimes a touch too small but is hopefully mostly of reasonable size.
-          maxDisplacement.max( vector );
+					// to assume that each target can have a max weight of 1. However, for some use cases - notably, when morph targets
+					// are used to implement key-frame animations and as such only two are active at a time - this results in very large
+					// boxes. So for now we make a box that's sometimes a touch too small but is hopefully mostly of reasonable size.
+					maxDisplacement.max( vector );
 
         } else {
 

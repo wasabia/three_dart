@@ -47,7 +47,9 @@ class WebGLParameters {
   late bool alphaMap;
   late bool gradientMap;
   late bool sheen;
+  late bool transmission;
   late bool transmissionMap;
+  late bool thicknessMap;
   int? combine;
   late bool vertexTangents;
   late bool vertexColors;
@@ -66,9 +68,6 @@ class WebGLParameters {
 
   late bool morphTargets;
   late bool morphNormals;
-  late num maxMorphTargets;
-  late num maxMorphNormals;
-
   late num numDirLights;
   late num numPointLights;
   late num numSpotLights;
@@ -160,7 +159,9 @@ class WebGLParameters {
     alphaMap = json["alphaMap"];
     gradientMap = json["gradientMap"];
     sheen = json["sheen"];
+    transmission = json["transmission"];
     transmissionMap = json["transmissionMap"];
+    thicknessMap = json["thicknessMap"];
     combine = json["combine"];
     vertexTangents = json["vertexTangents"];
     vertexColors = json["vertexColors"];
@@ -180,8 +181,6 @@ class WebGLParameters {
     morphTargets = json["morphTargets"];
 
     morphNormals = json["morphNormals"];
-    maxMorphTargets = json["maxMorphTargets"];
-    maxMorphNormals = json["maxMorphNormals"];
     numDirLights = json["numDirLights"];
     numPointLights = json["numPointLights"];
     numSpotLights = json["numSpotLights"];
@@ -280,7 +279,9 @@ class WebGLParameters {
       "alphaMap": alphaMap,
       "gradientMap": gradientMap,
       "sheen": sheen,
+      "transmission": transmission,
       "transmissionMap": transmissionMap,
+      "thicknessMap": thicknessMap,
       "combine": combine,
 
      "vertexTangents": vertexTangents,
@@ -301,9 +302,6 @@ class WebGLParameters {
       "useVertexTexture": useVertexTexture,
       "morphTargets": morphTargets,
       "morphNormals": morphNormals,
-
-     "maxMorphTargets": maxMorphTargets,
-      "maxMorphNormals": maxMorphNormals,
       "numDirLights": numDirLights,
       "numPointLights": numPointLights,
       "numSpotLights": numSpotLights,

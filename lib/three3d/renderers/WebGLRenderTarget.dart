@@ -130,6 +130,9 @@ class WebGLRenderTarget extends RenderTarget {
 
     this.texture = source.texture.clone();
 
+    // TODO Follow threejs
+    //  this.texture.image = { ...this.texture.image }; // See #20328.
+
     this.depthBuffer = source.depthBuffer;
     this.stencilBuffer = source.stencilBuffer;
     this.depthTexture = source.depthTexture;

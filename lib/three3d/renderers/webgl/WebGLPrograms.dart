@@ -25,15 +25,14 @@ class WebGLPrograms {
 		'map', 'mapEncoding', 'matcap', 'matcapEncoding', 'envMap', 'envMapMode', 'envMapEncoding', 'envMapCubeUV',
 		'lightMap', 'lightMapEncoding', 'aoMap', 'emissiveMap', 'emissiveMapEncoding', 'bumpMap', 'normalMap', 'objectSpaceNormalMap', 'tangentSpaceNormalMap', 'clearcoatMap', 'clearcoatRoughnessMap', 'clearcoatNormalMap', 'displacementMap', 'specularMap',
 		'roughnessMap', 'metalnessMap', 'gradientMap',
-		'alphaMap', 'combine', 'vertexColors', 'vertexTangents', 'vertexUvs', 'uvsVertexOnly', 'fog', 'useFog', 'fogExp2',
+		'alphaMap', 'combine', 'vertexColors', 'vertexAlphas', 'vertexTangents', 'vertexUvs', 'uvsVertexOnly', 'fog', 'useFog', 'fogExp2',
 		'flatShading', 'sizeAttenuation', 'logarithmicDepthBuffer', 'skinning',
-		'maxBones', 'useVertexTexture', 'morphTargets', 'morphNormals',
-		'maxMorphTargets', 'maxMorphNormals', 'premultipliedAlpha',
+		'maxBones', 'useVertexTexture', 'morphTargets', 'morphNormals', 'premultipliedAlpha',
 		'numDirLights', 'numPointLights', 'numSpotLights', 'numHemiLights', 'numRectAreaLights',
 		'numDirLightShadows', 'numPointLightShadows', 'numSpotLightShadows',
 		'shadowMapEnabled', 'shadowMapType', 'toneMapping', 'physicallyCorrectLights',
 		'alphaTest', 'doubleSided', 'flipSided', 'numClippingPlanes', 'numClipIntersection', 'depthPacking', 'dithering',
-		'sheen', 'transmissionMap'
+		'sheen', 'transmission', 'transmissionMap', 'thicknessMap'
 	];
 
   WebGLRenderer renderer;
@@ -223,14 +222,17 @@ class WebGLPrograms {
 
 			"sheen": material.sheen != null,
 
+			"transmission": material.transmission > 0,
 			"transmissionMap": material.transmissionMap != null,
+			"thicknessMap": material.thicknessMap != null,
 
 			"combine": material.combine,
 
 			"vertexTangents": ( material.normalMap != null && material.vertexTangents),
 			"vertexColors": material.vertexColors,
-			"vertexUvs":  material.map != null || material.bumpMap != null || material.normalMap != null || material.specularMap != null || material.alphaMap != null || material.emissiveMap != null || material.roughnessMap != null || material.metalnessMap != null || material.clearcoatMap != null || material.clearcoatRoughnessMap != null || material.clearcoatNormalMap != null || material.displacementMap != null || material.transmissionMap != null,
-			"uvsVertexOnly": ! ( material.map != null || material.bumpMap != null || material.normalMap != null || material.specularMap != null || material.alphaMap != null || material.emissiveMap != null || material.roughnessMap != null || material.metalnessMap != null || material.clearcoatNormalMap != null || material.transmissionMap != null ) && material.displacementMap != null,
+      "vertexAlphas": material.vertexColors == true && object.geometry != null && object.geometry.attributes["color"] != null && object.geometry.attributes["color"].itemSize == 4,
+			"vertexUvs":  material.map != null || material.bumpMap != null || material.normalMap != null || material.specularMap != null || material.alphaMap != null || material.emissiveMap != null || material.roughnessMap != null || material.metalnessMap != null || material.clearcoatMap != null || material.clearcoatRoughnessMap != null || material.clearcoatNormalMap != null || material.displacementMap != null || material.transmission != null || material.transmissionMap != null || material.thicknessMap != null,
+			"uvsVertexOnly": ! ( material.map != null || material.bumpMap != null || material.normalMap != null || material.specularMap != null || material.alphaMap != null || material.emissiveMap != null || material.roughnessMap != null || material.metalnessMap != null || material.clearcoatNormalMap != null || material.transmission != null || material.transmissionMap != null || material.thicknessMap != null ) && material.displacementMap != null,
 
 			"fog": fog != null,
 			"useFog": material.fog,
@@ -241,14 +243,12 @@ class WebGLPrograms {
 			"sizeAttenuation": material.sizeAttenuation,
 			"logarithmicDepthBuffer": logarithmicDepthBuffer,
 
-			"skinning": material.skinning == true && maxBones > 0,
+			"skinning": object.isSkinnedMesh == true && maxBones > 0,
 			"maxBones": maxBones,
 			"useVertexTexture": floatVertexTextures,
 
 			"morphTargets": material.morphTargets,
 			"morphNormals": material.morphNormals,
-			"maxMorphTargets": renderer.maxMorphTargets,
-			"maxMorphNormals": renderer.maxMorphNormals,
 
 			"numDirLights": lights.directional.length,
 			"numPointLights": lights.point.length,

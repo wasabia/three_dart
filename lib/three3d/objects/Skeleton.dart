@@ -8,7 +8,7 @@ class Skeleton {
   String uuid = MathUtils.generateUUID();
   late List<Bone> bones;
   late List<Matrix4> boneInverses;
-  late Float32List boneMatrices;
+  late Float32Array boneMatrices;
   DataTexture? boneTexture;
   num boneTextureSize = 0;
   num frame = -1;
@@ -25,7 +25,7 @@ class Skeleton {
 		var bones = this.bones;
 		var boneInverses = this.boneInverses;
 
-		this.boneMatrices = Float32List( bones.length * 16 );
+		this.boneMatrices = Float32Array( bones.length * 16 );
 
 		// calculate inverse bone matrices if necessary
 
@@ -158,6 +158,32 @@ class Skeleton {
 	clone () {
 
 		return new Skeleton( bones: this.bones, boneInverses: this.boneInverses );
+
+	}
+
+  computeBoneTexture() {
+
+		// layout (1 matrix = 4 pixels)
+		//      RGBA RGBA RGBA RGBA (=> column1, column2, column3, column4)
+		//  with  8x8  pixel texture max   16 bones * 4 pixels =  (8 * 8)
+		//       16x16 pixel texture max   64 bones * 4 pixels = (16 * 16)
+		//       32x32 pixel texture max  256 bones * 4 pixels = (32 * 32)
+		//       64x64 pixel texture max 1024 bones * 4 pixels = (64 * 64)
+
+		int size = Math.sqrt( this.bones.length * 4 ).toInt(); // 4 pixels needed for 1 matrix
+		size = MathUtils.ceilPowerOfTwo( size );
+		size = Math.max( size, 4 );
+
+		// var boneMatrices = new Float32Array( size * size * 4 ); // 4 floats per RGBA pixel
+		// boneMatrices.set( this.boneMatrices ); // copy current values
+
+		var boneTexture = new DataTexture( boneMatrices, size, size, RGBAFormat, FloatType, null, null, null, null, null, null, null );
+
+		// this.boneMatrices = boneMatrices.toDartList();
+		this.boneTexture = boneTexture;
+		this.boneTextureSize = size;
+
+		return this;
 
 	}
 

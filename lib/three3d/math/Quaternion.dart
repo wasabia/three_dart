@@ -34,7 +34,8 @@ class Quaternion {
 
 	static static_slerp( qa, qb, qm, t ) {
 
-		return qm.copy( qa ).slerp( qb, t );
+    print( 'THREE.Quaternion: Static .slerp() has been deprecated. Use is now qm.slerpQuaternions( qa, qb, t ) instead.' );
+		return qm.slerpQuaternions( qa, qb, t );
 
 	}
 
@@ -383,11 +384,10 @@ class Quaternion {
 
 		// assumes direction vectors vFrom and vTo are normalized
 
-		var EPS = 0.000001;
 
 		var r = vFrom.dot( vTo ) + 1;
 
-		if ( r < EPS ) {
+		if ( r < Math.EPSILON ) {
 
 			r = 0;
 
@@ -618,6 +618,12 @@ class Quaternion {
 		this.onChangeCallback();
 
 		return this;
+
+	}
+
+  slerpQuaternions( qa, qb, t ) {
+
+		this.copy( qa ).slerp( qb, t );
 
 	}
 

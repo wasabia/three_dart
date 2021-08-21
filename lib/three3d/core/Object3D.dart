@@ -464,6 +464,20 @@ class Object3D with EventDispatcher {
 
 	}
 
+  removeFromParent() {
+
+		var parent = this.parent;
+
+		if ( parent != null ) {
+
+			parent.remove( this );
+
+		}
+
+		return this;
+
+	}
+
 	clear () {
 
 		for ( var i = 0; i < this.children.length; i ++ ) {

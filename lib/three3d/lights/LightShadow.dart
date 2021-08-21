@@ -18,25 +18,24 @@ class LightShadow {
   bool autoUpdate = true;
   bool needsUpdate = false;
 
-  Frustum frustum = new Frustum(null,null,null,null,null,null);
-  Vector2 frameExtents = new Vector2( 1, 1 );
+  Frustum _frustum = new Frustum(null,null,null,null,null,null);
+  Vector2 _frameExtents = new Vector2( 1, 1 );
 
-  num viewportCount = 1;
+  num _viewportCount = 1;
 
-  List<Vector4> viewports = [
+  List<Vector4> _viewports = [
     Vector4( 0, 0, 1, 1 )
   ];
 
-  Matrix4 projScreenMatrix = Matrix4();
-  Vector3 lightPositionWorld = Vector3.init();
-  Vector3 lookTarget = Vector3.init();
+  Matrix4 _projScreenMatrix = Matrix4();
+  Vector3 _lightPositionWorld = Vector3.init();
+  Vector3 _lookTarget = Vector3.init();
 
   late num focus;
   bool isSpotLightShadow = false;
   bool isPointLightShadow = false;
 
-  late List<Vector3> cubeDirections;
-  late List<Vector3> cubeUps;
+
 
   LightShadow( this.camera ) {
   }
@@ -49,13 +48,13 @@ class LightShadow {
 
 	getViewportCount () {
 
-		return this.viewportCount;
+		return this._viewportCount;
 
 	}
 
 	getFrustum () {
 
-		return this.frustum;
+		return this._frustum;
 
 	}
 
@@ -63,20 +62,19 @@ class LightShadow {
 
 		var shadowCamera = this.camera;
 		var shadowMatrix = this.matrix;
-		var projScreenMatrix = this.projScreenMatrix;
-		var lookTarget = this.lookTarget;
-		var lightPositionWorld = this.lightPositionWorld;
+
+		var lightPositionWorld = this._lightPositionWorld;
 
 
 		lightPositionWorld.setFromMatrixPosition( light.matrixWorld );
 		shadowCamera!.position.copy( lightPositionWorld );
 
-		lookTarget.setFromMatrixPosition( light.target.matrixWorld );
-		shadowCamera.lookAt( lookTarget);
+		_lookTarget.setFromMatrixPosition( light.target.matrixWorld );
+		shadowCamera.lookAt( _lookTarget);
 		shadowCamera.updateMatrixWorld(false);
 
-		projScreenMatrix.multiplyMatrices( shadowCamera.projectionMatrix, shadowCamera.matrixWorldInverse );
-		this.frustum.setFromProjectionMatrix( projScreenMatrix );
+		_projScreenMatrix.multiplyMatrices( shadowCamera.projectionMatrix, shadowCamera.matrixWorldInverse );
+		this._frustum.setFromProjectionMatrix( _projScreenMatrix );
 
 		shadowMatrix.set(
 			0.5, 0.0, 0.0, 0.5,
@@ -92,13 +90,13 @@ class LightShadow {
 
 	getViewport ( viewportIndex ) {
 
-		return this.viewports[ viewportIndex ];
+		return this._viewports[ viewportIndex ];
 
 	}
 
 	getFrameExtents () {
 
-		return this.frameExtents;
+		return this._frameExtents;
 
 	}
 
@@ -133,6 +131,22 @@ class LightShadow {
 		object["camera"] = this.camera!.toJSON()["object"];
 
 		return object;
+
+	}
+
+  dispose() {
+
+		if ( this.map != null ) {
+
+			this.map!.dispose();
+
+		}
+
+		if ( this.mapPass != null ) {
+
+			this.mapPass!.dispose();
+
+		}
 
 	}
 

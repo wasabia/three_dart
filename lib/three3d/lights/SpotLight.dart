@@ -48,4 +48,10 @@ class SpotLight extends Light {
 
 	}
 
+  dispose() {
+
+		this.shadow!.dispose();
+
+	}
+
 }

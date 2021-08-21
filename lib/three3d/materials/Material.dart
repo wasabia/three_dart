@@ -85,7 +85,10 @@ class Material with EventDispatcher {
   Texture? specularMap;
   Texture? gradientMap;
   Color? sheen;
+  num transmission = 0.0;
   Texture? transmissionMap;
+  Texture? thicknessMap;
+  
   bool vertexTangents = false;
 
   Texture? map;
@@ -110,7 +113,7 @@ class Material with EventDispatcher {
   num? wireframeLinewidth;
   String? wireframeLinejoin;
   String? wireframeLinecap;
-  bool skinning = false;
+
   bool morphTargets = false;
 
   num? linewidth;
@@ -298,8 +301,6 @@ class Material with EventDispatcher {
       size = newValue;
     } else if(key == "sizeAttenuation") {
       sizeAttenuation = newValue;
-    } else if(key == "skinning") {
-      skinning = newValue;
     } else if(key == "toneMapped") {
       toneMapped = newValue;
     } else if(key == "transparent") {
@@ -441,6 +442,15 @@ class Material with EventDispatcher {
 
   	// }
 
+
+		// if ( this.transmission != null ) data["transmission"] = this.transmission;
+		// if ( this.transmissionMap && this.transmissionMap.isTexture ) data["transmissionMap"] = this.transmissionMap.toJSON( meta ).uuid;
+		// if ( this.thickness != null ) data["thickness"] = this.thickness;
+		// if ( this.thicknessMap != null && this.thicknessMap.isTexture ) data["thicknessMap"] = this.thicknessMap.toJSON( meta ).uuid;
+		// if ( this.attenuationDistance != null ) data["attenuationDistance"] = this.attenuationDistance;
+		// if ( this.attenuationTint != null ) data["attenuationTint"] = this.attenuationTint.getHex();
+
+
   	// if ( this.size != null ) data.size = this.size;
     // if ( this.shadowSide != null ) data.shadowSide = this.shadowSide;
   	// if ( this.sizeAttenuation != null ) data.sizeAttenuation = this.sizeAttenuation;
@@ -491,7 +501,6 @@ class Material with EventDispatcher {
 
   	// if ( this.morphTargets == true ) data.morphTargets = true;
   	// if ( this.morphNormals == true ) data.morphNormals = true;
-  	// if ( this.skinning == true ) data.skinning = true;
 
   	// if ( this.visible == false ) data.visible = false;
 

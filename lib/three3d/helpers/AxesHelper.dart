@@ -4,6 +4,10 @@ part of three_helpers;
 class AxesHelper extends LineSegments {
 
   String type = "AxesHelper";
+  
+  AxesHelper.create({num size = 1, geometry, material}) : super(geometry, material) {
+
+  }
 
   factory AxesHelper({num size = 1}) {
     var vertices = [
@@ -27,8 +31,14 @@ class AxesHelper extends LineSegments {
 		return AxesHelper.create( size: size, geometry: geometry, material: material );
   }
 
-  AxesHelper.create({num size = 1, geometry, material}) : super(geometry, material) {
 
-  }
+
+
+  dispose() {
+
+		this.geometry.dispose();
+		this.material.dispose();
+
+	}
 
 }

@@ -19,7 +19,6 @@ part of three_materials;
  *  wireframe: <boolean>,
  *  wireframeLinewidth: <float>
  *
- *  skinning: <bool>,
  *  morphTargets: <bool>,
  *  morphNormals: <bool>
  * }
@@ -47,7 +46,6 @@ class MeshNormalMaterial extends Material {
 
   bool fog = false;
 
-  bool skinning = false;
   bool morphTargets = false;
   bool morphNormals = false;
 

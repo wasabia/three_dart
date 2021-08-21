@@ -293,6 +293,12 @@ Map<String, dynamic> ShaderLib = {
         "sheen": { "value": new Color( 0,0,0 ) },
         "transmission": { "value": 0 },
         "transmissionMap": { "value": null },
+        "transmissionSamplerSize": { "value": new Vector2(null, null) },
+        "transmissionSamplerMap": { "value": null },
+        "thickness": { "value": 0 },
+        "thicknessMap": { "value": null },
+        "attenuationDistance": { "value": 0 },
+        "attenuationColor": { "value": Color.fromHex( 0x000000 ) }
       }
     ] ),
 

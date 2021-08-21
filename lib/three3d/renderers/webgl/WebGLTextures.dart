@@ -253,7 +253,6 @@ class WebGLTextures {
 
 	deallocateRenderTarget( renderTarget ) {
 
-    print("WebGLTextures.deallocateRenderTarget texture: ${renderTarget} ");
     var texture = renderTarget.texture;
 
 		var renderTargetProperties = properties.get( renderTarget );
@@ -264,6 +263,7 @@ class WebGLTextures {
 		if ( textureProperties["__webglTexture"] != null ) {
 
 			gl.deleteTexture( textureProperties["__webglTexture"] );
+      info.memory["textures"] = info.memory["textures"]! - 1;
 
 		}
 
@@ -291,6 +291,27 @@ class WebGLTextures {
 			if ( renderTargetProperties["__webglDepthRenderbuffer"] != null ) gl.deleteRenderbuffer( renderTargetProperties["__webglDepthRenderbuffer"] );
 
 		}
+
+    if ( renderTarget.isWebGLMultipleRenderTargets ) {
+
+			for ( var i = 0, il = texture.length; i < il; i ++ ) {
+
+				var attachmentProperties = properties.get( texture[ i ] );
+
+				if ( attachmentProperties["__webglTexture"] != null ) {
+
+					gl.deleteTexture( attachmentProperties["__webglTexture"] );
+
+					info.memory["textures"] = info.memory["textures"]! - 1;
+
+				}
+
+				properties.remove( texture[ i ] );
+
+			}
+
+		}
+
 
 		properties.remove( texture );
 		properties.remove( renderTarget );
@@ -937,9 +958,13 @@ class WebGLTextures {
 
 		} else {
 
-			var glFormat = utils.convert( renderTarget.texture.format );
-			var glType = utils.convert( renderTarget.texture.type );
-			var glInternalFormat = getInternalFormat( renderTarget.texture.internalFormat, glFormat, glType );
+      // Use the first texture for MRT so far
+			var texture = renderTarget.isWebGLMultipleRenderTargets == true ? renderTarget.texture[ 0 ] : renderTarget.texture;
+
+
+			var glFormat = utils.convert( texture.format );
+			var glType = utils.convert( texture.type );
+			var glInternalFormat = getInternalFormat( texture.internalFormat, glFormat, glType );
 
 			if ( isMultisample ) {
 
@@ -964,7 +989,7 @@ class WebGLTextures {
 		var isCube = ( renderTarget && renderTarget.isWebGLCubeRenderTarget );
 		if ( isCube ) throw( 'Depth Texture with cube render targets is not supported' );
 
-		gl.bindFramebuffer( gl.FRAMEBUFFER, framebuffer );
+		state.bindFramebuffer( gl.FRAMEBUFFER, framebuffer );
 
 		if ( ! ( renderTarget.depthTexture != null && renderTarget.depthTexture.isDepthTexture ) ) {
 
@@ -1024,8 +1049,8 @@ class WebGLTextures {
 				renderTargetProperties["__webglDepthbuffer"] = [];
 
 				for ( var i = 0; i < 6; i ++ ) {
+          state.bindFramebuffer( gl.FRAMEBUFFER, renderTargetProperties["__webglFramebuffer"][ i ] );
 
-					gl.bindFramebuffer( gl.FRAMEBUFFER, renderTargetProperties["__webglFramebuffer"][ i ] );
 					renderTargetProperties["__webglDepthbuffer"][ i ] = gl.createRenderbuffer();
 					setupRenderBufferStorage( renderTargetProperties["__webglDepthbuffer"][ i ], renderTarget, false );
 
@@ -1033,7 +1058,8 @@ class WebGLTextures {
 
 			} else {
 
-				gl.bindFramebuffer( gl.FRAMEBUFFER, renderTargetProperties["__webglFramebuffer"] );
+				state.bindFramebuffer( gl.FRAMEBUFFER, renderTargetProperties["__webglFramebuffer"] );
+
 				renderTargetProperties["__webglDepthbuffer"] = gl.createRenderbuffer();
 				setupRenderBufferStorage( renderTargetProperties["__webglDepthbuffer"], renderTarget, false );
 
@@ -1041,7 +1067,7 @@ class WebGLTextures {
 
 		}
 
-		gl.bindFramebuffer( gl.FRAMEBUFFER, null );
+		state.bindFramebuffer( gl.FRAMEBUFFER, null );
 
 	}
 
@@ -1054,15 +1080,16 @@ class WebGLTextures {
 
 		renderTarget.addEventListener( 'dispose', onRenderTargetDispose );
 
-		textureProperties["__webglTexture"] = gl.createTexture();
-
-		info.memory["textures"] = info.memory["textures"]! + 1;
+    if ( renderTarget.isWebGLMultipleRenderTargets != true ) {
+      textureProperties["__webglTexture"] = gl.createTexture();
+			textureProperties["__version"] = texture.version;
+			info.memory["textures"] = info.memory["textures"]! + 1;
+		}
 
 		var isCube = ( renderTarget.isWebGLCubeRenderTarget == true );
     var isMultipleRenderTargets = ( renderTarget.isWebGLMultipleRenderTargets == true );
 		var isMultisample = ( renderTarget.isWebGLMultisampleRenderTarget == true );
     var isRenderTarget3D = texture.isDataTexture3D || texture.isDataTexture2DArray;
-    
 		var supportsMips = isPowerOfTwo( renderTarget ) || isWebGL2;
     
 		// Handles WebGL2 RGBFormat fallback - #18858
@@ -1248,17 +1275,24 @@ class WebGLTextures {
 
 	updateRenderTargetMipmap( renderTarget ) {
 
-		var texture = renderTarget.texture;
-		var supportsMips = isPowerOfTwo( renderTarget ) || isWebGL2;
+    var supportsMips = isPowerOfTwo( renderTarget ) || isWebGL2;
 
-		if ( textureNeedsGenerateMipmaps( texture, supportsMips ) ) {
+		var textures = renderTarget.isWebGLMultipleRenderTargets == true ? renderTarget.texture : [ renderTarget.texture ];
 
-			var target = renderTarget.isWebGLCubeRenderTarget ? gl.TEXTURE_CUBE_MAP : gl.TEXTURE_2D;
-			var webglTexture = properties.get( texture )["__webglTexture"];
+		for ( var i = 0, il = textures.length; i < il; i ++ ) {
 
-			state.bindTexture( target, webglTexture );
-			generateMipmap( target, texture, renderTarget.width, renderTarget.height );
-			state.bindTexture( target, null );
+			var texture = textures[ i ];
+
+			if ( textureNeedsGenerateMipmaps( texture, supportsMips ) ) {
+
+				var target = renderTarget.isWebGLCubeRenderTarget ? gl.TEXTURE_CUBE_MAP : gl.TEXTURE_2D;
+				var webglTexture = properties.get( texture )["__webglTexture"];
+
+				state.bindTexture( target, webglTexture );
+				generateMipmap( target, texture, renderTarget.width, renderTarget.height );
+				state.bindTexture( target, null );
+
+			}
 
 		}
 
@@ -1270,11 +1304,6 @@ class WebGLTextures {
 
 			if ( isWebGL2 ) {
 
-				var renderTargetProperties = properties.get( renderTarget );
-
-				gl.bindFramebuffer( gl.READ_FRAMEBUFFER, renderTargetProperties["__webglMultisampledFramebuffer"] );
-				gl.bindFramebuffer( gl.DRAW_FRAMEBUFFER, renderTargetProperties["__webglFramebuffer"] );
-
 				var width = renderTarget.width;
 				var height = renderTarget.height;
 				var mask = gl.COLOR_BUFFER_BIT;
@@ -1282,9 +1311,16 @@ class WebGLTextures {
 				if ( renderTarget.depthBuffer ) mask |= gl.DEPTH_BUFFER_BIT;
 				if ( renderTarget.stencilBuffer ) mask |= gl.STENCIL_BUFFER_BIT;
 
+        var renderTargetProperties = properties.get( renderTarget );
+
+        state.bindFramebuffer( gl.READ_FRAMEBUFFER, renderTargetProperties["__webglMultisampledFramebuffer"] );
+				state.bindFramebuffer( gl.DRAW_FRAMEBUFFER, renderTargetProperties["__webglFramebuffer"] );
+
 				gl.blitFramebuffer( 0, 0, width, height, 0, 0, width, height, mask, gl.NEAREST );
 
-				gl.bindFramebuffer( gl.FRAMEBUFFER, renderTargetProperties["__webglMultisampledFramebuffer"] ); // see #18905
+				state.bindFramebuffer( gl.READ_FRAMEBUFFER, null );
+				state.bindFramebuffer( gl.DRAW_FRAMEBUFFER, renderTargetProperties["__webglMultisampledFramebuffer"] );
+
 
 			} else {
 

@@ -400,9 +400,9 @@ class Color {
     return this;
   }
 
-  setColorName(style) {
+  setColorName(String style) {
     // color keywords
-    var hex = _colorKeywords[style];
+    var hex = _colorKeywords[ style.toLowerCase() ];
 
     if (hex != null) {
       // red

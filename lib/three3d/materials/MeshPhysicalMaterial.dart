@@ -16,7 +16,12 @@ part of three_materials;
  *  sheen: <Color>,
  *
  *  transmission: <float>,
- *  transmissionMap: new THREE.Texture( <Image> )
+ *  transmissionMap: new THREE.Texture( <Image> ),
+ *
+ *  thickness: <float>,
+ *  thicknessMap: new THREE.Texture( <Image> ),
+ *  attenuationDistance: <float>,
+ *  attenuationColor: <Color>
  * }
  */
 
@@ -35,8 +40,10 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
   // null will disable sheen bsdf
   Color? sheen;
 
-  num transmission = 0.0;
-  Texture? transmissionMap;
+  num thickness = 0.01;
+  
+  num attenuationDistance = 0.0;
+  Color attenuationColor = new Color( 1, 1, 1 );
 
 
   MeshPhysicalMaterial( parameters ) : super(parameters) {
@@ -87,6 +94,11 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
 
     this.transmission = source.transmission;
     this.transmissionMap = source.transmissionMap;
+
+    this.thickness = source.thickness;
+		this.thicknessMap = source.thicknessMap;
+		this.attenuationDistance = source.attenuationDistance;
+		this.attenuationColor.copy( source.attenuationColor );
 
     return this;
 

@@ -55,8 +55,11 @@ class WebGLState {
   int? currentTextureSlot;
   var currentBoundTextures = Map<int, BoundTexture>();
 
-  Vector4 currentScissor = Vector4.init();
-  Vector4 currentViewport = Vector4.init();
+  late Vector4 currentScissor;
+  late Vector4 currentViewport;
+
+  dynamic scissorParam;
+  dynamic viewportParam;
 
   WebGLState(this.gl, this.extensions, this.capabilities) {
     this.isWebGL2 = capabilities.isWebGL2;
@@ -117,6 +120,19 @@ class WebGLState {
       OneMinusDstColorFactor: gl.ONE_MINUS_DST_COLOR,
       OneMinusDstAlphaFactor: gl.ONE_MINUS_DST_ALPHA
     };
+
+    // scissorParam = gl.getParameter( gl.SCISSOR_BOX );
+    // viewportParam = gl.getParameter( gl.VIEWPORT );
+
+    // currentScissor = new Vector4.init().fromArray( scissorParam );
+    // currentViewport = new Vector4.init().fromArray( viewportParam );
+
+    print(" WebGLState..................init........... ");
+    var _data = gl.getParameter( gl.SCISSOR_BOX );
+    print(" WebGLState. getParameter _data: ${_data}");
+
+    currentScissor = new Vector4.init();
+    currentViewport = new Vector4.init();
   }
 
   createTexture(int type, int target, num count) {
@@ -152,6 +168,18 @@ class WebGLState {
       enabledCapabilities[id] = false;
     }
   }
+
+  bindXRFramebuffer( framebuffer ) {
+
+		if ( framebuffer != xrFramebuffer ) {
+
+			gl.bindFramebuffer( gl.FRAMEBUFFER, framebuffer );
+
+			xrFramebuffer = framebuffer;
+
+		}
+
+	}
 
   bindFramebuffer( target, framebuffer ) {
 
@@ -559,13 +587,26 @@ class WebGLState {
 
 		gl.activeTexture( gl.TEXTURE0 );
 
+    if ( isWebGL2 == true ) {
+
+			gl.bindFramebuffer( gl.DRAW_FRAMEBUFFER, null ); // Equivalent to gl.FRAMEBUFFER
+			gl.bindFramebuffer( gl.READ_FRAMEBUFFER, null );
+
+		} else {
+
+			gl.bindFramebuffer( gl.FRAMEBUFFER, null );
+
+		}
+
 		gl.useProgram( null );
 
 		gl.lineWidth( 1 );
 
     // TODO app gl no canvas ???
-		gl.scissor( 0, 0, gl.canvas.width, gl.canvas.height );
-		gl.viewport( 0, 0, gl.canvas.width, gl.canvas.height );
+		// gl.scissor( 0, 0, gl.canvas.width, gl.canvas.height );
+		// gl.viewport( 0, 0, gl.canvas.width, gl.canvas.height );
+    gl.scissor( 0, 0, 0, 0 );
+		gl.viewport( 0, 0, 0, 0 );
 
 		// reset internals
 
@@ -573,6 +614,9 @@ class WebGLState {
 
     currentTextureSlot = null;
     currentBoundTextures = {};
+
+    xrFramebuffer = null;
+		currentBoundFramebuffers = {};
 
     currentProgram = null;
 

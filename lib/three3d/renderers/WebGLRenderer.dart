@@ -62,11 +62,6 @@ class WebGLRenderer {
   int toneMapping = NoToneMapping;
   double toneMappingExposure = 1.0;
 
-  // morphs
-
-  int maxMorphTargets = 8;
-  int maxMorphNormals = 4;
-
   late num _width;
   late num _height;
 
@@ -82,8 +77,6 @@ class WebGLRenderer {
 
   // internal state cache
 
-  var _framebuffer = null;
-
 
   int _currentActiveCubeFace = 0;
   int _currentActiveMipmapLevel = 0;
@@ -91,8 +84,6 @@ class WebGLRenderer {
 
   var _currentMaterialId = - 1;
 	var _currentCamera = null;
-
-  var _currentFramebuffer = null;
 
 
   var _currentViewport = Vector4.init();
@@ -106,6 +97,8 @@ class WebGLRenderer {
   Function? _transparentSort = null;
 
   var _scissorTest = false;
+
+  late List _currentDrawBuffers;
 
   // frustum
 
@@ -207,13 +200,7 @@ class WebGLRenderer {
     utils = WebGLUtils(_gl, extensions, capabilities);
 
     state = WebGLState(_gl, extensions, capabilities);
-
-
-    state.scissor(
-        _currentScissor.copy(_scissor).multiplyScalar(_pixelRatio).floor());
-    state.viewport(
-        _currentViewport.copy(_viewport).multiplyScalar(_pixelRatio).floor());
-
+    _currentDrawBuffers = [_gl.BACK];
 
     info = WebGLInfo(_gl);
     properties = WebGLProperties();
@@ -249,7 +236,7 @@ class WebGLRenderer {
 
     // shadow map
 
-    shadowMap = WebGLShadowMap(this, objects, capabilities.maxTextureSize);
+    shadowMap = WebGLShadowMap(this, objects, capabilities);
 
     // print("3 initGLContext ..... ");
   }
@@ -468,7 +455,29 @@ class WebGLRenderer {
 		}
   }
 
+
   // Events
+  onContextRestore( /* event */ ) {
+
+		print( 'THREE.WebGLRenderer: Context Restored.' );
+
+		_isContextLost = false;
+
+		var infoAutoReset = info.autoReset;
+		var shadowMapEnabled = shadowMap.enabled;
+		var shadowMapAutoUpdate = shadowMap.autoUpdate;
+		var shadowMapNeedsUpdate = shadowMap.needsUpdate;
+		var shadowMapType = shadowMap.type;
+
+		initGLContext();
+
+		info.autoReset = infoAutoReset;
+		shadowMap.enabled = shadowMapEnabled;
+		shadowMap.autoUpdate = shadowMapAutoUpdate;
+		shadowMap.needsUpdate = shadowMapNeedsUpdate;
+		shadowMap.type = shadowMapType;
+
+	}
 
   onMaterialDispose(event) {
     var material = event.target;
@@ -481,18 +490,26 @@ class WebGLRenderer {
   // Buffer deallocation
 
   deallocateMaterial(material) {
-    releaseMaterialProgramReference(material);
+    releaseMaterialProgramReferences(material);
 
     properties.remove(material);
   }
 
-  releaseMaterialProgramReference(material) {
-    var programInfo = properties.get(material)["program"];
+  releaseMaterialProgramReferences( material ) {
 
-    if (programInfo != null) {
-      programCache.releaseProgram(programInfo);
-    }
-  }
+		var programs = properties.get( material )["programs"];
+
+		if ( programs != null ) {
+
+			programs.forEach(( program ) {
+
+				programCache.releaseProgram( program );
+
+			} );
+
+		}
+
+	}
 
   // Buffer rendering
 
@@ -689,7 +706,6 @@ class WebGLRenderer {
 
     currentRenderState!.setupLights();
 
-    var compiled = WeakMap();
 
     scene.traverse((object) {
       var material = object.material;
@@ -699,14 +715,10 @@ class WebGLRenderer {
           for (var i = 0; i < material.length; i++) {
             var material2 = material[i];
 
-            if (compiled.has(material2) == false) {
-              getProgram(material2, scene, object);
-              compiled.add(key: material2, value: null);
-            }
+            getProgram(material2, scene, object);
           }
-        } else if (compiled.has(material) == false) {
+        } else {
           getProgram(material, scene, object);
-          compiled.add(key: material, value: null);
         }
       }
     });
@@ -724,18 +736,8 @@ class WebGLRenderer {
   // Rendering
 
   render(scene, Camera camera) {
-    if (camera != null && camera.isCamera != true) {
-      print('THREE.WebGLRenderer.render: camera is not an instance of THREE.Camera.');
-      return;
-    }
 
     if (_isContextLost == true) return;
-
-    // reset caching for this frame
-
-    bindingStates.resetDefaultState();
-    _currentMaterialId = -1;
-    _currentCamera = null;
 
     // update scene graph
 
@@ -802,24 +804,21 @@ class WebGLRenderer {
 
     if (this.info.autoReset == true) this.info.reset();
 
-    background.render(currentRenderList, scene, camera, false);
+    background.render(currentRenderList, scene);
 
     // render scene
 
     var opaqueObjects = currentRenderList!.opaque;
+    var transmissiveObjects = currentRenderList!.transmissive;
     var transparentObjects = currentRenderList!.transparent;
 
 
 
     if (opaqueObjects.length > 0) renderObjects(opaqueObjects, scene, camera);
+    if (transmissiveObjects.length > 0 ) renderTransmissiveObjects( opaqueObjects, transmissiveObjects, scene, camera );
     if (transparentObjects.length > 0) renderObjects(transparentObjects, scene, camera);
 
-    if (scene.isScene == true) {
-      scene.onAfterRender(renderer: this, scene: scene, camera: camera);
-    }
-
-    //
-
+  
     if (_currentRenderTarget != null) {
       // Generate mipmap if we're using any kind of mipmap filtering
 
@@ -828,6 +827,10 @@ class WebGLRenderer {
       // resolve multisample renderbuffers to a single-sample texture if necessary
 
       textures.updateMultisampleRenderTarget(_currentRenderTarget);
+    }
+
+    if (scene.isScene == true) {
+      scene.onAfterRender(renderer: this, scene: scene, camera: camera);
     }
 
     // Ensure depth buffer writing is enabled so it can be cleared on next render
@@ -839,6 +842,10 @@ class WebGLRenderer {
     state.setPolygonOffset(false, null, null);
 
     // _gl.finish();
+
+    bindingStates.resetDefaultState();
+    _currentMaterialId = -1;
+    _currentCamera = null;
 
     renderStateStack.removeLast();
     if (renderStateStack.length > 0) {
@@ -1560,14 +1567,6 @@ class WebGLRenderer {
 
 	}
 
-  //
-  setFramebuffer(value) {
-    if (_framebuffer != value && _currentRenderTarget == null)
-      _gl.bindFramebuffer(_gl.FRAMEBUFFER, value);
-
-    _framebuffer = value;
-  }
-
   getActiveCubeFace() {
     return _currentActiveCubeFace;
   }
@@ -1591,7 +1590,7 @@ class WebGLRenderer {
       textures.setupRenderTarget(renderTarget);
     }
 
-    var framebuffer = _framebuffer;
+    var framebuffer = null;
     var isCube = false;
     var isRenderTarget3D = false;
 
@@ -1622,12 +1621,74 @@ class WebGLRenderer {
       _currentScissorTest = _scissorTest;
     }
 
-    // print(" ${!identical(_currentFramebuffer, framebuffer)} ");
+    
+    var framebufferBound = state.bindFramebuffer( _gl.FRAMEBUFFER, framebuffer );
 
-    if (_currentFramebuffer != framebuffer) {
-      _gl.bindFramebuffer(_gl.FRAMEBUFFER, framebuffer);
-      _currentFramebuffer = framebuffer;
-    }
+		if ( framebufferBound && capabilities.drawBuffers ) {
+
+			var needsUpdate = false;
+
+			if ( renderTarget != null ) {
+
+				if ( renderTarget.isWebGLMultipleRenderTargets ) {
+
+					var textures = renderTarget.texture;
+
+					if ( _currentDrawBuffers.length != textures.length || _currentDrawBuffers[ 0 ] != _gl.COLOR_ATTACHMENT0 ) {
+
+						for ( var i = 0, il = textures.length; i < il; i ++ ) {
+
+							_currentDrawBuffers[ i ] = _gl.COLOR_ATTACHMENT0 + i;
+
+						}
+
+						_currentDrawBuffers.length = textures.length;
+
+						needsUpdate = true;
+
+					}
+
+				} else {
+
+					if ( _currentDrawBuffers.length != 1 || _currentDrawBuffers[ 0 ] != _gl.COLOR_ATTACHMENT0 ) {
+
+						_currentDrawBuffers[ 0 ] = _gl.COLOR_ATTACHMENT0;
+						_currentDrawBuffers.length = 1;
+
+						needsUpdate = true;
+
+					}
+
+				}
+
+			} else {
+
+				if ( _currentDrawBuffers.length != 1 || _currentDrawBuffers[ 0 ] != _gl.BACK ) {
+
+					_currentDrawBuffers[ 0 ] = _gl.BACK;
+					_currentDrawBuffers.length = 1;
+
+					needsUpdate = true;
+
+				}
+
+			}
+
+			if ( needsUpdate ) {
+
+				if ( capabilities.isWebGL2 ) {
+
+					_gl.drawBuffers( _currentDrawBuffers );
+
+				} else {
+
+					extensions.get( 'WEBGL_draw_buffers' ).drawBuffersWEBGL( _currentDrawBuffers );
+
+				}
+
+			}
+
+		}
 
     state.viewport(_currentViewport);
     state.scissor(_currentScissor);
@@ -1660,13 +1721,7 @@ class WebGLRenderer {
     }
 
     if (framebuffer != null) {
-      var restore = false;
-
-      if (framebuffer != _currentFramebuffer) {
-        _gl.bindFramebuffer(_gl.FRAMEBUFFER, framebuffer);
-
-        restore = true;
-      }
+      state.bindFramebuffer( _gl.FRAMEBUFFER, framebuffer );
 
       try {
         var texture = renderTarget.texture;
@@ -1713,9 +1768,8 @@ class WebGLRenderer {
               'THREE.WebGLRenderer.readRenderTargetPixels: readPixels from renderTarget failed. Framebuffer not complete.');
         }
       } finally {
-        if (restore) {
-          _gl.bindFramebuffer(_gl.FRAMEBUFFER, _currentFramebuffer);
-        }
+        var framebuffer = ( _currentRenderTarget != null ) ? properties.get( _currentRenderTarget )["__webglFramebuffer"] : null;
+				state.bindFramebuffer( _gl.FRAMEBUFFER, framebuffer );
       }
     }
   }
@@ -1724,7 +1778,12 @@ class WebGLRenderer {
     var levelScale = Math.pow(2, -level);
     var width = Math.floor(texture.image.width * levelScale);
     var height = Math.floor(texture.image.height * levelScale);
-    var glFormat = utils.convert(texture.format);
+    var glFormat = utils.convert( texture.format );
+
+    if ( capabilities.isWebGL2 ) {
+      if ( glFormat == _gl.RGB ) glFormat = _gl.RGB8;
+			if ( glFormat == _gl.RGBA ) glFormat = _gl.RGBA8;
+    }
 
     textures.setTexture2D(texture, 0);
 
@@ -1863,7 +1922,11 @@ class WebGLRenderer {
   }
 
   resetState() {
-    state.reset();
-    bindingStates.reset();
+		_currentActiveCubeFace = 0;
+		_currentActiveMipmapLevel = 0;
+		_currentRenderTarget = null;
+
+		state.reset();
+		bindingStates.reset();
   }
 }

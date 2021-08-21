@@ -917,7 +917,7 @@ class GLTFParser {
 
       }
 
-      materialType =await this._invokeOne( ( ext ) async {
+      materialType = await this._invokeOne( ( ext ) async {
 
         return ext.getMaterialType != null ? await ext.getMaterialType( materialIndex ) : null;
 
@@ -1415,29 +1415,7 @@ class GLTFParser {
 
       if ( outputAccessor.normalized ) {
 
-        var scale;
-
-        if ( outputArray.runtimeType == Int8List ) {
-
-          scale = 1 / 127;
-
-        } else if ( outputArray.runtimeType == Uint8List ) {
-
-          scale = 1 / 255;
-
-        } else if ( outputArray.runtimeType == Int16List ) {
-
-          scale = 1 / 32767;
-
-        } else if ( outputArray.runtimeType == Uint16List ) {
-
-          scale = 1 / 65535;
-
-        } else {
-
-          throw( 'THREE.GLTFLoader: Unsupported output accessor component type.' );
-
-        }
+        var scale = getNormalizedComponentScale( outputArray.runtimeType );
 
         var scaled = Float32List( outputArray.length );
 
@@ -1489,6 +1467,40 @@ class GLTFParser {
 
   }
 
+
+  createNodeMesh( nodeIndex ) async {
+
+		var json = this.json;
+		var parser = this;
+		var nodeDef = json["nodes"][ nodeIndex ];
+
+		if ( nodeDef.mesh == null ) return null;
+
+    var mesh = await parser.getDependency( 'mesh', nodeDef.mesh );
+
+		var node = parser._getNodeRef( parser.meshCache, nodeDef.mesh, mesh );
+
+    // if weights are provided on the node, override weights on the mesh.
+    if ( nodeDef.weights != null ) {
+
+      node.traverse( ( o ) {
+
+        if ( ! o.isMesh ) return;
+
+        for ( var i = 0, il = nodeDef.weights.length; i < il; i ++ ) {
+
+          o.morphTargetInfluences[ i ] = nodeDef.weights[ i ];
+
+        }
+
+      } );
+
+    }
+
+    return node;
+
+	}
+
   /**
    * Specification: https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#nodes-and-hierarchy
    * @param {number} nodeIndex
@@ -1508,32 +1520,32 @@ class GLTFParser {
 
     var pending = [];
 
-    if ( nodeDef["mesh"] != null ) {
 
-      var mesh = await parser.getDependency( 'mesh', nodeDef["mesh"] );
+    var meshPromise = await parser._invokeOne( ( ext ) {
 
-      var node = await parser._getNodeRef( parser.meshCache, nodeDef["mesh"], mesh );
+      return ext.createNodeMesh && ext.createNodeMesh( nodeIndex );
 
-      // if weights are provided on the node, override weights on the mesh.
-      if ( nodeDef["weights"] != null ) {
+    } );
 
-        node.traverse( ( o ) {
+    if ( meshPromise != null ) {
 
-          if ( ! o.isMesh ) return;
-
-          for ( var i = 0, il = nodeDef["weights"].length; i < il; i ++ ) {
-
-            o.morphTargetInfluences[ i ] = nodeDef["weights"][ i ];
-
-          }
-
-        } );
-
-      }
-
-      pending.add(node);
+      pending.add( meshPromise );
 
     }
+    // if ( nodeDef["mesh"] != null ) {
+    //   var mesh = await parser.getDependency( 'mesh', nodeDef["mesh"] );
+    //   var node = await parser._getNodeRef( parser.meshCache, nodeDef["mesh"], mesh );
+    //   // if weights are provided on the node, override weights on the mesh.
+    //   if ( nodeDef["weights"] != null ) {
+    //     node.traverse( ( o ) {
+    //       if ( ! o.isMesh ) return;
+    //       for ( var i = 0, il = nodeDef["weights"].length; i < il; i ++ ) {
+    //         o.morphTargetInfluences[ i ] = nodeDef["weights"][ i ];
+    //       }
+    //     } );
+    //   }
+    //   pending.add(node);
+    // }
 
     if ( nodeDef["camera"] != null ) {
 

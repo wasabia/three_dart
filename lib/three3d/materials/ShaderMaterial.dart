@@ -15,7 +15,6 @@ part of three_materials;
  *
  *  lights: <bool>,
  *
- *  skinning: <bool>,
  *  morphTargets: <bool>,
  *  morphNormals: <bool>
  * }
@@ -43,7 +42,6 @@ class ShaderMaterial extends Material {
     this.lights = false; // set to use scene lights
     this.clipping = false; // set to use user-defined clipping planes
 
-    this.skinning = false; // set to use skinning attribute streams
     this.morphTargets = false; // set to use morph targets
     this.morphNormals = false; // set to use morph normals
 
@@ -95,8 +93,6 @@ class ShaderMaterial extends Material {
 
     this.lights = source.lights;
     this.clipping = source.clipping;
-
-    this.skinning = source.skinning;
 
     this.morphTargets = source.morphTargets;
     this.morphNormals = source.morphNormals;

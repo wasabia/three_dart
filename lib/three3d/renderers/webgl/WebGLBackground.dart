@@ -3,8 +3,8 @@ part of three_webgl;
 class WebGLBackground {
   late Color clearColor;
   late num clearAlpha;
-  late Mesh planeMesh;
-  late Mesh boxMesh;
+  Mesh? planeMesh;
+  Mesh? boxMesh;
   late int currentBackgroundVersion;
   late int currentTonemapping;
   dynamic currentBackground = null;
@@ -23,7 +23,8 @@ class WebGLBackground {
     this.currentBackgroundVersion = 0;
   }
 
-  render(renderList, scene, camera, forceClear) {
+  render(renderList, scene) {
+    bool forceClear = false;
     var background = scene.isScene == true ? scene.background : null;
 
     if (background != null && background.isTexture) {
@@ -55,133 +56,126 @@ class WebGLBackground {
           renderer.autoClearStencil);
     }
 
-    // if ( background && ( background.isCubeTexture || background.isWebGLCubeRenderTarget || background.mapping == CubeUVReflectionMapping ) ) {
+    if ( background != null && ( background.isCubeTexture || background.mapping == CubeUVReflectionMapping ) ) {
 
-    // 	if ( boxMesh == null ) {
+    	if ( boxMesh == null ) {
 
-    // 		boxMesh = new Mesh(
-    // 			new BoxBufferGeometry( 1, 1, 1 ),
-    // 			new ShaderMaterial( {
-    // 				"name": 'BackgroundCubeMaterial',
-    // 				"uniforms": cloneUniforms( ShaderLib.cube.uniforms ),
-    // 				"vertexShader": ShaderLib.cube.vertexShader,
-    // 				"fragmentShader": ShaderLib.cube.fragmentShader,
-    // 				"side": BackSide,
-    // 				"depthTest": false,
-    // 				"depthWrite": false,
-    // 				"fog": false
-    // 			} )
-    // 		);
+    		boxMesh = new Mesh(
+    			new BoxGeometry( width: 1, height: 1, depth: 1 ),
+    			new ShaderMaterial( {
+    				"name": 'BackgroundCubeMaterial',
+    				"uniforms": cloneUniforms( ShaderLib["cube"]["uniforms"] ),
+    				"vertexShader": ShaderLib["cube"]["vertexShader"],
+    				"fragmentShader": ShaderLib["cube"]["fragmentShader"],
+    				"side": BackSide,
+    				"depthTest": false,
+    				"depthWrite": false,
+    				"fog": false
+    			} )
+    		);
 
-    // 		boxMesh.geometry.deleteAttribute( 'normal' );
-    // 		boxMesh.geometry.deleteAttribute( 'uv' );
+    		boxMesh!.geometry.deleteAttribute( 'normal' );
+    		boxMesh!.geometry.deleteAttribute( 'uv' );
 
-    // 		boxMesh.onBeforeRender = ( renderer, scene, camera ) {
-    // 			this.matrixWorld.copyPosition( camera.matrixWorld );
-    // 		};
+    		boxMesh!.onBeforeRender = ( renderer, mesh, scene, camera ) {
+    			mesh.matrixWorld.copyPosition( camera.matrixWorld );
+    		};
 
-    // 		// enable code injection for non-built-in material
-    // 		Object.defineProperty( boxMesh.material, 'envMap', {
+    		// enable code injection for non-built-in material
+    		// Object.defineProperty( boxMesh.material, 'envMap', {
+    		// 	get: function () {
+    		// 		return this.uniforms.envMap.value;
+    		// 	}
 
-    // 			get: function () {
+    		// } );
 
-    // 				return this.uniforms.envMap.value;
+    		objects.update( boxMesh );
 
-    // 			}
+    	}
 
-    // 		} );
+    	if ( background.isWebGLCubeRenderTarget ) {
 
-    // 		objects.update( boxMesh );
+    		// TODO Deprecate
 
-    // 	}
+    		background = background.texture;
 
-    // 	if ( background.isWebGLCubeRenderTarget ) {
+    	}
 
-    // 		// TODO Deprecate
+    	boxMesh!.material.uniforms.envMap.value = background;
+    	boxMesh!.material.uniforms.flipEnvMap.value = ( background.isCubeTexture && background._needsFlipEnvMap ) ? - 1 : 1;
 
-    // 		background = background.texture;
+    	if ( currentBackground != background ||
+    		currentBackgroundVersion != background.version ||
+    		currentTonemapping != renderer.toneMapping ) {
 
-    // 	}
+    		boxMesh!.material.needsUpdate = true;
 
-    // 	boxMesh.material.uniforms.envMap.value = background;
-    // 	boxMesh.material.uniforms.flipEnvMap.value = ( background.isCubeTexture && background._needsFlipEnvMap ) ? - 1 : 1;
+    		currentBackground = background;
+    		currentBackgroundVersion = background.version;
+    		currentTonemapping = renderer.toneMapping;
 
-    // 	if ( currentBackground != background ||
-    // 		currentBackgroundVersion != background.version ||
-    // 		currentTonemapping != renderer.toneMapping ) {
+    	}
 
-    // 		boxMesh.material.needsUpdate = true;
+    	// push to the pre-sorted opaque render list
+    	renderList.unshift( boxMesh, boxMesh!.geometry, boxMesh!.material, 0, 0, null );
 
-    // 		currentBackground = background;
-    // 		currentBackgroundVersion = background.version;
-    // 		currentTonemapping = renderer.toneMapping;
+    } else if ( background != null && background.isTexture ) {
 
-    // 	}
+    	if ( planeMesh == null ) {
 
-    // 	// push to the pre-sorted opaque render list
-    // 	renderList.unshift( boxMesh, boxMesh.geometry, boxMesh.material, 0, 0, null );
+    		planeMesh = new Mesh(
+    			new PlaneGeometry( width: 2, height: 2 ),
+    			new ShaderMaterial( {
+    				"name": 'BackgroundMaterial',
+    				"uniforms": cloneUniforms( ShaderLib["background"]["uniforms"] ),
+    				"vertexShader": ShaderLib["background"]["vertexShader"],
+    				"fragmentShader": ShaderLib["background"]["fragmentShader"],
+    				"side": FrontSide,
+    				"depthTest": false,
+    				"depthWrite": false,
+    				"fog": false
+    			} )
+    		);
 
-    // } else if ( background && background.isTexture ) {
+    		planeMesh!.geometry.deleteAttribute( 'normal' );
 
-    // 	if ( planeMesh == null ) {
+    		// enable code injection for non-built-in material
+    		// Object.defineProperty( planeMesh.material, 'map', {
+    		// 	get: function () {
+    		// 		return this.uniforms.t2D.value;
+    		// 	}
+    		// } );
 
-    // 		planeMesh = new Mesh(
-    // 			new PlaneBufferGeometry( 2, 2 ),
-    // 			new ShaderMaterial( {
-    // 				name: 'BackgroundMaterial',
-    // 				uniforms: cloneUniforms( ShaderLib.background.uniforms ),
-    // 				vertexShader: ShaderLib.background.vertexShader,
-    // 				fragmentShader: ShaderLib.background.fragmentShader,
-    // 				side: FrontSide,
-    // 				depthTest: false,
-    // 				depthWrite: false,
-    // 				fog: false
-    // 			} )
-    // 		);
+    		objects.update( planeMesh );
 
-    // 		planeMesh.geometry.deleteAttribute( 'normal' );
+    	}
 
-    // 		// enable code injection for non-built-in material
-    // 		Object.defineProperty( planeMesh.material, 'map', {
+    	planeMesh!.material.uniforms.t2D.value = background;
 
-    // 			get: function () {
+    	if ( background.matrixAutoUpdate == true ) {
 
-    // 				return this.uniforms.t2D.value;
+    		background.updateMatrix();
 
-    // 			}
+    	}
 
-    // 		} );
+    	planeMesh!.material.uniforms.uvTransform.value.copy( background.matrix );
 
-    // 		objects.update( planeMesh );
+    	if ( currentBackground != background ||
+    		currentBackgroundVersion != background.version ||
+    		currentTonemapping != renderer.toneMapping ) {
 
-    // 	}
+    		planeMesh!.material.needsUpdate = true;
 
-    // 	planeMesh.material.uniforms.t2D.value = background;
+    		currentBackground = background;
+    		currentBackgroundVersion = background.version;
+    		currentTonemapping = renderer.toneMapping;
 
-    // 	if ( background.matrixAutoUpdate == true ) {
+    	}
 
-    // 		background.updateMatrix();
+    	// push to the pre-sorted opaque render list
+    	renderList.unshift( planeMesh, planeMesh!.geometry, planeMesh!.material, 0, 0, null );
 
-    // 	}
-
-    // 	planeMesh.material.uniforms.uvTransform.value.copy( background.matrix );
-
-    // 	if ( currentBackground != background ||
-    // 		currentBackgroundVersion != background.version ||
-    // 		currentTonemapping != renderer.toneMapping ) {
-
-    // 		planeMesh.material.needsUpdate = true;
-
-    // 		currentBackground = background;
-    // 		currentBackgroundVersion = background.version;
-    // 		currentTonemapping = renderer.toneMapping;
-
-    // 	}
-
-    // 	// push to the pre-sorted opaque render list
-    // 	renderList.unshift( planeMesh, planeMesh.geometry, planeMesh.material, 0, 0, null );
-
-    // }
+    }
   }
 
   setClear(color, alpha) {

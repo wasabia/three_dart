@@ -58,6 +58,7 @@ class WebGLRenderList {
   var renderItemsIndex = 0;
 
   var opaque = [];
+  var transmissive = [];
   var transparent = [];
 
   var defaultProgram = DefaultProgram();
@@ -66,6 +67,7 @@ class WebGLRenderList {
     renderItemsIndex = 0;
 
     opaque.length = 0;
+    transmissive.length = 0;
     transparent.length = 0;
   }
 
@@ -107,22 +109,39 @@ class WebGLRenderList {
   push(object, geometry, material, groupOrder, z, group) {
     var renderItem = getNextRenderItem(object, geometry, material, groupOrder, z, group);
 
-    if(material.transparent == true) {
-      transparent.add(renderItem);
-    } else {
-      opaque.add(renderItem);
-    }
+    if ( material.transmission > 0.0 ) {
+
+			transmissive.add( renderItem );
+
+		} else {
+
+			if(material.transparent == true) {
+        transparent.add(renderItem);
+      } else {
+        opaque.add(renderItem);
+      }
+
+		}
+
+    
   }
 
   unshift(object, geometry, material, groupOrder, z, group) {
     var renderItem =
         getNextRenderItem(object, geometry, material, groupOrder, z, group);
 
-    if(material.transparent == true) {
-      transparent.insert(0, renderItem);
+
+    if ( material.transmission > 0.0 ) {
+      transmissive.insert(0, renderItem);
     } else {
-      opaque.insert(0, renderItem);
+      if(material.transparent == true) {
+        transparent.insert(0, renderItem);
+      } else {
+        opaque.insert(0, renderItem);
+      }
     }
+
+    
   }
 
   sort(customOpaqueSort, customTransparentSort) {
@@ -131,6 +150,10 @@ class WebGLRenderList {
       opaque.sort(customOpaqueSort ?? painterSortStable);
     }
 
+    if (transmissive.length > 1) {
+      transmissive.sort(customTransparentSort ?? reversePainterSortStable);
+    }
+  
     if (transparent.length > 1) {
       transparent.sort(customTransparentSort ?? reversePainterSortStable);
     }
