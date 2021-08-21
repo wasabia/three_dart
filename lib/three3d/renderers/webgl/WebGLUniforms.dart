@@ -94,30 +94,12 @@ class WebGLUniforms with WebGLUniform {
 
   }
 
-  static upload ( gl, seq, values, textures, object, material ) {
-
-    // print("WebGLUniforms.upload ${material.runtimeType.toString()} ${seq.length} ");
-
+  static upload ( gl, seq, values, textures ) {
     for ( var i = 0, n = seq.length; i != n; ++ i ) {
 
       var u = seq[ i ];
       var v = values[ u.id ];
 
-
-      // var v2 = v["value"];
-      // var _rt = v2.runtimeType.toString();
-      // if(_rt == "Color" || _rt == "Vector2" || _rt == "Vector4" || _rt == "Matrix3") {
-      //   print(" WebGLUniforms.upload u ${u.id}: ${u} v needsUpdate: ${v["needsUpdate"]} ");
-      //   print(v2.toJSON());
-      // } else if(_rt == "List<dynamic>") {
-      //   print(" WebGLUniforms.upload u ${u.id}: ${u} v needsUpdate: ${v["needsUpdate"]} ");
-      //   print(v2.map((e) => e.runtimeType.toString() == "Matrix4" ? e.toJSON() : e ));
-      // } else {
-      //   print(" WebGLUniforms.upload u ${u.id}: ${u}  v needsUpdate: ${v["needsUpdate"]} ${v2.runtimeType.toString()} ");
-      //   print(v2);
-      // }
-
-  
       if ( v["needsUpdate"] != false ) {
         // note: always updating when .needsUpdate is null
         u.setValue( gl, v["value"], textures );

@@ -13,6 +13,7 @@ import 'package:three_dart/three3d/cameras/index.dart';
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/dartHelpers.dart';
+import 'package:three_dart/three3d/extras/index.dart';
 import 'package:three_dart/three3d/geometries/index.dart';
 import 'package:three_dart/three3d/lights/index.dart';
 import 'package:three_dart/three3d/materials/index.dart';
@@ -56,5 +57,4 @@ part './WebGLTextures.dart';
 part './WebGLUniforms.dart';
 part './WebGLUniformsHelper.dart';
 part './WebGLUtils.dart';
-
-
+part './WebGLCubeUVMaps.dart';

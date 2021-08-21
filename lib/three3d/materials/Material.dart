@@ -56,7 +56,7 @@ class Material with EventDispatcher {
 
   bool dithering = false;
   num alphaTest = 0;
-
+  bool alphaToCoverage = false;
   num rotation = 0;
 
   bool premultipliedAlpha = false;
@@ -186,6 +186,8 @@ class Material with EventDispatcher {
     this.color = Color(0,0,0).setHex(json["color"]);
 
   }
+
+  onBuild( shaderobject, renderer ) {}
 
   // onBeforeCompile(shaderobject, renderer) {}
 
@@ -440,6 +442,7 @@ class Material with EventDispatcher {
   	// }
 
   	// if ( this.size != null ) data.size = this.size;
+    // if ( this.shadowSide != null ) data.shadowSide = this.shadowSide;
   	// if ( this.sizeAttenuation != null ) data.sizeAttenuation = this.sizeAttenuation;
 
   	if ( this.blending != NormalBlending ) data["blending"] = this.blending;
@@ -452,6 +455,7 @@ class Material with EventDispatcher {
   	data["depthFunc"] = this.depthFunc;
   	data["depthTest"] = this.depthTest;
   	data["depthWrite"] = this.depthWrite;
+    data["colorWrite"] = this.colorWrite;
 
   	data["stencilWrite"] = this.stencilWrite;
   	data["stencilWriteMask"] = this.stencilWriteMask;
@@ -477,6 +481,7 @@ class Material with EventDispatcher {
   	// if ( this.dithering == true ) data.dithering = true;
 
   	// if ( this.alphaTest > 0 ) data.alphaTest = this.alphaTest;
+    // if ( this.alphaToCoverage == true ) data.alphaToCoverage = this.alphaToCoverage;
   	// if ( this.premultipliedAlpha == true ) data.premultipliedAlpha = this.premultipliedAlpha;
 
   	// if ( this.wireframe == true ) data.wireframe = this.wireframe;
@@ -591,6 +596,7 @@ class Material with EventDispatcher {
     this.dithering = source.dithering;
 
     this.alphaTest = source.alphaTest;
+    this.alphaToCoverage = source.alphaToCoverage;
     this.premultipliedAlpha = source.premultipliedAlpha;
 
     this.visible = source.visible;

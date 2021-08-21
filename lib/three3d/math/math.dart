@@ -91,5 +91,9 @@ class Math {
     return math.exp(x);
   }
 
+  static double log2(num x) {
+    return log(x) / LN2;
+  }
+
 
 }

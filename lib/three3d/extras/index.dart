@@ -1,7 +1,12 @@
 library three_extra;
 
+import 'package:three_dart/three3d/cameras/index.dart';
+import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
+import 'package:three_dart/three3d/objects/index.dart';
+import 'package:three_dart/three3d/renderers/index.dart';
+import 'package:three_dart/three_dart.dart';
 import '../dartHelpers.dart';
 
 
@@ -24,3 +29,4 @@ part './curves/CatmullRomCurve3.dart';
 
 part './Earcut.dart';
 part './ShapeUtils.dart';
+part './PMREMGenerator.dart';

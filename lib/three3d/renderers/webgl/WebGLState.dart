@@ -359,6 +359,10 @@ class WebGLState {
     }
 
     setPolygonOffset(material.polygonOffset, material.polygonOffsetFactor, material.polygonOffsetUnits);
+
+    material.alphaToCoverage == true
+			? enable( gl.SAMPLE_ALPHA_TO_COVERAGE )
+			: disable( gl.SAMPLE_ALPHA_TO_COVERAGE );
   }
 
   //
@@ -530,7 +534,8 @@ class WebGLState {
 		gl.disable( gl.POLYGON_OFFSET_FILL );
 		gl.disable( gl.SCISSOR_TEST );
 		gl.disable( gl.STENCIL_TEST );
-
+    gl.disable( gl.SAMPLE_ALPHA_TO_COVERAGE );
+    
 		gl.blendEquation( gl.FUNC_ADD );
 		gl.blendFunc( gl.ONE, gl.ZERO );
 		gl.blendFuncSeparate( gl.ONE, gl.ZERO, gl.ONE, gl.ZERO );

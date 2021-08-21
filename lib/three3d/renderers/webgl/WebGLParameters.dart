@@ -108,6 +108,8 @@ class WebGLParameters {
 
   Map<String, dynamic>? uniforms;
 
+  dynamic vertexAlphas;
+
 
   WebGLParameters(Map<String, dynamic> json) {
     isWebGL2 = json["isWebGL2"];
@@ -217,6 +219,8 @@ class WebGLParameters {
     customProgramCacheKey = json["customProgramCacheKey"] ?? "";
 
     uniforms = json["uniforms"];
+
+    vertexAlphas = json["vertexAlphas"];
   }
 
 
@@ -334,8 +338,9 @@ class WebGLParameters {
       "rendererExtensionDrawBuffers": rendererExtensionDrawBuffers,
       "rendererExtensionShaderTextureLod": rendererExtensionShaderTextureLod,
 
-       "customProgramCacheKey": customProgramCacheKey,
-      "uniforms": uniforms
+      "customProgramCacheKey": customProgramCacheKey,
+      "uniforms": uniforms,
+      "vertexAlphas": vertexAlphas
     };
 
     return _json;

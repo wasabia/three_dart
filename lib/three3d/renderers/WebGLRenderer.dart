@@ -8,7 +8,7 @@ class WebGLRenderer {
   bool alpha = false;
   bool depth = true;
   bool stencil = true;
-  bool antialias = false;
+  bool _antialias = false;
   bool premultipliedAlpha = true;
   bool preserveDrawingBuffer = false;
   String powerPreference = "default";
@@ -67,8 +67,11 @@ class WebGLRenderer {
   int maxMorphTargets = 8;
   int maxMorphNormals = 4;
 
-  late num width;
-  late num height;
+  late num _width;
+  late num _height;
+
+  num get width => _width;
+  num get height => _height;
 
   late Vector4 _viewport;
   late Vector4 _scissor;
@@ -81,13 +84,16 @@ class WebGLRenderer {
 
   var _framebuffer = null;
 
+
   int _currentActiveCubeFace = 0;
   int _currentActiveMipmapLevel = 0;
   RenderTarget? _currentRenderTarget;
-  var _currentFramebuffer = null;
-  int currentMaterialId = -1;
 
-  var currentCamera = null;
+  var _currentMaterialId = - 1;
+	var _currentCamera = null;
+
+  var _currentFramebuffer = null;
+
 
   var _currentViewport = Vector4.init();
   var _currentScissor = Vector4.init();
@@ -109,6 +115,10 @@ class WebGLRenderer {
 
   bool _clippingEnabled = false;
   bool _localClippingEnabled = false;
+
+  // transmission
+
+	var _transmissionRenderTarget = null;
 
   // camera matrices cache
 
@@ -135,6 +145,7 @@ class WebGLRenderer {
   late WebGLProperties properties;
   late WebGLTextures textures;
   late WebGLCubeMaps cubemaps;
+  late WebGLCubeUVMaps cubeuvmaps;
   late WebGLAttributes attributes;
   late WebGLGeometries geometries;
   late WebGLObjects objects;
@@ -160,13 +171,13 @@ class WebGLRenderer {
   WebGLRenderer(Map<String, dynamic>? parameters) {
     this.parameters = parameters ?? Map<String, dynamic>();
 
-    width = this.parameters["width"];
-    height = this.parameters["height"];
+    _width = this.parameters["width"];
+    _height = this.parameters["height"];
 
     alpha = this.parameters["alpha"] ?? false;
     depth = this.parameters["depth"] ?? true;
     stencil = this.parameters["stencil"] ?? true;
-    antialias = this.parameters["antialias"] ?? false;
+    _antialias = this.parameters["antialias"] ?? false;
     premultipliedAlpha = this.parameters["premultipliedAlpha"] ?? true;
     preserveDrawingBuffer = this.parameters["preserveDrawingBuffer"] ?? false;
     powerPreference = this.parameters["powerPreference"] ?? "default";
@@ -210,6 +221,7 @@ class WebGLRenderer {
         _gl, extensions, state, properties, capabilities, utils, info);
 
     cubemaps = WebGLCubeMaps(this);
+    cubeuvmaps = WebGLCubeUVMaps( this );
     attributes = WebGLAttributes(_gl, capabilities);
     bindingStates =
         WebGLBindingStates(_gl, extensions, attributes, capabilities);
@@ -291,8 +303,8 @@ class WebGLRenderer {
 
     // }
 
-    this.width = width;
-    this.height = height;
+    this._width = width;
+    this._height = height;
 
     // print(" WebGLRenderer setSize ......... ");
 
@@ -324,8 +336,8 @@ class WebGLRenderer {
   }
 
   setDrawingBufferSize(width, height, pixelRatio) {
-    this.width = width;
-    this.height = height;
+    this._width = width;
+    this._height = height;
 
     _pixelRatio = pixelRatio;
 
@@ -447,6 +459,13 @@ class WebGLRenderer {
     cubemaps.dispose();
     objects.dispose();
     bindingStates.dispose();
+
+    if ( _transmissionRenderTarget != null ) {
+
+			_transmissionRenderTarget.dispose();
+			_transmissionRenderTarget = null;
+
+		}
   }
 
   // Events
@@ -681,12 +700,12 @@ class WebGLRenderer {
             var material2 = material[i];
 
             if (compiled.has(material2) == false) {
-              initMaterial(material2, scene, object);
+              getProgram(material2, scene, object);
               compiled.add(key: material2, value: null);
             }
           }
         } else if (compiled.has(material) == false) {
-          initMaterial(material, scene, object);
+          getProgram(material, scene, object);
           compiled.add(key: material, value: null);
         }
       }
@@ -715,8 +734,8 @@ class WebGLRenderer {
     // reset caching for this frame
 
     bindingStates.resetDefaultState();
-    currentMaterialId = -1;
-    currentCamera = null;
+    _currentMaterialId = -1;
+    _currentCamera = null;
 
     // update scene graph
 
@@ -950,6 +969,53 @@ class WebGLRenderer {
     }
   }
 
+  renderTransmissiveObjects( opaqueObjects, transmissiveObjects, scene, camera ) {
+
+		if ( _transmissionRenderTarget == null ) {
+
+			var needsAntialias = _antialias == true && capabilities.isWebGL2 == true;
+			// var renderTargetType = needsAntialias ? WebGLMultisampleRenderTarget : WebGLRenderTarget;
+
+      var _opts = WebGLRenderTargetOptions({
+        "generateMipmaps": true,
+        "type": utils.convert( HalfFloatType ) != null ? HalfFloatType : UnsignedByteType,
+        "minFilter": LinearMipmapLinearFilter,
+        "magFilter": NearestFilter,
+        "wrapS": ClampToEdgeWrapping,
+        "wrapT": ClampToEdgeWrapping
+      });
+
+      if(needsAntialias) {
+        _transmissionRenderTarget = new WebGLMultisampleRenderTarget( 1024, 1024, _opts );
+      } else {
+        _transmissionRenderTarget = new WebGLRenderTarget( 1024, 1024, _opts );
+      }
+			
+
+		}
+
+		var currentRenderTarget = this.getRenderTarget();
+		this.setRenderTarget( _transmissionRenderTarget );
+		this.clear(true, true, true);
+
+		// Turn off the features which can affect the frag color for opaque objects pass.
+		// Otherwise they are applied twice in opaque objects pass and transmission objects pass.
+		var currentToneMapping = this.toneMapping;
+		this.toneMapping = NoToneMapping;
+
+		renderObjects( opaqueObjects, scene, camera );
+
+		this.toneMapping = currentToneMapping;
+
+		textures.updateMultisampleRenderTarget( _transmissionRenderTarget );
+		textures.updateRenderTargetMipmap( _transmissionRenderTarget );
+
+		this.setRenderTarget( currentRenderTarget );
+
+		renderObjects( transmissiveObjects, scene, camera );
+
+	}
+
   renderObjects(renderList, scene, camera) {
     var overrideMaterial = scene.isScene == true ? scene.overrideMaterial : null;
 
@@ -1023,80 +1089,100 @@ class WebGLRenderer {
         group: group);
   }
 
-  initMaterial(Material material, Scene scene, Object3D object) {
-    if (scene.isScene != true) scene = _emptyScene; 
-    // scene could be a Mesh, Line, Points, ...
-   
-    var materialProperties = properties.get(material);
+  getProgram( material, scene, object ) {
 
-    var lights = currentRenderState!.state.lights;
-    var shadowsArray = currentRenderState!.state.shadowsArray;
+		if ( scene.isScene != true ) scene = _emptyScene; // scene could be a Mesh, Line, Points, ...
 
-    var lightsStateVersion = lights.state.version;
+		var materialProperties = properties.get( material );
 
-    var parameters = programCache.getParameters(material, lights.state, shadowsArray, scene, object);
+		var lights = currentRenderState!.state.lights;
+		var shadowsArray = currentRenderState!.state.shadowsArray;
 
-    var programCacheKey = programCache.getProgramCacheKey(parameters);
+		var lightsStateVersion = lights.state.version;
 
-    var program = materialProperties["program"];
-    var programChange = true;
+		var parameters = programCache.getParameters( material, lights.state, shadowsArray, scene, object );
+		var programCacheKey = programCache.getProgramCacheKey( parameters );
 
-    // always update environment and fog - changing these trigger an initMaterial call, but it's possible that the program doesn't change
+		var programs = materialProperties["programs"];
+
+		// always update environment and fog - changing these trigger an getProgram call, but it's possible that the program doesn't change
+
 		materialProperties["environment"] = material.isMeshStandardMaterial ? scene.environment : null;
 		materialProperties["fog"] = scene.fog;
-    materialProperties["envMap"] = cubemaps.get( material.envMap ?? materialProperties["environment"] );
 
-    if (program == null) {
-      // new material
-      material.addEventListener('dispose', onMaterialDispose);
-    } else if (program.cacheKey != programCacheKey) {
-      // changed glsl or parameters
-      releaseMaterialProgramReference(material);
-    } else if (materialProperties["lightsStateVersion"] != lightsStateVersion) {
-      programChange = false;
-    } else if (parameters.shaderID != null) {
-      // same glsl and uniform list, envMap still needs the update here to avoid a frame-late effect
-
-
-      return;
+    var _envMap;
+    if(material.isMeshStandardMaterial) {
+      _envMap = cubeuvmaps.get( material.envMap ?? materialProperties["environment"] );
     } else {
-      // only rebuild uniform list
-      programChange = false;
+      _envMap = cubemaps.get( material.envMap ?? materialProperties["environment"] );
     }
 
-    if (programChange) {
-      parameters.uniforms = programCache.getUniforms(material);
+		materialProperties["envMap"] = _envMap;
 
-      if(material.onBeforeCompile != null) {
-        material.onBeforeCompile!(parameters, this);
+		if ( programs == null ) {
+
+			// new material
+
+			material.addEventListener( 'dispose', onMaterialDispose );
+
+			programs = new Map();
+			materialProperties["programs"] = programs;
+
+		}
+
+		var program = programs[programCacheKey];
+
+		if ( program != null ) {
+
+			// early out if program and light state is identical
+
+			if ( materialProperties["currentProgram"] == program && materialProperties["lightsStateVersion"] == lightsStateVersion ) {
+
+				updateCommonMaterialProperties( material, parameters );
+
+				return program;
+
+			}
+
+		} else {
+
+			parameters.uniforms = programCache.getUniforms( material );
+
+			material.onBuild( parameters, this );
+
+      if( material.onBeforeCompile != null) {
+        material.onBeforeCompile( parameters, this );
       }
-      
+			
 
-      program = programCache.acquireProgram(parameters, programCacheKey);
+			program = programCache.acquireProgram( parameters, programCacheKey );
+			programs[programCacheKey] = program;
 
-      materialProperties["program"] = program;
-      materialProperties["uniforms"] = parameters.uniforms;
-      materialProperties["outputEncoding"] = parameters.outputEncoding;
-    }
+			materialProperties["uniforms"] = parameters.uniforms;
 
-    var uniforms = materialProperties["uniforms"];
+		}
 
-    if (!material.isShaderMaterial && !material.isRawShaderMaterial ||
-        material.clipping == true) {
-      materialProperties["numClippingPlanes"] = clipping.numPlanes;
-      materialProperties["numIntersection"] = clipping.numIntersection;
-      uniforms["clippingPlanes"] = clipping.uniform;
-    }
+		Map<String, dynamic> uniforms = materialProperties["uniforms"];
 
-    // store the light setup it was created for
+		if ( ( ! material.isShaderMaterial && ! material.isRawShaderMaterial ) || material.clipping == true ) {
 
-    materialProperties["needsLights"] = materialNeedsLights(material);
-    materialProperties["lightsStateVersion"] = lightsStateVersion;
+			uniforms["clippingPlanes"] = clipping.uniform;
 
-    if (materialProperties["needsLights"] == true) {
-      // wire up the material to this renderer's lighting state
+		}
 
-      uniforms["ambientLightColor"]["value"] = lights.state.ambient;
+		updateCommonMaterialProperties( material, parameters );
+
+		// store the light setup it was created for
+
+		materialProperties["needsLights"] = materialNeedsLights( material );
+		materialProperties["lightsStateVersion"] = lightsStateVersion;
+
+
+		if ( materialProperties["needsLights"] == true ) {
+
+			// wire up the material to this renderer's lighting state
+
+			uniforms["ambientLightColor"]["value"] = lights.state.ambient;
       uniforms["lightProbe"]["value"] = lights.state.probe;
       uniforms["directionalLights"]["value"] = lights.state.directional;
       uniforms["directionalLightShadows"]["value"] = lights.state.directionalShadow;
@@ -1115,289 +1201,343 @@ class WebGLRenderer {
       uniforms["spotShadowMatrix"]["value"] = lights.state.spotShadowMatrix;
       uniforms["pointShadowMap"]["value"] = lights.state.pointShadowMap;
       uniforms["pointShadowMatrix"]["value"] = lights.state.pointShadowMatrix;
-      // TODO (abelnation): add area lights shadow info to uniforms
 
-    }
+			// TODO (abelnation): add area lights shadow info to uniforms
+		}
 
-    var progUniforms = materialProperties["program"].getUniforms();
-    var uniformsList = WebGLUniforms.seqWithValue(progUniforms.seq, uniforms);
+		var progUniforms = program.getUniforms();
+		var uniformsList = WebGLUniforms.seqWithValue( progUniforms.seq, uniforms );
 
-    // print(" init material ...............object: ${object.type} material: ${material} id: ${material.id} map: ${material.map} ");
-    // print(uniforms);
-    // print("uniformsList ------------------- ");
-    // print(uniformsList);
+		materialProperties["currentProgram"] = program;
+		materialProperties["uniformsList"] = uniformsList;
 
-    // print(" -------------progUniforms ");
-    // print(progUniforms.seq.map((e) => e.id));
+		return program;
 
-    // print(" -------------uniforms ");
-    // print(uniforms);
+	}
 
-    materialProperties["uniformsList"] = uniformsList;
-  }
+  updateCommonMaterialProperties( material, parameters ) {
 
-  WebGLProgram setProgram(Camera camera, dynamic scene, Material material, object) {
-    if (scene.isScene != true) scene = _emptyScene; 
-    // scene could be a Mesh, Line, Points, ...
-    
+		var materialProperties = properties.get( material );
 
-    textures.resetTextureUnits();
+		materialProperties["outputEncoding"] = parameters.outputEncoding;
+		materialProperties["instancing"] = parameters.instancing;
+		materialProperties["skinning"] = parameters.skinning;
+		materialProperties["morphTargets"] = parameters.morphTargets;
+		materialProperties["morphNormals"] = parameters.morphNormals;
+		materialProperties["numClippingPlanes"] = parameters.numClippingPlanes;
+		materialProperties["numIntersection"] = parameters.numClipIntersection;
+		materialProperties["vertexAlphas"] = parameters.vertexAlphas;
+		materialProperties["vertexTangents"] = parameters.vertexTangents;
 
-    var fog = scene.fog;
-    var environment = material.isMeshStandardMaterial ? scene.environment : null;
-    var encoding = (_currentRenderTarget == null)
-        ? this.outputEncoding
-        : _currentRenderTarget!.texture.encoding;
-    var envMap = cubemaps.get(material.envMap ?? environment);
+	}
 
-    var materialProperties = properties.get(material);
+  setProgram( Camera camera, scene, Material material, object ) {
 
-    var lights = currentRenderState!.state.lights;
+		if ( scene.isScene != true ) scene = _emptyScene; // scene could be a Mesh, Line, Points, ...
 
-    if (_clippingEnabled == true) {
-      if (_localClippingEnabled == true || camera != currentCamera) {
-        bool useCache = camera == currentCamera && material.id == currentMaterialId;
+		textures.resetTextureUnits();
 
-        // we might want to call this function with some ClippingGroup
-        // object instead of the material, once it becomes feasible
-        // (#8465, #8379)
-       
-        clipping.setState(material, camera, useCache);
-      }
-    }
+		var fog = scene.fog;
+		var environment = material.isMeshStandardMaterial ? scene.environment : null;
+		var encoding = ( _currentRenderTarget == null ) ? this.outputEncoding : _currentRenderTarget!.texture.encoding;
 
-
-    if (material.version == materialProperties["__version"]) {
-      if (material.fog && materialProperties["fog"] != fog) {
-        initMaterial(material, scene, object);
-      } else if (materialProperties["environment"] != environment) {
-        initMaterial(material, scene, object);
-      } else if (materialProperties["needsLights"] &&
-          (materialProperties["lightsStateVersion"] != lights.state.version)) {
-        initMaterial(material, scene, object);
-      } else if (materialProperties["numClippingPlanes"] != null &&
-          (materialProperties["numClippingPlanes"] != clipping.numPlanes ||
-              materialProperties["numIntersection"] !=
-                  clipping.numIntersection)) {
-        initMaterial(material, scene, object);
-      } else if (materialProperties["outputEncoding"] != encoding) {
-        initMaterial(material, scene, object);
-      } else if (materialProperties["envMap"] != envMap) {
-        initMaterial(material, scene, object);
-      }
+    var envMap;
+    if(material.isMeshStandardMaterial) {
+      envMap = cubeuvmaps.get( material.envMap ?? environment );
     } else {
-      initMaterial(material, scene, object);
-      materialProperties["__version"] = material.version;
+      envMap = cubemaps.get( material.envMap ?? environment );
     }
+    
+		var vertexAlphas = material.vertexColors == true && object.geometry != null && object.geometry.attributes["color"] != null && object.geometry.attributes.color.itemSize == 4;
+		var vertexTangents = object.geometry != null && object.geometry.attributes["tangent"] != null;
+		var morphTargets = object.geometry != null && object.geometry.morphAttributes["position"] != null;
+		var morphNormals = object.geometry != null && object.geometry.morphAttributes["normal"] != null;
 
-    var refreshProgram = false;
-    var refreshMaterial = false;
-    var refreshLights = false;
+		Map<String, dynamic> materialProperties = properties.get( material );
+		var lights = currentRenderState!.state.lights;
 
-    // print(materialProperties);
-    // print("-------------materialProperties------------------");
+		if ( _clippingEnabled == true ) {
 
-    WebGLProgram program = materialProperties["program"];
-    var p_uniforms = program.getUniforms();
-    var m_uniforms = materialProperties["uniforms"];
+			if ( _localClippingEnabled == true || camera != _currentCamera ) {
 
-    if (state.useProgram(program.program)) {
-      refreshProgram = true;
-      refreshMaterial = true;
-      refreshLights = true;
-    }
+				var useCache =
+					camera == _currentCamera &&
+					material.id == _currentMaterialId;
 
-    if (material.id != currentMaterialId) {
-      currentMaterialId = material.id;
+				// we might want to call this function with some ClippingGroup
+				// object instead of the material, once it becomes feasible
+				// (#8465, #8379)
+				clipping.setState( material, camera, useCache );
 
-      refreshMaterial = true;
-    }
+			}
 
-    if (refreshProgram || currentCamera != camera) {
-      p_uniforms.setValue(
-          _gl, 'projectionMatrix', camera.projectionMatrix, null);
+		}
 
-      if (capabilities.logarithmicDepthBuffer) {
-        p_uniforms.setValue(_gl, 'logDepthBufFC',
-            2.0 / (Math.log(camera.far + 1.0) / Math.LN2), null);
-      }
+		//
 
-      if (currentCamera != camera) {
-        currentCamera = camera;
+		bool needsProgramChange = false;
 
-        // lighting uniforms depend on the camera so enforce an update
-        // now, in case this material supports lights - or later, when
-        // the next material that does gets activated:
+		if ( material.version == materialProperties["__version"] ) {
 
-        refreshMaterial = true; // set to true on material change
-        refreshLights = true; // remains set until update done
+			if ( materialProperties["needsLights"] && ( materialProperties["lightsStateVersion"] != lights.state.version ) ) {
 
-      }
+				needsProgramChange = true;
 
-      // load material specific uniforms
-      // (shader material also gets them for the sake of genericity)
+			} else if ( materialProperties["outputEncoding"] != encoding ) {
 
-      if (material.isShaderMaterial ||
-          material.isMeshPhongMaterial ||
-          material.isMeshToonMaterial ||
-          material.isMeshStandardMaterial ||
-          material.envMap != null) {
-        var uCamPos = p_uniforms.map["cameraPosition"];
+				needsProgramChange = true;
 
-        if (uCamPos != null) {
-          uCamPos.setValue(
-              _gl, _vector3.setFromMatrixPosition(camera.matrixWorld));
-        }
-      }
+			} else if ( object.isInstancedMesh && materialProperties["instancing"] == false ) {
 
-      if (material.isMeshPhongMaterial ||
-          material.isMeshToonMaterial ||
-          material.isMeshLambertMaterial ||
-          material.isMeshBasicMaterial ||
-          material.isMeshStandardMaterial ||
-          material.isShaderMaterial) {
-        p_uniforms.setValue(
-            _gl, 'isOrthographic', camera.isOrthographicCamera == true, null);
-      }
+				needsProgramChange = true;
 
-      if (material.isMeshPhongMaterial ||
-          material.isMeshToonMaterial ||
-          material.isMeshLambertMaterial ||
-          material.isMeshBasicMaterial ||
-          material.isMeshStandardMaterial ||
-          material.isShaderMaterial ||
-          material.isShadowMaterial ||
-          material.skinning) {
-        p_uniforms.setValue(_gl, 'viewMatrix', camera.matrixWorldInverse, null);
-      }
-    }
+			} else if ( ! object.isInstancedMesh && materialProperties["instancing"] == true ) {
 
-    // skinning uniforms must be set even if material didn't change
-    // auto-setting of texture unit for bone texture must go before other textures
-    // otherwise textures used for skinning can take over texture units reserved for other material textures
+				needsProgramChange = true;
 
-    if (material.skinning) {
-      p_uniforms.setOptional(_gl, object, 'bindMatrix');
-      p_uniforms.setOptional(_gl, object, 'bindMatrixInverse');
+			} else if ( object.isSkinnedMesh && materialProperties["skinning"] == false ) {
 
-      Skeleton? skeleton = object.skeleton;
+				needsProgramChange = true;
 
-      if (skeleton != null) {
-        var bones = skeleton.bones;
+			} else if ( ! object.isSkinnedMesh && materialProperties["skinning"] == true ) {
 
-        // print(" skeleton.boneMatrices ");
-				// print(skeleton.boneMatrices);
+				needsProgramChange = true;
 
-        if (capabilities.floatVertexTextures) {
-          if (skeleton.boneTexture == null) {
-            // layout (1 matrix = 4 pixels)
-            //      RGBA RGBA RGBA RGBA (=> column1, column2, column3, column4)
-            //  with  8x8  pixel texture max   16 bones * 4 pixels =  (8 * 8)
-            //       16x16 pixel texture max   64 bones * 4 pixels = (16 * 16)
-            //       32x32 pixel texture max  256 bones * 4 pixels = (32 * 32)
-            //       64x64 pixel texture max 1024 bones * 4 pixels = (64 * 64)
+			} else if ( materialProperties["envMap"] != envMap ) {
 
-            var size = Math.sqrt(bones.length * 4); 
-            // 4 pixels needed for 1 matrix
-            
-            size = MathUtils.ceilPowerOfTwo(size);
-            int size2 = Math.max(size, 4).toInt();
+				needsProgramChange = true;
 
-            var boneMatrices = Float32List(size2 * size2 * 4); 
-            // 4 floats per RGBA pixel
-        
-            setList(boneMatrices, skeleton.boneMatrices);
-            
-            var boneTexture = DataTexture(
-                boneMatrices,
-                size2,
-                size2,
-                RGBAFormat,
-                FloatType,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
+			} else if ( material.fog && materialProperties["fog"] != fog ) {
 
-      
-            skeleton.boneMatrices = boneMatrices;
-            skeleton.boneTexture = boneTexture;
-            skeleton.boneTextureSize = size2;
-          }
+				needsProgramChange = true;
 
-          p_uniforms.setValue(
-              _gl, 'boneTexture', skeleton.boneTexture, textures);
-          p_uniforms.setValue(
-              _gl, 'boneTextureSize', skeleton.boneTextureSize, null);
-        } else {
-          p_uniforms.setOptional(_gl, skeleton, 'boneMatrices');
-        }
-      }
-    }
+			} else if ( materialProperties["numClippingPlanes"] != null &&
+				( materialProperties["numClippingPlanes"] != clipping.numPlanes ||
+				materialProperties["numIntersection"] != clipping.numIntersection ) ) {
 
-    if (refreshMaterial ||
-        materialProperties["receiveShadow"] != object.receiveShadow) {
-      materialProperties["receiveShadow"] = object.receiveShadow;
-      p_uniforms.setValue(_gl, 'receiveShadow', object.receiveShadow, null);
-    }
+				needsProgramChange = true;
 
-    if (refreshMaterial) {
-      p_uniforms.setValue(
-          _gl, 'toneMappingExposure', this.toneMappingExposure, null);
+			} else if ( materialProperties["vertexAlphas"] != vertexAlphas ) {
 
-      if (materialProperties["needsLights"]) {
-        // the current material requires lighting info
+				needsProgramChange = true;
 
-        // note: all lighting uniforms are always set correctly
-        // they simply reference the renderer's state for their
-        // values
-        //
-        // use the current material's .needsUpdate flags to set
-        // the GL state when required
+			} else if ( materialProperties["vertexTangents"] != vertexTangents ) {
 
-        markUniformsLightsNeedsUpdate(m_uniforms, refreshLights);
-      }
+				needsProgramChange = true;
 
-      // refresh uniforms common to several materials
+			} else if ( materialProperties["morphTargets"] != morphTargets ) {
 
-      if (fog != null && material.fog) {
-        materials.refreshFogUniforms(m_uniforms, fog);
-      }
+				needsProgramChange = true;
 
-      materials.refreshMaterialUniforms(
-          m_uniforms, material, _pixelRatio, height);
+			} else if ( materialProperties["morphNormals"] != morphNormals ) {
 
-      WebGLUniforms.upload(
-          _gl, materialProperties["uniformsList"], m_uniforms, textures, object, material);
-    }
+				needsProgramChange = true;
 
-    if (material.isShaderMaterial && material.uniformsNeedUpdate == true) {
-      WebGLUniforms.upload(
-          _gl, materialProperties["uniformsList"], m_uniforms, textures, object, material);
-      material.uniformsNeedUpdate = false;
-    }
+			}
 
-    if (material.isSpriteMaterial) {
-      p_uniforms.setValue(_gl, 'center', object.center, null);
-    }
+		} else {
 
-    // common matrices
+			needsProgramChange = true;
+			materialProperties["__version"] = material.version;
 
-    p_uniforms.setValue(_gl, 'modelViewMatrix', object.modelViewMatrix, null);
-    p_uniforms.setValue(_gl, 'normalMatrix', object.normalMatrix, null);
-    p_uniforms.setValue(_gl, 'modelMatrix', object.matrixWorld, null);
+		}
 
-    // print("WebGLRender.setProgram object.modelViewMatrix: ${object.modelViewMatrix.toJSON()}  ");
-    // print("WebGLRender.setProgram object.normalMatrix: ${object.normalMatrix.toJSON()}  ");
-    // print("WebGLRender.setProgram object.matrixWorld: ${object.matrixWorld.toJSON()}  ");
+		//
 
-    return program;
-  }
+		var program = materialProperties["currentProgram"];
 
-  // If uniforms are marked as clean, they don't need to be loaded to the GPU.
+		if ( needsProgramChange == true ) {
+
+			program = getProgram( material, scene, object );
+
+		}
+
+		bool refreshProgram = false;
+		bool refreshMaterial = false;
+		bool refreshLights = false;
+
+		var p_uniforms = program.getUniforms(),
+			m_uniforms = materialProperties["uniforms"];
+
+		if ( state.useProgram( program.program ) ) {
+
+			refreshProgram = true;
+			refreshMaterial = true;
+			refreshLights = true;
+
+		}
+
+		if ( material.id != _currentMaterialId ) {
+
+			_currentMaterialId = material.id;
+
+			refreshMaterial = true;
+
+		}
+
+		if ( refreshProgram || _currentCamera != camera ) {
+
+			p_uniforms.setValue( _gl, 'projectionMatrix', camera.projectionMatrix, textures );
+
+			if ( capabilities.logarithmicDepthBuffer ) {
+
+				p_uniforms.setValue( _gl, 'logDepthBufFC',
+					2.0 / ( Math.log( camera.far + 1.0 ) / Math.LN2 ), textures );
+
+			}
+
+			if ( _currentCamera != camera ) {
+
+				_currentCamera = camera;
+
+				// lighting uniforms depend on the camera so enforce an update
+				// now, in case this material supports lights - or later, when
+				// the next material that does gets activated:
+
+				refreshMaterial = true;		// set to true on material change
+				refreshLights = true;		// remains set until update done
+
+			}
+
+			// load material specific uniforms
+			// (shader material also gets them for the sake of genericity)
+
+			if ( material.isShaderMaterial ||
+				material.isMeshPhongMaterial ||
+				material.isMeshToonMaterial ||
+				material.isMeshStandardMaterial ||
+				material.envMap != null ) {
+
+				var uCamPos = p_uniforms.map["cameraPosition"];
+
+				if ( uCamPos != null ) {
+
+					uCamPos.setValue( _gl,
+						_vector3.setFromMatrixPosition( camera.matrixWorld ) );
+
+				}
+
+			}
+
+			if ( material.isMeshPhongMaterial ||
+				material.isMeshToonMaterial ||
+				material.isMeshLambertMaterial ||
+				material.isMeshBasicMaterial ||
+				material.isMeshStandardMaterial ||
+				material.isShaderMaterial ) {
+
+				p_uniforms.setValue( _gl, 'isOrthographic', camera.isOrthographicCamera == true, textures );
+
+			}
+
+			if ( material.isMeshPhongMaterial ||
+				material.isMeshToonMaterial ||
+				material.isMeshLambertMaterial ||
+				material.isMeshBasicMaterial ||
+				material.isMeshStandardMaterial ||
+				material.isShaderMaterial ||
+				material.isShadowMaterial ||
+				object.isSkinnedMesh ) {
+
+				p_uniforms.setValue( _gl, 'viewMatrix', camera.matrixWorldInverse, textures );
+
+			}
+
+		}
+
+		// skinning uniforms must be set even if material didn't change
+		// auto-setting of texture unit for bone texture must go before other textures
+		// otherwise textures used for skinning can take over texture units reserved for other material textures
+
+		if ( object.isSkinnedMesh ) {
+
+			p_uniforms.setOptional( _gl, object, 'bindMatrix' );
+			p_uniforms.setOptional( _gl, object, 'bindMatrixInverse' );
+
+			var skeleton = object.skeleton;
+
+			if ( skeleton ) {
+
+				if ( capabilities.floatVertexTextures ) {
+
+					if ( skeleton.boneTexture == null ) skeleton.computeBoneTexture();
+
+					p_uniforms.setValue( _gl, 'boneTexture', skeleton.boneTexture, textures );
+					p_uniforms.setValue( _gl, 'boneTextureSize', skeleton.boneTextureSize, textures );
+
+				} else {
+
+					p_uniforms.setOptional( _gl, skeleton, 'boneMatrices' );
+
+				}
+
+			}
+
+		}
+
+		if ( refreshMaterial || materialProperties["receiveShadow"] != object.receiveShadow ) {
+
+			materialProperties["receiveShadow"] = object.receiveShadow;
+			p_uniforms.setValue( _gl, 'receiveShadow', object.receiveShadow, textures );
+
+		}
+
+		if ( refreshMaterial ) {
+
+			p_uniforms.setValue( _gl, 'toneMappingExposure', this.toneMappingExposure, textures );
+
+			if ( materialProperties["needsLights"] ) {
+
+				// the current material requires lighting info
+
+				// note: all lighting uniforms are always set correctly
+				// they simply reference the renderer's state for their
+				// values
+				//
+				// use the current material's .needsUpdate flags to set
+				// the GL state when required
+
+				markUniformsLightsNeedsUpdate( m_uniforms, refreshLights );
+
+			}
+
+			// refresh uniforms common to several materials
+
+			if ( fog != null && material.fog ) {
+
+				materials.refreshFogUniforms( m_uniforms, fog );
+
+			}
+
+			materials.refreshMaterialUniforms( m_uniforms, material, _pixelRatio, _height, _transmissionRenderTarget );
+
+			WebGLUniforms.upload( _gl, materialProperties["uniformsList"], m_uniforms, textures );
+
+		}
+
+		if ( material.isShaderMaterial && material.uniformsNeedUpdate == true ) {
+
+			WebGLUniforms.upload( _gl, materialProperties["uniformsList"], m_uniforms, textures );
+			material.uniformsNeedUpdate = false;
+
+		}
+
+		if ( material.isSpriteMaterial ) {
+
+			p_uniforms.setValue( _gl, 'center', object.center, textures );
+
+		}
+
+		// common matrices
+
+		p_uniforms.setValue( _gl, 'modelViewMatrix', object.modelViewMatrix, textures );
+		p_uniforms.setValue( _gl, 'normalMatrix', object.normalMatrix, textures );
+		p_uniforms.setValue( _gl, 'modelMatrix', object.matrixWorld, textures );
+
+		return program;
+
+	}
+
 
   markUniformsLightsNeedsUpdate(Map<String, dynamic> uniforms, value) {
     uniforms["ambientLightColor"]["needsUpdate"] = value;
@@ -1412,14 +1552,13 @@ class WebGLRenderer {
     uniforms["hemisphereLights"]["needsUpdate"] = value;
   }
 
-  materialNeedsLights(material) {
-    return material.isMeshLambertMaterial ||
-        material.isMeshToonMaterial ||
-        material.isMeshPhongMaterial ||
-        material.isMeshStandardMaterial ||
-        material.isShadowMaterial ||
-        (material.isShaderMaterial && material.lights == true);
-  }
+  materialNeedsLights( material ) {
+
+		return material.isMeshLambertMaterial || material.isMeshToonMaterial || material.isMeshPhongMaterial ||
+			material.isMeshStandardMaterial || material.isShadowMaterial ||
+			( material.isShaderMaterial && material.lights == true );
+
+	}
 
   //
   setFramebuffer(value) {

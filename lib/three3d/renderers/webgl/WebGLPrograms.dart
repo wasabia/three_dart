@@ -349,22 +349,18 @@ class WebGLPrograms {
 
 	Map<String, dynamic> getUniforms(Material material ) {
 
-    // print("WebGLPrograms.getUniforms material: ${material.type} ");
 
 		String? shaderID = shaderIDs[ material.shaderID ];
 		Map<String, dynamic> uniforms;
 
- 
 		if ( shaderID != null ) {
- 
 			var shader = ShaderLib[ shaderID ];
 			uniforms = cloneUniforms( shader["uniforms"] );
-
 		} else {
-
 			uniforms = material.uniforms!;
 
 		}
+
 
 		return uniforms;
 

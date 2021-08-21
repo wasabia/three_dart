@@ -40,6 +40,7 @@ class Points extends Object3D {
 		var geometry = this.geometry;
 		var matrixWorld = this.matrixWorld;
 		var threshold = raycaster.params["Points"].threshold;
+    var drawRange = geometry.drawRange;
 
 		// Checking boundingSphere distance to ray
 
@@ -59,43 +60,42 @@ class Points extends Object3D {
 		var localThreshold = threshold / ( ( this.scale.x + this.scale.y + this.scale.z ) / 3 );
 		var localThresholdSq = localThreshold * localThreshold;
 
-		if ( geometry.isBufferGeometry ) {
 
-			var index = geometry.index;
-			var attributes = geometry.attributes;
-			var positionAttribute = attributes["position"];
+    var index = geometry.index;
+    var attributes = geometry.attributes;
+    var positionAttribute = attributes["position"];
 
-			if ( index != null ) {
+    if ( index != null ) {
 
-				var indices = index.array;
+      var start = Math.max( 0, drawRange["start"]! );
+      var end = Math.min( index.count, ( drawRange["start"]! + drawRange["count"]! ) );
 
-				for ( var i = 0, il = indices.length; i < il; i ++ ) {
+      for ( var i = start, il = end; i < il; i ++ ) {
 
-					var a = indices[ i ];
+        var a = index.getX( i );
 
-					_position.fromBufferAttribute( positionAttribute, a.toInt() );
+        _position.fromBufferAttribute( positionAttribute, a.toInt() );
 
-					testPoint( _position, a, localThresholdSq, matrixWorld, raycaster, intersects, this );
+        testPoint( _position, a, localThresholdSq, matrixWorld, raycaster, intersects, this );
 
-				}
+      }
 
-			} else {
+    } else {
 
-				for ( var i = 0, l = positionAttribute.count; i < l; i ++ ) {
+      var start = Math.max( 0, drawRange["start"]! );
+      var end = Math.min( positionAttribute.count, ( drawRange["start"]! + drawRange["count"]! ) );
 
-					_position.fromBufferAttribute( positionAttribute, i );
+      for ( var i = start, l = end; i < l; i ++ ) {
 
-					testPoint( _position, i, localThresholdSq, matrixWorld, raycaster, intersects, this );
+        _position.fromBufferAttribute( positionAttribute, i );
 
-				}
+        testPoint( _position, i, localThresholdSq, matrixWorld, raycaster, intersects, this );
 
-			}
+      }
 
-		} else {
+    }
 
-			throw( 'THREE.Points.raycast() no longer supports THREE.Geometry. Use THREE.BufferGeometry instead.' );
-
-		}
+  
 
 	}
 
