@@ -10,7 +10,6 @@ part of three_materials;
  *  size: <float>,
  *  sizeAttenuation: <bool>
  *
- *  morphTargets: <bool>
  * }
  */
 
@@ -20,8 +19,7 @@ class PointsMaterial extends Material {
 
   String type = "PointsMaterial";
   bool isPointsMaterial = true;
-
-  bool morphTargets = false;
+  
   bool sizeAttenuation = true;
 
   Color? color = new Color( 1,1,1 );
@@ -45,8 +43,6 @@ class PointsMaterial extends Material {
 
     this.size = source.size;
     this.sizeAttenuation = source.sizeAttenuation;
-
-    this.morphTargets = source.morphTargets;
 
     return this;
 

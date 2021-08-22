@@ -29,7 +29,6 @@ part of three_materials;
  *  wireframe: <boolean>,
  *  wireframeLinewidth: <float>,
  *
- *  morphTargets: <bool>
  * }
  */
 
@@ -63,8 +62,6 @@ class MeshBasicMaterial extends Material {
     this.wireframeLinecap = 'round';
     this.wireframeLinejoin = 'round';
 
-    this.morphTargets = false;
-
     this.setValues(parameters);
   }
 
@@ -94,8 +91,6 @@ class MeshBasicMaterial extends Material {
     this.wireframeLinewidth = source.wireframeLinewidth;
     this.wireframeLinecap = source.wireframeLinecap;
     this.wireframeLinejoin = source.wireframeLinejoin;
-
-    this.morphTargets = source.morphTargets;
 
     return this;
   }

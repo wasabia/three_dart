@@ -273,12 +273,8 @@ class WebGLRenderer {
     this.setSize(width, height, false);
   }
 
-  getSize(target) {
-    if (target == null) {
-      print('WebGLRenderer: .getsize() now requires a Vector2 as an argument');
-      target = Vector2(0, 0);
-    }
-
+  getSize(Vector2 target) {
+    
     return target.set(width, height);
   }
 
@@ -308,13 +304,8 @@ class WebGLRenderer {
     this.setViewport(0, 0, width, height);
   }
 
-  Vector2 getDrawingBufferSize(target) {
-    if (target == null) {
-      print(
-          'WebGLRenderer: .getdrawingBufferSize() now requires a Vector2 as an argument');
-
-      target = new Vector2(0, 0);
-    }
+  Vector2 getDrawingBufferSize(Vector2 target) {
+    
     target.set(width * _pixelRatio, height * _pixelRatio);
 
     target.floor();
@@ -336,14 +327,8 @@ class WebGLRenderer {
     this.setViewport(0, 0, width, height);
   }
 
-  getCurrentViewport(target) {
-    if (target == null) {
-      print(
-          'WebGLRenderer: .getCurrentViewport() now requires a Vector4 as an argument');
-
-      target = new Vector4.init();
-    }
-
+  getCurrentViewport(Vector4 target) {
+    
     return target.copy(_currentViewport);
   }
 
@@ -392,14 +377,8 @@ class WebGLRenderer {
 
   // Clearing
 
-  getClearColor(target) {
-    if (target == null) {
-      print(
-          'WebGLRenderer: .getClearColor() now requires a Color as an argument');
-
-      target = new Color(0, 0, 0);
-    }
-
+  getClearColor(Color target) {
+    
     return target.copy(background.getClearColor());
   }
 
@@ -613,7 +592,7 @@ class WebGLRenderer {
       rangeFactor = 2;
     }
 
-    if (material.morphTargets || material.morphNormals) {
+    if (geometry.morphAttributes["position"] != null || geometry.morphAttributes["normal"] != null) {
       morphtargets.update(object, geometry, material, program);
     }
 
@@ -820,13 +799,12 @@ class WebGLRenderer {
 
   
     if (_currentRenderTarget != null) {
-      // Generate mipmap if we're using any kind of mipmap filtering
+      // resolve multisample renderbuffers to a single-sample texture if necessary
+      textures.updateMultisampleRenderTarget(_currentRenderTarget);
 
+      // Generate mipmap if we're using any kind of mipmap filtering
       textures.updateRenderTargetMipmap(_currentRenderTarget);
 
-      // resolve multisample renderbuffers to a single-sample texture if necessary
-
-      textures.updateMultisampleRenderTarget(_currentRenderTarget);
     }
 
     if (scene.isScene == true) {
@@ -1084,7 +1062,25 @@ class WebGLRenderer {
 
       renderObjectImmediate(object, program);
     } else {
-      this.renderBufferDirect(camera, scene, geometry, material, object, group);
+      // this.renderBufferDirect(camera, scene, geometry, material, object, group);
+
+      if ( material.transparent == true && material.side == DoubleSide ) {
+
+				material.side = BackSide;
+				material.needsUpdate = true;
+				this.renderBufferDirect( camera, scene, geometry, material, object, group );
+
+				material.side = FrontSide;
+				material.needsUpdate = true;
+				this.renderBufferDirect( camera, scene, geometry, material, object, group );
+
+				material.side = DoubleSide;
+
+			} else {
+
+				this.renderBufferDirect( camera, scene, geometry, material, object, group );
+
+			}
     }
 
     object.onAfterRender(
@@ -1836,7 +1832,8 @@ class WebGLRenderer {
   }
 
   copyTextureToTexture3D( sourceBox, position, srcTexture, dstTexture, {level = 0} ) {
-		var width = sourceBox.max.x - sourceBox.min.x + 1;
+		
+    var width = sourceBox.max.x - sourceBox.min.x + 1;
 		var height = sourceBox.max.y - sourceBox.min.y + 1;
 		var depth = sourceBox.max.z - sourceBox.min.z + 1;
 		var glFormat = utils.convert( dstTexture.format );

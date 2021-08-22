@@ -15,7 +15,6 @@ class Material with EventDispatcher {
   bool vertexColors = false;
 
   bool sizeAttenuation = false;
-  bool morphNormals = false;
 
   Vector2? normalScale;
   Vector2? clearcoatNormalScale;
@@ -83,6 +82,9 @@ class Material with EventDispatcher {
   Texture? roughnessMap;
   Texture? metalnessMap;
   Texture? specularMap;
+  Texture? specularIntensityMap;
+  Texture? specularTintMap;
+  
   Texture? gradientMap;
   Color? sheen;
   num transmission = 0.0;
@@ -113,8 +115,6 @@ class Material with EventDispatcher {
   num? wireframeLinewidth;
   String? wireframeLinejoin;
   String? wireframeLinecap;
-
-  bool morphTargets = false;
 
   num? linewidth;
   String? linecap;
@@ -277,11 +277,7 @@ class Material with EventDispatcher {
     } else if(key == "map") {
       map = newValue;
     } else if(key == "metalness") {
-      metalness = newValue;  
-    } else if(key == "morphNormals") {
-      morphNormals = newValue;
-    } else if(key == "morphTargets") {
-      morphTargets = newValue;
+      metalness = newValue;
     } else if(key == "normalScale") {
       normalScale = newValue;  
     } else if(key == "opacity") {
@@ -352,7 +348,9 @@ class Material with EventDispatcher {
   	// if ( this.emissiveIntensity && this.emissiveIntensity != 1 ) data.emissiveIntensity = this.emissiveIntensity;
 
   	// if ( this.specular && this.specular.isColor ) data.specular = this.specular.getHex();
-  	// if ( this.shininess != null ) data.shininess = this.shininess;
+    // if ( this.specularIntensity != null ) data.specularIntensity = this.specularIntensity;
+		// if ( this.specularTint && this.specularTint.isColor ) data.specularTint = this.specularTint.getHex();
+    // if ( this.shininess != null ) data.shininess = this.shininess;
   	// if ( this.clearcoat != null ) data.clearcoat = this.clearcoat;
   	// if ( this.clearcoatRoughness != null ) data.clearcoatRoughness = this.clearcoatRoughness;
 
@@ -424,6 +422,8 @@ class Material with EventDispatcher {
 
   	// if ( this.emissiveMap && this.emissiveMap.isTexture ) data.emissiveMap = this.emissiveMap.toJSON( meta ).uuid;
   	// if ( this.specularMap && this.specularMap.isTexture ) data.specularMap = this.specularMap.toJSON( meta ).uuid;
+    // if ( this.specularIntensityMap && this.specularIntensityMap.isTexture ) data.specularIntensityMap = this.specularIntensityMap.toJSON( meta ).uuid;
+		// if ( this.specularTintMap && this.specularTintMap.isTexture ) data.specularTintMap = this.specularTintMap.toJSON( meta ).uuid;
 
   	// if ( this.envMap && this.envMap.isTexture ) {
 
@@ -498,9 +498,6 @@ class Material with EventDispatcher {
   	// if ( this.wireframeLinewidth > 1 ) data.wireframeLinewidth = this.wireframeLinewidth;
   	// if ( this.wireframeLinecap != 'round' ) data.wireframeLinecap = this.wireframeLinecap;
   	// if ( this.wireframeLinejoin != 'round' ) data.wireframeLinejoin = this.wireframeLinejoin;
-
-  	// if ( this.morphTargets == true ) data.morphTargets = true;
-  	// if ( this.morphNormals == true ) data.morphNormals = true;
 
   	// if ( this.visible == false ) data.visible = false;
 

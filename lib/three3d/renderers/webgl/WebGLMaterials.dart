@@ -250,6 +250,14 @@ class WebGLMaterials {
 		} else if ( material.clearcoatRoughnessMap != null ) {
 
 			uvScaleMap = material.clearcoatRoughnessMap;
+      
+    } else if ( material.specularIntensityMap != null ) {
+
+			uvScaleMap = material.specularIntensityMap;
+
+		} else if ( material.specularTintMap != null ) {
+
+			uvScaleMap = material.specularTintMap;
 
 		}
 

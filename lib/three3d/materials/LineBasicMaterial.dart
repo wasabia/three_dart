@@ -23,8 +23,6 @@ class LineBasicMaterial extends Material {
     this.linecap = 'round'; // 'butt', 'round' and 'square'.
     this.linejoin = 'round'; // 'round', 'bevel' and 'miter'.
 
-    this.morphTargets = false;
-
     this.setValues( parameters );
   }
 
@@ -37,9 +35,7 @@ class LineBasicMaterial extends Material {
     this.linewidth = source.linewidth;
     this.linecap = source.linecap;
     this.linejoin = source.linejoin;
-
-    this.morphTargets = source.morphTargets;
-
+    
     return this;
 
   }

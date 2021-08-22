@@ -114,27 +114,13 @@ class Plane {
 
 	}
 
-	projectPoint( point, target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Plane: .projectPoint() target is now required' );
-			target = new Vector3.init();
-
-		}
+	projectPoint( point, Vector3 target ) {
 
 		return target.copy( this.normal ).multiplyScalar( - this.distanceToPoint( point ) ).add( point );
 
 	}
 
-	intersectLine( line, target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Plane: .intersectLine() target is now required' );
-			target = new Vector3.init();
-
-		}
+	intersectLine( line, Vector3 target ) {
 
 		var  direction = line.delta( _vector1 );
 
@@ -189,14 +175,7 @@ class Plane {
 
 	}
 
-	coplanarPoint( target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Plane: .coplanarPoint() target is now required' );
-			target = new Vector3.init();
-
-		}
+	coplanarPoint( Vector3 target ) {
 
 		return target.copy( this.normal ).multiplyScalar( - this.constant );
 

@@ -89,6 +89,8 @@ class LineSegments2 extends Mesh {
     // sitting at the camera origin which will cause "w" to be 0 when
     // applying the projection matrix.
     ray.at( 1, ssOrigin );
+    // TODO ray.at need Vec3 but ssOrigin is vec4
+
 
     // ndc space [ - 1.0, 1.0 ]
     ssOrigin.w = 1;

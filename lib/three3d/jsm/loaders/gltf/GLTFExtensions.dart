@@ -12,9 +12,12 @@ Map<String, String> EXTENSIONS = {
   "KHR_DRACO_MESH_COMPRESSION": 'KHR_draco_mesh_compression',
   "KHR_LIGHTS_PUNCTUAL": 'KHR_lights_punctual',
   "KHR_MATERIALS_CLEARCOAT": 'KHR_materials_clearcoat',
+  "KHR_MATERIALS_IOR": 'KHR_materials_ior',
   "KHR_MATERIALS_PBR_SPECULAR_GLOSSINESS": 'KHR_materials_pbrSpecularGlossiness',
+  "KHR_MATERIALS_SPECULAR": 'KHR_materials_specular',
   "KHR_MATERIALS_TRANSMISSION": 'KHR_materials_transmission',
   "KHR_MATERIALS_UNLIT": 'KHR_materials_unlit',
+  "KHR_MATERIALS_VOLUME": 'KHR_materials_volume',
   "KHR_TEXTURE_BASISU": 'KHR_texture_basisu',
   "KHR_TEXTURE_TRANSFORM": 'KHR_texture_transform',
   "KHR_MESH_QUANTIZATION": 'KHR_mesh_quantization',
@@ -36,6 +39,72 @@ class GLTFExtension {
   Function? loadTexture;
 }
 
+
+/**
+ * Materials specular Extension
+ *
+ * Specification: https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_materials_specular
+ */
+class GLTFMaterialsSpecularExtension extends GLTFExtension {
+  late dynamic parser;
+
+	GLTFMaterialsSpecularExtension( parser ) {
+
+		this.parser = parser;
+		this.name = EXTENSIONS["KHR_MATERIALS_SPECULAR"]!;
+
+    this.getMaterialType = ( materialIndex ) {
+
+      var parser = this.parser;
+      var materialDef = parser.json.materials[ materialIndex ];
+
+      if ( ! materialDef.extensions || ! materialDef.extensions[ this.name ] ) return null;
+
+      return MeshPhysicalMaterial;
+
+    };
+
+    this.extendMaterialParams = ( materialIndex, materialParams ) async {
+
+      var parser = this.parser;
+      var materialDef = parser.json.materials[ materialIndex ];
+
+      // if ( ! materialDef.extensions || ! materialDef.extensions[ this.name ] ) {
+
+      // 	return Promise.resolve();
+
+      // }
+
+      List<Future> pending = [];
+
+      var extension = materialDef.extensions[ this.name ];
+
+      materialParams.specularIntensity = extension.specularFactor != null ? extension.specularFactor : 1.0;
+
+      if ( extension.specularTexture != null ) {
+
+        pending.add( parser.assignTexture( materialParams, 'specularIntensityMap', extension.specularTexture ) );
+
+      }
+
+      var colorArray = extension.specularColorFactor ?? [ 1, 1, 1 ];
+      materialParams.specularTint = new Color( colorArray[ 0 ], colorArray[ 1 ], colorArray[ 2 ] );
+
+      if ( extension.specularColorTexture != null ) {
+
+        var texture = await parser.assignTexture( materialParams, 'specularTintMap', extension.specularColorTexture );
+        texture.encoding = sRGBEncoding;
+
+        pending.add( texture );
+
+      }
+
+      return await Future.wait( pending );
+
+    };
+	}
+
+}
 
 /**
  * DDS Texture Extension
@@ -403,12 +472,123 @@ class GLTFMaterialsTransmissionExtension extends GLTFExtension {
     };
   }
 
-  
+}
 
-  
 
+
+/**
+ * Materials ior Extension
+ *
+ * Specification: https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_materials_ior
+ */
+class GLTFMaterialsIorExtension extends GLTFExtension {
+  late dynamic parser;
+
+	GLTFMaterialsIorExtension( parser ) {
+
+		this.parser = parser;
+		this.name = EXTENSIONS["KHR_MATERIALS_IOR"]!;
+
+    this.getMaterialType = ( materialIndex ) {
+
+      var parser = this.parser;
+      var materialDef = parser.json.materials[ materialIndex ];
+
+      if ( ! materialDef.extensions || ! materialDef.extensions[ this.name ] ) return null;
+
+      return MeshPhysicalMaterial;
+
+    };
+
+    this.extendMaterialParams = ( materialIndex, materialParams ) {
+
+      var parser = this.parser;
+      var materialDef = parser.json.materials[ materialIndex ];
+
+      if ( materialDef.extensions == null || materialDef.extensions[ this.name ] == null ) {
+
+        return null;
+
+      }
+
+      var extension = materialDef.extensions[ this.name ];
+
+      materialParams.ior = extension.ior != null ? extension.ior : 1.5;
+
+      return null;
+
+    };
+
+	}
 
 }
+
+
+/**
+ * Materials Volume Extension
+ *
+ * Specification: https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_materials_volume
+ */
+class GLTFMaterialsVolumeExtension extends GLTFExtension {
+  late dynamic parser;
+
+	GLTFMaterialsVolumeExtension( parser ) {
+
+		this.parser = parser;
+		this.name = EXTENSIONS["KHR_MATERIALS_VOLUME"]!;
+
+    this.getMaterialType = ( materialIndex ) {
+
+      var parser = this.parser;
+      var materialDef = parser.json.materials[ materialIndex ];
+
+      if ( ! materialDef.extensions || ! materialDef.extensions[ this.name ] ) return null;
+
+      return MeshPhysicalMaterial;
+
+    };
+
+
+    this.extendMaterialParams = ( materialIndex, materialParams ) async {
+
+      var parser = this.parser;
+      var materialDef = parser.json.materials[ materialIndex ];
+
+      if ( materialDef.extensions == null || materialDef.extensions[ this.name ] == null ) {
+
+        return null;
+
+      }
+
+      List<Future> pending = [];
+
+      var extension = materialDef.extensions[ this.name ];
+
+      materialParams.thickness = extension.thicknessFactor != null ? extension.thicknessFactor : 0;
+
+      if ( extension.thicknessTexture != null ) {
+
+        pending.add( parser.assignTexture( materialParams, 'thicknessMap', extension.thicknessTexture ) );
+
+      }
+
+      materialParams.attenuationDistance = extension.attenuationDistance ?? 0;
+
+      var colorArray = extension.attenuationColor ?? [ 1, 1, 1 ];
+      materialParams.attenuationTint = new Color( colorArray[ 0 ], colorArray[ 1 ], colorArray[ 2 ] );
+
+      return await Future.wait( pending );
+
+    };
+
+	}
+
+	
+
+	
+
+}
+
 
 /**
  * BasisU Texture Extension

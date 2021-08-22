@@ -83,27 +83,13 @@ class Box2 {
 
 	}
 
-	getCenter( target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Box2: .getCenter() target is now required' );
-			target = new Vector2(null, null);
-
-		}
+	getCenter( Vector2 target ) {
 
 		return this.isEmpty() ? target.set( 0, 0 ) : target.addVectors( this.min, this.max ).multiplyScalar( 0.5 );
 
 	}
 
-	getSize( target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Box2: .getSize() target is now required' );
-			target = new Vector2(null, null);
-
-		}
+	getSize( Vector2 target ) {
 
 		return this.isEmpty() ? target.set( 0, 0 ) : target.subVectors( this.max, this.min );
 
@@ -150,17 +136,10 @@ class Box2 {
 
 	}
 
-	getParameter( point, target ) {
+	getParameter( point, Vector2 target ) {
 
 		// This can potentially have a divide by zero if the box
 		// has a size dimension of 0.
-
-		if ( target == null ) {
-
-			print( 'THREE.Box2: .getParameter() target is now required' );
-			target = new Vector2(null, null);
-
-		}
 
 		return target.set(
 			( point.x - this.min.x ) / ( this.max.x - this.min.x ),
@@ -178,14 +157,7 @@ class Box2 {
 
 	}
 
-	clampPoint( point, target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Box2: .clampPoint() target is now required' );
-			target = new Vector2(null, null);
-
-		}
+	clampPoint( point, Vector2 target ) {
 
 		return target.copy( point ).clamp( this.min, this.max );
 

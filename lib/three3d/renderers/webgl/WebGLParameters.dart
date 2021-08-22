@@ -44,6 +44,9 @@ class WebGLParameters {
   late bool roughnessMap;
   late bool metalnessMap;
   late bool specularMap;
+  late bool specularIntensityMap;
+	late bool specularTintMap;
+	late bool specularTintMapEncoding;
   late bool alphaMap;
   late bool gradientMap;
   late bool sheen;
@@ -156,6 +159,9 @@ class WebGLParameters {
     roughnessMap = json["roughnessMap"];
     metalnessMap = json["metalnessMap"];
     specularMap = json["specularMap"];
+    specularIntensityMap = json["specularIntensityMap"];
+	  specularTintMap = json["specularTintMap"];
+	  specularTintMapEncoding = json["specularTintMapEncoding"];
     alphaMap = json["alphaMap"];
     gradientMap = json["gradientMap"];
     sheen = json["sheen"];
@@ -276,6 +282,9 @@ class WebGLParameters {
       "metalnessMap": metalnessMap,
 
       "specularMap": specularMap,
+      "specularIntensityMap": specularIntensityMap,
+      "specularTintMap": specularTintMap,
+      "specularTintMapEncoding": specularTintMapEncoding,
       "alphaMap": alphaMap,
       "gradientMap": gradientMap,
       "sheen": sheen,

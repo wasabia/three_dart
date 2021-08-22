@@ -57,14 +57,7 @@ class Triangle {
     }
   }
 
-	static static_getNormal( a, b, c, target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Triangle: .getNormal() target is now required' );
-			target = new Vector3.init();
-
-		}
+	static static_getNormal( a, b, c, Vector3 target ) {
 
 		target.subVectors( c, b );
 		_v0.subVectors( a, b );
@@ -85,7 +78,7 @@ class Triangle {
 
 	// static/instance method to calculate barycentric coordinates
 	// based on: http://www.blackpawn.com/texts/pointinpoly/default.html
-	static static_getBarycoord( point, a, b, c, target ) {
+	static static_getBarycoord( point, a, b, c, Vector3 target ) {
 
 		_v0.subVectors( c, a );
 		_v1.subVectors( b, a );
@@ -99,12 +92,6 @@ class Triangle {
 
 		var denom = ( dot00 * dot11 - dot01 * dot01 );
 
-		if ( target == null ) {
-
-			print( 'THREE.Triangle: .getBarycoord() target is now required' );
-			target = new Vector3.init();
-
-		}
 
 		// collinear or singular triangle
 		if ( denom == 0 ) {
@@ -200,14 +187,7 @@ class Triangle {
 
 	}
 
-	getMidpoint( target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Triangle: .getMidpoint() target is now required' );
-			target = new Vector3.init();
-
-		}
+	getMidpoint( Vector3 target ) {
 
 		return target.addVectors( this.a, this.b ).add( this.c ).multiplyScalar( 1 / 3 );
 
@@ -219,14 +199,7 @@ class Triangle {
 
 	}
 
-	getPlane( target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Triangle: .getPlane() target is now required' );
-			target = new Plane(null, null);
-
-		}
+	getPlane( Plane target ) {
 
 		return target.setFromCoplanarPoints( this.a, this.b, this.c );
 
@@ -262,14 +235,7 @@ class Triangle {
 
 	}
 
-	closestPointToPoint( p, target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Triangle: .closestPointToPoint() target is now required' );
-			target = new Vector3.init();
-
-		}
+	closestPointToPoint( p, Vector3 target ) {
 
 		var a = this.a, b = this.b, c = this.c;
 		var v, w;

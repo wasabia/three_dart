@@ -19,8 +19,6 @@ part of three_materials;
  *  wireframe: <boolean>,
  *  wireframeLinewidth: <float>
  *
- *  morphTargets: <bool>,
- *  morphNormals: <bool>
  * }
  */
 
@@ -45,9 +43,6 @@ class MeshNormalMaterial extends Material {
   num? wireframeLinewidth = 1;
 
   bool fog = false;
-
-  bool morphTargets = false;
-  bool morphNormals = false;
 
 
   MeshNormalMaterial( Map<String, dynamic> parameters ) : super() {

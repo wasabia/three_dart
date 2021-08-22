@@ -102,7 +102,7 @@ class InstancedMesh extends Mesh {
 
 		if ( this.instanceColor == null ) {
 
-			this.instanceColor = new BufferAttribute( Float32Array( (this.count! * 3).toInt() ), 3, false );
+			this.instanceColor = new BufferAttribute( Float32Array( (this.instanceMatrix.count * 3).toInt() ), 3, false );
 
 		}
 

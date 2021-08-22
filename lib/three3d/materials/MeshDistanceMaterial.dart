@@ -7,7 +7,6 @@ part of three_materials;
  *  referencePosition: <float>,
  *  nearDistance: <float>,
  *  farDistance: <float>,
- *  morphTargets: <bool>,
  *
  *  map: new THREE.Texture( <Image> ),
  *
@@ -38,9 +37,7 @@ class MeshDistanceMaterial extends Material {
     this.referencePosition = new Vector3.init();
     this.nearDistance = 1;
     this.farDistance = 1000;
-
-    this.morphTargets = false;
-
+    
     this.map = null;
 
     this.alphaMap = null;
@@ -63,8 +60,6 @@ class MeshDistanceMaterial extends Material {
     this.nearDistance = source.nearDistance;
     this.farDistance = source.farDistance;
     
-    this.morphTargets = source.morphTargets;
-
     this.map = source.map;
 
     this.alphaMap = source.alphaMap;

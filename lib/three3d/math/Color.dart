@@ -495,17 +495,10 @@ class Color {
     return ('000000' + this.getHex().toString(16)).substring(-6);
   }
 
+  // target map target = { "h": 0, "s": 0, "l": 0 };
   getHSL( target ) {
 
 		// h,s,l ranges are in 0.0 - 1.0
-
-		if ( target == null ) {
-
-			print( 'THREE.Color: .getHSL() target is now required' );
-			target = { "h": 0, "s": 0, "l": 0 };
-
-		}
-
 		var r = this.r, g = this.g, b = this.b;
 
 		var max = Math.max3( r, g, b );

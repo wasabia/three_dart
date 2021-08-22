@@ -18,41 +18,61 @@ class GLTFLoader extends Loader {
 
     this.pluginCallbacks = [];
 
+    
     this.register( ( parser ) {
 
-      return new GLTFMaterialsClearcoatExtension( parser );
+			return new GLTFMaterialsClearcoatExtension( parser );
 
-    } );
+		} );
 
-    this.register( ( parser ) {
+		this.register( ( parser ) {
 
-      return new GLTFTextureBasisUExtension( parser );
+			return new GLTFTextureBasisUExtension( parser );
 
-    } );
+		} );
 
-    this.register( ( parser ) {
+		this.register( ( parser ) {
 
-      return new GLTFTextureWebPExtension( parser );
+			return new GLTFTextureWebPExtension( parser );
 
-    } );
+		} );
 
-    this.register( ( parser ) {
+		this.register( ( parser ) {
 
-      return new GLTFMaterialsTransmissionExtension( parser );
+			return new GLTFMaterialsTransmissionExtension( parser );
 
-    } );
+		} );
 
-    this.register( ( parser ) {
+		this.register( ( parser ) {
 
-      return new GLTFLightsExtension( parser );
+			return new GLTFMaterialsVolumeExtension( parser );
 
-    } );
+		} );
 
-    this.register( ( parser ) {
+		this.register( ( parser ) {
 
-      return new GLTFMeshoptCompression( parser );
+			return new GLTFMaterialsIorExtension( parser );
 
-    } );
+		} );
+
+		this.register( ( parser ) {
+
+			return new GLTFMaterialsSpecularExtension( parser );
+
+		} );
+
+		this.register( ( parser ) {
+
+			return new GLTFLightsExtension( parser );
+
+		} );
+
+		this.register( ( parser ) {
+
+			return new GLTFMeshoptCompression( parser );
+
+		} );
+
   }
 
   load( String url, Function? onLoad, Function? onProgress, Function? onError ) {

@@ -43,7 +43,7 @@ class WebGLMorphtargets {
 
 		var influences = influencesList[ geometry.id ];
 
-		if ( influences == null ) {
+		if ( influences == null || influences.length != length ) {
 
 			// initialise list
 
@@ -92,10 +92,8 @@ class WebGLMorphtargets {
 
 		workInfluences.sort( (a,b) => numericalSort(a,b) );
 
-		bool morphTargets = material.morphTargets;
-    var _position = geometry.morphAttributes["position"];
-		bool morphNormals = material.morphNormals;
-    var _normal = geometry.morphAttributes["normal"];
+		var morphTargets = geometry.morphAttributes["position"];
+		var morphNormals = geometry.morphAttributes["normal"];
 
 		num morphInfluencesSum = 0.0;
 
@@ -107,15 +105,15 @@ class WebGLMorphtargets {
 
 			if ( index != MAX_SAFE_INTEGER && value != null ) {
 
-				if ( morphTargets && geometry.getAttribute( 'morphTarget${i}' ) != _position[ index ] ) {
+				if ( morphTargets && geometry.getAttribute( 'morphTarget${i}' ) != morphTargets[ index ] ) {
 
-					geometry.setAttribute( 'morphTarget${i}', _position[ index ] );
+					geometry.setAttribute( 'morphTarget${i}', morphTargets[ index ] );
 
 				}
 
-				if ( morphNormals && geometry.getAttribute( 'morphNormal${i}' ) != _normal[ index ] ) {
+				if ( morphNormals && geometry.getAttribute( 'morphNormal${i}' ) != morphNormals[ index ] ) {
 
-					geometry.setAttribute( 'morphNormal${i}', _normal[ index ] );
+					geometry.setAttribute( 'morphNormal${i}', morphNormals[ index ] );
 
 				}
 

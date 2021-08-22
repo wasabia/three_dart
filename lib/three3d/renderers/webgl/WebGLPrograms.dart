@@ -23,7 +23,8 @@ class WebGLPrograms {
 	var parameterNames = [
 		'precision', 'isWebGL2', 'supportsVertexTextures', 'outputEncoding', 'instancing', 'instancingColor',
 		'map', 'mapEncoding', 'matcap', 'matcapEncoding', 'envMap', 'envMapMode', 'envMapEncoding', 'envMapCubeUV',
-		'lightMap', 'lightMapEncoding', 'aoMap', 'emissiveMap', 'emissiveMapEncoding', 'bumpMap', 'normalMap', 'objectSpaceNormalMap', 'tangentSpaceNormalMap', 'clearcoatMap', 'clearcoatRoughnessMap', 'clearcoatNormalMap', 'displacementMap', 'specularMap',
+		'lightMap', 'lightMapEncoding', 'aoMap', 'emissiveMap', 'emissiveMapEncoding', 'bumpMap', 'normalMap', 'objectSpaceNormalMap', 'tangentSpaceNormalMap', 'clearcoatMap', 'clearcoatRoughnessMap', 'clearcoatNormalMap', 'displacementMap', 
+    'specularMap', 'specularIntensityMap', 'specularTintMap', 'specularTintMapEncoding',
 		'roughnessMap', 'metalnessMap', 'gradientMap',
 		'alphaMap', 'combine', 'vertexColors', 'vertexAlphas', 'vertexTangents', 'vertexUvs', 'uvsVertexOnly', 'fog', 'useFog', 'fogExp2',
 		'flatShading', 'sizeAttenuation', 'logarithmicDepthBuffer', 'skinning',
@@ -216,6 +217,9 @@ class WebGLPrograms {
 			"roughnessMap": material.roughnessMap != null,
 			"metalnessMap": material.metalnessMap != null,
 			"specularMap": material.specularMap != null,
+      "specularIntensityMap": material.specularIntensityMap != null,
+			"specularTintMap": material.specularTintMap != null,
+			"specularTintMapEncoding": getTextureEncodingFromMap( material.specularTintMap ),
 			"alphaMap": material.alphaMap != null,
 
 			"gradientMap": material.gradientMap != null,
@@ -247,8 +251,8 @@ class WebGLPrograms {
 			"maxBones": maxBones,
 			"useVertexTexture": floatVertexTextures,
 
-			"morphTargets": material.morphTargets,
-			"morphNormals": material.morphNormals,
+			"morphTargets": object.geometry != null && object.geometry.morphAttributes["position"] != null,
+			"morphNormals": object.geometry != null && object.geometry.morphAttributes["normal"] != null,
 
 			"numDirLights": lights.directional.length,
 			"numPointLights": lights.point.length,

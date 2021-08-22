@@ -110,6 +110,10 @@ class Object3D with EventDispatcher {
   Function? onBeforeRender;
 
 
+  dynamic? background;
+  Texture? environment;
+
+
   Object3D() {
     init();
   }
@@ -569,13 +573,6 @@ class Object3D with EventDispatcher {
 
 	getWorldQuaternion ( Quaternion target ) {
 
-		if ( target == null ) {
-
-			print( 'THREE.Object3D: .getWorldQuaternion() target is now required' );
-			target = new Quaternion();
-
-		}
-
 		this.updateWorldMatrix( true, false );
 
 		this.matrixWorld.decompose( _position, target, _scale );
@@ -586,13 +583,6 @@ class Object3D with EventDispatcher {
 
 	getWorldScale (Vector3 target ) {
 
-		if ( target == null ) {
-
-			print( 'THREE.Object3D: .getWorldScale() target is now required' );
-			target = new Vector3.init();
-
-		}
-
 		this.updateWorldMatrix( true, false );
 
 		this.matrixWorld.decompose( _position, _quaternion, target );
@@ -601,14 +591,7 @@ class Object3D with EventDispatcher {
 
 	}
 
-	getWorldDirection ( target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Object3D: .getWorldDirection() target is now required' );
-			target = new Vector3.init();
-
-		}
+	getWorldDirection ( Vector3 target ) {
 
 		this.updateWorldMatrix( true, false );
 
@@ -812,13 +795,29 @@ class Object3D with EventDispatcher {
       if ( _instanceMesh.instanceColor != null ) object["instanceColor"] = _instanceMesh.instanceColor!.toJSON();
 		}
 
-		// //
+		if ( this.isScene ) {
 
-    print(" 1is Mesh .... type: ${type}  this.isMesh ${this.isMesh} ");
+			if ( this.background != null ) {
 
-		if ( this.isMesh || this.isLine || this.isPoints ) {
+				if ( this.background.isColor ) {
 
-      print(" 2is Mesh .... type: ${type} ");
+					object["background"] = this.background!.toJSON();
+
+				} else if ( this.background.isTexture ) {
+
+					object["background"] = this.background.toJSON( meta ).uuid;
+
+				}
+
+			}
+
+			if ( this.environment != null && this.environment!.isTexture ) {
+
+				object["environment"] = this.environment!.toJSON( meta ).uuid;
+
+			}
+
+		} else if ( this.isMesh || this.isLine || this.isPoints ) {
 
 			object["geometry"] = serialize( meta!.geometries, this.geometry, null );
 
@@ -828,11 +827,43 @@ class Object3D with EventDispatcher {
 
 				var shapes = parameters["shapes"];
 
-				serialize( meta.shapes, shapes, null );
+				if ( shapes is List ) {
+
+					for ( var i = 0, l = shapes.length; i < l; i ++ ) {
+
+						var shape = shapes[ i ];
+
+						serialize( meta!.shapes, shape, null );
+
+					}
+
+				} else {
+
+					serialize( meta!.shapes, shapes, null );
+
+				}
 
 			}
 
 		}
+
+		// if ( this.isMesh || this.isLine || this.isPoints ) {
+
+    //   print(" 2is Mesh .... type: ${type} ");
+
+		// 	object["geometry"] = serialize( meta!.geometries, this.geometry, null );
+
+		// 	var parameters = this.geometry.parameters;
+
+		// 	if ( parameters != null && parameters["shapes"] != null ) {
+
+		// 		var shapes = parameters["shapes"];
+
+		// 		serialize( meta.shapes, shapes, null );
+
+		// 	}
+
+		// }
 
     // TODO
 		// if ( this.type == "SkinnedMesh" ) {

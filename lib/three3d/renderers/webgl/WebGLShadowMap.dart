@@ -13,8 +13,12 @@ class WebGLShadowMap {
 
   var shadowSide = { 0: BackSide, 1: FrontSide, 2: DoubleSide };
 
-  HashMap<int, Material> _depthMaterials = HashMap<int, Material>();
-  HashMap<int, Material> _distanceMaterials = HashMap<int, Material>();
+  // HashMap<int, Material> _depthMaterials = HashMap<int, Material>();
+  // HashMap<int, Material> _distanceMaterials = HashMap<int, Material>();
+
+  late MeshDepthMaterial _depthMaterial;
+  late MeshDistanceMaterial _distanceMaterial;
+
   var _materialCache = {};
 
   late ShaderMaterial shadowMaterialVertical;
@@ -45,6 +49,9 @@ class WebGLShadowMap {
   WebGLShadowMap(this._renderer, this._objects, this._capabilities ) {
 
     _maxTextureSize = _capabilities.maxTextureSize;
+
+    _depthMaterial = new MeshDepthMaterial( { "depthPacking": RGBADepthPacking } );
+		_distanceMaterial = new MeshDistanceMaterial(null);
 
     shadowMaterialVertical = ShaderMaterial( {
 
@@ -241,82 +248,19 @@ class WebGLShadowMap {
 
 	}
 
-	Material getDepthMaterialVariant( bool useMorphing ) {
-
-  
-		int index = (useMorphing ? 1 : 0) << 0;
-
-
-		Material? material = _depthMaterials[ index ];
-
- 
-		if ( material == null ) {
-
-    
-			material = MeshDepthMaterial( {
-				"depthPacking": RGBADepthPacking,
-				"morphTargets": useMorphing
-			} );
-
-     
-			_depthMaterials[ index ] = material;
-
-		}
-
-  
-		return material;
-
-	}
-
-	Material getDistanceMaterialVariant( bool useMorphing ) {
-
-		var index = (useMorphing ? 1 : 0) << 0;
-
-		var material = _distanceMaterials[ index ];
-
-		if ( material == null ) {
-
-			material = MeshDistanceMaterial( {
-				"morphTargets": useMorphing
-			} );
-
-			_distanceMaterials[ index ] = material;
-
-		}
-
-		return material;
-
-	}
-
 	getDepthMaterial( object, geometry, material, light, shadowCameraNear, shadowCameraFar, type ) {
 
 		Material? result;
 
-		var getMaterialVariant = getDepthMaterialVariant;
-		var customMaterial = object.customDepthMaterial;
+    var customMaterial = light.isPointLight ? object.customDistanceMaterial : object.customDepthMaterial;
 
-		if ( light.isPointLight == true ) {
+		if ( customMaterial != null ) {
 
-			getMaterialVariant = getDistanceMaterialVariant;
-			customMaterial = object.customDistanceMaterial;
-
-		}
-
-		if ( customMaterial == null ) {
-
-			var useMorphing = false;
-
-			if ( material.morphTargets == true ) {
-
-				useMorphing = geometry.morphAttributes && geometry.morphAttributes.position && geometry.morphAttributes.position.length > 0;
-
-			}
-
-			result = getMaterialVariant( useMorphing );
+			result = customMaterial;
 
 		} else {
 
-			result = customMaterial;
+			result = light.isPointLight ? _distanceMaterial : _depthMaterial;
 
 		}
 

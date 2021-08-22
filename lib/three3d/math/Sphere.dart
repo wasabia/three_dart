@@ -126,16 +126,9 @@ class Sphere {
 
 	}
 
-	clampPoint( point, target ) {
+	clampPoint( point, Vector3 target ) {
 
 		var deltaLengthSq = this.center.distanceToSquared( point );
-
-		if ( target == null ) {
-
-			print( 'THREE.Sphere: .clampPoint() target is now required' );
-			target = new Vector3.init();
-
-		}
 
 		target.copy( point );
 
@@ -150,14 +143,7 @@ class Sphere {
 
 	}
 
-	getBoundingBox( target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Sphere: .getBoundingBox() target is now required' );
-			target = new Box3(null, null);
-
-		}
+	getBoundingBox( Box3 target ) {
 
 		if ( this.isEmpty() ) {
 

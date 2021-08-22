@@ -626,58 +626,6 @@ class GLTFParser {
 
     }
 
-    // return Promise.resolve( sourceURI ).then( function ( sourceURI ) {
-
-    //   return new Promise( function ( resolve, reject ) {
-
-    //     var onLoad = resolve;
-
-    //     if ( loader.isImageBitmapLoader == true ) {
-
-    //       onLoad = function ( imageBitmap ) {
-
-    //         resolve( new CanvasTexture( imageBitmap ) );
-
-    //       };
-
-    //     }
-
-    //     loader.load( resolveURL( sourceURI, options.path ), onLoad, null, reject );
-
-    //   } );
-
-    // } ).then( function ( texture ) {
-
-    //   // Clean up resources and configure Texture.
-
-    //   if ( isObjectURL == true ) {
-    //     URL.revokeObjectURL( sourceURI );
-    //   }
-
-    //   texture.flipY = false;
-
-    //   if ( textureDef.name ) texture.name = textureDef.name;
-
-    //   // When there is definitely no alpha channel in the texture, set RGBFormat to save space.
-    //   if ( ! hasAlpha ) texture.format = RGBFormat;
-
-    //   var samplers = json.samplers ?? {};
-    //   var sampler = samplers[ textureDef.sampler ] ?? {};
-
-    //   texture.magFilter = WEBGL_FILTERS[ sampler.magFilter ] ?? LinearFilter;
-    //   texture.minFilter = WEBGL_FILTERS[ sampler.minFilter ] ?? LinearMipmapLinearFilter;
-    //   texture.wrapS = WEBGL_WRAPPINGS[ sampler.wrapS ] ?? RepeatWrapping;
-    //   texture.wrapT = WEBGL_WRAPPINGS[ sampler.wrapT ] ?? RepeatWrapping;
-
-    //   parser.associations[texture] = {
-    //     "type": 'textures',
-    //     "index": textureIndex
-    //   };
-
-    //   return texture;
-
-    // } );
-    // 
     
     return null;
 
@@ -721,6 +669,7 @@ class GLTFParser {
 
     materialParams[ mapName ] = texture;
 
+    return texture;
   }
 
   /**
@@ -739,9 +688,6 @@ class GLTFParser {
     bool useVertexTangents = geometry.attributes["tangent"] != null;
     bool useVertexColors = geometry.attributes["color"] != null;
     bool useFlatShading = geometry.attributes["normal"] == null;
-    bool useSkinning = mesh.isSkinnedMesh == true;
-    bool useMorphTargets = geometry.morphAttributes.keys.length > 0;
-    bool useMorphNormals = useMorphTargets && geometry.morphAttributes["normal"] != null;
 
     if ( mesh.isPoints ) {
 
@@ -784,31 +730,25 @@ class GLTFParser {
     }
 
     // Clone the material if it will be modified
-    if ( useVertexTangents || useVertexColors || useFlatShading || useSkinning || useMorphTargets ) {
+    if ( useVertexTangents || useVertexColors || useFlatShading ) {
 
       var cacheKey = 'ClonedMaterial:' + material.uuid + ':';
 
       if ( material.type == "GLTFSpecularGlossinessMaterial" ) cacheKey += 'specular-glossiness:';
-      if ( useSkinning ) cacheKey += 'skinning:';
       if ( useVertexTangents ) cacheKey += 'vertex-tangents:';
       if ( useVertexColors ) cacheKey += 'vertex-colors:';
       if ( useFlatShading ) cacheKey += 'flat-shading:';
-      if ( useMorphTargets ) cacheKey += 'morph-targets:';
-      if ( useMorphNormals ) cacheKey += 'morph-normals:';
-
+  
       var cachedMaterial = this.cache.get( cacheKey );
 
       if ( cachedMaterial == null ) {
 
         cachedMaterial = material.clone();
-
-        if ( useSkinning ) cachedMaterial.skinning = true;
+        
         if ( useVertexTangents ) cachedMaterial.vertexTangents = true;
         if ( useVertexColors ) cachedMaterial.vertexColors = true;
         if ( useFlatShading ) cachedMaterial.flatShading = true;
-        if ( useMorphTargets ) cachedMaterial.morphTargets = true;
-        if ( useMorphNormals ) cachedMaterial.morphNormals = true;
-
+   
         this.cache.add( cacheKey, cachedMaterial );
 
         this.associations[cachedMaterial] = this.associations[material];

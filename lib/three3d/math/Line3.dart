@@ -40,27 +40,13 @@ class Line3 {
 
 	}
 
-	getCenter( target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Line3: .getCenter() target is now required' );
-			target = new Vector3.init();
-
-		}
+	getCenter( Vector3 target ) {
 
 		return target.addVectors( this.start, this.end ).multiplyScalar( 0.5 );
 
 	}
 
-	delta( target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Line3: .delta() target is now required' );
-			target = new Vector3.init();
-
-		}
+	delta( Vector3 target ) {
 
 		return target.subVectors( this.end, this.start );
 
@@ -78,14 +64,7 @@ class Line3 {
 
 	}
 
-	at( t, target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Line3: .at() target is now required' );
-			target = new Vector3.init();
-
-		}
+	at( t, Vector3 target ) {
 
 		return this.delta( target ).multiplyScalar( t ).add( this.start );
 
@@ -111,16 +90,9 @@ class Line3 {
 
 	}
 
-	closestPointToPoint( point, clampToLine, target ) {
+	closestPointToPoint( point, clampToLine, Vector3 target ) {
 
 		var t = this.closestPointToPointParameter( point, clampToLine );
-
-		if ( target == null ) {
-
-			print( 'THREE.Line3: .closestPointToPoint() target is now required' );
-			target = new Vector3.init();
-
-		}
 
 		return this.delta( target ).multiplyScalar( t ).add( this.start );
 

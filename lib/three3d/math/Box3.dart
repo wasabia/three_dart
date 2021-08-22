@@ -197,10 +197,6 @@ class Box3 {
 
 	Vector3 getCenter(Vector3 target ) {
 
-		if ( target == null ) {
-			target = new Vector3.init();
-		}
-
     if(this.isEmpty()) {
       target.set( 0, 0, 0 );
     } else {
@@ -210,14 +206,7 @@ class Box3 {
 		return target; 
 	}
 
-	getSize( target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Box3: .getSize() target is now required' );
-			target = new Vector3.init();
-
-		}
+	getSize( Vector3 target ) {
 
 		return this.isEmpty() ? target.set( 0, 0, 0 ) : target.subVectors( this.max, this.min );
 
@@ -302,17 +291,10 @@ class Box3 {
 
 	}
 
-	getParameter( point, target ) {
+	getParameter( point, Vector3 target ) {
 
 		// This can potentially have a divide by zero if the box
 		// has a size dimension of 0.
-
-		if ( target == null ) {
-
-			print( 'THREE.Box3: .getParameter() target is now required' );
-			target = new Vector3.init();
-
-		}
 
 		return target.set(
 			( point.x - this.min.x ) / ( this.max.x - this.min.x ),
@@ -441,14 +423,7 @@ class Box3 {
 
 	}
 
-	clampPoint( point, target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Box3: .clampPoint() target is now required' );
-			target = new Vector3.init();
-
-		}
+	clampPoint( point, Vector3 target ) {
 
 		return target.copy( point ).clamp( this.min, this.max );
 
@@ -462,14 +437,7 @@ class Box3 {
 
 	}
 
-	getBoundingSphere( target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Box3: .getBoundingSphere() target is now required' );
-			//target = new Sphere(); // removed to avoid cyclic dependency
-
-		}
+	getBoundingSphere( Sphere target ) {
 
 		this.getCenter( target.center );
 

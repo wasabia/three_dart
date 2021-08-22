@@ -49,13 +49,6 @@ class Ray {
 
 	at( t, target ) {
 
-		if ( target == null ) {
-
-			print( 'THREE.Ray: .at() target is now required' );
-			target = new Vector3.init();
-
-		}
-
 		return target.copy( this.direction ).multiplyScalar( t ).add( this.origin );
 
 	}
@@ -76,14 +69,7 @@ class Ray {
 
 	}
 
-	closestPointToPoint( point, target ) {
-
-		if ( target == null ) {
-
-			print('THREE.Ray: .closestPointToPoint() target is now required' );
-			target = new Vector3.init();
-
-		}
+	closestPointToPoint( point, Vector3 target ) {
 
 		target.subVectors( point, this.origin );
 

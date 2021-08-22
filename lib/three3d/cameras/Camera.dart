@@ -30,7 +30,7 @@ class Camera extends Object3D {
   late num top;
   late num bottom;
 
-  Map<String, dynamic>? view = null;
+  Map<String, dynamic>? view;
 
   late Vector4 viewport;
 
@@ -59,14 +59,7 @@ class Camera extends Object3D {
 
 	}
 
-	getWorldDirection( target ) {
-
-		if ( target == null ) {
-
-			print( 'THREE.Camera: .getWorldDirection() target is now required' );
-			target = new Vector3.init();
-
-		}
+	getWorldDirection( Vector3 target ) {
 
 		this.updateWorldMatrix( true, false );
 
