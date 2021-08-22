@@ -904,13 +904,8 @@ class GLTFParser {
 
       pending.add( parser.assignTexture( materialParams, 'normalMap', materialDef["normalTexture"] ) );
 
-      materialParams["normalScale"] = new Vector2( 1, 1 );
-
       if ( materialDef["normalTexture"]["scale"] != null ) {
-
-        // materialParams["normalScale"].set( materialDef["normalTexture"]["scale"], materialDef["normalTexture"]["scale"] );
-        materialParams["normalScale"][ materialDef["normalTexture"]["scale"] ] = materialDef["normalTexture"]["scale"];
-
+        materialParams["normalScale"] = new Vector2( materialDef["normalTexture"].scale, materialDef["normalTexture"].scale );
       }
 
     }

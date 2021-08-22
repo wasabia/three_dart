@@ -109,8 +109,6 @@ class MeshStandardMaterial extends Material {
     this.wireframeLinecap = 'round';
     this.wireframeLinejoin = 'round';
 
-    this.vertexTangents = false;
-
     this.setValues( parameters );
   }
 
@@ -167,8 +165,6 @@ class MeshStandardMaterial extends Material {
     this.wireframeLinewidth = source.wireframeLinewidth;
     this.wireframeLinecap = source.wireframeLinecap;
     this.wireframeLinejoin = source.wireframeLinejoin;
-
-    this.vertexTangents = source.vertexTangents;
 
     this.flatShading = source.flatShading;
 

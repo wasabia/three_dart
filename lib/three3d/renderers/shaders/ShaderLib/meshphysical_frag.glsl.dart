@@ -2,7 +2,7 @@ String meshphysical_frag = """
 #define STANDARD
 
 #ifdef PHYSICAL
-	#define IOR
+	#define REFLECTIVITY
 	#define CLEARCOAT
 	#define SPECULAR
 #endif
@@ -13,8 +13,15 @@ uniform float roughness;
 uniform float metalness;
 uniform float opacity;
 
-#ifdef IOR
-	uniform float ior;
+#ifdef USE_TRANSMISSION
+	uniform float transmission;
+	uniform float thickness;
+	uniform float attenuationDistance;
+	uniform vec3 attenuationTint;
+#endif
+
+#ifdef REFLECTIVITY
+	uniform float reflectivity;
 #endif
 
 #ifdef SPECULAR
@@ -41,6 +48,19 @@ uniform float opacity;
 
 varying vec3 vViewPosition;
 
+#ifndef FLAT_SHADED
+
+	varying vec3 vNormal;
+
+	#ifdef USE_TANGENT
+
+		varying vec3 vTangent;
+		varying vec3 vBitangent;
+
+	#endif
+
+#endif
+
 #include <common>
 #include <packing>
 #include <dithering_pars_fragment>
@@ -53,14 +73,13 @@ varying vec3 vViewPosition;
 #include <lightmap_pars_fragment>
 #include <emissivemap_pars_fragment>
 #include <bsdfs>
+#include <transmission_pars_fragment>
 #include <cube_uv_reflection_fragment>
 #include <envmap_common_pars_fragment>
 #include <envmap_physical_pars_fragment>
 #include <fog_pars_fragment>
 #include <lights_pars_begin>
-#include <normal_pars_fragment>
 #include <lights_physical_pars_fragment>
-#include <transmission_pars_fragment>
 #include <shadowmap_pars_fragment>
 #include <bumpmap_pars_fragment>
 #include <normalmap_pars_fragment>

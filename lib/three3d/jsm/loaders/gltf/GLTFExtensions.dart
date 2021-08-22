@@ -575,7 +575,7 @@ class GLTFMaterialsVolumeExtension extends GLTFExtension {
       materialParams.attenuationDistance = extension.attenuationDistance ?? 0;
 
       var colorArray = extension.attenuationColor ?? [ 1, 1, 1 ];
-      materialParams.attenuationTint = new Color( colorArray[ 0 ], colorArray[ 1 ], colorArray[ 2 ] );
+      materialParams.attenuation = new Color( colorArray[ 0 ], colorArray[ 1 ], colorArray[ 2 ] );
 
       return await Future.wait( pending );
 

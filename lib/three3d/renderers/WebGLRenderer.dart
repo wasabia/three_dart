@@ -217,7 +217,7 @@ class WebGLRenderer {
     morphtargets = WebGLMorphtargets(_gl);
     clipping = WebGLClipping(properties);
     programCache = WebGLPrograms(
-        this, cubemaps, extensions, capabilities, bindingStates, clipping);
+        this, cubemaps, cubeuvmaps, extensions, capabilities, bindingStates, clipping);
     materials = WebGLMaterials(properties);
     renderLists = WebGLRenderLists(properties);
     renderStates = WebGLRenderStates(extensions, capabilities);
@@ -423,6 +423,7 @@ class WebGLRenderer {
     renderStates.dispose();
     properties.dispose();
     cubemaps.dispose();
+    cubeuvmaps.dispose();
     objects.dispose();
     bindingStates.dispose();
 
@@ -673,6 +674,8 @@ class WebGLRenderer {
     currentRenderState = renderStates.get(scene);
     currentRenderState!.init();
 
+    renderStateStack.add( currentRenderState! );
+
     scene.traverseVisible((object) {
       if (object.isLight && object.layers.test(camera.layers)) {
         currentRenderState!.pushLight(object);
@@ -701,6 +704,9 @@ class WebGLRenderer {
         }
       }
     });
+
+    renderStateStack.removeLast();
+		currentRenderState = null;
   }
 
   // Animation Loop
@@ -1004,29 +1010,44 @@ class WebGLRenderer {
   renderObjects(renderList, scene, camera) {
     var overrideMaterial = scene.isScene == true ? scene.overrideMaterial : null;
 
-    for (var i = 0, l = renderList.length; i < l; i++) {
-      var renderItem = renderList[i];
+    if ( camera.isArrayCamera ) {
 
-      var object = renderItem.object;
-      var geometry = renderItem.geometry;
-      var material = overrideMaterial == null ? renderItem.material : overrideMaterial;
-      var group = renderItem.group;
+			var cameras = camera.cameras;
 
-      if (camera.isArrayCamera) {
-        var cameras = camera.cameras;
+			for ( var i = 0, l = cameras.length; i < l; i ++ ) {
 
-        for (var j = 0, jl = cameras.length; j < jl; j++) {
-          var camera2 = cameras[j];
+				var camera2 = cameras[ i ];
 
-          if (object.layers.test(camera2.layers)) {
-            state.viewport(_currentViewport.copy(camera2.viewport));
+				state.viewport( _currentViewport.copy( camera2.viewport ) );
 
-            currentRenderState!.setupLightsView(camera2);
+				currentRenderState!.setupLightsView( camera2 );
+
+				for ( var j = 0, jl = renderList.length; j < jl; j ++ ) {
+
+					var renderItem = renderList[ j ];
+
+					var object = renderItem.object;
+					var geometry = renderItem.geometry;
+					var material = overrideMaterial == null ? renderItem.material : overrideMaterial;
+					var group = renderItem.group;
+
+					if ( object.layers.test( camera2.layers ) ) {
 
             renderObject(object, scene, camera2, geometry, material, group);
           }
         }
-      } else {
+      }
+
+		} else {
+
+			for ( var j = 0, jl = renderList.length; j < jl; j ++ ) {
+
+				var renderItem = renderList[ j ];
+
+				var object = renderItem.object;
+				var geometry = renderItem.geometry;
+				var material = overrideMaterial == null ? renderItem.material : overrideMaterial;
+				var group = renderItem.group;
         renderObject(object, scene, camera, geometry, material, group);
       }
     }

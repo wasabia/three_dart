@@ -26,7 +26,8 @@ class WebGLPrograms {
 		'lightMap', 'lightMapEncoding', 'aoMap', 'emissiveMap', 'emissiveMapEncoding', 'bumpMap', 'normalMap', 'objectSpaceNormalMap', 'tangentSpaceNormalMap', 'clearcoatMap', 'clearcoatRoughnessMap', 'clearcoatNormalMap', 'displacementMap', 
     'specularMap', 'specularIntensityMap', 'specularTintMap', 'specularTintMapEncoding',
 		'roughnessMap', 'metalnessMap', 'gradientMap',
-		'alphaMap', 'combine', 'vertexColors', 'vertexAlphas', 'vertexTangents', 'vertexUvs', 'uvsVertexOnly', 'fog', 'useFog', 'fogExp2',
+		'alphaMap', 'combine', 'vertexColors', 'vertexAlphas', 'vertexTangents', 'vertexUvs', 'uvsVertexOnly', 
+    'flipNormalScaleY', 'fog', 'useFog', 'fogExp2',
 		'flatShading', 'sizeAttenuation', 'logarithmicDepthBuffer', 'skinning',
 		'maxBones', 'useVertexTexture', 'morphTargets', 'morphNormals', 'premultipliedAlpha',
 		'numDirLights', 'numPointLights', 'numSpotLights', 'numHemiLights', 'numRectAreaLights',
@@ -38,6 +39,7 @@ class WebGLPrograms {
 
   WebGLRenderer renderer;
   WebGLCubeMaps cubemaps;
+  WebGLCubeUVMaps cubeuvmaps;
   WebGLExtensions extensions;
   WebGLCapabilities capabilities;
   WebGLBindingStates bindingStates;
@@ -52,7 +54,7 @@ class WebGLPrograms {
   late bool vertexTextures;
   late String precision;
 
-  WebGLPrograms(this.renderer, this.cubemaps, this.extensions, this.capabilities, this.bindingStates, this.clipping ) {
+  WebGLPrograms(this.renderer, this.cubemaps, this.cubeuvmaps, this.extensions, this.capabilities, this.bindingStates, this.clipping ) {
   
     this.isWebGL2 = capabilities.isWebGL2;
 
@@ -135,7 +137,13 @@ class WebGLPrograms {
 		var fog = scene.fog;
 		var environment = material.isMeshStandardMaterial ? scene.environment : null;
 
-		var envMap = cubemaps.get( material.envMap ?? environment );
+
+    var envMap;
+    if(material.isMeshStandardMaterial) {
+      envMap = cubeuvmaps.get( material.envMap ?? environment );
+    } else {
+      envMap = cubemaps.get( material.envMap ?? environment );
+    }
 
 		var shaderID = shaderIDs[ material.shaderID ];
 
@@ -232,12 +240,13 @@ class WebGLPrograms {
 
 			"combine": material.combine,
 
-			"vertexTangents": ( material.normalMap != null && material.vertexTangents),
+			"vertexTangents": ( material.normalMap != null && object.geometry != null && object.geometry.attributes["tangent"] != null ),
 			"vertexColors": material.vertexColors,
       "vertexAlphas": material.vertexColors == true && object.geometry != null && object.geometry.attributes["color"] != null && object.geometry.attributes["color"].itemSize == 4,
 			"vertexUvs":  material.map != null || material.bumpMap != null || material.normalMap != null || material.specularMap != null || material.alphaMap != null || material.emissiveMap != null || material.roughnessMap != null || material.metalnessMap != null || material.clearcoatMap != null || material.clearcoatRoughnessMap != null || material.clearcoatNormalMap != null || material.displacementMap != null || material.transmission != null || material.transmissionMap != null || material.thicknessMap != null,
 			"uvsVertexOnly": ! ( material.map != null || material.bumpMap != null || material.normalMap != null || material.specularMap != null || material.alphaMap != null || material.emissiveMap != null || material.roughnessMap != null || material.metalnessMap != null || material.clearcoatNormalMap != null || material.transmission != null || material.transmissionMap != null || material.thicknessMap != null ) && material.displacementMap != null,
 
+      "flipNormalScaleY": ( ( material.normalMap != null && material.normalMap!.flipY == false || material.clearcoatNormalMap != null && material.clearcoatNormalMap!.flipY == false ) && ! ( object.geometry != null && object.geometry.attributes["tangent"] != null) ),
 			"fog": fog != null,
 			"useFog": material.fog,
 			"fogExp2": ( fog != null && fog.isFogExp2 ),

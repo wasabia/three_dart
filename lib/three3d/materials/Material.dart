@@ -447,9 +447,8 @@ class Material with EventDispatcher {
 		// if ( this.transmissionMap && this.transmissionMap.isTexture ) data["transmissionMap"] = this.transmissionMap.toJSON( meta ).uuid;
 		// if ( this.thickness != null ) data["thickness"] = this.thickness;
 		// if ( this.thicknessMap != null && this.thicknessMap.isTexture ) data["thicknessMap"] = this.thicknessMap.toJSON( meta ).uuid;
-		// if ( this.attenuationDistance != null ) data["attenuationDistance"] = this.attenuationDistance;
-		// if ( this.attenuationTint != null ) data["attenuationTint"] = this.attenuationTint.getHex();
-
+		// if ( this.attenuationTint != null ) data.attenuationTint = this.attenuationTint.getHex();
+    // if ( this.attenuationDistance != null ) data["attenuationDistance"] = this.attenuationDistance;
 
   	// if ( this.size != null ) data.size = this.size;
     // if ( this.shadowSide != null ) data.shadowSide = this.shadowSide;

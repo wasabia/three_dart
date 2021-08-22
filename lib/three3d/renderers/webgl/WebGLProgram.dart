@@ -123,6 +123,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.vertexAlphas ? '#define USE_COLOR_ALPHA' : '',
         parameters.vertexUvs ? '#define USE_UV' : '',
         parameters.uvsVertexOnly ? '#define UVS_VERTEX_ONLY' : '',
+        parameters.flipNormalScaleY ? '#define FLIP_NORMAL_SCALE_Y' : '',
         parameters.flatShading ? '#define FLAT_SHADED' : '',
         parameters.skinning ? '#define USE_SKINNING' : '',
         parameters.useVertexTexture ? '#define BONE_TEXTURE' : '',
@@ -245,7 +246,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.vertexAlphas ? '#define USE_COLOR_ALPHA' : '',
         parameters.vertexUvs ? '#define USE_UV' : '',
         parameters.uvsVertexOnly ? '#define UVS_VERTEX_ONLY' : '',
-
+        parameters.flipNormalScaleY ? '#define FLIP_NORMAL_SCALE_Y' : '',
         parameters.gradientMap ? '#define USE_GRADIENTMAP' : '',
 
         parameters.flatShading ? '#define FLAT_SHADED' : '',
@@ -376,11 +377,9 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
     // print(" USE_MAP: ${parameters.map}  vertexUvs: ${parameters.vertexUvs}-------------- ");
     // print(" 111 ================= VERTEX  ");
-    // print(vertexGlsl);
+    // developer.log(vertexGlsl);
     // print("  111 ==================== FRAGMENT ");
-    // print(fragmentGlsl);
-
-
+    // developer.log(fragmentGlsl);
 
 
     var glVertexShader = WebGLShader(gl, gl.VERTEX_SHADER, vertexGlsl);

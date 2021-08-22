@@ -164,7 +164,7 @@ class GlyphsGeometry extends InstancedBufferGeometry {
         bbox!.min.set(bounds[0], bounds[1], 0);
         bbox.max.set(bounds[2], bounds[3], 0);
       }
-      bbox.getBoundingSphere(this.boundingSphere);
+      bbox.getBoundingSphere(this.boundingSphere!);
     }
   }
 

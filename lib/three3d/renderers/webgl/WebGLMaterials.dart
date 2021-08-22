@@ -157,7 +157,7 @@ class WebGLMaterials {
 
 			uniforms["envMap"]["value"] = envMap;
 
-			uniforms["flipEnvMap"]["value"] = ( envMap.isCubeTexture && envMap._needsFlipEnvMap ) ? - 1 : 1;
+			uniforms["flipEnvMap"]["value"] = ( envMap.isCubeTexture && envMap.isRenderTargetTexture == false ) ? - 1 : 1;
 
 			uniforms["reflectivity"]["value"] = material.reflectivity;
 			uniforms["refractionRatio"]["value"] = material.refractionRatio;

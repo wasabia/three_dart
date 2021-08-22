@@ -46,7 +46,7 @@ class WebGLParameters {
   late bool specularMap;
   late bool specularIntensityMap;
 	late bool specularTintMap;
-	late bool specularTintMapEncoding;
+	late int specularTintMapEncoding;
   late bool alphaMap;
   late bool gradientMap;
   late bool sheen;
@@ -111,6 +111,7 @@ class WebGLParameters {
   Map<String, dynamic>? uniforms;
 
   dynamic vertexAlphas;
+  late bool flipNormalScaleY;
 
 
   WebGLParameters(Map<String, dynamic> json) {
@@ -226,6 +227,8 @@ class WebGLParameters {
     uniforms = json["uniforms"];
 
     vertexAlphas = json["vertexAlphas"];
+
+    flipNormalScaleY = json["flipNormalScaleY"];
   }
 
 
@@ -347,7 +350,8 @@ class WebGLParameters {
 
       "customProgramCacheKey": customProgramCacheKey,
       "uniforms": uniforms,
-      "vertexAlphas": vertexAlphas
+      "vertexAlphas": vertexAlphas,
+      "flipNormalScaleY": flipNormalScaleY
     };
 
     return _json;

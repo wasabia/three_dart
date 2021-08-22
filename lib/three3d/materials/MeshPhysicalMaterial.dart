@@ -20,8 +20,8 @@ part of three_materials;
  *
  *  thickness: <float>,
  *  thicknessMap: new THREE.Texture( <Image> ),
+ *  attenuationTint: <Color>
  *  attenuationDistance: <float>,
- *  attenuationColor: <Color>
  * 
  *  specularIntensity: <float>,
  *  specularIntensityhMap: new THREE.Texture( <Image> ),
@@ -47,8 +47,9 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
 
   num thickness = 0.01;
   
+  Color attenuationTint = new Color( 1, 1, 1 );
   num attenuationDistance = 0.0;
-  Color attenuationColor = new Color( 1, 1, 1 );
+  
 
   num specularIntensity = 1.0;
   Texture? specularIntensityMap = null;
@@ -107,8 +108,10 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
 
     this.thickness = source.thickness;
 		this.thicknessMap = source.thicknessMap;
+
+    this.attenuationTint.copy( source.attenuationTint );
 		this.attenuationDistance = source.attenuationDistance;
-		this.attenuationColor.copy( source.attenuationColor );
+		
 
     this.specularIntensity = source.specularIntensity;
 		this.specularIntensityMap = source.specularIntensityMap;

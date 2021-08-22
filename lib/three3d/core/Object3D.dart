@@ -833,13 +833,13 @@ class Object3D with EventDispatcher {
 
 						var shape = shapes[ i ];
 
-						serialize( meta!.shapes, shape, null );
+						serialize( meta.shapes, shape, null );
 
 					}
 
 				} else {
 
-					serialize( meta!.shapes, shapes, null );
+					serialize( meta.shapes, shapes, null );
 
 				}
 

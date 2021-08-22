@@ -16,6 +16,7 @@ class Texture with EventDispatcher {
   bool isDataTexture = false;
   bool isCompressedTexture = false;
   bool isOpenGLTexture = false;
+  bool isRenderTargetTexture = false;
 
   ImageElement? image;
 

@@ -71,7 +71,8 @@ class WebGLRenderTarget extends RenderTarget {
       this.options.type,
       this.options.anisotropy,
       this.options.encoding);
-
+    this.texture.isRenderTargetTexture = true;
+    
     ImageElement image = ImageElement(width: width, height: height);
 
     this.texture.image = image;
