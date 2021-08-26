@@ -1272,7 +1272,7 @@ class WebGLRenderer {
       envMap = cubemaps.get( material.envMap ?? environment );
     }
     
-		var vertexAlphas = material.vertexColors == true && object.geometry != null && object.geometry.attributes["color"] != null && object.geometry.attributes.color.itemSize == 4;
+		var vertexAlphas = material.vertexColors == true && object.geometry != null && object.geometry.attributes["color"] != null && object.geometry.attributes["color"].itemSize == 4;
 		var vertexTangents = object.geometry != null && object.geometry.attributes["tangent"] != null;
 		var morphTargets = object.geometry != null && object.geometry.morphAttributes["position"] != null;
 		var morphNormals = object.geometry != null && object.geometry.morphAttributes["normal"] != null;

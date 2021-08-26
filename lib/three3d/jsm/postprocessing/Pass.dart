@@ -27,6 +27,7 @@ class Pass {
 
 
   setProperty(String key, dynamic newValue) {
+    // print(" Pass setProperty key: ${key} ");
     this.uniforms[key] = {"value": newValue};
   }
 
@@ -52,7 +53,7 @@ class Pass {
 
 class FullScreenQuad {
 
-	var camera = new OrthographicCamera( left: -1, right: 1, top: 1, bottom: -1, near: 0, far: 1 );
+	Camera camera = new OrthographicCamera( left: -1, right: 1, top: 1, bottom: -1, near: 0, far: 1 );
 	BufferGeometry geometry = new PlaneGeometry( width: 2, height: 2 );
   
   late Object3D _mesh;

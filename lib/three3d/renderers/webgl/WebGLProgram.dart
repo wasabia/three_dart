@@ -53,24 +53,23 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
     String customDefines = generateDefines(defines);
 
-    var prefixVertex, prefixFragment;
+    String prefixVertex, prefixFragment;
     var versionString = parameters.glslVersion != null
         ? '#version ${parameters.glslVersion}\n'
         : '';
 
     if (parameters.isRawShaderMaterial) {
-      prefixVertex =
-          [customDefines].where((s) => filterEmptyLine(s)).join('\n');
+      prefixVertex = [customDefines].where((s) => filterEmptyLine(s)).join('\n');
 
       if (prefixVertex.length > 0) {
-        prefixVertex += '\n';
+        prefixVertex = "${prefixVertex}\n";
       }
 
-      prefixFragment = [customExtensions, customDefines]
-        ..where((s) => filterEmptyLine(s)).join('\n');
+      prefixFragment = [customExtensions, customDefines].where((s) => filterEmptyLine(s)).join('\n');
+
 
       if (prefixFragment.length > 0) {
-        prefixFragment += '\n';
+        prefixFragment = "${prefixFragment}\n";
       }
     } else {
 

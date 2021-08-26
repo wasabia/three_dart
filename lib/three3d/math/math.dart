@@ -71,6 +71,11 @@ class Math {
     return math.Random().nextDouble();
   }
 
+  static double randomFromA2B(a, b) {
+    var result = random() * (b - a) + a;
+    return result;
+  }
+
   static num pow( num x, num y ) {
     return math.pow(x, y);
   }
@@ -81,6 +86,10 @@ class Math {
 
   static double tan(double x) {
     return math.tan(x);
+  }
+
+  static double atan(double x) {
+    return math.atan(x);
   }
 
   static double sign(double x) {
