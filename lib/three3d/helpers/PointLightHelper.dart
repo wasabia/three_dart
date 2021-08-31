@@ -57,7 +57,7 @@ class PointLightHelper extends Mesh {
 
 	dispose() {
 
-		this.geometry.dispose();
+		this.geometry!.dispose();
 		this.material.dispose();
 
 	}

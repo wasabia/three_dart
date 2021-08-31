@@ -47,6 +47,12 @@ class PerspectiveCamera extends Camera {
     return this;
 	}
 
+  clone (bool recursive) {
+
+		return PerspectiveCamera().copy( this, false );
+
+	}
+
 // 	/**
 // 	 * Sets the FOV by focal length in respect to the current .filmGauge.
 // 	 *

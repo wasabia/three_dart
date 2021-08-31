@@ -100,6 +100,8 @@ class WebGLUniforms with WebGLUniform {
       var u = seq[ i ];
       var v = values[ u.id ];
 
+      // print(" WebGLUniforms.upload u: ${u.id}  value: ${v["value"]}");
+
       if ( v["needsUpdate"] != false ) {
         // note: always updating when .needsUpdate is null
         u.setValue( gl, v["value"], textures );

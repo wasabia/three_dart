@@ -37,7 +37,7 @@ class Points extends Object3D {
 
 	raycast( raycaster, intersects ) {
 
-		var geometry = this.geometry;
+		var geometry = this.geometry!;
 		var matrixWorld = this.matrixWorld;
 		var threshold = raycaster.params["Points"].threshold;
     var drawRange = geometry.drawRange;
@@ -101,7 +101,7 @@ class Points extends Object3D {
 
 	updateMorphTargets () {
 
-		var geometry = this.geometry;
+		var geometry = this.geometry!;
 
 		if ( geometry.isBufferGeometry ) {
 

@@ -319,7 +319,7 @@ class Text extends Mesh {
    * and we'll also dispose the derived material at that time.
    */
   dispose() {
-    this.geometry.dispose();
+    this.geometry!.dispose();
   }
 
   /**
@@ -579,8 +579,8 @@ class Text extends Mesh {
         }
         position.setXYZ(i, x, y, z);
       }
-      geom.boundingSphere = this.geometry.boundingSphere;
-      geom.boundingBox = this.geometry.boundingBox;
+      geom.boundingSphere = this.geometry!.boundingSphere;
+      geom.boundingBox = this.geometry!.boundingBox;
       raycastMesh.matrixWorld = this.matrixWorld;
       raycastMesh.material.side = this.material.side;
       tempArray.length = 0;

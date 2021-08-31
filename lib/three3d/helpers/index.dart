@@ -19,3 +19,4 @@ part './SkeletonHelper.dart';
 part './SpotLightHelper.dart';
 part './PointLightHelper.dart';
 part './DirectionalLightHelper.dart';
+part './HemisphereLightHelper.dart';

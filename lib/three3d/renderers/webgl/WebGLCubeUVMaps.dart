@@ -14,7 +14,7 @@ class WebGLCubeUVMaps {
 
 	get( texture ) {
 
-		if ( texture && texture.isTexture && texture.isRenderTargetTexture == false ) {
+		if ( texture != null && texture.isTexture && texture.isRenderTargetTexture == false ) {
 
 			var mapping = texture.mapping;
 

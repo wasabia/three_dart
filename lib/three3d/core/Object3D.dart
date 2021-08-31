@@ -72,7 +72,7 @@ class Object3D with EventDispatcher {
   Map<String, dynamic> extra = {};
 
 	bool isObject3D = true;
-  late BufferGeometry geometry;
+  BufferGeometry? geometry;
 
 	Vector3 up = Object3D.DefaultUp.clone();
 
@@ -821,7 +821,7 @@ class Object3D with EventDispatcher {
 
 			object["geometry"] = serialize( meta!.geometries, this.geometry, null );
 
-			var parameters = this.geometry.parameters;
+			var parameters = this.geometry!.parameters;
 
 			if ( parameters != null && parameters["shapes"] != null ) {
 

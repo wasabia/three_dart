@@ -5,11 +5,15 @@ class ShapeGeometry extends BufferGeometry {
 
   String type = 'ShapeGeometry';
 
-	ShapeGeometry( List<Shape> shapes, {num curveSegments = 12 } ) : super() {
+	ShapeGeometry( shapes, {num curveSegments = 12 } ) : super() {
 
     this.curveSegments = curveSegments;
-    this.shapes = shapes;
-
+    if(shapes is List) {
+      this.shapes = List<Shape>.from(shapes);
+    } else {
+      this.shapes = List<Shape>.from([shapes]);
+    }
+    
     init();
 	}
 

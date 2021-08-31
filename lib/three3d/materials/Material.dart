@@ -304,7 +304,9 @@ class Material with EventDispatcher {
     } else if(key == "uniforms") {
       uniforms = newValue;
     } else if(key == "vertexShader") {
-      vertexShader = newValue;
+      vertexShader = newValue;  
+    } else if(key == "visible") {
+      visible = newValue;
     } else if(key == "vertexColors") {
       vertexColors = newValue;
     } else if(key == "wireframe") {

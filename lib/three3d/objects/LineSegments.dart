@@ -15,7 +15,7 @@ class LineSegments extends Line {
 
   computeLineDistances () {
 
-		var geometry = this.geometry;
+		var geometry = this.geometry!;
 
 		if ( geometry.isBufferGeometry ) {
 

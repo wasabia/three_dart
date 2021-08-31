@@ -117,7 +117,7 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
 
     texture.minFilter = currentMinFilter;
 
-    mesh.geometry.dispose();
+    mesh.geometry!.dispose();
     mesh.material.dispose();
 
     return this;

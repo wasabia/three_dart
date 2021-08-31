@@ -90,6 +90,9 @@ class WebGLAttributes {
         // 保持抛出异常 及时发现异常情况
         throw("WebGLAttributes.createBuffer InstancedInterleavedBuffer arrayType: ${array.runtimeType} is not support  ");
       }
+    } else if(array.runtimeType == Float32Array) {
+      type = gl.FLOAT;
+      bytesPerElement = Float32List.bytesPerElement;
     } else {
       print("createBuffer array: ${array.runtimeType} ");
       // arrayList = Float32List.fromList(array.map((e) => e.toDouble()).toList());

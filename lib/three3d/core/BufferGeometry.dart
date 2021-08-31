@@ -39,10 +39,10 @@ class BufferGeometry with EventDispatcher {
   bool groupsNeedUpdate = false;
   bool isInstancedBufferGeometry = false;
 
-  late List<double> vertices;
+  late List<num> vertices;
   late List<int> indices;
-  late List<double> normals;
-  late List<double> uvs;
+  late List<num> normals;
+  late List<num> uvs;
 
   late List<Color> colors;
   bool isGeometry = false;
@@ -311,7 +311,7 @@ class BufferGeometry with EventDispatcher {
 	setFromObject( Object3D object ) {
 
 
-		var geometry = object.geometry;
+		var geometry = object.geometry!;
 
 		if ( object.type == "Points" || object.type == "Line" ) {
 

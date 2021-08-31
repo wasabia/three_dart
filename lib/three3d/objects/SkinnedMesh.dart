@@ -68,7 +68,7 @@ class SkinnedMesh extends Mesh {
 
 		var vector = new Vector4.init();
 
-		var skinWeight = this.geometry.attributes["skinWeight"];
+		var skinWeight = this.geometry!.attributes["skinWeight"];
 
 		for ( var i = 0, l = skinWeight.count; i < l; i ++ ) {
 
@@ -118,7 +118,7 @@ class SkinnedMesh extends Mesh {
 	boneTransform ( index, target ) {
 
 		var skeleton = this.skeleton;
-		var geometry = this.geometry;
+		var geometry = this.geometry!;
 
 		_skinIndex.fromBufferAttribute( geometry.attributes["skinIndex"], index, null );
 		_skinWeight.fromBufferAttribute( geometry.attributes["skinWeight"], index, null );

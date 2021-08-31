@@ -56,7 +56,7 @@ class WebGLBackground {
           renderer.autoClearStencil);
     }
 
-    if ( background != null && ( background.isCubeTexture || background.mapping == CubeUVReflectionMapping ) ) {
+    if ( background != null && ( background.type == "CubeTexture" || (background is Texture && background.mapping == CubeUVReflectionMapping) ) ) {
 
     	if ( boxMesh == null ) {
 
@@ -74,8 +74,8 @@ class WebGLBackground {
     			} )
     		);
 
-    		boxMesh!.geometry.deleteAttribute( 'normal' );
-    		boxMesh!.geometry.deleteAttribute( 'uv' );
+    		boxMesh!.geometry!.deleteAttribute( 'normal' );
+    		boxMesh!.geometry!.deleteAttribute( 'uv' );
 
     		boxMesh!.onBeforeRender = ( renderer, mesh, scene, camera ) {
     			mesh.matrixWorld.copyPosition( camera.matrixWorld );
@@ -137,7 +137,7 @@ class WebGLBackground {
     			} )
     		);
 
-    		planeMesh!.geometry.deleteAttribute( 'normal' );
+    		planeMesh!.geometry!.deleteAttribute( 'normal' );
 
     		// enable code injection for non-built-in material
     		// Object.defineProperty( planeMesh.material, 'map', {

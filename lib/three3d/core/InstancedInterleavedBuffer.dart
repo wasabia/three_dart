@@ -7,6 +7,8 @@ class InstancedInterleavedBuffer extends InterleavedBuffer {
 
   bool isInstancedInterleavedBuffer = true;
 
+  String type = "InstancedInterleavedBuffer";
+
   InstancedInterleavedBuffer( array, stride, meshPerAttribute ) : super( array, stride ) {
     this.meshPerAttribute = meshPerAttribute ?? 1;
   }

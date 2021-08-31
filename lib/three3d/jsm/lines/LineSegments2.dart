@@ -31,7 +31,7 @@ class LineSegments2 extends Mesh {
 		var end = new Vector3.init();
 
 		
-    var geometry = this.geometry;
+    var geometry = this.geometry!;
 
     var instanceStart = geometry.attributes["instanceStart"];
     var instanceEnd = geometry.attributes["instanceEnd"];
@@ -77,7 +77,7 @@ class LineSegments2 extends Mesh {
     var camera = raycaster.camera;
     var projectionMatrix = camera.projectionMatrix;
 
-    var geometry = this.geometry;
+    var geometry = this.geometry!;
     var material = this.material;
     var resolution = material.resolution;
     var lineWidth = material.linewidth + threshold;

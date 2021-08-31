@@ -35,7 +35,7 @@ class AxesHelper extends LineSegments {
   setColors( Color xAxisColor, Color yAxisColor, Color zAxisColor ) {
 
 		var color = new Color(1, 1, 1);
-		var array = this.geometry.attributes["color"].array;
+		var array = this.geometry!.attributes["color"].array;
 
 		color.copy( xAxisColor );
 		color.toArray( array, offset: 0 );
@@ -49,7 +49,7 @@ class AxesHelper extends LineSegments {
 		color.toArray( array, offset: 12 );
 		color.toArray( array, offset: 15 );
 
-		this.geometry.attributes["color"].needsUpdate = true;
+		this.geometry!.attributes["color"].needsUpdate = true;
 
 		return this;
 
@@ -57,7 +57,7 @@ class AxesHelper extends LineSegments {
 
   dispose() {
 
-		this.geometry.dispose();
+		this.geometry!.dispose();
 		this.material.dispose();
 
 	}

@@ -42,7 +42,7 @@ class Mesh extends Object3D {
   }
 
   clone( [bool recursive = false] ) {
-		return Mesh(this.geometry, this.material).copy( this, recursive );
+		return Mesh(this.geometry!, this.material).copy( this, recursive );
 	}
 
 
@@ -74,7 +74,7 @@ class Mesh extends Object3D {
 
 	updateMorphTargets () {
 
-		var geometry = this.geometry;
+		var geometry = this.geometry!;
 
 		if ( geometry.isBufferGeometry ) {
 
@@ -121,7 +121,7 @@ class Mesh extends Object3D {
   raycast( Raycaster raycaster, List<Intersection> intersects ) {
 
 
-		var geometry = this.geometry;
+		var geometry = this.geometry!;
 		var material = this.material;
 		var matrixWorld = this.matrixWorld;
 
@@ -209,7 +209,7 @@ class Mesh extends Object3D {
 
 						intersection = checkBufferGeometryIntersection( this, material, raycaster, _meshray, position, morphPosition, morphTargetsRelative, uv, uv2, a, b, c );
 
-						if ( intersection ) {
+						if ( intersection != null ) {
 
 							intersection.faceIndex = Math.floor( i / 3 ); // triangle number in indexed buffer semantics
 							intersects.add( intersection );
@@ -292,7 +292,7 @@ class Mesh extends Object3D {
 }
 
 
-checkIntersection( object, material, raycaster, ray, pA, pB, pC, point ) {
+Intersection? checkIntersection( object, material, raycaster, ray, pA, pB, pC, point ) {
 
 	var intersect;
 
@@ -315,15 +315,15 @@ checkIntersection( object, material, raycaster, ray, pA, pB, pC, point ) {
 
 	if ( distance < raycaster.near || distance > raycaster.far ) return null;
 
-	return {
+	return Intersection({
 		"distance": distance,
 		"point": _intersectionPointWorld.clone(),
 		"object": object
-	};
+	});
 
 }
 
-checkBufferGeometryIntersection( object, material, raycaster, ray, position, morphPosition, morphTargetsRelative, uv, uv2, a, b, c ) {
+Intersection? checkBufferGeometryIntersection( object, material, raycaster, ray, position, morphPosition, morphTargetsRelative, uv, uv2, a, b, c ) {
 
 	_vA.fromBufferAttribute( position, a );
 	_vB.fromBufferAttribute( position, b );
@@ -331,7 +331,7 @@ checkBufferGeometryIntersection( object, material, raycaster, ray, position, mor
 
 	var morphInfluences = object.morphTargetInfluences;
 
-	if ( morphPosition && morphInfluences ) {
+	if ( morphPosition != null && morphInfluences != null ) {
 
 		_morphA.set( 0, 0, 0 );
 		_morphB.set( 0, 0, 0 );
@@ -382,7 +382,7 @@ checkBufferGeometryIntersection( object, material, raycaster, ray, position, mor
 
 	if ( intersection != null ) {
 
-		if ( uv ) {
+		if ( uv != null ) {
 
 			_uvA.fromBufferAttribute( uv, a );
 			_uvB.fromBufferAttribute( uv, b );
@@ -392,7 +392,7 @@ checkBufferGeometryIntersection( object, material, raycaster, ray, position, mor
 
 		}
 
-		if ( uv2 ) {
+		if ( uv2 != null ) {
 
 			_uvA.fromBufferAttribute( uv2, a );
 			_uvB.fromBufferAttribute( uv2, b );

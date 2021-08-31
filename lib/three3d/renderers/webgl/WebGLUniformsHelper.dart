@@ -527,6 +527,7 @@ class WebGLUniformsHelper {
 
       }
     } else if(v is List) {
+
       if ( cache[ 0 ] != v[0] || cache[ 1 ] != v[1] || cache[ 2 ] != v[2] || cache[ 3 ] != v[3] ) {
 
         gl.uniform4f( this.addr, v[0], v[1], v[2], v[3] );

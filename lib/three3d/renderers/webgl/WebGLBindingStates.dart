@@ -392,7 +392,7 @@ class WebGLBindingStates {
 						var stride = data.stride;
 						var offset = geometryAttribute.offset;
 
-						if ( data != null && data.isInstancedInterleavedBuffer ) {
+						if ( data != null && data.type == "InstancedInterleavedBuffer" ) {
 
 							enableAttributeAndDivisor( programAttribute, data.meshPerAttribute );
 

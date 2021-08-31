@@ -37,7 +37,7 @@ class Line extends Object3D {
 
 	computeLineDistances () {
 
-		var geometry = this.geometry;
+		var geometry = this.geometry!;
 
 		if ( geometry.isBufferGeometry ) {
 
@@ -80,7 +80,7 @@ class Line extends Object3D {
 
 	raycast ( Raycaster raycaster, List<Intersection> intersects ) {
 
-		var geometry = this.geometry;
+		var geometry = this.geometry!;
 		var matrixWorld = this.matrixWorld;
 		var threshold = raycaster.params["Line"]["threshold"];
     var drawRange = geometry.drawRange;
@@ -194,7 +194,7 @@ class Line extends Object3D {
 
 	updateMorphTargets () {
 
-		var geometry = this.geometry;
+		var geometry = this.geometry!;
 
 		if ( geometry.isBufferGeometry ) {
 

@@ -79,7 +79,7 @@ class FullScreenQuad {
   }
 
   dispose() {
-    this._mesh.geometry.dispose();
+    this._mesh.geometry!.dispose();
   }
 
 }

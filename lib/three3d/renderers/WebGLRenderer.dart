@@ -575,7 +575,7 @@ class WebGLRenderer {
 
     var index = geometry.index;
 
-    BufferAttribute? position = geometry.attributes["position"];
+    var position = geometry.attributes["position"];
 
  
     if (index == null) {
@@ -797,7 +797,9 @@ class WebGLRenderer {
     var transmissiveObjects = currentRenderList!.transmissive;
     var transparentObjects = currentRenderList!.transparent;
 
-
+    // print("opaqueObjects: ${opaqueObjects} ");
+    // print("transmissiveObjects: ${transmissiveObjects} ");
+    // print("transparentObjects: ${transparentObjects} ");
 
     if (opaqueObjects.length > 0) renderObjects(opaqueObjects, scene, camera);
     if (transmissiveObjects.length > 0 ) renderTransmissiveObjects( opaqueObjects, transmissiveObjects, scene, camera );
@@ -903,7 +905,7 @@ class WebGLRenderer {
           }
         }
 
-        // print("object: ${object.type} ${object.frustumCulled} ${_frustum.intersectsObject(object)} ");
+        // print("object: ${object.type} ${!object.frustumCulled} ${_frustum.intersectsObject(object)} ");
 
         if (!object.frustumCulled || _frustum.intersectsObject(object)) {
 

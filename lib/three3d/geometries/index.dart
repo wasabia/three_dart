@@ -23,3 +23,4 @@ part './LatheGeometry.dart';
 part './ConeGeometry.dart';
 part './WireframeGeometry.dart';
 part './EdgesGeometry.dart';
+part './OctahedronGeometry.dart';

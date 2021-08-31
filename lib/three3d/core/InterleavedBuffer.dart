@@ -14,6 +14,8 @@ class InterleavedBuffer {
   bool isInterleavedBuffer = true;
   Function? onUploadCallback;
 
+  String type = "InterleavedBuffer";
+
 
   InterleavedBuffer( this.array, this.stride ) {
     this.count = array != null ? (array.length / stride).toInt() : 0;

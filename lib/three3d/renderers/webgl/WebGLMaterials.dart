@@ -387,13 +387,13 @@ class WebGLMaterials {
 		uniforms["opacity"]["value"] = material.opacity;
 		uniforms["rotation"]["value"] = material.rotation;
 
-		if ( material.map ) {
+		if ( material.map != null ) {
 
 			uniforms["map"]["value"] = material.map;
 
 		}
 
-		if ( material.alphaMap ) {
+		if ( material.alphaMap != null ) {
 
 			uniforms["alphaMap"]["value"] = material.alphaMap;
 
@@ -405,11 +405,11 @@ class WebGLMaterials {
 
 		var uvScaleMap;
 
-		if ( material.map ) {
+		if ( material.map != null ) {
 
 			uvScaleMap = material.map;
 
-		} else if ( material.alphaMap ) {
+		} else if ( material.alphaMap != null ) {
 
 			uvScaleMap = material.alphaMap;
 

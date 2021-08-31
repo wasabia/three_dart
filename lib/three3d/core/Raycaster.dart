@@ -28,9 +28,9 @@ class Raycaster {
   }
 
 
-  ascSort( a, b ) {
+  int ascSort( a, b ) {
 
-    return a.distance - b.distance;
+    return a.distance - b.distance >= 0 ? 1 : -1;
 
   }
 
@@ -67,13 +67,13 @@ class Raycaster {
 
 	setFromCamera ( coords, camera ) {
 
-		if ( camera && camera.isPerspectiveCamera ) {
+		if ( camera != null && camera.isPerspectiveCamera ) {
 
 			this.ray.origin.setFromMatrixPosition( camera.matrixWorld );
 			this.ray.direction.set( coords.x, coords.y, 0.5 ).unproject( camera ).sub( this.ray.origin ).normalize();
 			this.camera = camera;
 
-		} else if ( camera && camera.isOrthographicCamera ) {
+		} else if ( camera != null && camera.isOrthographicCamera ) {
 
 			this.ray.origin.set( coords.x, coords.y, ( camera.near + camera.far ) / ( camera.near - camera.far ) ).unproject( camera ); // set origin in plane of camera
 			this.ray.direction.set( 0, 0, - 1 ).transformDirection( camera.matrixWorld );
@@ -97,7 +97,10 @@ class Raycaster {
 
 	}
 
-	intersectObjects( objects, recursive, intersects ) {
+	intersectObjects( objects, recursive, {List<Intersection>? intersects} ) {
+
+    intersects = intersects ?? List<Intersection>.from([]);
+    
 
 		for ( var i = 0, l = objects.length; i < l; i ++ ) {
 
@@ -122,22 +125,53 @@ class Intersection {
   late num distanceToRay;
   late Vector3 point;
   late num index;
-  late Face? face;
+  Face? face;
   late num faceIndex;
   late Object3D object;
   late Vector2 uv;
+  Vector2? uv2;
   
 
   Intersection(Map<String, dynamic> json) {
-    instanceId = json["instanceId"];
-    distance = json["distance"];
-    distanceToRay = json["distanceToRay"];
-    point = json["point"];
-    index = json["index"];
-    face = json["face"];
-    faceIndex = json["faceIndex"];
-    object = json["object"];
-    uv = json["uv"];
+    if(json["instanceId"] != null) {
+      instanceId = json["instanceId"];
+    }
+    
+    if(json["distance"] != null) {
+      distance = json["distance"];
+    }
+    
+    if(json["distanceToRay"] != null) {
+      distanceToRay = json["distanceToRay"];
+    }
+
+    if(json["point"] != null) {
+      point = json["point"];
+    }
+
+    if(json["index"] != null) {
+      index = json["index"];
+    }
+
+    if(json["face"] != null) {
+      face = json["face"];
+    }
+
+    if(json["faceIndex"] != null) {
+      faceIndex = json["faceIndex"];
+    }
+
+    if(json["object"] != null) {
+      object = json["object"];
+    }
+
+    if(json["uv"] != null) {
+      uv = json["uv"];
+    }
+
+    if(json["uv2"] != null) {
+      uv2 = json["uv2"];
+    }
   }
 
   

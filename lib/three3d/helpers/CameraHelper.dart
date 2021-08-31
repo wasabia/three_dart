@@ -179,13 +179,13 @@ class CameraHelper extends LineSegments {
 		setPoint( 'cn3', pointMap, geometry, _camera, 0, - h, - 1 );
 		setPoint( 'cn4', pointMap, geometry, _camera, 0, h, - 1 );
 
-		geometry.getAttribute( 'position' ).needsUpdate = true;
+		geometry!.getAttribute( 'position' ).needsUpdate = true;
 
 	}
 
   dispose() {
 
-		this.geometry.dispose();
+		this.geometry!.dispose();
 		this.material.dispose();
 
 	}
