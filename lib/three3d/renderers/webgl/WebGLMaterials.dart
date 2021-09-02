@@ -160,6 +160,7 @@ class WebGLMaterials {
 			uniforms["flipEnvMap"]["value"] = ( envMap.isCubeTexture && envMap.isRenderTargetTexture == false ) ? - 1 : 1;
 
 			uniforms["reflectivity"]["value"] = material.reflectivity;
+      uniforms["ior"]["value"] = material.ior;
 			uniforms["refractionRatio"]["value"] = material.refractionRatio;
 
 			var maxMipLevel = properties.get( envMap )["__maxMipLevel"];

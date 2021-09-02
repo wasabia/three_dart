@@ -31,6 +31,8 @@ class OrbitControls with EventDispatcher {
   late Vector3 position0;
   late double zoom0;
 
+  num clientHeight = 400;
+  num clientWidth = 400;
 	// deprecated
 	late Vector3 center;
 
@@ -87,7 +89,7 @@ class OrbitControls with EventDispatcher {
 	var panOffset = new Vector3.init();
 	var zoomChanged = false;
 
-	var rotateStart = new Vector2(null, null);
+	var rotateStart = new Vector2(0, 0);
 	var rotateEnd = new Vector2(null, null);
 	var rotateDelta = new Vector2(null, null);
 
@@ -175,7 +177,7 @@ class OrbitControls with EventDispatcher {
     this.domElement.addEventListener( 'wheel', onMouseWheel, false );
     this.domElement.addEventListener( 'touchstart', onTouchStart, false );
     this.domElement.addEventListener( 'touchend', onTouchEnd, false );
-    this.domElement.addEventListener( 'touchmove', onTouchMove, false );
+    this.domElement.addEventListener( 'pointerupdate', onPointerMove, false );
     this.domElement.addEventListener( 'keydown', onKeyDown, false );
 
     // force an update at start
@@ -223,10 +225,12 @@ class OrbitControls with EventDispatcher {
 	// this method is exposed, but perhaps it would be better if we can make it private...
 	update () {
 
+    print(" ---------------- update ........... ");
+
 		var offset = new Vector3.init();
 
 		// so camera.up is the orbit axis
-		var quat = new Quaternion().setFromUnitVectors( object.up, new Vector3( 0, 1, 0 ) );
+		var quat = new Quaternion().setFromUnitVectors( object.up, new Vector3( 0.0, 1.0, 0.0 ) );
 		var quatInverse = quat.clone().invert();
 
 		var lastPosition = new Vector3.init();
@@ -476,14 +480,14 @@ class OrbitControls with EventDispatcher {
 				targetDistance *= Math.tan( ( this.object.fov / 2 ) * Math.PI / 180.0 );
 
 				// we use only clientHeight here so aspect ratio does not distort speed
-				panLeft( 2 * deltaX * targetDistance / element.clientHeight, this.object.matrix );
-				panUp( 2 * deltaY * targetDistance / element.clientHeight, this.object.matrix );
+				panLeft( 2 * deltaX * targetDistance / clientHeight, this.object.matrix );
+				panUp( 2 * deltaY * targetDistance / clientHeight, this.object.matrix );
 
 			} else if ( this.object.isOrthographicCamera ) {
 
 				// orthographic
-				panLeft( deltaX * ( this.object.right - this.object.left ) / this.object.zoom / element.clientWidth, this.object.matrix );
-				panUp( deltaY * ( this.object.top - this.object.bottom ) / this.object.zoom / element.clientHeight, this.object.matrix );
+				panLeft( deltaX * ( this.object.right - this.object.left ) / this.object.zoom / clientWidth, this.object.matrix );
+				panUp( deltaY * ( this.object.top - this.object.bottom ) / this.object.zoom / clientHeight, this.object.matrix );
 
 			} else {
 
@@ -564,15 +568,17 @@ class OrbitControls with EventDispatcher {
 
 	handleMouseMoveRotate( event ) {
 
+    print("handleMouseMoveRotate ............. ");
+
 		rotateEnd.set( event.page.x, event.page.y );
 
 		rotateDelta.subVectors( rotateEnd, rotateStart ).multiplyScalar( this.rotateSpeed );
 
 		var element = this.domElement;
 
-		rotateLeft( 2 * Math.PI * rotateDelta.x / element.clientHeight ); // yes, height
+		rotateLeft( 2 * Math.PI * rotateDelta.x / clientHeight ); // yes, height
 
-		rotateUp( 2 * Math.PI * rotateDelta.y / element.clientHeight );
+		rotateUp( 2 * Math.PI * rotateDelta.y / clientHeight );
 
 		rotateStart.copy( rotateEnd );
 
@@ -730,6 +736,7 @@ class OrbitControls with EventDispatcher {
 	}
 
 	handleTouchMoveRotate( event ) {
+    print("handleTouchMoveRotate -------------- ");
 
 		if ( event.touches.length == 1 ) {
 
@@ -748,9 +755,9 @@ class OrbitControls with EventDispatcher {
 
 		var element = this.domElement;
 
-		rotateLeft( 2 * Math.PI * rotateDelta.x / element.clientHeight ); // yes, height
+		rotateLeft( 2 * Math.PI * rotateDelta.x / clientHeight ); // yes, height
 
-		rotateUp( 2 * Math.PI * rotateDelta.y / element.clientHeight );
+		rotateUp( 2 * Math.PI * rotateDelta.y / clientHeight );
 
 		rotateStart.copy( rotateEnd );
 
@@ -824,6 +831,8 @@ class OrbitControls with EventDispatcher {
 
 	onPointerDown( event ) {
 
+    print("OrbitControls.onPointerDown event.pointerType: ${event.pointerType} ");
+
 		if ( this.enabled == false ) return;
 
 		switch ( event.pointerType ) {
@@ -874,13 +883,13 @@ class OrbitControls with EventDispatcher {
 	onMouseDown( event ) {
 
 		// Prevent the browser from scrolling.
-		event.preventDefault();
+		// event.preventDefault();
 
 		// Manually set the focus since calling preventDefault above
 		// prevents the browser from setting it automatically.
 
 		// this.domElement.focus ? this.domElement.focus() : window.focus();
-    if(this.domElement.focus != null) this.domElement.focus();
+    // if(this.domElement.focus != null) this.domElement.focus();
 
     
 		var mouseAction;
@@ -922,15 +931,15 @@ class OrbitControls with EventDispatcher {
 
 
 
-				if ( event.ctrlKey || event.metaKey || event.shiftKey ) {
+				// if ( event.ctrlKey || event.metaKey || event.shiftKey ) {
 
-					if ( this.enablePan == false ) return;
+				// 	if ( this.enablePan == false ) return;
 
-					handleMouseDownPan( event );
+				// 	handleMouseDownPan( event );
 
-					state = STATE["PAN"];
+				// 	state = STATE["PAN"];
 
-				} else {
+				// } else {
 
 					if ( this.enableRotate == false ) return;
 
@@ -938,7 +947,7 @@ class OrbitControls with EventDispatcher {
 
 					state = STATE["ROTATE"];
 
-				}
+				// }
 
 		} else if ( mouseAction == MOUSE["PAN"] ) {
 
@@ -970,8 +979,8 @@ class OrbitControls with EventDispatcher {
 
 		if ( state != STATE["NONE"] ) {
 
-			this.domElement.ownerDocument.addEventListener( 'pointermove', onPointerMove, false );
-			this.domElement.ownerDocument.addEventListener( 'pointerup', onPointerUp, false );
+			// this.domElement.ownerDocument.addEventListener( 'pointermove', onPointerMove, false );
+			// this.domElement.ownerDocument.addEventListener( 'pointerup', onPointerUp, false );
 
 			this.dispatchEvent( startEvent );
 
@@ -983,7 +992,11 @@ class OrbitControls with EventDispatcher {
 
 		if ( this.enabled == false ) return;
 
-		event.preventDefault();
+		// event.preventDefault();
+
+    print("onMouseMove=============state: ${state} enabled: ${enabled} ");
+
+    state = 0;
 
 		if ( state == STATE["ROTATE"] ) {
 
@@ -1129,12 +1142,19 @@ class OrbitControls with EventDispatcher {
 
 		if ( this.enabled == false ) return;
 
-		event.preventDefault(); // prevent scrolling
-		event.stopPropagation();
+		// event.preventDefault(); // prevent scrolling
+		// event.stopPropagation();
+    state = 3;
 
-		if ( state ==  STATE["TOUCH_ROTATE"] ) {
+    print("OrbitControls.onTouchMove state: ${state} event: ${event} enableRotate: ${enableRotate} ");
+
+
+
+		if ( state == STATE["TOUCH_ROTATE"] ) {
 
 				if ( this.enableRotate == false ) return;
+
+    
 
 				handleTouchMoveRotate( event );
 

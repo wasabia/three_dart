@@ -100,7 +100,15 @@ class WebGLUniforms with WebGLUniform {
       var u = seq[ i ];
       var v = values[ u.id ];
 
-      // print(" WebGLUniforms.upload u: ${u.id}  value: ${v["value"]}");
+      var value = v["value"];
+      var _vt = value.runtimeType.toString();
+      
+      print("WebGLUniforms.upload name: ${u.id}  value: ${value} ");
+      if(_vt == "Matrix4" || _vt == "Matrix3" || _vt == "Color") {
+        print(value.toJSON());
+      } else {
+        print(value);
+      }
 
       if ( v["needsUpdate"] != false ) {
         // note: always updating when .needsUpdate is null

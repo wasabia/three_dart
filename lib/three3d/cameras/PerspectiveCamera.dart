@@ -5,6 +5,7 @@ class PerspectiveCamera extends Camera {
   String type = "PerspectiveCamera";
   bool isPerspectiveCamera = true;
 
+  // near 设置太小 导致 画面异常 精度问题？ 浮点运算问题？？
   PerspectiveCamera({num fov = 50, num aspect = 1, num near = 0.1, num far = 2000}) : super() {
     this.fov = fov;
     this.aspect = aspect;

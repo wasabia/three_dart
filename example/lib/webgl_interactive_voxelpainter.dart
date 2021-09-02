@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'dart:ui' as ui;
 
+import 'package:example/EventListener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -16,12 +17,13 @@ import 'package:three_dart/three_dart.dart' as THREE;
 
 
 
-class ExampleModifierCurve extends StatefulWidget {
+class Webgl_interactive_voxelpainter extends StatefulWidget {
+  Webgl_interactive_voxelpainter({Key? key}) : super(key: key);
+
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<ExampleModifierCurve> {
-  
+class _MyAppState extends State<Webgl_interactive_voxelpainter> {
 
 
   late FlutterGlPlugin three3dRender;
@@ -81,7 +83,24 @@ class _MyAppState extends State<ExampleModifierCurve> {
   
   var myText = THREE.Text();
 
+  var plane;
+  var pointer, raycaster, isShiftDown = false;
+
+  var rollOverMesh, rollOverMaterial;
+  var cubeGeo, cubeMaterial;
+
+
   ui.Image? _image;
+
+
+  Map<String, List<Function>> _listeners = {};
+
+
+  addEventListener(String name, Function callback, bool flag) {
+    var _cls = _listeners[name] ?? [];
+    _cls.add(callback);
+    _listeners[name] = _cls;
+  }
 
   @override
   void initState() {
@@ -151,25 +170,114 @@ class _MyAppState extends State<ExampleModifierCurve> {
     );
   }
 
+  _onTapDown(TapDownDetails details) {
+    var event = Event.fromJSON({
+      "touches": [],
+      "clientX": details.localPosition.dx, 
+      "clientY": details.localPosition.dy,
+      "page": {
+        "x": details.globalPosition.dx,
+        "y": details.globalPosition.dy
+      }
+    });
+    emit("pointerdown", event);
+  }
+
+  _onPanStart(DragStartDetails details) {
+    var event = Event.fromJSON({
+      "touches": [
+        {"clientX": details.localPosition.dx, "clientY": details.localPosition.dy}
+      ],
+      "clientX": details.localPosition.dx, 
+      "clientY": details.localPosition.dy,
+      "page": {
+        "x": details.globalPosition.dx,
+        "y": details.globalPosition.dy
+      }
+    });
+
+    emit("pointerdown", event);
+  }
+
+  _onPanUpdate(DragUpdateDetails details) {
+    var event = Event.fromJSON({
+      "touches": [
+        {
+          "clientX": details.localPosition.dx, 
+          "clientY": details.localPosition.dy,
+          "pageX": details.globalPosition.dx, 
+          "pageY": details.globalPosition.dy
+        }
+      ],
+      "clientX": details.localPosition.dx, 
+      "clientY": details.localPosition.dy,
+      "deltaX": details.delta.dx,
+      "deltaY": details.delta.dy,
+      "page": {
+        "x": details.globalPosition.dx,
+        "y": details.globalPosition.dy
+      }
+    });
+
+    emit("pointerupdate", event);
+
+    render();
+  }
+  emit(String name, event) {
+    var _callbacks = _listeners[name];
+    if(_callbacks != null) {
+      for(var _cb in _callbacks) {
+        _cb(event);
+      }
+    }
+  }
+
   Widget _build(BuildContext context) {
-
-
     return Column(
       children: [
         Container(
-          width: width,
-          height: width,
-          color: Colors.black,
-          child: Builder(
-            builder: (BuildContext context) {
-              if(kIsWeb) {
-                return three3dRender.isInitialized ? HtmlElementView(viewType: three3dRender.textureId!.toString()) : Container();
-              } else {
-                return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
-              }
-            }
-          )
+          child: Stack(
+            children: [
+              Container(
+                width: width,
+                height: width,
+                color: Colors.black,
+                child: Builder(
+                  builder: (BuildContext context) {
+                    if(kIsWeb) {
+                      return three3dRender.isInitialized ? HtmlElementView(viewType: three3dRender.textureId!.toString()) : Container();
+                    } else {
+                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
+                    }
+                  }
+                )
+              ),
+              Positioned(
+                left: 0,
+                top: 0,
+                bottom: 0,
+                right: 0,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onPanStart: (DragStartDetails details) {
+                    _onPanStart(details);
+                  },
+                  onPanUpdate: (DragUpdateDetails details) {
+                    _onPanUpdate(details);
+                  },
+                  onTapDown: (TapDownDetails details) {
+                    _onTapDown(details);
+                  },
+                  child: Container(
+                    width: width,
+                    height: width
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
+
         _buildRow(context),
         _image != null ? Container(
           child: RawImage(
@@ -228,6 +336,9 @@ class _MyAppState extends State<ExampleModifierCurve> {
                   },
                   child: Text("FN1", style: TextStyle(fontSize: 13)),
                 ),
+
+                
+                
               ],
             ),
           )
@@ -242,7 +353,7 @@ class _MyAppState extends State<ExampleModifierCurve> {
 
   _addX() {
    
-    update();
+
 
     render();
   }
@@ -347,137 +458,85 @@ class _MyAppState extends State<ExampleModifierCurve> {
   }
 
 
-  update() {
-    var vertexpos = 0;
-    var colorpos = 0;
-    var numConnected = 0;
-
-    for ( var i = 0; i < particleCount; i ++ )
-      particlesData[ i ]["numConnections"] = 0;
-
-    for ( var i = 0; i < particleCount; i ++ ) {
-
-      // get the particle
-      var particleData = particlesData[ i ];
-
-      particlePositions[ i * 3 ] += particleData["velocity"].x;
-      particlePositions[ i * 3 + 1 ] += particleData["velocity"].y;
-      particlePositions[ i * 3 + 2 ] += particleData["velocity"].z;
-
-      if ( particlePositions[ i * 3 + 1 ] < - rHalf || particlePositions[ i * 3 + 1 ] > rHalf )
-        particleData["velocity"].y = - particleData["velocity"].y;
-
-      if ( particlePositions[ i * 3 ] < - rHalf || particlePositions[ i * 3 ] > rHalf )
-        particleData["velocity"].x = - particleData["velocity"].x;
-
-      if ( particlePositions[ i * 3 + 2 ] < - rHalf || particlePositions[ i * 3 + 2 ] > rHalf )
-        particleData["velocity"].z = - particleData["velocity"].z;
-
-      if ( limitConnections && particleData["numConnections"] >= maxConnections )
-        continue;
-
-      // Check collision
-      for ( var j = i + 1; j < particleCount; j ++ ) {
-
-        var particleDataB = particlesData[ j ];
-        if ( limitConnections && particleDataB["numConnections"] >= maxConnections )
-          continue;
-
-        var dx = particlePositions[ i * 3 ] - particlePositions[ j * 3 ];
-        var dy = particlePositions[ i * 3 + 1 ] - particlePositions[ j * 3 + 1 ];
-        var dz = particlePositions[ i * 3 + 2 ] - particlePositions[ j * 3 + 2 ];
-        var dist = THREE.Math.sqrt( dx * dx + dy * dy + dz * dz );
-
-        if ( dist < minDistance ) {
-
-          particleData["numConnections"] ++;
-          particleDataB["numConnections"] ++;
-
-          var alpha = 1.0 - dist / minDistance;
-
-          positions[ vertexpos ++ ] = particlePositions[ i * 3 ];
-          positions[ vertexpos ++ ] = particlePositions[ i * 3 + 1 ];
-          positions[ vertexpos ++ ] = particlePositions[ i * 3 + 2 ];
-
-          positions[ vertexpos ++ ] = particlePositions[ j * 3 ];
-          positions[ vertexpos ++ ] = particlePositions[ j * 3 + 1 ];
-          positions[ vertexpos ++ ] = particlePositions[ j * 3 + 2 ];
-
-          colors[ colorpos ++ ] = alpha;
-          colors[ colorpos ++ ] = alpha;
-          colors[ colorpos ++ ] = alpha;
-
-          colors[ colorpos ++ ] = alpha;
-          colors[ colorpos ++ ] = alpha;
-          colors[ colorpos ++ ] = alpha;
-
-          numConnected ++;
-
-        }
-
-      }
-
-    }
-
-
-    linesMesh.geometry.setDrawRange( 0, numConnected * 2 );
-    linesMesh.geometry.attributes["position"].needsUpdate = true;
-    linesMesh.geometry.attributes["color"].needsUpdate = true;
-
-    // linesMesh.geometry.attributes["instanceStart"].needsUpdate = true;
-    // linesMesh.geometry.attributes["instanceEnd"].needsUpdate = true;
-    // linesMesh.geometry.attributes["instanceColorStart"].needsUpdate = true;
-    // linesMesh.geometry.attributes["instanceColorEnd"].needsUpdate = true;
-
-
-    pointCloud.geometry.attributes["position"].needsUpdate = true;
-  }
-
+  
   initScene() async {
     initRenderer();
     
 
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera( fov: 40, aspect: 1, near: 1, far: 1000 );
+    camera = new THREE.PerspectiveCamera( fov: 45, aspect: 1, near: 1, far: 10000 );
 
-    camera.position.set( 2, 2, 4 );
+    camera.position.set( 500, 800, 1300 );
     camera.lookAt( scene.position );
 
-    var initialPoints = [
-      { "x": 1, "y": 0, "z": - 1 },
-      { "x": 1, "y": 0, "z": 1 },
-      { "x": - 1, "y": 0, "z": 1 },
-      { "x": - 1, "y": 0, "z": - 1 },
-    ];
 
-    var boxGeometry = new THREE.BoxGeometry( width: 0.1, height: 0.1, depth: 0.1 );
-    var boxMaterial = new THREE.MeshBasicMaterial();
+    scene.background = THREE.Color.fromHex( 0xf0f0f0 );
+
+    // roll-over helpers
+
+    var rollOverGeo = new THREE.BoxGeometry( width: 50, height: 50, depth: 50 );
+    rollOverMaterial = new THREE.MeshBasicMaterial( { "color": 0xff0000, "opacity": 0.5, "transparent": true } );
+    rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
+    scene.add( rollOverMesh );
+
+    // cubes
+
+    cubeGeo = new THREE.BoxGeometry( width: 50, height: 50, depth: 50 );
+    cubeMaterial = new THREE.MeshLambertMaterial( { "color": 0xfeb74c } );
+
+    // cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xfeb74c, map: new THREE.TextureLoader().load( 'textures/square-outline-textured.png' ) } );
+
+    // grid
+
+    var gridHelper = new THREE.GridHelper( size: 1000, divisions: 20 );
+    scene.add( gridHelper );
 
 
-    var x = 0, y = 0;
-    var heartShape = new THREE.Shape(null) // From http://blog.burlock.org/html5/130-paths
-					.moveTo( x + 25, y + 25 )
-					.bezierCurveTo( x + 25, y + 25, x + 20, y, x, y )
-					.bezierCurveTo( x - 30, y, x - 30, y + 35, x - 30, y + 35 )
-					.bezierCurveTo( x - 30, y + 55, x - 10, y + 77, x + 25, y + 95 )
-					.bezierCurveTo( x + 60, y + 77, x + 80, y + 55, x + 80, y + 35 )
-					.bezierCurveTo( x + 80, y + 35, x + 80, y, x + 50, y )
-					.bezierCurveTo( x + 35, y, x + 25, y + 25, x + 25, y + 25 );
+    var mesh1 = new THREE.Mesh( cubeGeo, cubeMaterial );
+    mesh1.position.set(25, 25, 25);
+    scene.add( mesh1 );
 
-     var points = heartShape.getPoints( divisions: 50 );
-
-    // var points = curve.getPoints( divisions: 50 );
-    var line = new THREE.LineLoop(
-      new THREE.BufferGeometry().setFromPoints( points ),
-      new THREE.LineBasicMaterial( { "color": 0x00ff00 } )
-    );
-
-    scene.add( line );
-
-    //
-
+    var mesh2 = new THREE.Mesh( cubeGeo, cubeMaterial );
+    mesh2.position.set(75, 25, 25);
+    scene.add( mesh2 );
 
     //
+
+    raycaster = new THREE.Raycaster(null, null, null, null);
+    pointer = new THREE.Vector2(0, 0);
+
+    var geometry = new THREE.PlaneGeometry( width: 1000, height: 1000 );
+    geometry.rotateX( - THREE.Math.PI / 2 );
+
+    plane = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { "visible": false } ) );
+    scene.add( plane );
+
+    objects.add( plane );
+
+    // lights
+
+    var ambientLight = new THREE.AmbientLight( THREE.Color.fromHex( 0x606060 ), 1 );
+    scene.add( ambientLight );
+
+    var directionalLight = new THREE.DirectionalLight( THREE.Color.fromHex( 0xffffff ), 1 );
+    directionalLight.position.set( 1, 0.75, 0.5 ).normalize();
+    scene.add( directionalLight );
+
+
+    controls = new THREE.OrbitControls( camera, (widget.key as GlobalKey).currentState);
+    // controls.listenToKeyEvents( window ); // optional
+
+    //controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
+
+    // controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
+    controls.dampingFactor = 0.05;
+
+    controls.screenSpacePanning = false;
+
+    controls.minDistance = 100.0;
+    controls.maxDistance = 500.0;
+
+    controls.maxPolarAngle = THREE.Math.PI / 2;
    
   }
 

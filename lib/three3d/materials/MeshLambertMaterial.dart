@@ -50,7 +50,7 @@ class MeshLambertMaterial extends Material {
     this.aoMap = null;
     this.aoMapIntensity = 1.0;
 
-    this.emissive = new Color(0,0,0).setHex( 0x000000 );
+    this.emissive = new Color(0,0,0);
     this.emissiveIntensity = 1.0;
     this.emissiveMap = null;
 

@@ -1,5 +1,4 @@
 String clearcoat_pars_fragment = """
-
 #ifdef USE_CLEARCOATMAP
 
 	uniform sampler2D clearcoatMap;

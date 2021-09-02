@@ -20,7 +20,7 @@ Event _removedEvent = Event({"type": "removed"});
 
 class Object3D with EventDispatcher {
 
-  static Vector3 DefaultUp = Vector3( 0, 1, 0 );
+  static Vector3 DefaultUp = Vector3( 0.0, 1.0, 0.0 );
   static bool DefaultMatrixAutoUpdate = true;
 
   int id = _object3DId ++;

@@ -109,7 +109,7 @@ class Material with EventDispatcher {
   Texture? bumpMap;  
   Texture? envMap;
   int? combine;
-  num? reflectivity;
+
   num? refractionRatio;
   bool wireframe = false;
   num? wireframeLinewidth;
@@ -120,7 +120,7 @@ class Material with EventDispatcher {
   String? linecap;
   String? linejoin;
 
-  // Color emissive = new Color( 0,0,0 );
+
   Color? emissive;
 	num emissiveIntensity = 1.0;
 	Texture? emissiveMap;
@@ -159,8 +159,15 @@ class Material with EventDispatcher {
   bool? lights;
   bool? clipping;
 
+  num? ior;
+
   num? size;
 
+  late num _reflectivity;
+  num get reflectivity => _reflectivity;
+  set reflectivity(num value) {
+    
+  }
  
   bool? uniformsNeedUpdate;
 
@@ -430,7 +437,7 @@ class Material with EventDispatcher {
   	// if ( this.envMap && this.envMap.isTexture ) {
 
   	// 	data.envMap = this.envMap.toJSON( meta ).uuid;
-  	// 	data.reflectivity = this.reflectivity; // Scale behind envMap
+
   	// 	data.refractionRatio = this.refractionRatio;
 
   	// 	if ( this.combine != null ) data.combine = this.combine;

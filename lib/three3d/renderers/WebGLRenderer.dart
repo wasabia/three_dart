@@ -1508,6 +1508,8 @@ class WebGLRenderer {
 
 		}
 
+    print(" setProgram .......... material: ${material.type} ");
+
 		if ( refreshMaterial ) {
 
 			p_uniforms.setValue( _gl, 'toneMappingExposure', this.toneMappingExposure, textures );

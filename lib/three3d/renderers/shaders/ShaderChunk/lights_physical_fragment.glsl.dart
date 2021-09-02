@@ -5,15 +5,15 @@ material.diffuseColor = diffuseColor.rgb * ( 1.0 - metalnessFactor );
 vec3 dxy = max( abs( dFdx( geometryNormal ) ), abs( dFdy( geometryNormal ) ) );
 float geometryRoughness = max( max( dxy.x, dxy.y ), dxy.z );
 
-material.roughness = max( roughnessFactor, 0.0525 );// 0.0525 corresponds to the base mip of a 256 cubemap.
-material.roughness += geometryRoughness;
-material.roughness = min( material.roughness, 1.0 );
+material.specularRoughness = max( roughnessFactor, 0.0525 );// 0.0525 corresponds to the base mip of a 256 cubemap.
+material.specularRoughness += geometryRoughness;
+material.specularRoughness = min( material.specularRoughness, 1.0 );
 
 #ifdef IOR
 
 	#ifdef SPECULAR
 
-		float specularIntensityFactor = specularIntensity;
+		vec3 specularIntensityFactor = vec3( specularIntensity );
 		vec3 specularTintFactor = specularTint;
 
 		#ifdef USE_SPECULARINTENSITYMAP
@@ -28,13 +28,13 @@ material.roughness = min( material.roughness, 1.0 );
 
 		#endif
 
-		material.specularF90 = mix( specularIntensityFactor, 1.0, metalnessFactor );
+		material.specularColorF90 = mix( specularIntensityFactor, vec3( 1.0 ), metalnessFactor );
 
 	#else
 
-		float specularIntensityFactor = 1.0;
+		vec3 specularIntensityFactor = vec3( 1.0 );
 		vec3 specularTintFactor = vec3( 1.0 );
-		material.specularF90 = 1.0;
+		material.specularColorF90 = vec3( 1.0 );
 
 	#endif
 
@@ -43,7 +43,7 @@ material.roughness = min( material.roughness, 1.0 );
 #else
 
 	material.specularColor = mix( vec3( DEFAULT_SPECULAR_COEFFICIENT ), diffuseColor.rgb, metalnessFactor );
-	material.specularF90 = 1.0;
+	material.specularColorF90 = vec3( 1.0 );
 
 #endif
 

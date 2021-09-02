@@ -2,7 +2,7 @@ String meshphysical_frag = """
 #define STANDARD
 
 #ifdef PHYSICAL
-	#define REFLECTIVITY
+	#define IOR
 	#define CLEARCOAT
 	#define SPECULAR
 #endif
@@ -20,8 +20,8 @@ uniform float opacity;
 	uniform vec3 attenuationTint;
 #endif
 
-#ifdef REFLECTIVITY
-	uniform float reflectivity;
+#ifdef IOR
+	uniform float IOR;
 #endif
 
 #ifdef SPECULAR

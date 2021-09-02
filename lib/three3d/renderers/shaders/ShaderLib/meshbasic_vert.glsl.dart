@@ -16,13 +16,14 @@ void main() {
 	#include <uv2_vertex>
 	#include <color_vertex>
 
+	#if defined ( USE_ENVMAP ) || defined ( USE_SKINNING )
 
-  #if defined ( USE_ENVMAP ) || defined ( USE_SKINNING )
 		#include <beginnormal_vertex>
 		#include <morphnormal_vertex>
 		#include <skinbase_vertex>
 		#include <skinnormal_vertex>
 		#include <defaultnormal_vertex>
+
 	#endif
 
 	#include <begin_vertex>
@@ -30,7 +31,7 @@ void main() {
 	#include <skinning_vertex>
 	#include <project_vertex>
 	#include <logdepthbuf_vertex>
-  #include <clipping_planes_vertex>
+	#include <clipping_planes_vertex>
 
 	#include <worldpos_vertex>
 	#include <envmap_vertex>

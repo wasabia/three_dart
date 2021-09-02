@@ -10,8 +10,8 @@ part of three_materials;
  *  clearcoatNormalScale: <Vector2>,
  *  clearcoatNormalMap: new THREE.Texture( <Image> ),
  *
- *  reflectivity: <float>,
  *  ior: <float>,
+ *  reflectivity: <float>,
  *
  *  sheen: <Color>,
  *
@@ -40,7 +40,6 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
   Texture? clearcoatRoughnessMap;
   Vector2? clearcoatNormalScale = Vector2( 1, 1 );
   Texture? clearcoatNormalMap;
-  num? reflectivity = 0.5;
 
   // null will disable sheen bsdf
   Color? sheen;
@@ -55,6 +54,7 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
   Texture? specularIntensityMap = null;
   Color specularTint = new Color( 1, 1, 1 );
   Texture? specularTintMap = null;
+  num? ior = 1.5;
 
 
   MeshPhysicalMaterial( parameters ) : super(parameters) {
@@ -67,9 +67,9 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
   }
 
 
-  get ior => ( 1 + 0.4 * this.reflectivity! ) / ( 1 - 0.4 * this.reflectivity! );
-  set ior(value) {
-    this.reflectivity = MathUtils.clamp( 2.5 * ( value - 1 ) / ( value + 1 ), 0, 1 );
+  num get reflectivity => ( MathUtils.clamp( 2.5 * ( this.ior! - 1 ) / ( this.ior! + 1 ), 0, 1 ) );
+  set reflectivity(num value) {
+    this.ior = ( 1 + 0.4 * value ) / ( 1 - 0.4 * value );
   }
 
 
@@ -91,7 +91,7 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
     this.clearcoatNormalMap = source.clearcoatNormalMap;
     this.clearcoatNormalScale!.copy( source.clearcoatNormalScale );
 
-    this.reflectivity = source.reflectivity;
+    this.ior = source.ior;
 
     if ( source.sheen ) {
 

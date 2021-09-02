@@ -3,10 +3,10 @@ part of three_math;
 class Quaternion {
 
   String type = "Quaternion";
-  double _x = 0;
-  double _y = 0;
-  double _z = 0;
-  double _w = 0;
+  double _x = 0.0;
+  double _y = 0.0;
+  double _z = 0.0;
+  double _w = 0.0;
 
   Function onChangeCallback = () {};
 

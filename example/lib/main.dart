@@ -1,5 +1,5 @@
+import 'package:example/webgl_interactive_voxelpainter.dart';
 import 'package:flutter/material.dart';
-// import 'package:example/ExampleModifierCurve.dart';
 
 
 
@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
     // return ExampleLineFat();
     // return ExampleLineDrawRange();
     // return ExampleModifierCurve();
-    return Container();
+    // return Container();
+    return Webgl_interactive_voxelpainter(key: GlobalKey(debugLabel: "Webgl_interactive_voxelpainter"));
   }
 }

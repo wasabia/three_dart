@@ -10,11 +10,11 @@ part of three_math;
 
 class Spherical {
 
-  late double radius;
-  late double phi;
-  late double theta;
+  late num radius;
+  late num phi;
+  late num theta;
 
-	Spherical( {double radius = 1, double phi = 0, double theta = 0} ) {
+	Spherical( {num radius = 1, num phi = 0, num theta = 0} ) {
 
 		this.radius = radius;
 		this.phi = phi; // polar angle

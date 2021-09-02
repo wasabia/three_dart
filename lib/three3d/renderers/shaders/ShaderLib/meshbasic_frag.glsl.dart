@@ -1,4 +1,3 @@
-/* glsl */
 String meshbasic_frag = """
 uniform vec3 diffuse;
 uniform float opacity;
