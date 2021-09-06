@@ -103,12 +103,17 @@ class WebGLUniforms with WebGLUniform {
       var value = v["value"];
       var _vt = value.runtimeType.toString();
       
-      print("WebGLUniforms.upload name: ${u.id}  value: ${value} ");
-      if(_vt == "Matrix4" || _vt == "Matrix3" || _vt == "Color") {
-        print(value.toJSON());
-      } else {
-        print(value);
-      }
+      // print("WebGLUniforms.upload name: ${u.id}  value: ${value} ");
+      // if(_vt == "Matrix4" || _vt == "Matrix3" || _vt == "Color") {
+      //   print(value.toJSON());
+      // } else if( u.id == "lightProbe" ) {
+      //   print(value.map((e) => e.toJSON() ) );
+      // } else if( u.id == "directionalLights" ) {
+      //   print(value.map((e) => e["color"].toJSON() ) );
+      //   print(value.map((e) => e["direction"].toJSON() ) );  
+      // } else {
+      //   print(value);
+      // }
 
       if ( v["needsUpdate"] != false ) {
         // note: always updating when .needsUpdate is null

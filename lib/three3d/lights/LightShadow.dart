@@ -8,6 +8,7 @@ class LightShadow {
   num bias = 0;
   num normalBias = 0;
   num radius = 1;
+  num blurSamples = 8;
 
   Vector2 mapSize = Vector2( 512, 512 );
 

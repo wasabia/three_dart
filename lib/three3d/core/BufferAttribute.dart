@@ -33,8 +33,9 @@ class BufferAttribute extends BaseBufferAttribute {
     this.updateRange = { "offset": 0, "count": - 1 };
 
     this.version = 0;
-   }
+  }
 
+  get length => this.count;
 
   set needsUpdate(bool value) {
     if ( value == true ) this.version ++;

@@ -70,8 +70,6 @@ class Camera extends Object3D {
 	}
 
 	updateMatrixWorld( bool force ) {
-
-
     super.updateMatrixWorld(force);
 
 		this.matrixWorldInverse.copy( this.matrixWorld ).invert();

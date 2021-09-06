@@ -63,7 +63,8 @@ class WebGLShadowMap {
       "uniforms": {
         "shadow_pass": { "value": null },
         "resolution": { "value": new Vector2(null, null) },
-        "radius": { "value": 4.0 }
+        "radius": { "value": 4.0 },
+        "samples": { "value": 8.0 }
       },
 
       "vertexShader": vsm_vert,
@@ -233,6 +234,8 @@ class WebGLShadowMap {
 		shadowMaterialVertical.uniforms!["shadow_pass"].value = shadow.map.texture;
 		shadowMaterialVertical.uniforms!["resolution"].value = shadow.mapSize;
 		shadowMaterialVertical.uniforms!["radius"].value = shadow.radius;
+    shadowMaterialVertical.uniforms!["samples"].value = shadow.blurSamples;
+
 		_renderer.setRenderTarget( shadow.mapPass );
 		_renderer.clear(null, null, null);
 		_renderer.renderBufferDirect( camera, null, geometry, shadowMaterialVertical, fullScreenMesh, null );
@@ -242,6 +245,8 @@ class WebGLShadowMap {
 		shadowMaterialHorizontal.uniforms!["shadow_pass"].value = shadow.mapPass.texture;
 		shadowMaterialHorizontal.uniforms!["resolution"].value = shadow.mapSize;
 		shadowMaterialHorizontal.uniforms!["radius"].value = shadow.radius;
+    shadowMaterialHorizontal.uniforms!["samples"].value = shadow.blurSamples;
+
 		_renderer.setRenderTarget( shadow.map );
 		_renderer.clear(null, null, null);
 		_renderer.renderBufferDirect( camera, null, geometry, shadowMaterialHorizontal, fullScreenMesh, null );

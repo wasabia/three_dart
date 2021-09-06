@@ -190,8 +190,8 @@ Map<String, dynamic> ShaderLib = {
 			}
 		] ),
 
-		"vertexShader": ShaderChunk["normal_vert"],
-		"fragmentShader": ShaderChunk["normal_frag"]
+		"vertexShader": ShaderChunk["meshnormal_vert"],
+		"fragmentShader": ShaderChunk["meshnormal_frag"]
 
 	},
 

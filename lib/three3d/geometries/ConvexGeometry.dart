@@ -7,8 +7,8 @@ class ConvexGeometry extends BufferGeometry {
 
 	ConvexGeometry(points) : super() {
 
-    vertices = [];
-    normals = [];
+    var vertices = [];
+    var normals = [];
 
 
     // buffers

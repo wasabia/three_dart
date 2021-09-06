@@ -26,6 +26,6 @@ export './WeakMap.dart';
 export './ThreeHelper.dart';
 export './dartHelpers.dart';
 
-// export './Float32Array.app.dart';
-export './Float32Array.web.dart';
+export './Float32Array.app.dart';
+// export './Float32Array.web.dart';
 

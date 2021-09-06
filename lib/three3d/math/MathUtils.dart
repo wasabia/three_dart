@@ -7,8 +7,8 @@ var _seed = 1234567;
 
 class MathUtils {
 
-	static num DEG2RAD = Math.PI / 180;
-	static num RAD2DEG = 180 / Math.PI;
+	static num DEG2RAD = Math.PI / 180.0;
+	static num RAD2DEG = 180.0 / Math.PI;
 
 	static String generateUUID () {
 

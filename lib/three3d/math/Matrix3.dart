@@ -4,11 +4,11 @@ class Matrix3 {
 
   String type = "Matrix3";
 
-  late Float32List elements;
+  late List<num> elements;
 
 	Matrix3() {
 
-		this.elements = Float32List.fromList([
+		this.elements = List<num>.from([
 
 			1, 0, 0,
 			0, 1, 0,
@@ -142,7 +142,7 @@ class Matrix3 {
 
 	}
 
-	double determinant() {
+	num determinant() {
 
 		var te = this.elements;
 
@@ -190,7 +190,7 @@ class Matrix3 {
 
 	Matrix3 transpose() {
 
-		double tmp;
+		num tmp;
 		var m = this.elements;
 
 		tmp = m[ 1 ]; m[ 1 ] = m[ 3 ]; m[ 3 ] = tmp;
@@ -207,7 +207,7 @@ class Matrix3 {
 
 	}
 
-	Matrix3 transposeIntoArray( List<double> r ) {
+	Matrix3 transposeIntoArray( List<num> r ) {
  
 		var m = this.elements;
 
@@ -311,7 +311,7 @@ class Matrix3 {
 
 	}
 
-	List<double> toArray( List<double> array, { int offset = 0 }) {
+	List<num> toArray( List<num> array, { int offset = 0 }) {
 
 		var te = this.elements;
 

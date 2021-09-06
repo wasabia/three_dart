@@ -13,10 +13,10 @@ var _matrix4z = new Vector3.init();
 class Matrix4 {
   
   String type = "Matrix4";
-  late Float32List elements;
+  late List<num> elements;
 
 	Matrix4() {
-		this.elements = Float32List.fromList([
+		this.elements = List<num>.from([
 
 			1.0, 0.0, 0.0, 0.0,
 			0.0, 1.0, 0.0, 0.0,
@@ -46,6 +46,8 @@ class Matrix4 {
     te[ 7 ] = n42.toDouble(); 
     te[ 11 ] = n43.toDouble(); 
     te[ 15 ] = n44.toDouble();
+
+    return this;
 	}
 
 	Matrix4 identity() {
@@ -499,9 +501,7 @@ class Matrix4 {
 
 		if ( x.isVector3 ) {
 
-			te[ 12 ] = x.x;
-			te[ 13 ] = x.y;
-			te[ 14 ] = x.z;
+			return setPositionFromVector3(x);
 
 		} else {
 
@@ -510,6 +510,17 @@ class Matrix4 {
 			te[ 14 ] = z;
 
 		}
+
+		return this;
+
+	}
+
+  setPositionFromVector3( Vector3 x ) {
+		var te = this.elements;
+
+		te[ 12 ] = x.x;
+    te[ 13 ] = x.y;
+    te[ 14 ] = x.z;
 
 		return this;
 
@@ -799,6 +810,7 @@ class Matrix4 {
 		var te = this.elements;
 		var x = 2 * near / ( right - left );
 		var y = 2 * near / ( top - bottom );
+
 
 		var a = ( right + left ) / ( right - left );
 		var b = ( top + bottom ) / ( top - bottom );

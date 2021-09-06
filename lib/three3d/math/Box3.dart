@@ -47,8 +47,8 @@ class Box3 {
 
 
 	Box3( min, max ) {
-		this.min = ( min != null ) ? min : new Vector3( Infinity, Infinity, Infinity );
-		this.max = ( max != null ) ? max : new Vector3( -Infinity, -Infinity, -Infinity );
+		this.min = min ?? new Vector3( Infinity, Infinity, Infinity );
+		this.max = max ?? new Vector3( -Infinity, -Infinity, -Infinity );
 	}
 
   List toJSON() {

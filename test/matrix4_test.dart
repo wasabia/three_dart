@@ -1,44 +1,29 @@
-
-// import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:three_dart/three_dart.dart';
 
 void main() {
   test('adds one to input values', () {
-    
-    var _m1 = Matrix4();
-    var _m2 = Matrix4();
-    var _m3 = Matrix4();
 
-    int _t = DateTime.now().millisecondsSinceEpoch;
-    var a = 1.2;
+    var left = -0.19803038838554346;
+    var top = 0.41421356237309503;
+    var near = 1;
+    var height = 0.8284271247461901;
+    var width = 0.3960607767710869;
+    var far = 10000;
 
-    for(var i=0; i< 50000; i++) {
-      var a1 = a * 2.0 + a * 2.5 + a * 4.2 + 5.1 * a;
-      a = a + 0.1;
-    }
+    var a = new Matrix4().makePerspective( left, left + width, top, top - height, near, far );
+    var expected = new Matrix4().set(
+      1, 0, 0, 0,
+      0, - 1, 0, 0,
+      0, 0, - 101 / 99, - 200 / 99,
+      0, 0, - 1, 0
+    );
+
+    print(a.elements);
+    print(expected.elements );
+
+    expect(a.elements, expected.elements);
   
-
-    int _t1 = DateTime.now().millisecondsSinceEpoch;
-
-    print(" test cost ${_t1 - _t}  ");
-
-
-
-    // var _m1 = Matrix4.identity();
-    // var _m2 = Matrix4.identity();
-    // var _m3 = Matrix4.identity();
-
-    // int _t = DateTime.now().millisecondsSinceEpoch;
-
-    // for(var i=0; i< 5000; i++) {
-    //   _m1.multiply(_m2);
-    // }
-
-    // int _t1 = DateTime.now().millisecondsSinceEpoch;
-
-    // print(" test cost ${_t1 - _t}  ");
-
   });
 }

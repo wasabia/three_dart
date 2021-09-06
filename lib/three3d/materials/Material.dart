@@ -51,7 +51,7 @@ class Material with EventDispatcher {
   String? precision;
   bool polygonOffset = false;
   num polygonOffsetFactor = 0;
-  int polygonOffsetUnits = 0;
+  num polygonOffsetUnits = 0;
 
   bool dithering = false;
   num alphaTest = 0;
@@ -288,7 +288,13 @@ class Material with EventDispatcher {
     } else if(key == "normalScale") {
       normalScale = newValue;  
     } else if(key == "opacity") {
-      opacity = newValue;  
+      opacity = newValue;
+    } else if(key == "polygonOffset") {
+      polygonOffset = newValue;  
+    } else if(key == "polygonOffsetFactor") {
+      polygonOffsetFactor = newValue;
+    } else if(key == "polygonOffsetUnits") {
+      polygonOffsetUnits = newValue;    
     } else if(key == "roughness") {
       roughness = newValue;
     } else if(key == "flatShading") {

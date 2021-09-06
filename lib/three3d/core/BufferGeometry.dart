@@ -39,10 +39,7 @@ class BufferGeometry with EventDispatcher {
   bool groupsNeedUpdate = false;
   bool isInstancedBufferGeometry = false;
 
-  late List<num> vertices;
-  late List<int> indices;
-  late List<num> normals;
-  late List<num> uvs;
+
 
   late List<Color> colors;
   bool isGeometry = false;
@@ -306,54 +303,6 @@ class BufferGeometry with EventDispatcher {
 
 
 		this.translate( _bufferGeometryoffset.x, _bufferGeometryoffset.y, _bufferGeometryoffset.z );
-	}
-
-	setFromObject( Object3D object ) {
-
-
-		var geometry = object.geometry!;
-
-		if ( object.type == "Points" || object.type == "Line" ) {
-
-			var positions = new Float32BufferAttribute( geometry.vertices.length * 3, 3, false );
-			var colors = new Float32BufferAttribute( geometry.colors.length * 3, 3, false );
-
-			this.setAttribute( 'position', positions.copyVector3sArray( geometry.vertices ) );
-			this.setAttribute( 'color', colors.copyColorsArray( geometry.colors ) );
-
-			if ( geometry.lineDistances != null && geometry.lineDistances.length == geometry.vertices.length ) {
-
-				var lineDistances = new Float32BufferAttribute( geometry.lineDistances.length, 1, false );
-
-				this.setAttribute( 'lineDistance', lineDistances.copyArray( geometry.lineDistances ) );
-
-			}
-
-			if ( geometry.boundingSphere != null ) {
-
-				this.boundingSphere = geometry.boundingSphere!.clone();
-
-			}
-
-			if ( geometry.boundingBox != null ) {
-
-				this.boundingBox = geometry.boundingBox!.clone();
-
-			}
-
-		} else if ( object.type == "Mesh" ) {
-
-			if ( geometry != null && geometry.isGeometry ) {
-
-				// this.fromGeometry( geometry );
-        throw(" BufferGeometry  setFromObject todo" );
-
-			}
-
-		}
-
-		return this;
-
 	}
 
 	setFromPoints( points ) {

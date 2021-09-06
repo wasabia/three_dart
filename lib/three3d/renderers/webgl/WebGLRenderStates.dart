@@ -38,9 +38,9 @@ class WebGLRenderState {
 
 	}
 
-	setupLights() {
+	setupLights(physicallyCorrectLights) {
 
-		lights.setup( lightsArray );
+		lights.setup( lightsArray, physicallyCorrectLights );
 
 	}
 

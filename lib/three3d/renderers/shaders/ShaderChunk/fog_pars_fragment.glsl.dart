@@ -2,7 +2,7 @@ String fog_pars_fragment = """
 #ifdef USE_FOG
 
 	uniform vec3 fogColor;
-	varying float fogDepth;
+	varying float vFogDepth;
 
 	#ifdef FOG_EXP2
 

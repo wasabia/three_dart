@@ -189,6 +189,9 @@ class PerspectiveCamera extends Camera {
 		num width = this.aspect * height;
 		num left = - 0.5 * width;
 
+    print("updateProjectionMatrix: near: ${near} top: ${top} height: ${height} width: ${width} left: ${left} ");
+    print(" view: ${view} ");
+
 		if ( this.view != null && this.view!["enabled"] ) {
 
 			var fullWidth = view!["fullWidth"]!;
@@ -204,11 +207,13 @@ class PerspectiveCamera extends Camera {
 		num skew = this.filmOffset;
 		if ( skew != 0 ) left += near * skew / this.getFilmWidth();
 
+    print("skew: ${skew}  left: ${left} ");
 
 		this.projectionMatrix.makePerspective( left, left + width, top, top - height, near, this.far );
-
-   
 		this.projectionMatrixInverse.copy( this.projectionMatrix ).invert();
+
+    print("this.projectionMatrix: ${this.projectionMatrix.toJSON()}  ");
+    print("this.projectionMatrixInverse: ${this.projectionMatrixInverse.toJSON()}  ");
 	}
 
 	toJSON( {Object3dMeta? meta} ) {

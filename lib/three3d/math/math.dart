@@ -6,7 +6,7 @@ class Math {
   static double Infinity = double.maxFinite;
   static const double PI = math.pi;
   static double LN2 = math.ln2;
-  static double EPSILON = 4.94065645841247E-324;
+  static const double EPSILON = 4.94065645841247E-324;
   static double LOG2E = math.log2e;
   static double MAX_VALUE = double.maxFinite;
   static double LN10 = math.ln10;

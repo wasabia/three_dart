@@ -41,10 +41,10 @@ class ShapeGeometry extends BufferGeometry {
 
 		// buffers
 
-		this.indices = [];
-		this.vertices = [];
-		this.normals = [];
-		this.uvs = [];
+		var indices = [];
+		var vertices = [];
+		var normals = [];
+		var uvs = [];
 
 		// helper variables
 

@@ -3,11 +3,11 @@ String fog_fragment = """
 
 	#ifdef FOG_EXP2
 
-		float fogFactor = 1.0 - exp( - fogDensity * fogDensity * fogDepth * fogDepth );
+		float fogFactor = 1.0 - exp( - fogDensity * fogDensity * vFogDepth * vFogDepth );
 
 	#else
 
-		float fogFactor = smoothstep( fogNear, fogFar, fogDepth );
+		float fogFactor = smoothstep( fogNear, fogFar, vFogDepth );
 
 	#endif
 

@@ -204,7 +204,7 @@ class WebGLLights {
 
 	
 
-	setup(List<Light> lights ) {
+	setup(List<Light> lights, physicallyCorrectLights) {
 
 		num r = 0.0;
     num g = 0.0;
@@ -226,6 +226,9 @@ class WebGLLights {
 
 		lights.sort( (a,b) => shadowCastingLightsFirst(a,b) );
 
+    // artist-friendly light intensity scaling factor
+		num scaleFactor = ( physicallyCorrectLights != true ) ? Math.PI : 1.0;
+
 		for ( var i = 0, l = lights.length; i < l; i ++ ) {
 
 			var light = lights[ i ];
@@ -239,9 +242,9 @@ class WebGLLights {
 
 			if ( light.type == "AmbientLight" ) {
 
-				r += color.r * intensity;
-				g += color.g * intensity;
-				b += color.b * intensity;
+				r += color.r * intensity * scaleFactor;
+				g += color.g * intensity * scaleFactor;
+				b += color.b * intensity * scaleFactor;
 
 			} else if ( light.type == "LightProbe" ) {
 
@@ -255,7 +258,7 @@ class WebGLLights {
 
 				var uniforms = cache.get( light );
 
-				uniforms["color"].copy( light.color ).multiplyScalar( light.intensity );
+				uniforms["color"].copy( light.color ).multiplyScalar( light.intensity * scaleFactor );
 
 				if ( light.castShadow ) {
 
@@ -292,7 +295,7 @@ class WebGLLights {
 				var uniforms = cache.get( light );
 
 				uniforms["position"].setFromMatrixPosition( light.matrixWorld );
-				uniforms["color"].copy( color ).multiplyScalar( intensity );
+				uniforms["color"].copy( color ).multiplyScalar( intensity * scaleFactor );
 
 				uniforms["distance"] = distance;
 
@@ -356,7 +359,7 @@ class WebGLLights {
 
 				var uniforms = cache.get( light );
 
-				uniforms["color"].copy( light.color ).multiplyScalar( light.intensity );
+				uniforms["color"].copy( light.color ).multiplyScalar( light.intensity * scaleFactor );
 
 				uniforms["distance"] = light.distance;
 				uniforms["decay"] = light.decay;
@@ -397,8 +400,8 @@ class WebGLLights {
 
 				var uniforms = cache.get( light );
 
-				uniforms["skyColor"].copy( light.color ).multiplyScalar( intensity );
-				uniforms["groundColor"].copy( light.groundColor ).multiplyScalar( intensity );
+				uniforms["skyColor"].copy( light.color ).multiplyScalar( intensity * scaleFactor );
+				uniforms["groundColor"].copy( light.groundColor ).multiplyScalar( intensity * scaleFactor );
 
 				// state.hemi[ hemiLength ] = uniforms;
         listSetter(state.hemi, hemiLength, uniforms);

@@ -12,6 +12,7 @@ import '../constants.dart';
 
 
 part './AxesHelper.dart';
+part './BoxHelper.dart';
 part './CameraHelper.dart';
 part './GridHelper.dart';
 part './PlaneHelper.dart';

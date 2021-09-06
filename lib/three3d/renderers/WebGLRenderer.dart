@@ -686,7 +686,7 @@ class WebGLRenderer {
       }
     });
 
-    currentRenderState!.setupLights();
+    currentRenderState!.setupLights(physicallyCorrectLights);
 
 
     scene.traverse((object) {
@@ -782,7 +782,7 @@ class WebGLRenderer {
 
     shadowMap.render(shadowsArray, scene, camera);
 
-    currentRenderState!.setupLights();
+    currentRenderState!.setupLights(physicallyCorrectLights);
     currentRenderState!.setupLightsView(camera);
 
     if (_clippingEnabled == true) clipping.endShadows();
@@ -1508,7 +1508,7 @@ class WebGLRenderer {
 
 		}
 
-    print(" setProgram .......... material: ${material.type} ");
+    // print(" setProgram .......... material: ${material.type} ");
 
 		if ( refreshMaterial ) {
 
