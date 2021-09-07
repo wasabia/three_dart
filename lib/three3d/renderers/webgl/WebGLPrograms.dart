@@ -26,15 +26,16 @@ class WebGLPrograms {
 		'lightMap', 'lightMapEncoding', 'aoMap', 'emissiveMap', 'emissiveMapEncoding', 'bumpMap', 'normalMap', 'objectSpaceNormalMap', 'tangentSpaceNormalMap', 'clearcoatMap', 'clearcoatRoughnessMap', 'clearcoatNormalMap', 'displacementMap', 
     'specularMap', 'specularIntensityMap', 'specularTintMap', 'specularTintMapEncoding',
 		'roughnessMap', 'metalnessMap', 'gradientMap',
-		'alphaMap', 'combine', 'vertexColors', 'vertexAlphas', 'vertexTangents', 'vertexUvs', 'uvsVertexOnly', 
+		'alphaMap', 'alphaTest', 'combine', 'vertexColors', 'vertexAlphas', 'vertexTangents', 'vertexUvs', 'uvsVertexOnly', 
     'flipNormalScaleY', 'fog', 'useFog', 'fogExp2',
 		'flatShading', 'sizeAttenuation', 'logarithmicDepthBuffer', 'skinning',
 		'maxBones', 'useVertexTexture', 'morphTargets', 'morphNormals', 'premultipliedAlpha',
 		'numDirLights', 'numPointLights', 'numSpotLights', 'numHemiLights', 'numRectAreaLights',
 		'numDirLightShadows', 'numPointLightShadows', 'numSpotLightShadows',
 		'shadowMapEnabled', 'shadowMapType', 'toneMapping', 'physicallyCorrectLights',
-		'alphaTest', 'doubleSided', 'flipSided', 'numClippingPlanes', 'numClipIntersection', 'depthPacking', 'dithering',
-		'sheen', 'transmission', 'transmissionMap', 'thicknessMap'
+		'doubleSided', 'flipSided', 'numClippingPlanes', 'numClipIntersection', 'depthPacking', 'dithering',
+    'blending',
+		'sheenTint', 'transmission', 'transmissionMap', 'thicknessMap'
 	];
 
   WebGLRenderer renderer;
@@ -180,6 +181,9 @@ class WebGLPrograms {
 
 		var currentRenderTarget = renderer.getRenderTarget();
 
+    var useAlphaTest = material.alphaTest > 0;
+		var useClearcoat = material.clearcoat > 0;
+
 		var parameters = WebGLParameters({
 
 			"isWebGL2": isWebGL2,
@@ -229,10 +233,11 @@ class WebGLPrograms {
 			"specularTintMap": material.specularTintMap != null,
 			"specularTintMapEncoding": getTextureEncodingFromMap( material.specularTintMap ),
 			"alphaMap": material.alphaMap != null,
+      "alphaTest": useAlphaTest,
 
 			"gradientMap": material.gradientMap != null,
 
-			"sheen": material.sheen != null,
+			"sheenTint": ( material.sheenTint != null && !( material.sheenTint!.isBlack() ) ),
 
 			"transmission": material.transmission > 0,
 			"transmissionMap": material.transmissionMap != null,
@@ -275,7 +280,7 @@ class WebGLPrograms {
 
 			"numClippingPlanes": clipping.numPlanes,
 			"numClipIntersection": clipping.numIntersection,
-
+      "blending": material.blending > 0,
 			"dithering": material.dithering,
 
 			"shadowMapEnabled": renderer.shadowMap.enabled && shadows.length > 0,
@@ -285,8 +290,7 @@ class WebGLPrograms {
 			"physicallyCorrectLights": renderer.physicallyCorrectLights,
 
 			"premultipliedAlpha": material.premultipliedAlpha,
-
-			"alphaTest": material.alphaTest,
+      
 			"doubleSided": material.side == DoubleSide,
 			"flipSided": material.side == BackSide,
 

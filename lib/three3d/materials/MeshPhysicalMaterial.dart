@@ -13,7 +13,7 @@ part of three_materials;
  *  ior: <float>,
  *  reflectivity: <float>,
  *
- *  sheen: <Color>,
+ *  sheenTint: <Color>,
  *
  *  transmission: <float>,
  *  transmissionMap: new THREE.Texture( <Image> ),
@@ -33,7 +33,7 @@ part of three_materials;
 class MeshPhysicalMaterial extends MeshStandardMaterial {
 
   bool isMeshPhysicalMaterial = true;
-  num clearcoat = 0.0;
+
   Texture? clearcoatMap;
   num clearcoatRoughness = 0.0;
   String type = 'MeshPhysicalMaterial';
@@ -41,8 +41,8 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
   Vector2? clearcoatNormalScale = Vector2( 1, 1 );
   Texture? clearcoatNormalMap;
 
-  // null will disable sheen bsdf
-  Color? sheen;
+  // null will disable sheenTint bsdf
+  Color? sheenTint;
 
   num thickness = 0.01;
   
@@ -93,13 +93,13 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
 
     this.ior = source.ior;
 
-    if ( source.sheen ) {
+    if ( source.sheenTint != null ) {
 
-      this.sheen = ( this.sheen ?? new Color(1,1,1) ).copy( source.sheen );
+      this.sheenTint = ( this.sheenTint ?? new Color(0,0,0) ).copy( source.sheen );
 
     } else {
 
-      this.sheen = null;
+      this.sheenTint = null;
 
     }
 

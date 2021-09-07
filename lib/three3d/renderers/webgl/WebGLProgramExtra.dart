@@ -224,6 +224,8 @@ class WebGLProgramExtra {
       
       String includeString = match.group(1)!;
 
+      // print(" includeString: ${includeString} ");
+
       String targetString = ShaderChunk[includeString]!;
 
       String targetString2 = resolveIncludes(targetString);

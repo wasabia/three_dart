@@ -645,6 +645,12 @@ class Color {
     return (c.r == this.r) && (c.g == this.g) && (c.b == this.b);
   }
 
+  isBlack() {
+
+		return ( this.r == 0 ) && ( this.g == 0 ) && ( this.b == 0 );
+
+	}
+
   fromArray(array, {int offset = 0}) {
     this.r = array[offset];
     this.g = array[offset + 1];

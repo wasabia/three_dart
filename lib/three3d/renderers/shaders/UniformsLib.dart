@@ -12,6 +12,7 @@ Map<String, dynamic> UniformsLib = {
     "uvTransform": {"value": new Matrix3()},
     "uv2Transform": {"value": new Matrix3()},
     "alphaMap": {"value": null},
+    "alphaTest": { "value": 0.0 }
   },
   "specularmap": {
     "specularMap": {"value": null},
@@ -153,6 +154,7 @@ Map<String, dynamic> UniformsLib = {
     "scale": {"value": 1.0},
     "map": {"value": null},
     "alphaMap": {"value": null},
+    "alphaTest": { "value": 0.0 },
     "uvTransform": {"value": new Matrix3()}
   },
   "sprite": {
@@ -162,6 +164,7 @@ Map<String, dynamic> UniformsLib = {
     "rotation": {"value": 0.0},
     "map": {"value": null},
     "alphaMap": {"value": null},
+    "alphaTest": { "value": 0.0 },
     "uvTransform": {"value": new Matrix3()}
   }
 };

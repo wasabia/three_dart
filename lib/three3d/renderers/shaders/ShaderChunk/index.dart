@@ -1,6 +1,7 @@
 export './alphamap_fragment.glsl.dart';
 export './alphamap_pars_fragment.glsl.dart';
 export './alphatest_fragment.glsl.dart';
+export './alphatest_pars_fragment.glsl.dart';
 export './aomap_fragment.glsl.dart';
 export './aomap_pars_fragment.glsl.dart';
 export './begin_vertex.glsl.dart';
@@ -72,6 +73,7 @@ export './normal_pars_fragment.glsl.dart';
 export './normal_pars_vertex.glsl.dart';
 export './normal_vertex.glsl.dart';
 export './normalmap_pars_fragment.glsl.dart';
+export './output_fragment.glsl.dart';
 export './packing.glsl.dart';
 export './premultiplied_alpha_fragment.glsl.dart';
 export './project_vertex.glsl.dart';

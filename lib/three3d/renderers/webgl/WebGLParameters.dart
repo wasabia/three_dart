@@ -2,6 +2,10 @@ part of three_webgl;
 
 class WebGLParameters {
   late bool isWebGL2;
+
+  late bool blending;
+
+
   String? shaderID;
   late String shaderName;
 
@@ -48,8 +52,9 @@ class WebGLParameters {
 	late bool specularTintMap;
 	late int specularTintMapEncoding;
   late bool alphaMap;
+  
   late bool gradientMap;
-  late bool sheen;
+  late bool sheenTint;
   late bool transmission;
   late bool transmissionMap;
   late bool thicknessMap;
@@ -89,7 +94,7 @@ class WebGLParameters {
   late int toneMapping;
   late bool physicallyCorrectLights;
   late bool premultipliedAlpha;
-  late num alphaTest;
+  late bool alphaTest;
 
   late bool doubleSided;
   late bool flipSided;
@@ -115,6 +120,7 @@ class WebGLParameters {
 
 
   WebGLParameters(Map<String, dynamic> json) {
+    blending = json["blending"];
     isWebGL2 = json["isWebGL2"];
     shaderID = json["shaderID"];
     shaderName = json["shaderName"];
@@ -165,7 +171,7 @@ class WebGLParameters {
 	  specularTintMapEncoding = json["specularTintMapEncoding"];
     alphaMap = json["alphaMap"];
     gradientMap = json["gradientMap"];
-    sheen = json["sheen"];
+    sheenTint = json["sheenTint"];
     transmission = json["transmission"];
     transmissionMap = json["transmissionMap"];
     thicknessMap = json["thicknessMap"];
@@ -240,6 +246,7 @@ class WebGLParameters {
 
   toJSON() {
     Map<String, dynamic> _json = {
+      "blending": blending,
       "isWebGL2": isWebGL2,
       "shaderID": shaderID,
       "shaderName": shaderName,
@@ -290,7 +297,7 @@ class WebGLParameters {
       "specularTintMapEncoding": specularTintMapEncoding,
       "alphaMap": alphaMap,
       "gradientMap": gradientMap,
-      "sheen": sheen,
+      "sheenTint": sheenTint,
       "transmission": transmission,
       "transmissionMap": transmissionMap,
       "thicknessMap": thicknessMap,

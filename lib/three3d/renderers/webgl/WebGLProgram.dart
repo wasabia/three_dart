@@ -197,10 +197,6 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
         customDefines,
 
-        parameters.alphaTest != 0
-            ? '#define ALPHATEST ${parameters.alphaTest}${(parameters.alphaTest % 1) != 0 ? '' : '.0'}'
-            : '', // add '.0' if integer
-
         '#define GAMMA_FACTOR ${gammaFactorDefine}',
 
         (parameters.useFog && parameters.fog) ? '#define USE_FOG' : '',
@@ -234,8 +230,8 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.roughnessMap ? '#define USE_ROUGHNESSMAP' : '',
         parameters.metalnessMap ? '#define USE_METALNESSMAP' : '',
         parameters.alphaMap ? '#define USE_ALPHAMAP' : '',
-
-        parameters.sheen ? '#define USE_SHEEN' : '',
+        parameters.alphaTest ? '#define USE_ALPHATEST' : '',
+        parameters.sheenTint ? '#define USE_SHEEN' : '',
         parameters.transmission ? '#define USE_TRANSMISSION' : '',
         parameters.transmissionMap ? '#define USE_TRANSMISSIONMAP' : '',
         parameters.thicknessMap ? '#define USE_THICKNESSMAP' : '',
@@ -286,6 +282,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
             : '',
 
         parameters.dithering ? '#define DITHERING' : '',
+        parameters.blending == NoBlending ? '#define OPAQUE' : '',
 
         ShaderChunk[
             'encodings_pars_fragment'], // this code is required here because it is used by the various encoding/decoding defined below

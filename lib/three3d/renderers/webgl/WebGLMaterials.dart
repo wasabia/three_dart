@@ -352,6 +352,12 @@ class WebGLMaterials {
 
 		}
 
+    if ( material.alphaTest > 0 ) {
+
+			uniforms["alphaTest"]["value"] = material.alphaTest;
+
+		}
+
 		// uv repeat and offset setting priorities
 		// 1. color map
 		// 2. alpha map
@@ -397,6 +403,12 @@ class WebGLMaterials {
 		if ( material.alphaMap != null ) {
 
 			uniforms["alphaMap"]["value"] = material.alphaMap;
+
+		}
+
+    if ( material.alphaTest > 0 ) {
+
+			uniforms["alphaTest"]["value"] = material.alphaTest;
 
 		}
 
@@ -580,32 +592,43 @@ class WebGLMaterials {
 
 		uniforms.ior.value = material.ior; // also part of uniforms common
 
-		uniforms.clearcoat.value = material.clearcoat;
-		uniforms.clearcoatRoughness.value = material.clearcoatRoughness;
+    if ( material.sheenTint && ( material.sheenTint.r > 0 || material.sheenTint.g > 0 || material.sheenTint.b > 0 ) ) {
 
-		if ( material.sheen ) uniforms.sheen.value.copy( material.sheen );
+			uniforms.sheenTint.value.copy( material.sheenTint );
 
-		if ( material.clearcoatMap ) {
-
-			uniforms.clearcoatMap.value = material.clearcoatMap;
+			uniforms.sheenRoughness.value = material.sheenRoughness;
 
 		}
 
-		if ( material.clearcoatRoughnessMap ) {
 
-			uniforms.clearcoatRoughnessMap.value = material.clearcoatRoughnessMap;
 
-		}
+    if ( material.clearcoat > 0 ) {
 
-		if ( material.clearcoatNormalMap ) {
+			uniforms.clearcoat.value = material.clearcoat;
+			uniforms.clearcoatRoughness.value = material.clearcoatRoughness;
 
-			uniforms.clearcoatNormalScale.value.copy( material.clearcoatNormalScale );
-			uniforms.clearcoatNormalMap.value = material.clearcoatNormalMap;
+			if ( material.clearcoatMap ) {
 
-			if ( material.side == BackSide ) {
+				uniforms.clearcoatMap.value = material.clearcoatMap;
 
-				uniforms.clearcoatNormalScale.value.negate();
+			}
 
+			if ( material.clearcoatRoughnessMap ) {
+
+				uniforms.clearcoatRoughnessMap.value = material.clearcoatRoughnessMap;
+
+			}
+
+			if ( material.clearcoatNormalMap ) {
+
+				uniforms.clearcoatNormalScale.value.copy( material.clearcoatNormalScale );
+				uniforms.clearcoatNormalMap.value = material.clearcoatNormalMap;
+
+				if ( material.side == BackSide ) {
+
+					uniforms.clearcoatNormalScale.value.negate();
+
+				}
 			}
 
 		}
@@ -652,6 +675,7 @@ class WebGLMaterials {
 		}
 
 	}
+
 
 	refreshUniformsMatcap( uniforms, material ) {
 

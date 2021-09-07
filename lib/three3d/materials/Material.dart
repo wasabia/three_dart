@@ -55,6 +55,16 @@ class Material with EventDispatcher {
 
   bool dithering = false;
   num alphaTest = 0;
+  num _clearcoat = 0;
+
+  num get clearcoat => _clearcoat;
+  set clearcoat( num value ) {
+		if ( (this._clearcoat > 0) != (value > 0) ) {
+			this.version ++;
+		}
+		this._clearcoat = value;
+	}
+  
   bool alphaToCoverage = false;
   num rotation = 0;
 
@@ -86,7 +96,7 @@ class Material with EventDispatcher {
   Texture? specularTintMap;
   
   Texture? gradientMap;
-  Color? sheen;
+  Color? sheenTint;
   num transmission = 0.0;
   Texture? transmissionMap;
   Texture? thicknessMap;
@@ -358,7 +368,7 @@ class Material with EventDispatcher {
   	// if ( this.roughness != null ) data.roughness = this.roughness;
   	// if ( this.metalness != null ) data.metalness = this.metalness;
 
-  	// if ( this.sheen && this.sheen.isColor ) data.sheen = this.sheen.getHex();
+  	// if ( this.sheenTint && this.sheenTint.isColor ) data.sheenTint = this.sheenTint.getHex();
   	// if ( this.emissive && this.emissive.isColor ) data.emissive = this.emissive.getHex();
   	// if ( this.emissiveIntensity && this.emissiveIntensity != 1 ) data.emissiveIntensity = this.emissiveIntensity;
 
