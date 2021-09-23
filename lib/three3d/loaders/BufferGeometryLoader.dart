@@ -109,7 +109,7 @@ class BufferGeometryLoader extends Loader {
 				var typedArray = getTypedArray( attribute.type, attribute.array );
 				// var bufferAttributeConstr = attribute.isInstancedBufferAttribute ? InstancedBufferAttribute : BufferAttribute;
 				if(attribute.isInstancedBufferAttribute) {
-          bufferAttribute = new InstancedBufferAttribute( typedArray, attribute.itemSize, attribute.normalized, null );
+          bufferAttribute = new InstancedBufferAttribute( typedArray, attribute.itemSize, attribute.normalized );
         } else {
           bufferAttribute = new BufferAttribute( typedArray, attribute.itemSize, attribute.normalized );
         }

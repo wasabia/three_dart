@@ -166,7 +166,20 @@ class WebGLProgramExtra {
 
       // print( "THREE.WebGLProgram: ACTIVE VERTEX ATTRIBUTE: name: ${name} i: ${i}");
 
-      attributes[name] = gl.getAttribLocation(program, name);
+      // attributes[name] = gl.getAttribLocation(program, name);
+
+      var locationSize = 1;
+      if ( info.type == gl.FLOAT_MAT2 ) locationSize = 2;
+      if ( info.type == gl.FLOAT_MAT3 ) locationSize = 3;
+      if ( info.type == gl.FLOAT_MAT4 ) locationSize = 4;
+
+      // console.log( 'THREE.WebGLProgram: ACTIVE VERTEX ATTRIBUTE:', name, i );
+
+      attributes[ name ] = {
+        "type": info.type,
+        "location": gl.getAttribLocation( program, name ),
+        "locationSize": locationSize
+      };
     }
 
     return attributes;

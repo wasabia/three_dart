@@ -19,7 +19,7 @@ class InstancedMesh extends Mesh {
 
   InstancedMesh( geometry, material, count ) : super(geometry, material) {
     var dl = Float32Array( count * 16 );
-    this.instanceMatrix = new BufferAttribute( dl, 16, false );
+    this.instanceMatrix = new InstancedBufferAttribute( dl, 16, false );
     this.instanceColor = null;
 
     this.count = count;

@@ -5,7 +5,7 @@ class InstancedBufferAttribute extends BufferAttribute {
   late num meshPerAttribute;
   bool isInstancedBufferAttribute = true;
 
-  InstancedBufferAttribute( array, itemSize, normalized, meshPerAttribute ) : super(array, itemSize, normalized) {
+  InstancedBufferAttribute( array, itemSize, normalized, [num meshPerAttribute = 1] ) : super(array, itemSize, normalized) {
     if ( normalized is num ) {
 
       meshPerAttribute = normalized;
@@ -17,7 +17,7 @@ class InstancedBufferAttribute extends BufferAttribute {
     }
 
 
-    this.meshPerAttribute = meshPerAttribute ?? 1;
+    this.meshPerAttribute = meshPerAttribute;
   }
 
   copy ( source ) {
