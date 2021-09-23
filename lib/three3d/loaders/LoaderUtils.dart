@@ -6,7 +6,7 @@ class LoaderUtils {
 
 	static decodeText( array ) {
 
-    var s = Utf8Decoder().convert(array);
+    var s = convert.Utf8Decoder().convert(array);
     return s;
 
 		// if ( typeof TextDecoder !== 'undefined' ) {

@@ -35,9 +35,6 @@ var _testAxis = new Vector3.init();
 
 class Box3 {
 
-
-  
-
   String type = "Box3";
 
   late Vector3 min;

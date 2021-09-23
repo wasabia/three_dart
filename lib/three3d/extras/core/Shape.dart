@@ -93,6 +93,24 @@ class Shape extends Path {
 
 	}
 
+  fromJSON( json ) {
+
+		super.fromJSON( json );
+
+		this.uuid = json.uuid;
+		this.holes = [];
+
+		for ( var i = 0, l = json.holes.length; i < l; i ++ ) {
+
+			var hole = json.holes[ i ];
+			this.holes.add( new Path(null).fromJSON( hole ) );
+
+		}
+
+		return this;
+
+	}
+
 	
 }
 

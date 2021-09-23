@@ -38,7 +38,7 @@ class MeshLambertMaterial extends Material {
   String type = "MeshLambertMaterial";
   bool isMeshLambertMaterial = true;
 
-  MeshLambertMaterial( parameters ) : super() {
+  MeshLambertMaterial( [parameters] ) : super() {
 
     this.color = new Color(0,0,0).setHex( 0xffffff ); // diffuse
 

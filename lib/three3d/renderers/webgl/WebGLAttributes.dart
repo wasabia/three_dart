@@ -189,6 +189,7 @@ class WebGLAttributes {
 		var array = attribute.array;
 		var updateRange = attribute.updateRange;
 
+
 		gl.bindBuffer( bufferType, buffer );
 
 		if ( updateRange["count"] == - 1 ) {

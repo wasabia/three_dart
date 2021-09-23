@@ -3,16 +3,8 @@ part of three_geometries;
 
 class PlaneGeometry extends BufferGeometry {
 
-  factory PlaneGeometry.fromJson(Map<String, dynamic> options) {
-    return PlaneGeometry(
-      width: options["width"],
-      height: options["height"],
-      widthSegments: options["widthSegments"],
-      heightSegments: options["heightSegments"]
-    );
-  }
 
-	PlaneGeometry( {num width = 1, num height = 1, num widthSegments = 1, num heightSegments = 1} ) : super() {
+	PlaneGeometry( [num width = 1, num height = 1, num widthSegments = 1, num heightSegments = 1] ) : super() {
 
 		this.type = 'PlaneGeometry';
 
@@ -81,6 +73,12 @@ class PlaneGeometry extends BufferGeometry {
 		this.setAttribute( 'position', new Float32BufferAttribute( Float32Array.from(vertices), 3, false ) );
 		this.setAttribute( 'normal', new Float32BufferAttribute( Float32Array.from(normals), 3, false ) );
 		this.setAttribute( 'uv', new Float32BufferAttribute( Float32Array.from(uvs), 2, false ) );
+
+	}
+
+  static fromJSON( data ) {
+
+		return new PlaneGeometry( data["width"], data["height"], data["widthSegments"], data["heightSegments"] );
 
 	}
 

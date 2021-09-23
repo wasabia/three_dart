@@ -55,11 +55,11 @@ class MeshStandardMaterial extends Material {
   num roughness = 1.0;
   num metalness = 0.0;
 
-  num bumpScale = 1.0;
+  num? bumpScale = 1.0;
 
   Vector2? normalScale = Vector2( 1, 1 );
 
-  num envMapIntensity = 1.0;
+  num? envMapIntensity = 1.0;
 
 
   MeshStandardMaterial( Map<String, dynamic> parameters ) : super() {

@@ -659,7 +659,7 @@ class Color {
     return this;
   }
 
-  toArray(List<num?> array, {int offset = 0}) {
+  toArray(array, {int offset = 0}) {
     array[offset] = this.r;
     array[offset + 1] = this.g;
     array[offset + 2] = this.b;

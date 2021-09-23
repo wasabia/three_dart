@@ -48,6 +48,7 @@ class Material with EventDispatcher {
 
   num? shininess;
 
+
   String? precision;
   bool polygonOffset = false;
   num polygonOffsetFactor = 0;
@@ -55,8 +56,8 @@ class Material with EventDispatcher {
 
   bool dithering = false;
   num alphaTest = 0;
-  num _clearcoat = 0;
 
+  num _clearcoat = 0;
   num get clearcoat => _clearcoat;
   set clearcoat( num value ) {
 		if ( (this._clearcoat > 0) != (value > 0) ) {
@@ -78,8 +79,15 @@ class Material with EventDispatcher {
   int version = 0;
 
   bool isMaterial = true;
-  bool flatShading = false;
+  int flatShading = 0;
   Color? color;
+
+  Color? specular;
+  num? specularIntensity;
+  Color? specularTint;
+  num? clearcoatRoughness;
+  num? bumpScale;
+  num? envMapIntensity;
 
   num metalness = 0.0;
   num roughness = 1.0;
@@ -99,7 +107,12 @@ class Material with EventDispatcher {
   Color? sheenTint;
   num transmission = 0.0;
   Texture? transmissionMap;
+
+  num? thickness;
   Texture? thicknessMap;
+
+  Color? attenuationTint;
+  num? attenuationDistance;
   
   bool vertexTangents = false;
 
@@ -129,6 +142,10 @@ class Material with EventDispatcher {
   num? linewidth;
   String? linecap;
   String? linejoin;
+
+  num? dashSize;
+  num? gapSize;
+  num? scale;
 
 
   Color? emissive;
@@ -173,10 +190,10 @@ class Material with EventDispatcher {
 
   num? size;
 
-  late num _reflectivity;
-  num get reflectivity => _reflectivity;
-  set reflectivity(num value) {
-    
+  num? _reflectivity;
+  num? get reflectivity => _reflectivity;
+  set reflectivity(value) {
+    _reflectivity = value;
   }
  
   bool? uniformsNeedUpdate;
@@ -279,6 +296,8 @@ class Material with EventDispatcher {
       } else {
         emissive = Color(0,0,0).setHex(newValue);
       }
+    } else if(key == "flatShading") {
+      flatShading = newValue;  
     } else if(key == "fog") {
       fog = newValue;
     } else if(key == "fragmentShader") {
@@ -304,10 +323,12 @@ class Material with EventDispatcher {
     } else if(key == "polygonOffsetFactor") {
       polygonOffsetFactor = newValue;
     } else if(key == "polygonOffsetUnits") {
-      polygonOffsetUnits = newValue;    
+      polygonOffsetUnits = newValue;
+    } else if(key == "premultipliedAlpha") {
+      premultipliedAlpha = newValue;
     } else if(key == "roughness") {
       roughness = newValue;
-    } else if(key == "flatShading") {
+    } else if(key == "shading") {
     //   // for backward compatability if shading is set in the constructor
       throw( 'THREE.' + this.type + ': .shading has been removed. Use the boolean .flatShading instead.' );
     //   this.flatShading = ( newValue == FlatShading ) ? true : false;
@@ -365,119 +386,119 @@ class Material with EventDispatcher {
 
   	if ( this.color != null && this.color!.isColor ) data["color"] = this.color!.getHex();
 
-  	// if ( this.roughness != null ) data.roughness = this.roughness;
-  	// if ( this.metalness != null ) data.metalness = this.metalness;
+  	if ( this.roughness != null ) data["roughness"] = this.roughness;
+  	if ( this.metalness != null ) data["metalness"] = this.metalness;
 
-  	// if ( this.sheenTint && this.sheenTint.isColor ) data.sheenTint = this.sheenTint.getHex();
-  	// if ( this.emissive && this.emissive.isColor ) data.emissive = this.emissive.getHex();
-  	// if ( this.emissiveIntensity && this.emissiveIntensity != 1 ) data.emissiveIntensity = this.emissiveIntensity;
+  	if ( this.sheenTint != null && this.sheenTint!.isColor ) data["sheenTint"] = this.sheenTint!.getHex();
+  	if ( this.emissive != null && this.emissive!.isColor ) data["emissive"] = this.emissive!.getHex();
+  	if ( this.emissiveIntensity != null && this.emissiveIntensity != 1 ) data["emissiveIntensity"] = this.emissiveIntensity;
 
-  	// if ( this.specular && this.specular.isColor ) data.specular = this.specular.getHex();
-    // if ( this.specularIntensity != null ) data.specularIntensity = this.specularIntensity;
-		// if ( this.specularTint && this.specularTint.isColor ) data.specularTint = this.specularTint.getHex();
-    // if ( this.shininess != null ) data.shininess = this.shininess;
-  	// if ( this.clearcoat != null ) data.clearcoat = this.clearcoat;
-  	// if ( this.clearcoatRoughness != null ) data.clearcoatRoughness = this.clearcoatRoughness;
+  	if ( this.specular != null && this.specular!.isColor ) data["specular"] = this.specular!.getHex();
+    if ( this.specularIntensity != null ) data["specularIntensity"] = this.specularIntensity;
+		if ( this.specularTint != null && this.specularTint!.isColor ) data["specularTint"] = this.specularTint!.getHex();
+    if ( this.shininess != null ) data["shininess"] = this.shininess;
+  	if ( this.clearcoat != null ) data["clearcoat"] = this.clearcoat;
+  	if ( this.clearcoatRoughness != null ) data["clearcoatRoughness"] = this.clearcoatRoughness;
 
-  	// if ( this.clearcoatMap && this.clearcoatMap.isTexture ) {
+  	if ( this.clearcoatMap != null && this.clearcoatMap!.isTexture ) {
 
-  	// 	data.clearcoatMap = this.clearcoatMap.toJSON( meta ).uuid;
+  		data["clearcoatMap"] = this.clearcoatMap!.toJSON( meta ).uuid;
 
-  	// }
+  	}
 
-  	// if ( this.clearcoatRoughnessMap && this.clearcoatRoughnessMap.isTexture ) {
+  	if ( this.clearcoatRoughnessMap != null && this.clearcoatRoughnessMap!.isTexture ) {
 
-  	// 	data.clearcoatRoughnessMap = this.clearcoatRoughnessMap.toJSON( meta ).uuid;
+  		data["clearcoatRoughnessMap"] = this.clearcoatRoughnessMap!.toJSON( meta ).uuid;
 
-  	// }
+  	}
 
-  	// if ( this.clearcoatNormalMap && this.clearcoatNormalMap.isTexture ) {
+  	if ( this.clearcoatNormalMap != null && this.clearcoatNormalMap!.isTexture ) {
 
-  	// 	data.clearcoatNormalMap = this.clearcoatNormalMap.toJSON( meta ).uuid;
-  	// 	data.clearcoatNormalScale = this.clearcoatNormalScale.toArray();
+  		data["clearcoatNormalMap"] = this.clearcoatNormalMap!.toJSON( meta ).uuid;
+  		data["clearcoatNormalScale"] = this.clearcoatNormalScale!.toArray();
 
-  	// }
+  	}
 
-  	// if ( this.map && this.map.isTexture ) data.map = this.map.toJSON( meta ).uuid;
-  	// if ( this.matcap && this.matcap.isTexture ) data.matcap = this.matcap.toJSON( meta ).uuid;
-  	// if ( this.alphaMap && this.alphaMap.isTexture ) data.alphaMap = this.alphaMap.toJSON( meta ).uuid;
-  	// if ( this.lightMap && this.lightMap.isTexture ) data.lightMap = this.lightMap.toJSON( meta ).uuid;
-
-
-		// if ( this.lightMap && this.lightMap.isTexture ) {
-
-		// 	data.lightMap = this.lightMap.toJSON( meta ).uuid;
-		// 	data.lightMapIntensity = this.lightMapIntensity;
-
-		// }
+  	if ( this.map != null && this.map!.isTexture ) data["map"] = this.map!.toJSON( meta ).uuid;
+  	if ( this.matcap != null && this.matcap!.isTexture ) data["matcap"] = this.matcap!.toJSON( meta ).uuid;
+  	if ( this.alphaMap != null && this.alphaMap!.isTexture ) data["alphaMap"] = this.alphaMap!.toJSON( meta ).uuid;
+  	if ( this.lightMap != null && this.lightMap!.isTexture ) data["lightMap"] = this.lightMap!.toJSON( meta ).uuid;
 
 
-  	// if ( this.aoMap && this.aoMap.isTexture ) {
+		if ( this.lightMap != null && this.lightMap!.isTexture ) {
 
-  	// 	data.aoMap = this.aoMap.toJSON( meta ).uuid;
-  	// 	data.aoMapIntensity = this.aoMapIntensity;
+			data["lightMap"] = this.lightMap!.toJSON( meta ).uuid;
+			data["lightMapIntensity"] = this.lightMapIntensity;
 
-  	// }
-
-  	// if ( this.bumpMap && this.bumpMap.isTexture ) {
-
-  	// 	data.bumpMap = this.bumpMap.toJSON( meta ).uuid;
-  	// 	data.bumpScale = this.bumpScale;
-
-  	// }
-
-  	// if ( this.normalMap && this.normalMap.isTexture ) {
-
-  	// 	data.normalMap = this.normalMap.toJSON( meta ).uuid;
-  	// 	data.normalMapType = this.normalMapType;
-  	// 	data.normalScale = this.normalScale.toArray();
-
-  	// }
-
-  	// if ( this.displacementMap && this.displacementMap.isTexture ) {
-
-  	// 	data.displacementMap = this.displacementMap.toJSON( meta ).uuid;
-  	// 	data.displacementScale = this.displacementScale;
-  	// 	data.displacementBias = this.displacementBias;
-
-  	// }
-
-  	// if ( this.roughnessMap && this.roughnessMap.isTexture ) data.roughnessMap = this.roughnessMap.toJSON( meta ).uuid;
-  	// if ( this.metalnessMap && this.metalnessMap.isTexture ) data.metalnessMap = this.metalnessMap.toJSON( meta ).uuid;
-
-  	// if ( this.emissiveMap && this.emissiveMap.isTexture ) data.emissiveMap = this.emissiveMap.toJSON( meta ).uuid;
-  	// if ( this.specularMap && this.specularMap.isTexture ) data.specularMap = this.specularMap.toJSON( meta ).uuid;
-    // if ( this.specularIntensityMap && this.specularIntensityMap.isTexture ) data.specularIntensityMap = this.specularIntensityMap.toJSON( meta ).uuid;
-		// if ( this.specularTintMap && this.specularTintMap.isTexture ) data.specularTintMap = this.specularTintMap.toJSON( meta ).uuid;
-
-  	// if ( this.envMap && this.envMap.isTexture ) {
-
-  	// 	data.envMap = this.envMap.toJSON( meta ).uuid;
-
-  	// 	data.refractionRatio = this.refractionRatio;
-
-  	// 	if ( this.combine != null ) data.combine = this.combine;
-  	// 	if ( this.envMapIntensity != null ) data.envMapIntensity = this.envMapIntensity;
-
-  	// }
-
-  	// if ( this.gradientMap && this.gradientMap.isTexture ) {
-
-  	// 	data.gradientMap = this.gradientMap.toJSON( meta ).uuid;
-
-  	// }
+		}
 
 
-		// if ( this.transmission != null ) data["transmission"] = this.transmission;
-		// if ( this.transmissionMap && this.transmissionMap.isTexture ) data["transmissionMap"] = this.transmissionMap.toJSON( meta ).uuid;
-		// if ( this.thickness != null ) data["thickness"] = this.thickness;
-		// if ( this.thicknessMap != null && this.thicknessMap.isTexture ) data["thicknessMap"] = this.thicknessMap.toJSON( meta ).uuid;
-		// if ( this.attenuationTint != null ) data.attenuationTint = this.attenuationTint.getHex();
-    // if ( this.attenuationDistance != null ) data["attenuationDistance"] = this.attenuationDistance;
+  	if ( this.aoMap != null && this.aoMap!.isTexture ) {
 
-  	// if ( this.size != null ) data.size = this.size;
-    // if ( this.shadowSide != null ) data.shadowSide = this.shadowSide;
-  	// if ( this.sizeAttenuation != null ) data.sizeAttenuation = this.sizeAttenuation;
+  		data["aoMap"] = this.aoMap!.toJSON( meta ).uuid;
+  		data["aoMapIntensity"] = this.aoMapIntensity;
+
+  	}
+
+  	if ( this.bumpMap != null && this.bumpMap!.isTexture ) {
+
+  		data["bumpMap"] = this.bumpMap!.toJSON( meta ).uuid;
+  		data["bumpScale"] = this.bumpScale;
+
+  	}
+
+  	if ( this.normalMap != null && this.normalMap!.isTexture ) {
+
+  		data["normalMap"] = this.normalMap!.toJSON( meta ).uuid;
+  		data["normalMapType"] = this.normalMapType;
+  		data["normalScale"] = this.normalScale!.toArray();
+
+  	}
+
+  	if ( this.displacementMap != null && this.displacementMap!.isTexture ) {
+
+  		data["displacementMap"] = this.displacementMap!.toJSON( meta ).uuid;
+  		data["displacementScale"] = this.displacementScale;
+  		data["displacementBias"] = this.displacementBias;
+
+  	}
+
+  	if ( this.roughnessMap != null && this.roughnessMap!.isTexture ) data["roughnessMap"] = this.roughnessMap!.toJSON( meta ).uuid;
+  	if ( this.metalnessMap != null && this.metalnessMap!.isTexture ) data["metalnessMap"] = this.metalnessMap!.toJSON( meta ).uuid;
+
+  	if ( this.emissiveMap != null && this.emissiveMap!.isTexture ) data["emissiveMap"] = this.emissiveMap!.toJSON( meta ).uuid;
+  	if ( this.specularMap != null && this.specularMap!.isTexture ) data["specularMap"] = this.specularMap!.toJSON( meta ).uuid;
+    if ( this.specularIntensityMap != null && this.specularIntensityMap!.isTexture ) data["specularIntensityMap"] = this.specularIntensityMap!.toJSON( meta ).uuid;
+		if ( this.specularTintMap != null && this.specularTintMap!.isTexture ) data["specularTintMap"] = this.specularTintMap!.toJSON( meta ).uuid;
+
+  	if ( this.envMap != null && this.envMap!.isTexture ) {
+
+  		data["envMap"] = this.envMap!.toJSON( meta ).uuid;
+
+  		data["refractionRatio"] = this.refractionRatio;
+
+  		if ( this.combine != null ) data["combine"] = this.combine;
+  		if ( this.envMapIntensity != null ) data["envMapIntensity"] = this.envMapIntensity;
+
+  	}
+
+  	if ( this.gradientMap != null && this.gradientMap!.isTexture ) {
+
+  		data["gradientMap"] = this.gradientMap!.toJSON( meta ).uuid;
+
+  	}
+
+
+		if ( this.transmission != null ) data["transmission"] = this.transmission;
+		if ( this.transmissionMap != null && this.transmissionMap!.isTexture ) data["transmissionMap"] = this.transmissionMap!.toJSON( meta ).uuid;
+		if ( this.thickness != null ) data["thickness"] = this.thickness;
+		if ( this.thicknessMap != null && this.thicknessMap!.isTexture ) data["thicknessMap"] = this.thicknessMap!.toJSON( meta ).uuid;
+		if ( this.attenuationTint != null ) data["attenuationTint"] = this.attenuationTint!.getHex();
+    if ( this.attenuationDistance != null ) data["attenuationDistance"] = this.attenuationDistance;
+
+  	if ( this.size != null ) data["size"] = this.size;
+    if ( this.shadowSide != null ) data["shadowSide"] = this.shadowSide;
+  	if ( this.sizeAttenuation != null ) data["sizeAttenuation"] = this.sizeAttenuation;
 
   	if ( this.blending != NormalBlending ) data["blending"] = this.blending;
   	if ( this.side != FrontSide ) data["side"] = this.side;
@@ -500,34 +521,33 @@ class Material with EventDispatcher {
   	data["stencilZFail"] = this.stencilZFail;
   	data["stencilZPass"] = this.stencilZPass;
 
-  	// rotation (SpriteMaterial)
-  	// if ( this.rotation != null && this.rotation != 0 ) data.rotation = this.rotation;
+  	if ( this.rotation != null && this.rotation != 0 ) data["rotation"] = this.rotation;
 
-  	// if ( this.polygonOffset == true ) data.polygonOffset = true;
-  	// if ( this.polygonOffsetFactor != 0 ) data.polygonOffsetFactor = this.polygonOffsetFactor;
-  	// if ( this.polygonOffsetUnits != 0 ) data.polygonOffsetUnits = this.polygonOffsetUnits;
+  	if ( this.polygonOffset == true ) data["polygonOffset"] = true;
+  	if ( this.polygonOffsetFactor != 0 ) data["polygonOffsetFactor"] = this.polygonOffsetFactor;
+  	if ( this.polygonOffsetUnits != 0 ) data["polygonOffsetUnits"] = this.polygonOffsetUnits;
 
-  	// if ( this.linewidth && this.linewidth != 1 ) data.linewidth = this.linewidth;
-  	// if ( this.dashSize != null ) data.dashSize = this.dashSize;
-  	// if ( this.gapSize != null ) data.gapSize = this.gapSize;
-  	// if ( this.scale != null ) data.scale = this.scale;
+  	if ( this.linewidth != null && this.linewidth != 1 ) data["linewidth"] = this.linewidth;
+  	if ( this.dashSize != null ) data["dashSize"] = this.dashSize;
+  	if ( this.gapSize != null ) data["gapSize"] = this.gapSize;
+  	if ( this.scale != null ) data["scale"] = this.scale;
 
-  	// if ( this.dithering == true ) data.dithering = true;
+  	if ( this.dithering == true ) data["dithering"] = true;
 
-  	// if ( this.alphaTest > 0 ) data.alphaTest = this.alphaTest;
-    // if ( this.alphaToCoverage == true ) data.alphaToCoverage = this.alphaToCoverage;
-  	// if ( this.premultipliedAlpha == true ) data.premultipliedAlpha = this.premultipliedAlpha;
+  	if ( this.alphaTest > 0 ) data["alphaTest"] = this.alphaTest;
+    if ( this.alphaToCoverage == true ) data["alphaToCoverage"] = this.alphaToCoverage;
+  	if ( this.premultipliedAlpha == true ) data["premultipliedAlpha"] = this.premultipliedAlpha;
 
-  	// if ( this.wireframe == true ) data.wireframe = this.wireframe;
-  	// if ( this.wireframeLinewidth > 1 ) data.wireframeLinewidth = this.wireframeLinewidth;
-  	// if ( this.wireframeLinecap != 'round' ) data.wireframeLinecap = this.wireframeLinecap;
-  	// if ( this.wireframeLinejoin != 'round' ) data.wireframeLinejoin = this.wireframeLinejoin;
+  	if ( this.wireframe == true ) data["wireframe"] = this.wireframe;
+  	if ( this.wireframeLinewidth != null && this.wireframeLinewidth! > 1 ) data["wireframeLinewidth"] = this.wireframeLinewidth;
+  	if ( this.wireframeLinecap != 'round' ) data["wireframeLinecap"] = this.wireframeLinecap;
+  	if ( this.wireframeLinejoin != 'round' ) data["wireframeLinejoin"] = this.wireframeLinejoin;
 
-  	// if ( this.visible == false ) data.visible = false;
+  	if ( this.visible == false ) data["visible"] = false;
 
-  	// if ( this.toneMapped == false ) data.toneMapped = false;
+  	if ( this.toneMapped == false ) data["toneMapped"] = false;
 
-  	// if ( JSON.stringify( this.userData ) != '{}' ) data.userData = this.userData;
+  	if ( jsonEncode( this.userData ) != '{}' ) data["userData"] = this.userData;
 
   	// TODO: Copied from Object3D.toJSON
 

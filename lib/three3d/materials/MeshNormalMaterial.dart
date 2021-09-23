@@ -27,7 +27,7 @@ class MeshNormalMaterial extends Material {
   bool isMeshNormalMaterial = true;
 
   String type = "MeshNormalMaterial";
-  num bumpScale = 1;
+  num? bumpScale = 1;
   Texture? bumpMap;
 
   Texture? normalMap;

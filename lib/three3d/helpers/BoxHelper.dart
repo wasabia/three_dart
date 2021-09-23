@@ -72,8 +72,6 @@ class BoxHelper extends LineSegments {
 		position.needsUpdate = true;
 
 		this.geometry!.computeBoundingSphere();
-
-
 	}
 
 	setFromObject( object ) {

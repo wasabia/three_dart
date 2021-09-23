@@ -7,7 +7,7 @@ class OrthographicCamera extends Camera {
 
   double zoom = 1;
 
-  OrthographicCamera({num left=-1, num right=1, num top=1, num bottom=-1, num near=0.1, num far=2000}) : super() {
+  OrthographicCamera([num left=-1, num right=1, num top=1, num bottom=-1, num near=0.1, num far=2000]) : super() {
 
     this.view = null;
 
@@ -118,15 +118,15 @@ class OrthographicCamera extends Camera {
 
 		var data = super.toJSON( meta: meta );
 
-		data.object.zoom = this.zoom;
-		data.object.left = this.left;
-		data.object.right = this.right;
-		data.object.top = this.top;
-		data.object.bottom = this.bottom;
-		data.object.near = this.near;
-		data.object.far = this.far;
+		data["object"]["zoom"] = this.zoom;
+		data["object"]["left"] = this.left;
+		data["object"]["right"] = this.right;
+		data["object"]["top"] = this.top;
+		data["object"]["bottom"] = this.bottom;
+		data["object"]["near"] = this.near;
+		data["object"]["far"] = this.far;
 
-		if ( this.view != null ) data.object.view = json.decode(json.encode(this.view));
+		if ( this.view != null ) data["object"]["view"] = json.decode(json.encode(this.view));
 
 		return data;
 

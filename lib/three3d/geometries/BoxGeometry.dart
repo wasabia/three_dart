@@ -11,7 +11,7 @@ class BoxGeometry extends BufferGeometry {
   late int numberOfVertices;
   
 
-	BoxGeometry( {width = 1, height = 1, depth = 1, widthSegments = 1, heightSegments = 1, depthSegments = 1} ) : super() {
+	BoxGeometry( [width = 1, height = 1, depth = 1, widthSegments = 1, heightSegments = 1, depthSegments = 1] ) : super() {
 
 
 		this.parameters = {
@@ -178,6 +178,10 @@ class BoxGeometry extends BufferGeometry {
 
 
   
+  static fromJSON( data ) {
 
+		return BoxGeometry( data["width"], data["height"], data["depth"], data["widthSegments"], data["heightSegments"], data["depthSegments"] );
+
+	}
 
 }

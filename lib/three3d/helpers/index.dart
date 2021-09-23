@@ -11,6 +11,7 @@ import 'package:three_dart/three_dart.dart';
 import '../constants.dart';
 
 
+part './ArrowHelper.dart';
 part './AxesHelper.dart';
 part './BoxHelper.dart';
 part './CameraHelper.dart';

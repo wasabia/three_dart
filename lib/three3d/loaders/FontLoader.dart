@@ -17,7 +17,7 @@ class FontLoader extends Loader {
 		loader.setWithCredentials( this.withCredentials );
 		var text = await loader.loadAsync( url, null );
 
-    var jsonData = json.decode(text);
+    var jsonData = convert.jsonDecode(text);
 
     return this.parse( jsonData );
 	}
@@ -35,7 +35,7 @@ class FontLoader extends Loader {
 
 			var jsonData;
 
-      jsonData = json.decode(text);
+      jsonData = convert.jsonDecode(text);
 
 			// try {
 			// 	json = JSON.parse( text );

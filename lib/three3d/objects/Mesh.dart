@@ -136,8 +136,6 @@ class Mesh extends Object3D {
 
 		if ( raycaster.ray.intersectsSphere( _meshsphere ) == false ) return;
 
-		//
-
 		_meshinverseMatrix.copy( matrixWorld ).invert();
 		_meshray.copy( raycaster.ray ).applyMatrix4( _meshinverseMatrix );
 
@@ -166,37 +164,37 @@ class Mesh extends Object3D {
 
 				// indexed buffer geometry
 
-				// if ( material is List ) {
+				if ( material is List ) {
 
-				// 	for ( var i = 0, il = groups.length; i < il; i ++ ) {
+					for ( var i = 0, il = groups.length; i < il; i ++ ) {
 
-				// 		var group = groups[ i ];
-				// 		var groupMaterial = material[ group["materialIndex"] ];
+						var group = groups[ i ];
+						var groupMaterial = material[ group["materialIndex"] ];
 
-				// 		var start = Math.max( group["start"], drawRange["start"] );
-				// 		var end = Math.min( ( group["start"] + group["count"] ), ( drawRange["start"] + drawRange["count"] ) );
+						var start = Math.max( group["start"], drawRange["start"]! );
+						var end = Math.min( ( group["start"] + group["count"] ), ( drawRange["start"]! + drawRange["count"]! ) );
 
-				// 		for ( var j = start, jl = end; j < jl; j += 3 ) {
+						for ( var j = start, jl = end; j < jl; j += 3 ) {
 
-				// 			var a = index.getX( j );
-				// 			var b = index.getX( j + 1 );
-				// 			var c = index.getX( j + 2 );
+							var a = index.getX( j );
+							var b = index.getX( j + 1 );
+							var c = index.getX( j + 2 );
 
-				// 			intersection = checkBufferGeometryIntersection( this, groupMaterial, raycaster, _meshray, position, morphPosition, morphTargetsRelative, uv, uv2, a, b, c );
+							intersection = checkBufferGeometryIntersection( this, groupMaterial, raycaster, _meshray, position, morphPosition, morphTargetsRelative, uv, uv2, a, b, c );
 
-				// 			if ( intersection ) {
+							if ( intersection ) {
 
-				// 				intersection.faceIndex = Math.floor( j / 3 ); // triangle number in indexed buffer semantics
-				// 				intersection.face.materialIndex = group["materialIndex"];
-				// 				intersects.add( intersection );
+								intersection.faceIndex = Math.floor( j / 3 ); // triangle number in indexed buffer semantics
+								intersection.face.materialIndex = group["materialIndex"];
+								intersects.add( intersection );
 
-				// 			}
+							}
 
-				// 		}
+						}
 
-				// 	}
+					}
 
-				// } else {
+				} else {
 
 					var start = Math.max( 0, drawRange["start"]! );
 					var end = Math.min( index.count, ( drawRange["start"]! + drawRange["count"]! ) );
@@ -218,43 +216,43 @@ class Mesh extends Object3D {
 
 					}
 
-				// }
+				}
 
 			} else if ( position != null ) {
 
 				// non-indexed buffer geometry
 
-				// if ( material is List ) {
+				if ( material is List ) {
 
-				// 	for ( var i = 0, il = groups.length; i < il; i ++ ) {
+					for ( var i = 0, il = groups.length; i < il; i ++ ) {
 
-				// 		var group = groups[ i ];
-				// 		var groupMaterial = material[ group["materialIndex"] ];
+						var group = groups[ i ];
+						var groupMaterial = material[ group["materialIndex"] ];
 
-				// 		var start = Math.max( group["start"], drawRange["start"] );
-				// 		var end = Math.min( ( group["start"] + group["count"] ), ( drawRange["start"] + drawRange["count"] ) );
+						var start = Math.max( group["start"], drawRange["start"]! );
+						var end = Math.min( ( group["start"] + group["count"] ), ( drawRange["start"]! + drawRange["count"]! ) );
 
-				// 		for ( var j = start, jl = end; j < jl; j += 3 ) {
+						for ( var j = start, jl = end; j < jl; j += 3 ) {
 
-				// 			var a = j;
-				// 			var b = j + 1;
-				// 			var c = j + 2;
+							var a = j;
+							var b = j + 1;
+							var c = j + 2;
 
-				// 			intersection = checkBufferGeometryIntersection( this, groupMaterial, raycaster, _meshray, position, morphPosition, morphTargetsRelative, uv, uv2, a, b, c );
+							intersection = checkBufferGeometryIntersection( this, groupMaterial, raycaster, _meshray, position, morphPosition, morphTargetsRelative, uv, uv2, a, b, c );
 
-				// 			if ( intersection ) {
+							if ( intersection ) {
 
-				// 				intersection.faceIndex = Math.floor( j / 3 ); // triangle number in non-indexed buffer semantics
-				// 				intersection.face.materialIndex = group["materialIndex"];
-				// 				intersects.add( intersection );
+								intersection.faceIndex = Math.floor( j / 3 ); // triangle number in non-indexed buffer semantics
+								intersection.face.materialIndex = group["materialIndex"];
+								intersects.add( intersection );
 
-				// 			}
+							}
 
-				// 		}
+						}
 
-				// 	}
+					}
 
-				// } else {
+				} else {
 
 					var start = Math.max( 0, drawRange["start"]! );
 					var end = Math.min( position.count, ( drawRange["start"]! + drawRange["count"]! ) );
@@ -276,7 +274,7 @@ class Mesh extends Object3D {
 
 					}
 
-				// }
+				}
 
 			}
 

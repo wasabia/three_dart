@@ -37,9 +37,7 @@ class Raycaster {
   intersectObject4( object, raycaster, intersects, recursive ) {
 
     if ( object.layers.test( raycaster.layers ) ) {
-
       object.raycast( raycaster, intersects );
-
     }
 
     if ( recursive == true ) {

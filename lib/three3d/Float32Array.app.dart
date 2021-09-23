@@ -147,6 +147,8 @@ class Uint32Array extends ThreeArray {
 
   get data => list;
 
+  get buffer => data;
+
   operator [](int index) {
     return this.list[index];
   }

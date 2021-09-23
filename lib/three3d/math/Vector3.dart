@@ -314,9 +314,7 @@ class Vector3 {
 		this.y = ( e[ 1 ] * x + e[ 5 ] * y + e[ 9 ] * z + e[ 13 ] ) * w;
 		this.z = ( e[ 2 ] * x + e[ 6 ] * y + e[ 10 ] * z + e[ 14 ] ) * w;
 
-
 		return this;
-
 	}
 
 	applyQuaternion( q ) {
@@ -440,9 +438,9 @@ class Vector3 {
 
 	floor() {
 
-		this.x = Math.floor( this.x ).toDouble();
-		this.y = Math.floor( this.y ).toDouble();
-		this.z = Math.floor( this.z ).toDouble();
+		this.x = Math.floor( this.x );
+		this.y = Math.floor( this.y );
+		this.z = Math.floor( this.z );
 
 		return this;
 
@@ -450,9 +448,9 @@ class Vector3 {
 
 	ceil() {
 
-		this.x = Math.ceil( this.x ).toDouble();
-		this.y = Math.ceil( this.y ).toDouble();
-		this.z = Math.ceil( this.z ).toDouble();
+		this.x = Math.ceil( this.x );
+		this.y = Math.ceil( this.y );
+		this.z = Math.ceil( this.z );
 
 		return this;
 
@@ -460,9 +458,9 @@ class Vector3 {
 
 	round() {
 
-		this.x = Math.round( this.x ).toDouble();
-		this.y = Math.round( this.y ).toDouble();
-		this.z = Math.round( this.z ).toDouble();
+		this.x = Math.round( this.x );
+		this.y = Math.round( this.y );
+		this.z = Math.round( this.z );
 
 		return this;
 

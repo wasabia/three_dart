@@ -14,7 +14,7 @@ class CylinderGeometry extends BufferGeometry {
 
   String type = "CylinderGeometry";
 
-	CylinderGeometry( {radiusTop = 1, radiusBottom = 1, height = 1, radialSegments = 8, heightSegments = 1, bool openEnded = false, thetaStart = 0, thetaLength = Math.PI * 2} ) : super() {
+	CylinderGeometry( [radiusTop = 1, radiusBottom = 1, height = 1, radialSegments = 8, heightSegments = 1, bool openEnded = false, thetaStart = 0, thetaLength = Math.PI * 2] ) : super() {
 
 		this.parameters = {
 			"radiusTop": radiusTop,

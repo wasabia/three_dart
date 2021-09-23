@@ -245,6 +245,24 @@ class CurvePath extends Curve {
 	}
 
 	
+  fromJSON( json ) {
 
+		super.fromJSON( json );
+
+		this.autoClose = json.autoClose;
+		this.curves = [];
+
+		for ( var i = 0, l = json.curves.length; i < l; i ++ ) {
+
+			var curve = json.curves[ i ];
+
+      throw(" CurvePath fromJSON todo ");
+			// this.curves.add( new Curves[ curve.type ]().fromJSON( curve ) );
+
+		}
+
+		return this;
+
+	}
 
 }

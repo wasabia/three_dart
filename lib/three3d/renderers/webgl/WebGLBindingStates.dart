@@ -29,8 +29,6 @@ class WebGLBindingStates {
 
 	setup( object, material, program, geometry, index ) {
 
-    // print(" WebGLBindingStates.setup object: ${object.type} ${object.id} vaoAvailable: ${vaoAvailable} index: ${index} ");
-
 		bool updateBuffers = false;
 
 		if ( vaoAvailable ) {
@@ -44,6 +42,8 @@ class WebGLBindingStates {
 			}
 
 			updateBuffers = needsUpdate( geometry, index );
+
+      // print("WebGLBindingStates.dart setup object: ${object}  updateBuffers: ${updateBuffers}  ");
 
 
 			if ( updateBuffers ) saveCache( geometry, index );
@@ -78,18 +78,16 @@ class WebGLBindingStates {
 		}
 
 
-    // print(" WebGLBindingStates.setup updateBuffers: ${updateBuffers} ");
-
 		if ( updateBuffers ) {
-
+      
 			setupVertexAttributes( object, material, program, geometry );
+
 
 			if ( index != null ) {
 
         var _buffer = attributes.get( index )["buffer"];
-
 				gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, _buffer);
-
+ 
 			}
 
 		}
@@ -195,6 +193,7 @@ class WebGLBindingStates {
 	}
 
 	needsUpdate( geometry, index ) {
+
 		var cachedAttributes = currentState["attributes"];
 		var geometryAttributes = geometry.attributes;
 
@@ -321,9 +320,6 @@ class WebGLBindingStates {
 	}
 
 	vertexAttribPointer( index, size, type, normalized, stride, offset ) {
-
-
-
 		if ( capabilities.isWebGL2 == true && ( type == gl.INT || type == gl.UNSIGNED_INT ) ) {
 			gl.vertexAttribIPointer( index, size, type, stride, offset );
 		} else {
@@ -335,10 +331,7 @@ class WebGLBindingStates {
 
 
 		if ( capabilities.isWebGL2 == false && ( object.isInstancedMesh || geometry.isInstancedBufferGeometry ) ) {
-
-      print("  geometry.isInstancedBufferGeometry: ${geometry.isInstancedBufferGeometry} ");
 			if ( extensions.get( 'ANGLE_instanced_arrays' ) == null ) return;
-
 		}
 
 		initAttributes();
@@ -354,15 +347,9 @@ class WebGLBindingStates {
 
 			var programAttribute = programAttributes[ name ];
 
-      // print(" WebGLBindingStates setupVertexAttributes programAttributes: name ${name} programAttribute: ${programAttribute} ");
-
-
-
 			if ( programAttribute >= 0 ) {
 
 				var geometryAttribute = geometryAttributes[ name ];
-
-      
 
 				if ( geometryAttribute != null ) {
       
@@ -385,9 +372,8 @@ class WebGLBindingStates {
 					var bytesPerElement = attribute["bytesPerElement"];
 
 					if ( geometryAttribute.isInterleavedBufferAttribute ) {
-    
-          
-
+            
+         
 						var data = geometryAttribute.data;
 						var stride = data.stride;
 						var offset = geometryAttribute.offset;
@@ -405,12 +391,10 @@ class WebGLBindingStates {
 						} else {
 							enableAttribute( programAttribute );
 						}
-
+            
 						gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
 
-
 						vertexAttribPointer( programAttribute, size, type, normalized, stride * bytesPerElement, offset * bytesPerElement );
-
 					} else {
 
 						if ( geometryAttribute.isInstancedBufferAttribute ) {
@@ -435,6 +419,7 @@ class WebGLBindingStates {
 
 					}
 
+   
 				} else if ( name == 'instanceMatrix' ) {
 
  
@@ -512,6 +497,7 @@ class WebGLBindingStates {
 				}
 
 			}
+
 		};
 
 		disableUnusedAttributes();

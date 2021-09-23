@@ -103,21 +103,21 @@ packages:
       path: "../../flutter_gl/flutter_gl"
       relative: true
     source: path
-    version: "0.0.4"
+    version: "0.0.5"
   flutter_gl_platform_interface:
     dependency: transitive
     description:
-      path: "../../flutter_gl/flutter_gl_platform_interface"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: flutter_gl_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   flutter_gl_web:
     dependency: transitive
     description:
-      path: "../../flutter_gl/flutter_gl_web"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: flutter_gl_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -259,13 +259,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.0"
-  three_bas:
-    dependency: "direct main"
-    description:
-      path: "../../three_bas"
-      relative: true
-    source: path
-    version: "0.0.1"
   three_dart:
     dependency: "direct main"
     description:

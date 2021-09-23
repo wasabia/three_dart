@@ -89,7 +89,7 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
       """
     };
 
-    var geometry = new BoxGeometry( width: 5, height: 5, depth: 5 );
+    var geometry = new BoxGeometry( 5, 5, 5 );
 
     var material = new ShaderMaterial( {
 

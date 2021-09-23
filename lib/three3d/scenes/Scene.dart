@@ -7,7 +7,7 @@ class Scene extends Object3D {
 
   bool isScene = true;
 
-  Fog? fog;
+  dynamic fog;
 
   
 
@@ -75,7 +75,7 @@ class Scene extends Object3D {
 
 		Map<String, dynamic> data = super.toJSON( meta: meta );
 
-		// if ( this.fog !== null ) data.object.fog = this.fog.toJSON();
+		if ( this.fog != null ) data["object"]["fog"] = this.fog!.toJSON();
 
 		return data;
 

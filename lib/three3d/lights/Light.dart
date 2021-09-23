@@ -6,7 +6,7 @@ class Light extends Object3D {
   bool isLight = true;
   late num intensity;
   Color? color;
-  double? distance;
+  num? distance;
   LightShadow? shadow;
   SphericalHarmonics3? sh;
   
@@ -15,14 +15,14 @@ class Light extends Object3D {
   bool isPointLight = false;
 
 
-  double? angle;
-  double? decay;
+  num? angle;
+  num? decay;
 
   Object3D? target;
-  double? penumbra;
+  num? penumbra;
 
-  double? width;
-  double? height;
+  num? width;
+  num? height;
 
   bool isRectAreaLight = false;
   bool isHemisphereLightProbe = false;
@@ -32,9 +32,14 @@ class Light extends Object3D {
 
   String type = "Light";
 
-  Light( Color? color, num? intensity) : super() {
-    this.color = color;
-    this.intensity = intensity ?? 1;
+  Light( color, num? intensity) : super() {
+    if(color is Color) {
+      this.color = color;
+    } else if (color is int) {
+      this.color = Color.fromHex(color);
+    }
+    
+    this.intensity = intensity ?? 1.0;
   }
 
 

@@ -51,9 +51,9 @@ class MeshPhongMaterial extends Material {
 
   bool isMeshPhongMaterial = true;
 
-  num bumpScale = 1;
+  num? bumpScale = 1;
   num? shininess = 30;
-  Color specular = Color( 0.067, 0.067, 0.067);
+  Color? specular = Color( 0.067, 0.067, 0.067);
   Color? color = Color( 1,1,1 ); // diffuse
 
   String type = "MeshPhongMaterial";
@@ -108,7 +108,7 @@ class MeshPhongMaterial extends Material {
     super.copy( source );
 
     this.color!.copy( source.color );
-    this.specular.copy( source.specular );
+    this.specular!.copy( source.specular );
     this.shininess = source.shininess;
 
     this.map = source.map;

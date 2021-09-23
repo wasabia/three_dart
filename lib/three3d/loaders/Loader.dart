@@ -7,7 +7,7 @@ class Loader {
   late String crossOrigin;
   late bool withCredentials;
   late String path;
-  late String resourcePath;
+  String? resourcePath;
   late Map<String, dynamic> requestHeader;
   String responseType = "text";
   late String mimeType;
@@ -19,7 +19,7 @@ class Loader {
     this.crossOrigin = 'anonymous';
     this.withCredentials = false;
     this.path = '';
-    this.resourcePath = '';
+
     this.requestHeader = {};
   }
 

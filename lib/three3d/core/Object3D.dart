@@ -604,7 +604,7 @@ class Object3D with EventDispatcher {
   raycast( Raycaster raycaster, List<Intersection> intersects ) {
     print("Object3D raycast todo ");
   }
-
+  
 	traverse ( callback ) {
 
 		callback( this );
@@ -738,7 +738,6 @@ class Object3D with EventDispatcher {
 	}
 
 	toJSON( {Object3dMeta? meta} ) {
-
 		// meta is a string when called from JSON.stringify
 		var isRootObject = ( meta == null || meta is String );
 
@@ -776,10 +775,7 @@ class Object3D with EventDispatcher {
 		if ( this.userData != null && this.userData.keys.length > 0 ) object["userData"] = this.userData;
 
 		object["layers"] = layers.mask;
-		object["matrix"] = this.matrix.toJSON();
-    // object["position"] = this.position.toArray(List(3));
-    // object["quaternion"] = this.quaternion.toArray(List(4));
-    // object["scale"] = this.scale.toArray(List(3));
+		object["matrix"] = this.matrix.toArray(List<num>.filled(16, 0.0));
 
 		if ( this.matrixAutoUpdate == false ) object["matrixAutoUpdate"] = false;
 
@@ -795,13 +791,13 @@ class Object3D with EventDispatcher {
       if ( _instanceMesh.instanceColor != null ) object["instanceColor"] = _instanceMesh.instanceColor!.toJSON();
 		}
 
-		if ( this.isScene ) {
 
+		if ( this.isScene ) {
 			if ( this.background != null ) {
 
 				if ( this.background.isColor ) {
 
-					object["background"] = this.background!.toJSON();
+					object["background"] = this.background!.getHex();
 
 				} else if ( this.background.isTexture ) {
 
@@ -847,23 +843,23 @@ class Object3D with EventDispatcher {
 
 		}
 
-		// if ( this.isMesh || this.isLine || this.isPoints ) {
+		if ( this.isMesh || this.isLine || this.isPoints ) {
 
-    //   print(" 2is Mesh .... type: ${type} ");
+      print(" 2is Mesh .... type: ${type} ");
 
-		// 	object["geometry"] = serialize( meta!.geometries, this.geometry, null );
+			object["geometry"] = serialize( meta!.geometries, this.geometry, null );
 
-		// 	var parameters = this.geometry.parameters;
+			var parameters = this.geometry!.parameters;
 
-		// 	if ( parameters != null && parameters["shapes"] != null ) {
+			if ( parameters != null && parameters["shapes"] != null ) {
 
-		// 		var shapes = parameters["shapes"];
+				var shapes = parameters["shapes"];
 
-		// 		serialize( meta.shapes, shapes, null );
+				serialize( meta.shapes, shapes, null );
 
-		// 	}
+			}
 
-		// }
+		}
 
     // TODO
 		// if ( this.type == "SkinnedMesh" ) {
@@ -883,22 +879,22 @@ class Object3D with EventDispatcher {
 
 		// }
 
-    // TODO
-		// if ( this.material != null ) {
 
-		// 	List<String> uuids = [];
+		if ( this.material != null ) {
 
-    //   for ( var i = 0, l = this.material.length; i < l; i ++ ) {
+			List<String> uuids = [];
 
-    //     uuids.add( serialize( meta.materials, this.material[ i ], null ) );
+      if(this.material is List) {
+        for ( var i = 0, l = this.material.length; i < l; i ++ ) {
+          uuids.add( serialize( meta!.materials, this.material[ i ], null ) );
+        }
 
-    //   }
-
-    //   object["material"] = uuids;
-
-		// }
-
-		// //
+        object["material"] = uuids;
+      } else {
+        object["material"] = serialize( meta!.materials, this.material, null );
+      }
+      
+		}
 
   
 		if ( this.children.length > 0 ) {

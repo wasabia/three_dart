@@ -1,3 +1,5 @@
+import 'package:three_dart/three_dart.dart';
+
 arrayMin( array ) {
 
 	if ( array.length == 0 ) return 9999999;
@@ -43,9 +45,13 @@ arrayMax( array ) {
 // 	Float64Array: Float64Array
 // };
 
-// getTypedArray( type, buffer ) {
+getTypedArray( type, buffer ) {
 
-// 	return new TYPED_ARRAYS[ type ]( buffer );
+  if(type == "Uint32Array") {
+    return Uint32Array.from(buffer);
+  } else {
+    throw(" Util.datr getTypedArray type: ${type} is not support "); 
+  }
 
-// }
+}
 

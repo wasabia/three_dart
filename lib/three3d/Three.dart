@@ -7,7 +7,6 @@ export './core/index.dart';
 export './extras/index.dart';
 export './geometries/index.dart';
 export './helpers/index.dart';
-export './jsm/index.dart';
 
 export './renderers/shaders/index.dart';
 
@@ -26,6 +25,8 @@ export './WeakMap.dart';
 export './ThreeHelper.dart';
 export './dartHelpers.dart';
 
+
+// how to handle this on different platform ???
 export './Float32Array.app.dart';
 // export './Float32Array.web.dart';
 

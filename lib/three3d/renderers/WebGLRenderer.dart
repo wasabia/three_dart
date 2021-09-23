@@ -593,14 +593,17 @@ class WebGLRenderer {
       rangeFactor = 2;
     }
 
+
     if (geometry.morphAttributes["position"] != null || geometry.morphAttributes["normal"] != null) {
       morphtargets.update(object, geometry, material, program);
     }
+
 
     bindingStates.setup(object, material, program, geometry, index);
 
     Map<String, dynamic> attribute;
     var renderer = bufferRenderer;
+
 
     if (index != null) {
       attribute = attributes.get(index);
@@ -608,7 +611,6 @@ class WebGLRenderer {
       renderer = indexedBufferRenderer;
       renderer.setIndex(attribute);
     }
-
 
     var dataCount = (index != null) ? index.count : position!.count;
 
@@ -666,6 +668,7 @@ class WebGLRenderer {
     } else {
       renderer.render(drawStart, drawCount);
     }
+
   }
 
   // Compile
@@ -768,6 +771,7 @@ class WebGLRenderer {
 
     renderListStack.add( currentRenderList );
 
+
     projectObject(scene, camera, 0, this.sortObjects);
 
     currentRenderList!.finish();
@@ -779,6 +783,7 @@ class WebGLRenderer {
     if (_clippingEnabled == true) clipping.beginShadows();
 
     var shadowsArray = currentRenderState!.state.shadowsArray;
+
 
     shadowMap.render(shadowsArray, scene, camera);
 
@@ -793,6 +798,7 @@ class WebGLRenderer {
 
     // render scene
 
+
     var opaqueObjects = currentRenderList!.opaque;
     var transmissiveObjects = currentRenderList!.transmissive;
     var transparentObjects = currentRenderList!.transparent;
@@ -801,11 +807,11 @@ class WebGLRenderer {
     // print("transmissiveObjects: ${transmissiveObjects} ");
     // print("transparentObjects: ${transparentObjects} ");
 
+
     if (opaqueObjects.length > 0) renderObjects(opaqueObjects, scene, camera);
     if (transmissiveObjects.length > 0 ) renderTransmissiveObjects( opaqueObjects, transmissiveObjects, scene, camera );
     if (transparentObjects.length > 0) renderObjects(transparentObjects, scene, camera);
 
-  
     if (_currentRenderTarget != null) {
       // resolve multisample renderbuffers to a single-sample texture if necessary
       textures.updateMultisampleRenderTarget(_currentRenderTarget);
@@ -814,6 +820,7 @@ class WebGLRenderer {
       textures.updateRenderTargetMipmap(_currentRenderTarget);
 
     }
+
 
     if (scene.isScene == true) {
       scene.onAfterRender(renderer: this, scene: scene, camera: camera);

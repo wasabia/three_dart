@@ -540,8 +540,7 @@ class WebGLUniformsHelper {
       }  
     } else {
 
-      print(" WebGLUniformsHelper setValueV4f ");
-      
+  
       if ( arraysEqual( cache, v ) ) return;
 
       gl.uniform4fv( this.addr, v );

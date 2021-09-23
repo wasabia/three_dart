@@ -7,7 +7,7 @@ class AmbientLight extends Light {
   bool isAmbientLight = true;
   String type = 'AmbientLight';
 
-  AmbientLight( color, double? intensity ) : super(color, intensity) {
+  AmbientLight( color, intensity ) : super(color, intensity) {
 
   }
 

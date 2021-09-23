@@ -24,13 +24,15 @@ class ImageLoaderLoader {
       // bytes = file.readAsBytesSync();
       // print(" load image and decode 1: ${DateTime.now().millisecondsSinceEpoch}............ ");
       var receivePort = ReceivePort();
-      await Isolate.spawn(decodeIsolate, DecodeParam(bytes!, receivePort.sendPort));
+      await Isolate.spawn(decodeIsolate, DecodeParam(bytes, receivePort.sendPort));
       // Get the processed image from the isolate.
-      var image = await receivePort.first as Image;
+      var image = await receivePort.first as Image?;
 
       // print(" load image and decode 2: ${DateTime.now().millisecondsSinceEpoch}............ ");
+      if(image != null) {
+        imageElement = ImageElement(data: image.getBytes(format: Format.rgba), width: image.width, height: image.height);
+      }
       
-      imageElement = ImageElement(data: image.getBytes(format: Format.rgba), width: image.width, height: image.height);
     } else {
       var image = await imageDecoder(null, url);
       if(image != null) {
@@ -46,16 +48,22 @@ class ImageLoaderLoader {
 
 
 class DecodeParam {
-  final Uint8List bytes;
+  Uint8List? bytes;
   final SendPort sendPort;
   DecodeParam(this.bytes, this.sendPort);
 }
 
 void decodeIsolate(DecodeParam param) {
+
+  if(param.bytes == null) {
+    param.sendPort.send(null);
+    return;
+  }
+
   // Read an image from file (webp in this case).
   // decodeImage will identify the format of the image and use the appropriate
   // decoder.
-  var image = decodeImage(param.bytes)!;
+  var image = decodeImage(param.bytes!)!;
   // Resize the image to a 120x? thumbnail (maintaining the aspect ratio).
   // var thumbnail = copyResize(image, width: 120);
   var image2 = flipVertical(image);

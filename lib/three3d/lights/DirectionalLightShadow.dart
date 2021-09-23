@@ -5,7 +5,7 @@ class DirectionalLightShadow extends LightShadow {
 
   bool isDirectionalLightShadow = true;
 
-  DirectionalLightShadow() : super(OrthographicCamera( left: -5, right: 5, top: 5, bottom: -5, near: 0.5, far: 500 )) {
+  DirectionalLightShadow() : super(OrthographicCamera( -5, 5, 5, -5, 0.5, 500 )) {
 
   }
 

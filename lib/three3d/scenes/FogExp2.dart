@@ -4,6 +4,9 @@ part of three_scenes;
 class FogExp2 {
 
   bool isFogExp2 = true;
+  bool isFog = false;
+
+
   String name = "";
   late Color color;
   late num density;

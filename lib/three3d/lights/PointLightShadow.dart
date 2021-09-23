@@ -4,7 +4,7 @@ class PointLightShadow extends LightShadow {
   late List<Vector3> _cubeDirections;
   late List<Vector3> _cubeUps;
 
-  PointLightShadow() : super(PerspectiveCamera( fov: 90, aspect: 1, near: 0.5, far: 500 )) {
+  PointLightShadow() : super(PerspectiveCamera( 90, 1, 0.5, 500 )) {
 
     this.isPointLightShadow = true;
     this._frameExtents = new Vector2( 4, 2 );

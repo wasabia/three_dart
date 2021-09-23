@@ -3,10 +3,10 @@ part of three_math;
 class Quaternion {
 
   String type = "Quaternion";
-  double _x = 0.0;
-  double _y = 0.0;
-  double _z = 0.0;
-  double _w = 0.0;
+  num _x = 0.0;
+  num _y = 0.0;
+  num _z = 0.0;
+  num _w = 0.0;
 
   Function onChangeCallback = () {};
 
@@ -19,7 +19,7 @@ class Quaternion {
 
 	}
 
-  Quaternion.fromJSON ( List<double>? json ) {
+  Quaternion.fromJSON ( List<num>? json ) {
     if(json != null) {
       this._x = json[0];
       this._y = json[1];
@@ -28,7 +28,7 @@ class Quaternion {
     }
 	}
 
-  List<double> toJSON() {
+  List<num> toJSON() {
     return [this._x, this._y, this._z, this._w];
   }
 
@@ -177,7 +177,7 @@ class Quaternion {
 
 	}
 
-	double get w {
+	num get w {
 
 		return this._w;
 
@@ -646,7 +646,7 @@ class Quaternion {
 
 	}
 
-	toArray( List<double?> array, {int offset = 0} ) {
+	toArray( List<num?> array, {int offset = 0} ) {
 
 		array[ offset ] = this._x;
 		array[ offset + 1 ] = this._y;

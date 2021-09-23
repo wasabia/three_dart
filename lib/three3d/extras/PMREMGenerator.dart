@@ -251,7 +251,7 @@ class PMREMGenerator {
 
 		var fov = 90;
 		var aspect = 1;
-		var cubeCamera = new PerspectiveCamera( fov: fov, aspect: aspect, near: near, far: far );
+		var cubeCamera = new PerspectiveCamera( fov, aspect, near, far );
 		var upSign = [ 1, - 1, 1, 1, 1, 1 ];
 		var forwardSign = [ 1, 1, 1, - 1, - 1, - 1 ];
 		var renderer = this._renderer;
@@ -485,6 +485,10 @@ class PMREMGenerator {
 		renderer.render( blurMesh, _flatCamera );
 
 	}
+
+  bool isFinite(value) {
+    return value == double.infinity;
+  }
 
   _isLDR( texture ) {
 

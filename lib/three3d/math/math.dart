@@ -84,7 +84,7 @@ class Math {
     return math.log(x);
   }
 
-  static double tan(double x) {
+  static double tan(num x) {
     return math.tan(x);
   }
 

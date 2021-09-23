@@ -2,7 +2,7 @@ part of three_lights;
 
 class SpotLightShadow extends LightShadow {
 
-  SpotLightShadow() : super( PerspectiveCamera( fov: 50, aspect: 1, near: 0.5, far: 500 ) ) {
+  SpotLightShadow() : super( PerspectiveCamera( 50, 1, 0.5, 500 ) ) {
     	this.focus = 1;
       this.isSpotLightShadow = true;
   }

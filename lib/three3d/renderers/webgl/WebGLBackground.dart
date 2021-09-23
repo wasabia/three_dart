@@ -61,7 +61,7 @@ class WebGLBackground {
     	if ( boxMesh == null ) {
 
     		boxMesh = new Mesh(
-    			new BoxGeometry( width: 1, height: 1, depth: 1 ),
+    			new BoxGeometry( 1, 1, 1 ),
     			new ShaderMaterial( {
     				"name": 'BackgroundCubeMaterial',
     				"uniforms": cloneUniforms( ShaderLib["cube"]["uniforms"] ),
@@ -124,7 +124,7 @@ class WebGLBackground {
     	if ( planeMesh == null ) {
 
     		planeMesh = new Mesh(
-    			new PlaneGeometry( width: 2, height: 2 ),
+    			new PlaneGeometry( 2, 2 ),
     			new ShaderMaterial( {
     				"name": 'BackgroundMaterial',
     				"uniforms": cloneUniforms( ShaderLib["background"]["uniforms"] ),

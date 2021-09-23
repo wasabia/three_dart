@@ -453,5 +453,12 @@ class Curve {
 
 	}
 
+  fromJSON( json ) {
+
+		this.arcLengthDivisions = json.arcLengthDivisions;
+
+		return this;
+
+	}
 
 }

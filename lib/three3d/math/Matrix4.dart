@@ -735,10 +735,12 @@ class Matrix4 {
 		te[ 2 ] = ( xz - wy ) * sx;
 		te[ 3 ] = 0;
 
+
 		te[ 4 ] = ( xy - wz ) * sy;
-		te[ 5 ] = ( 1 - ( xx + zz ) ) * sy.toDouble();
+		te[ 5 ] = ( 1.0 - ( xx + zz ) ) * sy;
 		te[ 6 ] = ( yz + wx ) * sy;
 		te[ 7 ] = 0;
+
 
 		te[ 8 ] = ( xz + wy ) * sz;
 		te[ 9 ] = ( yz - wx ) * sz;

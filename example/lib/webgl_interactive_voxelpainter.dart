@@ -4,7 +4,7 @@ import 'dart:typed_data';
 
 import 'dart:ui' as ui;
 
-import 'package:example/EventListener.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -48,9 +48,7 @@ class _MyAppState extends State<Webgl_interactive_voxelpainter> {
   late THREE.Group group;
   late THREE.Object3D object;
   
-  late THREE.EffectComposer composer;
-  late THREE.GlitchPass glitchPass;
-  late THREE.LUTPass lutPass;
+
   late THREE.AnimationMixer mixer;
   late THREE.Clock clock;
   late THREE.WebGLRenderTarget renderTarget;
@@ -80,8 +78,7 @@ class _MyAppState extends State<Webgl_interactive_voxelpainter> {
   var limitConnections = false;
   var maxConnections = 20;
   // var particleCount = 500;
-  
-  var myText = THREE.Text();
+
 
   var plane;
   var pointer, raycaster, isShiftDown = false;
@@ -170,68 +167,8 @@ class _MyAppState extends State<Webgl_interactive_voxelpainter> {
     );
   }
 
-  _onTapDown(TapDownDetails details) {
-    var event = Event.fromJSON({
-      "touches": [],
-      "clientX": details.localPosition.dx, 
-      "clientY": details.localPosition.dy,
-      "page": {
-        "x": details.globalPosition.dx,
-        "y": details.globalPosition.dy
-      }
-    });
-    emit("pointerdown", event);
-  }
-
-  _onPanStart(DragStartDetails details) {
-    var event = Event.fromJSON({
-      "touches": [
-        {"clientX": details.localPosition.dx, "clientY": details.localPosition.dy}
-      ],
-      "clientX": details.localPosition.dx, 
-      "clientY": details.localPosition.dy,
-      "page": {
-        "x": details.globalPosition.dx,
-        "y": details.globalPosition.dy
-      }
-    });
-
-    emit("pointerdown", event);
-  }
-
-  _onPanUpdate(DragUpdateDetails details) {
-    var event = Event.fromJSON({
-      "touches": [
-        {
-          "clientX": details.localPosition.dx, 
-          "clientY": details.localPosition.dy,
-          "pageX": details.globalPosition.dx, 
-          "pageY": details.globalPosition.dy
-        }
-      ],
-      "clientX": details.localPosition.dx, 
-      "clientY": details.localPosition.dy,
-      "deltaX": details.delta.dx,
-      "deltaY": details.delta.dy,
-      "page": {
-        "x": details.globalPosition.dx,
-        "y": details.globalPosition.dy
-      }
-    });
-
-    emit("pointerupdate", event);
-
-    render();
-  }
-  emit(String name, event) {
-    var _callbacks = _listeners[name];
-    if(_callbacks != null) {
-      for(var _cb in _callbacks) {
-        _cb(event);
-      }
-    }
-  }
-
+  
+  
   Widget _build(BuildContext context) {
     return Column(
       children: [
@@ -252,28 +189,7 @@ class _MyAppState extends State<Webgl_interactive_voxelpainter> {
                   }
                 )
               ),
-              Positioned(
-                left: 0,
-                top: 0,
-                bottom: 0,
-                right: 0,
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onPanStart: (DragStartDetails details) {
-                    _onPanStart(details);
-                  },
-                  onPanUpdate: (DragUpdateDetails details) {
-                    _onPanUpdate(details);
-                  },
-                  onTapDown: (TapDownDetails details) {
-                    _onTapDown(details);
-                  },
-                  child: Container(
-                    width: width,
-                    height: width
-                  ),
-                ),
-              ),
+              
             ],
           ),
         ),
@@ -464,7 +380,7 @@ class _MyAppState extends State<Webgl_interactive_voxelpainter> {
     
 
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera( fov: 45, aspect: 1, near: 1, far: 10000 );
+    camera = new THREE.PerspectiveCamera( 45, 1, 1, 10000 );
 
     camera.position.set( 500, 800, 1300 );
     camera.lookAt( scene.position );
@@ -474,14 +390,14 @@ class _MyAppState extends State<Webgl_interactive_voxelpainter> {
 
     // roll-over helpers
 
-    var rollOverGeo = new THREE.BoxGeometry( width: 50, height: 50, depth: 50 );
+    var rollOverGeo = new THREE.BoxGeometry( 50, 50, 50 );
     rollOverMaterial = new THREE.MeshBasicMaterial( { "color": 0xff0000, "opacity": 0.5, "transparent": true } );
     rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
     scene.add( rollOverMesh );
 
     // cubes
 
-    cubeGeo = new THREE.BoxGeometry( width: 50, height: 50, depth: 50 );
+    cubeGeo = new THREE.BoxGeometry( 50, 50, 50 );
     cubeMaterial = new THREE.MeshLambertMaterial( { "color": 0xfeb74c } );
 
     // cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xfeb74c, map: new THREE.TextureLoader().load( 'textures/square-outline-textured.png' ) } );
@@ -505,7 +421,7 @@ class _MyAppState extends State<Webgl_interactive_voxelpainter> {
     raycaster = new THREE.Raycaster(null, null, null, null);
     pointer = new THREE.Vector2(0, 0);
 
-    var geometry = new THREE.PlaneGeometry( width: 1000, height: 1000 );
+    var geometry = new THREE.PlaneGeometry( 1000, 1000 );
     geometry.rotateX( - THREE.Math.PI / 2 );
 
     plane = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { "visible": false } ) );
@@ -523,20 +439,6 @@ class _MyAppState extends State<Webgl_interactive_voxelpainter> {
     scene.add( directionalLight );
 
 
-    controls = new THREE.OrbitControls( camera, (widget.key as GlobalKey).currentState);
-    // controls.listenToKeyEvents( window ); // optional
-
-    //controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
-
-    // controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
-    controls.dampingFactor = 0.05;
-
-    controls.screenSpacePanning = false;
-
-    controls.minDistance = 100.0;
-    controls.maxDistance = 500.0;
-
-    controls.maxPolarAngle = THREE.Math.PI / 2;
    
   }
 

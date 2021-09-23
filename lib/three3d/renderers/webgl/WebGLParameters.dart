@@ -184,7 +184,7 @@ class WebGLParameters {
     fog = json["fog"];
     useFog = json["useFog"];
     fogExp2 = json["fogExp2"];
-    flatShading = json["flatShading"];
+    flatShading = json["flatShading"] == 1;
 
     sizeAttenuation = json["sizeAttenuation"];
     logarithmicDepthBuffer = json["logarithmicDepthBuffer"];

@@ -35,7 +35,7 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
   bool isMeshPhysicalMaterial = true;
 
   Texture? clearcoatMap;
-  num clearcoatRoughness = 0.0;
+  num? clearcoatRoughness = 0.0;
   String type = 'MeshPhysicalMaterial';
   Texture? clearcoatRoughnessMap;
   Vector2? clearcoatNormalScale = Vector2( 1, 1 );
@@ -44,15 +44,15 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
   // null will disable sheenTint bsdf
   Color? sheenTint;
 
-  num thickness = 0.01;
+  num? thickness = 0.01;
   
-  Color attenuationTint = new Color( 1, 1, 1 );
-  num attenuationDistance = 0.0;
+  Color? attenuationTint = new Color( 1, 1, 1 );
+  num? attenuationDistance = 0.0;
   
 
-  num specularIntensity = 1.0;
+  num? specularIntensity = 1.0;
   Texture? specularIntensityMap = null;
-  Color specularTint = new Color( 1, 1, 1 );
+  Color? specularTint = new Color( 1, 1, 1 );
   Texture? specularTintMap = null;
   num? ior = 1.5;
 
@@ -68,7 +68,7 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
 
 
   num get reflectivity => ( MathUtils.clamp( 2.5 * ( this.ior! - 1 ) / ( this.ior! + 1 ), 0, 1 ) );
-  set reflectivity(num value) {
+  set reflectivity(value) {
     this.ior = ( 1 + 0.4 * value ) / ( 1 - 0.4 * value );
   }
 
@@ -109,13 +109,13 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
     this.thickness = source.thickness;
 		this.thicknessMap = source.thicknessMap;
 
-    this.attenuationTint.copy( source.attenuationTint );
+    this.attenuationTint!.copy( source.attenuationTint );
 		this.attenuationDistance = source.attenuationDistance;
 		
 
     this.specularIntensity = source.specularIntensity;
 		this.specularIntensityMap = source.specularIntensityMap;
-		this.specularTint.copy( source.specularTint );
+		this.specularTint!.copy( source.specularTint );
 		this.specularTintMap = source.specularTintMap;
 
     return this;

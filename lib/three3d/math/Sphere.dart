@@ -15,13 +15,13 @@ class Sphere {
 
 	Sphere( center, radius ) {
 
-		this.center = ( center != null ) ? center : new Vector3.init();
-		this.radius = ( radius != null ) ? radius : - 1;
+		this.center = center ?? new Vector3.init();
+		this.radius = radius ?? - 1;
 
 	}
 
   toJSON() {
-    List<double> _data = center.toJSON();
+    var _data = center.toJSON();
     _data.add(radius);
 
     return _data;
