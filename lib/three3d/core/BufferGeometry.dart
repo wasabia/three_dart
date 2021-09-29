@@ -45,7 +45,7 @@ class BufferGeometry with EventDispatcher {
   bool isGeometry = false;
   late List<num> lineDistances;
 
-  Map<String, dynamic> parameters = {};
+  Map<String, dynamic>? parameters;
 
   late num curveSegments;
   late List<Shape> shapes;
@@ -163,8 +163,6 @@ class BufferGeometry with EventDispatcher {
 	}
 
 	applyMatrix4( Matrix4 matrix ) {
-
-
 		var position = this.attributes["position"];
 		if ( position != null ) {
 			position.applyMatrix4( matrix );
@@ -173,8 +171,6 @@ class BufferGeometry with EventDispatcher {
 
 
 		var normal = this.attributes["normal"];
-
-
 
 		if ( normal != null ) {
 
@@ -269,6 +265,10 @@ class BufferGeometry with EventDispatcher {
 
     return this;
 	}
+
+  translateWithVector3(Vector3 v3) {
+    return translate(v3.x, v3.y, v3.z);
+  }
 
 	scale( num x, num y, num z ) {
 
@@ -805,9 +805,9 @@ class BufferGeometry with EventDispatcher {
 		if ( this.parameters != null ) {
 
 
-			parameters.keys.forEach(( key ) {
+			parameters!.keys.forEach(( key ) {
 
-				if ( parameters[ key ] != null ) data[ key ] = parameters[ key ];
+				if ( parameters![ key ] != null ) data[ key ] = parameters![ key ];
 
 			});
 
@@ -818,7 +818,8 @@ class BufferGeometry with EventDispatcher {
 
     // for simplicity the code assumes attributes are not shared across geometries, see #15811
 
-		data["data"] = { "attributes": {} };
+		data["data"] = { };
+    data["data"]["attributes"] = {};
 
 		var index = this.index;
 
@@ -826,7 +827,7 @@ class BufferGeometry with EventDispatcher {
 
       // TODO
 			data["data"]["index"] = {
-				"type": "TODO",
+				"type": index.array.runtimeType.toString(),
 				"array": index.array.sublist(0)
 			};
 
@@ -835,7 +836,6 @@ class BufferGeometry with EventDispatcher {
 		var attributes = this.attributes;
 
 		attributes.keys.forEach(( key ) {
-
 			var attribute = attributes[ key ];
 
       // TODO
@@ -858,8 +858,7 @@ class BufferGeometry with EventDispatcher {
 
         // TODO
 				// var attributeData = attribute.toJSON( data["data"] );
-        	var attributeData = attribute.toJSON();
-
+        var attributeData = attribute.toJSON();
 
 				array.add( attributeData );
 

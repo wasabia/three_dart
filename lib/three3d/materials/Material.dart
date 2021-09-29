@@ -79,7 +79,7 @@ class Material with EventDispatcher {
   int version = 0;
 
   bool isMaterial = true;
-  int flatShading = 0;
+  bool flatShading = false;
   Color? color;
 
   Color? specular;
@@ -265,7 +265,9 @@ class Material with EventDispatcher {
     } else if(key == "blendSrc") {
       blendSrc = newValue;
     } else if(key == "blendSrcAlpha") {
-      blendSrcAlpha = newValue;    
+      blendSrcAlpha = newValue;
+    } else if(key == "clearcoat") {
+      clearcoat = newValue;
     } else if(key == "clipIntersection") {
       clipIntersection = newValue;
     } else if(key == "clipping") {

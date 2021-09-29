@@ -31,3 +31,5 @@ part './PointsMaterial.dart';
 part './ShaderMaterial.dart';
 part './SpriteMaterial.dart';
 part './RawShaderMaterial.dart';
+part './MeshToonMaterial.dart';
+

@@ -36,8 +36,8 @@ class ShapeGeometry extends BufferGeometry {
 
   init() {
 
-		this.parameters["shapes"] = shapes;
-    this.parameters["curveSegments"] = curveSegments;
+		this.parameters!["shapes"] = shapes;
+    this.parameters!["curveSegments"] = curveSegments;
 
 		// buffers
 
@@ -234,7 +234,7 @@ class ShapeGeometry extends BufferGeometry {
 
 		var data = super.toJSON(meta: meta );
 
-		var shapes = this.parameters["shapes"];
+		var shapes = this.parameters!["shapes"];
 
 		return toJSON2( shapes, data );
 

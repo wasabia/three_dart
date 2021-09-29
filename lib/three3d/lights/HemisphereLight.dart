@@ -2,7 +2,7 @@ part of three_lights;
 
 class HemisphereLight extends Light {
 
-  HemisphereLight( Color skyColor, Color groundColor, double intensity ) : super(skyColor, intensity) {
+  HemisphereLight( skyColor, groundColor, double intensity ) : super(skyColor, intensity) {
 
     this.type = 'HemisphereLight';
 
@@ -11,7 +11,14 @@ class HemisphereLight extends Light {
     this.isHemisphereLight = true;
     this.updateMatrix();
 
-    this.groundColor = new Color( groundColor.r, groundColor.g, groundColor.b );
+    if(groundColor is Color) {
+      this.groundColor = groundColor;
+    } else if(groundColor is int) {
+      this.groundColor = Color.fromHex( groundColor );
+    } else {
+      throw("HemisphereLight init groundColor type is not support ${groundColor} ");
+    }
+    
   }
 
 

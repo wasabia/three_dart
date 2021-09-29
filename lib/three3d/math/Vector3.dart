@@ -14,10 +14,10 @@ class Vector3 {
   num y = 0;
   num z = 0;
 
-  Vector3(num x, num y, num z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+  Vector3([num? x, num? y, num? z]) {
+		this.x = x ?? 0;
+		this.y = y ?? 0;
+		this.z = z ?? 0;
 	}
 
   Vector3.init({num x = 0, num y = 0, num z = 0}) {
@@ -227,21 +227,12 @@ class Vector3 {
 
 	}
 
-	multiply( v, w ) {
-
-		if ( w != null ) {
-
-			print( 'THREE.Vector3: .multiply() now only accepts one argument. Use .multiplyVectors( a, b ) instead.' );
-			return this.multiplyVectors( v, w );
-
-		}
-
+	multiply( Vector3 v) {
 		this.x *= v.x;
 		this.y *= v.y;
 		this.z *= v.z;
 
 		return this;
-
 	}
 
 	multiplyScalar( scalar ) {
@@ -481,6 +472,7 @@ class Vector3 {
 		this.y = - this.y;
 		this.z = - this.z;
 
+    return this;
 	}
 
 	num dot( v ) {

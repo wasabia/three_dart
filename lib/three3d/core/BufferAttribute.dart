@@ -14,7 +14,7 @@ class BufferAttribute extends BaseBufferAttribute {
   bool isBufferAttribute = true;
   
 
-  BufferAttribute(arrayList, itemSize, normalized ) {
+  BufferAttribute(arrayList, itemSize, [bool normalized = false] ) {
     if(arrayList is ThreeArray) {
       this.array = arrayList;
     } else if (arrayList is Float32List ) {
@@ -222,9 +222,6 @@ class BufferAttribute extends BaseBufferAttribute {
 	}
 
 	applyMatrix4 ( Matrix4 m ) {
-    
-    // print(this.array);
-
 		for ( var i = 0, l = this.count; i < l; i ++ ) {
 
 			_vector.x = this.getX( i );
@@ -233,15 +230,8 @@ class BufferAttribute extends BaseBufferAttribute {
 
 			_vector.applyMatrix4( m );
 
- 
 			this.setXYZ( i, _vector.x, _vector.y, _vector.z );
-
 		}
-
-
-
-
-
 	}
 
 	applyNormalMatrix ( m ) {
@@ -433,7 +423,7 @@ class BufferAttribute extends BaseBufferAttribute {
 class Int8BufferAttribute extends BufferAttribute {
   String type = "Int8BufferAttribute";
   
-  Int8BufferAttribute(array, itemSize, normalized ): super(array, itemSize, normalized) {
+  Int8BufferAttribute(array, itemSize, [bool normalized = false] ): super(array, itemSize, normalized) {
 
   }
 }
@@ -442,7 +432,7 @@ class Int8BufferAttribute extends BufferAttribute {
 
 class Uint8BufferAttribute extends BufferAttribute {
   String type = "Uint8BufferAttribute";
-  Uint8BufferAttribute(array, itemSize, normalized ): super( array, itemSize, normalized ) {
+  Uint8BufferAttribute(array, itemSize, [bool normalized = false] ): super( array, itemSize, normalized ) {
 
   }
 
@@ -451,7 +441,7 @@ class Uint8BufferAttribute extends BufferAttribute {
 
 class Uint8ClampedBufferAttribute extends BufferAttribute {
   String type = "Uint8ClampedBufferAttribute";
-  Uint8ClampedBufferAttribute( array, itemSize, normalized ): super( array, itemSize, normalized ) {
+  Uint8ClampedBufferAttribute( array, itemSize, [bool normalized = false] ): super( array, itemSize, normalized ) {
 
   }
 
@@ -461,7 +451,7 @@ class Uint8ClampedBufferAttribute extends BufferAttribute {
 
 class Int16BufferAttribute extends BufferAttribute {
   String type = "Int16BufferAttribute";
-  Int16BufferAttribute(array, itemSize, normalized ): super( array, itemSize, normalized ) {
+  Int16BufferAttribute(array, itemSize, [bool normalized = false] ): super( array, itemSize, normalized ) {
 
   }
 
@@ -474,7 +464,7 @@ class Int16BufferAttribute extends BufferAttribute {
 
 class Uint16BufferAttribute extends BufferAttribute {
   String type = "Uint16BufferAttribute";
-  Uint16BufferAttribute(array, itemSize, normalized ): super(array, itemSize, normalized) {
+  Uint16BufferAttribute(array, itemSize, [bool normalized = false] ): super(array, itemSize, normalized) {
 
   }
 
@@ -484,7 +474,7 @@ class Uint16BufferAttribute extends BufferAttribute {
 
 class Int32BufferAttribute extends BufferAttribute {
   String type = "Int32BufferAttribute";
-  Int32BufferAttribute(array, itemSize, normalized ): super(array, itemSize, normalized) {
+  Int32BufferAttribute(array, itemSize, [bool normalized = false] ): super(array, itemSize, normalized) {
 
   }
 
@@ -495,7 +485,7 @@ class Int32BufferAttribute extends BufferAttribute {
 
 class Uint32BufferAttribute extends BufferAttribute {
   String type = "Uint32BufferAttribute";
-  Uint32BufferAttribute( array, itemSize, normalized ): super(array, itemSize, normalized) {
+  Uint32BufferAttribute( array, itemSize, [bool normalized = false] ): super(array, itemSize, normalized) {
 
   }
 
@@ -505,7 +495,7 @@ class Uint32BufferAttribute extends BufferAttribute {
 
 class Float16BufferAttribute extends BufferAttribute {
   String type = "Float16BufferAttribute";
-  Float16BufferAttribute( array, itemSize, normalized ): super(array, itemSize, normalized) {
+  Float16BufferAttribute( array, itemSize, [bool normalized = false] ): super(array, itemSize, normalized) {
 
   }
 
@@ -516,7 +506,7 @@ class Float32BufferAttribute extends BufferAttribute {
 
   String type = "Float32BufferAttribute";
 
-  Float32BufferAttribute( array, itemSize, normalized ): super(array, itemSize, normalized) {
+  Float32BufferAttribute( array, itemSize, [bool normalized = false] ): super(array, itemSize, normalized) {
 
   }
 
@@ -526,7 +516,7 @@ class Float32BufferAttribute extends BufferAttribute {
 
 class Float64BufferAttribute extends BufferAttribute {
   String type = "Float64BufferAttribute";
-  Float64BufferAttribute( array, itemSize, normalized ): super(array, itemSize, normalized) {
+  Float64BufferAttribute( array, itemSize, [bool normalized = false] ): super(array, itemSize, normalized) {
 
   }
 

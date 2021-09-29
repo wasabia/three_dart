@@ -742,8 +742,8 @@ class ExtrudeGeometry extends BufferGeometry {
 
 		var data = super.toJSON( meta: meta );
 
-		var shapes = this.parameters["shapes"];
-		var options = this.parameters["options"];
+		var shapes = this.parameters?["shapes"];
+		var options = this.parameters?["options"];
 
 		return toJSON2( shapes, options, data );
 

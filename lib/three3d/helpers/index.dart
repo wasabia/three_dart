@@ -22,3 +22,4 @@ part './SpotLightHelper.dart';
 part './PointLightHelper.dart';
 part './DirectionalLightHelper.dart';
 part './HemisphereLightHelper.dart';
+part './Box3Helper.dart';

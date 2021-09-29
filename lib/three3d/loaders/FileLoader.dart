@@ -42,11 +42,8 @@ class FileLoader extends Loader {
 
 			scope.manager.itemStart( url );
 
-      Future.delayed(Duration.zero, () {
-        if ( onLoad != null ) onLoad( cached );
-
-				scope.manager.itemEnd( url );
-      });
+      if ( onLoad != null ) onLoad( cached );
+      scope.manager.itemEnd( url );
 
 			return cached;
 

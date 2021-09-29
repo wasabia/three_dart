@@ -269,7 +269,19 @@ class CylinderGeometry extends BufferGeometry {
 		this.setAttribute( 'uv', new Float32BufferAttribute( uvs, 2, false ) );
 	}
 
-  
+  static fromJSON( data ) {
+		return new CylinderGeometry( 
+      data["radiusTop"], 
+      data["radiusBottom"], 
+      data["height"], 
+      data["radialSegments"], 
+      data["heightSegments"], 
+      data["openEnded"], 
+      data["thetaStart"], 
+      data["thetaLength"] 
+    );
+
+	}
 
 }
 

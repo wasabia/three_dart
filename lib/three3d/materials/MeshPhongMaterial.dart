@@ -61,7 +61,7 @@ class MeshPhongMaterial extends Material {
   int? normalMapType = TangentSpaceNormalMap;
   Vector2? normalScale = Vector2( 1, 1 );
 
-	MeshPhongMaterial(Map<String, dynamic> parameters ) : super() {
+	MeshPhongMaterial( [Map<String, dynamic>? parameters] ) : super() {
 
  
     this.map = null;

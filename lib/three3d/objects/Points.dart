@@ -7,7 +7,7 @@ var _position = new Vector3.init();
 
 class Points extends Object3D {
 
-  Points( BufferGeometry geometry, Material material) {
+  Points( BufferGeometry geometry, material) {
     this.type = 'Points';
     this.isPoints = true;
 

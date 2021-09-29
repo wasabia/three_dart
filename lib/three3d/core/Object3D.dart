@@ -772,7 +772,7 @@ class Object3D with EventDispatcher {
 		if ( visible == false ) object["visible"] = false;
 		if ( this.frustumCulled == false ) object["frustumCulled"] = false;
 		if ( this.renderOrder != 0 ) object["renderOrder"] = this.renderOrder;
-		if ( this.userData != null && this.userData.keys.length > 0 ) object["userData"] = this.userData;
+		if ( this.userData.keys.length > 0 ) object["userData"] = this.userData;
 
 		object["layers"] = layers.mask;
 		object["matrix"] = this.matrix.toArray(List<num>.filled(16, 0.0));
@@ -843,24 +843,6 @@ class Object3D with EventDispatcher {
 
 		}
 
-		if ( this.isMesh || this.isLine || this.isPoints ) {
-
-      print(" 2is Mesh .... type: ${type} ");
-
-			object["geometry"] = serialize( meta!.geometries, this.geometry, null );
-
-			var parameters = this.geometry!.parameters;
-
-			if ( parameters != null && parameters["shapes"] != null ) {
-
-				var shapes = parameters["shapes"];
-
-				serialize( meta.shapes, shapes, null );
-
-			}
-
-		}
-
     // TODO
 		// if ( this.type == "SkinnedMesh" ) {
 
@@ -896,7 +878,7 @@ class Object3D with EventDispatcher {
       
 		}
 
-  
+
 		if ( this.children.length > 0 ) {
 
 			List<Map<String, dynamic>> _childrenJSON = [];

@@ -37,6 +37,8 @@ class Light extends Object3D {
       this.color = color;
     } else if (color is int) {
       this.color = Color.fromHex(color);
+    } else {
+      throw("Light init color type is not support ${color} ");
     }
     
     this.intensity = intensity ?? 1.0;

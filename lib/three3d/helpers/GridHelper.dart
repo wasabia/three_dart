@@ -7,7 +7,7 @@ class GridHelper extends LineSegments {
   GridHelper.create(geometry, material) : super(geometry, material) {}
 
 
-	factory GridHelper( {size = 10, divisions = 10, color1 = 0x444444, color2 = 0x888888} ) {
+	factory GridHelper( [size = 10, int divisions = 10, color1 = 0x444444, color2 = 0x888888] ) {
 
 		var color_1 = Color.fromHex( color1 );
 		var color_2 = Color.fromHex( color2 );

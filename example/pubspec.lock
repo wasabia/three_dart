@@ -266,6 +266,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  three_dart_jsm:
+    dependency: "direct main"
+    description:
+      path: "../../three_dart_plugins/three_dart_jsm"
+      relative: true
+    source: path
+    version: "0.0.1"
   typed_data:
     dependency: transitive
     description:

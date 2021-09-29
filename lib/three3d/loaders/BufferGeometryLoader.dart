@@ -6,6 +6,21 @@ class BufferGeometryLoader extends Loader {
 
 	}
 
+  loadAsync ( String url, Function? onProgress ) async {
+    var completer = Completer();
+
+    load(
+      url, 
+      (data) {
+        completer.complete(data);
+      }, 
+      onProgress, 
+      () {}
+    );
+
+    return completer.future;
+	}
+
 	load( url, onLoad, onProgress, onError ) {
 
 		var scope = this;
@@ -81,47 +96,47 @@ class BufferGeometryLoader extends Loader {
 
 		
 
-		var geometry = json.isInstancedBufferGeometry ? new InstancedBufferGeometry() : new BufferGeometry();
+		var geometry = json["isInstancedBufferGeometry"] == true ? new InstancedBufferGeometry() : new BufferGeometry();
 
-		var index = json.data.index;
+		var index = json["data"]["index"];
 
 		if ( index != null ) {
 
-			var typedArray = getTypedArray( index.type, index.array );
+			var typedArray = getTypedArray( index["type"], index["array"] );
 			geometry.setIndex( new BufferAttribute( typedArray, 1, false ) );
 
 		}
 
-		var attributes = json.data.attributes;
+		var attributes = json["data"]["attributes"];
 
-		for ( var key in attributes ) {
+		for ( var key in attributes.keys ) {
 
 			var attribute = attributes[ key ];
 			var bufferAttribute;
 
-			if ( attribute.isInterleavedBufferAttribute ) {
+			if ( attribute["isInterleavedBufferAttribute"] == true ) {
 
-				var interleavedBuffer = getInterleavedBuffer( json.data, attribute.data );
-				bufferAttribute = new InterleavedBufferAttribute( interleavedBuffer, attribute.itemSize, attribute.offset, attribute.normalized );
+				var interleavedBuffer = getInterleavedBuffer( json["data"], attribute["data"] );
+				bufferAttribute = new InterleavedBufferAttribute( interleavedBuffer, attribute["itemSize"], attribute["offset"], attribute["normalized"] );
 
 			} else {
 
-				var typedArray = getTypedArray( attribute.type, attribute.array );
+				var typedArray = getTypedArray( attribute["type"], attribute["array"] );
 				// var bufferAttributeConstr = attribute.isInstancedBufferAttribute ? InstancedBufferAttribute : BufferAttribute;
-				if(attribute.isInstancedBufferAttribute) {
-          bufferAttribute = new InstancedBufferAttribute( typedArray, attribute.itemSize, attribute.normalized );
+				if(attribute["isInstancedBufferAttribute"] == true) {
+          bufferAttribute = new InstancedBufferAttribute( typedArray, attribute["itemSize"], attribute["normalized"] );
         } else {
-          bufferAttribute = new BufferAttribute( typedArray, attribute.itemSize, attribute.normalized );
+          bufferAttribute = new BufferAttribute( typedArray, attribute["itemSize"], attribute["normalized"] );
         }
 			}
 
-			if ( attribute.name != null ) bufferAttribute.name = attribute.name;
-			if ( attribute.usage != null ) bufferAttribute.setUsage( attribute.usage );
+			if ( attribute["name"] != null ) bufferAttribute.name = attribute["name"];
+			if ( attribute["usage"] != null ) bufferAttribute.setUsage( attribute["usage"] );
 
-			if ( attribute.updateRange != null ) {
+			if ( attribute["updateRange"] != null ) {
 
-				bufferAttribute.updateRange.offset = attribute.updateRange.offset;
-				bufferAttribute.updateRange.count = attribute.updateRange.count;
+				bufferAttribute.updateRange.offset = attribute["updateRange"]["offset"];
+				bufferAttribute.updateRange.count = attribute["updateRange"]["count"];
 
 			}
 
@@ -129,11 +144,11 @@ class BufferGeometryLoader extends Loader {
 
 		}
 
-		var morphAttributes = json.data.morphAttributes;
+		var morphAttributes = json["data"]["morphAttributes"];
 
-		if ( morphAttributes ) {
+		if ( morphAttributes != null ) {
 
-			for ( var key in morphAttributes ) {
+			for ( var key in morphAttributes.keys ) {
 
 				var attributeArray = morphAttributes[ key ];
 
@@ -146,7 +161,7 @@ class BufferGeometryLoader extends Loader {
 
 					if ( attribute.isInterleavedBufferAttribute ) {
 
-						var interleavedBuffer = getInterleavedBuffer( json.data, attribute.data );
+						var interleavedBuffer = getInterleavedBuffer( json["data"], attribute.data );
 						bufferAttribute = new InterleavedBufferAttribute( interleavedBuffer, attribute.itemSize, attribute.offset, attribute.normalized );
 
 					} else {
@@ -167,15 +182,15 @@ class BufferGeometryLoader extends Loader {
 
 		}
 
-		var morphTargetsRelative = json.data.morphTargetsRelative;
+		var morphTargetsRelative = json["data"]["morphTargetsRelative"];
 
-		if ( morphTargetsRelative ) {
+		if ( morphTargetsRelative == true ) {
 
 			geometry.morphTargetsRelative = true;
 
 		}
 
-		var groups = json.data.groups ?? json.data.drawcalls ?? json.data.offsets;
+		var groups = json["data"]["groups"] ?? json["data"]["drawcalls"] ?? json["data"]["offsets"];
 
 		if ( groups != null ) {
 
@@ -183,30 +198,30 @@ class BufferGeometryLoader extends Loader {
 
 				var group = groups[ i ];
 
-				geometry.addGroup( group.start, group.count, materialIndex: group.materialIndex );
+				geometry.addGroup( group["start"], group["count"], materialIndex: group["materialIndex"] );
 
 			}
 
 		}
 
-		var boundingSphere = json.data.boundingSphere;
+		var boundingSphere = json["data"]["boundingSphere"];
 
 		if ( boundingSphere != null ) {
 
 			var center = new Vector3(0,0,0);
 
-			if ( boundingSphere.center != null ) {
+			if ( boundingSphere["center"] != null ) {
 
-				center.fromArray( boundingSphere.center );
+				center.fromArray( boundingSphere["center"] );
 
 			}
 
-			geometry.boundingSphere = new Sphere( center, boundingSphere.radius );
+			geometry.boundingSphere = new Sphere( center, boundingSphere["radius"] );
 
 		}
 
-		if ( json.name ) geometry.name = json.name;
-		if ( json.userData ) geometry.userData = json.userData;
+		if ( json["name"] != null ) geometry.name = json["name"];
+		if ( json["userData"] != null ) geometry.userData = json["userData"];
 
 		return geometry;
 

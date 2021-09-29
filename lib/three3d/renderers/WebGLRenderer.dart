@@ -574,7 +574,8 @@ class WebGLRenderer {
 
     var position = geometry.attributes["position"];
 
- 
+    // print(" WebGLRenderer.renderBufferDirect geometry.index ${index.count} - ${index} position: ${position.count} - ${position}  ");
+
     if (index == null) {
       if (position == null || position.count == 0) return;
     } else if (index.count == 0) {
@@ -606,6 +607,9 @@ class WebGLRenderer {
       attribute = attributes.get(index);
 
       renderer = indexedBufferRenderer;
+
+      // print(index);
+      // print("WebGLRenderer.renderBufferDirect index attribute: ${attribute}  ");
       renderer.setIndex(attribute);
     }
 
@@ -1089,8 +1093,6 @@ class WebGLRenderer {
 
       renderObjectImmediate(object, program);
     } else {
-      // this.renderBufferDirect(camera, scene, geometry, material, object, group);
-
       if ( material.transparent == true && material.side == DoubleSide ) {
 
 				material.side = BackSide;

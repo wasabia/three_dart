@@ -15,7 +15,7 @@ class LoadingManager {
   Function? onProgress;
   Function? onError;
 
-  LoadingManager( onLoad, onProgress, onError ) {
+  LoadingManager( [onLoad, onProgress, onError] ) {
 
     
 
@@ -52,9 +52,7 @@ class LoadingManager {
 		itemsLoaded ++;
 
 		if ( this.onProgress != null ) {
-
 			this.onProgress!( url, itemsLoaded, itemsTotal );
-
 		}
 
 		if ( itemsLoaded == itemsTotal ) {

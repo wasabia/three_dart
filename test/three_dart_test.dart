@@ -4,12 +4,11 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('adds one to input values', () {
     
-    List<int> _l = [0,2,3,10];
+    var str = "2589/3069/2612 2591/3071/2614 2588/3068/2611";
 
-    var a = _l.asMap();
+    var _list = str.split(RegExp(r"\s+"));
 
-    print(" ——a: ${a} ");
-
+    print(_list);
 
   });
 }

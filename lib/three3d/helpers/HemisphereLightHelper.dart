@@ -51,7 +51,7 @@ class HemisphereLightHelper extends Object3D {
 
 		if ( this.color != null ) {
 
-			this.material.color.set( this.color );
+			this.material.color.copy( this.color );
 
 		} else {
 

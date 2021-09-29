@@ -33,6 +33,8 @@ dependencies:
     path: ../../flutter_gl/flutter_gl
   three_dart:
     path: ../
+  three_dart_jsm:
+    path: ../../three_dart_plugins/three_dart_jsm  
 
 dev_dependencies:
   flutter_test:
@@ -63,7 +65,12 @@ flutter:
     - assets/demo.png
     - assets/KOMO-v5.cube
     - assets/screenshots/webgl_camera_array.jpg
+    - assets/screenshots/webgl_loader_obj.jpg
     - assets/screenshots/webgl_geometry_text.jpg
+    - assets/models/obj/male02/male02.obj
+    - assets/textures/uv_grid_opengl.jpg
+
+    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

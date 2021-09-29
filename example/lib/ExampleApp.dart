@@ -1,6 +1,7 @@
 import 'package:example/filesJson.dart';
 import 'package:example/tagsJson.dart';
 import 'package:example/webgl_camera_array.dart';
+import 'package:example/webgl_loader_obj.dart';
 import 'package:flutter/material.dart';
 
 
@@ -77,7 +78,9 @@ class _MyAppState extends State<ExampleApp> {
     Widget page;
 
     if(fileName == "webgl_camera_array") {
-      page = Webgl_camera_array(fileName: fileName);
+      page = webgl_camera_array(fileName: fileName);
+    } else if(fileName == "webgl_loader_obj") {
+      page = webgl_loader_obj(fileName: fileName);  
     } else {
       throw("_goto fileName ${fileName} is not support yet ");
     }

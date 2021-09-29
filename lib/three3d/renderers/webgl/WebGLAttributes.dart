@@ -26,6 +26,8 @@ class WebGLAttributes {
 
     // dynamic arrayList;
 
+    // print(" WebGLAttributes.createBuffer attribute: ${attribute} array: ${array} name: ${name} ");
+
     var type = gl.FLOAT;
     int bytesPerElement = 4;
 
@@ -47,6 +49,9 @@ class WebGLAttributes {
       } else if(array is Uint32Array) {
         type = gl.UNSIGNED_INT;
         bytesPerElement = Uint32List.bytesPerElement;
+      } else if(array is Uint16Array) {
+        type = gl.UNSIGNED_SHORT;
+        bytesPerElement = Uint16List.bytesPerElement;
       } else {
 
         // 保持抛出异常 及时发现异常情况

@@ -49,8 +49,12 @@ getTypedArray( type, buffer ) {
 
   if(type == "Uint32Array") {
     return Uint32Array.from(buffer);
+  } else if(type == "Uint16Array") {
+    return Uint16Array.from(buffer);
+  } else if(type == "Float32Array") {
+    return Float32Array.from(buffer);  
   } else {
-    throw(" Util.datr getTypedArray type: ${type} is not support "); 
+    throw(" Util.dart getTypedArray type: ${type} is not support "); 
   }
 
 }

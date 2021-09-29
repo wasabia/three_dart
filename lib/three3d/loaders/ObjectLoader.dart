@@ -232,6 +232,8 @@ class ObjectLoader extends Loader {
 							geometry = PlaneGeometry.fromJSON( data );
             } else if( data["type"] == "BoxGeometry" ) {
               geometry = BoxGeometry.fromJSON( data );
+            } else if( data["type"] == "CylinderGeometry") {
+              geometry = CylinderGeometry.fromJSON(data);  
 						} else {
 
 							throw( "THREE.ObjectLoader: Unsupported geometry type ${ data["type"] }" );

@@ -590,13 +590,13 @@ class WebGLMaterials {
 
 		refreshUniformsStandard( uniforms, material );
 
-		uniforms.ior.value = material.ior; // also part of uniforms common
+		uniforms["ior"]["value"] = material.ior; // also part of uniforms common
 
-    if ( material.sheenTint && ( material.sheenTint.r > 0 || material.sheenTint.g > 0 || material.sheenTint.b > 0 ) ) {
+    if ( material.sheenTint != null && ( material.sheenTint.r > 0 || material.sheenTint.g > 0 || material.sheenTint.b > 0 ) ) {
 
-			uniforms.sheenTint.value.copy( material.sheenTint );
+			uniforms["sheenTint"]["value"].copy( material.sheenTint );
 
-			uniforms.sheenRoughness.value = material.sheenRoughness;
+			uniforms["sheenRoughness"]["value"] = material.sheenRoughness;
 
 		}
 
@@ -604,73 +604,73 @@ class WebGLMaterials {
 
     if ( material.clearcoat > 0 ) {
 
-			uniforms.clearcoat.value = material.clearcoat;
-			uniforms.clearcoatRoughness.value = material.clearcoatRoughness;
+			uniforms["clearcoat"]["value"] = material.clearcoat;
+			uniforms["clearcoatRoughness"]["value"] = material.clearcoatRoughness;
 
-			if ( material.clearcoatMap ) {
+			if ( material.clearcoatMap != null ) {
 
-				uniforms.clearcoatMap.value = material.clearcoatMap;
-
-			}
-
-			if ( material.clearcoatRoughnessMap ) {
-
-				uniforms.clearcoatRoughnessMap.value = material.clearcoatRoughnessMap;
+				uniforms["clearcoatMap"]["value"] = material.clearcoatMap;
 
 			}
 
-			if ( material.clearcoatNormalMap ) {
+			if ( material.clearcoatRoughnessMap != null ) {
 
-				uniforms.clearcoatNormalScale.value.copy( material.clearcoatNormalScale );
-				uniforms.clearcoatNormalMap.value = material.clearcoatNormalMap;
+				uniforms["clearcoatRoughnessMap"]["value"] = material.clearcoatRoughnessMap;
+
+			}
+
+			if ( material.clearcoatNormalMap != null ) {
+
+				uniforms["clearcoatNormalScale"]["value"].copy( material.clearcoatNormalScale );
+				uniforms["clearcoatNormalMap"]["value"] = material.clearcoatNormalMap;
 
 				if ( material.side == BackSide ) {
 
-					uniforms.clearcoatNormalScale.value.negate();
+					uniforms["clearcoatNormalScale"]["value"].negate();
 
 				}
 			}
 
 		}
 
-		uniforms.transmission.value = material.transmission;
+		uniforms["transmission"]["value"] = material.transmission;
 
-		if ( material.transmissionMap ) {
+		if ( material.transmissionMap != null ) {
 
-			uniforms.transmissionMap.value = material.transmissionMap;
+			uniforms["transmissionMap"]["value"] = material.transmissionMap;
 
 		}
 
 		if ( material.transmission > 0.0 ) {
 
-			uniforms.transmissionSamplerMap.value = transmissionRenderTarget.texture;
-			uniforms.transmissionSamplerSize.value.set( transmissionRenderTarget.width, transmissionRenderTarget.height );
+			uniforms["transmissionSamplerMap"]["value"] = transmissionRenderTarget.texture;
+			uniforms["transmissionSamplerSize"]["value"].set( transmissionRenderTarget.width, transmissionRenderTarget.height );
 
 		}
 
-		uniforms.thickness.value = material.thickness;
+		uniforms["thickness"]["value"] = material.thickness;
 
-		if ( material.thicknessMap ) {
+		if ( material.thicknessMap != null ) {
 
-			uniforms.thicknessMap.value = material.thicknessMap;
-
-		}
-
-		uniforms.attenuationDistance.value = material.attenuationDistance;
-		uniforms.attenuationTint.value.copy( material.attenuationTint );
-
-		uniforms.specularIntensity.value = material.specularIntensity;
-		uniforms.specularTint.value.copy( material.specularTint );
-
-		if ( material.specularIntensityMap ) {
-
-			uniforms.specularIntensityMap.value = material.specularIntensityMap;
+			uniforms["thicknessMap"]["value"] = material.thicknessMap;
 
 		}
 
-		if ( material.specularTintMap ) {
+		uniforms["attenuationDistance"]["value"] = material.attenuationDistance;
+		uniforms["attenuationTint"]["value"].copy( material.attenuationTint );
 
-			uniforms.specularTintMap.value = material.specularTintMap;
+		uniforms["specularIntensity"]["value"] = material.specularIntensity;
+		uniforms["specularTint"]["value"].copy( material.specularTint );
+
+		if ( material.specularIntensityMap != null ) {
+
+			uniforms["specularIntensityMap"]["value"] = material.specularIntensityMap;
+
+		}
+
+		if ( material.specularTintMap != null ) {
+
+			uniforms["specularTintMap"]["value"] = material.specularTintMap;
 
 		}
 

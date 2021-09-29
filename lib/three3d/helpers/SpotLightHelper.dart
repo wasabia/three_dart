@@ -83,7 +83,7 @@ class SpotLightHelper extends Object3D {
 
 		if ( this.color != null ) {
 
-			this.cone.material.color.set( this.color );
+			this.cone.material.color.copy( this.color );
 
 		} else {
 
