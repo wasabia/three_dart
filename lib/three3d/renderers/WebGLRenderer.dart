@@ -696,7 +696,7 @@ class WebGLRenderer {
     scene.traverse((object) {
       var material = object.material;
 
-      if (material) {
+      if (material != null) {
         if (material is List) {
           for (var i = 0; i < material.length; i++) {
             var material2 = material[i];

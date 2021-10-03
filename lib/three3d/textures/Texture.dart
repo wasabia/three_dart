@@ -23,7 +23,7 @@ class Texture with EventDispatcher {
   int id = textureId ++;
   String uuid = MathUtils.generateUUID();
   String name = "";
-  late int? mapping;
+  int? mapping;
   int wrapS = ClampToEdgeWrapping;
   int wrapT = ClampToEdgeWrapping;
   int wrapR = ClampToEdgeWrapping;

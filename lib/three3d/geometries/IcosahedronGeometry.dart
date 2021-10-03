@@ -5,7 +5,7 @@ class IcosahedronGeometry extends PolyhedronGeometry {
 
   String type = "IcosahedronGeometry";
 
-  IcosahedronGeometry.create(vertices, indices, {radius = 1, detail = 0}) : super(vertices, indices, radius: radius, detail: detail) {
+  IcosahedronGeometry.create(vertices, indices, [radius = 1, detail = 0]) : super(vertices, indices, radius, detail) {
 
   }
 
@@ -26,7 +26,7 @@ class IcosahedronGeometry extends PolyhedronGeometry {
 			4, 9, 5, 	2, 4, 11,	6, 2, 10,	8, 6, 7,	9, 8, 1
 		];
 
-		IcosahedronGeometry ibg = IcosahedronGeometry.create( vertices, indices, radius: radius, detail: detail );
+		IcosahedronGeometry ibg = IcosahedronGeometry.create( vertices, indices, radius, detail );
 
 
 		ibg.parameters = {

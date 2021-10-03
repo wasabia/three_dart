@@ -21,7 +21,7 @@ class HemisphereLightHelper extends Object3D {
 
 		this.color = color;
 
-		var geometry = new OctahedronGeometry( radius: size );
+		var geometry = new OctahedronGeometry( size );
 		geometry.rotateY( Math.PI * 0.5 );
 
 		this.material = new MeshBasicMaterial( { "wireframe": true, "fog": false, "toneMapped": false } );

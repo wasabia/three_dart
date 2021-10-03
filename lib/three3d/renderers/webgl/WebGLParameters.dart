@@ -29,7 +29,7 @@ class WebGLParameters {
   late bool matcap;
   late int matcapEncoding;
   late bool envMap;
-  late bool envMapMode;
+  int? envMapMode;
   late int envMapEncoding;
   late bool envMapCubeUV;
   late bool lightMap;

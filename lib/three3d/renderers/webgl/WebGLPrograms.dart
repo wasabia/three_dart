@@ -210,7 +210,7 @@ class WebGLPrograms {
 			"matcap": material.matcap != null,
 			"matcapEncoding": getTextureEncodingFromMap( material.matcap ),
 			"envMap": envMap != null,
-			"envMapMode": envMap != null && envMap.mapping,
+			"envMapMode": envMap != null ? envMap.mapping : null,
 			"envMapEncoding": getTextureEncodingFromMap( envMap ),
 			"envMapCubeUV": ( envMap != null ) && ( ( envMap.mapping == CubeUVReflectionMapping ) || ( envMap.mapping == CubeUVRefractionMapping ) ),
 			"lightMap": material.lightMap != null,

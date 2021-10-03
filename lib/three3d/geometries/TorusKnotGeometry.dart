@@ -5,7 +5,7 @@ class TorusKnotGeometry extends BufferGeometry {
 
   String type = "TorusKnotGeometry";
 
-	TorusKnotGeometry( {radius = 1, tube = 0.4, tubularSegments = 64, radialSegments = 8, p = 2, q = 3} ) : super() {
+	TorusKnotGeometry( [radius = 1, tube = 0.4, tubularSegments = 64, radialSegments = 8, p = 2, q = 3] ) : super() {
 
 		this.parameters = {
 			"radius": radius,

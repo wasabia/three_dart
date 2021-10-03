@@ -4,7 +4,7 @@ class DodecahedronGeometry extends PolyhedronGeometry {
 
   String type = "DodecahedronGeometry";
 
-  DodecahedronGeometry( vertices, indices, radius, detail ) : super(vertices, indices, radius: radius, detail: detail) {
+  DodecahedronGeometry( vertices, indices, radius, detail ) : super(vertices, indices, radius, detail) {
     this.parameters = {
 			"radius": radius,
 			"detail": detail

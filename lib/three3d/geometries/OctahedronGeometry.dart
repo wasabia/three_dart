@@ -3,11 +3,11 @@ part of three_geometries;
 
 class OctahedronGeometry extends PolyhedronGeometry {
 
-  OctahedronGeometry.create(vertices, indices, radius, detail) : super(vertices, indices, radius: radius, detail: detail) {
+  OctahedronGeometry.create(vertices, indices, radius, detail) : super(vertices, indices, radius, detail) {
 
   }
 
-	factory OctahedronGeometry( {radius = 1, detail = 0} ) {
+	factory OctahedronGeometry( [radius = 1, detail = 0] ) {
 
 		var vertices = [
 			1, 0, 0, 	- 1, 0, 0,	0, 1, 0,
@@ -34,7 +34,7 @@ class OctahedronGeometry extends PolyhedronGeometry {
 
 	static fromJSON( data ) {
 
-		return new OctahedronGeometry( radius: data.radius, detail: data.detail );
+		return new OctahedronGeometry( data.radius, data.detail );
 
 	}
 

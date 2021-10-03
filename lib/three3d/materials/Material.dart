@@ -268,6 +268,8 @@ class Material with EventDispatcher {
       blendSrcAlpha = newValue;
     } else if(key == "clearcoat") {
       clearcoat = newValue;
+    } else if(key == "clearcoatRoughness") {
+      clearcoatRoughness = newValue;  
     } else if(key == "clipIntersection") {
       clipIntersection = newValue;
     } else if(key == "clipping") {
@@ -316,6 +318,8 @@ class Material with EventDispatcher {
       map = newValue;
     } else if(key == "metalness") {
       metalness = newValue;
+    } else if(key == "name") {
+      name = newValue;  
     } else if(key == "normalScale") {
       normalScale = newValue;  
     } else if(key == "opacity") {
@@ -328,6 +332,8 @@ class Material with EventDispatcher {
       polygonOffsetUnits = newValue;
     } else if(key == "premultipliedAlpha") {
       premultipliedAlpha = newValue;
+     } else if(key == "reflectivity") {
+      reflectivity = newValue;
     } else if(key == "roughness") {
       roughness = newValue;
     } else if(key == "shading") {

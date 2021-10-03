@@ -62,13 +62,14 @@ class PMREMGenerator {
   dynamic _cubemapShader;
 
 	PMREMGenerator( renderer ) {
-    var _cp = _createPlanes();
-    var _lodPlanes = _cp["_lodPlanes"];
-    var _sizeLods = _cp["_sizeLods"];
-    var _sigmas = _cp["_sigmas"];
-
     SIZE_MAX = Math.pow( 2, LOD_MAX ).toInt();
-    TOTAL_LODS = LOD_MAX - LOD_MIN + 1 + EXTRA_LOD_SIGMA.length;
+    this.TOTAL_LODS = LOD_MAX - LOD_MIN + 1 + EXTRA_LOD_SIGMA.length;
+
+    var _cp = _createPlanes();
+    _lodPlanes = _cp["_lodPlanes"];
+    _sizeLods = _cp["_sizeLods"];
+    _sigmas = _cp["_sigmas"];
+
     // Golden Ratio 
     PHI = ( 1 + Math.sqrt( 5 ) ) / 2;
     INV_PHI = 1 / PHI;
@@ -110,7 +111,7 @@ class PMREMGenerator {
 	fromScene( scene, {sigma = 0, near = 0.1, far = 100} ) {
 
 		_oldTarget = this._renderer.getRenderTarget();
-		var cubeUVRenderTarget = this._allocateTargets(false);
+		var cubeUVRenderTarget = this._allocateTargets(null);
 
 		this._sceneToCubeUV( scene, near, far, cubeUVRenderTarget );
 		if ( sigma > 0 ) {
@@ -234,7 +235,7 @@ class PMREMGenerator {
 		};
 
 		var cubeUVRenderTarget = _createRenderTarget( params );
-		cubeUVRenderTarget.depthBuffer = texture ? false : true;
+		cubeUVRenderTarget.depthBuffer = texture == null ? false : true;
 		this._pingPongRenderTarget = _createRenderTarget( params );
 		return cubeUVRenderTarget;
 
@@ -265,7 +266,7 @@ class PMREMGenerator {
 		renderer.outputEncoding = LinearEncoding;
 
 		var background = scene.background;
-		if ( background && background.isColor ) {
+		if ( background != null && background.isColor ) {
 
 			background.convertSRGBToLinear();
 			// Convert linear to RGBE
@@ -338,16 +339,16 @@ class PMREMGenerator {
 
 		var uniforms = material.uniforms;
 
-		uniforms[ 'envMap' ].value = texture;
+		uniforms[ 'envMap' ]["value"] = texture;
 
 		if ( ! texture.isCubeTexture ) {
 
-			uniforms[ 'texelSize' ].value.set( 1.0 / texture.image.width, 1.0 / texture.image.height );
+			uniforms[ 'texelSize' ]["value"].set( 1.0 / texture.image.width, 1.0 / texture.image.height );
 
 		}
 
-		uniforms[ 'inputEncoding' ].value = ENCODINGS[ texture.encoding ];
-		uniforms[ 'outputEncoding' ].value = ENCODINGS[ cubeUVRenderTarget.texture.encoding ];
+		uniforms[ 'inputEncoding' ]["value"] = ENCODINGS[ texture.encoding ];
+		uniforms[ 'outputEncoding' ]["value"] = ENCODINGS[ cubeUVRenderTarget.texture.encoding ];
 
 		_setViewport( cubeUVRenderTarget, 0, 0, 3 * SIZE_MAX, 2 * SIZE_MAX );
 
@@ -433,7 +434,7 @@ class PMREMGenerator {
 
 		}
 
-		var weights = [];
+		List<num> weights = [];
 		num sum = 0;
 
 		for ( var i = 0; i < MAX_SAMPLES; ++ i ) {
@@ -460,21 +461,21 @@ class PMREMGenerator {
 
 		}
 
-		blurUniforms[ 'envMap' ].value = targetIn.texture;
-		blurUniforms[ 'samples' ].value = samples;
-		blurUniforms[ 'weights' ].value = weights;
-		blurUniforms[ 'latitudinal' ].value = direction == 'latitudinal';
+		blurUniforms[ 'envMap' ]["value"] = targetIn.texture;
+		blurUniforms[ 'samples' ]["value"] = samples;
+		blurUniforms[ 'weights' ]["value"] = weights;
+		blurUniforms[ 'latitudinal' ]["value"] = direction == 'latitudinal';
 
-		if ( poleAxis ) {
+		if ( poleAxis != null ) {
 
-			blurUniforms[ 'poleAxis' ].value = poleAxis;
+			blurUniforms[ 'poleAxis' ]["value"] = poleAxis;
 
 		}
 
-		blurUniforms[ 'dTheta' ].value = radiansPerPixel;
-		blurUniforms[ 'mipInt' ].value = LOD_MAX - lodIn;
-		blurUniforms[ 'inputEncoding' ].value = ENCODINGS[ targetIn.texture.encoding ];
-		blurUniforms[ 'outputEncoding' ].value = ENCODINGS[ targetIn.texture.encoding ];
+		blurUniforms[ 'dTheta' ]["value"] = radiansPerPixel;
+		blurUniforms[ 'mipInt' ]["value"] = LOD_MAX - lodIn;
+		blurUniforms[ 'inputEncoding' ]["value"] = ENCODINGS[ targetIn.texture.encoding ];
+		blurUniforms[ 'outputEncoding' ]["value"] = ENCODINGS[ targetIn.texture.encoding ];
 
 		var outputSize = _sizeLods[ lodOut ];
 		var x = 3 * Math.max( 0, SIZE_MAX - 2 * outputSize );
@@ -572,13 +573,16 @@ class PMREMGenerator {
 
     }
 
-    return { _lodPlanes, _sizeLods, _sigmas };
-
+    return { 
+      "_lodPlanes": _lodPlanes, 
+      "_sizeLods": _sizeLods, 
+      "_sigmas": _sigmas 
+    };
   }
 
   _createRenderTarget( params ) {
 
-    var cubeUVRenderTarget = new WebGLRenderTarget( 3 * SIZE_MAX, 3 * SIZE_MAX, params );
+    var cubeUVRenderTarget = new WebGLRenderTarget( 3 * SIZE_MAX, 3 * SIZE_MAX, WebGLRenderTargetOptions(params) );
     cubeUVRenderTarget.texture.mapping = CubeUVReflectionMapping;
     cubeUVRenderTarget.texture.name = 'PMREM.cubeUv';
     cubeUVRenderTarget.scissorTest = true;
@@ -595,7 +599,7 @@ class PMREMGenerator {
 
   _getBlurShader( maxSamples ) {
 
-    var weights = new Float32Array( maxSamples );
+    var weights = maxSamples;
     var poleAxis = new Vector3( 0, 1, 0 );
     var shaderMaterial = new RawShaderMaterial( {
 
@@ -604,11 +608,11 @@ class PMREMGenerator {
       "defines": { 'n': maxSamples },
 
       "uniforms": {
-        'envMap': { "value": null },
+        'envMap': { },
         'samples': { "value": 1 },
         'weights': { "value": weights },
         'latitudinal': { "value": false },
-        'dTheta': { "value": 0 },
+        'dTheta': { "value": 0.0 },
         'mipInt': { "value": 0 },
         'poleAxis': { "value": poleAxis },
         'inputEncoding': { "value": ENCODINGS[ LinearEncoding ] },
