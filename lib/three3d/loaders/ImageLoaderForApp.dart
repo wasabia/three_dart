@@ -2,6 +2,7 @@ import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:flutter_gl/flutter_gl.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart';
 import 'package:three_dart/three3d/textures/index.dart';
@@ -30,13 +31,14 @@ class ImageLoaderLoader {
 
       // print(" load image and decode 2: ${DateTime.now().millisecondsSinceEpoch}............ ");
       if(image != null) {
-        imageElement = ImageElement(data: image.getBytes(format: Format.rgba), width: image.width, height: image.height);
+        var _pixels = image.getBytes(format: Format.rgba);
+        imageElement = ImageElement(data: Uint8Array.from(_pixels) , width: image.width, height: image.height);
       }
       
     } else {
       var image = await imageDecoder(null, url);
       if(image != null) {
-        imageElement = ImageElement(data: image.pixels, width: image.width, height: image.height);
+        imageElement = ImageElement(data: Uint8Array.from(image.pixels), width: image.width, height: image.height);
       }
       
     }

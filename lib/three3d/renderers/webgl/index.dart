@@ -7,6 +7,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
 import 'package:three_dart/three_dart.dart';
+import 'package:flutter_gl/flutter_gl.dart';
 
 import 'package:three_dart/three3d/WeakMap.dart';
 import 'package:three_dart/three3d/cameras/index.dart';

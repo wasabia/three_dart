@@ -136,7 +136,7 @@ class WebGLState {
   }
 
   createTexture(int type, int target, num count) {
-    var data = Uint8List(4); 
+    var data = Uint8Array(4); 
     // 4 is required to match default unpack alignment of 4.
     // 
     var texture = gl.createTexture();
@@ -146,8 +146,7 @@ class WebGLState {
     gl.texParameteri(type, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
     for (var i = 0; i < count; i++) {
-      gl.texImage2D(
-          target + i, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+      gl.texImage2D(target + i, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
     }
 
     return texture;

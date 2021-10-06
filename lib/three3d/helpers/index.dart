@@ -1,5 +1,6 @@
 library three_helpers;
 
+import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/cameras/index.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/geometries/index.dart';

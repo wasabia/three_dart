@@ -14,6 +14,8 @@ dependencies:
   universal_html: ^2.0.7
   ffi:
   image:
+  flutter_gl:
+    path: ../flutter_gl/flutter_gl
   opentype:
     path: ../opentype
     # git: https://github.com/wasabia/opentype.git

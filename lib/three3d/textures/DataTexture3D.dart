@@ -5,7 +5,7 @@ class DataTexture3D extends Texture {
   bool isDataTexture3D = true;
   late int wrapR;
 
-  DataTexture3D( {Uint8List? data = null, int width = 1, int height = 1, int depth = 1 }) : super(null, null, null, null, null, null, null, null, null, null) {
+  DataTexture3D( {NativeArray? data, int width = 1, int height = 1, int depth = 1 }) : super(null, null, null, null, null, null, null, null, null, null) {
 
     this.image = ImageElement(data: data, width: width, height: height, depth: depth );
 

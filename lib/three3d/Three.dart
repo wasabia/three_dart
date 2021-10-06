@@ -24,10 +24,3 @@ export './WeakMap.dart';
 
 export './ThreeHelper.dart';
 export './dartHelpers.dart';
-
-
-// how to handle this on different platform ???
-// export './Float32Array.app.dart';
-// export './Float32Array.web.dart';
-
-export './native-array/index.dart';
