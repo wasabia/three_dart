@@ -5,4 +5,9 @@ three.js implement by Dart.
 
 ## Getting Started
 
-TODO
+Example project
+
+
+## TODO
+...
+

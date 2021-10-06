@@ -314,6 +314,8 @@ class Material with EventDispatcher {
       linejoin = newValue;
     } else if(key == "linewidth") {
       linewidth = newValue;
+    } else if(key == "matcap") {
+      matcap = newValue; 
     } else if(key == "map") {
       map = newValue;
     } else if(key == "metalness") {
@@ -427,10 +429,10 @@ class Material with EventDispatcher {
 
   	}
 
-  	if ( this.map != null && this.map!.isTexture ) data["map"] = this.map!.toJSON( meta ).uuid;
-  	if ( this.matcap != null && this.matcap!.isTexture ) data["matcap"] = this.matcap!.toJSON( meta ).uuid;
-  	if ( this.alphaMap != null && this.alphaMap!.isTexture ) data["alphaMap"] = this.alphaMap!.toJSON( meta ).uuid;
-  	if ( this.lightMap != null && this.lightMap!.isTexture ) data["lightMap"] = this.lightMap!.toJSON( meta ).uuid;
+  	if ( this.map != null && this.map!.isTexture ) data["map"] = this.map!.toJSON( meta )["uuid"];
+  	if ( this.matcap != null && this.matcap!.isTexture ) data["matcap"] = this.matcap!.toJSON( meta )["uuid"];
+  	if ( this.alphaMap != null && this.alphaMap!.isTexture ) data["alphaMap"] = this.alphaMap!.toJSON( meta )["uuid"];
+  	if ( this.lightMap != null && this.lightMap!.isTexture ) data["lightMap"] = this.lightMap!.toJSON( meta )["uuid"];
 
 
 		if ( this.lightMap != null && this.lightMap!.isTexture ) {

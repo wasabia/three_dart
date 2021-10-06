@@ -66,7 +66,9 @@ class MaterialLoader extends Loader {
     } else if(json["type"] == "MeshLambertMaterial") {
       material = MeshLambertMaterial();
     } else if(json["type"] == "MeshPhongMaterial") {
-      material = MeshPhongMaterial();  
+      material = MeshPhongMaterial();
+    } else if(json["type"] == "MeshMatcapMaterial") {
+      material = MeshMatcapMaterial();  
     } else {
       throw(" MaterialLoader ${json["type"]} is not support  ");
     }

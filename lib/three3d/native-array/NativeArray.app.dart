@@ -1,13 +1,9 @@
-
-import 'package:ffi/ffi.dart';
 import 'dart:ffi';
-
-import 'dart:typed_data';
-
-import 'package:three_dart/three3d/Float32Array.dart';
+import 'package:ffi/ffi.dart';
+import 'index.dart';
 
 
-class ThreeArray {
+class PlatformNativeArray extends NativeArray {
 
   late int _size;
   late int oneByteSize;
@@ -26,10 +22,13 @@ class ThreeArray {
     
   }
 
-  ThreeArray(int size) {
+  PlatformNativeArray(int size) {
     _size = size;
   }
 
+  PlatformNativeArray.from(List listData) {
+    _size = listData.length;
+  }
 
   sublist(int len) {
     return this.toDartList().sublist(len);
@@ -50,7 +49,7 @@ class ThreeArray {
 
 }
 
-class Float32Array extends ThreeArray {
+class NativeFloat32Array extends PlatformNativeArray {
   late Pointer<Float> list;
 
   get data => list;
@@ -63,14 +62,15 @@ class Float32Array extends ThreeArray {
     this.list[index] = value.toDouble();
   }
 
-  Float32Array(int size) : super(size) {
+  NativeFloat32Array(int size) : super(size) {
     list = calloc<Float>(size);
     oneByteSize = sizeOf<Float>();
   }
 
-  factory Float32Array.from(list) {
-    var _array = Float32Array(list.length).set(list);
-    return _array;
+  NativeFloat32Array.from(List listData) : super.from(listData) {
+    list = calloc<Float>(listData.length);
+    oneByteSize = sizeOf<Float>();
+    this.toDartList().setAll( 0, List<double>.from(listData.map((e) => e.toDouble())) );
   }
 
   toDartList() {
@@ -89,7 +89,7 @@ class Float32Array extends ThreeArray {
 
   clone() {
     var _dartList = this.toDartList();
-    return Float32Array(_dartList.length).set(_dartList);
+    return NativeFloat32Array(_dartList.length).set(_dartList);
   }
 
   dispose() {
@@ -99,7 +99,7 @@ class Float32Array extends ThreeArray {
 
 
 
-class Uint16Array extends ThreeArray {
+class NativeUint16Array extends PlatformNativeArray {
   late Pointer<Uint16> list;
 
   get data => list;
@@ -113,14 +113,15 @@ class Uint16Array extends ThreeArray {
   }
 
 
-  Uint16Array(int size) : super(size) {
+  NativeUint16Array(int size) : super(size) {
     list = calloc<Uint16>(size);
     oneByteSize = sizeOf<Uint16>();
   }
 
-  factory Uint16Array.from(list) {
-    var _array = Uint16Array(list.length).set(list);
-    return _array;
+  NativeUint16Array.from(List listData) : super.from(listData) {
+    list = calloc<Uint16>(listData.length);
+    oneByteSize = sizeOf<Uint16>();
+    this.toDartList().setAll( 0, List<int>.from(listData.map((e) => e.toInt())) );
   }
 
   toDartList() {
@@ -134,7 +135,7 @@ class Uint16Array extends ThreeArray {
 
   clone() {
     var _dartList = this.toDartList();
-    return Uint16Array(_dartList.length).set(_dartList);
+    return NativeUint16Array(_dartList.length).set(_dartList);
   }
 
   dispose() {
@@ -142,7 +143,7 @@ class Uint16Array extends ThreeArray {
   }
 }
 
-class Uint32Array extends ThreeArray {
+class NativeUint32Array extends PlatformNativeArray {
   late Pointer<Uint32> list;
 
   get data => list;
@@ -157,14 +158,15 @@ class Uint32Array extends ThreeArray {
     this.list[index] = value;
   }
 
-  Uint32Array(int size) : super(size) {
+  NativeUint32Array(int size) : super(size) {
     list = calloc<Uint32>(size);
     oneByteSize = sizeOf<Uint32>();
   }
 
-  factory Uint32Array.from(list) {
-    var _array = Uint32Array(list.length).set(list);
-    return _array;
+  NativeUint32Array.from(List listData) : super.from(listData) {
+    list = calloc<Uint32>(listData.length);
+    oneByteSize = sizeOf<Uint32>();
+    this.toDartList().setAll( 0, List<int>.from(listData.map((e) => e.toInt())) );
   }
 
   toDartList() {
@@ -178,7 +180,7 @@ class Uint32Array extends ThreeArray {
 
   clone() {
     var _dartList = this.toDartList();
-    return Uint32Array(_dartList.length).set(_dartList);
+    return NativeUint32Array(_dartList.length).set(_dartList);
   }
 
   dispose() {
@@ -188,7 +190,7 @@ class Uint32Array extends ThreeArray {
 
 
 
-class Int8Array extends ThreeArray {
+class NativeInt8Array extends PlatformNativeArray {
   late Pointer<Int8> list;
 
   get data => list;
@@ -201,14 +203,15 @@ class Int8Array extends ThreeArray {
     this.list[index] = value;
   }
 
-  Int8Array(int size) : super(size) {
+  NativeInt8Array(int size) : super(size) {
     list = calloc<Int8>(size);
     oneByteSize = sizeOf<Int8>();
   }
 
-  factory Int8Array.from(list) {
-    var _array = Int8Array(list.length).set(list);
-    return _array;
+  NativeInt8Array.from(List listData) : super.from(listData) {
+    list = calloc<Int8>(listData.length);
+    oneByteSize = sizeOf<Int8>();
+    this.toDartList().setAll( 0, List<int>.from(listData.map((e) => e.toInt())) );
   }
 
   toDartList() {
@@ -222,7 +225,7 @@ class Int8Array extends ThreeArray {
 
   clone() {
     var _dartList = this.toDartList();
-    return Int8Array(_dartList.length).set(_dartList);
+    return NativeInt8Array(_dartList.length).set(_dartList);
   }
 
   dispose() {
@@ -230,7 +233,7 @@ class Int8Array extends ThreeArray {
   }
 }
 
-class Int16Array extends ThreeArray {
+class NativeInt16Array extends PlatformNativeArray {
 
   late Pointer<Int16> list;
 
@@ -245,14 +248,15 @@ class Int16Array extends ThreeArray {
   }
 
 
-  Int16Array(int size) : super(size) {
+  NativeInt16Array(int size) : super(size) {
     list = calloc<Int16>(size);
     oneByteSize = sizeOf<Int16>();
   }
 
-  factory Int16Array.from(list) {
-    var _array = Int16Array(list.length).set(list);
-    return _array;
+  NativeInt16Array.from(List listData) : super.from(listData) {
+    list = calloc<Int16>(listData.length);
+    oneByteSize = sizeOf<Int16>();
+    this.toDartList().setAll( 0, List<int>.from(listData.map((e) => e.toInt())) );
   }
 
   toDartList() {
@@ -266,7 +270,7 @@ class Int16Array extends ThreeArray {
 
   clone() {
     var _dartList = this.toDartList();
-    return Int16Array(_dartList.length).set(_dartList);
+    return NativeInt16Array(_dartList.length).set(_dartList);
   }
 
   dispose() {
@@ -275,7 +279,7 @@ class Int16Array extends ThreeArray {
 }
 
 
-class Int32Array extends ThreeArray {
+class NativeInt32Array extends PlatformNativeArray {
   late Pointer<Int32> list;
 
   get data => list;
@@ -289,14 +293,15 @@ class Int32Array extends ThreeArray {
   }
 
 
-  Int32Array(int size) : super(size) {
+  NativeInt32Array(int size) : super(size) {
     list = calloc<Int32>(size);
     oneByteSize = sizeOf<Int32>();
   }
 
-  factory Int32Array.from(list) {
-    var _array = Int32Array(list.length).set(list);
-    return _array;
+  NativeInt32Array.from(List listData) : super.from(listData) {
+    list = calloc<Int32>(listData.length);
+    oneByteSize = sizeOf<Int32>();
+    this.toDartList().setAll( 0, List<int>.from(listData.map((e) => e.toInt())) );
   }
 
   toDartList() {
@@ -310,7 +315,7 @@ class Int32Array extends ThreeArray {
 
   clone() {
     var _dartList = this.toDartList();
-    return Int32Array(_dartList.length).set(_dartList);
+    return NativeInt32Array(_dartList.length).set(_dartList);
   }
 
   dispose() {
@@ -319,7 +324,7 @@ class Int32Array extends ThreeArray {
 }
 
 
-class Uint8Array extends ThreeArray {
+class NativeUint8Array extends PlatformNativeArray {
   late Pointer<Uint8> list;
 
   get data => list;
@@ -333,14 +338,15 @@ class Uint8Array extends ThreeArray {
   }
 
 
-  Uint8Array(int size) : super(size) {
+  NativeUint8Array(int size) : super(size) {
     list = calloc<Uint8>(size);
     oneByteSize = sizeOf<Uint8>();
   }
 
-  factory Uint8Array.from(list) {
-    var _array = Uint8Array(list.length).set(list);
-    return _array;
+  NativeUint8Array.from(List listData) : super.from(listData) {
+    list = calloc<Uint8>(listData.length);
+    oneByteSize = sizeOf<Uint8>();
+    this.toDartList().setAll( 0, List<int>.from(listData.map((e) => e.toInt())) );
   }
 
   toDartList() {
@@ -354,7 +360,7 @@ class Uint8Array extends ThreeArray {
 
   clone() {
     var _dartList = this.toDartList();
-    return Uint8Array(_dartList.length).set(_dartList);
+    return NativeUint8Array(_dartList.length).set(_dartList);
   }
 
   dispose() {

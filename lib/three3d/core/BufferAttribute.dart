@@ -15,7 +15,7 @@ class BufferAttribute extends BaseBufferAttribute {
   
 
   BufferAttribute(arrayList, itemSize, [bool normalized = false] ) {
-    if(arrayList is ThreeArray) {
+    if(arrayList is NativeArray) {
       this.array = arrayList;
     } else if (arrayList is Float32List ) {
       this.array = Float32Array.from(arrayList);

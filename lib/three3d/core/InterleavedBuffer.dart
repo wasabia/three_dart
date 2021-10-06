@@ -3,7 +3,7 @@ part of three_core;
 
 class InterleavedBuffer {
 
-  ThreeArray array;
+  dynamic array;
   int stride;
   
   late int count;
