@@ -24,7 +24,7 @@ dependencies:
     git: https://github.com/wasabia/typr_dart.git
   bidi_dart:
     # path: ../bidi_dart
-    git: git: https://github.com/wasabia/bidi_dart.git
+    git: https://github.com/wasabia/bidi_dart.git
 
 
 dev_dependencies:
