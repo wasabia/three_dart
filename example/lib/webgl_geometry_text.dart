@@ -17,14 +17,14 @@ import 'package:three_dart/three_dart.dart' as THREE;
 
 
 
-class Webgl_camera_array extends StatefulWidget {
+class webgl_geometry_text extends StatefulWidget {
   String fileName;
-  Webgl_camera_array({Key? key, required this.fileName}) : super(key: key);
+  webgl_geometry_text({Key? key, required this.fileName}) : super(key: key);
 
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<Webgl_camera_array> {
+class _MyAppState extends State<webgl_geometry_text> {
 
 
   late FlutterGlPlugin three3dRender;

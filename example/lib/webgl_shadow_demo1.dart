@@ -244,7 +244,7 @@ class _MyAppState extends State<webgl_shadow_demo1> {
       "color": 0xff00ff
     });
     object = THREE.Mesh(geometry, material);
-    object.rotation.set(1, 1.2, 1.5);
+    // object.rotation.set(1, 1.2, 1.5);
     object.castShadow = true;
 
 

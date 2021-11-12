@@ -1,6 +1,7 @@
 import 'package:example/filesJson.dart';
 import 'package:example/tagsJson.dart';
 import 'package:example/webgl_camera_array.dart';
+import 'package:example/webgl_geometry_text.dart';
 import 'package:example/webgl_loader_obj.dart';
 import 'package:example/webgl_materials_browser.dart';
 import 'package:example/webgl_shadow_demo1.dart';
@@ -92,7 +93,8 @@ class _MyAppState extends State<ExampleApp> {
       page = webgl_materials_browser(fileName: fileName);
     } else if(fileName == "webgl_shadow_demo1") {
       page = webgl_shadow_demo1(fileName: fileName);
-      
+    } else if(fileName == "webgl_geometry_text") {
+      page = webgl_geometry_text(fileName: fileName);
     } else {
       throw("_goto fileName ${fileName} is not support yet ");
     }

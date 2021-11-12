@@ -243,7 +243,6 @@ class _MyAppState extends State<webgl_camera_array> {
     }
 
     camera = new THREE.ArrayCamera( cameras );
-
     // camera = new THREE.PerspectiveCamera( 40, 1, 0.1, 10 );
     camera.position.z = 3;
 
