@@ -16,15 +16,15 @@ dependencies:
   image:
   flutter_gl:
     # path: ../flutter_gl/flutter_gl
-    git: https://github.com/wasabia/flutter_gl.git
-  opentype:
-    git: https://github.com/wasabia/opentype.git
-  typr_dart:
-    # path: ../typr_dart
-    git: https://github.com/wasabia/typr_dart.git
-  bidi_dart:
-    # path: ../bidi_dart
-    git: https://github.com/wasabia/bidi_dart.git
+    # git: git@github.com:wasabia/flutter_gl.git
+  # opentype:
+  #   git: git@github.com:wasabia/opentype.git
+  # typr_dart:
+  #   # path: ../typr_dart
+  #   git: git@github.com:wasabia/typr_dart.git
+  # bidi_dart:
+  #   # path: ../bidi_dart
+  #   git: git@github.com:wasabia/bidi_dart.git
 
 
 dev_dependencies:
