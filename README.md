@@ -2,6 +2,9 @@
 
 three.js rewrite by Dart. 3D for Flutter. Base on [flutter_gl](https://github.com/wasabia/flutter_gl)
 
+Metaverse with Flutter?
+
+
 support web, iOS, Android
 
 Desktop Mac, Windows, Linux TODO, need flutter_gl support
