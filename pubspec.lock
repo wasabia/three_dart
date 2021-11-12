@@ -15,15 +15,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.8.1"
-  bidi_dart:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "48450586c101c07d18bcab1c977ea3ee0d38baf8"
-      url: "git@github.com:wasabia/bidi_dart.git"
-    source: git
-    version: "0.0.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -254,15 +245,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
-  typr_dart:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: a9219082f5aee70a20fb4e0c461f8d01dd39165c
-      url: "git@github.com:wasabia/typr_dart.git"
-    source: git
-    version: "0.0.1"
   universal_html:
     dependency: "direct main"
     description:
