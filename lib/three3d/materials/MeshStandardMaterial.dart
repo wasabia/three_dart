@@ -62,7 +62,7 @@ class MeshStandardMaterial extends Material {
   num? envMapIntensity = 1.0;
 
 
-  MeshStandardMaterial( Map<String, dynamic> parameters ) : super() {
+  MeshStandardMaterial( [Map<String, dynamic>? parameters] ) : super() {
 
     this.defines = { 'STANDARD': '' };
 

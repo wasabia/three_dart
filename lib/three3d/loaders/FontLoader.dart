@@ -10,6 +10,7 @@ class FontLoader extends Loader {
   }
 
   loadAsync( url, Function? onProgress ) async {
+   
 		var loader = new FileLoader( this.manager );
 		loader.setPath( this.path );
 		loader.responseType = this.responseType;
@@ -18,6 +19,7 @@ class FontLoader extends Loader {
 		var text = await loader.loadAsync( url, null );
 
     var jsonData = convert.jsonDecode(text);
+
 
     return this.parse( jsonData );
 	}

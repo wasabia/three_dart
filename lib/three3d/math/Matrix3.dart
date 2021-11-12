@@ -4,11 +4,11 @@ class Matrix3 {
 
   String type = "Matrix3";
 
-  late List<num> elements;
+  late Float32Array elements;
 
 	Matrix3() {
 
-		this.elements = List<num>.from([
+		this.elements = Float32Array.from([
 
 			1, 0, 0,
 			0, 1, 0,

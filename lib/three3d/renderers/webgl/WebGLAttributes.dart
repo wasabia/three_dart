@@ -26,7 +26,7 @@ class WebGLAttributes {
 
     // dynamic arrayList;
 
-    // print(" WebGLAttributes.createBuffer attribute: ${attribute} array: ${array} name: ${name} ");
+    // print(" WebGLAttributes.createBuffer attribute: ${attribute.runtimeType} arrayType: ${arrayType} name: ${name} ");
 
     var type = gl.FLOAT;
     int bytesPerElement = 4;
@@ -111,7 +111,7 @@ class WebGLAttributes {
 
 		gl.bindBuffer( bufferType, buffer );
 
-		gl.bufferData( bufferType, array.bytesLength, array.data, usage);
+		gl.bufferData( bufferType, array.bytesLength, array, usage);
 
 
 		if(attribute.onUploadCallback != null) {
@@ -194,18 +194,17 @@ class WebGLAttributes {
 		var array = attribute.array;
 		var updateRange = attribute.updateRange;
 
-
 		gl.bindBuffer( bufferType, buffer );
 
 		if ( updateRange["count"] == - 1 ) {
 
 			// Not using update ranges
-			gl.bufferSubData( bufferType, 0, array.data, 0, array.bytesLength );
+			gl.bufferSubData( bufferType, 0, array, 0, array.bytesLength );
 
 		} else {
 
       print(" WebGLAttributes.dart gl.bufferSubData need debug confirm.... ");  
-			gl.bufferSubData( bufferType, updateRange["offset"] * attribute.itemSize, array.data, updateRange["offset"], updateRange["count"] );
+			gl.bufferSubData( bufferType, updateRange["offset"] * attribute.itemSize, array, updateRange["offset"], updateRange["count"] );
 
 			updateRange["count"] = - 1; // reset range
 
@@ -250,25 +249,16 @@ class WebGLAttributes {
 
 	}
 
-	update( BaseBufferAttribute attribute, bufferType, {String? name} ) {
+	update(attribute, bufferType, {String? name} ) {
 
+    
+    // print(" WebGLAttributes.update attribute: ${attribute.runtimeType} name: ${name} ");
 
 		if ( attribute.type == "GLBufferAttribute" ) {
 
 			var cached = buffers.get( attribute );
 
 			if ( cached == null || cached["version"] < attribute.version ) {
-
-				// buffers.add( 
-        //   key: attribute, 
-        //   value: {
-        //     "buffer": attribute.buffer,
-        //     "type": attribute.type,
-        //     "bytesPerElement": attribute.elementSize,
-        //     "version": attribute.version
-        //   } 
-        // );
-
         buffers.add( 
           key: attribute, 
           value: createBuffer(attribute, bufferType, name: name)

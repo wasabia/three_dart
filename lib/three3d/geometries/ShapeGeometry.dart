@@ -6,7 +6,7 @@ class ShapeGeometry extends BufferGeometry {
   String type = 'ShapeGeometry';
 
 	ShapeGeometry( shapes, {num curveSegments = 12 } ) : super() {
-
+    this.parameters = {};
     this.curveSegments = curveSegments;
     if(shapes is List) {
       this.shapes = List<Shape>.from(shapes);

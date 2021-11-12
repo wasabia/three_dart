@@ -11,7 +11,7 @@ class ImageLoaderLoader {
     var imageDom = html.ImageElement();
     imageDom.onLoad.listen((e) {
 
-      ImageElement imageElement = ImageElement(data: imageDom, width: imageDom.width!, height: imageDom.height!);
+      ImageElement imageElement = ImageElement(url: url, data: imageDom, width: imageDom.width!, height: imageDom.height!);
 
       completer.complete(imageElement);
     });

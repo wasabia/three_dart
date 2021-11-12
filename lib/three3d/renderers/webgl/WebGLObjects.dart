@@ -31,7 +31,9 @@ class WebGLObjects {
 
 		}
 
-		if ( object.type == "InstancedMesh" ) {
+    // print(" WebGLObjects update object: ${object} ${object.type} ");
+
+		if ( object is InstancedMesh ) {
 
 			if ( object.hasEventListener( 'dispose', onInstancedMeshDispose ) == false ) {
 
@@ -39,6 +41,7 @@ class WebGLObjects {
 
 			}
 
+      // print(" WebGLObjects update 2 object: ${object} ${object.instanceMatrix} ");
 			attributes.update( object.instanceMatrix, gl.ARRAY_BUFFER );
 
 			if ( object.instanceColor != null ) {

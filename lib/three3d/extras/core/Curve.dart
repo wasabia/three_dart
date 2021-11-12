@@ -59,6 +59,8 @@ class Curve {
 
   String type = "Curve";
 
+  Map<String, dynamic> userData = {};
+
 
   Curve() {
     this.arcLengthDivisions = 200;
@@ -277,7 +279,7 @@ class Curve {
 	// 2 points a small delta apart will be used to find its gradient
 	// which seems to give a reasonable approximation
 
-	getTangent ( t, optionalTarget ) {
+	getTangent ( t, [optionalTarget] ) {
 
 		var delta = 0.0001;
 		num t1 = t - delta;
@@ -291,7 +293,7 @@ class Curve {
 		var pt1 = this.getPoint( t1, null );
 		var pt2 = this.getPoint( t2, null );
 
-		var tangent = optionalTarget ?? ( ( pt1.isVector2 ) ? new Vector2(null, null) : new Vector3.init() );
+		var tangent = optionalTarget ?? ( ( pt1.runtimeType == Vector2 ) ? new Vector2(null, null) : new Vector3.init() );
 
 		tangent.copy( pt2 ).sub( pt1 ).normalize();
 

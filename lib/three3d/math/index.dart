@@ -3,6 +3,8 @@ library three_math;
 import 'dart:math' as math;
 import 'dart:typed_data';
 
+import 'package:flutter_gl/flutter_gl.dart';
+
 import '../dartHelpers.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import '../constants.dart';

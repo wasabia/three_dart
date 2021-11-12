@@ -57,6 +57,7 @@ class ImageLoader extends Loader {
     if ( onLoad != null ) {
       onLoad(_resp);
     }
+
     return _resp;
 	}
 

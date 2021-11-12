@@ -20,9 +20,11 @@ class ImageLoaderLoader {
       } else if(url.startsWith("assets")) {
         final fileData = await rootBundle.load(url);
         bytes = Uint8List.view(fileData.buffer);
+      } else {
+        var file = File(url);
+        bytes = await file.readAsBytes();
       }
-      // var file = File(url);
-      // bytes = file.readAsBytesSync();
+      
       // print(" load image and decode 1: ${DateTime.now().millisecondsSinceEpoch}............ ");
       var receivePort = ReceivePort();
       await Isolate.spawn(decodeIsolate, DecodeParam(bytes, receivePort.sendPort));
@@ -32,13 +34,13 @@ class ImageLoaderLoader {
       // print(" load image and decode 2: ${DateTime.now().millisecondsSinceEpoch}............ ");
       if(image != null) {
         var _pixels = image.getBytes(format: Format.rgba);
-        imageElement = ImageElement(data: Uint8Array.from(_pixels) , width: image.width, height: image.height);
+        imageElement = ImageElement(url: url, data: Uint8Array.from(_pixels) , width: image.width, height: image.height);
       }
       
     } else {
       var image = await imageDecoder(null, url);
       if(image != null) {
-        imageElement = ImageElement(data: Uint8Array.from(image.pixels), width: image.width, height: image.height);
+        imageElement = ImageElement(url: url, data: Uint8Array.from(image.pixels), width: image.width, height: image.height);
       }
       
     }

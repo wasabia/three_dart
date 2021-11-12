@@ -45,7 +45,7 @@ class MeshNormalMaterial extends Material {
   bool fog = false;
 
 
-  MeshNormalMaterial( Map<String, dynamic> parameters ) : super() {
+  MeshNormalMaterial( [Map<String, dynamic>? parameters] ) : super() {
     this.setValues( parameters );
   }
 

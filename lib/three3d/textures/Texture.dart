@@ -17,8 +17,9 @@ class Texture with EventDispatcher {
   bool isCompressedTexture = false;
   bool isOpenGLTexture = false;
   bool isRenderTargetTexture = false;
-
-  ImageElement? image;
+  
+  // image or List ???
+  dynamic image;
 
   int id = textureId ++;
   String uuid = MathUtils.generateUUID();
@@ -174,68 +175,68 @@ class Texture with EventDispatcher {
 
 		};
 
-		// if ( this.image != null ) {
+		if ( this.image != null ) {
 
-		// 	// TODO: Move to THREE.Image
+			// TODO: Move to THREE.Image
 
-		// 	var image = this.image;
+			var image = this.image;
 
-		// 	if ( image.uuid == null ) {
+			if ( image!.uuid == null ) {
 
-		// 		image.uuid = MathUtils.generateUUID(); // UGH
+				image.uuid = MathUtils.generateUUID(); // UGH
 
-		// 	}
+			}
 
-		// 	if ( ! isRootObject && meta.images[ image.uuid ] === undefined ) {
+			if ( ! isRootObject && meta.images[ image.uuid ] ==  null ) {
 
-		// 		let url;
+				var url;
 
-		// 		if ( Array.isArray( image ) ) {
+				if ( image is List ) {
 
-		// 			// process array of images e.g. CubeTexture
+					// process array of images e.g. CubeTexture
 
-		// 			url = [];
+					url = [];
 
-		// 			for ( let i = 0, l = image.length; i < l; i ++ ) {
+					for ( var i = 0, l = image.length; i < l; i ++ ) {
 
-		// 				// check cube texture with data textures
+						// check cube texture with data textures
 
-		// 				if ( image[ i ].isDataTexture ) {
+						if ( image[ i ].isDataTexture ) {
 
-		// 					url.push( serializeImage( image[ i ].image ) );
+							url.add( serializeImage( image[ i ].image ) );
 
-		// 				} else {
+						} else {
 
-		// 					url.push( serializeImage( image[ i ] ) );
+							url.add( serializeImage( image[ i ] ) );
 
-		// 				}
+						}
 
-		// 			}
+					}
 
-		// 		} else {
+				} else {
 
-		// 			// process single image
+					// process single image
 
-		// 			url = serializeImage( image );
+					url = serializeImage( image );
 
-		// 		}
+				}
 
-		// 		meta.images[ image.uuid ] = {
-		// 			uuid: image.uuid,
-		// 			url: url
-		// 		};
+				meta.images[ image.uuid ] = {
+					"uuid": image.uuid,
+					"url": url
+				};
 
-		// 	}
+			}
 
-		// 	output.image = image.uuid;
+			output["image"] = image.uuid;
 
-		// }
+		}
 
-		// if ( ! isRootObject ) {
+		if ( ! isRootObject ) {
 
-		// 	meta.textures[ this.uuid ] = output;
+			meta.textures[ this.uuid ] = output;
 
-		// }
+		}
 
 		return output;
 
@@ -340,5 +341,48 @@ class ImageDataInfo {
   ImageDataInfo(this.data, this.width, this.height, this.depth) {
 
   }
+
+}
+
+
+
+serializeImage( image ) {
+
+	// if ( ( typeof HTMLImageElement !== 'undefined' && image instanceof HTMLImageElement ) ||
+	// 	( typeof HTMLCanvasElement !== 'undefined' && image instanceof HTMLCanvasElement ) ||
+	// 	( typeof ImageBitmap !== 'undefined' && image instanceof ImageBitmap ) ) {
+
+	// 	// default images
+
+	// 	return ImageUtils.getDataURL( image );
+
+  if ( image is ImageElement ) {
+
+		// default images
+
+		// return ImageUtils.getDataURL( image );
+    return image.url;
+
+	} else {
+
+    if ( image.data != null ) {
+
+      // images of DataTexture
+
+      return {
+        "data": image.data.clone(),
+        "width": image.width,
+        "height": image.height,
+        "type": image.data.runtimeType.toString()
+      };
+
+    } else {
+
+      print( 'THREE.Texture: Unable to serialize Texture.' );
+      return {};
+
+    }
+
+	}
 
 }

@@ -13,10 +13,10 @@ var _matrix4z = new Vector3.init();
 class Matrix4 {
   
   String type = "Matrix4";
-  late List<num> elements;
+  late Float32Array elements;
 
 	Matrix4() {
-		this.elements = List<num>.from([
+		this.elements = Float32Array.from([
 
 			1.0, 0.0, 0.0, 0.0,
 			0.0, 1.0, 0.0, 0.0,

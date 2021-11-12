@@ -31,3 +31,4 @@ part './curves/CatmullRomCurve3.dart';
 part './Earcut.dart';
 part './ShapeUtils.dart';
 part './PMREMGenerator.dart';
+part './ImageUtils.dart';

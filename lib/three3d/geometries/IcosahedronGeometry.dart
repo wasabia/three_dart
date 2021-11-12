@@ -9,7 +9,7 @@ class IcosahedronGeometry extends PolyhedronGeometry {
 
   }
 
-	factory IcosahedronGeometry( {radius = 1, detail = 0} ) {
+	factory IcosahedronGeometry( [radius = 1, detail = 0] ) {
 
 		var t = ( 1 + Math.sqrt( 5 ) ) / 2;
 

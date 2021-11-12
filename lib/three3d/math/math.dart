@@ -104,5 +104,16 @@ class Math {
     return log(x) / LN2;
   }
 
+  // Random float from <low, high> interval
+  static randFloat( low, high ) {
+	  return low + Math.random() * ( high - low );
+  }
+
+  // Random float from <-range/2, range/2> interval
+  static randFloatSpread( range ) {
+
+    return range * ( 0.5 - Math.random() );
+
+  }
 
 }

@@ -350,7 +350,7 @@ class WebGLUniformsHelper {
     // return r;
   }
 
-  arraysEqual( Map<int, dynamic> a, List b ) {
+  arraysEqual( Map<int, dynamic> a, b ) {
     if ( a.keys.length != b.length ) return false;
 
     for ( var i = 0, l = a.keys.length; i < l; i ++ ) {
@@ -363,7 +363,7 @@ class WebGLUniformsHelper {
 
   }
 
-  copyArray( Map<int, dynamic> a, List b ) {
+  copyArray( Map<int, dynamic> a, b ) {
     for ( var i = 0, l = b.length; i < l; i ++ ) {
       a[ i ] = b[ i ];
     }
@@ -442,11 +442,11 @@ class WebGLUniformsHelper {
   setValueV3f( gl, v, textures ) {
 
     // if ( v.runtimeType == Vector3 ) {
-    //   print("setValueV3f ${v.runtimeType} v: ${v.toJSON()}  ");
+    //   print("v setValueV3f ${v.runtimeType} v: ${v.toJSON()}  ");
     // } else if ( v.runtimeType == Color ) { 
-    //   print("setValueV3f ${v.runtimeType} v: ${v.toJSON()}  ");
+    //   print("c setValueV3f ${v.runtimeType} v: ${v.toJSON()}  ");
     // } else {
-    //   print("setValueV3f ${v.runtimeType} v: ${v}  ");
+    //   print("1 setValueV3f ${v.runtimeType} v: ${v}  ");
     // }
     
 
@@ -488,7 +488,6 @@ class WebGLUniformsHelper {
       }
 
     } else {
-
       if ( arraysEqual( cache, v ) ) return;
 
       gl.uniform3fv( this.addr, v );
@@ -598,11 +597,10 @@ class WebGLUniformsHelper {
         return;
       }
 
-      mat3array.set( elements );
+      // TODO ???
+      // mat3array.set( elements );
 
       gl.uniformMatrix3fv( this.addr, false, elements );
-
-
 
       copyArray( cache, elements );
     }
@@ -629,7 +627,8 @@ class WebGLUniformsHelper {
         return;
       }
 
-      mat4array.set( elements );
+      // TODO
+      // mat4array.set( elements );
 
       gl.uniformMatrix4fv( this.addr, false, elements );
 
@@ -913,7 +912,6 @@ class WebGLUniformsHelper {
   }
 
   setValueV3fArray( gl, v, textures ) {
-
     var data = flatten( v, this.size, 3 );
 
     gl.uniform3fv( this.addr, data );

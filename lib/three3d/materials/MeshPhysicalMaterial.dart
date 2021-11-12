@@ -57,7 +57,7 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
   num? ior = 1.5;
 
 
-  MeshPhysicalMaterial( parameters ) : super(parameters) {
+  MeshPhysicalMaterial( [parameters] ) : super(parameters) {
     this.defines = {
       'STANDARD': '',
       'PHYSICAL': ''

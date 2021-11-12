@@ -169,6 +169,7 @@ class Material with EventDispatcher {
   bool isLineBasicMaterial = false;
   bool isPointsMaterial = false;
   bool isMeshPhysicalMaterial = false;
+  bool instanced = false;
 
   Map<String, dynamic>? defines;
   Map<String, dynamic>? uniforms;
@@ -306,6 +307,8 @@ class Material with EventDispatcher {
       fog = newValue;
     } else if(key == "fragmentShader") {
       fragmentShader = newValue;
+    } else if(key == "instanced") {
+      instanced = newValue;
     } else if(key == "lights") {
       lights = newValue;
     } else if( key == "linecap" ) {
@@ -579,7 +582,7 @@ class Material with EventDispatcher {
 
   	if ( isRoot ) {
 
-    var textures = extractFromCache( meta!.textures );
+      var textures = extractFromCache( meta!.textures );
   		var images = extractFromCache( meta.images );
 
   		if ( textures.length > 0 ) data["textures"] = textures;

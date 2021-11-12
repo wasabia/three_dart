@@ -91,8 +91,7 @@ class WebGLShadowMap {
 
 
 	render(List<Light> lights, scene, Camera camera ) {
-
- 
+    
 		if ( scope.enabled == false ) return;
 		if ( scope.autoUpdate == false && scope.needsUpdate == false ) return;
 

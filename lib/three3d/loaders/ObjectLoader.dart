@@ -80,18 +80,16 @@ class ObjectLoader extends Loader {
 
 	}
 
-	parse( json, {String? path, Function? onLoad, Function? onError} ) {
+	parse( json, {String? path, Function? onLoad, Function? onError} ) async {
 
 		var animations = this.parseAnimations( json.animations );
 		var shapes = this.parseShapes( json.shapes );
 		var geometries = this.parseGeometries( json.geometries, shapes );
 
-    print(" ObjectLoader parse parseImages TODO ");
-		var images = this.parseImages( json.images, () {
+    
+		var images = await this.parseImages( json.images, null );
 
-			// if ( onLoad != null ) onLoad( object );
 
-		} );
 
 		var textures = this.parseTextures( json.textures, images );
 		var materials = this.parseMaterials( json.materials, textures );
@@ -101,27 +99,7 @@ class ObjectLoader extends Loader {
 
 		this.bindSkeletons( object, skeletons );
 
-		//
 
-		if ( onLoad != null ) {
-
-			var hasImages = false;
-
-			for ( var uuid in images ) {
-
-        print(" ObjectLoader .....TODO image ");
-				// if ( images[ uuid ] is HTMLImageElement ) {
-
-				// 	hasImages = true;
-				// 	break;
-
-				// }
-
-			}
-
-			if ( hasImages == false ) onLoad( object );
-
-		}
 
 		return object;
 
@@ -133,7 +111,18 @@ class ObjectLoader extends Loader {
 		var shapes = this.parseShapes( json["shapes"] );
 		var geometries = this.parseGeometries( json["geometries"], shapes );
 
-		var images = await this.parseImagesAsync( json["images"] );
+    // print(" ObjectLoader.parseAsync images1: ${json["images"]} ");
+
+		var images = await this.parseImages( json["images"], null );
+
+    // print(" ObjectLoader.parseAsync images2: ${images} ");
+
+    if(images != null) {
+      images.keys.forEach((k) {
+        var im = images[k];
+        // print(" key: ${k} data: ${im.data} url: ${im.url} ");
+      });
+    }
 
 		var textures = this.parseTextures( json["textures"], images );
 		var materials = this.parseMaterials( json["materials"], textures );
@@ -335,39 +324,34 @@ class ObjectLoader extends Loader {
 
 	}
 
-	parseImages( json, onLoad ) {
+	parseImages( json, onLoad ) async {
 
 		var scope = this;
 		var images = {};
 
 		var loader;
 
-		Function loadImage = ( url ) {
+		Function loadImage = ( url ) async {
 
 			scope.manager.itemStart( url );
 
-			return loader.load( url, () {
+			return await loader.loadAsync( url, () {
 
 				scope.manager.itemEnd( url );
 
-			}, null, () {
-
-				scope.manager.itemError( url );
-				scope.manager.itemEnd( url );
-
-			} );
+			});
 
 		};
 
-		Function deserializeImage = ( image ) {
+		Function deserializeImage = ( image ) async {
 
 			if ( image is String ) {
 
 				var url = image;
 
-				var path = RegExp("^(\/\/)|([a-z]+:(\/\/)?)", caseSensitive: false).hasMatch( url ) ? url : scope.resourcePath! + url;
+				var path = RegExp("^(\/\/)|([a-z]+:(\/\/)?)", caseSensitive: false).hasMatch( url ) ? url : (scope.resourcePath ?? "") + url;
 
-				return loadImage( path );
+				return await loadImage( path );
 
 			} else {
 
@@ -398,25 +382,25 @@ class ObjectLoader extends Loader {
 
 			for ( var i = 0, il = json.length; i < il; i ++ ) {
 
-				var image = json[ i ];
-				var url = image.url;
+				Map<String, dynamic> image = json[ i ];
+				var url = image["url"];
 
 				if ( url is List ) {
 
 					// load array of images e.g CubeTexture
 
-					images[ image.uuid ] = [];
+					images[ image["uuid"] ] = [];
 
 					for ( var j = 0, jl = url.length; j < jl; j ++ ) {
 
 						var currentUrl = url[ j ];
 
-						var deserializedImage = deserializeImage( currentUrl );
+						var deserializedImage = await deserializeImage( currentUrl );
 
 						if ( deserializedImage != null ) {
               
 
-              print(" ObjectLoader  deserializedImage TODO ");
+              images[ image["uuid"] ].add( deserializedImage );
 
 							// if ( deserializedImage is HTMLImageElement ) {
 
@@ -438,11 +422,11 @@ class ObjectLoader extends Loader {
 
 					// load single image
 
-					var deserializedImage = deserializeImage( image.url );
+					var deserializedImage = await deserializeImage( image["url"] );
 
 					if ( deserializedImage != null ) {
 
-						images[ image.uuid ] = deserializedImage;
+						images[ image["uuid"] ] = deserializedImage;
 
 					}
 
@@ -456,107 +440,7 @@ class ObjectLoader extends Loader {
 
 	}
 
-	parseImagesAsync( json ) async {
-
-		var scope = this;
-		var images = {};
-
-		var loader;
-
-		Function deserializeImage = ( image ) async {
-
-			if ( image is String ) {
-
-				var url = image;
-
-				var path = RegExp("^(\/\/)|([a-z]+:(\/\/)?)").hasMatch( url ) ? url : scope.resourcePath! + url;
-
-				return await loader.loadAsync( path );
-
-			} else {
-
-				if ( image.data ) {
-
-					return {
-						"data": getTypedArray( image.type, image.data ),
-						"width": image.width,
-						"height": image.height
-					};
-
-				} else {
-
-					return null;
-
-				}
-
-			}
-
-		};
-
-		if ( json != null && json.length > 0 ) {
-
-			loader = new ImageLoader( this.manager );
-			loader.setCrossOrigin( this.crossOrigin );
-
-			for ( var i = 0, il = json.length; i < il; i ++ ) {
-
-				var image = json[ i ];
-				var url = image.url;
-
-				if ( url is List ) {
-
-					// load array of images e.g CubeTexture
-
-					images[ image.uuid ] = [];
-
-					for ( var j = 0, jl = url.length; j < jl; j ++ ) {
-
-						var currentUrl = url[ j ];
-
-						var deserializedImage = await deserializeImage( currentUrl );
-
-						if ( deserializedImage != null ) {
-
-              print(" ObjectLoader TODO deserializedImage ");
-
-							// if ( deserializedImage is HTMLImageElement ) {
-
-							// 	images[ image.uuid ].add( deserializedImage );
-
-							// } else {
-
-							// 	// special case: handle array of data textures for cube textures
-
-							// 	images[ image.uuid ].add( new DataTexture( deserializedImage.data, deserializedImage.width, deserializedImage.height ) );
-
-							// }
-
-						}
-
-					}
-
-				} else {
-
-					// load single image
-
-					var deserializedImage = await deserializeImage( image.url );
-
-					if ( deserializedImage != null ) {
-
-						images[ image.uuid ] = deserializedImage;
-
-					}
-
-				}
-
-			}
-
-		}
-
-		return images;
-
-	}
-
+	
 	parseTextures( json, images ) {
 
 		Function parseConstant = ( value, type ) {
@@ -575,79 +459,82 @@ class ObjectLoader extends Loader {
 
 			for ( var i = 0, l = json.length; i < l; i ++ ) {
 
-				var data = json[ i ];
+				Map<String, dynamic> data = json[ i ];
 
-				if ( data.image == null ) {
+				if ( data['image'] == null ) {
 
-					print( 'THREE.ObjectLoader: No "image" specified for ${data.uuid}' );
+					print( 'THREE.ObjectLoader: No "image" specified for ${data["uuid"]}' );
 
 				}
 
-				if ( images[ data.image ] == null ) {
+				if ( images[ data["image"] ] == null ) {
 
-					print( 'THREE.ObjectLoader: Undefined image ${data.image}' );
+					print( 'THREE.ObjectLoader: Undefined image ${data["image"]}' );
 
 				}
 
 				var texture;
-				var image = images[ data.image ];
+				var image = images[ data["image"] ];
 
+        print("parseTextures uuid: ${data["image"]} image1 : ${image} ");
+        print("parseTextures uuid: ${data["image"]} image1 url : ${image.url} ");
 
-        print("1 ObjectLoader Image TODO ");
-				// if ( image is List ) {
+				if ( image is List ) {
 
-				// 	texture = new CubeTexture( image );
+					texture = new CubeTexture( image, null, null, null, null, null, null, null, null, null );
 
-				// 	if ( image.length == 6 ) texture.needsUpdate = true;
+					if ( image.length == 6 ) texture.needsUpdate = true;
 
-				// } else {
+				} else {
 
-				// 	if ( image && image.data ) {
+          print("parseTextures image: ${image.url} ");
 
-				// 		texture = new DataTexture( image.data, image.width, image.height );
+					if ( image != null && image.data != null && image.url == null ) {
 
-				// 	} else {
+						texture = new DataTexture( image.data, image.width, image.height, null, null, null, null, null, null, null, null, null );
 
-				// 		texture = new Texture( image );
+					} else {
 
-				// 	}
+						texture = new Texture( image, null, null, null, null, null, null, null, null, null );
 
-				// 	if ( image ) texture.needsUpdate = true; // textures can have null image data
+					}
 
-				// }
-
-				texture.uuid = data.uuid;
-
-				if ( data.name != null ) texture.name = data.name;
-
-				if ( data.mapping != null ) texture.mapping = parseConstant( data.mapping, TEXTURE_MAPPING );
-
-				if ( data.offset != null ) texture.offset.fromArray( data.offset );
-				if ( data.repeat != null ) texture.repeat.fromArray( data.repeat );
-				if ( data.center != null ) texture.center.fromArray( data.center );
-				if ( data.rotation != null ) texture.rotation = data.rotation;
-
-				if ( data.wrap != null ) {
-
-					texture.wrapS = parseConstant( data.wrap[ 0 ], TEXTURE_WRAPPING );
-					texture.wrapT = parseConstant( data.wrap[ 1 ], TEXTURE_WRAPPING );
+					if ( image != null ) texture.needsUpdate = true; // textures can have null image data
 
 				}
 
-				if ( data.format != null ) texture.format = data.format;
-				if ( data.type != null ) texture.type = data.type;
-				if ( data.encoding != null ) texture.encoding = data.encoding;
+				texture.uuid = data["uuid"];
 
-				if ( data.minFilter != null ) texture.minFilter = parseConstant( data.minFilter, TEXTURE_FILTER );
-				if ( data.magFilter != null ) texture.magFilter = parseConstant( data.magFilter, TEXTURE_FILTER );
-				if ( data.anisotropy != null ) texture.anisotropy = data.anisotropy;
+				if ( data["name"] != null ) texture.name = data["name"];
 
-				if ( data.flipY != null ) texture.flipY = data.flipY;
+				if ( data["mapping"] != null ) texture.mapping = parseConstant( data["mapping"], TEXTURE_MAPPING );
 
-				if ( data.premultiplyAlpha != null ) texture.premultiplyAlpha = data.premultiplyAlpha;
-				if ( data.unpackAlignment != null ) texture.unpackAlignment = data.unpackAlignment;
+				if ( data["offset"] != null ) texture.offset.fromArray( data["offset"] );
+				if ( data["repeat"] != null ) texture.repeat.fromArray( data["repeat"] );
+				if ( data["center"] != null ) texture.center.fromArray( data["center"] );
+				if ( data["rotation"] != null ) texture.rotation = data["rotation"];
 
-				textures[ data.uuid ] = texture;
+				if ( data["wrap"] != null ) {
+
+					texture.wrapS = parseConstant( data["wrap"][ 0 ], TEXTURE_WRAPPING );
+					texture.wrapT = parseConstant( data["wrap"][ 1 ], TEXTURE_WRAPPING );
+
+				}
+
+				if ( data["format"] != null ) texture.format = data["format"];
+				if ( data["type"] != null ) texture.type = data["type"];
+				if ( data["encoding"] != null ) texture.encoding = data["encoding"];
+
+				if ( data["minFilter"] != null ) texture.minFilter = parseConstant( data["minFilter"], TEXTURE_FILTER );
+				if ( data["magFilter"] != null ) texture.magFilter = parseConstant( data["magFilter"], TEXTURE_FILTER );
+				if ( data["anisotropy"] != null ) texture.anisotropy = data["anisotropy"];
+
+				if ( data["flipY"] != null ) texture.flipY = data["flipY"];
+
+				if ( data["premultiplyAlpha"] != null ) texture.premultiplyAlpha = data["premultiplyAlpha"];
+				if ( data["unpackAlignment"] != null ) texture.unpackAlignment = data["unpackAlignment"];
+
+				textures[ data["uuid"] ] = texture;
 
 			}
 

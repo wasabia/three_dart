@@ -49,7 +49,7 @@ class LineCurve extends Curve {
 
   }
 
-  getTangent ( t, optionalTarget ) {
+  getTangent ( t, [optionalTarget] ) {
 
     var tangent = optionalTarget ?? new Vector2(null,null);
 

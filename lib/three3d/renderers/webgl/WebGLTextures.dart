@@ -1406,7 +1406,7 @@ class WebGLTextures {
 
 	safeSetTextureCube( texture, slot ) {
 
-		if ( texture != null && texture.isWebGLCubeRenderTarget ) {
+		if ( texture != null && texture is WebGLCubeRenderTarget ) {
 
 			if ( warnedTextureCube == false ) {
 

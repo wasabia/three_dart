@@ -95,6 +95,7 @@ class Object3D with EventDispatcher {
   Skeleton? skeleton;
 
   Material? overrideMaterial;
+  dynamic customDistanceMaterial;
 
   /**
 	 * Custom depth material to be used when rendering to the depth map. Can only be used in context of meshes.
@@ -650,19 +651,8 @@ class Object3D with EventDispatcher {
 	}
 
 	updateMatrix() {
-
-    // print(" Object3D.updateMatrix ${this.type} ${this.id}  ");
-    // print(" Object3D.updateMatrix position ${this.position.toJSON()}   ");
-    // print(" Object3D.updateMatrix quaternion ${this.quaternion.toJSON()}   ");
-    // print(" Object3D.updateMatrix scale ${this.scale.toJSON()}   ");
-    // print(" Object3D.updateMatrix 1 matrix ${this.matrix.toJSON()}   ");
-
 		this.matrix.compose( this.position, this.quaternion, this.scale );
-
-    // print(" Object3D.updateMatrix 2 matrix ${this.matrix.toJSON()}   ");
-
 		this.matrixWorldNeedsUpdate = true;
-
 	}
 
 	updateMatrixWorld( bool force ) {
@@ -815,7 +805,7 @@ class Object3D with EventDispatcher {
 
 		} else if ( this.isMesh || this.isLine || this.isPoints ) {
 
-			object["geometry"] = serialize( meta!.geometries, this.geometry, null );
+			object["geometry"] = serialize( meta!.geometries, this.geometry, meta );
 
 			var parameters = this.geometry!.parameters;
 
@@ -829,13 +819,13 @@ class Object3D with EventDispatcher {
 
 						var shape = shapes[ i ];
 
-						serialize( meta.shapes, shape, null );
+						serialize( meta.shapes, shape, meta );
 
 					}
 
 				} else {
 
-					serialize( meta.shapes, shapes, null );
+					serialize( meta.shapes, shapes, meta );
 
 				}
 
@@ -868,12 +858,12 @@ class Object3D with EventDispatcher {
 
       if(this.material is List) {
         for ( var i = 0, l = this.material.length; i < l; i ++ ) {
-          uuids.add( serialize( meta!.materials, this.material[ i ], null ) );
+          uuids.add( serialize( meta!.materials, this.material[ i ], meta ) );
         }
 
         object["material"] = uuids;
       } else {
-        object["material"] = serialize( meta!.materials, this.material, null );
+        object["material"] = serialize( meta!.materials, this.material, meta );
       }
       
 		}
@@ -921,6 +911,10 @@ class Object3D with EventDispatcher {
 			var shapes = extractFromCache( meta.shapes );
 			var skeletons = extractFromCache( meta.skeletons );
 			var animations = extractFromCache( meta.animations );
+
+
+      print( textures );
+      print(" isRootObject: ${isRootObject} ");
 
 			if ( geometries.length > 0 ) output["geometries"] = geometries;
 			if ( materials.length > 0 ) output["materials"] = materials;

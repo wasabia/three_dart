@@ -31,7 +31,7 @@ class MeshDepthMaterial extends Material {
   bool fog = false;
 
 
-  MeshDepthMaterial( Map<String, dynamic> parameters ) : super() {
+  MeshDepthMaterial( [Map<String, dynamic>? parameters] ) : super() {
 
     this.displacementMap = null;
 

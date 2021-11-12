@@ -4,17 +4,14 @@ class InstancedBufferAttribute extends BufferAttribute {
 
   late num meshPerAttribute;
   bool isInstancedBufferAttribute = true;
+  String type = "InstancedBufferAttribute";
 
-  InstancedBufferAttribute( array, itemSize, normalized, [num meshPerAttribute = 1] ) : super(array, itemSize, normalized) {
-    if ( normalized is num ) {
-
-      meshPerAttribute = normalized;
-
-      normalized = false;
-
-      print( 'THREE.InstancedBufferAttribute: The constructor now expects normalized as the third argument.' );
-
-    }
+  InstancedBufferAttribute( array, itemSize, [bool normalized = false, num meshPerAttribute = 1] ) : super(array, itemSize, normalized) {
+    // if ( normalized is num ) {
+    //   meshPerAttribute = normalized;
+    //   normalized = false;
+    //   print( 'THREE.InstancedBufferAttribute: The constructor now expects normalized as the third argument.' );
+    // }
 
 
     this.meshPerAttribute = meshPerAttribute;

@@ -98,7 +98,7 @@ class WebGLRenderer {
 
   var _scissorTest = false;
 
-  late List _currentDrawBuffers;
+  late List<int> _currentDrawBuffers;
 
   // frustum
 
@@ -562,13 +562,14 @@ class WebGLRenderer {
     var frontFaceCW = (object.isMesh && object.matrixWorld.determinant() < 0);
 
 
-    // print(" WebGLRenderer.renderBufferDirect object: ${object.type} ${object.id} material: ${material.type} map: ${material.map} id: ${material.id} geometry: ${geometry.type} ${geometry.id} object.isMesh: ${object.isMesh} frontFaceCW: ${frontFaceCW} ");
+    // print("${DateTime.now().millisecondsSinceEpoch} - ${DateTime.now().microsecondsSinceEpoch}  WebGLRenderer.renderBufferDirect object: ${object.type} ${object.id} material: ${material.type} map: ${material.map} id: ${material.id} geometry: ${geometry.type} ${geometry.id} object.isMesh: ${object.isMesh} frontFaceCW: ${frontFaceCW} ");
 
    
     WebGLProgram program = setProgram(camera, scene, material, object);
 
     state.setMaterial(material, frontFaceCW);
 
+    // print("renderBufferDirect - 0: ${DateTime.now().millisecondsSinceEpoch} - ${DateTime.now().microsecondsSinceEpoch}  ");
 
     var index = geometry.index;
 
@@ -670,6 +671,9 @@ class WebGLRenderer {
       renderer.render(drawStart, drawCount);
     }
 
+    // print("renderBufferDirect - 1: ${DateTime.now().millisecondsSinceEpoch} - ${DateTime.now().microsecondsSinceEpoch}  ");
+
+
   }
 
   // Compile
@@ -729,7 +733,6 @@ class WebGLRenderer {
     if (_isContextLost == true) return;
 
     // update scene graph
-
     if (scene.autoUpdate == true) scene.updateMatrixWorld(false);
 
     // update camera matrices and frustum
@@ -807,6 +810,10 @@ class WebGLRenderer {
     // print("opaqueObjects: ${opaqueObjects} ");
     // print("transmissiveObjects: ${transmissiveObjects} ");
     // print("transparentObjects: ${transparentObjects} ");
+
+
+    // print(" renderObjects: scene: ${scene} ${scene.name} -1:${DateTime.now().millisecondsSinceEpoch} - ${DateTime.now().microsecondsSinceEpoch}  ");
+    // print(" ============================================ ");
 
 
     if (opaqueObjects.length > 0) renderObjects(opaqueObjects, scene, camera);
@@ -1068,6 +1075,9 @@ class WebGLRenderer {
 
     // print(" render renderObject  type: ${object.type} material: ${material} geometry: ${geometry}");  
 
+    // print("1 render renderObject type: ${object.type} name: ${object.name} ${DateTime.now().millisecondsSinceEpoch}");  
+
+
     if(object.onBeforeRender != null) {
       object.onBeforeRender!(
         renderer: this,
@@ -1119,6 +1129,8 @@ class WebGLRenderer {
         geometry: geometry,
         material: material,
         group: group);
+
+    // print("2 render renderObject type: ${object.type} name: ${object.name} ${DateTime.now().millisecondsSinceEpoch}");
   }
 
   getProgram( material, scene, object ) {
@@ -1544,6 +1556,10 @@ class WebGLRenderer {
 			}
 
 			materials.refreshMaterialUniforms( m_uniforms, material, _pixelRatio, _height, _transmissionRenderTarget );
+
+
+      // print("m_uniforms  ");
+      // print(m_uniforms);
 
 			WebGLUniforms.upload( _gl, materialProperties["uniformsList"], m_uniforms, textures );
 

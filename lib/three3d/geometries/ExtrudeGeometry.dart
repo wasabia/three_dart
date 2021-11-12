@@ -809,7 +809,7 @@ class WorldUVGenerator {
 
 }
 
-toJSON2( shapes, Map<String, dynamic> options, data ) {
+toJSON2( shapes, Map<String, dynamic>? options, data ) {
 
   if(shapes != null) {
     	data["shapes"] = [];

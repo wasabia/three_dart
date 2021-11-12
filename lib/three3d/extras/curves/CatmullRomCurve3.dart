@@ -100,7 +100,7 @@ class CatmullRomCurve3 extends Curve {
   }
 
 
-  getPoint( t, optionalTarget ) {
+  getPoint( t, [optionalTarget] ) {
 
     var point = optionalTarget ?? Vector3.init();
 
@@ -186,28 +186,31 @@ class CatmullRomCurve3 extends Curve {
 
   }
 
+  clone() {
+    return CatmullRomCurve3().copy(this);
+  }
     
-  // copy ( source ) {
+  copy ( source ) {
 
-  //   Curve.prototype.copy.call( this, source );
+    super.copy( source );
 
-  //   this.points = [];
+    this.points = [];
 
-  //   for ( var i = 0, l = source.points.length; i < l; i ++ ) {
+    for ( var i = 0, l = source.points.length; i < l; i ++ ) {
 
-  //     var point = source.points[ i ];
+      var point = source.points[ i ];
 
-  //     this.points.push( point.clone() );
+      this.points.add( point.clone() );
 
-  //   }
+    }
 
-  //   this.closed = source.closed;
-  //   this.curveType = source.curveType;
-  //   this.tension = source.tension;
+    this.closed = source.closed;
+    this.curveType = source.curveType;
+    this.tension = source.tension;
 
-  //   return this;
+    return this;
 
-  // }
+  }
 
   // toJSON() {
 

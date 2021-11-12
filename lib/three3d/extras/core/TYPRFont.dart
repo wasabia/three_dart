@@ -13,7 +13,7 @@ class TYPRFont extends Font {
 
     for (var p = 0, pl = paths.length; p < pl; p++) {
       // Array.prototype.push.apply( shapes, paths[ p ].toShapes() );
-      shapes.addAll(paths[p].toShapes(true, true));
+      shapes.addAll(paths[p].toShapes(true, false));
     }
 
     return shapes;

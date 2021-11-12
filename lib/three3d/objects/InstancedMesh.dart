@@ -11,9 +11,10 @@ var _mesh = Mesh(BufferGeometry(), Material());
 
 class InstancedMesh extends Mesh {
 
-  late BufferAttribute instanceMatrix;
+  late InstancedBufferAttribute instanceMatrix;
   late BufferAttribute? instanceColor;
- 
+  
+  String type = "InstancedMesh";
 
   bool isInstancedMesh = true;
 
@@ -106,14 +107,12 @@ class InstancedMesh extends Mesh {
 
 		}
 
-		color.toArray( this.instanceColor!.array, index * 3 );
+		color.toArray( this.instanceColor!.array,  offset: index * 3 );
 
 	}
 
-	setMatrixAt ( index, matrix ) {
-
-		matrix.toArray( this.instanceMatrix.array, index * 16 );
-
+	setMatrixAt ( index, Matrix4 matrix ) {
+		matrix.toArray( this.instanceMatrix.array, offset: index * 16 );
 	}
 
 	updateMorphTargets () {

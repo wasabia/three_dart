@@ -27,7 +27,7 @@ class TextGeometry extends ExtrudeGeometry {
 
 	factory TextGeometry(String text, Map<String, dynamic> parameters) {
 
-		Font font = parameters["font"];
+		Font? font = parameters["font"];
 
 		if ( ! ( font != null && font.isFont ) ) {
 			throw( 'THREE.TextGeometry: font parameter is not an instance of THREE.Font.' );
