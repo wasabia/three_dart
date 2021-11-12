@@ -12,6 +12,28 @@ Desktop Mac, Windows, Linux TODO, need flutter_gl support
 TODO
 
 
+## Usage
+
+check example project
+
+```
+camera = new THREE.PerspectiveCamera( 40, 1, 0.1, 10 );
+camera.position.z = 3;
+
+scene = new THREE.Scene();
+camera.lookAt(scene.position);
+
+scene.background = THREE.Color(1.0, 1.0, 1.0);
+scene.add( new THREE.AmbientLight( 0x222244, null ) );
+
+var geometryCylinder = new THREE.CylinderGeometry( 0.5, 0.5, 1, 32 );
+var materialCylinder = new THREE.MeshPhongMaterial( { "color": 0xff0000 } );
+
+mesh = new THREE.Mesh( geometryCylinder, materialCylinder );
+scene.add( mesh );
+```
+
+
 ## Example
 
 ```
@@ -24,7 +46,9 @@ cd example && flutter run
 
 ## TODO
 - unit test
-
+- more example
+- README && Document
+- and so on...
 
 ## Issues
 File any issues, bugs, or feature requests.
