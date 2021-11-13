@@ -5,7 +5,7 @@ import 'package:example/webgl_geometry_shapes.dart';
 import 'package:example/webgl_geometry_text.dart';
 import 'package:example/webgl_loader_obj.dart';
 import 'package:example/webgl_materials_browser.dart';
-import 'package:example/webgl_shadow_demo1.dart';
+import 'package:example/webgl_shadow_contact.dart';
 import 'package:flutter/material.dart';
 
 
@@ -92,8 +92,8 @@ class _MyAppState extends State<ExampleApp> {
       page = webgl_loader_obj(fileName: fileName);
     } else if(fileName == "webgl_materials_browser") {
       page = webgl_materials_browser(fileName: fileName);
-    } else if(fileName == "webgl_shadow_demo1") {
-      page = webgl_shadow_demo1(fileName: fileName);
+    } else if(fileName == "webgl_shadow_contact") {
+      page = webgl_shadow_contact(fileName: fileName);
     } else if(fileName == "webgl_geometry_text") {
       page = webgl_geometry_text(fileName: fileName);
     } else if(fileName == "webgl_geometry_shapes") {
