@@ -30,11 +30,10 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   flutter_gl:
-    path: ../../flutter_gl/flutter_gl
   three_dart:
     path: ../
   three_dart_jsm:
-    path: ../../three_dart_plugins/three_dart_jsm  
+    git: git@github.com:wasabia/three_dart_jsm.git
 
 dev_dependencies:
   flutter_test:
