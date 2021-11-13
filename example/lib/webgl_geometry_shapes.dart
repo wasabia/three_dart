@@ -537,9 +537,9 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
     render();
 
-    // Future.delayed(Duration(milliseconds: 40), () {
-    //   animate();
-    // });
+    Future.delayed(Duration(milliseconds: 40), () {
+      animate();
+    });
   }
 
 
