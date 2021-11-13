@@ -3,6 +3,7 @@ import 'filesJson.dart';
 import 'webgl_camera_array.dart';
 import 'webgl_geometry_shapes.dart';
 import 'webgl_geometry_text.dart';
+import 'webgl_instancing_performance.dart';
 import 'webgl_loader_obj.dart';
 import 'webgl_materials_browser.dart';
 import 'package:flutter/material.dart';
@@ -97,6 +98,8 @@ class _MyAppState extends State<ExampleApp> {
       page = webgl_geometry_text(fileName: fileName);
     } else if(fileName == "webgl_geometry_shapes") {
       page = webgl_geometry_shapes(fileName: fileName);
+    } else if(fileName == "webgl_instancing_performance") {
+      page = webgl_instancing_performance(fileName: fileName);
     } else {
       throw("_goto fileName ${fileName} is not support yet ");
     }

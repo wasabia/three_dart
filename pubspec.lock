@@ -89,7 +89,7 @@ packages:
       name: flutter_gl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.5"
+    version: "0.0.6"
   flutter_gl_platform_interface:
     dependency: transitive
     description:

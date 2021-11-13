@@ -72,6 +72,7 @@ flutter:
     - assets/KOMO-v5.cube
     - assets/screenshots/
     - assets/models/obj/male02/male02.obj
+    - assets/models/json/
     - assets/textures/uv_grid_opengl.jpg
     - assets/textures/uv_grid_directx.jpg
     

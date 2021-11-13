@@ -31,25 +31,25 @@ class BufferGeometryLoader extends Loader {
 		loader.setWithCredentials( scope.withCredentials );
 		loader.load( url, ( text ) {
 
-			try {
+			// try {
 
 				onLoad!( scope.parse( convert.jsonDecode( text ) ) );
 
-			} catch ( e ) {
+			// } catch ( e ) {
 
-				if ( onError != null ) {
+			// 	if ( onError != null ) {
 
-					onError( e );
+			// 		onError( e );
 
-				} else {
+			// 	} else {
 
-					print( e );
+			// 		print( e );
 
-				}
+			// 	}
 
-				scope.manager.itemError( url );
+			// 	scope.manager.itemError( url );
 
-			}
+			// }
 
 		}, onProgress, onError );
 
@@ -126,7 +126,7 @@ class BufferGeometryLoader extends Loader {
 				if(attribute["isInstancedBufferAttribute"] == true) {
           bufferAttribute = new InstancedBufferAttribute( typedArray, attribute["itemSize"], attribute["normalized"] );
         } else {
-          bufferAttribute = new BufferAttribute( typedArray, attribute["itemSize"], attribute["normalized"] );
+          bufferAttribute = new BufferAttribute( typedArray, attribute["itemSize"], attribute["normalized"] == true );
         }
 			}
 
