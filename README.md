@@ -9,6 +9,7 @@ support web, iOS, Android
 
 Desktop Mac, Windows, Linux TODO, need flutter_gl support
 
+three.js r130
 
 ## Getting Started
 
@@ -58,3 +59,9 @@ File any issues, bugs, or feature requests.
 
 ## Contributing
 Pull request please!
+
+## Libraries and Plugins
+
+[https://github.com/wasabia/three_dart_jsm](https://github.com/wasabia/three_dart_jsm)
+[https://github.com/wasabia/opentype](https://github.com/wasabia/opentype)
+[https://github.com/wasabia/typr_dart](https://github.com/wasabia/typr_dart)

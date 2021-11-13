@@ -227,9 +227,6 @@ class _MyAppState extends State<webgl_materials_browser> {
 
     scene = new THREE.Scene();
 
-    // var pmremGenerator = new THREE.PMREMGenerator( renderer );
-    // scene.environment = pmremGenerator.fromScene( THREE_JSM.RoomEnvironment(), sigma: 0.04 ).texture;
-
     var ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 );
     scene.add( ambientLight );
 
