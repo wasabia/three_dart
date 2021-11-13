@@ -29,11 +29,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
-  flutter_gl:
-  three_dart:
-    path: ../
-  three_dart_jsm:
-    git: git@github.com:wasabia/three_dart_jsm.git
+  flutter_gl: ^0.0.6
+  three_dart: ^0.0.1
+  three_dart_jsm: ^0.0.1
 
 dev_dependencies:
   flutter_test:
@@ -63,9 +61,7 @@ flutter:
     - assets/lut.cube
     - assets/demo.png
     - assets/KOMO-v5.cube
-    - assets/screenshots/webgl_camera_array.jpg
-    - assets/screenshots/webgl_loader_obj.jpg
-    - assets/screenshots/webgl_geometry_text.jpg
+    - assets/screenshots/
     - assets/models/obj/male02/male02.obj
     - assets/textures/uv_grid_opengl.jpg
 
