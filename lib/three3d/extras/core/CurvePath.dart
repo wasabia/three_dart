@@ -143,7 +143,7 @@ class CurvePath extends Curve {
 
 	}
 
-	getSpacedPoints ( {num divisions = 40, num offset = 0.0} ) {
+	getSpacedPoints ( [num divisions = 40, num offset = 0.0] ) {
 
 		var points = [];
 
