@@ -1,13 +1,11 @@
-import 'package:example/filesJson.dart';
-import 'package:example/tagsJson.dart';
-import 'package:example/webgl_camera_array.dart';
-import 'package:example/webgl_geometry_shapes.dart';
-import 'package:example/webgl_geometry_text.dart';
-import 'package:example/webgl_loader_obj.dart';
-import 'package:example/webgl_materials_browser.dart';
-import 'package:example/webgl_shadow_demo1.dart';
+import 'filesJson.dart';
+import 'webgl_camera_array.dart';
+import 'webgl_geometry_shapes.dart';
+import 'webgl_geometry_text.dart';
+import 'webgl_loader_obj.dart';
+import 'webgl_materials_browser.dart';
+import 'webgl_shadow_demo1.dart';
 import 'package:flutter/material.dart';
-
 
 class ExampleApp extends StatefulWidget {
   ExampleApp({Key? key}) : super(key: key);
