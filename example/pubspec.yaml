@@ -31,16 +31,6 @@ dependencies:
   flutter_gl: ^0.0.6
   three_dart: ^0.0.1
   three_dart_jsm: ^0.0.1
-  
-
-dependency_overrides:
-  three_dart:
-    path: ../
-  three_dart_jsm:
-    path: ../../three_dart_plugins/three_dart_jsm
-  flutter_gl:
-    path: ../../flutter_gl/flutter_gl
-
 
 dev_dependencies:
   flutter_test:
