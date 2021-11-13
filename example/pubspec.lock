@@ -15,13 +15,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.8.1"
-  bidi_dart:
-    dependency: transitive
-    description:
-      path: "../../bidi_dart"
-      relative: true
-    source: path
-    version: "0.0.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -100,10 +93,10 @@ packages:
   flutter_gl:
     dependency: "direct main"
     description:
-      path: "../../flutter_gl/flutter_gl"
-      relative: true
-    source: path
-    version: "0.0.5"
+      name: flutter_gl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.6"
   flutter_gl_platform_interface:
     dependency: transitive
     description:
@@ -177,12 +170,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
-  opentype:
+  opentype_dart:
     dependency: transitive
     description:
-      path: "../../opentype"
-      relative: true
-    source: path
+      name: opentype_dart
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.0.1"
   path:
     dependency: transitive
@@ -262,16 +255,16 @@ packages:
   three_dart:
     dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
+      name: three_dart
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.0.1"
   three_dart_jsm:
     dependency: "direct main"
     description:
-      path: "../../three_dart_plugins/three_dart_jsm"
-      relative: true
-    source: path
+      name: three_dart_jsm
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.0.1"
   typed_data:
     dependency: transitive
@@ -283,9 +276,9 @@ packages:
   typr_dart:
     dependency: transitive
     description:
-      path: "../../typr_dart"
-      relative: true
-    source: path
+      name: typr_dart
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.0.1"
   universal_html:
     dependency: transitive
