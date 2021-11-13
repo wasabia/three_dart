@@ -130,7 +130,7 @@ class Curve {
 
 	// Get sequence of points using getPointAt( u )
 
-	getSpacedPoints ( {num divisions = 5} ) {
+	getSpacedPoints ( [num divisions = 5, num offset = 0] ) {
 
 		var points = [];
 

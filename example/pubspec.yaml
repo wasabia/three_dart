@@ -30,7 +30,9 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   flutter_gl: ^0.0.6
-  three_dart: ^0.0.1
+  # three_dart: ^0.0.1
+  three_dart:
+    path: ../
   three_dart_jsm: ^0.0.1
 
 dev_dependencies:
