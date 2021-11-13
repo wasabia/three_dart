@@ -229,7 +229,7 @@ class _MyAppState extends State<webgl_loader_obj> {
     // texture
 
     var textureLoader = new THREE.TextureLoader( null );
-    texture = await textureLoader.loadAsync( 'assets/textures/uv_grid_opengl.jpg', null);
+    texture = await textureLoader.loadAsync( 'assets/textures/uv_grid_directx.jpg', null);
 
     texture.magFilter = THREE.LinearFilter;
     texture.minFilter = THREE.LinearMipmapLinearFilter;

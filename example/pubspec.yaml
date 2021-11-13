@@ -63,7 +63,7 @@ flutter:
     - assets/screenshots/
     - assets/models/obj/male02/male02.obj
     - assets/textures/uv_grid_opengl.jpg
-
+    - assets/textures/uv_grid_directx.jpg
     
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
