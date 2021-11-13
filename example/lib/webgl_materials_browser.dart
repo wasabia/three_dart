@@ -1,21 +1,12 @@
 import 'dart:async';
 
-import 'dart:typed_data';
-
-import 'dart:ui' as ui;
-
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 
-
 import 'package:three_dart/three_dart.dart' as THREE;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
-
-
 
 class webgl_materials_browser extends StatefulWidget {
   String fileName;
