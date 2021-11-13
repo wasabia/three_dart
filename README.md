@@ -13,6 +13,9 @@ three.js r130
 
 ## Getting Started
 
+First at all. Follow flutter_gl Usage [flutter_gl](https://github.com/wasabia/flutter_gl)
+
+
 TODO
 
 
