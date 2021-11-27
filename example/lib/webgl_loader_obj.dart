@@ -56,11 +56,14 @@ class _MyAppState extends State<webgl_loader_obj> {
     width = screenSize!.width;
     height = screenSize!.height;
 
-    three3dRender = FlutterGlPlugin(width.toInt(), height.toInt(), dpr: dpr);
+    three3dRender = FlutterGlPlugin();
 
     Map<String, dynamic> _options = {
       "antialias": true,
-      "alpha": false
+      "alpha": false,
+      "width": width.toInt(), 
+      "height": height.toInt(), 
+      "dpr": dpr
     };
     
     await three3dRender.initialize(options: _options);

@@ -238,12 +238,11 @@ class WebGLTextures {
 	//
 
 	deallocateTexture( texture ) {
+    // print("WebGLTextures.deallocateTexture texture: ${texture} ");
 
 		var textureProperties = properties.get( texture );
 
 		if ( textureProperties["__webglInit"] == null ) return;
-
-    print("WebGLTextures.deallocateTexture texture: ${texture} ");
 
 		gl.deleteTexture( textureProperties["__webglTexture"] );
 

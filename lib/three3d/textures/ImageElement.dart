@@ -19,4 +19,9 @@ class ImageElement {
     this.height = height;
     this.depth = depth;
   }
+
+
+  dispose() {
+    data?.dispose();
+  }
 }
