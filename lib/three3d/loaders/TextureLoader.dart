@@ -49,7 +49,7 @@ class TextureLoader extends Loader {
 			texture.image = image;
 
 			// JPEGs can't have an alpha channel, so memory can be saved by storing them as RGB.
-			var isJPEG = url.indexOf(".jpg") > 0 || url.indexOf(".jpeg") > 0 || url.indexOf("data:image/jpeg") == 0;
+			var isJPEG = url.indexOf(".JPG") > 0 || url.indexOf(".JPEG") > 0 || url.indexOf(".jpg") > 0 || url.indexOf(".jpeg") > 0 || url.indexOf("data:image/jpeg") == 0;
 
 			texture.format = RGBAFormat;
 			texture.needsUpdate = true;

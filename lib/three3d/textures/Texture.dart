@@ -244,6 +244,13 @@ class Texture with EventDispatcher {
 
 	dispose () {
 		this.dispatchEvent( Event({"type": "dispose"}) );
+    if(image is List) {
+      image.forEach((img) {
+        img.dispose();
+      });
+    } else {
+      image?.dispose();
+    }
 	}
 
 	transformUv ( uv ) {

@@ -31,7 +31,7 @@ class ImageLoaderLoader {
       // Get the processed image from the isolate.
       var image = await receivePort.first as Image?;
 
-      // print(" load image and decode 2: ${DateTime.now().millisecondsSinceEpoch}............ ");
+      
       if(image != null) {
         var _pixels = image.getBytes(format: Format.rgba);
         imageElement = ImageElement(url: url, data: Uint8Array.from(_pixels) , width: image.width, height: image.height);
@@ -40,7 +40,7 @@ class ImageLoaderLoader {
     } else {
       var image = await imageDecoder(null, url);
       if(image != null) {
-        imageElement = ImageElement(url: url, data: Uint8Array.from(image.pixels), width: image.width, height: image.height);
+        imageElement = ImageElement(url: url, data: image.pixels, width: image.width, height: image.height);
       }
       
     }
