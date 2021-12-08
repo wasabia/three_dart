@@ -200,7 +200,7 @@ class WebGLRenderList {
     if (a.groupOrder != b.groupOrder) {
       return a.groupOrder - b.groupOrder;
     } else if (a.renderOrder != b.renderOrder) {
-      return a.renderOrder - b.renderOrder;
+      return (a.renderOrder - b.renderOrder).toInt();
     } else if (a.z != b.z) {
       final _v = b.z - a.z;
       return _v > 0 ? 1 : -1;

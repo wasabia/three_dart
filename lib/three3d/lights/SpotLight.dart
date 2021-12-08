@@ -5,7 +5,7 @@ class SpotLight extends Light {
   String type = "SpotLight";
   bool isSpotLight = true;
 
-  SpotLight( color, intensity, distance, angle, penumbra, decay ) : super(color, intensity) {
+  SpotLight( color, [intensity, distance, angle, penumbra, decay] ) : super(color, intensity) {
     this.position.copy( Object3D.DefaultUp );
     this.updateMatrix();
 

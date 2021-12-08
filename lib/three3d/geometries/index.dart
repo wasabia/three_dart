@@ -27,3 +27,5 @@ part './EdgesGeometry.dart';
 part './OctahedronGeometry.dart';
 part './TetrahedronGeometry.dart';
 part './TorusGeometry.dart';
+part './ParametricGeometry.dart';
+

@@ -39,7 +39,7 @@ class MeshToonMaterial extends Material {
 
   bool isMeshToonMaterial = true;
 
-  MeshToonMaterial( parameters ) : super() {
+  MeshToonMaterial( [parameters] ) : super() {
     this.defines = { 'TOON': '' };
 
     this.type = 'MeshToonMaterial';

@@ -18,11 +18,11 @@ class SpriteMaterial extends Material {
 
   bool transparent = true;
 
-  SpriteMaterial( parameters ) : super() {
+  SpriteMaterial( [parameters] ) : super() {
     
     this.type = 'SpriteMaterial';
 
-    this.color = new Color( 255,255,255 );
+    this.color = new Color( 1,1,1 );
 
 
     this.setValues( parameters );

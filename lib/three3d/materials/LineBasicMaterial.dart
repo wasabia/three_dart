@@ -16,7 +16,7 @@ class LineBasicMaterial extends Material {
   bool isLineBasicMaterial = true;
   String type = 'LineBasicMaterial';
 
-  LineBasicMaterial( Map<String, dynamic> parameters ) : super() {
+  LineBasicMaterial( [Map<String, dynamic>? parameters] ) : super() {
     
     this.color = new Color( 1,1,1 );
     this.linewidth = 1;
@@ -38,6 +38,10 @@ class LineBasicMaterial extends Material {
     
     return this;
 
+  }
+
+  clone() {
+    return LineBasicMaterial({}).copy(this);
   }
 
 }

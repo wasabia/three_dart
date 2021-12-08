@@ -24,7 +24,7 @@ class PointsMaterial extends Material {
 
   Color? color = new Color( 1,1,1 );
 
-  PointsMaterial( parameters ) {
+  PointsMaterial( [parameters] ) {
     this.setValues( parameters );
   }
 

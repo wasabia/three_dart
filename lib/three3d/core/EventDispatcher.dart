@@ -10,6 +10,7 @@ class Event {
   late dynamic? attachment;
   late dynamic? action;
   late dynamic? direction;
+  String? mode;
 
   Event(Map<String, dynamic> json) {
     this.type = json["type"];
@@ -17,6 +18,7 @@ class Event {
     this.attachment = json["attachment"];
     this.action = json["action"];
     this.direction = json["direction"];
+    this.mode = json["mode"];
   }
 }
 

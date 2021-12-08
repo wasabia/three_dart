@@ -29,6 +29,7 @@ class Mesh extends Object3D {
 
   String type = "Mesh";
   bool isMesh = true;
+  String? tag;
 
   Mesh(BufferGeometry geometry, material) : super() {
     this.geometry = geometry;
@@ -265,7 +266,7 @@ class Mesh extends Object3D {
 
 						intersection = checkBufferGeometryIntersection( this, material, raycaster, _meshray, position, morphPosition, morphTargetsRelative, uv, uv2, a, b, c );
 
-						if ( intersection ) {
+						if ( intersection != null ) {
 
 							intersection.faceIndex = Math.floor( i / 3 ); // triangle number in non-indexed buffer semantics
 							intersects.add( intersection );

@@ -370,6 +370,12 @@ class Material with EventDispatcher {
       wireframe = newValue;
     } else if(key == "wireframeLinewidth") {
       wireframeLinewidth = newValue;
+    } else if(key == "specular") {
+      if(newValue.runtimeType == Color) {
+        specular = newValue;
+      } else {
+        specular = Color(0,0,0).setHex(newValue);
+      }
     } else {
       throw("Material.setValues key: ${key} newValue: ${newValue} is not support");
     }
@@ -681,6 +687,33 @@ class Material with EventDispatcher {
       return this.color;
     } else if(propertyName == "opacity") {
       return this.opacity;
+    } else if(propertyName == "color") {
+      return this.color;
+    } else if(propertyName == "emissive") {
+      return this.emissive;
+    } else if(propertyName == "flatShading") {
+      return this.flatShading;
+    } else if(propertyName == "wireframe") {
+      return this.wireframe;  
+    } else if(propertyName == "vertexColors") {
+      return this.vertexColors;  
+    } else if(propertyName == "transparent") {
+      return this.transparent;
+    } else if(propertyName == "depthTest") {
+      return this.depthTest;  
+    } else if(propertyName == "depthWrite") {
+      return this.depthWrite;      
+    } else if(propertyName == "visible") {
+      return this.visible; 
+    } else if(propertyName == "blending") {
+      return this.blending; 
+    } else if(propertyName == "side") {
+      return this.side; 
+    } else if(propertyName == "roughness") {
+      return this.roughness;
+    } else if(propertyName == "metalness") {
+      return this.metalness;   
+    
     
     } else {
       throw("Material.getProperty type: ${type} propertyName: ${propertyName} is not support ");
@@ -692,6 +725,32 @@ class Material with EventDispatcher {
       this.color = value;
     } else if(propertyName == "opacity") {
       this.opacity = value;
+    } else if(propertyName == "emissive") {
+      this.emissive = value;
+    } else if(propertyName == "flatShading") {
+      this.flatShading = value;
+    } else if(propertyName == "wireframe") {
+      this.wireframe = value;
+    } else if(propertyName == "vertexColors") {
+      this.vertexColors = value;
+    } else if(propertyName == "transparent") {
+      this.transparent = value;
+    } else if(propertyName == "depthTest") {
+      this.depthTest = value;
+    } else if(propertyName == "depthWrite") {
+      this.depthWrite = value;
+    } else if(propertyName == "visible") {
+      this.visible = value;
+    } else if(propertyName == "blending") {
+      this.blending = value;
+    } else if(propertyName == "side") {
+      this.side = value;
+    } else if(propertyName == "roughness") {
+      this.roughness = value;
+    } else if(propertyName == "metalness") {
+      this.metalness = value;
+    
+      
     } else {
       throw("Material.setProperty type: ${type} propertyName: ${propertyName} is not support ");
     }

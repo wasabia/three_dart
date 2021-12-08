@@ -1,4 +1,6 @@
 
+import 'package:example/webgl_shadowmap_viewer.dart';
+
 import 'filesJson.dart';
 import 'webgl_camera_array.dart';
 import 'webgl_geometry_shapes.dart';
@@ -100,6 +102,9 @@ class _MyAppState extends State<ExampleApp> {
       page = webgl_geometry_shapes(fileName: fileName);
     } else if(fileName == "webgl_instancing_performance") {
       page = webgl_instancing_performance(fileName: fileName);
+    } else if(fileName == "webgl_shadowmap_viewer") {
+      page = webgl_shadowmap_viewer(fileName: fileName);
+
     } else {
       throw("_goto fileName ${fileName} is not support yet ");
     }

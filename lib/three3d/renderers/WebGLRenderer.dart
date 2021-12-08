@@ -555,12 +555,15 @@ class WebGLRenderer {
 
   renderBufferDirect(Camera camera, dynamic? scene, geometry, Material material,
       Object3D object, group) {
+
+   
     
     // renderBufferDirect second parameter used to be fog (could be null)
     if (scene == null) scene =  _emptyScene; 
 
     var frontFaceCW = (object.isMesh && object.matrixWorld.determinant() < 0);
 
+    //  print("renderBufferDirect object: ${object} name: ${object.name} tag: ${object.tag} frontFaceCW: ${frontFaceCW} ");
 
     // print("${DateTime.now().millisecondsSinceEpoch} - ${DateTime.now().microsecondsSinceEpoch}  WebGLRenderer.renderBufferDirect object: ${object.type} ${object.id} material: ${material.type} map: ${material.map} id: ${material.id} geometry: ${geometry.type} ${geometry.id} object.isMesh: ${object.isMesh} frontFaceCW: ${frontFaceCW} ");
 
@@ -627,6 +630,7 @@ class WebGLRenderer {
     var drawEnd = Math.min3(dataCount, rangeStart + rangeCount, groupStart + groupCount) - 1;
 
     var drawCount = Math.max(0, drawEnd - drawStart + 1);
+
 
 
     if (drawCount == 0) return;
@@ -870,6 +874,9 @@ class WebGLRenderer {
 
   projectObject(object, camera, groupOrder, sortObjects) {
     
+    // print("projectObject object: ${object} name: ${object.name} tag: ${object.tag}  ${object.visible} ${object.scale.toJSON()} ${object.children.length}  ");
+
+
     if (object.visible == false) return;
 
     bool visible = object.layers.test(camera.layers);
@@ -1074,7 +1081,6 @@ class WebGLRenderer {
       Material material, group) {
 
     // print(" render renderObject  type: ${object.type} material: ${material} geometry: ${geometry}");  
-
     // print("1 render renderObject type: ${object.type} name: ${object.name} ${DateTime.now().millisecondsSinceEpoch}");  
 
 
@@ -1248,6 +1254,7 @@ class WebGLRenderer {
 
 			// TODO (abelnation): add area lights shadow info to uniforms
 		}
+
 
 		var progUniforms = program.getUniforms();
 		var uniformsList = WebGLUniforms.seqWithValue( progUniforms.seq, uniforms );
@@ -1560,6 +1567,7 @@ class WebGLRenderer {
 
       // print("m_uniforms  ");
       // print(m_uniforms);
+      // print(m_uniforms["ambientLightColor"]["value"].runtimeType);
 
 			WebGLUniforms.upload( _gl, materialProperties["uniformsList"], m_uniforms, textures );
 
