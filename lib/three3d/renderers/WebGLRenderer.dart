@@ -556,14 +556,14 @@ class WebGLRenderer {
   renderBufferDirect(Camera camera, dynamic? scene, geometry, Material material,
       Object3D object, group) {
 
-   
+      
     
     // renderBufferDirect second parameter used to be fog (could be null)
     if (scene == null) scene =  _emptyScene; 
 
     var frontFaceCW = (object.isMesh && object.matrixWorld.determinant() < 0);
 
-    //  print("renderBufferDirect object: ${object} name: ${object.name} tag: ${object.tag} frontFaceCW: ${frontFaceCW} ");
+    // print("renderBufferDirect object: ${object} name: ${object.name} tag: ${object.tag} frontFaceCW: ${frontFaceCW} ");
 
     // print("${DateTime.now().millisecondsSinceEpoch} - ${DateTime.now().microsecondsSinceEpoch}  WebGLRenderer.renderBufferDirect object: ${object.type} ${object.id} material: ${material.type} map: ${material.map} id: ${material.id} geometry: ${geometry.type} ${geometry.id} object.isMesh: ${object.isMesh} frontFaceCW: ${frontFaceCW} ");
 
@@ -578,7 +578,7 @@ class WebGLRenderer {
 
     var position = geometry.attributes["position"];
 
-    // print(" WebGLRenderer.renderBufferDirect geometry.index ${index.count} - ${index} position: ${position.count} - ${position}  ");
+    // print(" WebGLRenderer.renderBufferDirect geometry.index ${index?.count} - ${index} position: ${position.count} - ${position}  ");
 
     if (index == null) {
       if (position == null || position.count == 0) return;
@@ -663,7 +663,6 @@ class WebGLRenderer {
     } else if (object.type == "Sprite") {
       renderer.setMode(_gl.TRIANGLES);
     }
-
 
     if (object.isInstancedMesh) {
       renderer.renderInstances(drawStart, drawCount, object.count);
@@ -823,6 +822,7 @@ class WebGLRenderer {
     if (opaqueObjects.length > 0) renderObjects(opaqueObjects, scene, camera);
     if (transmissiveObjects.length > 0 ) renderTransmissiveObjects( opaqueObjects, transmissiveObjects, scene, camera );
     if (transparentObjects.length > 0) renderObjects(transparentObjects, scene, camera);
+
 
     if (_currentRenderTarget != null) {
       // resolve multisample renderbuffers to a single-sample texture if necessary

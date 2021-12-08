@@ -97,7 +97,7 @@ class Object3D with EventDispatcher {
   Skeleton? skeleton;
 
   Material? overrideMaterial;
-  dynamic customDistanceMaterial;
+  Material? customDistanceMaterial;
 
   /**
 	 * Custom depth material to be used when rendering to the depth map. Can only be used in context of meshes.

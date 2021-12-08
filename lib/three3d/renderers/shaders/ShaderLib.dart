@@ -59,7 +59,7 @@ Map<String, dynamic> ShaderLib = {
 			UniformsLib["fog"],
 			UniformsLib["lights"],
 			{
-				"emissive": { "value": new Color( 0,0,0 ) }
+				"emissive": { "value": Color.fromHex( 0x000000 ) }
 			}
 		] ),
 
@@ -83,8 +83,8 @@ Map<String, dynamic> ShaderLib = {
 			UniformsLib["fog"],
 			UniformsLib["lights"],
 			{
-				"emissive": { "value": new Color( 0,0,0 ) },
-				"specular": { "value": new Color( 17, 17, 17 ) },
+				"emissive": { "value": Color.fromHex(0x000000) },
+				"specular": { "value": Color.fromHex(0x111111) },
 				"shininess": { "value": 30 }
 			}
 		] ),
@@ -110,7 +110,7 @@ Map<String, dynamic> ShaderLib = {
 			UniformsLib["fog"],
 			UniformsLib["lights"],
 			{
-				"emissive": { "value": new Color( 0,0,0 ) }
+				"emissive": { "value": Color.fromHex(0x000000) }
 			}
 		] ),
 
@@ -270,7 +270,7 @@ Map<String, dynamic> ShaderLib = {
 			UniformsLib["lights"],
 			UniformsLib["fog"],
 			{
-				"color": { "value": new Color( 0,0,0 ) },
+				"color": { "value": Color.fromHex(0x000000) },
 				"opacity": { "value": 1.0 }
 			},
 		] ),
@@ -290,7 +290,7 @@ Map<String, dynamic> ShaderLib = {
         "clearcoatRoughnessMap": { "value": null },
         "clearcoatNormalScale": { "value": new Vector2( 1, 1 ) },
         "clearcoatNormalMap": { "value": null },
-        "sheenTint": { "value": new Color( 0,0,0 ) },
+        "sheenTint": { "value": Color.fromHex(0x000000) },
         "sheenRoughness": { "value": 0 },
         "transmission": { "value": 0 },
         "transmissionMap": { "value": null },

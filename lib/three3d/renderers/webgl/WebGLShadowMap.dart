@@ -35,9 +35,7 @@ class WebGLShadowMap {
 	bool autoUpdate = true;
 	bool needsUpdate = false;
 
-  // int type = 0;
 	int type = PCFShadowMap;
-  // int type = PCFSoftShadowMap;
 
   late WebGLShadowMap scope;
 
@@ -78,7 +76,7 @@ class WebGLShadowMap {
 
     fullScreenTri.setAttribute(
       'position',
-      BufferAttribute( _float32Array, 3, false )
+      Float32BufferAttribute( _float32Array, 3, false )
     );
     
     fullScreenMesh = new Mesh( fullScreenTri, shadowMaterialVertical );
@@ -91,7 +89,7 @@ class WebGLShadowMap {
 
 
 	render(List<Light> lights, scene, Camera camera ) {
-    
+  
 		if ( scope.enabled == false ) return;
 		if ( scope.autoUpdate == false && scope.needsUpdate == false ) return;
 
@@ -180,6 +178,7 @@ class WebGLShadowMap {
 			_renderer.clear(null, null, null);
 
 			var viewportCount = shadow.getViewportCount();
+
 
 			for ( var vp = 0; vp < viewportCount; vp ++ ) {
 
@@ -340,49 +339,49 @@ class WebGLShadowMap {
  
 		if ( object.visible == false ) return;
 
+    // print("WebGLShadowMap renderObject object: ${object} light: ${light} ");
+
 		var visible = object.layers.test( camera.layers );
 
 		if ( visible && ( object.isMesh || object.isLine || object.isPoints ) ) {
 
 			if ( ( object.castShadow || ( object.receiveShadow && type == VSMShadowMap ) ) && ( ! object.frustumCulled || _frustum.intersectsObject( object ) ) ) {
 
+        // print("renderObject light: ${light} 2 ");
+
 				object.modelViewMatrix.multiplyMatrices( shadowCamera.matrixWorldInverse, object.matrixWorld );
      
 				var geometry = _objects.update( object );
 				var material = object.material;
 
+				if ( material is List ) {
 
-        if ( material.visible ) {
+					var groups = geometry.groups;
+
+					for ( var k = 0, kl = groups.length; k < kl; k ++ ) {
+
+						var group = groups[ k ];
+						var groupMaterial = material[ group.materialIndex ];
+
+						if ( groupMaterial && groupMaterial.visible ) {
+
+							var depthMaterial = getDepthMaterial( object, geometry, groupMaterial, light, shadowCamera.near, shadowCamera.far, type );
+
+							_renderer.renderBufferDirect( shadowCamera, null, geometry, depthMaterial, object, group );
+
+						}
+
+					}
+
+				} else if ( material.visible ) {
+
 					var depthMaterial = getDepthMaterial( object, geometry, material, light, shadowCamera.near, shadowCamera.far, type );
+
+          // print("WebGLShadowMap object: ${object} light: ${light} depthMaterial: ${depthMaterial} ");
+
 					_renderer.renderBufferDirect( shadowCamera, null, geometry, depthMaterial, object, null );
+
 				}
-
-				// if ( material is List ) {
-
-				// 	var groups = geometry.groups;
-
-				// 	for ( var k = 0, kl = groups.length; k < kl; k ++ ) {
-
-				// 		var group = groups[ k ];
-				// 		var groupMaterial = material[ group.materialIndex ];
-
-				// 		if ( groupMaterial && groupMaterial.visible ) {
-
-				// 			var depthMaterial = getDepthMaterial( object, geometry, groupMaterial, light, shadowCamera.near, shadowCamera.far, type );
-
-				// 			_renderer.renderBufferDirect( shadowCamera, null, geometry, depthMaterial, object, group );
-
-				// 		}
-
-				// 	}
-
-				// } else if ( material.visible ) {
-
-				// 	var depthMaterial = getDepthMaterial( object, geometry, material, light, shadowCamera.near, shadowCamera.far, type );
-
-				// 	_renderer.renderBufferDirect( shadowCamera, null, geometry, depthMaterial, object, null );
-
-				// }
 
 			}
 

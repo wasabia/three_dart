@@ -371,13 +371,13 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     var vertexGlsl = versionString + prefixVertex + vertexShader;
     var fragmentGlsl = versionString + prefixFragment + fragmentShader;
 
-    // print(" USE_MAP: ${parameters.map}  vertexUvs: ${parameters.vertexUvs}-------------- ");
-    // print(" 111 ================= VERTEX  ");
+    // developer.log(" USE_MAP: ${parameters.map}  vertexUvs: ${parameters.vertexUvs}-------------- ");
+    // developer.log(" 111 ================= VERTEX  ");
     // developer.log(vertexGlsl);
-    // print(vertexGlsl);
-    // print("  111 ==================== FRAGMENT ");
+    // // print(vertexGlsl);
+    // developer.log("  111 ==================== FRAGMENT ");
     // developer.log(fragmentGlsl);
-    // print(fragmentGlsl);
+    // // print(fragmentGlsl);
 
 
     var glVertexShader = WebGLShader(gl, gl.VERTEX_SHADER, vertexGlsl);

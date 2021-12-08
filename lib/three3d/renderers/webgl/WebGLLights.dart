@@ -6,78 +6,78 @@ class UniformsCache {
 
   }
 
-	var lights = {};
+	Map<int, Map<String, dynamic>> lights = {};
 
   get ( light ) {
 
-			if ( lights[ light.id ] != null ) {
+    if ( lights[ light.id ] != null ) {
 
-				return lights[ light.id ];
+      return lights[ light.id ];
 
-			}
+    }
 
-			var uniforms;
+    var uniforms;
 
-			switch ( light.type ) {
+    switch ( light.type ) {
 
-				case 'DirectionalLight':
-					uniforms = {
-						"direction": new Vector3.init(),
-						"color": new Color(0,0,0)
-					};
-					break;
+      case 'DirectionalLight':
+        uniforms = {
+          "direction": new Vector3.init(),
+          "color": new Color(0,0,0)
+        };
+        break;
 
-				case 'SpotLight':
-					uniforms = {
-						"position": new Vector3.init(),
-						"direction": new Vector3.init(),
-						"color": new Color(0,0,0),
-						"distance": 0,
-						"coneCos": 0,
-						"penumbraCos": 0,
-						"decay": 0
-					};
-					break;
+      case 'SpotLight':
+        uniforms = {
+          "position": new Vector3.init(),
+          "direction": new Vector3.init(),
+          "color": new Color(0,0,0),
+          "distance": 0,
+          "coneCos": 0,
+          "penumbraCos": 0,
+          "decay": 0
+        };
+        break;
 
-				case 'PointLight':
-					uniforms = {
-						"position": new Vector3.init(),
-						"color": new Color(1,1,1),
-						"distance": 0,
-						"decay": 0
-					};
-					break;
+      case 'PointLight':
+        uniforms = {
+          "position": new Vector3.init(),
+          "color": new Color(1,1,1),
+          "distance": 0,
+          "decay": 0
+        };
+        break;
 
-				case 'HemisphereLight':
-					uniforms = {
-						"direction": new Vector3.init(),
-						"skyColor": new Color(0,0,0),
-						"groundColor": new Color(0,0,0)
-					};
-					break;
+      case 'HemisphereLight':
+        uniforms = {
+          "direction": new Vector3.init(),
+          "skyColor": new Color(0,0,0),
+          "groundColor": new Color(0,0,0)
+        };
+        break;
 
-				case 'RectAreaLight':
-					uniforms = {
-						"color": new Color(0,0,0),
-						"position": new Vector3.init(),
-						"halfWidth": new Vector3.init(),
-						"halfHeight": new Vector3.init()
-					};
-					break;
+      case 'RectAreaLight':
+        uniforms = {
+          "color": new Color(0,0,0),
+          "position": new Vector3.init(),
+          "halfWidth": new Vector3.init(),
+          "halfHeight": new Vector3.init()
+        };
+        break;
 
-			}
+    }
 
-			lights[ light.id ] = uniforms;
+    lights[ light.id ] = uniforms;
 
-			return uniforms;
+    return uniforms;
 
-		}
+  }
 
 }
 
 class ShadowUniformsCache {
 
-	var lights = {};
+	Map<int, Map<String, dynamic>> lights = {};
 
   get ( light ) {
 
@@ -197,9 +197,6 @@ class WebGLLights {
     };
 
 
-    print(" WebGLLights state ${state.ambient.runtimeType} ");
-
-
     vector3 = new Vector3.init();
     matrix4 = new Matrix4();
     matrix42 = new Matrix4();
@@ -215,7 +212,7 @@ class WebGLLights {
 
 		for ( var i = 0; i < 9; i ++ ) {
       state.probe[ i ].set( 0, 0, 0 );
-    };
+    }
 
 		var directionalLength = 0;
 		var pointLength = 0;
@@ -412,7 +409,7 @@ class WebGLLights {
 				hemiLength ++;
 
 			} else {
-        print(" WebGLLigts type: ${light.type} ..... ");
+        throw(" WebGLLigts type: ${light.type} is not support ..... ");
       }
 
 		}
