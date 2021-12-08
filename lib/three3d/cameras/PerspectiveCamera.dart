@@ -48,7 +48,7 @@ class PerspectiveCamera extends Camera {
     return this;
 	}
 
-  clone (bool recursive) {
+  clone ([bool recursive = false]) {
 
 		return PerspectiveCamera().copy( this, false );
 

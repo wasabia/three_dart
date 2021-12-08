@@ -27,6 +27,8 @@ class Object3D with EventDispatcher {
 
 	String uuid = MathUtils.generateUUID();
 
+  String? tag;
+  
 	String name = '';
 	String type = 'Object3D';
 
@@ -963,7 +965,7 @@ class Object3D with EventDispatcher {
 
   }
 
-	clone( bool recursive ) {
+	clone( [bool recursive = false] ) {
 
 		return Object3D().copy( this, recursive );
 
@@ -1047,10 +1049,34 @@ class Object3D with EventDispatcher {
       return null; 
     } else if(propertyName == "morphTargetInfluences") {
       return this.morphTargetInfluences;
-
+    } else if(propertyName == "castShadow") {
+      return this.castShadow;
+    } else if(propertyName == "receiveShadow") {
+      return this.receiveShadow;
+    } else if(propertyName == "visible") {
+      return this.visible;
+      
     } else {
       throw("Object3D.getProperty type: ${type} propertyName: ${propertyName} is not support ");
     }
+  }
+
+  setProperty(String propertyName, value) {
+    if(propertyName == "id") {
+      this.id = value;
+  
+    } else if(propertyName == "castShadow") {
+      this.castShadow = value;
+    } else if(propertyName == "receiveShadow") {
+      this.receiveShadow = value;
+    } else if(propertyName == "visible") {
+      this.visible = value;
+    
+    } else {
+      throw("Object3D.setProperty type: ${type} propertyName: ${propertyName} is not support ");
+    }
+
+    return this;
   }
 
   dispose() {

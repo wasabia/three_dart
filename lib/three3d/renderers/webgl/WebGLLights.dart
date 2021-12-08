@@ -79,56 +79,56 @@ class ShadowUniformsCache {
 
 	var lights = {};
 
-get ( light ) {
+  get ( light ) {
 
-  if ( lights[ light.id ] != null ) {
+    if ( lights[ light.id ] != null ) {
 
-    return lights[ light.id ];
+      return lights[ light.id ];
+
+    }
+
+    var uniforms;
+
+    switch ( light.type ) {
+
+      case 'DirectionalLight':
+        uniforms = {
+          "shadowBias": 0,
+          "shadowNormalBias": 0,
+          "shadowRadius": 1,
+          "shadowMapSize": new Vector2(null, null)
+        };
+        break;
+
+      case 'SpotLight':
+        uniforms = {
+          "shadowBias": 0,
+          "shadowNormalBias": 0,
+          "shadowRadius": 1,
+          "shadowMapSize": new Vector2(null, null)
+        };
+        break;
+
+      case 'PointLight':
+        uniforms = {
+          "shadowBias": 0,
+          "shadowNormalBias": 0,
+          "shadowRadius": 1,
+          "shadowMapSize": new Vector2(null, null),
+          "shadowCameraNear": 1,
+          "shadowCameraFar": 1000
+        };
+        break;
+
+      // TODO (abelnation): set RectAreaLight shadow uniforms
+
+    }
+
+    lights[ light.id ] = uniforms;
+
+    return uniforms;
 
   }
-
-  var uniforms;
-
-  switch ( light.type ) {
-
-    case 'DirectionalLight':
-      uniforms = {
-        "shadowBias": 0,
-        "shadowNormalBias": 0,
-        "shadowRadius": 1,
-        "shadowMapSize": new Vector2(null, null)
-      };
-      break;
-
-    case 'SpotLight':
-      uniforms = {
-        "shadowBias": 0,
-        "shadowNormalBias": 0,
-        "shadowRadius": 1,
-        "shadowMapSize": new Vector2(null, null)
-      };
-      break;
-
-    case 'PointLight':
-      uniforms = {
-        "shadowBias": 0,
-        "shadowNormalBias": 0,
-        "shadowRadius": 1,
-        "shadowMapSize": new Vector2(null, null),
-        "shadowCameraNear": 1,
-        "shadowCameraFar": 1000
-      };
-      break;
-
-    // TODO (abelnation): set RectAreaLight shadow uniforms
-
-  }
-
-  lights[ light.id ] = uniforms;
-
-  return uniforms;
-
-}
 }
 
 
@@ -195,6 +195,9 @@ class WebGLLights {
     for ( int i = 0; i < 9; i ++ ) {
       state.probe.add( new Vector3.init() );
     };
+
+
+    print(" WebGLLights state ${state.ambient.runtimeType} ");
 
 
     vector3 = new Vector3.init();
@@ -450,9 +453,9 @@ class WebGLLights {
 		}
 
 
-		state.ambient[ 0 ] = r;
-		state.ambient[ 1 ] = g;
-		state.ambient[ 2 ] = b;
+		state.ambient[ 0 ] = r.toDouble();
+		state.ambient[ 1 ] = g.toDouble();
+		state.ambient[ 2 ] = b.toDouble();
 
 
 		var hash = state.hash;
@@ -592,7 +595,7 @@ class LightState {
 
   late num version;
 	late Map<String, num> hash;
-	late List<num> ambient;
+	late List<double> ambient;
 	late List<Vector3> probe;
 	late List directional;
 	late List directionalShadow;
@@ -614,7 +617,7 @@ class LightState {
   LightState(Map<String, dynamic> json) {
     version = json["version"];
 	  hash = json["hash"];
-	  ambient = json["ambient"];
+	  ambient = List<double>.from(json["ambient"]);
 	  probe = List<Vector3>.from(json["probe"]);
 	  directional = json["directional"];
 	  directionalShadow = json["directionalShadow"];

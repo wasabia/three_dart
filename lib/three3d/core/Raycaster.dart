@@ -87,11 +87,13 @@ class Raycaster {
 
 	intersectObject( object, recursive, intersects ) {
 
-		intersectObject4( object, this, intersects ?? [], recursive );
+    List<Intersection> _intersects = intersects ?? [];
 
-		intersects.sort( ascSort );
+		intersectObject4( object, this, _intersects, recursive );
 
-		return intersects;
+		_intersects.sort( ascSort );
+
+		return _intersects;
 
 	}
 

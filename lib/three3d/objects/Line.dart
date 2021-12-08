@@ -35,6 +35,10 @@ class Line extends Object3D {
 
 	}
 
+  clone( [bool recursive = false] ) {
+		return Line(this.geometry!, this.material!).copy( this, recursive );
+	}
+
 	computeLineDistances () {
 
 		var geometry = this.geometry!;

@@ -17,14 +17,14 @@ import 'package:three_dart/three_dart.dart' as THREE;
 
 
 
-class webgl_instancing_performance extends StatefulWidget {
+class webgl_shadowmap_viewer extends StatefulWidget {
   String fileName;
-  webgl_instancing_performance({Key? key, required this.fileName}) : super(key: key);
+  webgl_shadowmap_viewer({Key? key, required this.fileName}) : super(key: key);
 
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<webgl_instancing_performance> {
+class _MyAppState extends State<webgl_shadowmap_viewer> {
 
 
   late FlutterGlPlugin three3dRender;
@@ -40,6 +40,13 @@ class _MyAppState extends State<webgl_instancing_performance> {
   late THREE.Camera camera;
   late THREE.Mesh mesh;
 
+  late THREE.Light spotLight;
+  late THREE.Light dirLight;
+  late THREE.Mesh torusKnot;
+  late THREE.Mesh cube;
+
+  int delta = 0;
+
   late THREE.Material material;
   
   num dpr = 1.0;
@@ -50,7 +57,7 @@ class _MyAppState extends State<webgl_instancing_performance> {
 
   int count = 1000;
 
-
+  bool inited = false;
 
   late THREE.WebGLRenderTarget renderTarget;
 
@@ -205,7 +212,7 @@ class _MyAppState extends State<webgl_instancing_performance> {
     renderer = THREE.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize( width, height, false );
-    renderer!.shadowMap.enabled = false;
+    renderer!.shadowMap.enabled = true;
     
     if(!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({ "minFilter": THREE.LinearFilter, "magFilter": THREE.LinearFilter, "format": THREE.RGBAFormat });
@@ -224,101 +231,101 @@ class _MyAppState extends State<webgl_instancing_performance> {
 
   initPage() async {
 
-    camera = new THREE.PerspectiveCamera( 70, width / height, 1, 100 );
-    camera.position.z = 30;
+    _initScene();
+    _initShadowMapViewers();
 
+    inited = true;
+  }
 
+  _initScene() {
+
+    camera = new THREE.PerspectiveCamera( 45, width / height, 1, 1000 );
+    camera.position.set( 0, 15, 70 );
 
     scene = new THREE.Scene();
-    scene.background = THREE.Color.fromHex( 0xffffff );
+    camera.lookAt(scene.position);
 
+    // Lights
 
+    scene.add( new THREE.AmbientLight( 0x404040, null ) );
 
-    var _loader = new THREE.BufferGeometryLoader(null);
-    material = new THREE.MeshNormalMaterial();
+    spotLight = new THREE.SpotLight( 0xffffff );
+    spotLight.name = 'Spot Light';
+    spotLight.angle = THREE.Math.PI / 5;
+    spotLight.penumbra = 0.3;
+    spotLight.position.set( 10, 10, 5 );
+    spotLight.castShadow = true;
+    spotLight.shadow!.camera!.near = 8;
+    spotLight.shadow!.camera!.far = 30;
+    spotLight.shadow!.mapSize.width = 1024;
+    spotLight.shadow!.mapSize.height = 1024;
+    scene.add( spotLight );
 
-    // var geometry = await _loader.loadAsync("assets/models/json/suzanne_buffergeometry.json", null);
-    // geometry.computeVertexNormals();
+    scene.add( new THREE.CameraHelper( spotLight.shadow!.camera ) );
 
-    var geometry = THREE.BoxGeometry(5, 5, 5);
+    dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
+    dirLight.name = 'Dir. Light';
+    dirLight.position.set( 0, 10, 0 );
+    dirLight.castShadow = true;
+    dirLight.shadow!.camera!.near = 1;
+    dirLight.shadow!.camera!.far = 10;
+    dirLight.shadow!.camera!.right = 15;
+    dirLight.shadow!.camera!.left = - 15;
+    dirLight.shadow!.camera!.top	= 15;
+    dirLight.shadow!.camera!.bottom = - 15;
+    dirLight.shadow!.mapSize.width = 1024;
+    dirLight.shadow!.mapSize.height = 1024;
+    scene.add( dirLight );
 
+    scene.add( new THREE.CameraHelper( dirLight.shadow!.camera ) );
 
+    // Geometry
+    var geometry = new THREE.TorusKnotGeometry( 25, 8, 75, 20 );
+    var material = new THREE.MeshPhongMaterial( {
+      "color": THREE.Color.fromHex(0x222222),
+      "shininess": 150,
+      "specular": THREE.Color.fromHex(0x222222)
+    } );
 
-    // makeInstanced( geometry );
+    torusKnot = new THREE.Mesh( geometry, material );
+    torusKnot.scale.multiplyScalar( 1 / 18 );
+    torusKnot.position.y = 3;
+    torusKnot.castShadow = true;
+    torusKnot.receiveShadow = true;
+    scene.add( torusKnot );
 
-    // makeMerged( geometry );
+    var geometry2 = new THREE.BoxGeometry( 3, 3, 3 );
+    cube = new THREE.Mesh( geometry2, material );
+    cube.position.set( 8, 3, 8 );
+    cube.castShadow = true;
+    cube.receiveShadow = true;
+    scene.add( cube );
 
-    makeNaive( geometry );
+    var geometry3 = new THREE.BoxGeometry( 10, 0.15, 10 );
+    material = new THREE.MeshPhongMaterial( {
+      "color": 0xa0adaf,
+      "shininess": 150,
+      "specular": 0x111111
+    } );
 
+    var ground = new THREE.Mesh( geometry3, material );
+    ground.scale.multiplyScalar( 3 );
+    ground.castShadow = false;
+    ground.receiveShadow = true;
+    scene.add( ground );
 
+  }
+
+  _initShadowMapViewers() {
+
+    // dirLightShadowMapViewer = new ShadowMapViewer( dirLight );
+    // spotLightShadowMapViewer = new ShadowMapViewer( spotLight );
+    // resizeShadowMapViewers();
 
   }
 
 
-  makeInstanced( geometry ) {
 
-    var matrix = new THREE.Matrix4();
-    var mesh = new THREE.InstancedMesh( geometry, material, count );
-
-    for ( var i = 0; i < count; i ++ ) {
-
-      randomizeMatrix( matrix );
-      mesh.setMatrixAt( i, matrix );
-
-    }
-
-    scene.add( mesh );
-
-    //
-
-    // var geometryByteLength = getGeometryByteLength( geometry );
-
-    // guiStatsEl.innerHTML = [
-
-    //   '<i>GPU draw calls</i>: 1',
-    //   '<i>GPU memory</i>: ' + formatBytes( api.count * 16 + geometryByteLength, 2 )
-
-    // ].join( '<br/>' );
-
-  }
-
-  makeNaive( geometry ) {
-
-    var matrix = new THREE.Matrix4();
-    
-
-    for ( var i = 0; i < count; i ++ ) {
-      var mesh = new THREE.Mesh( geometry, material );
-      randomizeMatrix( matrix );
-      mesh.applyMatrix4( matrix );
-      scene.add( mesh );
-    }
-
-    
-  }
-
-  var position = new THREE.Vector3();
-  var rotation = new THREE.Euler(0,0,0);
-  var quaternion = new THREE.Quaternion();
-  var scale = new THREE.Vector3();
-
-  randomizeMatrix(matrix) {
-
-    position.x = THREE.Math.random() * 40 - 20;
-    position.y = THREE.Math.random() * 40 - 20;
-    position.z = THREE.Math.random() * 40 - 20;
-
-    rotation.x = THREE.Math.random() * 2 * THREE.Math.PI;
-    rotation.y = THREE.Math.random() * 2 * THREE.Math.PI;
-    rotation.z = THREE.Math.random() * 2 * THREE.Math.PI;
-
-    quaternion.setFromEuler( rotation, false );
-
-    scale.x = scale.y = scale.z = THREE.Math.random() * 1;
-
-    matrix.compose( position, quaternion, scale );
-
-  }
 
   animate() {
 
@@ -326,9 +333,18 @@ class _MyAppState extends State<webgl_instancing_performance> {
       return;
     }
 
+    if(!inited) {
+      return;
+    }
 
-    scene.rotation.x += 0.002;
-    scene.rotation.y += 0.001;
+  
+    torusKnot.rotation.x += 0.025;
+    torusKnot.rotation.y += 0.2;
+    torusKnot.rotation.z += 0.1;
+
+    cube.rotation.x += 0.025 ;
+    cube.rotation.y += 0.2;
+    cube.rotation.z += 0.1;
 
     render();
 

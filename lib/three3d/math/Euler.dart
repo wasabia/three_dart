@@ -93,6 +93,8 @@ class Euler {
 		this._order = order ?? this._order;
 
 		this.onChangeCallback();
+
+    return this;
 	}
 
 	clone() {

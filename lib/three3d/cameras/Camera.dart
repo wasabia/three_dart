@@ -84,7 +84,7 @@ class Camera extends Object3D {
 
 	}
 
-	clone (bool recursive) {
+	clone ([bool recursive = false]) {
 
 		return Camera().copy( this, false );
 

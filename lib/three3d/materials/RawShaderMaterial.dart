@@ -5,7 +5,7 @@ class RawShaderMaterial extends ShaderMaterial {
   String type = 'RawShaderMaterial';
   bool isRawShaderMaterial = true;
 
-	RawShaderMaterial( parameters ) : super(parameters) {
+	RawShaderMaterial( [parameters] ) : super(parameters) {
 
 	}
 

@@ -22,7 +22,7 @@ class ShaderMaterial extends Material {
 
   bool isShaderMaterial = true;
 
-  ShaderMaterial( Map<String, dynamic>? parameters ) : super() {
+  ShaderMaterial( [Map<String, dynamic>? parameters] ) : super() {
   
     this.defines = {};
     this.uniforms = {};

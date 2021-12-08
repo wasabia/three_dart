@@ -959,7 +959,7 @@ class BufferGeometry with EventDispatcher {
 
 		if ( index != null ) {
 
-			this.setIndex( index.clone( data ) );
+			this.setIndex( index.clone(  ) );
 
 		}
 
@@ -967,10 +967,10 @@ class BufferGeometry with EventDispatcher {
 
 		var attributes = source.attributes;
 
-		for ( var name in attributes ) {
+		for ( var name in attributes.keys ) {
 
 			var attribute = attributes[ name ];
-			this.setAttribute( name, attribute.clone( data ) );
+			this.setAttribute( name, attribute.clone(  ) );
 
 		}
 
@@ -978,14 +978,14 @@ class BufferGeometry with EventDispatcher {
 
 		var morphAttributes = source.morphAttributes;
 
-		for ( var name in morphAttributes ) {
+		for ( var name in morphAttributes.keys ) {
 
 			List<BufferAttribute> array = [];
 			var morphAttribute = morphAttributes[ name ]; // morphAttribute: array of Float32BufferAttributes
 
 			for ( var i = 0, l = morphAttribute.length; i < l; i ++ ) {
 
-				array.add( morphAttribute[ i ].clone( data ) );
+				array.add( morphAttribute[ i ].clone(  ) );
 
 			}
 
@@ -1002,7 +1002,7 @@ class BufferGeometry with EventDispatcher {
 		for ( var i = 0, l = groups.length; i < l; i ++ ) {
 
 			var group = groups[ i ];
-			this.addGroup( group.start, group.count, materialIndex: group.materialIndex );
+			this.addGroup( group["start"], group["count"], materialIndex: group["materialIndex"] );
 
 		}
 
@@ -1028,8 +1028,8 @@ class BufferGeometry with EventDispatcher {
 
 		// draw range
 
-		this.drawRange["start"] = source.drawRange.start;
-		this.drawRange["count"] = source.drawRange.count;
+		this.drawRange["start"] = source.drawRange["start"];
+		this.drawRange["count"] = source.drawRange["count"];
 
 		// user data
 
