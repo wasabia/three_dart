@@ -100,17 +100,26 @@ class WebGLUniforms with WebGLUniform {
       var u = seq[ i ];
       var v = values[ u.id ];
 
-      var value = v["value"];
-      var _vt = value.runtimeType.toString();
+      // var value = v["value"];
+      // var _vt = value.runtimeType.toString();
       
-      // print("WebGLUniforms.upload name: ${u.id}  value: ${value} ");
+      // print("WebGLUniforms.upload ${_vt} name: ${u.id}  value: ${value} ");
       // if(_vt == "Matrix4" || _vt == "Matrix3" || _vt == "Color") {
       //   print(value.toJSON());
+      // } else if(_vt == "List<Vector3>") {
+      //   print(value.map((e) => e.toJSON()));
       // } else if( u.id == "lightProbe" ) {
       //   print(value.map((e) => e.toJSON() ) );
       // } else if( u.id == "directionalLights" ) {
       //   print(value.map((e) => e["color"].toJSON() ) );
-      //   print(value.map((e) => e["direction"].toJSON() ) );  
+      //   print(value.map((e) => e["direction"].toJSON() ) );
+      // } else if(u.id == "spotLights") {
+      //   print("spotLights... ");
+      //   print(value.map((e) => e["position"].toJSON() ) );
+      //   print(value.map((e) => e["direction"].toJSON() ) );
+      //   print(value.map((e) => e["color"].toJSON() ) );
+      // } else if(u.id == "spotShadowMatrix" || u.id == "directionalShadowMatrix") {
+      //   print(value.map((e) => e.toJSON()));
       // } else {
       //   print(value);
       // }
