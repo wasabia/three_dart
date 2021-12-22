@@ -48,9 +48,7 @@ class Ray {
 	}
 
 	at( t, target ) {
-
 		return target.copy( this.direction ).multiplyScalar( t ).add( this.origin );
-
 	}
 
 	lookAt( v ) {
@@ -416,6 +414,7 @@ class Ray {
 		_edge2.subVectors( c, a );
 		_normal.crossVectors( _edge1, _edge2 );
 
+
 		// Solve Q + t*D = b1*E1 + b2*E2 (Q = kDiff, D = ray direction,
 		// E1 = kEdge1, E2 = kEdge2, N = Cross(E1,E2)) by
 		//   |Dot(D,N)|*b1 = sign(Dot(D,N))*Dot(D,Cross(Q,E2))
@@ -425,7 +424,7 @@ class Ray {
 		var sign;
 
 		if ( DdN > 0 ) {
-
+      
 			if ( backfaceCulling ) return null;
 			sign = 1;
 
@@ -468,6 +467,7 @@ class Ray {
 
 		// Line intersects triangle, check if ray does.
 		var QdN = - sign * _diff.dot( _normal );
+
 
 		// t < 0, no intersection
 		if ( QdN < 0 ) {

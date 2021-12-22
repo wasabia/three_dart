@@ -34,11 +34,11 @@ class WebGLBackground {
     // Ignore background in AR
     // TODO: Reconsider this.
 
-    // TODO
+
     // var xr = renderer.xr;
     // var session = xr.getSession && xr.getSession();
 
-    // if ( session && session.environmentBlendMode == 'additive' ) {
+    // if ( session != null && session.environmentBlendMode == 'additive' ) {
 
     // 	background = null;
 
@@ -46,7 +46,7 @@ class WebGLBackground {
 
     if (background == null) {
       setClear(clearColor, clearAlpha);
-    } else if (background != null && background.type == "Color") {
+    } else if (background != null && background is Color) {
       setClear(background, 1);
       forceClear = true;
     }
@@ -56,7 +56,7 @@ class WebGLBackground {
           renderer.autoClearStencil);
     }
 
-    if ( background != null && ( background.type == "CubeTexture" || (background is Texture && background.mapping == CubeUVReflectionMapping) ) ) {
+    if ( background != null && ( background is CubeTexture || (background is Texture && background.mapping == CubeUVReflectionMapping) ) ) {
 
     	if ( boxMesh == null ) {
 
@@ -77,23 +77,23 @@ class WebGLBackground {
     		boxMesh!.geometry!.deleteAttribute( 'normal' );
     		boxMesh!.geometry!.deleteAttribute( 'uv' );
 
-    		boxMesh!.onBeforeRender = ( renderer, mesh, scene, camera ) {
+    		boxMesh!.onBeforeRender = ( {renderer, mesh, scene, camera, geometry, material, group} ) {
     			mesh.matrixWorld.copyPosition( camera.matrixWorld );
     		};
 
+        // TODO see line NO.107 only for dart
     		// enable code injection for non-built-in material
     		// Object.defineProperty( boxMesh.material, 'envMap', {
     		// 	get: function () {
     		// 		return this.uniforms.envMap.value;
     		// 	}
-
     		// } );
 
     		objects.update( boxMesh );
 
     	}
 
-    	if ( background.isWebGLCubeRenderTarget ) {
+    	if ( background is WebGLCubeRenderTarget ) {
 
     		// TODO Deprecate
 
@@ -101,8 +101,13 @@ class WebGLBackground {
 
     	}
 
-    	boxMesh!.material.uniforms.envMap.value = background;
-    	boxMesh!.material.uniforms.flipEnvMap.value = ( background.isCubeTexture && background.isRenderTargetTexture == false ) ? - 1 : 1;
+    	boxMesh!.material.uniforms["envMap"]["value"] = background;
+    	boxMesh!.material.uniforms["flipEnvMap"]["value"] = ( (background is CubeTexture) && ((background.isRenderTargetTexture) == false) ) ? - 1 : 1;
+
+      // only for dart see line line NO.84 enable code injection for non-built-in material
+      // TODO
+      boxMesh!.material.envMap = background;
+
 
     	if ( currentBackground != background ||
     		currentBackgroundVersion != background.version ||
@@ -150,7 +155,7 @@ class WebGLBackground {
 
     	}
 
-    	planeMesh!.material.uniforms.t2D.value = background;
+    	planeMesh!.material.uniforms["t2D"]["value"] = background;
 
     	if ( background.matrixAutoUpdate == true ) {
 
@@ -158,7 +163,7 @@ class WebGLBackground {
 
     	}
 
-    	planeMesh!.material.uniforms.uvTransform.value.copy( background.matrix );
+    	planeMesh!.material.uniforms["uvTransform"]["value"].copy( background.matrix );
 
     	if ( currentBackground != background ||
     		currentBackgroundVersion != background.version ||
@@ -179,8 +184,7 @@ class WebGLBackground {
   }
 
   setClear(color, alpha) {
-    state.buffers["color"]
-        .setClear(color.r, color.g, color.b, alpha, premultipliedAlpha);
+    state.buffers["color"].setClear(color.r, color.g, color.b, alpha, premultipliedAlpha);
   }
 
   getClearColor() {

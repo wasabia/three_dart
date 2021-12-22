@@ -113,7 +113,7 @@ class Object3D with EventDispatcher {
   Function? onBeforeRender;
 
 
-  dynamic? background;
+  dynamic background;
   Texture? environment;
 
 
@@ -1004,7 +1004,7 @@ class Object3D with EventDispatcher {
 			for ( var i = 0; i < source.children.length; i ++ ) {
 
 				var child = source.children[ i ];
-				this.add( child.clone(false) );
+				this.add( child.clone( recursive ) );
 
 			}
 
@@ -1055,7 +1055,6 @@ class Object3D with EventDispatcher {
       return this.receiveShadow;
     } else if(propertyName == "visible") {
       return this.visible;
-      
     } else {
       throw("Object3D.getProperty type: ${type} propertyName: ${propertyName} is not support ");
     }
@@ -1071,7 +1070,8 @@ class Object3D with EventDispatcher {
       this.receiveShadow = value;
     } else if(propertyName == "visible") {
       this.visible = value;
-    
+    } else if(propertyName == "name") {
+      this.name = value;
     } else {
       throw("Object3D.setProperty type: ${type} propertyName: ${propertyName} is not support ");
     }

@@ -102,9 +102,8 @@ class WebGLUniforms with WebGLUniform {
 
       // var value = v["value"];
       // var _vt = value.runtimeType.toString();
-      
       // print("WebGLUniforms.upload ${_vt} name: ${u.id}  value: ${value} ");
-      // if(_vt == "Matrix4" || _vt == "Matrix3" || _vt == "Color") {
+      // if(_vt == "Matrix4" || _vt == "Matrix3" || _vt == "Color" || _vt == "Vector2" || _vt == "Vector3") {
       //   print(value.toJSON());
       // } else if(_vt == "List<Vector3>") {
       //   print(value.map((e) => e.toJSON()));

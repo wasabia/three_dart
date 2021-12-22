@@ -66,7 +66,7 @@ class MeshStandardMaterial extends Material {
 
     this.defines = { 'STANDARD': '' };
 
-    this.color = new Color(0,0,0).setHex( 0xffffff ); // diffuse
+    this.color = Color.fromHex( 0xffffff ); // diffuse
     this.roughness = 1.0;
     this.metalness = 0.0;
 
@@ -78,7 +78,7 @@ class MeshStandardMaterial extends Material {
     this.aoMap = null;
     this.aoMapIntensity = 1.0;
 
-    this.emissive = new Color(0,0,0).setHex( 0x000000 );
+    this.emissive = Color.fromHex( 0x000000 );
     this.emissiveIntensity = 1.0;
     this.emissiveMap = null;
 

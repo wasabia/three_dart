@@ -8,17 +8,17 @@ Map<String, dynamic> UniformsLib = {
   "common": {
     "diffuse": {"value": Color.fromHex(0xffffff)},
     "opacity": {"value": 1.0},
-    "map": {"value": null},
+    "map": { },
     "uvTransform": {"value": new Matrix3()},
     "uv2Transform": {"value": new Matrix3()},
-    "alphaMap": {"value": null},
+    "alphaMap": { },
     "alphaTest": { "value": 0.0 }
   },
   "specularmap": {
-    "specularMap": {"value": null},
+    "specularMap": { },
   },
   "envmap": {
-    "envMap": {"value": null},
+    "envMap": { },
     "flipEnvMap": {"value": -1},
     "reflectivity": { "value": 1.0 }, // basic, lambert, phong
 		"ior": { "value": 1.5 }, // standard, physical
@@ -26,37 +26,37 @@ Map<String, dynamic> UniformsLib = {
     "maxMipLevel": {"value": 0}
   },
   "aomap": {
-    "aoMap": {"value": null},
+    "aoMap": { },
     "aoMapIntensity": {"value": 1}
   },
   "lightmap": {
-    "lightMap": {"value": null},
+    "lightMap": { },
     "lightMapIntensity": {"value": 1}
   },
   "emissivemap": {
-    "emissiveMap": {"value": null}
+    "emissiveMap": { }
   },
   "bumpmap": {
-    "bumpMap": {"value": null},
+    "bumpMap": { },
     "bumpScale": {"value": 1}
   },
   "normalmap": {
-    "normalMap": {"value": null},
+    "normalMap": { },
     "normalScale": {"value": new Vector2(1, 1)}
   },
   "displacementmap": {
-    "displacementMap": {"value": null},
+    "displacementMap": { },
     "displacementScale": {"value": 1},
     "displacementBias": {"value": 0}
   },
   "roughnessmap": {
-    "roughnessMap": {"value": null}
+    "roughnessMap": { }
   },
   "metalnessmap": {
-    "metalnessMap": {"value": null}
+    "metalnessMap": { }
   },
   "gradientmap": {
-    "gradientMap": {"value": null}
+    "gradientMap": { }
   },
   "fog": {
     "fogDensity": {"value": 0.00025},
@@ -144,16 +144,16 @@ Map<String, dynamic> UniformsLib = {
       "properties": {"color": {}, "position": {}, "width": {}, "height": {}}
     },
 
-    "ltc_1": {"value": null},
-    "ltc_2": {"value": null}
+    "ltc_1": { },
+    "ltc_2": { }
   },
   "points": {
     "diffuse": { "value": Color.fromHex(0xffffff) },
     "opacity": {"value": 1.0},
     "size": {"value": 1.0},
     "scale": {"value": 1.0},
-    "map": {"value": null},
-    "alphaMap": {"value": null},
+    "map": { },
+    "alphaMap": { },
     "alphaTest": { "value": 0.0 },
     "uvTransform": {"value": new Matrix3()}
   },
@@ -162,8 +162,8 @@ Map<String, dynamic> UniformsLib = {
     "opacity": {"value": 1.0},
     "center": {"value": new Vector2(0.5, 0.5)},
     "rotation": {"value": 0.0},
-    "map": {"value": null},
-    "alphaMap": {"value": null},
+    "map": { },
+    "alphaMap": { },
     "alphaTest": { "value": 0.0 },
     "uvTransform": {"value": new Matrix3()}
   }

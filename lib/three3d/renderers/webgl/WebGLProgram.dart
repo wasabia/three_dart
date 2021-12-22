@@ -85,6 +85,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         '#define MAX_BONES ${parameters.maxBones}',
         (parameters.useFog && parameters.fog) ? '#define USE_FOG' : '',
         (parameters.useFog && parameters.fogExp2) ? '#define FOG_EXP2' : '',
+        
         parameters.map ? '#define USE_MAP' : '',
         parameters.envMap ? '#define USE_ENVMAP' : '',
         parameters.envMap ? '#define ' + envMapModeDefine : '',
@@ -274,48 +275,23 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         'uniform bool isOrthographic;',
 
         (parameters.toneMapping != NoToneMapping) ? '#define TONE_MAPPING' : '',
-        (parameters.toneMapping != NoToneMapping)
-            ? ShaderChunk['tonemapping_pars_fragment']
-            : '', // this code is required here because it is used by the toneMapping() defined below
-        (parameters.toneMapping != NoToneMapping)
-            ? getToneMappingFunction('toneMapping', parameters.toneMapping)
-            : '',
+        (parameters.toneMapping != NoToneMapping) ? ShaderChunk['tonemapping_pars_fragment'] : '', // this code is required here because it is used by the toneMapping() defined below
+        (parameters.toneMapping != NoToneMapping) ? getToneMappingFunction('toneMapping', parameters.toneMapping) : '',
 
         parameters.dithering ? '#define DITHERING' : '',
         parameters.blending == NoBlending ? '#define OPAQUE' : '',
 
-        ShaderChunk[
-            'encodings_pars_fragment'], // this code is required here because it is used by the various encoding/decoding defined below
-        parameters.map
-            ? getTexelDecodingFunction(
-                'mapTexelToLinear', parameters.mapEncoding)
-            : '',
-        parameters.matcap
-            ? getTexelDecodingFunction(
-                'matcapTexelToLinear', parameters.matcapEncoding)
-            : '',
-        parameters.envMap
-            ? getTexelDecodingFunction(
-                'envMapTexelToLinear', parameters.envMapEncoding)
-            : '',
-        parameters.emissiveMap
-            ? getTexelDecodingFunction(
-                'emissiveMapTexelToLinear', parameters.emissiveMapEncoding)
-            : '',
+        ShaderChunk['encodings_pars_fragment'], // this code is required here because it is used by the various encoding/decoding defined below
+        parameters.map ? getTexelDecodingFunction('mapTexelToLinear', parameters.mapEncoding) : '',
+        parameters.matcap ? getTexelDecodingFunction('matcapTexelToLinear', parameters.matcapEncoding) : '',
+        parameters.envMap ? getTexelDecodingFunction('envMapTexelToLinear', parameters.envMapEncoding) : '',
+        parameters.emissiveMap ? getTexelDecodingFunction('emissiveMapTexelToLinear', parameters.emissiveMapEncoding) : '',
+        parameters.specularTintMap ? getTexelDecodingFunction( 'specularTintMapTexelToLinear', parameters.specularTintMapEncoding ) : '',    
+        parameters.sheenColorMap ? getTexelDecodingFunction( 'sheenColorMapTexelToLinear', parameters.sheenColorMapEncoding ) : '',
+        parameters.lightMap ? getTexelDecodingFunction('lightMapTexelToLinear', parameters.lightMapEncoding) : '',
+        getTexelEncodingFunction('linearToOutputTexel', parameters.outputEncoding),
 
-        parameters.specularTintMap 
-            ? getTexelDecodingFunction( 'specularTintMapTexelToLinear', parameters.specularTintMapEncoding ) 
-            : '',    
-        parameters.lightMap
-            ? getTexelDecodingFunction(
-                'lightMapTexelToLinear', parameters.lightMapEncoding)
-            : '',
-        getTexelEncodingFunction(
-            'linearToOutputTexel', parameters.outputEncoding),
-
-        parameters.depthPacking != null
-            ? '#define DEPTH_PACKING ${parameters.depthPacking}'
-            : '',
+        parameters.depthPacking != null ? '#define DEPTH_PACKING ${parameters.depthPacking}' : '',
 
         '\n'
       ].where((s) => filterEmptyLine(s)).join('\n');
@@ -377,7 +353,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     // // print(vertexGlsl);
     // developer.log("  111 ==================== FRAGMENT ");
     // developer.log(fragmentGlsl);
-    // // print(fragmentGlsl);
+    // print(fragmentGlsl);
 
 
     var glVertexShader = WebGLShader(gl, gl.VERTEX_SHADER, vertexGlsl);

@@ -37,14 +37,14 @@ class WebGLCubeMaps {
 
 				if ( cubemaps.has( texture ) ) {
 
-					var cubemap = cubemaps.get("texture").texture;
+					var cubemap = cubemaps.get(texture).texture;
 					return mapTextureMapping( cubemap, texture.mapping );
 
 				} else {
 
 					var image = texture.image;
 
-					if ( image && image.height > 0 ) {
+					if ( image != null && image.height > 0 ) {
 
 						var currentRenderTarget = renderer.getRenderTarget();
 

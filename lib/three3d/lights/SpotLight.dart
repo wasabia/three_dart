@@ -5,14 +5,15 @@ class SpotLight extends Light {
   String type = "SpotLight";
   bool isSpotLight = true;
 
-  SpotLight( color, [intensity, distance, angle, penumbra, decay] ) : super(color, intensity) {
+  SpotLight( color, [intensity, num? distance, angle, penumbra, decay] ) : super(color, intensity) {
     this.position.copy( Object3D.DefaultUp );
     this.updateMatrix();
 
     this.target = new Object3D();
 
-
-    this.distance = distance ?? 0;
+    // remove default 0  for js 0 is false  but for dart 0 is not.
+    // SpotLightShadow.updateMatrices  far value 
+    this.distance = distance;
     this.angle = angle ?? Math.PI / 3;
     this.penumbra = penumbra ?? 0;
     this.decay = decay ?? 1;	// for physically correct lights, should be 2.

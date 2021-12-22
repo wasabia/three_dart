@@ -9,7 +9,7 @@ class Clock {
   late num elapsedTime;
   late bool running;
 
-	Clock( autoStart ) {
+	Clock( [autoStart] ) {
 
 		this.autoStart = ( autoStart != null ) ? autoStart : true;
 

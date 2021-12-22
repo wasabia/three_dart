@@ -102,6 +102,7 @@ class Material with EventDispatcher {
   Texture? specularMap;
   Texture? specularIntensityMap;
   Texture? specularTintMap;
+  Texture? sheenColorMap;
   
   Texture? gradientMap;
   Color? sheenTint;
@@ -129,7 +130,7 @@ class Material with EventDispatcher {
   int? normalMapType;
 
   Texture? normalMap;
-  Texture? bumpMap;  
+  Texture? bumpMap;
   Texture? envMap;
   int? combine;
 
@@ -239,7 +240,7 @@ class Material with EventDispatcher {
 
       if ( newValue == null ) {
 
-        print( 'THREE.Material: ${key} parameter is null.' );
+        print( 'THREE.Material setValues: ${key} parameter is null.' );
         continue;
 
       }
@@ -251,8 +252,11 @@ class Material with EventDispatcher {
 
 
   setValue(String key, dynamic newValue) {
+    
     if(key == "alphaTest") {
       alphaTest = newValue;
+    } else if(key == "aoMap") {
+      aoMap = newValue;  
     } else if(key == "blendDst") {
       blendDst = newValue;
     } else if(key == "blendDstAlpha") {
@@ -301,6 +305,8 @@ class Material with EventDispatcher {
       } else {
         emissive = Color(0,0,0).setHex(newValue);
       }
+    } else if(key == "emissiveMap") {
+      emissiveMap = newValue;    
     } else if(key == "flatShading") {
       flatShading = newValue;  
     } else if(key == "fog") {
@@ -323,8 +329,12 @@ class Material with EventDispatcher {
       map = newValue;
     } else if(key == "metalness") {
       metalness = newValue;
+    } else if(key == "metalnessMap") {
+      metalnessMap = newValue;
     } else if(key == "name") {
-      name = newValue;  
+      name = newValue;
+    } else if(key == "normalMap") {
+      normalMap = newValue;  
     } else if(key == "normalScale") {
       normalScale = newValue;  
     } else if(key == "opacity") {
@@ -341,6 +351,8 @@ class Material with EventDispatcher {
       reflectivity = newValue;
     } else if(key == "roughness") {
       roughness = newValue;
+    } else if(key == "roughnessMap") {
+      roughnessMap = newValue;
     } else if(key == "shading") {
     //   // for backward compatability if shading is set in the constructor
       throw( 'THREE.' + this.type + ': .shading has been removed. Use the boolean .flatShading instead.' );

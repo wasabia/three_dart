@@ -17,10 +17,14 @@ class BufferAttribute extends BaseBufferAttribute {
   BufferAttribute(arrayList, itemSize, [bool normalized = false] ) {
     if(arrayList is NativeArray) {
       this.array = arrayList;
+    } else if (arrayList is Uint16List) {
+      this.array = Uint16Array.from(arrayList);
     } else if (arrayList is Float32List ) {
       this.array = Float32Array.from(arrayList);
     } else if (arrayList is List ) {
-      this.array = Float32Array.from(arrayList);  
+      // 确认 正确的BufferAttribute 使用了正确的List 类型 默认 Float32
+      print(" BufferAttribute type: ${type} ${this} arrayList is ${arrayList.runtimeType} need confirm ? ");
+      this.array = Float32Array.from(arrayList);
     } else {
       throw("BufferAttribute  arrayList: ${arrayList.runtimeType} is need support ....  ");
     }

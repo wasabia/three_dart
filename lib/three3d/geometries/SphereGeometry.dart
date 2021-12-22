@@ -113,4 +113,16 @@ class SphereGeometry extends BufferGeometry {
 
 	}
 
+  static fromJSON( data ) {
+		return new SphereGeometry( 
+      data["radius"], 
+      data["widthSegments"], 
+      data["heightSegments"],
+      data["phiStart"], 
+      data["phiLength"],
+      data["thetaStart"],
+      data["thetaLength"] 
+    );
+	}
+
 }

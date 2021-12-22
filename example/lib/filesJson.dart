@@ -6,5 +6,6 @@ var filesJson = [
   "webgl_geometry_shapes",
   "webgl_materials_browser",
   "webgl_instancing_performance",
-  "webgl_shadowmap_viewer"
+  "webgl_shadowmap_viewer",
+  "webgl_loader_gltf"
 ];

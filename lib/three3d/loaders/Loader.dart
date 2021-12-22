@@ -19,7 +19,7 @@ class Loader {
     this.crossOrigin = 'anonymous';
     this.withCredentials = false;
     this.path = '';
-
+    this.resourcePath = '';
     this.requestHeader = {};
   }
 

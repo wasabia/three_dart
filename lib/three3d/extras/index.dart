@@ -1,5 +1,7 @@
 library three_extra;
 
+import 'dart:typed_data';
+
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/cameras/index.dart';
 import 'package:three_dart/three3d/constants.dart';
@@ -32,3 +34,4 @@ part './Earcut.dart';
 part './ShapeUtils.dart';
 part './PMREMGenerator.dart';
 part './ImageUtils.dart';
+part './DataUtils.dart';

@@ -60,7 +60,7 @@ class PointLightShadow extends LightShadow {
 		var camera = this.camera;
 		var shadowMatrix = this.matrix;
 
-		var far = light.distance != 0 ? light.distance : camera!.far;
+		var far = light.distance ?? camera!.far;
 
 		if ( far != camera!.far ) {
 

@@ -157,7 +157,7 @@ class WebGLRenderer {
 
   late WebGLBindingStates bindingStates;
 
-  // WebXRManager xr;
+  late WebXRManager xr;
 
   late WebGLShadowMap shadowMap;
 
@@ -216,23 +216,19 @@ class WebGLRenderer {
     objects = WebGLObjects(_gl, geometries, attributes, info);
     morphtargets = WebGLMorphtargets(_gl);
     clipping = WebGLClipping(properties);
-    programCache = WebGLPrograms(
-        this, cubemaps, cubeuvmaps, extensions, capabilities, bindingStates, clipping);
+    programCache = WebGLPrograms(this, cubemaps, cubeuvmaps, extensions, capabilities, bindingStates, clipping);
     materials = WebGLMaterials(properties);
     renderLists = WebGLRenderLists(properties);
     renderStates = WebGLRenderStates(extensions, capabilities);
-    background =
-        WebGLBackground(this, cubemaps, state, objects, premultipliedAlpha);
+    background = WebGLBackground(this, cubemaps, state, objects, premultipliedAlpha);
 
     bufferRenderer = WebGLBufferRenderer(_gl, extensions, info, capabilities);
-    indexedBufferRenderer =
-        WebGLIndexedBufferRenderer(_gl, extensions, info, capabilities);
+    indexedBufferRenderer = WebGLIndexedBufferRenderer(_gl, extensions, info, capabilities);
 
     info.programs = programCache.programs;
 
     // xr
-
-    // xr = WebXRManager( this, _gl );
+    xr = WebXRManager( this, _gl );
 
     // shadow map
 
@@ -481,7 +477,7 @@ class WebGLRenderer {
 
 		if ( programs != null ) {
 
-			programs.forEach(( program ) {
+			programs.forEach(( key, program ) {
 
 				programCache.releaseProgram( program );
 
@@ -631,8 +627,7 @@ class WebGLRenderer {
 
     var drawCount = Math.max(0, drawEnd - drawStart + 1);
 
-
-
+  
     if (drawCount == 0) return;
 
     //
@@ -1087,6 +1082,7 @@ class WebGLRenderer {
     if(object.onBeforeRender != null) {
       object.onBeforeRender!(
         renderer: this,
+        mesh: object,
         scene: scene,
         camera: camera,
         geometry: geometry,
