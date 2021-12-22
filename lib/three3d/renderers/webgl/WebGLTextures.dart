@@ -1054,7 +1054,9 @@ class WebGLTextures {
 				for ( var i = 0; i < 6; i ++ ) {
           state.bindFramebuffer( gl.FRAMEBUFFER, renderTargetProperties["__webglFramebuffer"][ i ] );
 
-					renderTargetProperties["__webglDepthbuffer"][ i ] = gl.createRenderbuffer();
+					// renderTargetProperties["__webglDepthbuffer"][ i ] = gl.createRenderbuffer();
+          renderTargetProperties["__webglDepthbuffer"].add( gl.createRenderbuffer() );
+
 					setupRenderBufferStorage( renderTargetProperties["__webglDepthbuffer"][ i ], renderTarget, false );
 
 				}
@@ -1114,7 +1116,9 @@ class WebGLTextures {
 
 			for ( var i = 0; i < 6; i ++ ) {
 
-				renderTargetProperties["__webglFramebuffer"][ i ] = gl.createFramebuffer();
+				// renderTargetProperties["__webglFramebuffer"][ i ] = gl.createFramebuffer();
+
+        renderTargetProperties["__webglFramebuffer"].add( gl.createFramebuffer() );
 
 			}
 

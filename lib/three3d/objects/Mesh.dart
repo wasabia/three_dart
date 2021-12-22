@@ -121,10 +121,12 @@ class Mesh extends Object3D {
 
   raycast( Raycaster raycaster, List<Intersection> intersects ) {
 
+    // print(" raycast: ${this.name} ${this} ");
 
 		var geometry = this.geometry!;
 		var material = this.material;
 		var matrixWorld = this.matrixWorld;
+
 
 		if ( material == null ) return;
 

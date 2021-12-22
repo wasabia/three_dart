@@ -89,7 +89,8 @@ class WebGLShadowMap {
 
 
 	render(List<Light> lights, scene, Camera camera ) {
-  
+
+
 		if ( scope.enabled == false ) return;
 		if ( scope.autoUpdate == false && scope.needsUpdate == false ) return;
 
@@ -117,7 +118,7 @@ class WebGLShadowMap {
 
 			if ( shadow == null ) {
 
-				print( 'THREE.WebGLShadowMap: ${light} has no shadow.' );
+				// print( 'THREE.WebGLShadowMap: ${light} has no shadow.' );
 				continue;
 
 			}
@@ -339,15 +340,11 @@ class WebGLShadowMap {
  
 		if ( object.visible == false ) return;
 
-    // print("WebGLShadowMap renderObject object: ${object} light: ${light} ");
-
 		var visible = object.layers.test( camera.layers );
 
 		if ( visible && ( object.isMesh || object.isLine || object.isPoints ) ) {
 
 			if ( ( object.castShadow || ( object.receiveShadow && type == VSMShadowMap ) ) && ( ! object.frustumCulled || _frustum.intersectsObject( object ) ) ) {
-
-        // print("renderObject light: ${light} 2 ");
 
 				object.modelViewMatrix.multiplyMatrices( shadowCamera.matrixWorldInverse, object.matrixWorld );
      

@@ -361,7 +361,8 @@ class WebGLLights {
 
 				uniforms["color"].copy( light.color ).multiplyScalar( light.intensity * scaleFactor );
 
-				uniforms["distance"] = light.distance;
+        // TODO distance 默认0 ？？
+				uniforms["distance"] = light.distance ?? 0;
 				uniforms["decay"] = light.decay;
 
 				if ( light.castShadow ) {

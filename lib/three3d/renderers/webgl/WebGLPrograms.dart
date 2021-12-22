@@ -146,6 +146,8 @@ class WebGLPrograms {
       envMap = cubemaps.get( material.envMap ?? environment );
     }
 
+    // print("material: ${material} ${material.type} envMap: ${envMap} scene: ${scene} ");
+
 		var shaderID = shaderIDs[ material.shaderID ];
 
 		// heuristics to create shader parameters according to lights in the scene
@@ -234,10 +236,13 @@ class WebGLPrograms {
 			"specularTintMapEncoding": getTextureEncodingFromMap( material.specularTintMap ),
 			"alphaMap": material.alphaMap != null,
       "alphaTest": useAlphaTest,
+      "sheenColorMap": material.sheenColorMap != null,
 
 			"gradientMap": material.gradientMap != null,
 
 			"sheenTint": ( material.sheenTint != null && !( material.sheenTint!.isBlack() ) ),
+
+      "sheenColorMapEncoding": getTextureEncodingFromMap( material.sheenColorMap ),
 
 			"transmission": material.transmission > 0,
 			"transmissionMap": material.transmissionMap != null,

@@ -26,11 +26,12 @@ class WebGLAttributes {
 
     // dynamic arrayList;
 
-    // print(" WebGLAttributes.createBuffer attribute: ${attribute.runtimeType} arrayType: ${arrayType} name: ${name} ");
+    // print(" WebGLAttributes.createBuffer attribute: ${attribute.runtimeType} arrayType: ${arrayType} array: ${array} ${array.runtimeType} name: ${name} ");
 
     var type = gl.FLOAT;
     int bytesPerElement = 4;
 
+    // TODO 优化判断？？？
     if(arrayType == Float32BufferAttribute) {
       // arrayList = Float32List.fromList(array.map((e) => e.toDouble()).toList());
     } else if (arrayType == Uint16BufferAttribute) {
@@ -105,7 +106,7 @@ class WebGLAttributes {
       throw("WebGLAttributes.createBuffer BufferAttribute arrayType: ${array.runtimeType} is not support  ");
     }
 
-    // print("WebGLAttributes.createBuffer attribute: ${attribute} arrayList: ${arrayList}   ");
+    // print("WebGLAttributes.createBuffer name: ${name} attribute: ${attribute} arrayList: ${array.runtimeType}  array.bytesLength: ${ array.bytesLength }   ");
 
 		var buffer = gl.createBuffer();
 

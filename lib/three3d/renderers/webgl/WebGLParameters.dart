@@ -52,7 +52,11 @@ class WebGLParameters {
 	late bool specularTintMap;
 	late int specularTintMapEncoding;
   late bool alphaMap;
+  late bool sheenColorMap;
   
+
+  late int sheenColorMapEncoding;
+
   late bool gradientMap;
   late bool sheenTint;
   late bool transmission;
@@ -175,6 +179,9 @@ class WebGLParameters {
     transmission = json["transmission"];
     transmissionMap = json["transmissionMap"];
     thicknessMap = json["thicknessMap"];
+
+    sheenColorMap = json["sheenColorMap"];
+
     combine = json["combine"];
     vertexTangents = json["vertexTangents"];
     vertexColors = json["vertexColors"];
@@ -235,6 +242,8 @@ class WebGLParameters {
     vertexAlphas = json["vertexAlphas"];
 
     flipNormalScaleY = json["flipNormalScaleY"];
+
+    sheenColorMapEncoding = json["sheenColorMapEncoding"];
   }
 
 
@@ -278,7 +287,7 @@ class WebGLParameters {
       "emissiveMap": emissiveMap,
       "emissiveMapEncoding": emissiveMapEncoding,
 
-       "bumpMap": bumpMap,
+      "bumpMap": bumpMap,
       "normalMap": normalMap,
       "objectSpaceNormalMap": objectSpaceNormalMap,
       "tangentSpaceNormalMap": tangentSpaceNormalMap,
@@ -303,20 +312,22 @@ class WebGLParameters {
       "thicknessMap": thicknessMap,
       "combine": combine,
 
-     "vertexTangents": vertexTangents,
+      "sheenColorMap": sheenColorMap,
+
+      "vertexTangents": vertexTangents,
       "vertexColors": vertexColors,
       "vertexUvs": vertexUvs,
       "uvsVertexOnly": uvsVertexOnly,
       "fog": fog,
 
-     "useFog": useFog,
+      "useFog": useFog,
       "fogExp2": fogExp2,
       "flatShading": flatShading,
       "sizeAttenuation": sizeAttenuation,
       "logarithmicDepthBuffer": logarithmicDepthBuffer,
 
 
-     "skinning": skinning,
+      "skinning": skinning,
       "maxBones": maxBones,
       "useVertexTexture": useVertexTexture,
       "morphTargets": morphTargets,
@@ -325,7 +336,7 @@ class WebGLParameters {
       "numPointLights": numPointLights,
       "numSpotLights": numSpotLights,
 
-       "numRectAreaLights": numRectAreaLights,
+      "numRectAreaLights": numRectAreaLights,
       "numHemiLights": numHemiLights,
       "numDirLightShadows": numDirLightShadows,
       "numPointLightShadows": numPointLightShadows,
@@ -337,19 +348,19 @@ class WebGLParameters {
       "shadowMapEnabled": shadowMapEnabled,
       "shadowMapType": shadowMapType,
 
-       "toneMapping": toneMapping,
+      "toneMapping": toneMapping,
       "physicallyCorrectLights": physicallyCorrectLights,
       "premultipliedAlpha": premultipliedAlpha,
       "alphaTest": alphaTest,
       "doubleSided": doubleSided,
 
-       "flipSided": flipSided,
+      "flipSided": flipSided,
       "depthPacking": depthPacking,
       "index0AttributeName": index0AttributeName,
       "extensionDerivatives": extensionDerivatives,
       "extensionFragDepth": extensionFragDepth,
 
-       "extensionDrawBuffers": extensionDrawBuffers,
+      "extensionDrawBuffers": extensionDrawBuffers,
       "extensionShaderTextureLOD": extensionShaderTextureLOD,
       "rendererExtensionFragDepth": rendererExtensionFragDepth,
       "rendererExtensionDrawBuffers": rendererExtensionDrawBuffers,
@@ -358,7 +369,8 @@ class WebGLParameters {
       "customProgramCacheKey": customProgramCacheKey,
       "uniforms": uniforms,
       "vertexAlphas": vertexAlphas,
-      "flipNormalScaleY": flipNormalScaleY
+      "flipNormalScaleY": flipNormalScaleY,
+      "sheenColorMapEncoding": sheenColorMapEncoding
     };
 
     return _json;

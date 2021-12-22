@@ -32,13 +32,13 @@ class PMREMGenerator {
   var MAX_SAMPLES = 20;
 
   var ENCODINGS = {
-    [ LinearEncoding ]: 0,
-    [ sRGBEncoding ]: 1,
-    [ RGBEEncoding ]: 2,
-    [ RGBM7Encoding ]: 3,
-    [ RGBM16Encoding ]: 4,
-    [ RGBDEncoding ]: 5,
-    [ GammaEncoding ]: 6
+    LinearEncoding: 0,
+    sRGBEncoding: 1,
+    RGBEEncoding: 2,
+    RGBM7Encoding: 3,
+    RGBM16Encoding: 4,
+    RGBDEncoding: 5,
+    GammaEncoding: 6
   };
 
   dynamic _lodPlanes;
@@ -316,7 +316,7 @@ class PMREMGenerator {
 
 		var renderer = this._renderer;
 
-		if ( texture.isCubeTexture ) {
+		if ( texture is CubeTexture ) {
 
 			if ( this._cubemapShader == null ) {
 
@@ -334,14 +334,14 @@ class PMREMGenerator {
 
 		}
 
-		var material = texture.isCubeTexture ? this._cubemapShader : this._equirectShader;
+		var material = (texture is CubeTexture) ? this._cubemapShader : this._equirectShader;
 		var mesh = new Mesh( _lodPlanes[ 0 ], material );
 
 		var uniforms = material.uniforms;
 
 		uniforms[ 'envMap' ]["value"] = texture;
 
-		if ( ! texture.isCubeTexture ) {
+		if ( ! (texture is CubeTexture) ) {
 
 			uniforms[ 'texelSize' ]["value"].set( 1.0 / texture.image.width, 1.0 / texture.image.height );
 
@@ -705,7 +705,7 @@ class PMREMGenerator {
       "name": 'EquirectangularToCubeUV',
 
       "uniforms": {
-        'envMap': { "value": null },
+        'envMap': {  },
         'texelSize': { "value": texelSize },
         'inputEncoding': { "value": ENCODINGS[ LinearEncoding ] },
         'outputEncoding': { "value": ENCODINGS[ LinearEncoding ] }
@@ -770,7 +770,7 @@ class PMREMGenerator {
       "name": 'CubemapToCubeUV',
 
       "uniforms": {
-        'envMap': { "value": null },
+        'envMap': { },
         'inputEncoding': { "value": ENCODINGS[ LinearEncoding ] },
         'outputEncoding': { "value": ENCODINGS[ LinearEncoding ] }
       },

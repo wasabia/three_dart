@@ -23,11 +23,11 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
 		// and the flag isRenderTargetTexture controls this conversion. The flip is not required when using WebGLCubeRenderTarget.texture
 		// as a cube texture (this is detected when isRenderTargetTexture is set to true for cube textures).
 
-    this.texture = CubeTexture( null, options.mapping, options.wrapS, options.wrapT, options.magFilter, options.minFilter, options.format, options.type, options.anisotropy, options.encoding );
+    this.texture = CubeTexture( null, options["mapping"], options["wrapS"], options["wrapT"], options["magFilter"], options["minFilter"], options["format"], options["type"], options["anisotropy"], options["encoding"] );
     this.texture.isRenderTargetTexture = true;
     
-    this.texture.generateMipmaps = options.generateMipmaps ?? false;
-		this.texture.minFilter = options.minFilter ?? LinearFilter;
+    this.texture.generateMipmaps = options["generateMipmaps"] ?? false;
+		this.texture.minFilter = options["minFilter"] ?? LinearFilter;
 
   }
 
@@ -46,7 +46,7 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
     var shader = {
 
       "uniforms": {
-        "tEquirect": { "value": null },
+        "tEquirect": {  },
       },
 
       "vertexShader": """

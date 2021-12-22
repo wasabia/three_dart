@@ -32,3 +32,5 @@ part './Cache.dart';
 part './ObjectLoader.dart';
 part './BufferGeometryLoader.dart';
 part './MaterialLoader.dart';
+part './DataTextureLoader.dart';
+

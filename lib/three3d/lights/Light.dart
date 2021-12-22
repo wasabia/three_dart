@@ -104,5 +104,25 @@ class Light extends Object3D {
 
 	}
 
+  getProperty(propertyName) {
+    if(propertyName == "color") {
+      return this.color;
+    } else if(propertyName == "intensity") {
+      return this.intensity;  
+    } else {
+      return super.getProperty(propertyName);
+    }
+  }
+
+  setProperty(String propertyName, value) {
+    if(propertyName == "intensity") {
+      this.intensity = value;
+    } else {
+      super.setProperty(propertyName, value);
+    }
+
+    return this;
+  }
+
 }
 

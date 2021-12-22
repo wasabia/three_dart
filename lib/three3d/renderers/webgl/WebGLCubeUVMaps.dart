@@ -33,7 +33,7 @@ class WebGLCubeUVMaps {
 
 					var image = texture.image;
 
-					if ( ( isEquirectMap && image && image.height > 0 ) || ( isCubeMap && image && isCubeTextureComplete( image ) ) ) {
+					if ( ( isEquirectMap && image != null && image.height > 0 ) || ( isCubeMap && image != null && isCubeTextureComplete( image ) ) ) {
 
 						var currentRenderTarget = renderer.getRenderTarget();
 

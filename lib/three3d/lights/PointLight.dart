@@ -7,7 +7,9 @@ class PointLight extends Light {
 
   PointLight(color, [double? intensity, double? distance, double? decay] ) : super(color, intensity) {
 
-    this.distance = distance ?? 0;
+    // remove default 0  for js 0 is false  but for dart 0 is not.
+    // PointLightShadow.updateMatrices  far value 
+    this.distance = distance;
     this.decay = decay ?? 1;	// for physically correct lights, should be 2.
 
     this.shadow = PointLightShadow();
@@ -16,7 +18,7 @@ class PointLight extends Light {
 
 
   PointLight.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) : super.fromJSON(json, rootJSON) {
-    distance = json["distance"] ?? 0;
+    distance = json["distance"];
     decay = json["decay"] ?? 1;
     shadow = PointLightShadow.fromJSON(json["shadow"], rootJSON);
   }

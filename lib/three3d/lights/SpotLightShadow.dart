@@ -15,7 +15,7 @@ class SpotLightShadow extends LightShadow {
 
 		var fov = MathUtils.RAD2DEG * 2 * light.angle * this.focus;
 		var aspect = this.mapSize.width / this.mapSize.height;
-		var far = light.distance != 0 ? light.distance : camera.far;
+		var far = light.distance ?? camera.far;
 
 		if ( fov != camera.fov || aspect != camera.aspect || far != camera.far ) {
 			camera.fov = fov;

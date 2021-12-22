@@ -1,11 +1,13 @@
-const _floatView = new Float32Array( 1 );
-const _int32View = new Int32Array( _floatView.buffer );
+part of three_extra;
 
-const DataUtils = {
+var _floatView = Float32List( 1 );
+var _int32View = new Int32List.view( _floatView.buffer );
+
+class DataUtils {
 
 	// Converts float32 to float16 (stored as uint16 value).
 
-	toHalfFloat: function ( val ) {
+	static toHalfFloat ( val ) {
 
 		// Source: http://gamedev.stackexchange.com/questions/17326/conversion-of-a-number-from-single-precision-floating-point-representation-to-a/17410#17410
 
@@ -14,11 +16,11 @@ const DataUtils = {
 		* by James Tursa?s half-precision code. */
 
 		_floatView[ 0 ] = val;
-		const x = _int32View[ 0 ];
+		var x = _int32View[ 0 ];
 
-		let bits = ( x >> 16 ) & 0x8000; /* Get the sign */
-		let m = ( x >> 12 ) & 0x07ff; /* Keep one extra bit for rounding */
-		const e = ( x >> 23 ) & 0xff; /* Using int is faster here */
+		var bits = ( x >> 16 ) & 0x8000; /* Get the sign */
+		var m = ( x >> 12 ) & 0x07ff; /* Keep one extra bit for rounding */
+		var e = ( x >> 23 ) & 0xff; /* Using int is faster here */
 
 		/* If zero, or denormal, or exponent underflows too much for a denormal
 			* half, return signed zero. */
@@ -30,7 +32,9 @@ const DataUtils = {
 			bits |= 0x7c00;
 			/* If exponent was 0xff and one mantissa bit was set, it means NaN,
 						* not Inf, so make sure we set one mantissa bit too. */
-			bits |= ( ( e == 255 ) ? 0 : 1 ) && ( x & 0x007fffff );
+			// bits |= ( ( e == 255 ) ? 0 : 1 ) && ( x & 0x007fffff );
+      bits |= (e == 255 ? ( x & 0x007fffff ) : 1);
+
 			return bits;
 
 		}
@@ -54,6 +58,4 @@ const DataUtils = {
 
 	}
 
-};
-
-export { DataUtils };
+}

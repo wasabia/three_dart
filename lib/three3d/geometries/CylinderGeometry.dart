@@ -280,7 +280,6 @@ class CylinderGeometry extends BufferGeometry {
       data["thetaStart"], 
       data["thetaLength"] 
     );
-
 	}
 
 }

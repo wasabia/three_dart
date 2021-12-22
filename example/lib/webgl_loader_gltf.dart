@@ -1,31 +1,21 @@
 import 'dart:async';
 
-import 'dart:typed_data';
-
-import 'dart:ui' as ui;
-
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
-
-
 import 'package:three_dart/three_dart.dart' as THREE;
-
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
-
-
-class webgl_debug extends StatefulWidget {
+class webgl_loader_gltf extends StatefulWidget {
   String fileName;
-  webgl_debug({Key? key, required this.fileName}) : super(key: key);
+  webgl_loader_gltf({Key? key, required this.fileName}) : super(key: key);
 
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<webgl_debug> {
+class _MyAppState extends State<webgl_loader_gltf> {
 
 
   late FlutterGlPlugin three3dRender;
@@ -40,16 +30,6 @@ class _MyAppState extends State<webgl_debug> {
   late THREE.Scene scene;
   late THREE.Camera camera;
   late THREE.Mesh mesh;
-
-  late THREE.Light spotLight;
-  late THREE.Light dirLight;
-  late THREE.Light pointLight;
-  late THREE.Mesh torusKnot;
-  late THREE.Mesh cube;
-
-  int delta = 0;
-
-  late THREE.Material material;
   
   num dpr = 1.0;
 
@@ -57,14 +37,13 @@ class _MyAppState extends State<webgl_debug> {
 
   bool verbose = true;
 
-  int count = 1000;
+  late THREE.Object3D object;
 
-  bool inited = false;
+  late THREE.Texture texture;
 
-  late THREE.WebGLRenderTarget renderTarget;
+  late THREE.WebGLMultisampleRenderTarget renderTarget;
 
   dynamic? sourceTexture;
-
 
   @override
   void initState() {
@@ -183,8 +162,7 @@ class _MyAppState extends State<webgl_debug> {
 
     renderer!.render(scene, camera);
 
-
-
+   
     int _t1 = DateTime.now().millisecondsSinceEpoch;
 
     if(verbose) {
@@ -216,12 +194,12 @@ class _MyAppState extends State<webgl_debug> {
     renderer = THREE.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize( width, height, false );
-    renderer!.shadowMap.enabled = true;
-    renderer!.shadowMap.type = THREE.BasicShadowMap;
+    renderer!.shadowMap.enabled = false;
     
     if(!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({ "minFilter": THREE.LinearFilter, "magFilter": THREE.LinearFilter, "format": THREE.RGBAFormat });
+      var pars = THREE.WebGLRenderTargetOptions({ "format": THREE.RGBAFormat });
       renderTarget = THREE.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
+      renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }
@@ -229,44 +207,75 @@ class _MyAppState extends State<webgl_debug> {
 
 
   
-  initScene() async {
+  initScene() {
     initRenderer();
-    await initPage();
+    initPage();
   }
 
   initPage() async {
 
-    _initScene();
+    camera = new THREE.PerspectiveCamera( 45, width / height, 0.25, 20 );
+    camera.position.set( - 1.8, 0.6, 2.7 );
 
-    inited = true;
-  }
-
-  _initScene() {
-
-    camera = new THREE.PerspectiveCamera( 45, width / height, 1, 1000 );
-    camera.position.set( 0, 15, 70 );
+    // scene
 
     scene = new THREE.Scene();
 
+    var ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 );
+    scene.add( ambientLight );
+
+    var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
+
+    pointLight.position.set(0, 0, 18);
+
+    
+    scene.add( pointLight );
+    scene.add( camera );
+
     camera.lookAt(scene.position);
 
-    dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
-    dirLight.name = 'Dir. Light';
-    dirLight.position.set( 0, 20, 40 );
-    scene.add(dirLight);
+    var _loader = THREE_JSM.RGBELoader(null);
+		_loader.setPath( 'textures/equirectangular/' );
+		var _hdrTexture = await _loader.loadAsync( 'royal_esplanade_1k.hdr', null );
 
-    var geometry = new THREE.BoxGeometry( 10, 10, 10 );
-    var material = new THREE.MeshLambertMaterial( {
-      "color": 0xffffff
-    } );
+    _hdrTexture.mapping = THREE.EquirectangularReflectionMapping;
 
-    var box = new THREE.Mesh( geometry, material );
+    // print("_hdrTexture 1: ${_hdrTexture} ");
+    // print("_hdrTexture 2: ${_hdrTexture.image} ");
+    // print("_hdrTexture 3: ${_hdrTexture.image.data} ");
+    // print("_hdrTexture 3: ${_hdrTexture.image.data.toDartList()} ");
 
-    scene.add( box );
+    scene.background = _hdrTexture;
+    scene.environment = _hdrTexture;
 
+
+
+    var textureLoader = new THREE.TextureLoader( null );
+    texture = await textureLoader.loadAsync( 'assets/textures/uv_grid_directx.jpg', null );
+
+    texture.magFilter = THREE.LinearFilter;
+    texture.minFilter = THREE.LinearMipmapLinearFilter;
+    texture.generateMipmaps = true;
+    texture.needsUpdate = true;
+
+    var loader = THREE_JSM.GLTFLoader( null ).setPath( 'assets/models/gltf/DamagedHelmet/glTF/' );
+    
+    var result = await loader.loadAsync( 'DamagedHelmet.gltf', null);
+
+    object = result["scene"];
+
+
+    // object.traverse( ( child ) {
+    //   if ( child.isMesh ) {
+        // child.material.map = texture;
+    //   }
+    // } );
+
+
+    scene.add( object );
+
+    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
   }
-
-
 
   animate() {
 
@@ -274,11 +283,7 @@ class _MyAppState extends State<webgl_debug> {
       return;
     }
 
-    if(!inited) {
-      return;
-    }
-
-
+    
 
     render();
 
