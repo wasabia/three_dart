@@ -97,6 +97,8 @@ class _MyAppState extends State<webgl_debug> {
 
       initScene();
       animate();
+
+
       
     });
   
@@ -179,11 +181,11 @@ class _MyAppState extends State<webgl_debug> {
 
     final _gl = three3dRender.gl;
 
-     
+    print( _gl.getString(_gl.VENDOR) );
+    print( _gl.getString(_gl.RENDERER) );
+
 
     renderer!.render(scene, camera);
-
-
 
     int _t1 = DateTime.now().millisecondsSinceEpoch;
 
