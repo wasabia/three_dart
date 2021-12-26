@@ -1,5 +1,6 @@
 
 import 'package:example/webgl_loader_gltf.dart';
+import 'package:example/webgl_loader_obj_mtl.dart';
 import 'package:example/webgl_shadowmap_viewer.dart';
 
 import 'filesJson.dart';
@@ -107,6 +108,9 @@ class _MyAppState extends State<ExampleApp> {
       page = webgl_shadowmap_viewer(fileName: fileName);
     } else if(fileName == "webgl_loader_gltf") {
       page = webgl_loader_gltf(fileName: fileName);
+    } else if(fileName == "webgl_loader_obj_mtl") {
+      page = webgl_loader_obj_mtl(fileName: fileName);
+      
     } else {
       throw("_goto fileName ${fileName} is not support yet ");
     }
