@@ -15,7 +15,14 @@ class FogExp2 {
 
 		this.name = '';
 
-		this.color = Color.fromHex( color );
+		if(color is int) {
+      this.color = Color(0,0,0).setHex(color);
+    } else if (color is Color) {
+      this.color = color;
+    } else {
+      throw(" Fog color type: ${color.runtimeType} is not support ... ");
+    }
+    
 		this.density = ( density != null ) ? density : 0.00025;
 
 	}

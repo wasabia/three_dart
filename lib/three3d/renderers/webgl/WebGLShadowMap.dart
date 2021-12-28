@@ -358,9 +358,9 @@ class WebGLShadowMap {
 					for ( var k = 0, kl = groups.length; k < kl; k ++ ) {
 
 						var group = groups[ k ];
-						var groupMaterial = material[ group.materialIndex ];
+						var groupMaterial = material[ group["materialIndex"] ];
 
-						if ( groupMaterial && groupMaterial.visible ) {
+						if ( groupMaterial != null && groupMaterial.visible ) {
 
 							var depthMaterial = getDepthMaterial( object, geometry, groupMaterial, light, shadowCamera.near, shadowCamera.far, type );
 
