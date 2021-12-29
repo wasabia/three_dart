@@ -11,7 +11,7 @@ class KeyframeTrack {
 	var DefaultInterpolation = InterpolateLinear;
   late String ValueTypeName;
 
-  late Function createInterpolant;
+  Function? createInterpolant;
   late int? _interpolation;
 
   KeyframeTrack( name, times, values, interpolation ) {
@@ -460,17 +460,5 @@ class KeyframeTrack {
 		// return track;
 
 	}
-
-  // for GLTFLoader
-  // setCreateInterpolant() {
-  //   this.createInterpolant = ( result ) {
-  //     // A CUBICSPLINE keyframe in glTF has three output values for each input value,
-  //     // representing inTangent, splineVertex, and outTangent. As a result, track.getValueSize()
-  //     // must be divided by three to get the interpolant's sampleSize argument.
-
-  //     return GLTFCubicSplineInterpolant( this.times, this.values, this.getValueSize() / 3, result );
-
-  //   };
-  // }
 
 }

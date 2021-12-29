@@ -26,10 +26,14 @@ class AnimationUtils {
 	}
 
 	// converts an array to a specific type
-	static convertArray( List array, String type, [bool forceClone = false] ) {
+	static convertArray( array, String type, [bool forceClone = false] ) {
 
     // var 'null' and 'null' pass
 		if ( array == null || ! forceClone && array.runtimeType.toString() == type ) return array;
+
+    if( array is NativeArray && type == 'List<num>' ) {
+      return array.toDartList();
+    }
 
 		if ( type == 'List<num>' ) {
       // create typed array
@@ -306,7 +310,7 @@ class AnimationUtils {
 			} else {
 
 				// Interpolate to the reference value
-				var interpolant = referenceTrack.createInterpolant();
+				var interpolant = referenceTrack.createInterpolant!();
 				var startIndex = referenceOffset;
 				var endIndex = referenceValueSize - referenceOffset;
 				interpolant.evaluate( referenceTime );
