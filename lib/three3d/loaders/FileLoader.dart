@@ -66,6 +66,110 @@ class FileLoader extends Loader {
 		}
 
 
+    // Check for data: URI
+		var dataUriRegex = RegExp(r"^data:(.*?)(;base64)?,(.*)$");
+		var dataUriRegexResult = dataUriRegex.firstMatch(url);
+		var request;
+
+		// Safari can not handle Data URIs through XMLHttpRequest so process manually
+		if ( dataUriRegex.hasMatch(url) ) {
+
+      var dataUriRegexResult = dataUriRegex.firstMatch(url)!;
+
+			var mimeType = dataUriRegexResult.group(1);
+			var isBase64 = dataUriRegexResult.group(2) != null;
+
+			var data = dataUriRegexResult.group(3)!;
+			// data = decodeURIComponent( data );
+
+      Uint8List? base64Data;
+
+			if ( isBase64 ) base64Data = convert.base64.decode( data );
+
+			try {
+
+				var response;
+				var responseType = ( this.responseType ).toLowerCase();
+
+				switch ( responseType ) {
+
+					case 'arraybuffer':
+					case 'blob':
+
+						if ( responseType == 'blob' ) {
+							// response = new Blob( [ view.buffer ], { type: mimeType } );
+              throw(" FileLoader responseType: ${responseType} need support .... ");
+						} else {
+							response = base64Data;
+						}
+
+						break;
+
+					case 'document':
+
+						// var parser = new DOMParser();
+						// response = parser.parseFromString( data, mimeType );
+
+            throw("FileLoader responseType: ${responseType} is not support ....  ");
+
+						break;
+
+					case 'json':
+
+						response = convert.jsonDecode( data );
+
+						break;
+
+					default: // 'text' or other
+
+						response = data;
+
+						break;
+
+				}
+
+				// Wait for next browser tick like standard XMLHttpRequest event dispatching does
+				// setTimeout( function () {
+
+				// 	if ( onLoad ) onLoad( response );
+
+				// 	scope.manager.itemEnd( url );
+
+				// }, 0 );
+
+        Future.delayed(Duration.zero, () {
+          if ( onLoad != null ) onLoad( response );
+
+          scope.manager.itemEnd( url );
+        });
+
+			} catch ( error ) {
+
+				// Wait for next browser tick like standard XMLHttpRequest event dispatching does
+				// setTimeout( function () {
+
+				// 	if ( onError ) onError( error );
+
+				// 	scope.manager.itemError( url );
+				// 	scope.manager.itemEnd( url );
+
+				// }, 0 );
+
+        Future.delayed(Duration.zero, () {
+          
+					if ( onError != null ) onError( error );
+
+					scope.manager.itemError( url );
+					scope.manager.itemEnd( url );
+
+        });
+
+			}
+
+      return;
+		}
+
+
     // Initialise array for duplicate requests
 
     loading[ url ] = [];

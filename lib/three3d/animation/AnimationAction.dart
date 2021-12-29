@@ -52,7 +52,7 @@ class AnimationAction {
 
 		for ( var i = 0; i != nTracks; ++ i ) {
 
-			var interpolant = tracks[ i ].createInterpolant( null );
+			var interpolant = tracks[ i ].createInterpolant!( null );
 			interpolants[ i ] = interpolant;
 			interpolant.settings = interpolantSettings;
 
