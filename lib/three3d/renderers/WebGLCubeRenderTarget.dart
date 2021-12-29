@@ -4,7 +4,7 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
 
   bool isWebGLCubeRenderTarget = true;
 
-  WebGLCubeRenderTarget(size, options, dummy) : super(size, size, options) {
+  WebGLCubeRenderTarget(int size, options, dummy) : super(size, size, options) {
     if ( options is num ) {
 
       print( 'THREE.WebGLCubeRenderTarget: constructor signature is now WebGLCubeRenderTarget( size, options )' );

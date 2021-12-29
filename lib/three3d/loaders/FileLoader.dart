@@ -86,7 +86,7 @@ class FileLoader extends Loader {
 
 			if ( isBase64 ) base64Data = convert.base64.decode( data );
 
-			try {
+			// try {
 
 				var response;
 				var responseType = ( this.responseType ).toLowerCase();
@@ -143,7 +143,7 @@ class FileLoader extends Loader {
           scope.manager.itemEnd( url );
         });
 
-			} catch ( error ) {
+			// } catch ( error ) {
 
 				// Wait for next browser tick like standard XMLHttpRequest event dispatching does
 				// setTimeout( function () {
@@ -155,16 +155,16 @@ class FileLoader extends Loader {
 
 				// }, 0 );
 
-        Future.delayed(Duration.zero, () {
+      //   Future.delayed(Duration.zero, () {
           
-					if ( onError != null ) onError( error );
+			// 		if ( onError != null ) onError( error );
 
-					scope.manager.itemError( url );
-					scope.manager.itemEnd( url );
+			// 		scope.manager.itemError( url );
+			// 		scope.manager.itemEnd( url );
 
-        });
+      //   });
 
-			}
+			// }
 
       return;
 		}
