@@ -538,8 +538,8 @@ class WebGLTextures {
 		var glFormat = utils.convert( texture.format );
 		var glType = utils.convert( texture.type );
 
-    print("WebGLTextures.uploadTexture  ");
-    print(texture.toJSON(null));
+    // print("WebGLTextures.uploadTexture  ");
+    // print(texture.toJSON(null));
 
 		var glInternalFormat = getInternalFormat( texture.internalFormat, glFormat, glType );
 
