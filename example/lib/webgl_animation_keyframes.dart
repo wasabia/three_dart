@@ -299,6 +299,9 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
     var loader = THREE_JSM.GLTFLoader( null ).setPath( 'assets/models/gltf/test/' );
     
     var result = await loader.loadAsync( 'tokyo.gltf', null);
+    // var result = await loader.loadAsync( 'animate7.gltf', null);
+
+    
 
     print(" load gltf success result: ${result}  ");
 
@@ -307,7 +310,7 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
     print(" load gltf success model: ${model}  ");
 
     model.position.set( 1, 1, 0 );
-    model.scale.set( 0.01, 0.01, 0.01 );
+    // model.scale.set( 0.01, 0.01, 0.01 );
     scene.add( model );
 
     mixer = new THREE.AnimationMixer( model );
@@ -362,9 +365,9 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
 
     render();
 
-    // Future.delayed(Duration(milliseconds: 40), () {
-    //   animate();
-    // });
+    Future.delayed(Duration(milliseconds: 40), () {
+      animate();
+    });
   }
 
 
