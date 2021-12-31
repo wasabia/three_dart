@@ -530,7 +530,7 @@ class WebGLTextures {
     }
     
 		var needsPowerOfTwo = textureNeedsPowerOfTwo( texture ) && isPowerOfTwo( texture.image ) == false;
-		
+	
     
     var image = resizeImage( texture.image, needsPowerOfTwo, false, maxTextureSize );
 
@@ -538,7 +538,8 @@ class WebGLTextures {
 		var glFormat = utils.convert( texture.format );
 		var glType = utils.convert( texture.type );
 
-    // print("WebGLTexture glFormat: ${glFormat} glType: ${glType} texture.format: ${texture.format} texture.type: ${texture.type}  ");
+    print("WebGLTextures.uploadTexture  ");
+    print(texture.toJSON(null));
 
 		var glInternalFormat = getInternalFormat( texture.internalFormat, glFormat, glType );
 
@@ -648,8 +649,10 @@ class WebGLTextures {
 
 			} else {
 
-
-				state.texImage2D( gl.TEXTURE_2D, 0, glInternalFormat, image.width, image.height, 0, glFormat, glType, image.data );
+       
+        state.texImage2D( gl.TEXTURE_2D, 0, glInternalFormat, image.width, image.height, 0, glFormat, glType, image.data );
+      
+				
 				textureProperties["__maxMipLevel"] = 0;
 
 			}

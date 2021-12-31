@@ -171,7 +171,7 @@ class Skeleton {
 		//       64x64 pixel texture max 1024 bones * 4 pixels = (64 * 64)
 
 		int size = Math.sqrt( this.bones.length * 4 ).toInt(); // 4 pixels needed for 1 matrix
-		size = MathUtils.ceilPowerOfTwo( size );
+		size = MathUtils.ceilPowerOfTwo( size ).toInt();
 		size = Math.max( size, 4 );
 
 		// var boneMatrices = new Float32Array( size * size * 4 ); // 4 floats per RGBA pixel

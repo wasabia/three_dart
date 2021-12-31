@@ -9,5 +9,6 @@ var filesJson = [
   "webgl_shadowmap_viewer",
   "webgl_loader_gltf",
   "webgl_loader_gltf_test",
-  "webgl_loader_obj_mtl"
+  "webgl_loader_obj_mtl",
+  "webgl_animation_keyframes"
 ];

@@ -640,6 +640,8 @@ class AnimationMixer with EventDispatcher {
 
 			var action = actions[ i ];
 
+      // print(" i: ${i} action: ${action} ");
+
 			action._update( time, deltaTime, timeDirection, accuIndex );
 
 		}
@@ -650,6 +652,8 @@ class AnimationMixer with EventDispatcher {
 			nBindings = this._nActiveBindings;
 
 		for ( var i = 0; i != nBindings; ++ i ) {
+
+      // print(" i: ${i} bindings: ${bindings[i]} ");
 
 			bindings[ i ].apply( accuIndex );
 
