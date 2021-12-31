@@ -184,6 +184,8 @@ class Interpolant {
 
 					var mid = ( i1 + right ) >> 1;
 
+          // print(" Interpolant i1: ${i1} right: ${right} pp: ${pp.length} mid: ${mid} ");
+
 					if ( t < pp[ mid ] ) {
 
 						right = mid;
@@ -196,8 +198,16 @@ class Interpolant {
 
 				}
 
-				t1 = pp[ i1 ];
-				t0 = pp[ i1 - 1 ];
+        t1 = null;
+        t0 = null;
+
+        if(i1 < pp.length) {
+          t1 = pp[ i1 ];
+        }
+        if(i1 - 1 < pp.length) {
+          t0 = pp[ i1 - 1 ];
+        }
+				
 
 				// check boundary cases, again
 

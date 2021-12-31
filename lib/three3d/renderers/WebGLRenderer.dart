@@ -1503,7 +1503,7 @@ class WebGLRenderer {
 
 			var skeleton = object.skeleton;
 
-			if ( skeleton ) {
+			if ( skeleton != null ) {
 
 				if ( capabilities.floatVertexTextures ) {
 

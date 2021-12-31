@@ -243,7 +243,7 @@ class Mesh extends Object3D {
 
 							intersection = checkBufferGeometryIntersection( this, groupMaterial, raycaster, _meshray, position, morphPosition, morphTargetsRelative, uv, uv2, a, b, c );
 
-							if ( intersection ) {
+							if ( intersection != null ) {
 
 								intersection.faceIndex = Math.floor( j / 3 ); // triangle number in non-indexed buffer semantics
 								intersection.face.materialIndex = group["materialIndex"];

@@ -14,10 +14,10 @@ class ImageLoaderLoader {
     ImageElement? imageElement;
     if(imageDecoder == null) {
       Uint8List? bytes;
-      if(url.startsWith("http")) {
+      if( url.startsWith("http") ) {
         var response = await http.get(Uri.parse(url));
         bytes = response.bodyBytes;
-      } else if(url.startsWith("assets")) {
+      } else if( url.startsWith("assets") ) {
         final fileData = await rootBundle.load(url);
         bytes = Uint8List.view(fileData.buffer);
       } else {
