@@ -5,16 +5,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart';
+import 'package:three_dart/extra/Blob.dart';
 import 'package:three_dart/three3d/textures/index.dart';
 
 class ImageLoaderLoader {
 
-  static Future<ImageElement?> loadImage(String url, {Function? imageDecoder}) async {
+  static Future<ImageElement?> loadImage(url, {Function? imageDecoder}) async {
   
     ImageElement? imageElement;
     if(imageDecoder == null) {
       Uint8List? bytes;
-      if( url.startsWith("http") ) {
+      if( url is Blob) {
+        bytes = url.data;
+      } else if( url.startsWith("http") ) {
         var response = await http.get(Uri.parse(url));
         bytes = response.bodyBytes;
       } else if( url.startsWith("assets") ) {
