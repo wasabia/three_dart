@@ -6,7 +6,7 @@ class BufferGeometryLoader extends Loader {
 
 	}
 
-  loadAsync ( String url, Function? onProgress ) async {
+  loadAsync (  url, Function? onProgress ) async {
     var completer = Completer();
 
     load(

@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.1
-  universal_html: ^2.0.7
+  universal_html: ^2.0.8
   ffi: ^1.1.2
   image: ^3.0.2
   flutter_gl: ^0.0.6

@@ -720,11 +720,14 @@ class WebGLTextures {
 
 			} else {
 
+        // TODO
         if(kIsWeb) {
           state.texImage2D_NOSIZE( gl.TEXTURE_2D, 0, glInternalFormat, glFormat, glType, image.data );
         } else {
           state.texImage2D( gl.TEXTURE_2D, 0, glInternalFormat, image.width, image.height, 0, glFormat, glType, image.data );
         }
+        
+       
 				
 				textureProperties["__maxMipLevel"] = 0;
 

@@ -23,11 +23,11 @@ class Loader {
     this.requestHeader = {};
   }
 
-  load (String url, Function? onLoad, Function? onProgress, Function? onError ) {
+  load ( url, Function? onLoad, Function? onProgress, Function? onError ) {
     throw(" load need implement ............. ");
   }
 
-  loadAsync ( String url, Function? onProgress ) {
+  loadAsync ( url, Function? onProgress ) {
     throw(" loadAsync need implement ............. ");
 	}
 

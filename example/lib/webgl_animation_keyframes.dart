@@ -57,6 +57,8 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
   
   bool loaded = false;
 
+  late THREE.Object3D model;
+
 
   Map<String, List<Function>> _listeners = {};
 
@@ -286,10 +288,9 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
 
     var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
 
-    pointLight.position.set(0, 0, 18);
 
     
-    scene.add( pointLight );
+    camera.add( pointLight );
     scene.add( camera );
 
     camera.lookAt(scene.position);
@@ -300,23 +301,24 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
     
     var result = await loader.loadAsync( 'tokyo.gltf', null);
     // var result = await loader.loadAsync( 'animate7.gltf', null);
+    // var result = await loader.loadAsync( 'untitled22.gltf', null);
 
-    
+    print(result);
 
     print(" load gltf success result: ${result}  ");
 
-    var model = result["scene"];
+    model = result["scene"];
 
     print(" load gltf success model: ${model}  ");
 
     model.position.set( 1, 1, 0 );
-    // model.scale.set( 0.01, 0.01, 0.01 );
+    model.scale.set( 0.01, 0.01, 0.01 );
     scene.add( model );
+
+
 
     mixer = new THREE.AnimationMixer( model );
     mixer.clipAction( result["animations"][ 0 ], null, null ).play();
-
-    
 
     
     loaded = true;
@@ -354,9 +356,8 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
     }
     
 
-    var delta = clock.getDelta();
 
-    print("delta: ${delta}  ");
+    var delta = clock.getDelta();
 
     mixer.update( delta );
 

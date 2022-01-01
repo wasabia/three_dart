@@ -8,7 +8,7 @@ class ImageLoader extends Loader {
 
   }
 
-  loadAsync(String url, Function? onProgress, {Function? imageDecoder}) async {
+  loadAsync(url, Function? onProgress, {Function? imageDecoder}) async {
     var completer = Completer();
 
     load(
@@ -26,9 +26,9 @@ class ImageLoader extends Loader {
     return completer.future;
   }
 
-  load ( String url, onLoad, onProgress, onError, {Function? imageDecoder} ) async {
+  load ( url, onLoad, onProgress, onError, {Function? imageDecoder} ) async {
 
-		if ( this.path != null ) {
+		if ( this.path != "" && url is String ) {
       url = this.path + url;
     }
 
