@@ -311,7 +311,11 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     if (parameters.isWebGL2 && parameters.isRawShaderMaterial != true) {
       // GLSL 3.0 conversion for built-in materials and ShaderMaterial
 
-      versionString = '#version 300 es\n';
+      if(Platform.isMacOS) {
+        versionString = '#version 400\n';
+      } else {
+        versionString = '#version 300 es\n';
+      }
 
       prefixVertex = [
             '#define attribute in',
