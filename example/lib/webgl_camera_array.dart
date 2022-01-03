@@ -182,6 +182,10 @@ class _MyAppState extends State<webgl_camera_array> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.finish();
 
+    // var pixels = _gl.readCurrentPixels(0, 0, 10, 10);
+    // print(" --------------pixels............. ");
+    // print(pixels);
+
     if(verbose) print(" render: sourceTexture: ${sourceTexture} ");
 
     if(!kIsWeb) {

@@ -19,14 +19,14 @@ import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 
 
-class webgl_debug extends StatefulWidget {
+class webgl_debug_for_macos extends StatefulWidget {
   String fileName;
-  webgl_debug({Key? key, required this.fileName}) : super(key: key);
+  webgl_debug_for_macos({Key? key, required this.fileName}) : super(key: key);
 
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<webgl_debug> {
+class _MyAppState extends State<webgl_debug_for_macos> {
 
 
   late FlutterGlPlugin three3dRender;
@@ -77,8 +77,9 @@ class _MyAppState extends State<webgl_debug> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    width = screenSize!.width;
-    height = screenSize!.height;
+    width = screenSize!.width * 0.5;
+    height = width;
+    // height = screenSize!.height;
 
     three3dRender = FlutterGlPlugin();
 
@@ -174,7 +175,7 @@ class _MyAppState extends State<webgl_debug> {
           ),
         ),
 
-        if(resultImage != null) Image.memory(resultImage!)
+        if(resultImage != null) Image.memory(resultImage!, width: width, height: height,)
       ],
     );
   }

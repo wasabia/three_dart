@@ -1808,7 +1808,7 @@ class WebGLRenderer {
               (y >= 0 && y <= (renderTarget.height - height))) {
             // _gl.readPixels(x, y, width, height, utils.convert(textureFormat),
             //     utils.convert(textureType), buffer);
-             _gl.readPixels(x, y, width, height, utils.convert(textureFormat), utils.convert(textureType), buffer);
+            _gl.readPixels(x, y, width, height, utils.convert(textureFormat), utils.convert(textureType), buffer);
           }
         } else {
           print(
