@@ -356,8 +356,6 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     // developer.log(fragmentGlsl);
 
 
-
-
     var glVertexShader = WebGLShader(gl, gl.VERTEX_SHADER, vertexGlsl);
 
     var glFragmentShader = WebGLShader(gl, gl.FRAGMENT_SHADER, fragmentGlsl);
