@@ -208,20 +208,20 @@ class _MyAppState extends State<webgl_debug_for_macos> {
     // print(" --------------pixels............. ");
     // print(pixels);
 
-    var _target = renderer!.getRenderTarget();
-    var buffer = Uint8List(_target.width * _target.height * 4);
-    renderer!.readRenderTargetPixels(_target, 0, 0, _target.width, _target.height, buffer, 0);
+    // var _target = renderer!.getRenderTarget();
+    // var buffer = Uint8List(_target.width * _target.height * 4);
+    // renderer!.readRenderTargetPixels(_target, 0, 0, _target.width, _target.height, buffer, 0);
 
-    // print(" --------------buffer............. ");
-    // print(buffer.sublist(0, 100));
+    // // print(" --------------buffer............. ");
+    // // print(buffer.sublist(0, 100));
 
-    decodeImageFromPixels(buffer, _target.width, _target.height, ui.PixelFormat.rgba8888, (image) async {
-      final pngBytes = await image.toByteData(format: ImageByteFormat.png);
+    // decodeImageFromPixels(buffer, _target.width, _target.height, ui.PixelFormat.rgba8888, (image) async {
+    //   final pngBytes = await image.toByteData(format: ImageByteFormat.png);
       
-      setState(() {
-        resultImage = pngBytes!.buffer.asUint8List();
-      });
-    });
+    //   setState(() {
+    //     resultImage = pngBytes!.buffer.asUint8List();
+    //   });
+    // });
 
     if(verbose) print(" render: sourceTexture: ${sourceTexture} ");
 

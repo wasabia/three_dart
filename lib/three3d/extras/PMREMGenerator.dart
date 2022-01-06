@@ -597,6 +597,25 @@ class PMREMGenerator {
 
   }
 
+  _getPlatformHelper() {
+    if(kIsWeb) {
+      return "";
+    }
+
+    if(Platform.isMacOS) {
+      return """
+        #define attribute in
+        #define varying out
+        #define texture2D texture
+        out highp vec4 pc_fragColor;
+        #define gl_FragColor pc_fragColor
+      """;
+    }
+    return """
+      
+    """;
+  }
+
   _getBlurShader( maxSamples ) {
 
     var weights = maxSamples;
@@ -622,6 +641,7 @@ class PMREMGenerator {
       "vertexShader": _getCommonVertexShader(),
 
       "fragmentShader": """
+        ${ _getPlatformHelper() }
 
         precision mediump float;
         precision mediump int;
@@ -714,6 +734,7 @@ class PMREMGenerator {
       "vertexShader": _getCommonVertexShader(),
 
       "fragmentShader": """
+        ${ _getPlatformHelper() }
 
         precision mediump float;
         precision mediump int;
@@ -778,7 +799,8 @@ class PMREMGenerator {
       "vertexShader": _getCommonVertexShader(),
 
       "fragmentShader": """
-
+        ${ _getPlatformHelper() }
+        
         precision mediump float;
         precision mediump int;
 
@@ -807,9 +829,17 @@ class PMREMGenerator {
 
   }
 
+  _getPlatformVertexHelper() {
+    
+    return """
+    """;
+  }
+
   _getCommonVertexShader() {
 
     return """
+
+      ${ _getPlatformVertexHelper() }
 
       precision mediump float;
       precision mediump int;

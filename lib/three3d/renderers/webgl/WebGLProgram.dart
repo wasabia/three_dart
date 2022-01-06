@@ -54,9 +54,10 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     String customDefines = generateDefines(defines);
 
     String prefixVertex, prefixFragment;
-    var versionString = parameters.glslVersion != null
-        ? '#version ${parameters.glslVersion}\n'
-        : '';
+
+    String defaultVersionString = (!kIsWeb && Platform.isMacOS) ? "#version 140\n" : "";
+
+    var versionString = parameters.glslVersion != null ? '#version ${parameters.glslVersion}\n' : defaultVersionString;
 
     if (parameters.isRawShaderMaterial) {
       prefixVertex = [customDefines].where((s) => filterEmptyLine(s)).join('\n');
@@ -308,14 +309,10 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     vertexShader = unrollLoops(vertexShader);
     fragmentShader = unrollLoops(fragmentShader);
 
+
     if (parameters.isWebGL2 && parameters.isRawShaderMaterial != true) {
       // GLSL 3.0 conversion for built-in materials and ShaderMaterial
-
-      if(Platform.isMacOS) {
-        versionString = '#version 400\n';
-      } else {
-        versionString = '#version 300 es\n';
-      }
+      versionString = (!kIsWeb && Platform.isMacOS) ? "#version 140\n" : "#version 300 es\n";
 
       prefixVertex = [
             '#define attribute in',
@@ -351,16 +348,18 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     var vertexGlsl = versionString + prefixVertex + vertexShader;
     var fragmentGlsl = versionString + prefixFragment + fragmentShader;
 
-    // developer.log(" USE_MAP: ${parameters.map}  vertexUvs: ${parameters.vertexUvs}-------------- ");
+
+    // developer.log(" versionString: ${versionString} ");
     // developer.log(" 111 ================= VERTEX  ");
     // developer.log(vertexGlsl);
-    // // print(vertexGlsl);
     // developer.log("  111 ==================== FRAGMENT ");
     // developer.log(fragmentGlsl);
-    // print(fragmentGlsl);
+
+
 
 
     var glVertexShader = WebGLShader(gl, gl.VERTEX_SHADER, vertexGlsl);
+
     var glFragmentShader = WebGLShader(gl, gl.FRAGMENT_SHADER, fragmentGlsl);
 
     this.vertexShader = glVertexShader.content;

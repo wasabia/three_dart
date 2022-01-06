@@ -1,6 +1,7 @@
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:http/http.dart' as http;
@@ -11,7 +12,7 @@ import 'package:three_dart/three3d/textures/index.dart';
 class ImageLoaderLoader {
 
   static Future<ImageElement?> loadImage(url, {Function? imageDecoder}) async {
-  
+   
     ImageElement? imageElement;
     if(imageDecoder == null) {
       Uint8List? bytes;
@@ -28,19 +29,29 @@ class ImageLoaderLoader {
         bytes = await file.readAsBytes();
       }
       
+ 
       // print(" load image and decode 1: ${DateTime.now().millisecondsSinceEpoch}............ ");
-      var receivePort = ReceivePort();
-      await Isolate.spawn(decodeIsolate, DecodeParam(bytes, receivePort.sendPort));
-      // Get the processed image from the isolate.
-      var image = await receivePort.first as Image?;
-
+    
+      // var receivePort = ReceivePort();
+      // await Isolate.spawn(decodeIsolate, DecodeParam(bytes, receivePort.sendPort));
+      // var error = await errorPort.first;
+      // print(" error: ${error} ");
       
+      // Get the processed image from the isolate.
+      // var image = await receivePort.first as Image?;
+
+      var image = await compute( imageProcess, bytes );
+      // var image = imageProcess(bytes);
+
       if(image != null) {
         var _pixels = image.getBytes(format: Format.rgba);
         imageElement = ImageElement(url: url, data: Uint8Array.from(_pixels) , width: image.width, height: image.height);
       }
       
     } else {
+
+      // print(" imageDecoder is not null..... ");
+
       var image = await imageDecoder(null, url);
       if(image != null) {
         imageElement = ImageElement(url: url, data: image.pixels, width: image.width, height: image.height);
@@ -67,13 +78,18 @@ void decodeIsolate(DecodeParam param) {
     return;
   }
 
+
   // Read an image from file (webp in this case).
   // decodeImage will identify the format of the image and use the appropriate
   // decoder.
-  var image = decodeImage(param.bytes!)!;
-  // Resize the image to a 120x? thumbnail (maintaining the aspect ratio).
-  // var thumbnail = copyResize(image, width: 120);
-  var image2 = flipVertical(image);
+  var image2 = imageProcess(param.bytes!);
+
+  
   param.sendPort.send(image2);
 }
 
+imageProcess(bytes) {
+  var image = decodeImage(bytes)!;
+  var image2 = flipVertical(image);
+  return image2;
+}

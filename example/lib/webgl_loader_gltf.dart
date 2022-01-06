@@ -235,32 +235,19 @@ class _MyAppState extends State<webgl_loader_gltf> {
     camera.lookAt(scene.position);
 
     var _loader = THREE_JSM.RGBELoader(null);
-		_loader.setPath( 'textures/equirectangular/' );
+		_loader.setPath( 'assets/textures/equirectangular/' );
 		var _hdrTexture = await _loader.loadAsync( 'royal_esplanade_1k.hdr', null );
 
     _hdrTexture.mapping = THREE.EquirectangularReflectionMapping;
 
-    // print("_hdrTexture 1: ${_hdrTexture} ");
-    // print("_hdrTexture 2: ${_hdrTexture.image} ");
-    // print("_hdrTexture 3: ${_hdrTexture.image.data} ");
-    // print("_hdrTexture 3: ${_hdrTexture.image.data.toDartList()} ");
-
     scene.background = _hdrTexture;
     scene.environment = _hdrTexture;
-
-
-
-    var textureLoader = new THREE.TextureLoader( null );
-    texture = await textureLoader.loadAsync( 'assets/textures/uv_grid_directx.jpg', null );
-
-    texture.magFilter = THREE.LinearFilter;
-    texture.minFilter = THREE.LinearMipmapLinearFilter;
-    texture.generateMipmaps = true;
-    texture.needsUpdate = true;
 
     var loader = THREE_JSM.GLTFLoader( null ).setPath( 'assets/models/gltf/DamagedHelmet/glTF/' );
     
     var result = await loader.loadAsync( 'DamagedHelmet.gltf', null);
+
+    print(" gltf load sucess result: ${result}  ");
 
     object = result["scene"];
 

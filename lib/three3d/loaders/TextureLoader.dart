@@ -27,14 +27,14 @@ class TextureLoader extends Loader {
 
   Future<Texture> load( url, Function? onLoad, Function? onProgress, Function? onError, {Function? imageDecoder} ) {
 
+    print(" TextureLoader.load ...url: ${url} ");
+
     Texture texture;
 
  
     texture = Texture(null, null, null,null, null, null,null, null, null, null);
 
-    
-
-
+  
 		var loader = new ImageLoader( this.manager );
 		loader.setCrossOrigin( this.crossOrigin );
 		loader.setPath( this.path );
@@ -43,6 +43,7 @@ class TextureLoader extends Loader {
 
 		loader.load(url, ( image ) {
 
+      print(" TextureLoader.load ...url: ${url} image: ${image} ... ");
   
 			texture.image = image;
 

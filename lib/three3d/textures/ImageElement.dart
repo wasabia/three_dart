@@ -2,7 +2,7 @@ part of three_textures;
 
 class ImageElement {
   String? uuid;
-  String? url;
+  dynamic url;
   late int width;
   late int height;
   String? src;

@@ -552,7 +552,7 @@ class WebGLRenderer {
   renderBufferDirect(Camera camera, dynamic? scene, geometry, Material material,
       Object3D object, group) {
 
-      
+    // print("renderBufferDirect .............material: ${material.runtimeType}  ");
     
     // renderBufferDirect second parameter used to be fog (could be null)
     if (scene == null) scene =  _emptyScene; 

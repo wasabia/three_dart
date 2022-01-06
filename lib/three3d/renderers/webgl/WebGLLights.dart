@@ -8,15 +8,15 @@ class UniformsCache {
 
 	Map<int, Map<String, dynamic>> lights = {};
 
-  get ( light ) {
+  Map<String, dynamic> get ( light ) {
 
     if ( lights[ light.id ] != null ) {
 
-      return lights[ light.id ];
+      return lights[ light.id ]!;
 
     }
 
-    var uniforms;
+    Map<String, dynamic>? uniforms;
 
     switch ( light.type ) {
 
@@ -67,7 +67,7 @@ class UniformsCache {
 
     }
 
-    lights[ light.id ] = uniforms;
+    lights[ light.id ] = uniforms!;
 
     return uniforms;
 
