@@ -1,7 +1,9 @@
 library three_extra;
 
+import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/cameras/index.dart';
 import 'package:three_dart/three3d/constants.dart';

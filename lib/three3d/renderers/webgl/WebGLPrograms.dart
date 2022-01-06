@@ -191,7 +191,7 @@ class WebGLPrograms {
 			"isWebGL2": isWebGL2,
 
 			"shaderID": shaderID,
-			"shaderName": material.type,
+			"shaderName": material.type + " - " + "${material.name}",
 
 			"vertexShader": vertexShader,
 			"fragmentShader": fragmentShader,
