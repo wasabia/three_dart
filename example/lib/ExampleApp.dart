@@ -3,6 +3,7 @@ import 'package:example/webgl_animation_keyframes.dart';
 import 'package:example/webgl_loader_gltf.dart';
 import 'package:example/webgl_loader_gltf_test.dart';
 import 'package:example/webgl_loader_obj_mtl.dart';
+import 'package:example/webgl_loader_texture_basis.dart';
 import 'package:example/webgl_shadowmap_viewer.dart';
 
 import 'filesJson.dart';
@@ -116,6 +117,8 @@ class _MyAppState extends State<ExampleApp> {
       page = webgl_loader_obj_mtl(fileName: fileName);
     } else if(fileName == "webgl_animation_keyframes") {
       page = webgl_animation_keyframes(key: webgl_animation_keyframesGlobalKey, fileName: fileName);
+    } else if(fileName == "webgl_loader_texture_basis") {
+      page = webgl_loader_texture_basis(fileName: fileName);  
     } else {
       throw("_goto fileName ${fileName} is not support yet ");
     }

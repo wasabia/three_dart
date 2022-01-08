@@ -4,6 +4,8 @@ part of three_loaders;
 
 class ImageLoader extends Loader {
 
+  bool flipY = true;
+
   ImageLoader( manager ) : super(manager) {
 
   }
@@ -53,7 +55,7 @@ class ImageLoader extends Loader {
 		}
 
 
-    final _resp = await ImageLoaderLoader.loadImage(url, imageDecoder: imageDecoder);
+    final _resp = await ImageLoaderLoader.loadImage(url, flipY, imageDecoder: imageDecoder);
     if ( onLoad != null ) {
       onLoad(_resp);
     }

@@ -232,16 +232,16 @@ class _MyAppState extends State<webgl_loader_obj> {
     // texture
 
     var textureLoader = new THREE.TextureLoader( null );
-    texture = await textureLoader.loadAsync( 'assets/textures/uv_grid_directx.jpg', null);
+    texture = await textureLoader.loadAsync( 'assets/textures/uv_grid_opengl.jpg', null);
 
     texture.magFilter = THREE.LinearFilter;
     texture.minFilter = THREE.LinearMipmapLinearFilter;
     texture.generateMipmaps = true;
     texture.needsUpdate = true;
+    texture.flipY = true;
 
     var loader = THREE_JSM.OBJLoader( null );
     object = await loader.loadAsync( 'assets/models/obj/male02/male02.obj', null);
-
 
     object.traverse( ( child ) {
 
