@@ -523,9 +523,6 @@ class WebGLTextures {
 		state.activeTexture( gl.TEXTURE0 + slot );
 		state.bindTexture( textureType, textureProperties["__webglTexture"] );
 
-    // print("uploadTexture texture ${texture} ");
-    // print( texture.toJSON(null));
-
 		gl.pixelStorei( gl.UNPACK_FLIP_Y_WEBGL, texture.flipY ? 1 : 0 );
 
 
