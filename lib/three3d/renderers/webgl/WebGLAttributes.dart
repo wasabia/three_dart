@@ -27,6 +27,7 @@ class WebGLAttributes {
     // dynamic arrayList;
 
     // print(" WebGLAttributes.createBuffer attribute: ${attribute.runtimeType} arrayType: ${arrayType} array: ${array} ${array.runtimeType} name: ${name} ");
+    // print( array.toDartList().sublist(0, 40) );
 
     var type = gl.FLOAT;
     int bytesPerElement = 4;

@@ -3,17 +3,16 @@ import 'dart:typed_data';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gl/flutter_gl.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart';
 import 'package:three_dart/extra/Blob.dart';
-import 'package:three_dart/three3d/textures/index.dart';
+
 
 class ImageLoaderLoader {
 
-  static Future<ImageElement?> loadImage(url, {Function? imageDecoder}) async {
+  static Future<Image?> loadImage(url, flipY, {Function? imageDecoder}) async {
    
-    ImageElement? imageElement;
+    Image? image;
     if(imageDecoder == null) {
       Uint8List? bytes;
       if( url is Blob) {
@@ -29,52 +28,50 @@ class ImageLoaderLoader {
         bytes = await file.readAsBytes();
       }
       
- 
       // print(" load image and decode 1: ${DateTime.now().millisecondsSinceEpoch}............ ");
     
       // var receivePort = ReceivePort();
       // await Isolate.spawn(decodeIsolate, DecodeParam(bytes, receivePort.sendPort));
-      // var error = await errorPort.first;
-      // print(" error: ${error} ");
-      
-      // Get the processed image from the isolate.
-      // var image = await receivePort.first as Image?;
+      // image = await receivePort.first as Image?;
 
-      var image = await compute( imageProcess, bytes );
-      // var image = imageProcess(bytes);
+      image = await compute( imageProcess2, DecodeParam(bytes!, flipY, null) );
+      // image = imageProcess2( DecodeParam(bytes!, flipY, null) );
 
-      if(image != null) {
-        var _pixels = image.getBytes(format: Format.rgba);
-        imageElement = ImageElement(url: url, data: Uint8Array.from(_pixels) , width: image.width, height: image.height);
-      }
+      // if(image != null) {
+      //   var _pixels = image.getBytes(format: Format.rgb);
+      //   imageElement = ImageElement(url: url, data: Uint8Array.from(_pixels) , width: image.width, height: image.height);
+      // }
+
+ 
       
     } else {
 
       // print(" imageDecoder is not null..... ");
 
-      var image = await imageDecoder(null, url);
-      if(image != null) {
-        imageElement = ImageElement(url: url, data: image.pixels, width: image.width, height: image.height);
-      }
+      image = await imageDecoder(null, url);
+      // if(image != null) {
+      //   imageElement = ImageElement(url: url, data: image.pixels, width: image.width, height: image.height);
+      // }
       
     }
   
-    return imageElement;
+    return image;
   }
 
 }
 
 
 class DecodeParam {
-  Uint8List? bytes;
-  final SendPort sendPort;
-  DecodeParam(this.bytes, this.sendPort);
+  Uint8List bytes;
+  bool flipY;
+  SendPort? sendPort;
+  DecodeParam(this.bytes, this.flipY, this.sendPort);
 }
 
 void decodeIsolate(DecodeParam param) {
 
   if(param.bytes == null) {
-    param.sendPort.send(null);
+    param.sendPort?.send(null);
     return;
   }
 
@@ -82,14 +79,18 @@ void decodeIsolate(DecodeParam param) {
   // Read an image from file (webp in this case).
   // decodeImage will identify the format of the image and use the appropriate
   // decoder.
-  var image2 = imageProcess(param.bytes!);
+  var image2 = imageProcess2(param);
 
   
-  param.sendPort.send(image2);
+  param.sendPort?.send(image2);
 }
 
-imageProcess(bytes) {
-  var image = decodeImage(bytes)!;
-  var image2 = flipVertical(image);
-  return image2;
+Image imageProcess2(DecodeParam param) {
+  var image = decodeImage(param.bytes)!;
+
+  if(param.flipY) {
+    image = flipVertical(image);
+  }
+
+  return image;
 }

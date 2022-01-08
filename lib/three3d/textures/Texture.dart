@@ -5,7 +5,7 @@ int textureId = 0;
 class Texture with EventDispatcher {
 
   static String? DEFAULT_IMAGE = null;
-  static String DEFAULT_MAPPING = "UVMapping";
+  static int DEFAULT_MAPPING = UVMapping;
 
   bool isTexture = true;
   bool isWebGLRenderTarget = false;
@@ -60,8 +60,9 @@ class Texture with EventDispatcher {
 
   List mipmaps = [];
 
-  Texture(this.image, this.mapping, int? wrapS, int? wrapT, int? magFilter, int? minFilter, int? format, int? type, int? anisotropy, int? encoding) {
+  Texture(this.image, int? mapping, int? wrapS, int? wrapT, int? magFilter, int? minFilter, int? format, int? type, int? anisotropy, int? encoding) {
  
+    this.mapping = mapping ?? Texture.DEFAULT_MAPPING;
 
     this.wrapS = wrapS ?? ClampToEdgeWrapping;
     this.wrapT = wrapT ?? ClampToEdgeWrapping;

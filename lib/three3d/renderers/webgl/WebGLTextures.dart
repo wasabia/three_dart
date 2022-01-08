@@ -513,33 +513,44 @@ class WebGLTextures {
 	uploadTexture( textureProperties, Texture texture, int slot ) {
 		var textureType = gl.TEXTURE_2D;
 
+
 		if ( texture.isDataTexture2DArray ) textureType = gl.TEXTURE_2D_ARRAY;
 		if ( texture.isDataTexture3D ) textureType = gl.TEXTURE_3D;
 
 		initTexture( textureProperties, texture );
 
+
 		state.activeTexture( gl.TEXTURE0 + slot );
 		state.bindTexture( textureType, textureProperties["__webglTexture"] );
 
+    // print("uploadTexture texture ${texture} ");
+    // print( texture.toJSON(null));
+
 		gl.pixelStorei( gl.UNPACK_FLIP_Y_WEBGL, texture.flipY ? 1 : 0 );
+
+
 		gl.pixelStorei( gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, texture.premultiplyAlpha ? 1 : 0 );
+
+
+
 		gl.pixelStorei( gl.UNPACK_ALIGNMENT, texture.unpackAlignment);
-    
+
+
     if(kIsWeb) {
       gl.pixelStorei( gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE );
     }
-    
+
+ 
 		var needsPowerOfTwo = textureNeedsPowerOfTwo( texture ) && isPowerOfTwo( texture.image ) == false;
 	
     
     var image = resizeImage( texture.image, needsPowerOfTwo, false, maxTextureSize );
 
+
 		var supportsMips = isPowerOfTwo( image ) || isWebGL2;
 		var glFormat = utils.convert( texture.format );
 		var glType = utils.convert( texture.type );
 
-    // print("WebGLTextures.uploadTexture  ");
-    // print(texture.toJSON(null));
 
 		var glInternalFormat = getInternalFormat( texture.internalFormat, glFormat, glType );
 
@@ -628,9 +639,8 @@ class WebGLTextures {
 
 		} else if ( texture.isDataTexture ) {
 
-
-      // print("uploadTexture texture isDataTexture  ----------------- ");
-      // print(image.data);
+      // print("uploadTexture texture isDataTexture image.width: ${image.width}, image.height: ${image.height} supportsMips: ${supportsMips}  -mipmaps.length: ${mipmaps.length}---------------- ");
+      // print(image.data.toDartList().length);
 			// use manually created mipmaps if available
 			// if there are no manual mipmaps
 			// set 0 level mipmap and then use GL to generate other mipmap levels
@@ -649,11 +659,8 @@ class WebGLTextures {
 
 			} else {
 
-       
         state.texImage2D( gl.TEXTURE_2D, 0, glInternalFormat, image.width, image.height, 0, glFormat, glType, image.data );
-      
-				
-				textureProperties["__maxMipLevel"] = 0;
+        textureProperties["__maxMipLevel"] = 0;
 
 			}
 
@@ -720,6 +727,8 @@ class WebGLTextures {
 
 			} else {
 
+        // print(" WebGLTextures.uploadTexture..... ");
+
         // TODO
         if(kIsWeb) {
           state.texImage2D_NOSIZE( gl.TEXTURE_2D, 0, glInternalFormat, glFormat, glType, image.data );
@@ -759,8 +768,8 @@ class WebGLTextures {
 		state.activeTexture( gl.TEXTURE0 + slot );
 		state.bindTexture( gl.TEXTURE_CUBE_MAP, textureProperties.__webglTexture );
 
-    gl.pixelStorei( gl.UNPACK_FLIP_Y_WEBGL, texture.flipY );
-		gl.pixelStorei( gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, texture.premultiplyAlpha );
+    gl.pixelStorei( gl.UNPACK_FLIP_Y_WEBGL, texture.flipY ? 1 : 0 );
+		gl.pixelStorei( gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, texture.premultiplyAlpha ? 1 : 0 );
 		gl.pixelStorei( gl.UNPACK_ALIGNMENT, texture.unpackAlignment );
 
     if(kIsWeb) {

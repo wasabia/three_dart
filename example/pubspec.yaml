@@ -75,8 +75,7 @@ flutter:
     - assets/models/json/
     - assets/models/gltf/test/
     - assets/models/gltf/DamagedHelmet/glTF/
-    - assets/textures/uv_grid_opengl.jpg
-    - assets/textures/uv_grid_directx.jpg
+    - assets/textures/
     - assets/textures/equirectangular/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

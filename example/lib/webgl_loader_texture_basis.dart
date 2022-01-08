@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:example/TouchListener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -9,18 +8,14 @@ import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
-GlobalKey<webgl_debugState> webgl_animation_keyframesGlobalKey = GlobalKey<webgl_debugState>();
-
-
-class webgl_debug extends StatefulWidget {
+class webgl_loader_texture_basis extends StatefulWidget {
   String fileName;
+  webgl_loader_texture_basis({Key? key, required this.fileName}) : super(key: key);
 
-  webgl_debug({Key? key, required this.fileName}) : super(key: key);
-
-  createState() => webgl_debugState();
+  _MyAppState createState() => _MyAppState();
 }
 
-class webgl_debugState extends State<webgl_debug> {
+class _MyAppState extends State<webgl_loader_texture_basis> {
 
 
   late FlutterGlPlugin three3dRender;
@@ -35,11 +30,6 @@ class webgl_debugState extends State<webgl_debug> {
   late THREE.Scene scene;
   late THREE.Camera camera;
   late THREE.Mesh mesh;
-
-
-  late THREE.AnimationMixer mixer;
-  THREE.Clock clock = new THREE.Clock();
-  THREE_JSM.OrbitControls? controls;
   
   num dpr = 1.0;
 
@@ -54,31 +44,11 @@ class webgl_debugState extends State<webgl_debug> {
   late THREE.WebGLMultisampleRenderTarget renderTarget;
 
   dynamic? sourceTexture;
-  
-  bool loaded = false;
-
-  late THREE.Object3D model;
-
-
-  Map<String, List<Function>> _listeners = {};
 
   @override
   void initState() {
-    super.initState();   
-  }
-
-
-
-  addEventListener(String name, Function callback, [bool flag = false]) {
-    var _cls = _listeners[name] ?? [];
-    _cls.add(callback);
-    _listeners[name] = _cls;
-  }
-
-  removeEventListener(String name, Function callback, [bool flag = false]) {
-    var _cls = _listeners[name] ?? [];
-    _cls.remove(callback);
-    _listeners[name] = _cls;
+    super.initState();
+    
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -144,23 +114,14 @@ class webgl_debugState extends State<webgl_debug> {
         floatingActionButton: FloatingActionButton(
           child: Text("render"),
           onPressed: () {
-            clickRender();
+            render();
           },
         ),
       ),
     );
   }
 
-  emit(String name, event) {
-    var _callbacks = _listeners[name];
-    if(_callbacks != null && _callbacks.length > 0) {
-      var _len = _callbacks.length;
-      for(int i = 0; i < _len; i++) {
-        var _cb = _callbacks[i];
-        _cb(event);
-      }
-    }
-  }
+  
   
   Widget _build(BuildContext context) {
     return Column(
@@ -168,41 +129,18 @@ class webgl_debugState extends State<webgl_debug> {
         Container(
           child: Stack(
             children: [
-              TouchListener(
-                touchstart: (event) {
-                  emit("touchstart", event);
-                },
-                touchmove: (event) {
-                  emit("touchmove", event);
-                },
-                touchend: (event) {
-                  emit("touchend", event);
-                },
-                pointerdown: (event) {
-                  emit("pointerdown", event);
-                },
-                pointermove: (event) {
-                  emit("pointermove", event);
-                },
-                pointerup: (event) {
-                  emit("pointerup", event);
-                },
-                wheel: (event) {
-                  emit("wheel", event);
-                },
-                child: Container(
-                  width: width,
-                  height: height,
-                  color: Colors.black,
-                  child: Builder(
-                    builder: (BuildContext context) {
-                      if(kIsWeb) {
-                        return three3dRender.isInitialized ? HtmlElementView(viewType: three3dRender.textureId!.toString()) : Container();
-                      } else {
-                        return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
-                      }
+              Container(
+                width: width,
+                height: height,
+                color: Colors.black,
+                child: Builder(
+                  builder: (BuildContext context) {
+                    if(kIsWeb) {
+                      return three3dRender.isInitialized ? HtmlElementView(viewType: three3dRender.textureId!.toString()) : Container();
+                    } else {
+                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
                     }
-                  )
+                  }
                 )
               ),
               
@@ -253,7 +191,7 @@ class webgl_debugState extends State<webgl_debug> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer( _options );
+    renderer = THREE.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize( width, height, false );
     renderer!.shadowMap.enabled = false;
@@ -276,8 +214,8 @@ class webgl_debugState extends State<webgl_debug> {
 
   initPage() async {
 
-    camera = new THREE.PerspectiveCamera( 40, 1, 1, 100 );
-    camera.position.set( 5, 2, 8 );
+    camera = new THREE.PerspectiveCamera( 60, width / height, 0.25, 20 );
+    camera.position.set( - 0.0, 0.0, 20.0 );
 
     // scene
 
@@ -286,45 +224,29 @@ class webgl_debugState extends State<webgl_debug> {
     var ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 );
     scene.add( ambientLight );
 
-    scene.add( camera );
+    camera.lookAt(scene.position);
 
-    camera.lookAt( scene.position );
+    var geometry = THREE.PlaneGeometry(10, 10);
+    var material = new THREE.MeshBasicMaterial( { "side": THREE.DoubleSide } );
 
+    mesh = new THREE.Mesh( geometry, material );
 
+    scene.add( mesh );
 
-    var loader = THREE_JSM.GLTFLoader( null ).setPath( 'assets/models/gltf/test/' );
+    var loader = new THREE.TextureLoader(null);
+    var texture = await loader.loadAsync( "assets/textures/758px-Canestra_di_frutta_(Caravaggio).jpg", null);
+
+    // texture.unpackAlignment = 1;
+    // var texture = await loader.loadAsync( "assets/textures/uv_grid_directx.jpg", null);
+
+    // var texture = await loader.loadAsync( "assets/textures/colors.png", null);
+    // var texture = await loader.loadAsync( "assets/models/gltf/DamagedHelmet/glTF/Default_normal.jpg", null);
     
-    // var result = await loader.loadAsync( 'tokyo.gltf', null );
-    // var result = await loader.loadAsync( 'animate7.gltf', null );
-    var result = await loader.loadAsync( 'untitled22.gltf', null );
 
-    print(result);
+    // texture.encoding = THREE.sRGBEncoding;
+    material.map = texture;
+    material.needsUpdate = true;
 
-    print(" load gltf success result: ${result}  ");
-
-    model = result["scene"];
-
-    print(" load gltf success model: ${model}  ");
-
-    model.position.set( 1, 1, 0 );
-    model.scale.set( 0.01, 0.01, 0.01 );
-    scene.add( model );
-
-
-
-  
-    loaded = true;
-
-
-    animate();
-
-
-    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
-  }
-
-  clickRender() {
-    print("clickRender..... ");
-    animate();
   }
 
   animate() {
@@ -332,22 +254,6 @@ class webgl_debugState extends State<webgl_debug> {
     if(!mounted) {
       return;
     }
-
-    if(!loaded) {
-      return;
-    }
-
-
-
-    
-
-
-    var delta = clock.getDelta();
-
-
-
-    controls?.update();
-
 
     render();
 

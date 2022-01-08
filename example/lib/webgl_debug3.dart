@@ -9,18 +9,18 @@ import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
-GlobalKey<webgl_debugState> webgl_animation_keyframesGlobalKey = GlobalKey<webgl_debugState>();
+GlobalKey<webgl_animation_keyframesState> webgl_animation_keyframesGlobalKey = GlobalKey<webgl_animation_keyframesState>();
 
 
-class webgl_debug extends StatefulWidget {
+class webgl_debug3 extends StatefulWidget {
   String fileName;
 
-  webgl_debug({Key? key, required this.fileName}) : super(key: key);
+  webgl_debug3({Key? key, required this.fileName}) : super(key: key);
 
-  createState() => webgl_debugState();
+  createState() => webgl_animation_keyframesState();
 }
 
-class webgl_debugState extends State<webgl_debug> {
+class webgl_animation_keyframesState extends State<webgl_debug3> {
 
 
   late FlutterGlPlugin three3dRender;
@@ -253,7 +253,7 @@ class webgl_debugState extends State<webgl_debug> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer( _options );
+    renderer = THREE.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize( width, height, false );
     renderer!.shadowMap.enabled = false;
@@ -276,8 +276,8 @@ class webgl_debugState extends State<webgl_debug> {
 
   initPage() async {
 
-    camera = new THREE.PerspectiveCamera( 40, 1, 1, 100 );
-    camera.position.set( 5, 2, 8 );
+    camera = new THREE.PerspectiveCamera( 45, width / height, 1, 100 );
+    camera.position.set( 0, 0, 100 );
 
     // scene
 
@@ -286,33 +286,46 @@ class webgl_debugState extends State<webgl_debug> {
     var ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 );
     scene.add( ambientLight );
 
+    var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
+
+
+    
+    camera.add( pointLight );
     scene.add( camera );
 
-    camera.lookAt( scene.position );
+    camera.lookAt(scene.position);
 
 
 
     var loader = THREE_JSM.GLTFLoader( null ).setPath( 'assets/models/gltf/test/' );
     
-    // var result = await loader.loadAsync( 'tokyo.gltf', null );
-    // var result = await loader.loadAsync( 'animate7.gltf', null );
-    var result = await loader.loadAsync( 'untitled22.gltf', null );
+    // var result = await loader.loadAsync( 'tokyo.gltf', null);
+    // var result = await loader.loadAsync( 'animate7.gltf', null);
+    var result = await loader.loadAsync( 'untitled22.gltf', null);
 
     print(result);
 
     print(" load gltf success result: ${result}  ");
 
-    model = result["scene"];
+    model = result["scene"].children[0].children[0].children[0];
 
     print(" load gltf success model: ${model}  ");
 
     model.position.set( 1, 1, 0 );
-    model.scale.set( 0.01, 0.01, 0.01 );
-    scene.add( model );
+    model.scale.set( 0.05, 0.05, 0.05 );
+    // scene.add( model );
 
 
+    var texture0 = model.material.map;
 
-  
+    var plane = new THREE.PlaneGeometry(50, 50);
+    var mat = new THREE.MeshBasicMaterial({"map": texture0});
+
+    var _mesh = new THREE.Mesh( plane, mat );
+    scene.add( _mesh );
+
+
+    
     loaded = true;
 
 
@@ -339,14 +352,8 @@ class webgl_debugState extends State<webgl_debug> {
 
 
 
-    
-
 
     var delta = clock.getDelta();
-
-
-
-    controls?.update();
 
 
     render();
