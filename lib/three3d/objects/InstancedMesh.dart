@@ -29,9 +29,9 @@ class InstancedMesh extends Mesh {
   }
 
 
-  copy ( Object3D source, recursive ) {
+  copy ( Object3D source, [bool? recursive] ) {
 
-		super.copy(source, recursive);
+		super.copy(source);
 
     InstancedMesh source1 = source as InstancedMesh;
 

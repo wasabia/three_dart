@@ -12,17 +12,13 @@ class ImageLoaderLoader {
     var completer = Completer<html.ImageElement>();
     var imageDom = html.ImageElement();
 
-    print(" ImageLoaderLoader.web  loadImage url: ${url} ...");
 
     imageDom.onLoad.listen((e) {
-      
-      // ImageElement imageElement = ImageElement(url: url is Blob ? "" : url, data: imageDom, width: imageDom.width!, height: imageDom.height!);
-
       completer.complete(imageDom);
     });
 
     if(url is Blob) {
-      var blob = new html.Blob( [url.data.buffer], url.options["mimeType"]);
+      var blob = new html.Blob( [url.data.buffer], url.options["type"]);
 			imageDom.src = html.Url.createObjectUrl( blob );
     } else {
       imageDom.src = url;

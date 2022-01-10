@@ -18,13 +18,17 @@ class SkinnedMesh extends Mesh {
   Skeleton? skeleton;
   String type = "SkinnedMesh";
 
-  SkinnedMesh( BufferGeometry geometry, material ) : super(geometry, material) {
+  SkinnedMesh( geometry, material ) : super(geometry, material) {
 
   }
 
-  copy ( Object3D source, bool recursive ) {
+  clone( [bool? recursive] ) {
+		return SkinnedMesh(this.geometry!, this.material).copy( this, recursive );
+	}
 
-		super.copy( source, recursive );
+  copy ( Object3D source, [bool? recursive] ) {
+
+		super.copy( source );
 
     SkinnedMesh source1 = source as SkinnedMesh;
 
@@ -66,9 +70,11 @@ class SkinnedMesh extends Mesh {
 
 	normalizeSkinWeights () {
 
+  
 		var vector = new Vector4.init();
 
 		var skinWeight = this.geometry!.attributes["skinWeight"];
+
 
 		for ( var i = 0, l = skinWeight.count; i < l; i ++ ) {
 
@@ -78,6 +84,7 @@ class SkinnedMesh extends Mesh {
 			vector.w = skinWeight.getW( i );
 
 			var scale = 1.0 / vector.manhattanLength();
+      
 
 			if ( scale != double.infinity ) {
 

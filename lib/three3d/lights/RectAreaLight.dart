@@ -13,9 +13,9 @@ class RectAreaLight extends Light{
   }
 
 
-  copy( Object3D source, bool recursive ) {
+  copy( Object3D source, [ bool? recursive ]) {
 
-		super.copy(source, false );
+		super.copy(source );
 
     RectAreaLight source1 = source as RectAreaLight;
 

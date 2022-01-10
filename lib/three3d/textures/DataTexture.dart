@@ -9,6 +9,8 @@ class DataTexture extends Texture {
     
     this.image = ImageElement(data: data, width: width ?? 1, height: height ?? 1);
 
+    this.magFilter = magFilter ?? NearestFilter;
+    this.minFilter = minFilter ?? NearestFilter;
 
     this.generateMipmaps = false;
     this.flipY = false;

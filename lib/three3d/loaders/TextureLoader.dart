@@ -51,9 +51,6 @@ class TextureLoader extends Loader {
       bool isJPEG = false;
       if( url is String ) {
         isJPEG = url.indexOf(".JPG") > 0 || url.indexOf(".JPEG") > 0 || url.indexOf(".jpg") > 0 || url.indexOf(".jpeg") > 0 || url.indexOf("data:image/jpeg") == 0;
-      } else if(url is Blob) {
-        var _mime = url.options["type"];
-        isJPEG = _mime.indexOf("/JPG") > 0 || _mime.indexOf("/JPEG") > 0 || _mime.indexOf("/jpg") > 0 || _mime.indexOf("/jpeg") > 0 || _mime.indexOf("data:image/jpeg") == 0;
       }
 
       ImageElement imageElement;
@@ -66,6 +63,10 @@ class TextureLoader extends Loader {
         imageElement = ImageElement(url: url, data: Uint8Array.from(_pixels) , width: image.width, height: image.height);
       }
 
+      print(" image.width: ${image.width} image.height: ${image.height} isJPEG: ${isJPEG} ");
+
+
+  
       
 			texture.image = imageElement;
 			texture.format = isJPEG ? RGBFormat : RGBAFormat;

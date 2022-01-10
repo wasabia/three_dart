@@ -277,7 +277,7 @@ class webgl_debugState extends State<webgl_debug> {
   initPage() async {
 
     camera = new THREE.PerspectiveCamera( 40, 1, 1, 100 );
-    camera.position.set( 5, 2, 8 );
+    camera.position.set( 0, 0, 100 );
 
     // scene
 
@@ -295,8 +295,8 @@ class webgl_debugState extends State<webgl_debug> {
     var loader = THREE_JSM.GLTFLoader( null ).setPath( 'assets/models/gltf/test/' );
     
     // var result = await loader.loadAsync( 'tokyo.gltf', null );
-    // var result = await loader.loadAsync( 'animate7.gltf', null );
-    var result = await loader.loadAsync( 'untitled22.gltf', null );
+    var result = await loader.loadAsync( 'animate7.gltf', null );
+    // var result = await loader.loadAsync( 'untitled22.gltf', null );
 
     print(result);
 
@@ -306,12 +306,18 @@ class webgl_debugState extends State<webgl_debug> {
 
     print(" load gltf success model: ${model}  ");
 
-    model.position.set( 1, 1, 0 );
-    model.scale.set( 0.01, 0.01, 0.01 );
+    // model.position.set( 1, 1, 0 );
+    // model.scale.set( 0.01, 0.01, 0.01 );
     scene.add( model );
 
+    
+    mixer = new THREE.AnimationMixer( model );
+    mixer.clipAction( result["animations"][ 0 ], null, null ).play();
 
 
+    // console.log(model);
+
+    camera = result["cameras"][0];
   
     loaded = true;
 
@@ -344,16 +350,18 @@ class webgl_debugState extends State<webgl_debug> {
 
     var delta = clock.getDelta();
 
+    print(" delat: ${delta} ");
 
+    mixer.update( delta );
 
     controls?.update();
 
 
     render();
 
-    // Future.delayed(Duration(milliseconds: 40), () {
-    //   animate();
-    // });
+    Future.delayed(Duration(milliseconds: 40), () {
+      animate();
+    });
   }
 
 

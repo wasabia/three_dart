@@ -132,9 +132,9 @@ class Sprite extends Object3D {
 
 	}
 
-	copy ( Object3D source, bool recursive ) {
+	copy ( Object3D source, [bool? recursive] ) {
 
-	  super.copy( source, recursive );
+	  super.copy( source );
 
     Sprite source1 = source as Sprite;
 

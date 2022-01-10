@@ -42,12 +42,12 @@ class Mesh extends Object3D {
    
   }
 
-  clone( [bool recursive = false] ) {
+  clone( [bool? recursive = true] ) {
 		return Mesh(this.geometry!, this.material).copy( this, recursive );
 	}
 
 
-  copy ( Object3D source, bool recursive) {
+  copy ( Object3D source, [bool? recursive]) {
 
 		super.copy(source, false);
 

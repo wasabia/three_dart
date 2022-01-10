@@ -12,7 +12,7 @@ class AnimationClip {
   late List<KeyframeTrack> tracks;
   late List results;
 
-  AnimationClip( name, {num duration = - 1, tracks, int blendMode = NormalAnimationBlendMode} ) {
+  AnimationClip( name, [num duration = - 1, tracks, int blendMode = NormalAnimationBlendMode] ) {
 
     this.name = name;
     this.tracks = tracks;
@@ -96,7 +96,7 @@ class AnimationClip {
 
 		}
 
-		return new AnimationClip( this.name, duration: this.duration, tracks: tracks, blendMode: this.blendMode );
+		return new AnimationClip( this.name, this.duration, tracks, this.blendMode );
 
 	}
 
@@ -120,7 +120,7 @@ class AnimationClip {
 
 		}
 
-		var clip = new AnimationClip( json.name, duration: json.duration, tracks: tracks, blendMode: json.blendMode );
+		var clip = new AnimationClip( json.name, json.duration, tracks, json.blendMode );
 		clip.uuid = json.uuid;
 
 		return clip;
@@ -190,7 +190,7 @@ class AnimationClip {
 
 		}
 
-		return new AnimationClip( name, duration: - 1, tracks: tracks );
+		return new AnimationClip( name, - 1, tracks );
 
 	}
 
@@ -395,7 +395,7 @@ class AnimationClip {
 
 		}
 
-		var clip = new AnimationClip( clipName, duration: duration, tracks: tracks, blendMode: blendMode );
+		var clip = new AnimationClip( clipName, duration, tracks, blendMode );
 
 		return clip;
 

@@ -54,9 +54,9 @@ class Scene extends Object3D {
   }
 
 
-	copy( Object3D source, bool recursive ) {
+	copy( Object3D source, [bool? recursive] ) {
 
-		super.copy( source, recursive );
+		super.copy( source );
 
 		// if ( source.background !== null ) this.background = source.background.clone();
 		// if ( source.environment !== null ) this.environment = source.environment.clone();

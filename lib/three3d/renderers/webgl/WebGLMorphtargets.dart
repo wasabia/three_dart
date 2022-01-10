@@ -105,13 +105,13 @@ class WebGLMorphtargets {
 
 			if ( index != MAX_SAFE_INTEGER && value != null ) {
 
-				if ( morphTargets && geometry.getAttribute( 'morphTarget${i}' ) != morphTargets[ index ] ) {
+				if ( morphTargets != null && geometry.getAttribute( 'morphTarget${i}' ) != morphTargets[ index ] ) {
 
 					geometry.setAttribute( 'morphTarget${i}', morphTargets[ index ] );
 
 				}
 
-				if ( morphNormals && geometry.getAttribute( 'morphNormal${i}' ) != morphNormals[ index ] ) {
+				if ( morphNormals != null  && geometry.getAttribute( 'morphNormal${i}' ) != morphNormals[ index ] ) {
 
 					geometry.setAttribute( 'morphNormal${i}', morphNormals[ index ] );
 
@@ -122,14 +122,14 @@ class WebGLMorphtargets {
 
 			} else {
 
-				if ( morphTargets && geometry.hasAttribute( 'morphTarget${i}' ) == true ) {
+				if ( morphTargets != null && geometry.hasAttribute( 'morphTarget${i}' ) == true ) {
 
 					geometry.deleteAttribute( 'morphTarget${i}' );
 
 				}
 
   
-				if ( morphNormals && geometry.hasAttribute( 'morphNormal${i}' ) == true ) {
+				if ( morphNormals != null && geometry.hasAttribute( 'morphNormal${i}' ) == true ) {
 
 					geometry.deleteAttribute( 'morphNormal${i}' );
 

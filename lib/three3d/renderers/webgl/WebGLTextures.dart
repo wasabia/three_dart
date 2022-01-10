@@ -513,6 +513,8 @@ class WebGLTextures {
 	uploadTexture( textureProperties, Texture texture, int slot ) {
 		var textureType = gl.TEXTURE_2D;
 
+    // print(" WebGLTextures.uploadTexture ");
+    // print(texture.toJSON(null));
 
 		if ( texture.isDataTexture2DArray ) textureType = gl.TEXTURE_2D_ARRAY;
 		if ( texture.isDataTexture3D ) textureType = gl.TEXTURE_3D;
@@ -527,15 +529,13 @@ class WebGLTextures {
 
 
 		gl.pixelStorei( gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, texture.premultiplyAlpha ? 1 : 0 );
-
-
-
 		gl.pixelStorei( gl.UNPACK_ALIGNMENT, texture.unpackAlignment);
 
 
     if(kIsWeb) {
       gl.pixelStorei( gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE );
     }
+
 
  
 		var needsPowerOfTwo = textureNeedsPowerOfTwo( texture ) && isPowerOfTwo( texture.image ) == false;
@@ -638,6 +638,7 @@ class WebGLTextures {
 
       // print("uploadTexture texture isDataTexture image.width: ${image.width}, image.height: ${image.height} supportsMips: ${supportsMips}  -mipmaps.length: ${mipmaps.length}---------------- ");
       // print(image.data.toDartList().length);
+      // print(image.data.toDartList() );
 			// use manually created mipmaps if available
 			// if there are no manual mipmaps
 			// set 0 level mipmap and then use GL to generate other mipmap levels

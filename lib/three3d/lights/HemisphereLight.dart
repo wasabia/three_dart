@@ -2,7 +2,7 @@ part of three_lights;
 
 class HemisphereLight extends Light {
 
-  HemisphereLight( skyColor, groundColor, double intensity ) : super(skyColor, intensity) {
+  HemisphereLight( skyColor, groundColor, [double intensity = 1.0] ) : super(skyColor, intensity) {
 
     this.type = 'HemisphereLight';
 
@@ -22,9 +22,9 @@ class HemisphereLight extends Light {
   }
 
 
-  copy ( Object3D source, bool recursive ) {
+  copy ( Object3D source, [bool? recursive] ) {
 
-		super.copy( source, recursive );
+		super.copy( source );
 
     HemisphereLight source1 = source as HemisphereLight;
 

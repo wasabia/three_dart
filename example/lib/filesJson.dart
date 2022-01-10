@@ -8,8 +8,9 @@ var filesJson = [
   "webgl_instancing_performance",
   "webgl_shadowmap_viewer",
   "webgl_loader_gltf",
-  "webgl_loader_gltf_test",
+  // "webgl_loader_gltf_test",
   "webgl_loader_obj_mtl",
   "webgl_animation_keyframes",
-  "webgl_loader_texture_basis"
+  "webgl_loader_texture_basis",
+  "webgl_animation_multiple"
 ];

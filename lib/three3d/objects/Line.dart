@@ -24,9 +24,9 @@ class Line extends Object3D {
 
 
 
-  copy ( Object3D source, bool recursive ) {
+  copy ( Object3D source, [bool? recursive] ) {
 
-		super.copy( source, false );
+		super.copy( source );
 
 		this.material = source.material;
 		this.geometry = source.geometry;
@@ -35,7 +35,7 @@ class Line extends Object3D {
 
 	}
 
-  clone( [bool recursive = false] ) {
+  clone( [bool? recursive = true] ) {
 		return Line(this.geometry!, this.material!).copy( this, recursive );
 	}
 

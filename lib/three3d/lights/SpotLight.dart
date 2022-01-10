@@ -30,9 +30,9 @@ class SpotLight extends Light {
     this.intensity = value / Math.PI;
   }
 
-  copy ( Object3D source, bool recursive ) {
+  copy ( Object3D source, [ bool? recursive ] ) {
 
-	  super.copy(source, false );
+	  super.copy(source );
 
     SpotLight source1 = source as SpotLight;
 
@@ -41,7 +41,7 @@ class SpotLight extends Light {
 		this.penumbra = source1.penumbra;
 		this.decay = source1.decay;
 
-		this.target = source1.target!.clone(false);
+		this.target = source1.target!.clone();
 
 		this.shadow = source1.shadow!.clone();
 
