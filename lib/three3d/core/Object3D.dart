@@ -1076,6 +1076,8 @@ class Object3D with EventDispatcher {
       this.visible = value;
     } else if(propertyName == "name") {
       this.name = value;
+    } else if(propertyName == "quaternion") {
+      this.quaternion.copy( value );
     } else {
       throw("Object3D.setProperty type: ${type} propertyName: ${propertyName} is not support ");
     }

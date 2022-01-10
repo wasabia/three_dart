@@ -10,17 +10,21 @@ class QuaternionLinearInterpolant extends Interpolant {
 
   }
 
-  interpolate_( i1, t0, t, t1 ) {
+  interpolate( int i1, num x0, num t, num t1 ) {
 
-		var result = this.resultBuffer,
-			values = this.sampleValues,
-			stride = this.valueSize,
+		var result = this.resultBuffer;
+		var values = this.sampleValues;
+		var stride = this.valueSize;
 
-			alpha = ( t - t0 ) / ( t1 - t0 );
+
+    double _v0 = t + (x0 * -1);
+    double _v1 = t1 + (x0 * -1);
+
+		double alpha = _v0 / _v1;
 
 		var offset = i1 * stride;
 
-		for ( var end = offset + stride; offset != end; offset += 4 ) {
+		for ( var end = offset + stride; offset < end; offset += 4 ) {
 
 			Quaternion.slerpFlat( result, 0, values, offset - stride, values, offset, alpha );
 

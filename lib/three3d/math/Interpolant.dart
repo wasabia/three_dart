@@ -33,9 +33,13 @@ class Interpolant {
 
   	// --- Protected interface
 
-	dynamic DefaultSettings_ = {};
+	dynamic DefaultSettings = {};
 
   Interpolant( parameterPositions, sampleValues, sampleSize, resultBuffer ) {
+
+    // print(" parameterPositions sampleSize: ${sampleSize} ");
+    // print(parameterPositions);
+
     this.parameterPositions = parameterPositions;
 
     this.resultBuffer = resultBuffer != null ? resultBuffer : null;
@@ -45,13 +49,13 @@ class Interpolant {
 
 
 
-  evaluate( t ) {
+  evaluate( double t ) {
 
 		var pp = this.parameterPositions;
-		var i1 = this._cachedIndex;
+		int i1 = this._cachedIndex;
 
-    var t1 = null;
-		var t0 = null;
+    num? t1;
+		num? t0;
 
     if(i1 < pp.length) {
       t1 = pp[ i1 ];
@@ -62,7 +66,6 @@ class Interpolant {
 
  
 		validate_interval: {
-
 			seek: {
 
 				int right;
@@ -79,13 +82,13 @@ class Interpolant {
 
 							if ( t1 == null ) {
 
-								if ( t < t0 ) break forward_scan;
+								if ( t < t0! ) break forward_scan;
 
 								// after end
 
 								i1 = pp.length;
 								this._cachedIndex = i1;
-								return this.afterEnd_( i1 - 1, t, t0 );
+								return this.afterEnd( i1 - 1, t, t0 );
 
 							}
 
@@ -140,7 +143,7 @@ class Interpolant {
 								// before start
 
 								this._cachedIndex = 0;
-								return this.beforeStart_( 0, t, t1 );
+								return this.beforeStart( 0, t, t1 );
 
 							}
 
@@ -214,7 +217,7 @@ class Interpolant {
 				if ( t0 == null ) {
 
 					this._cachedIndex = 0;
-					return this.beforeStart_( 0, t, t1 );
+					return this.beforeStart( 0, t, t1 );
 
 				}
 
@@ -222,7 +225,7 @@ class Interpolant {
 
 					i1 = pp.length;
 					this._cachedIndex = i1;
-					return this.afterEnd_( i1 - 1, t0, t );
+					return this.afterEnd( i1 - 1, t0, t );
 
 				}
 
@@ -230,23 +233,23 @@ class Interpolant {
 
 			this._cachedIndex = i1;
 
-			this.intervalChanged_( i1, t0, t1 );
+			this.intervalChanged( i1, t0, t1 );
 
 		} // validate_interval
 
-		return this.interpolate_( i1, t0, t, t1 );
+		return this.interpolate( i1, t0, t, t1! );
 
 	}
 
 
 
-	getSettings_() {
+	getSettings() {
 
-		return this.settings ?? this.DefaultSettings_;
+		return this.settings ?? this.DefaultSettings;
 
 	}
 
-	copySampleValue_( index ) {
+	copySampleValue( index ) {
 
 		// copies a sample value to the result buffer
 
@@ -267,27 +270,27 @@ class Interpolant {
 
 	// Template methods for derived classes:
 
-	interpolate_( i1, t0, t, t1 ) {
+	interpolate( int i1, num t0, num t, num t1 ) {
 
 		throw ( 'call to abstract method' );
 		// implementations shall return this.resultBuffer
 
 	}
 
-	intervalChanged_(v1, v2, v3) {
+	intervalChanged(v1, v2, v3) {
 
 		// empty
 
 	}
 
-  beforeStart_(v1, v2, v3) {
+  beforeStart(v1, v2, v3) {
     // return copySampleValue_(v1, v2, v3);
   }
 
 	//( N-1, tN-1, t ), returns this.resultBuffer
 	// afterEnd_: Interpolant.prototype.copySampleValue_,
 
-  afterEnd_(v1, v2, v3) {
+  afterEnd(v1, v2, v3) {
     // return copySampleValue_(v1, v2, v3);
   }
 

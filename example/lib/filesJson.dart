@@ -12,5 +12,6 @@ var filesJson = [
   "webgl_loader_obj_mtl",
   "webgl_animation_keyframes",
   "webgl_loader_texture_basis",
+  "webgl_skinning_simple",
   "webgl_animation_multiple"
 ];
