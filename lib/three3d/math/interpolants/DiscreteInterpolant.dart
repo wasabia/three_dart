@@ -12,9 +12,9 @@ class DiscreteInterpolant extends Interpolant {
 
   }
 
-  interpolate_( i1, t0, t, t1 ) {
+  interpolate( i1, t0, t, t1 ) {
 
-		return this.copySampleValue_( i1 - 1 );
+		return this.copySampleValue( i1 - 1 );
 
 	}
 

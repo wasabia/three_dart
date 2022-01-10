@@ -23,16 +23,16 @@ class CubicInterpolant extends Interpolant {
     this._offsetPrev = - 0;
     this._weightNext = - 0;
     this._offsetNext = - 0;
-  } 
 
-  var DefaultSettings_ = {
+    DefaultSettings = {
 
-		"endingStart": ZeroCurvatureEnding,
-		"endingEnd": ZeroCurvatureEnding
+      "endingStart": ZeroCurvatureEnding,
+      "endingEnd": ZeroCurvatureEnding
 
-	};
+    };
+  }
 
-	intervalChanged_( i1, t0, t1 ) {
+	intervalChanged( i1, t0, t1 ) {
 
 		var pp = this.parameterPositions;
 		var iPrev = i1 - 2,
@@ -43,7 +43,7 @@ class CubicInterpolant extends Interpolant {
 
 		if ( tPrev == null ) {
 
-			switch ( this.getSettings_().endingStart ) {
+			switch ( this.getSettings().endingStart ) {
 
 				case ZeroSlopeEnding:
 
@@ -73,7 +73,7 @@ class CubicInterpolant extends Interpolant {
 
 		if ( tNext == null ) {
 
-			switch ( this.getSettings_().endingEnd ) {
+			switch ( this.getSettings().endingEnd ) {
 
 				case ZeroSlopeEnding:
 
@@ -111,7 +111,7 @@ class CubicInterpolant extends Interpolant {
 
 	}
 
-	interpolate_( i1, t0, t, t1 ) {
+	interpolate( i1, t0, t, t1 ) {
 
 		var result = this.resultBuffer,
 			values = this.sampleValues,

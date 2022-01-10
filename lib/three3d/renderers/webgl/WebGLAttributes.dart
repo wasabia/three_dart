@@ -28,7 +28,7 @@ class WebGLAttributes {
 
     // print(" WebGLAttributes.createBuffer attribute: ${attribute.runtimeType} arrayType: ${arrayType} array: ${array.length} ${array.runtimeType} name: ${name} ");
     // if( name == "skinIndex" ) {
-    //   print( array.toDartList() );
+    //    print( array.toDartList() );
     // }
     
 
@@ -103,6 +103,9 @@ class WebGLAttributes {
     } else if(array.runtimeType == Float32Array) {
       type = gl.FLOAT;
       bytesPerElement = Float32List.bytesPerElement;
+    } else if(array.runtimeType == Uint32Array) {
+      type = gl.UNSIGNED_INT;
+      bytesPerElement = Uint32List.bytesPerElement;  
     } else if(array.runtimeType == Uint8Array) {
       type = gl.UNSIGNED_BYTE;
       bytesPerElement = Uint8List.bytesPerElement;  

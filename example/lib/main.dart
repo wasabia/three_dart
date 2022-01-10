@@ -1,3 +1,4 @@
+import 'package:example/app_debug.dart';
 import 'package:example/webgl_animation_keyframes.dart';
 import 'package:example/webgl_animation_multiple.dart';
 import 'package:example/webgl_debug.dart';
@@ -6,12 +7,15 @@ import 'package:example/webgl_debug3.dart';
 import 'package:example/webgl_debug_for_macos.dart';
 import 'package:example/webgl_loader_gltf_2.dart';
 import 'package:example/webgl_loader_gltf_3.dart';
+import 'package:example/webgl_skinning_simple.dart';
 import 'package:flutter/material.dart';
 import 'ExampleApp.dart';
 
 void main() {
   runApp(
     ExampleApp()
+    // app_debug(fileName: "app_debug")
+    // webgl_skinning_simple(fileName: "webgl_skinning_simple")
     // webgl_debug3(fileName: "webgl_debug3")
     // webgl_debug(fileName: "webgl_debug")
     // webgl_animation_multiple(fileName: "webgl_animation_multiple")
