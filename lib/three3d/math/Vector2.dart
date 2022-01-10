@@ -8,7 +8,7 @@ class Vector2 {
   num x = 0;
   num y = 0;
 
-	Vector2(num? x, num? y) {
+	Vector2([num? x, num? y]) {
 		this.x = x ?? 0;
 		this.y = y ?? 0;
 	}

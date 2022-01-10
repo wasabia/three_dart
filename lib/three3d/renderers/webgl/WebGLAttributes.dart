@@ -26,8 +26,11 @@ class WebGLAttributes {
 
     // dynamic arrayList;
 
-    // print(" WebGLAttributes.createBuffer attribute: ${attribute.runtimeType} arrayType: ${arrayType} array: ${array} ${array.runtimeType} name: ${name} ");
-    // print( array.toDartList().sublist(0, 40) );
+    // print(" WebGLAttributes.createBuffer attribute: ${attribute.runtimeType} arrayType: ${arrayType} array: ${array.length} ${array.runtimeType} name: ${name} ");
+    // if( name == "skinIndex" ) {
+    //   print( array.toDartList() );
+    // }
+    
 
     var type = gl.FLOAT;
     int bytesPerElement = 4;
@@ -100,11 +103,14 @@ class WebGLAttributes {
     } else if(array.runtimeType == Float32Array) {
       type = gl.FLOAT;
       bytesPerElement = Float32List.bytesPerElement;
+    } else if(array.runtimeType == Uint8Array) {
+      type = gl.UNSIGNED_BYTE;
+      bytesPerElement = Uint8List.bytesPerElement;  
     } else {
       print("createBuffer array: ${array.runtimeType} ");
       // arrayList = Float32List.fromList(array.map((e) => e.toDouble()).toList());
       // 保持抛出异常 及时发现异常情况
-      throw("WebGLAttributes.createBuffer BufferAttribute arrayType: ${array.runtimeType} is not support  ");
+      throw("1 WebGLAttributes.createBuffer BufferAttribute arrayType: ${array.runtimeType} is not support  ");
     }
 
     // print("WebGLAttributes.createBuffer name: ${name} attribute: ${attribute} arrayList: ${array.runtimeType}  array.bytesLength: ${ array.bytesLength }   ");

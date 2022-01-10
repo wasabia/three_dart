@@ -17,6 +17,8 @@ class BufferAttribute extends BaseBufferAttribute {
   BufferAttribute(arrayList, itemSize, [bool normalized = false] ) {
     if(arrayList is NativeArray) {
       this.array = arrayList;
+    } else if (arrayList is Uint8List) {
+      this.array = Uint8Array.from(arrayList);  
     } else if (arrayList is Uint16List) {
       this.array = Uint16Array.from(arrayList);
     } else if (arrayList is Float32List ) {

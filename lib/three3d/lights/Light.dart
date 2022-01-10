@@ -53,7 +53,7 @@ class Light extends Object3D {
 
   }
 
-  copy ( Object3D source, bool recursive ) {
+  copy ( Object3D source, [bool? recursive] ) {
 
 	  super.copy(source, false );
 

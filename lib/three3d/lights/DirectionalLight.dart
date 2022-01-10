@@ -5,7 +5,7 @@ class DirectionalLight extends Light {
   String type = "DirectionalLight";
   bool isDirectionalLight = true;
 
-  DirectionalLight( color, intensity ) : super(color, intensity) {
+  DirectionalLight( color, [intensity] ) : super(color, intensity) {
 
     this.position.copy( Object3D.DefaultUp );
     this.updateMatrix();
@@ -16,7 +16,7 @@ class DirectionalLight extends Light {
   }
 
 
-  copy ( Object3D source, bool recursive ) {
+  copy ( Object3D source, [bool? recursive] ) {
 
 		super.copy(source, false );
 

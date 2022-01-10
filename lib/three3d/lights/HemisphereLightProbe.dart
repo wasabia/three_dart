@@ -21,15 +21,6 @@ class HemisphereLightProbe extends LightProbe {
     this.isHemisphereLightProbe = false;
 	}
 
-
-  copy ( Object3D source, bool recursive ) { // modifying colors not currently supported
-
-	  super.copy( source, recursive );
-
-		return this;
-
-	}
-
 	toJSON ( {Object3dMeta? meta} ) {
 
 		var data = super.toJSON( meta: meta );

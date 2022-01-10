@@ -1,5 +1,6 @@
 
 import 'package:example/webgl_animation_keyframes.dart';
+import 'package:example/webgl_animation_multiple.dart';
 import 'package:example/webgl_loader_gltf.dart';
 import 'package:example/webgl_loader_gltf_test.dart';
 import 'package:example/webgl_loader_obj_mtl.dart';
@@ -118,7 +119,9 @@ class _MyAppState extends State<ExampleApp> {
     } else if(fileName == "webgl_animation_keyframes") {
       page = webgl_animation_keyframes(key: webgl_animation_keyframesGlobalKey, fileName: fileName);
     } else if(fileName == "webgl_loader_texture_basis") {
-      page = webgl_loader_texture_basis(fileName: fileName);  
+      page = webgl_loader_texture_basis(fileName: fileName);
+    } else if(fileName == "webgl_animation_multiple") {
+      page = webgl_animation_multiple(fileName: fileName);  
     } else {
       throw("_goto fileName ${fileName} is not support yet ");
     }

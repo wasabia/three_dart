@@ -10,5 +10,8 @@ class Bone extends Object3D {
 
   }
 
+  clone( [bool? recursive] ) {
+		return Bone().copy( this, recursive );
+	}
 
 }

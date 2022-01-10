@@ -521,12 +521,12 @@ class AnimationMixer with EventDispatcher {
 	// return an action for a clip optionally using a custom root target
 	// object (this method allocates a lot of dynamic memory in case a
 	// previously unknown clip/root combination is specified)
-	clipAction( clip, optionalRoot, blendMode ) {
+	clipAction( clip, [optionalRoot, blendMode] ) {
 
 		var root = optionalRoot ?? this._root;
 		var rootUuid = root.uuid;
 
-		var clipObject = clip.runtimeType.toString() == 'String' ? AnimationClip.findByName( root, clip ) : clip;
+		var clipObject = clip is String ? AnimationClip.findByName( root, clip ) : clip;
 
 		var clipUuid = clipObject != null ? clipObject.uuid : clip;
 
@@ -652,10 +652,12 @@ class AnimationMixer with EventDispatcher {
 			nBindings = this._nActiveBindings;
 
 		for ( var i = 0; i != nBindings; ++ i ) {
+      var _binding = bindings[i];
 
-      // print(" i: ${i} bindings: ${bindings[i]} ");
+      // print(" i: ${i} bindings: ${ _binding } ");
+      // print( _binding.buffer );
 
-			bindings[ i ].apply( accuIndex );
+			_binding.apply( accuIndex );
 
 		}
 
@@ -766,7 +768,7 @@ class AnimationMixer with EventDispatcher {
 	}
 
 	// remove a targeted clip from the cache
-	uncacheAction ( clip, optionalRoot ) {
+	uncacheAction ( clip, [optionalRoot] ) {
 
 		var action = this.existingAction( clip, optionalRoot );
 

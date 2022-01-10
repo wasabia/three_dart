@@ -58,8 +58,7 @@ class Skeleton {
 	calculateInverses () {
 
 		this.boneInverses.length = 0;
-
-
+    this.boneInverses.clear();
 
 		for ( var i = 0, il = this.bones.length; i < il; i ++ ) {
 
@@ -170,16 +169,20 @@ class Skeleton {
 		//       32x32 pixel texture max  256 bones * 4 pixels = (32 * 32)
 		//       64x64 pixel texture max 1024 bones * 4 pixels = (64 * 64)
 
-		int size = Math.sqrt( this.bones.length * 4 ).toInt(); // 4 pixels needed for 1 matrix
-		size = MathUtils.ceilPowerOfTwo( size ).toInt();
+		num size = Math.sqrt( this.bones.length * 4 ); // 4 pixels needed for 1 matrix
+		size = MathUtils.ceilPowerOfTwo( size );
 		size = Math.max( size, 4 );
 
-		// var boneMatrices = new Float32Array( size * size * 4 ); // 4 floats per RGBA pixel
-		// boneMatrices.set( this.boneMatrices ); // copy current values
+		var _boneMatrices = new Float32Array( (size * size * 4).toInt() ); // 4 floats per RGBA pixel
 
-		var boneTexture = new DataTexture( boneMatrices, size, size, RGBAFormat, FloatType, null, null, null, null, null, null, null );
+		_boneMatrices.set( this.boneMatrices.toDartList() ); // copy current values
+    
+		var boneTexture = new DataTexture( _boneMatrices, size, size, RGBAFormat, FloatType, null, null, null, null, null, null, null );
+    boneTexture.name = "DataTexture from Skeleton.computeBoneTexture";
 
-		// this.boneMatrices = boneMatrices.toDartList();
+    this.boneMatrices.dispose();
+
+		this.boneMatrices = _boneMatrices;
 		this.boneTexture = boneTexture;
 		this.boneTextureSize = size;
 

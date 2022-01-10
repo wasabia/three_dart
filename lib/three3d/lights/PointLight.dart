@@ -34,9 +34,9 @@ class PointLight extends Light {
   }
 
 
-  copy ( Object3D source, bool recursive ) {
+  copy ( Object3D source, [bool? recursive] ) {
 
-		super.copy.call( source, recursive );
+		super.copy.call( source );
 
     PointLight source1 = source as PointLight;
 

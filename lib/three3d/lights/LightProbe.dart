@@ -10,9 +10,9 @@ class LightProbe extends Light {
     this.isLightProbe = true;
   }
 
-  copy ( Object3D source, bool recursive ) {
+  copy ( Object3D source, [bool? recursive] ) {
 
-		super.copy( source, false );
+		super.copy( source );
 
     LightProbe source1 = source as LightProbe;
 

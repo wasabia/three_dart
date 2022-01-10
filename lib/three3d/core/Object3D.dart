@@ -965,14 +965,18 @@ class Object3D with EventDispatcher {
 
   }
 
-	clone( [bool recursive = false] ) {
+	clone( [bool? recursive] ) {
+
+    
 
 		return Object3D().copy( this, recursive );
 
 	}
 
-	copy ( Object3D source, bool recursive ) {
+	copy ( Object3D source, [bool? recursive = true] ) {
 
+    recursive = recursive ?? true;
+ 
 		this.name = source.name;
 
 		this.up.copy( source.up );
@@ -1004,7 +1008,7 @@ class Object3D with EventDispatcher {
 			for ( var i = 0; i < source.children.length; i ++ ) {
 
 				var child = source.children[ i ];
-				this.add( child.clone( recursive ) );
+				this.add( child.clone() );
 
 			}
 

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:example/TouchListener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -9,18 +8,14 @@ import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
-GlobalKey<webgl_animation_keyframesState> webgl_animation_keyframesGlobalKey = GlobalKey<webgl_animation_keyframesState>();
-
-
-class webgl_animation_keyframes extends StatefulWidget {
+class webgl_loader_gltf_2 extends StatefulWidget {
   String fileName;
+  webgl_loader_gltf_2({Key? key, required this.fileName}) : super(key: key);
 
-  webgl_animation_keyframes({Key? key, required this.fileName}) : super(key: key);
-
-  createState() => webgl_animation_keyframesState();
+  _MyAppState createState() => _MyAppState();
 }
 
-class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
+class _MyAppState extends State<webgl_loader_gltf_2> {
 
 
   late FlutterGlPlugin three3dRender;
@@ -35,11 +30,6 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
   late THREE.Scene scene;
   late THREE.Camera camera;
   late THREE.Mesh mesh;
-
-
-  late THREE.AnimationMixer mixer;
-  THREE.Clock clock = new THREE.Clock();
-  THREE_JSM.OrbitControls? controls;
   
   num dpr = 1.0;
 
@@ -47,38 +37,24 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
 
   bool verbose = true;
 
+  bool loaded = false;
+
   late THREE.Object3D object;
 
   late THREE.Texture texture;
 
   late THREE.WebGLMultisampleRenderTarget renderTarget;
 
+
+  THREE.AnimationMixer? mixer;
+  THREE.Clock clock = new THREE.Clock();
+
   dynamic? sourceTexture;
-  
-  bool loaded = false;
-
-  late THREE.Object3D model;
-
-
-  Map<String, List<Function>> _listeners = {};
 
   @override
   void initState() {
-    super.initState();   
-  }
-
-
-
-  addEventListener(String name, Function callback, [bool flag = false]) {
-    var _cls = _listeners[name] ?? [];
-    _cls.add(callback);
-    _listeners[name] = _cls;
-  }
-
-  removeEventListener(String name, Function callback, [bool flag = false]) {
-    var _cls = _listeners[name] ?? [];
-    _cls.remove(callback);
-    _listeners[name] = _cls;
+    super.initState();
+    
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -151,16 +127,7 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
     );
   }
 
-  emit(String name, event) {
-    var _callbacks = _listeners[name];
-    if(_callbacks != null && _callbacks.length > 0) {
-      var _len = _callbacks.length;
-      for(int i = 0; i < _len; i++) {
-        var _cb = _callbacks[i];
-        _cb(event);
-      }
-    }
-  }
+  
   
   Widget _build(BuildContext context) {
     return Column(
@@ -168,41 +135,18 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
         Container(
           child: Stack(
             children: [
-              TouchListener(
-                touchstart: (event) {
-                  emit("touchstart", event);
-                },
-                touchmove: (event) {
-                  emit("touchmove", event);
-                },
-                touchend: (event) {
-                  emit("touchend", event);
-                },
-                pointerdown: (event) {
-                  emit("pointerdown", event);
-                },
-                pointermove: (event) {
-                  emit("pointermove", event);
-                },
-                pointerup: (event) {
-                  emit("pointerup", event);
-                },
-                wheel: (event) {
-                  emit("wheel", event);
-                },
-                child: Container(
-                  width: width,
-                  height: height,
-                  color: Colors.black,
-                  child: Builder(
-                    builder: (BuildContext context) {
-                      if(kIsWeb) {
-                        return three3dRender.isInitialized ? HtmlElementView(viewType: three3dRender.textureId!.toString()) : Container();
-                      } else {
-                        return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
-                      }
+              Container(
+                width: width,
+                height: height,
+                color: Colors.black,
+                child: Builder(
+                  builder: (BuildContext context) {
+                    if(kIsWeb) {
+                      return three3dRender.isInitialized ? HtmlElementView(viewType: three3dRender.textureId!.toString()) : Container();
+                    } else {
+                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
                     }
-                  )
+                  }
                 )
               ),
               
@@ -212,6 +156,12 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
 
       ],
     );
+  }
+
+
+  clickRender() {
+    print(" click render... ");
+    animate();
   }
 
   render() {
@@ -276,68 +226,77 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
 
   initPage() async {
 
-    camera = new THREE.PerspectiveCamera( 45, width / height, 1, 100 );
-    camera.position.set( 8, 4, 12 );
+    camera = new THREE.PerspectiveCamera( 45, width / height, 1, 2200 );
+    camera.position.set( 3, 6, - 10 );
 
     // scene
 
     scene = new THREE.Scene();
 
-    var pmremGenerator = new THREE.PMREMGenerator( renderer );
-    scene.background = THREE.Color.fromHex( 0xbfe3dd );
-    scene.environment = pmremGenerator.fromScene( new THREE_JSM.RoomEnvironment(), sigma: 0.04 ).texture;
+    var ambientLight = new THREE.AmbientLight( 0xffffff, 0.9 );
+    scene.add( ambientLight );
 
-    // var ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 );
-    // scene.add( ambientLight );
+    var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
 
-    // var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
-    // camera.add( pointLight );
+    pointLight.position.set(0, 0, -20);
 
+    
+    scene.add( pointLight );
     scene.add( camera );
 
     camera.lookAt(scene.position);
 
 
-
-    var loader = THREE_JSM.GLTFLoader( null ).setPath( 'assets/models/gltf/test/' );
+    var loader = THREE_JSM.GLTFLoader( null ).setPath( 'assets/models/gltf/' );
     
-    var result = await loader.loadAsync( 'tokyo.gltf', null);
-    // var result = await loader.loadAsync( 'animate7.gltf', null);
-    // var result = await loader.loadAsync( 'untitled22.gltf', null);
+    // var result = await loader.loadAsync( 'Parrot.gltf', null);
+    var result = await loader.loadAsync( 'Soldier.gltf', null);
 
-    print(result);
+    print(" gltf load sucess result: ${result}  ");
 
-    print(" load gltf success result: ${result}  ");
+    object = result["scene"];
 
-    model = result["scene"];
+  
+    // object.updateMatrixWorld(true);
 
-    print(" load gltf success model: ${model}  ");
+    // object.traverse( ( child ) {
+    //   if ( child.isMesh ) {
+        // child.material.map = texture;
+    //   }
+    // } );
 
-    model.position.set( 1, 1, 0 );
-    model.scale.set( 0.01, 0.01, 0.01 );
-    scene.add( model );
+    // var skeleton = new THREE.SkeletonHelper( object );
+    // skeleton.visible = true;
+    // scene.add( skeleton );
+
+    object.scale.set(2, 2, 2);
+    object.rotation.set(0, 180 * THREE.Math.PI / 180.0, 0);
+
+    // var clonedMesh = object.getObjectByName( "vanguard_Mesh" );
+
+    // mixer = new THREE.AnimationMixer(clonedMesh );
+ 
+    // var clip = THREE.AnimationClip.findByName( List<THREE.AnimationClip>.from(result["animations"]), "Walk" );
+    // if ( clip != null ) {
+
+    //   var action = mixer.clipAction( clip );
+    //   action.play();
+
+    // }
+
+    scene.add( object );
 
 
-
-    mixer = new THREE.AnimationMixer( model );
-    mixer.clipAction( result["animations"][ 0 ], null, null ).play();
-
-    
-    loaded = true;
-
-
-    animate();
 
 
     // scene.overrideMaterial = new THREE.MeshBasicMaterial();
-  }
 
-  clickRender() {
-    print("clickRender..... ");
-    animate();
+    loaded = true;
   }
 
   animate() {
+
+    print("before animate render mounted: ${mounted} loaded: ${loaded}");
 
     if(!mounted) {
       return;
@@ -347,30 +306,17 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
       return;
     }
 
-
-    if(controls == null) {
-      // possible compatible with three.js OrbitControls, wait on progress...  
-      controls = new THREE_JSM.OrbitControls( camera, webgl_animation_keyframesGlobalKey.currentState );
-      controls!.target.set( 0, 0.5, 0 );
-      controls!.update();
-      controls!.enablePan = false;
-      controls!.enableDamping = true;
-    }
+    print(" animate render ");
     
-
-
     var delta = clock.getDelta();
 
-    mixer.update( delta );
-
-    controls?.update();
-
+    mixer?.update( delta );
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
-      animate();
-    });
+    // Future.delayed(Duration(milliseconds: 40), () {
+    //   animate();
+    // });
   }
 
 

@@ -26,7 +26,7 @@ class PerspectiveCamera extends Camera {
 
 
 
-  copy( Object3D source, recursive ) {
+  copy( Object3D source, [ bool? recursive] ) {
 
     super.copy(source, recursive);
 
@@ -48,9 +48,9 @@ class PerspectiveCamera extends Camera {
     return this;
 	}
 
-  clone ([bool recursive = false]) {
+  clone ([bool? recursive = true]) {
 
-		return PerspectiveCamera().copy( this, false );
+		return PerspectiveCamera().copy( this, recursive );
 
 	}
 

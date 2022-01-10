@@ -90,7 +90,7 @@ class ArrowHelper extends Object3D {
 
 	}
 
-	copy( source, bool recursive ) {
+	copy( source, [bool? recursive]) {
 
 		super.copy( source, false );
 

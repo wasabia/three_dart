@@ -24,7 +24,7 @@ class OrthographicCamera extends Camera {
   }
 
 
-  copy ( source, recursive ) {
+  copy ( source, [bool? recursive] ) {
 
 		super.copy( source, recursive );
 
