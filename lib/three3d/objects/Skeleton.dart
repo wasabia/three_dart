@@ -177,7 +177,7 @@ class Skeleton {
 
 		_boneMatrices.set( this.boneMatrices.toDartList() ); // copy current values
     
-		var boneTexture = new DataTexture( _boneMatrices, size, size, RGBAFormat, FloatType, null, null, null, null, null, null, null );
+		var boneTexture = new DataTexture( _boneMatrices, size.toInt(), size.toInt(), RGBAFormat, FloatType, null, null, null, null, null, null, null );
     boneTexture.name = "DataTexture from Skeleton.computeBoneTexture";
 
     this.boneMatrices.dispose();
