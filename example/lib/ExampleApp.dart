@@ -1,6 +1,12 @@
 
+import 'package:example/misc_animation_keys.dart';
 import 'package:example/webgl_animation_keyframes.dart';
 import 'package:example/webgl_animation_multiple.dart';
+import 'package:example/webgl_clipping.dart';
+import 'package:example/webgl_clipping_advanced.dart';
+import 'package:example/webgl_clipping_intersection.dart';
+import 'package:example/webgl_clipping_stencil.dart';
+import 'package:example/webgl_geometries.dart';
 import 'package:example/webgl_loader_gltf.dart';
 import 'package:example/webgl_loader_gltf_test.dart';
 import 'package:example/webgl_loader_obj_mtl.dart';
@@ -125,7 +131,20 @@ class _MyAppState extends State<ExampleApp> {
       page = webgl_animation_multiple(fileName: fileName);
     } else if(fileName == "webgl_skinning_simple") {
       page = webgl_skinning_simple(fileName: fileName);
-      
+    } else if(fileName == "misc_animation_keys") {
+      page = misc_animation_keys(fileName: fileName);
+    } else if(fileName == "webgl_clipping_intersection") {
+      page = webgl_clipping_intersection(fileName: fileName);
+    } else if(fileName == "webgl_clipping_advanced") {
+      page = webgl_clipping_advanced(fileName: fileName);
+    } else if(fileName == "webgl_clipping_stencil") {
+      page = webgl_clipping_stencil(fileName: fileName);
+    } else if(fileName == "webgl_clipping") {
+      page = webgl_clipping(fileName: fileName);   
+    } else if(fileName == "webgl_geometries") {
+      page = webgl_geometries(fileName: fileName); 
+
+
     } else {
       throw("_goto fileName ${fileName} is not support yet ");
     }

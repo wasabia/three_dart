@@ -21,7 +21,7 @@ class WebGLCapabilities {
   late int maxVaryings;
   late int maxFragmentUniforms;
 
-  late num maxAnisotropy;
+  num? maxAnisotropy;
 
   late bool vertexTextures;
   late bool floatFragmentTextures;
@@ -67,7 +67,7 @@ class WebGLCapabilities {
 
 	num getMaxAnisotropy() {
 
-		if ( maxAnisotropy != null ) return maxAnisotropy;
+		if ( maxAnisotropy != null ) return maxAnisotropy!;
 
 		var extension = extensions.get( 'EXT_texture_filter_anisotropic' );
 
@@ -81,7 +81,7 @@ class WebGLCapabilities {
 
 		}
 
-		return maxAnisotropy;
+		return maxAnisotropy!;
 
 	}
 

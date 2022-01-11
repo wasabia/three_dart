@@ -9,7 +9,7 @@ class AxesHelper extends LineSegments {
 
   }
 
-  factory AxesHelper({num size = 1}) {
+  factory AxesHelper([num size = 1]) {
     var vertices = [
 			0, 0, 0,	size, 0, 0,
 			0, 0, 0,	0, size, 0,

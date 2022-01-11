@@ -9,10 +9,10 @@ class LatheGeometry extends BufferGeometry {
 	LatheGeometry( points, {segments = 12, phiStart = 0, phiLength = Math.PI * 2} ) : super() {
 
 		this.parameters = {
-			points: points,
-			segments: segments,
-			phiStart: phiStart,
-			phiLength: phiLength
+			"points": points,
+			"segments": segments,
+			"phiStart": phiStart,
+			"phiLength": phiLength
 		};
 
 		segments = Math.floor( segments );

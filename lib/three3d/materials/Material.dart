@@ -366,6 +366,19 @@ class Material with EventDispatcher {
       size = newValue;
     } else if(key == "sizeAttenuation") {
       sizeAttenuation = newValue;
+    } else if(key == "stencilZFail") {
+      stencilZFail = newValue;
+    } else if(key == "stencilZPass") {
+      stencilZPass = newValue;
+      
+    } else if(key == "stencilFail") {
+      stencilFail = newValue;
+    } else if(key == "stencilFunc") {
+      stencilFunc = newValue;    
+    } else if(key == "stencilRef") {
+      stencilRef = newValue;
+    } else if(key == "stencilWrite") {
+      stencilWrite = newValue;
     } else if(key == "toneMapped") {
       toneMapped = newValue;
     } else if(key == "transparent") {
@@ -382,6 +395,8 @@ class Material with EventDispatcher {
       wireframe = newValue;
     } else if(key == "wireframeLinewidth") {
       wireframeLinewidth = newValue;
+    } else if(key == "shadowSide") {
+      shadowSide = newValue; 
     } else if(key == "specular") {
       if(newValue.runtimeType == Color) {
         specular = newValue;
@@ -613,7 +628,7 @@ class Material with EventDispatcher {
   }
 
   clone() {
-    throw("Material.clone need implement.... ");
+    throw("Material.clone ${type} need implement.... ");
   }
 
   copy(source) {

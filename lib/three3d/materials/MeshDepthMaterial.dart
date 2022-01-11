@@ -61,5 +61,9 @@ class MeshDepthMaterial extends Material {
 
   }
 
+  clone() {
+    return MeshDepthMaterial().copy(this);
+  }
+
 }
 

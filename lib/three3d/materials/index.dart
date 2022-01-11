@@ -33,3 +33,4 @@ part './SpriteMaterial.dart';
 part './RawShaderMaterial.dart';
 part './MeshToonMaterial.dart';
 part './MeshMatcapMaterial.dart';
+part './ShadowMaterial.dart';
