@@ -199,9 +199,7 @@ class PropertyBinding {
 			"propertyIndex": matches.group(6)
 		};
 
-    // print("PropertyBinding _trackRe: ${_trackRe.pattern} trackName: ${trackName} ");
-    // print(results);
-
+ 
 
     String? nodeName = results["nodeName"];
 
@@ -233,6 +231,7 @@ class PropertyBinding {
 			throw( 'PropertyBinding: can not parse propertyName from trackName: ${trackName}' );
 
 		}
+
 
 		return results;
 
@@ -322,7 +321,8 @@ class PropertyBinding {
   
   // 0
   getValue_direct( buffer, offset ) {
-    buffer[ offset ] = this.node.getProperty(this.propertyName);
+    var _v = this.targetObject.getProperty(this.propertyName);
+    buffer[ offset ] = _v;
   }
   // 1
   getValue_array( buffer, offset ) {

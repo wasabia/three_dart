@@ -181,7 +181,7 @@ class WebGLRenderList {
     if (a.groupOrder != b.groupOrder) {
       return a.groupOrder - b.groupOrder;
     } else if (a.renderOrder != b.renderOrder) {
-      return a.renderOrder - b.renderOrder;
+      return (a.renderOrder - b.renderOrder) > 0 ? 1 : -1;
     } else if (a.program != b.program) {
       return a.program.id - b.program.id;
     } else if (a.material.id != b.material.id) {

@@ -100,8 +100,8 @@ class WebGLMaterials {
 
 		} else if ( material.isShadowMaterial ) {
 
-			uniforms.color.value.copy( material.color );
-			uniforms.opacity.value = material.opacity;
+			uniforms["color"]["value"].copy( material.color );
+			uniforms["opacity"]["value"] = material.opacity;
 
 		} else if ( material.isShaderMaterial ) {
 

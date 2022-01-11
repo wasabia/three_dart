@@ -47,7 +47,7 @@ class WebGLExtensions {
   hasForWeb(name) {
  
     if ( extensions[ name ] != null ) {
-      return extensions[ name ] != null;
+      return extensions[ name ];
     }
     
     var extension;
@@ -77,7 +77,7 @@ class WebGLExtensions {
 
     extensions[ name ] = extension;
 
-    return extension != null;
+    return extension;
   }
 
   hasForApp(name) {

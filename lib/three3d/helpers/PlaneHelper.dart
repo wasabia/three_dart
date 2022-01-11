@@ -8,9 +8,9 @@ class PlaneHelper extends Line {
   num size = 1.0;
   Plane? plane;
 
-  PlaneHelper(geometry, material) : super(geometry, material) {}
+  PlaneHelper.create(geometry, material) : super(geometry, material) {}
 
-	static PlaneHelper create({plane, size = 1, hex = 0xffff00} ) {
+	factory PlaneHelper( plane, [size = 1, hex = 0xffff00] ) {
 
 		var color = hex;
 
@@ -20,7 +20,7 @@ class PlaneHelper extends Line {
 		geometry.setAttribute( 'position', new Float32BufferAttribute( positions, 3, false ) );
 		geometry.computeBoundingSphere();
 
-		var planeHelper = PlaneHelper( geometry, new LineBasicMaterial( { "color": color, "toneMapped": false } ) );
+		var planeHelper = PlaneHelper.create( geometry, new LineBasicMaterial( { "color": color, "toneMapped": false } ) );
 
 	
 		planeHelper.plane = plane;
