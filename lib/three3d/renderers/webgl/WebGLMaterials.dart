@@ -150,6 +150,12 @@ class WebGLMaterials {
 
 		}
 
+    if ( material.alphaTest > 0 ) {
+
+			uniforms["alphaTest"]["value"] = material.alphaTest;
+
+		}
+
  
 		var envMap = properties.get( material )["envMap"];
 
