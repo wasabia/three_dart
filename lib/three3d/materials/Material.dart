@@ -255,8 +255,10 @@ class Material with EventDispatcher {
     
     if(key == "alphaTest") {
       alphaTest = newValue;
+    } else if(key == "alphaMap") {
+      alphaMap = newValue;
     } else if(key == "aoMap") {
-      aoMap = newValue;  
+      aoMap = newValue;
     } else if(key == "blendDst") {
       blendDst = newValue;
     } else if(key == "blendDstAlpha") {
