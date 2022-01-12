@@ -285,43 +285,24 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
 
     var ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 );
     scene.add( ambientLight );
-
-    var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
-
-
-    
-    camera.add( pointLight );
     scene.add( camera );
 
     camera.lookAt(scene.position);
 
 
+    var loader = new THREE.TextureLoader(null);
+    var clothTexture = await loader.loadAsync( 'assets/textures/patterns/circuit_pattern.png', null );
+    clothTexture.anisotropy = 16;
 
-    var loader = THREE_JSM.GLTFLoader( null ).setPath( 'assets/models/gltf/test/' );
-    
-    // var result = await loader.loadAsync( 'tokyo.gltf', null);
-    // var result = await loader.loadAsync( 'animate7.gltf', null);
-    var result = await loader.loadAsync( 'untitled22.gltf', null);
+    var clothMaterial = new THREE.MeshLambertMaterial( {
+      "alphaMap": clothTexture,
+      "side": THREE.DoubleSide,
+      "alphaTest": 0.5
+    } );
 
-    print(result);
+    var plane = THREE.PlaneGeometry(50, 50);
 
-    print(" load gltf success result: ${result}  ");
-
-    model = result["scene"].children[0].children[0].children[0];
-
-    print(" load gltf success model: ${model}  ");
-
-    model.position.set( 1, 1, 0 );
-    model.scale.set( 0.05, 0.05, 0.05 );
-    // scene.add( model );
-
-
-    var texture0 = model.material.map;
-
-    var plane = new THREE.PlaneGeometry(50, 50);
-    var mat = new THREE.MeshBasicMaterial({"map": texture0});
-
-    var _mesh = new THREE.Mesh( plane, mat );
+    var _mesh = new THREE.Mesh( plane, clothMaterial );
     scene.add( _mesh );
 
 

@@ -32,11 +32,11 @@ class ParametricGeometry extends BufferGeometry {
 		var p0 = new Vector3(), p1 = new Vector3();
 		var pu = new Vector3(), pv = new Vector3();
 
-		if ( func.length < 3 ) {
+		// if ( func.length < 3 ) {
 
-			print( 'THREE.ParametricGeometry: Function must now modify a Vector3 as third parameter.' );
+		// 	print( 'THREE.ParametricGeometry: Function must now modify a Vector3 as third parameter.' );
 
-		}
+		// }
 
 		// generate vertices, normals and uvs
 
