@@ -14,7 +14,7 @@ Linux TODO, need flutter_gl support
 three.js r130
 
 
-Example Demo on flutter web [https://wasabia.github.io/three_dart/#/](https://wasabia.github.io/three_dart/#/)
+Example Demo on flutter web [https://wasabia.github.io/three_dart_example/#/](https://wasabia.github.io/three_dart_example/#/)
 
 
 ## Getting Started
