@@ -104,7 +104,7 @@ class Interpolant {
 
 							if ( t1 == null ) {
 
-								if ( t < t0! ) break forward_scan;
+								if ( t < t0 ) break forward_scan;
 
 								// after end
 

@@ -1,7 +1,7 @@
+import 'dart:html';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'dart:math' as Math;
 
-import 'package:flutter/services.dart';
 
 class app_debug2 extends StatefulWidget {
   String fileName;
@@ -13,17 +13,31 @@ class app_debug2 extends StatefulWidget {
 
 class webgl_debugState extends State<app_debug2> {
 
+  CanvasElement? element;
+  dynamic gl;
+  String divId = DateTime.now().microsecondsSinceEpoch.toString();
+
   @override
   void initState() {
     super.initState();
 
 
-    loadFile();
+    init();
   }
 
-  loadFile() async {
-    final data = await rootBundle.load("assets/test.txt");
-    print(" load data: ${data} ");
+  init() {
+    ui.platformViewRegistry.registerViewFactory(divId, (int viewId) {
+      this.element = CanvasElement(width: 300, height: 300)
+      ..id = 'canvas-id';
+
+      print(" set element ");
+      print(" set gl ");
+      
+      this.gl = this.element!.getContext("webgl2", {"alpha": true, "antialias": true});
+      return this.element!;
+    });
+
+    
   }
 
   @override
@@ -33,12 +47,28 @@ class webgl_debugState extends State<app_debug2> {
         appBar: AppBar(
           title: Text(widget.fileName),
         ),
-        body: Container(),
-        
+        body: Container(
+          child: HtmlElementView(viewType: divId),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Text("render"),
+          onPressed: () {
+            render();
+          },
+        ),
       ),
     );
   }
 
+  render() {
+    print(" render gl: ${gl} ");
+
+    var _ext = gl.getExtension("EXT_texture_filter_anisotropic");
+
+    print(" _ext: ${_ext} ");
+    print(" _ext: ${_ext.TEXTURE_MAX_ANISOTROPY_EXT} ");
+
+  }
 
 }
 

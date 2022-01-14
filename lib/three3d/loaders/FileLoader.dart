@@ -206,6 +206,12 @@ class FileLoader extends Loader {
         
       }
     } else {
+
+      // load assets file TODO
+      if(url.startsWith("assets")) {
+        url = "assets/" + url;
+      }
+
       http.Response response = await http.get(Uri.parse(url));
       
       if(response.statusCode != 200) {
