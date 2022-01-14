@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Flutter Web
+name: Build Example Flutter Web
 
 # Controls when the workflow will run
 on:
@@ -25,10 +25,11 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
-      - run: flutter config --enable-web
-      - run: flutter pub get
-      - run: flutter build web --release
       - run: |
+          cd example
+          flutter config --enable-web
+          flutter pub get
+          flutter build web --release
           cd build/web
           git init
           # 改成你的提交邮箱
@@ -37,7 +38,7 @@ jobs:
           git config --global user.name wasabia
           git status
           
-          git remote add origin https://${{secrets.commit_secret}}@github.com/wasabia/three_dart.git
+          git remote add origin https://${{secrets.commit_secret}}@github.com/wasabia/three_dart_example.git
           git checkout -b gh-pages
           git add --all
           git commit -m "update"
