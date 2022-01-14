@@ -23,9 +23,9 @@ import 'ExampleApp.dart';
 
 void main() {
   runApp(
-    // ExampleApp()
+    ExampleApp()
     // app_debug2(fileName: "app_debug2")
-    webgl_loader_obj(fileName: "webgl_loader_obj")
+    // webgl_loader_obj(fileName: "webgl_loader_obj")
     // webgl_skinning_simple(fileName: "webgl_skinning_simple")
     // webgl_debug3(fileName: "webgl_debug3")
     // webgl_debug(fileName: "webgl_debug")
