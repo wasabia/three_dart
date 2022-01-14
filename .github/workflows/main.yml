@@ -16,15 +16,18 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
+    name: Build Example Web
     runs-on: ubuntu-latest
     env:
       my_secret: ${{secrets.commit_secret}}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v2
         with:
-          channel: 'dev'
+          # flutter-version: '2.8.0'
+          channel: 'beta'
+      - run: flutter --version    
       - run: |
           cd example
           flutter config --enable-web
