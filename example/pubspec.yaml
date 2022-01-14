@@ -78,6 +78,8 @@ flutter:
     - assets/models/gltf/DamagedHelmet/glTF/
     - assets/textures/
     - assets/textures/equirectangular/
+    - assets/textures/terrain/
+    - assets/textures/patterns/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
