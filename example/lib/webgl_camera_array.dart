@@ -4,18 +4,13 @@ import 'dart:typed_data';
 
 import 'dart:ui' as ui;
 
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 
-
 import 'package:three_dart/three_dart.dart' as THREE;
-
-
-
 
 class webgl_camera_array extends StatefulWidget {
   String fileName;
@@ -25,8 +20,6 @@ class webgl_camera_array extends StatefulWidget {
 }
 
 class _MyAppState extends State<webgl_camera_array> {
-
-
   late FlutterGlPlugin three3dRender;
   THREE.WebGLRenderer? renderer;
 
@@ -39,14 +32,12 @@ class _MyAppState extends State<webgl_camera_array> {
   late THREE.Scene scene;
   late THREE.Camera camera;
   late THREE.Mesh mesh;
-  
+
   num dpr = 1.0;
 
   var AMOUNT = 4;
 
   bool verbose = true;
-
-
 
   late THREE.WebGLRenderTarget renderTarget;
 
@@ -55,7 +46,6 @@ class _MyAppState extends State<webgl_camera_array> {
   @override
   void initState() {
     super.initState();
-    
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -68,14 +58,14 @@ class _MyAppState extends State<webgl_camera_array> {
     Map<String, dynamic> _options = {
       "antialias": true,
       "alpha": false,
-      "width": width.toInt(), 
-      "height": height.toInt(), 
+      "width": width.toInt(),
+      "height": height.toInt(),
       "dpr": dpr
     };
-    
+
     await three3dRender.initialize(options: _options);
 
-    setState(() { });
+    setState(() {});
 
     // TODO web wait dom ok!!!
     Future.delayed(Duration(milliseconds: 100), () async {
@@ -83,12 +73,8 @@ class _MyAppState extends State<webgl_camera_array> {
 
       initScene();
       animate();
-      
     });
-  
   }
-
-  
 
   initSize(BuildContext context) {
     if (screenSize != null) {
@@ -112,10 +98,8 @@ class _MyAppState extends State<webgl_camera_array> {
         ),
         body: Builder(
           builder: (BuildContext context) {
-            initSize(context);  
-            return SingleChildScrollView(
-              child: _build(context)
-            );
+            initSize(context);
+            return SingleChildScrollView(child: _build(context));
           },
         ),
         floatingActionButton: FloatingActionButton(
@@ -128,8 +112,6 @@ class _MyAppState extends State<webgl_camera_array> {
     );
   }
 
-  
-  
   Widget _build(BuildContext context) {
     return Column(
       children: [
@@ -137,119 +119,115 @@ class _MyAppState extends State<webgl_camera_array> {
           child: Stack(
             children: [
               Container(
-                width: width,
-                height: height,
-                color: Colors.black,
-                child: Builder(
-                  builder: (BuildContext context) {
-                    if(kIsWeb) {
-                      return three3dRender.isInitialized ? HtmlElementView(viewType: three3dRender.textureId!.toString()) : Container();
+                  width: width,
+                  height: height,
+                  color: Colors.black,
+                  child: Builder(builder: (BuildContext context) {
+                    if (kIsWeb) {
+                      return three3dRender.isInitialized
+                          ? HtmlElementView(
+                              viewType: three3dRender.textureId!.toString())
+                          : Container();
                     } else {
-                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
+                      return three3dRender.isInitialized
+                          ? Texture(textureId: three3dRender.textureId!)
+                          : Container();
                     }
-                  }
-                )
-              ),
-              
+                  })),
             ],
           ),
         ),
-
       ],
     );
   }
 
   render() {
-
     int _t = DateTime.now().millisecondsSinceEpoch;
 
     final _gl = three3dRender.gl;
 
-     
-
     renderer!.render(scene, camera);
 
-   
     int _t1 = DateTime.now().millisecondsSinceEpoch;
 
-    if(verbose) {
+    if (verbose) {
       print("render cost: ${_t1 - _t} ");
       print(renderer!.info.memory);
       print(renderer!.info.render);
     }
-    
-   
+
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
-    _gl.finish();
+    _gl.flush();
 
     // var pixels = _gl.readCurrentPixels(0, 0, 10, 10);
     // print(" --------------pixels............. ");
     // print(pixels);
 
-    if(verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
 
-    if(!kIsWeb) {
+    if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
     }
-    
   }
 
   initRenderer() {
     Map<String, dynamic> _options = {
-      "width": width, 
+      "width": width,
       "height": height,
-      "gl":  three3dRender.gl,
+      "gl": three3dRender.gl,
       "antialias": true,
       "canvas": three3dRender.element
     };
     renderer = THREE.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
-    renderer!.setSize( width, height, false );
+    renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
-    
-    if(!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({ "minFilter": THREE.LinearFilter, "magFilter": THREE.LinearFilter, "format": THREE.RGBAFormat });
-      renderTarget = THREE.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
+
+    if (!kIsWeb) {
+      var pars = THREE.WebGLRenderTargetOptions({
+        "minFilter": THREE.LinearFilter,
+        "magFilter": THREE.LinearFilter,
+        "format": THREE.RGBAFormat
+      });
+      renderTarget = THREE.WebGLMultisampleRenderTarget(
+          (width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }
   }
 
-
-  
   initScene() {
     initRenderer();
     initPage();
   }
 
   initPage() {
-
     var ASPECT_RATIO = width / height;
 
-    var WIDTH = ( width / AMOUNT ) * dpr;
-    var HEIGHT = ( height / AMOUNT ) * dpr;
+    var WIDTH = (width / AMOUNT) * dpr;
+    var HEIGHT = (height / AMOUNT) * dpr;
 
     List<THREE.Camera> cameras = [];
 
-    for ( var y = 0; y < AMOUNT; y ++ ) {
-
-      for ( var x = 0; x < AMOUNT; x ++ ) {
-
-        var subcamera = new THREE.PerspectiveCamera( 40, ASPECT_RATIO, 0.1, 10 );
-        subcamera.viewport = new THREE.Vector4( THREE.Math.floor( x * WIDTH ), THREE.Math.floor( y * HEIGHT ), THREE.Math.ceil( WIDTH ), THREE.Math.ceil( HEIGHT ) );
-        subcamera.position.x = ( x / AMOUNT ) - 0.5;
-        subcamera.position.y = 0.5 - ( y / AMOUNT );
+    for (var y = 0; y < AMOUNT; y++) {
+      for (var x = 0; x < AMOUNT; x++) {
+        var subcamera = new THREE.PerspectiveCamera(40, ASPECT_RATIO, 0.1, 10);
+        subcamera.viewport = new THREE.Vector4(
+            THREE.Math.floor(x * WIDTH),
+            THREE.Math.floor(y * HEIGHT),
+            THREE.Math.ceil(WIDTH),
+            THREE.Math.ceil(HEIGHT));
+        subcamera.position.x = (x / AMOUNT) - 0.5;
+        subcamera.position.y = 0.5 - (y / AMOUNT);
         subcamera.position.z = 1.5;
-        subcamera.position.multiplyScalar( 2 );
-        subcamera.lookAt( THREE.Vector3(0,0,0) );
+        subcamera.position.multiplyScalar(2);
+        subcamera.lookAt(THREE.Vector3(0, 0, 0));
         subcamera.updateMatrixWorld(false);
-        cameras.add( subcamera );
-
+        cameras.add(subcamera);
       }
-
     }
 
-    camera = new THREE.ArrayCamera( cameras );
+    camera = new THREE.ArrayCamera(cameras);
     // camera = new THREE.PerspectiveCamera( 40, 1, 0.1, 10 );
     camera.position.z = 3;
 
@@ -259,40 +237,38 @@ class _MyAppState extends State<webgl_camera_array> {
 
     scene.background = THREE.Color(1.0, 1.0, 1.0);
 
-    scene.add( new THREE.AmbientLight( 0x222244, null ) );
+    scene.add(new THREE.AmbientLight(0x222244, null));
 
     var light = new THREE.DirectionalLight(0xffffff, null);
-    light.position.set( 0.5, 0.5, 1 );
+    light.position.set(0.5, 0.5, 1);
     light.castShadow = true;
     light.shadow!.camera!.zoom = 4; // tighter shadow map
-    scene.add( light );
+    scene.add(light);
 
-    var geometryBackground = new THREE.PlaneGeometry( 100, 100 );
-    var materialBackground = new THREE.MeshPhongMaterial( { "color": 0x000066 } );
+    var geometryBackground = new THREE.PlaneGeometry(100, 100);
+    var materialBackground = new THREE.MeshPhongMaterial({"color": 0x000066});
 
-    var background = new THREE.Mesh( geometryBackground, materialBackground );
+    var background = new THREE.Mesh(geometryBackground, materialBackground);
     background.receiveShadow = true;
-    background.position.set( 0, 0, - 1 );
-    scene.add( background );
+    background.position.set(0, 0, -1);
+    scene.add(background);
 
-    var geometryCylinder = new THREE.CylinderGeometry( 0.5, 0.5, 1, 32 );
-    var materialCylinder = new THREE.MeshPhongMaterial( { "color": 0xff0000 } );
+    var geometryCylinder = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
+    var materialCylinder = new THREE.MeshPhongMaterial({"color": 0xff0000});
 
-    mesh = new THREE.Mesh( geometryCylinder, materialCylinder );
+    mesh = new THREE.Mesh(geometryCylinder, materialCylinder);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
-    scene.add( mesh );
+    scene.add(mesh);
   }
 
   animate() {
-
-    if(!mounted) {
+    if (!mounted) {
       return;
     }
 
     mesh.rotation.x += 0.005;
     mesh.rotation.z += 0.01;
-
 
     render();
 
@@ -301,17 +277,12 @@ class _MyAppState extends State<webgl_camera_array> {
     });
   }
 
-
   @override
   void dispose() {
-    
     print(" dispose ............. ");
 
     three3dRender.dispose();
 
     super.dispose();
   }
-
-
- 
 }
