@@ -188,7 +188,7 @@ class _State extends State<webgl_clipping_intersection> {
     
    
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
-    _gl.finish();
+    _gl.flush();
 
     if(verbose) print(" render: sourceTexture: ${sourceTexture} ");
 
