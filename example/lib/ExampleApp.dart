@@ -1,5 +1,6 @@
 
 import 'package:example/misc_animation_keys.dart';
+import 'package:example/webgl_animation_cloth.dart';
 import 'package:example/webgl_animation_keyframes.dart';
 import 'package:example/webgl_animation_multiple.dart';
 import 'package:example/webgl_clipping.dart';
@@ -11,6 +12,7 @@ import 'package:example/webgl_loader_gltf.dart';
 import 'package:example/webgl_loader_gltf_test.dart';
 import 'package:example/webgl_loader_obj_mtl.dart';
 import 'package:example/webgl_loader_texture_basis.dart';
+import 'package:example/webgl_materials.dart';
 import 'package:example/webgl_shadowmap_viewer.dart';
 import 'package:example/webgl_skinning_simple.dart';
 
@@ -140,11 +142,14 @@ class _MyAppState extends State<ExampleApp> {
     } else if(fileName == "webgl_clipping_stencil") {
       page = webgl_clipping_stencil(fileName: fileName);
     } else if(fileName == "webgl_clipping") {
-      page = webgl_clipping(fileName: fileName);   
+      page = webgl_clipping(fileName: fileName);
     } else if(fileName == "webgl_geometries") {
-      page = webgl_geometries(fileName: fileName); 
-
-
+      page = webgl_geometries(fileName: fileName);
+    } else if(fileName == "webgl_animation_cloth") {
+      page = webgl_animation_cloth(fileName: fileName);
+    } else if(fileName == "webgl_materials") {
+      page = webgl_materials(fileName: fileName);
+      
     } else {
       throw("_goto fileName ${fileName} is not support yet ");
     }
