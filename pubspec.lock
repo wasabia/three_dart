@@ -86,24 +86,38 @@ packages:
   flutter_gl:
     dependency: "direct main"
     description:
-      path: "../flutter_gl/flutter_gl"
-      relative: true
-    source: path
-    version: "0.0.6"
+      name: flutter_gl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.7"
+  flutter_gl_macos:
+    dependency: transitive
+    description:
+      name: flutter_gl_macos
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   flutter_gl_platform_interface:
     dependency: transitive
     description:
       name: flutter_gl_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.2"
+    version: "0.0.3"
   flutter_gl_web:
     dependency: transitive
     description:
       name: flutter_gl_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.2"
+    version: "0.0.3"
+  flutter_gl_windows:
+    dependency: transitive
+    description:
+      name: flutter_gl_windows
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -197,7 +211,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.2"
+    version: "2.1.2"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -281,5 +295,5 @@ packages:
     source: hosted
     version: "5.1.1"
 sdks:
-  dart: ">=2.14.0 <3.0.0"
-  flutter: ">=1.20.0"
+  dart: ">=2.16.0-80.1.beta <3.0.0"
+  flutter: ">=2.5.0"
