@@ -478,7 +478,7 @@ class WebGLTextures {
 			if ( texture.type == HalfFloatType && ( isWebGL2 || extensions.get( 'OES_texture_half_float_linear' ) ) == null ) return;
 
 			if ( texture.anisotropy > 1 || properties.get( texture )["__currentAnisotropy"] != null ) {
-
+        // print("extension: ${extension} ... extension.TEXTURE_MAX_ANISOTROPY_EXT: ${extension.TEXTURE_MAX_ANISOTROPY_EXT} ");
 				gl.texParameterf( textureType, extension.TEXTURE_MAX_ANISOTROPY_EXT, Math.min( texture.anisotropy, capabilities.getMaxAnisotropy() ) );
 				properties.get( texture )["__currentAnisotropy"] = texture.anisotropy;
 

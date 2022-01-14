@@ -55,18 +55,15 @@ class TextureLoader extends Loader {
 
       ImageElement imageElement;
       
-      // Web
-      if(image.runtimeType.toString() == "ImageElement") {
+      // Web better way ???
+      if(kIsWeb && image.runtimeType.toString().indexOf("ImageElement") >= 0) {
         imageElement = ImageElement(url: url is Blob ? "" : url, data: image, width: image.width!, height: image.height!);
       } else {
         var _pixels = image.getBytes(format: isJPEG ? Format.rgb : Format.rgba);
         imageElement = ImageElement(url: url, data: Uint8Array.from(_pixels) , width: image.width, height: image.height);
       }
 
-      print(" image.width: ${image.width} image.height: ${image.height} isJPEG: ${isJPEG} ");
-
-
-  
+      // print(" image.width: ${image.width} image.height: ${image.height} isJPEG: ${isJPEG} ");
       
 			texture.image = imageElement;
 			texture.format = isJPEG ? RGBFormat : RGBAFormat;
