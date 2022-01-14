@@ -1,4 +1,5 @@
 import 'package:example/app_debug.dart';
+import 'package:example/app_debug2.dart';
 import 'package:example/misc_animation_keys.dart';
 import 'package:example/webgl_animation_cloth.dart';
 import 'package:example/webgl_animation_keyframes.dart';
@@ -14,6 +15,7 @@ import 'package:example/webgl_debug_for_macos.dart';
 import 'package:example/webgl_geometries.dart';
 import 'package:example/webgl_loader_gltf_2.dart';
 import 'package:example/webgl_loader_gltf_3.dart';
+import 'package:example/webgl_loader_obj.dart';
 import 'package:example/webgl_materials.dart';
 import 'package:example/webgl_skinning_simple.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +23,9 @@ import 'ExampleApp.dart';
 
 void main() {
   runApp(
-    ExampleApp()
-    // app_debug(fileName: "app_debug")
+    // ExampleApp()
+    // app_debug2(fileName: "app_debug2")
+    webgl_loader_obj(fileName: "webgl_loader_obj")
     // webgl_skinning_simple(fileName: "webgl_skinning_simple")
     // webgl_debug3(fileName: "webgl_debug3")
     // webgl_debug(fileName: "webgl_debug")
