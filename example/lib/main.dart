@@ -4,6 +4,7 @@ import 'package:example/misc_animation_keys.dart';
 import 'package:example/webgl_animation_cloth.dart';
 import 'package:example/webgl_animation_keyframes.dart';
 import 'package:example/webgl_animation_multiple.dart';
+import 'package:example/webgl_animation_skinning_morph.dart';
 import 'package:example/webgl_clipping.dart';
 import 'package:example/webgl_clipping_advanced.dart';
 import 'package:example/webgl_clipping_intersection.dart';
