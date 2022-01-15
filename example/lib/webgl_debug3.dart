@@ -46,6 +46,7 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
   var AMOUNT = 4;
 
   bool verbose = true;
+  bool disposed = false;
 
   late THREE.Object3D object;
 
@@ -128,25 +129,23 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.fileName),
-        ),
-        body: Builder(
-          builder: (BuildContext context) {
-            initSize(context);  
-            return SingleChildScrollView(
-              child: _build(context)
-            );
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Text("render"),
-          onPressed: () {
-            clickRender();
-          },
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.fileName),
+      ),
+      body: Builder(
+        builder: (BuildContext context) {
+          initSize(context);  
+          return SingleChildScrollView(
+            child: _build(context)
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Text("render"),
+        onPressed: () {
+          clickRender();
+        },
       ),
     );
   }
@@ -323,7 +322,7 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
 
   animate() {
 
-    if(!mounted) {
+    if(!mounted || disposed) {
       return;
     }
 
@@ -349,7 +348,7 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
   void dispose() {
     
     print(" dispose ............. ");
-
+    disposed = true;
     three3dRender.dispose();
 
     super.dispose();

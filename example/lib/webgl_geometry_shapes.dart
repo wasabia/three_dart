@@ -45,6 +45,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
   num dpr = 1.0;
 
   bool verbose = true;
+  bool disposed = false;
 
 
 
@@ -105,25 +106,23 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.fileName),
-        ),
-        body: Builder(
-          builder: (BuildContext context) {
-            initSize(context);  
-            return SingleChildScrollView(
-              child: _build(context)
-            );
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Text("render"),
-          onPressed: () {
-            render();
-          },
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.fileName),
+      ),
+      body: Builder(
+        builder: (BuildContext context) {
+          initSize(context);  
+          return SingleChildScrollView(
+            child: _build(context)
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Text("render"),
+        onPressed: () {
+          render();
+        },
       ),
     );
   }
@@ -530,7 +529,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
   animate() {
 
-    if(!mounted) {
+    if(!mounted || disposed) {
       return;
     }
 
@@ -550,7 +549,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
   void dispose() {
     
     print(" dispose ............. ");
-
+    disposed = true;
     three3dRender.dispose();
 
     super.dispose();
