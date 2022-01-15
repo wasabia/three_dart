@@ -276,9 +276,9 @@ packages:
   three_dart_jsm:
     dependency: "direct main"
     description:
-      name: three_dart_jsm
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../../three_dart_plugins/three_dart_jsm"
+      relative: true
+    source: path
     version: "0.0.2"
   typed_data:
     dependency: transitive
@@ -293,7 +293,7 @@ packages:
       name: typr_dart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1"
+    version: "0.0.2"
   universal_html:
     dependency: transitive
     description:

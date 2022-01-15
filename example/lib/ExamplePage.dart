@@ -4,12 +4,15 @@ import 'package:example/webgl_animation_keyframes.dart';
 import 'package:example/webgl_animation_multiple.dart';
 import 'package:example/webgl_animation_skinning_additive_blending.dart';
 import 'package:example/webgl_animation_skinning_blending.dart';
+import 'package:example/webgl_animation_skinning_morph.dart';
+import 'package:example/webgl_camera.dart';
 import 'package:example/webgl_camera_array.dart';
 import 'package:example/webgl_clipping.dart';
 import 'package:example/webgl_clipping_advanced.dart';
 import 'package:example/webgl_clipping_intersection.dart';
 import 'package:example/webgl_clipping_stencil.dart';
 import 'package:example/webgl_geometries.dart';
+import 'package:example/webgl_geometry_colors.dart';
 import 'package:example/webgl_geometry_shapes.dart';
 import 'package:example/webgl_geometry_text.dart';
 import 'package:example/webgl_instancing_performance.dart';
@@ -95,7 +98,12 @@ class _MyAppState extends State<ExamplePage> {
       page = webgl_animation_skinning_blending(fileName: fileName);
     } else if (fileName == "webgl_animation_skinning_additive_blending") {
       page = webgl_animation_skinning_additive_blending(fileName: fileName);
-      
+    } else if (fileName == "webgl_animation_skinning_morph") {
+      page = webgl_animation_skinning_morph(fileName: fileName);
+    } else if (fileName == "webgl_camera") {
+      page = webgl_camera(fileName: fileName);
+    } else if (fileName == "webgl_geometry_colors") {
+      page = webgl_geometry_colors(fileName: fileName);
     } else {
       throw ("ExamplePage fileName ${fileName} is not support yet ");
     }

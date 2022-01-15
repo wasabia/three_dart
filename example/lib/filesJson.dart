@@ -1,4 +1,5 @@
 var filesJson = [
+  "webgl_camera",
   "webgl_camera_array",
   "webgl_loader_obj",
   "webgl_shadow_contact",
@@ -23,5 +24,7 @@ var filesJson = [
   "webgl_geometries",
   "webgl_materials",
   "webgl_animation_skinning_blending",
-  "webgl_animation_skinning_additive_blending"
+  "webgl_animation_skinning_additive_blending",
+  "webgl_animation_skinning_morph",
+  "webgl_geometry_colors"
 ];

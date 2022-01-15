@@ -36,6 +36,8 @@ dependencies:
 dependency_overrides:
   three_dart:
     path: ../
+  three_dart_jsm:
+    path: ../../three_dart_plugins/three_dart_jsm/
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +72,7 @@ flutter:
     - assets/models/json/
     - assets/models/gltf/
     - assets/models/gltf/test/
+    - assets/models/gltf/RobotExpressive/
     - assets/models/gltf/DamagedHelmet/glTF/
     - assets/textures/
     - assets/textures/equirectangular/

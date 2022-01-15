@@ -603,9 +603,7 @@ class PropertyBinding {
 
       this.resolvedProperty = nodeProperty;
 
-      // } else if ( Array.isArray( nodeProperty ) ) {
-    } else if (nodeProperty.runtimeType.toString().startsWith("List<")) {
-      print("PropertyBinding  nodeProperty is Array");
+    } else if (nodeProperty is List ) {
 
       bindingType = this.BindingType["EntireArray"];
 

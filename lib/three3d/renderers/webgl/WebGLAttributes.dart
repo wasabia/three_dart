@@ -21,9 +21,7 @@ class WebGLAttributes {
     // dynamic arrayList;
 
     // print(" WebGLAttributes.createBuffer attribute: ${attribute.runtimeType} arrayType: ${arrayType} array: ${array.length} ${array.runtimeType} name: ${name} ");
-    // if( name == "skinIndex" ) {
-    //    print( array.toDartList() );
-    // }
+ 
 
     var type = gl.FLOAT;
     int bytesPerElement = 4;
@@ -108,13 +106,11 @@ class WebGLAttributes {
       throw ("1 WebGLAttributes.createBuffer BufferAttribute arrayType: ${array.runtimeType} is not support  ");
     }
 
-    // print("WebGLAttributes.createBuffer name: ${name} attribute: ${attribute} arrayList: ${array.runtimeType}  array.bytesLength: ${ array.bytesLength }   ");
-
     var buffer = gl.createBuffer();
 
     gl.bindBuffer(bufferType, buffer);
 
-    gl.bufferData(bufferType, array.bytesLength, array, usage);
+    gl.bufferData(bufferType, (array is NativeArray) ? array.bytesLength : array.lengthInBytes, array, usage);
 
     if (attribute.onUploadCallback != null) {
       attribute.onUploadCallback();
@@ -180,7 +176,7 @@ class WebGLAttributes {
 
     if (updateRange["count"] == -1) {
       // Not using update ranges
-      gl.bufferSubData(bufferType, 0, array, 0, array.bytesLength);
+      gl.bufferSubData(bufferType, 0, array, 0, (array is NativeArray) ? array.bytesLength : array.lengthInBytes);
     } else {
       print(" WebGLAttributes.dart gl.bufferSubData need debug confirm.... ");
       gl.bufferSubData(bufferType, updateRange["offset"] * attribute.itemSize,
