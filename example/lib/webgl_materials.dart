@@ -40,6 +40,7 @@ class _MyAppState extends State<webgl_materials> {
   var AMOUNT = 4;
 
   bool verbose = true;
+  bool disposed = false;
 
   bool loaded = false;
 
@@ -108,25 +109,23 @@ class _MyAppState extends State<webgl_materials> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.fileName),
-        ),
-        body: Builder(
-          builder: (BuildContext context) {
-            initSize(context);  
-            return SingleChildScrollView(
-              child: _build(context)
-            );
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Text("render"),
-          onPressed: () {
-            clickRender();
-          },
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.fileName),
+      ),
+      body: Builder(
+        builder: (BuildContext context) {
+          initSize(context);  
+          return SingleChildScrollView(
+            child: _build(context)
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Text("render"),
+        onPressed: () {
+          clickRender();
+        },
       ),
     );
   }
@@ -346,7 +345,7 @@ class _MyAppState extends State<webgl_materials> {
 
     print("before animate render mounted: ${mounted} loaded: ${loaded}");
 
-    if(!mounted) {
+    if(!mounted || disposed) {
       return;
     }
 
@@ -396,7 +395,7 @@ class _MyAppState extends State<webgl_materials> {
   void dispose() {
     
     print(" dispose ............. ");
-
+    disposed = true;
     three3dRender.dispose();
 
     super.dispose();

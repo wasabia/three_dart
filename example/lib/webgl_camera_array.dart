@@ -38,6 +38,7 @@ class _MyAppState extends State<webgl_camera_array> {
   var AMOUNT = 4;
 
   bool verbose = true;
+  bool disposed = false;
 
   late THREE.WebGLRenderTarget renderTarget;
 
@@ -91,23 +92,21 @@ class _MyAppState extends State<webgl_camera_array> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.fileName),
-        ),
-        body: Builder(
-          builder: (BuildContext context) {
-            initSize(context);
-            return SingleChildScrollView(child: _build(context));
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Text("render"),
-          onPressed: () {
-            render();
-          },
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.fileName),
+      ),
+      body: Builder(
+        builder: (BuildContext context) {
+          initSize(context);
+          return SingleChildScrollView(child: _build(context));
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Text("render"),
+        onPressed: () {
+          render();
+        },
       ),
     );
   }
@@ -263,7 +262,7 @@ class _MyAppState extends State<webgl_camera_array> {
   }
 
   animate() {
-    if (!mounted) {
+    if (!mounted || disposed) {
       return;
     }
 
@@ -281,6 +280,7 @@ class _MyAppState extends State<webgl_camera_array> {
   void dispose() {
     print(" dispose ............. ");
 
+    disposed = true;
     three3dRender.dispose();
 
     super.dispose();

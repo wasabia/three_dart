@@ -47,6 +47,7 @@ class _MyAppState extends State<webgl_geometry_text> {
   var AMOUNT = 4;
 
   bool verbose = true;
+  bool disposed = false;
 
   String text = "Three Dart";
 
@@ -119,25 +120,23 @@ class _MyAppState extends State<webgl_geometry_text> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.fileName),
-        ),
-        body: Builder(
-          builder: (BuildContext context) {
-            initSize(context);  
-            return SingleChildScrollView(
-              child: _build(context)
-            );
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Text("render"),
-          onPressed: () {
-            render();
-          },
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.fileName),
+      ),
+      body: Builder(
+        builder: (BuildContext context) {
+          initSize(context);  
+          return SingleChildScrollView(
+            child: _build(context)
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Text("render"),
+        onPressed: () {
+          render();
+        },
       ),
     );
   }
@@ -359,7 +358,7 @@ class _MyAppState extends State<webgl_geometry_text> {
 
   animate() {
 
-    if(!mounted) {
+    if(!mounted || disposed) {
       return;
     }
 
@@ -376,7 +375,7 @@ class _MyAppState extends State<webgl_geometry_text> {
   void dispose() {
     
     print(" dispose ............. ");
-
+    disposed = true;
     three3dRender.dispose();
 
     super.dispose();
