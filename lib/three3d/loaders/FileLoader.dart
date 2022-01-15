@@ -3,256 +3,212 @@ part of three_loaders;
 var loading = {};
 
 class FileLoader extends Loader {
+  FileLoader(manager) : super(manager) {}
 
-  FileLoader( manager ) : super(manager) {
-
-  }
-
-  loadAsync ( url, Function? onProgress ) async {
+  loadAsync(url, Function? onProgress) async {
     var completer = Completer();
 
-    load(
-      url, 
-      (buffer) {
-        completer.complete(buffer);
-      }, 
-      onProgress, 
-      () {
-
-      }
-    );
+    load(url, (buffer) {
+      completer.complete(buffer);
+    }, onProgress, () {});
 
     return completer.future;
-	}
+  }
 
+  load(url, onLoad, onProgress, onError) async {
+    if (url == null) url = '';
 
-  load ( url, onLoad, onProgress, onError ) async {
+    if (this.path != null) url = this.path + url;
 
-		if ( url == null ) url = '';
+    url = this.manager.resolveURL(url);
 
-		if ( this.path != null ) url = this.path + url;
+    var scope = this;
 
-		url = this.manager.resolveURL( url );
+    var cached = Cache.get(url);
 
-		var scope = this;
+    if (cached != null) {
+      scope.manager.itemStart(url);
 
-		var cached = Cache.get( url );
+      if (onLoad != null) onLoad(cached);
+      scope.manager.itemEnd(url);
 
-		if ( cached != null ) {
+      return cached;
+    }
 
-			scope.manager.itemStart( url );
+    // Check if request is duplicate
 
-      if ( onLoad != null ) onLoad( cached );
-      scope.manager.itemEnd( url );
+    if (loading[url] != null) {
+      loading[url].add(
+          {"onLoad": onLoad, "onProgress": onProgress, "onError": onError});
 
-			return cached;
-
-		}
-
-		// Check if request is duplicate
-
-		if ( loading[ url ] != null ) {
-
-			loading[ url ].add( {
-
-				"onLoad": onLoad,
-				"onProgress": onProgress,
-				"onError": onError
-
-			} );
-
-			return;
-
-		}
-
+      return;
+    }
 
     // Check for data: URI
-		var dataUriRegex = RegExp(r"^data:(.*?)(;base64)?,(.*)$");
-		var dataUriRegexResult = dataUriRegex.firstMatch(url);
-		var request;
+    var dataUriRegex = RegExp(r"^data:(.*?)(;base64)?,(.*)$");
+    var dataUriRegexResult = dataUriRegex.firstMatch(url);
+    var request;
 
-		// Safari can not handle Data URIs through XMLHttpRequest so process manually
-		if ( dataUriRegex.hasMatch(url) ) {
-
+    // Safari can not handle Data URIs through XMLHttpRequest so process manually
+    if (dataUriRegex.hasMatch(url)) {
       var dataUriRegexResult = dataUriRegex.firstMatch(url)!;
 
-			var mimeType = dataUriRegexResult.group(1);
-			var isBase64 = dataUriRegexResult.group(2) != null;
+      var mimeType = dataUriRegexResult.group(1);
+      var isBase64 = dataUriRegexResult.group(2) != null;
 
-			var data = dataUriRegexResult.group(3)!;
-			// data = decodeURIComponent( data );
+      var data = dataUriRegexResult.group(3)!;
+      // data = decodeURIComponent( data );
 
       Uint8List? base64Data;
 
-			if ( isBase64 ) base64Data = convert.base64.decode( data );
+      if (isBase64) base64Data = convert.base64.decode(data);
 
-			// try {
+      // try {
 
-				var response;
-				var responseType = ( this.responseType ).toLowerCase();
+      var response;
+      var responseType = (this.responseType).toLowerCase();
 
-				switch ( responseType ) {
+      switch (responseType) {
+        case 'arraybuffer':
+        case 'blob':
+          if (responseType == 'blob') {
+            // response = new Blob( [ view.buffer ], { type: mimeType } );
+            throw (" FileLoader responseType: ${responseType} need support .... ");
+          } else {
+            response = base64Data;
+          }
 
-					case 'arraybuffer':
-					case 'blob':
+          break;
 
-						if ( responseType == 'blob' ) {
-							// response = new Blob( [ view.buffer ], { type: mimeType } );
-              throw(" FileLoader responseType: ${responseType} need support .... ");
-						} else {
-							response = base64Data;
-						}
+        case 'document':
 
-						break;
+          // var parser = new DOMParser();
+          // response = parser.parseFromString( data, mimeType );
 
-					case 'document':
+          throw ("FileLoader responseType: ${responseType} is not support ....  ");
 
-						// var parser = new DOMParser();
-						// response = parser.parseFromString( data, mimeType );
+          break;
 
-            throw("FileLoader responseType: ${responseType} is not support ....  ");
+        case 'json':
+          response = convert.jsonDecode(data);
 
-						break;
+          break;
 
-					case 'json':
+        default: // 'text' or other
 
-						response = convert.jsonDecode( data );
+          response = data;
 
-						break;
+          break;
+      }
 
-					default: // 'text' or other
+      // Wait for next browser tick like standard XMLHttpRequest event dispatching does
+      // setTimeout( function () {
 
-						response = data;
+      // 	if ( onLoad ) onLoad( response );
 
-						break;
+      // 	scope.manager.itemEnd( url );
 
-				}
+      // }, 0 );
 
-				// Wait for next browser tick like standard XMLHttpRequest event dispatching does
-				// setTimeout( function () {
+      Future.delayed(Duration.zero, () {
+        if (onLoad != null) onLoad(response);
 
-				// 	if ( onLoad ) onLoad( response );
+        scope.manager.itemEnd(url);
+      });
 
-				// 	scope.manager.itemEnd( url );
+      // } catch ( error ) {
 
-				// }, 0 );
+      // Wait for next browser tick like standard XMLHttpRequest event dispatching does
+      // setTimeout( function () {
 
-        Future.delayed(Duration.zero, () {
-          if ( onLoad != null ) onLoad( response );
+      // 	if ( onError ) onError( error );
 
-          scope.manager.itemEnd( url );
-        });
+      // 	scope.manager.itemError( url );
+      // 	scope.manager.itemEnd( url );
 
-			// } catch ( error ) {
-
-				// Wait for next browser tick like standard XMLHttpRequest event dispatching does
-				// setTimeout( function () {
-
-				// 	if ( onError ) onError( error );
-
-				// 	scope.manager.itemError( url );
-				// 	scope.manager.itemEnd( url );
-
-				// }, 0 );
+      // }, 0 );
 
       //   Future.delayed(Duration.zero, () {
-          
-			// 		if ( onError != null ) onError( error );
 
-			// 		scope.manager.itemError( url );
-			// 		scope.manager.itemEnd( url );
+      // 		if ( onError != null ) onError( error );
+
+      // 		scope.manager.itemError( url );
+      // 		scope.manager.itemEnd( url );
 
       //   });
 
-			// }
+      // }
 
       return;
-		}
-
+    }
 
     // Initialise array for duplicate requests
 
-    loading[ url ] = [];
+    loading[url] = [];
 
-    loading[ url ].add( {
+    loading[url]
+        .add({"onLoad": onLoad, "onProgress": onProgress, "onError": onError});
 
-      "onLoad": onLoad,
-      "onProgress": onProgress,
-      "onError": onError
-
-    } );
-
-    var callbacks = loading[ url ];
+    var callbacks = loading[url];
 
     dynamic respData;
-    if(!kIsWeb && !url.startsWith("http")) {
-      
-      if(url.startsWith("assets")) {
-        if(this.responseType == "text") {
+    if (!kIsWeb && !url.startsWith("http")) {
+      if (url.startsWith("assets")) {
+        if (this.responseType == "text") {
           respData = await rootBundle.loadString(url);
         } else {
           ByteData resp = await rootBundle.load(url);
           respData = Uint8List.view(resp.buffer);
         }
       } else {
-
         var file = File(url);
 
-        if(this.responseType == "text") {
+        if (this.responseType == "text") {
           respData = await file.readAsString();
         } else {
           respData = await file.readAsBytes();
         }
-        
       }
     } else {
-
       // load assets file TODO
-      if(url.startsWith("assets")) {
+      if (url.startsWith("assets")) {
         url = "assets/" + url;
       }
 
       http.Response response = await http.get(Uri.parse(url));
-      
-      if(response.statusCode != 200) {
-        for ( var i = 0, il = callbacks.length; i < il; i ++ ) {
-          var callback = callbacks[ i ];
-          if ( callback.onError ) callback.onError(response.body);
+
+      if (response.statusCode != 200) {
+        for (var i = 0, il = callbacks.length; i < il; i++) {
+          var callback = callbacks[i];
+          if (callback.onError) callback.onError(response.body);
         }
 
-        scope.manager.itemError( url );
-        scope.manager.itemEnd( url );
+        scope.manager.itemError(url);
+        scope.manager.itemEnd(url);
       }
 
-      if(this.responseType == "text") {
+      if (this.responseType == "text") {
         respData = response.body;
       } else {
         respData = response.bodyBytes;
       }
     }
-    
-    loading.remove(url);
 
-    
-    
+    loading.remove(url);
 
     // Add to cache only on HTTP success, so that we do not cache
     // error response bodies as proper responses to requests.
-    Cache.add( url, respData );
+    Cache.add(url, respData);
 
-    for ( var i = 0, il = callbacks.length; i < il; i ++ ) {
-
-      var callback = callbacks[ i ];
-      if ( callback["onLoad"] != null ) callback["onLoad"]( respData );
-
+    for (var i = 0, il = callbacks.length; i < il; i++) {
+      var callback = callbacks[i];
+      if (callback["onLoad"] != null) callback["onLoad"](respData);
     }
 
-    scope.manager.itemEnd( url );
-
-    
+    scope.manager.itemEnd(url);
 
     return respData;
-  
+
     // request = new XMLHttpRequest();
     // request.open( 'GET', url, true );
     // request.addEventListener( 'load', ( event ) {
@@ -363,25 +319,18 @@ class FileLoader extends Loader {
 
     // request.send( null );
 
-		
+    // scope.manager.itemStart( url );
 
-		// scope.manager.itemStart( url );
+    // return request;
+  }
 
-		// return request;
+  setResponseType(value) {
+    this.responseType = value;
+    return this;
+  }
 
-	}
-
-	setResponseType ( value ) {
-		this.responseType = value;
-		return this;
-
-	}
-
-	setMimeType ( value ) {
-
-		this.mimeType = value;
-		return this;
-
-	}
-
+  setMimeType(value) {
+    this.mimeType = value;
+    return this;
+  }
 }

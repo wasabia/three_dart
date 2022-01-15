@@ -84,7 +84,6 @@ mixin EventDispatcher {
 
       event.target = null;
     }
-
   }
 
   clearListeners() {

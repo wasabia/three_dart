@@ -63,7 +63,7 @@ class WeakMap<K, V> {
       _map[key] = value;
     }
 
-    if(!contains(key)) {
+    if (!contains(key)) {
       _keys.add(key);
     }
   }

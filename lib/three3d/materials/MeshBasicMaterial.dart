@@ -1,6 +1,5 @@
 part of three_materials;
 
-
 /**
  * 基础网格材质，不受光照影响的材质
  * parameters = {
@@ -37,7 +36,6 @@ class MeshBasicMaterial extends Material {
   String type = 'MeshBasicMaterial';
 
   MeshBasicMaterial([Map<String, dynamic>? parameters]) : super() {
-  
     this.color = new Color(1, 1, 1); // emissive
 
     this.map = null;
@@ -68,7 +66,7 @@ class MeshBasicMaterial extends Material {
   copy(source) {
     super.copy(source);
 
-    if(source.color != null) this.color?.copy(source.color);
+    if (source.color != null) this.color?.copy(source.color);
 
     this.map = source.map;
 
@@ -95,10 +93,7 @@ class MeshBasicMaterial extends Material {
     return this;
   }
 
-
   clone() {
     return MeshBasicMaterial().copy(this);
   }
-
-
 }

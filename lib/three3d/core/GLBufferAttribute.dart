@@ -1,12 +1,9 @@
 part of three_core;
 
-
 class GLBufferAttribute extends BaseBufferAttribute {
-
   bool isGLBufferAttribute = true;
 
-  GLBufferAttribute( buffer, type, itemSize, elementSize, count ) : super() {
-
+  GLBufferAttribute(buffer, type, itemSize, elementSize, count) : super() {
     this.buffer = buffer;
     this.type = type;
     this.itemSize = itemSize;
@@ -17,40 +14,31 @@ class GLBufferAttribute extends BaseBufferAttribute {
   }
 
   set needsUpdate(bool value) {
-    if ( value == true ) this.version ++;
+    if (value == true) this.version++;
   }
 
-  setBuffer ( buffer ) {
+  setBuffer(buffer) {
+    this.buffer = buffer;
 
-		this.buffer = buffer;
+    return this;
+  }
 
-		return this;
+  setType(type, elementSize) {
+    this.type = type;
+    this.elementSize = elementSize;
 
-	}
+    return this;
+  }
 
-	setType ( type, elementSize ) {
+  setItemSize(itemSize) {
+    this.itemSize = itemSize;
 
-		this.type = type;
-		this.elementSize = elementSize;
+    return this;
+  }
 
-		return this;
+  setCount(count) {
+    this.count = count;
 
-	}
-
-	setItemSize ( itemSize ) {
-
-		this.itemSize = itemSize;
-
-		return this;
-
-	}
-
-	setCount ( count ) {
-
-		this.count = count;
-
-		return this;
-
-	}
-
+    return this;
+  }
 }

@@ -14,28 +14,23 @@ part of three_materials;
  */
 
 class PointsMaterial extends Material {
-
   num? size = 1;
 
   String type = "PointsMaterial";
   bool isPointsMaterial = true;
-  
+
   bool sizeAttenuation = true;
 
-  Color? color = new Color( 1,1,1 );
+  Color? color = new Color(1, 1, 1);
 
-  PointsMaterial( [parameters] ) {
-    this.setValues( parameters );
+  PointsMaterial([parameters]) {
+    this.setValues(parameters);
   }
 
+  copy(source) {
+    super.copy(source);
 
-
-
-  copy( source ) {
-
-    super.copy( source );
-
-    this.color?.copy( source.color );
+    this.color?.copy(source.color);
 
     this.map = source.map;
 
@@ -45,9 +40,5 @@ class PointsMaterial extends Material {
     this.sizeAttenuation = source.sizeAttenuation;
 
     return this;
-
   }
-
 }
-
-

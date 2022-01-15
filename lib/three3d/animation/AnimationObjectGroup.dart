@@ -30,7 +30,6 @@ part of three_animation;
  */
 
 class AnimationObjectGroup {
-
   bool isAnimationObjectGroup = true;
 
   String uuid = MathUtils.generateUUID();
@@ -38,7 +37,7 @@ class AnimationObjectGroup {
   // threshold
   int nCachedObjects_ = 0;
   // note: read by PropertyBinding.Composite
-  
+
   late Map _indicesByUUID;
   late dynamic _paths;
   late dynamic _parsedPaths;
@@ -46,21 +45,18 @@ class AnimationObjectGroup {
   late dynamic _bindingsIndicesByPath;
   List<Mesh> _objects = [];
 
-
-  AnimationObjectGroup( List<Mesh>? items ) {
+  AnimationObjectGroup(List<Mesh>? items) {
     // cached objects followed by the active ones
     this._objects = items != null ? items.sublist(0) : [];
-
 
     var indices = {};
     this._indicesByUUID = indices; // for bookkeeping
 
-    if(items != null && items.length > 0) {
-      for ( var i = 0, n = items.length; i != n; ++ i ) {
-        indices[ items[ i ].uuid ] = i;
+    if (items != null && items.length > 0) {
+      for (var i = 0, n = items.length; i != n; ++i) {
+        indices[items[i].uuid] = i;
       }
     }
-    
 
     this._paths = []; // inside: string
     this._parsedPaths = []; // inside: { we don't care, here }
@@ -90,309 +86,254 @@ class AnimationObjectGroup {
     //   }
 
     // };
-
   }
 
-
   add(List<Mesh> items) {
+    var objects = this._objects,
+        indicesByUUID = this._indicesByUUID,
+        paths = this._paths,
+        parsedPaths = this._parsedPaths,
+        bindings = this._bindings,
+        nBindings = bindings.length;
 
-		var objects = this._objects,
-			indicesByUUID = this._indicesByUUID,
-			paths = this._paths,
-			parsedPaths = this._parsedPaths,
-			bindings = this._bindings,
-			nBindings = bindings.length;
+    var knownObject = null,
+        nObjects = objects.length,
+        nCachedObjects = this.nCachedObjects_;
 
-		var knownObject = null,
-			nObjects = objects.length,
-			nCachedObjects = this.nCachedObjects_;
+    for (var i = 0, n = items.length; i != n; ++i) {
+      var object = items[i], uuid = object.uuid;
+      var index = indicesByUUID[uuid];
 
-		for ( var i = 0, n = items.length; i != n; ++ i ) {
+      if (index == null) {
+        // unknown object -> add it to the ACTIVE region
 
-			var object = items[ i ],
-				uuid = object.uuid;
-			var index = indicesByUUID[ uuid ];
+        index = nObjects++;
+        indicesByUUID[uuid] = index;
+        objects.add(object);
 
-			if ( index == null ) {
+        // accounting is done, now do the same for all bindings
 
-				// unknown object -> add it to the ACTIVE region
+        for (var j = 0, m = nBindings; j != m; ++j) {
+          bindings[j]
+              .add(new PropertyBinding(object, paths[j], parsedPaths[j]));
+        }
+      } else if (index < nCachedObjects) {
+        knownObject = objects[index];
 
-				index = nObjects ++;
-				indicesByUUID[ uuid ] = index;
-				objects.add( object );
+        // move existing object to the ACTIVE region
 
-				// accounting is done, now do the same for all bindings
+        var firstActiveIndex = --nCachedObjects,
+            lastCachedObject = objects[firstActiveIndex];
 
-				for ( var j = 0, m = nBindings; j != m; ++ j ) {
+        indicesByUUID[lastCachedObject.uuid] = index;
+        objects[index] = lastCachedObject;
 
-					bindings[ j ].add( new PropertyBinding( object, paths[ j ], parsedPaths[ j ] ) );
+        indicesByUUID[uuid] = firstActiveIndex;
+        objects[firstActiveIndex] = object;
 
-				}
+        // accounting is done, now do the same for all bindings
 
-			} else if ( index < nCachedObjects ) {
+        for (var j = 0, m = nBindings; j != m; ++j) {
+          var bindingsForPath = bindings[j],
+              lastCached = bindingsForPath[firstActiveIndex];
 
-				knownObject = objects[ index ];
+          var binding = bindingsForPath[index];
 
-				// move existing object to the ACTIVE region
+          bindingsForPath[index] = lastCached;
 
-				var firstActiveIndex = -- nCachedObjects,
-					lastCachedObject = objects[ firstActiveIndex ];
+          if (binding == null) {
+            // since we do not bother to create new bindings
+            // for objects that are cached, the binding may
+            // or may not exist
 
-				indicesByUUID[ lastCachedObject.uuid ] = index;
-				objects[ index ] = lastCachedObject;
+            binding = new PropertyBinding(object, paths[j], parsedPaths[j]);
+          }
 
-				indicesByUUID[ uuid ] = firstActiveIndex;
-				objects[ firstActiveIndex ] = object;
+          bindingsForPath[firstActiveIndex] = binding;
+        }
+      } else if (objects[index] != knownObject) {
+        print('THREE.AnimationObjectGroup: Different objects with the same UUID ' +
+            'detected. Clean the caches or recreate your infrastructure when reloading scenes.');
+      } // else the object is already where we want it to be
 
-				// accounting is done, now do the same for all bindings
+    } // for arguments
 
-				for ( var j = 0, m = nBindings; j != m; ++ j ) {
+    this.nCachedObjects_ = nCachedObjects;
+  }
 
-					var bindingsForPath = bindings[ j ],
-						lastCached = bindingsForPath[ firstActiveIndex ];
+  remove(List<Mesh> items) {
+    var objects = this._objects,
+        indicesByUUID = this._indicesByUUID,
+        bindings = this._bindings,
+        nBindings = bindings.length;
 
-					var binding = bindingsForPath[ index ];
+    var nCachedObjects = this.nCachedObjects_;
 
-					bindingsForPath[ index ] = lastCached;
+    for (var i = 0, n = items.length; i != n; ++i) {
+      var object = items[i], uuid = object.uuid, index = indicesByUUID[uuid];
 
-					if ( binding == null ) {
+      if (index != null && index >= nCachedObjects) {
+        // move existing object into the CACHED region
 
-						// since we do not bother to create new bindings
-						// for objects that are cached, the binding may
-						// or may not exist
+        var lastCachedIndex = nCachedObjects++,
+            firstActiveObject = objects[lastCachedIndex];
 
-						binding = new PropertyBinding( object, paths[ j ], parsedPaths[ j ] );
+        indicesByUUID[firstActiveObject.uuid] = index;
+        objects[index] = firstActiveObject;
 
-					}
+        indicesByUUID[uuid] = lastCachedIndex;
+        objects[lastCachedIndex] = object;
 
-					bindingsForPath[ firstActiveIndex ] = binding;
+        // accounting is done, now do the same for all bindings
 
-				}
+        for (var j = 0, m = nBindings; j != m; ++j) {
+          var bindingsForPath = bindings[j],
+              firstActive = bindingsForPath[lastCachedIndex],
+              binding = bindingsForPath[index];
 
-			} else if ( objects[ index ] != knownObject ) {
+          bindingsForPath[index] = firstActive;
+          bindingsForPath[lastCachedIndex] = binding;
+        }
+      }
+    } // for arguments
 
-				print( 'THREE.AnimationObjectGroup: Different objects with the same UUID ' +
-					'detected. Clean the caches or recreate your infrastructure when reloading scenes.' );
+    this.nCachedObjects_ = nCachedObjects;
+  }
 
-			} // else the object is already where we want it to be
+  // remove & forget
+  uncache(List<Mesh> items) {
+    var objects = this._objects,
+        indicesByUUID = this._indicesByUUID,
+        bindings = this._bindings,
+        nBindings = bindings.length;
 
-		} // for arguments
+    var nCachedObjects = this.nCachedObjects_, nObjects = objects.length;
 
-		this.nCachedObjects_ = nCachedObjects;
+    for (var i = 0, n = items.length; i != n; ++i) {
+      var object = items[i], uuid = object.uuid, index = indicesByUUID[uuid];
 
-	}
-
-	remove(List<Mesh> items) {
-
-		var objects = this._objects,
-			indicesByUUID = this._indicesByUUID,
-			bindings = this._bindings,
-			nBindings = bindings.length;
-
-		var nCachedObjects = this.nCachedObjects_;
-
-		for ( var i = 0, n = items.length; i != n; ++ i ) {
-
-			var object = items[ i ],
-				uuid = object.uuid,
-				index = indicesByUUID[ uuid ];
-
-			if ( index != null && index >= nCachedObjects ) {
-
-				// move existing object into the CACHED region
-
-				var lastCachedIndex = nCachedObjects ++,
-					firstActiveObject = objects[ lastCachedIndex ];
-
-				indicesByUUID[ firstActiveObject.uuid ] = index;
-				objects[ index ] = firstActiveObject;
-
-				indicesByUUID[ uuid ] = lastCachedIndex;
-				objects[ lastCachedIndex ] = object;
-
-				// accounting is done, now do the same for all bindings
-
-				for ( var j = 0, m = nBindings; j != m; ++ j ) {
-
-					var bindingsForPath = bindings[ j ],
-						firstActive = bindingsForPath[ lastCachedIndex ],
-						binding = bindingsForPath[ index ];
-
-					bindingsForPath[ index ] = firstActive;
-					bindingsForPath[ lastCachedIndex ] = binding;
-
-				}
-
-			}
-
-		} // for arguments
-
-		this.nCachedObjects_ = nCachedObjects;
-
-	}
-
-	// remove & forget
-	uncache(List<Mesh> items) {
-
-		var objects = this._objects,
-			indicesByUUID = this._indicesByUUID,
-			bindings = this._bindings,
-			nBindings = bindings.length;
-
-		var nCachedObjects = this.nCachedObjects_,
-			nObjects = objects.length;
-
-		for ( var i = 0, n = items.length; i != n; ++ i ) {
-
-			var object = items[ i ],
-				uuid = object.uuid,
-				index = indicesByUUID[ uuid ];
-
-			if ( index != null ) {
-
-				// delete indicesByUUID[ uuid ];
+      if (index != null) {
+        // delete indicesByUUID[ uuid ];
         indicesByUUID.remove(uuid);
 
-				if ( index < nCachedObjects ) {
+        if (index < nCachedObjects) {
+          // object is cached, shrink the CACHED region
 
-					// object is cached, shrink the CACHED region
+          var firstActiveIndex = --nCachedObjects,
+              lastCachedObject = objects[firstActiveIndex],
+              lastIndex = --nObjects,
+              lastObject = objects[lastIndex];
 
-					var firstActiveIndex = -- nCachedObjects,
-						lastCachedObject = objects[ firstActiveIndex ],
-						lastIndex = -- nObjects,
-						lastObject = objects[ lastIndex ];
+          // last cached object takes this object's place
+          indicesByUUID[lastCachedObject.uuid] = index;
+          objects[index] = lastCachedObject;
 
-					// last cached object takes this object's place
-					indicesByUUID[ lastCachedObject.uuid ] = index;
-					objects[ index ] = lastCachedObject;
+          // last object goes to the activated slot and pop
+          indicesByUUID[lastObject.uuid] = firstActiveIndex;
+          objects[firstActiveIndex] = lastObject;
+          pop(objects);
 
-					// last object goes to the activated slot and pop
-					indicesByUUID[ lastObject.uuid ] = firstActiveIndex;
-					objects[ firstActiveIndex ] = lastObject;
-					pop(objects);
+          // accounting is done, now do the same for all bindings
 
-					// accounting is done, now do the same for all bindings
+          for (var j = 0, m = nBindings; j != m; ++j) {
+            var bindingsForPath = bindings[j],
+                lastCached = bindingsForPath[firstActiveIndex],
+                last = bindingsForPath[lastIndex];
 
-					for ( var j = 0, m = nBindings; j != m; ++ j ) {
+            bindingsForPath[index] = lastCached;
+            bindingsForPath[firstActiveIndex] = last;
+            bindingsForPath.pop();
+          }
+        } else {
+          // object is active, just swap with the last and pop
 
-						var bindingsForPath = bindings[ j ],
-							lastCached = bindingsForPath[ firstActiveIndex ],
-							last = bindingsForPath[ lastIndex ];
+          var lastIndex = --nObjects, lastObject = objects[lastIndex];
 
-						bindingsForPath[ index ] = lastCached;
-						bindingsForPath[ firstActiveIndex ] = last;
-						bindingsForPath.pop();
+          if (lastIndex > 0) {
+            indicesByUUID[lastObject.uuid] = index;
+          }
 
-					}
+          objects[index] = lastObject;
+          pop(objects);
 
-				} else {
+          // accounting is done, now do the same for all bindings
 
-					// object is active, just swap with the last and pop
+          for (var j = 0, m = nBindings; j != m; ++j) {
+            var bindingsForPath = bindings[j];
 
-					var lastIndex = -- nObjects,
-						lastObject = objects[ lastIndex ];
+            bindingsForPath[index] = bindingsForPath[lastIndex];
+            pop(bindingsForPath);
+          }
+        } // cached or active
 
-					if ( lastIndex > 0 ) {
+      } // if object is known
 
-						indicesByUUID[ lastObject.uuid ] = index;
+    } // for arguments
 
-					}
+    this.nCachedObjects_ = nCachedObjects;
+  }
 
-					objects[ index ] = lastObject;
-					pop(objects);
+  // Internal interface used by befriended PropertyBinding.Composite:
 
-					// accounting is done, now do the same for all bindings
+  subscribe_(path, parsedPath) {
+    // returns an array of bindings for the given path that is changed
+    // according to the contained objects in the group
 
-					for ( var j = 0, m = nBindings; j != m; ++ j ) {
+    var indicesByPath = this._bindingsIndicesByPath;
+    var index = indicesByPath[path];
+    var bindings = this._bindings;
 
-						var bindingsForPath = bindings[ j ];
+    if (index != null) return bindings[index];
 
-						bindingsForPath[ index ] = bindingsForPath[ lastIndex ];
-						pop(bindingsForPath);
+    var paths = this._paths,
+        parsedPaths = this._parsedPaths,
+        objects = this._objects,
+        nObjects = objects.length,
+        nCachedObjects = this.nCachedObjects_;
 
-					}
+    var bindingsForPath = List<PropertyBinding?>.filled(nObjects, null);
 
-				} // cached or active
+    index = bindings.length;
 
-			} // if object is known
+    indicesByPath[path] = index;
 
-		} // for arguments
+    paths.add(path);
+    parsedPaths.add(parsedPath);
+    bindings.add(bindingsForPath);
 
-		this.nCachedObjects_ = nCachedObjects;
+    for (var i = nCachedObjects, n = objects.length; i != n; ++i) {
+      var object = objects[i];
+      bindingsForPath[i] = new PropertyBinding(object, path, parsedPath);
+    }
 
-	}
+    return bindingsForPath;
+  }
 
-	// Internal interface used by befriended PropertyBinding.Composite:
+  unsubscribe_(path) {
+    // tells the group to forget about a property path and no longer
+    // update the array previously obtained with 'subscribe_'
 
-	subscribe_( path, parsedPath ) {
+    var indicesByPath = this._bindingsIndicesByPath,
+        index = indicesByPath[path];
 
-		// returns an array of bindings for the given path that is changed
-		// according to the contained objects in the group
+    if (index != null) {
+      var paths = this._paths,
+          parsedPaths = this._parsedPaths,
+          bindings = this._bindings,
+          lastBindingsIndex = bindings.length - 1,
+          lastBindings = bindings[lastBindingsIndex],
+          lastBindingsPath = path[lastBindingsIndex];
 
-		var indicesByPath = this._bindingsIndicesByPath;
-		var index = indicesByPath[ path ];
-		var bindings = this._bindings;
+      indicesByPath[lastBindingsPath] = index;
 
-		if ( index != null ) return bindings[ index ];
+      bindings[index] = lastBindings;
+      bindings.pop();
 
-		var paths = this._paths,
-			parsedPaths = this._parsedPaths,
-			objects = this._objects,
-			nObjects = objects.length,
-			nCachedObjects = this.nCachedObjects_;
+      parsedPaths[index] = parsedPaths[lastBindingsIndex];
+      parsedPaths.pop();
 
-    var bindingsForPath = List<PropertyBinding?>.filled( nObjects, null );
-
-		index = bindings.length;
-
-		indicesByPath[ path ] = index;
-
-		paths.add( path );
-		parsedPaths.add( parsedPath );
-		bindings.add( bindingsForPath );
-
-		for ( var i = nCachedObjects, n = objects.length; i != n; ++ i ) {
-
-			var object = objects[ i ];
-			bindingsForPath[ i ] = new PropertyBinding( object, path, parsedPath );
-
-		}
-
-		return bindingsForPath;
-
-	}
-
-	unsubscribe_( path ) {
-
-		// tells the group to forget about a property path and no longer
-		// update the array previously obtained with 'subscribe_'
-
-		var indicesByPath = this._bindingsIndicesByPath,
-			index = indicesByPath[ path ];
-
-		if ( index != null ) {
-
-			var paths = this._paths,
-				parsedPaths = this._parsedPaths,
-				bindings = this._bindings,
-				lastBindingsIndex = bindings.length - 1,
-				lastBindings = bindings[ lastBindingsIndex ],
-				lastBindingsPath = path[ lastBindingsIndex ];
-
-			indicesByPath[ lastBindingsPath ] = index;
-
-			bindings[ index ] = lastBindings;
-			bindings.pop();
-
-			parsedPaths[ index ] = parsedPaths[ lastBindingsIndex ];
-			parsedPaths.pop();
-
-			paths[ index ] = paths[ lastBindingsIndex ];
-			paths.pop();
-
-		}
-
-	}
-
-
+      paths[index] = paths[lastBindingsIndex];
+      paths.pop();
+    }
+  }
 }

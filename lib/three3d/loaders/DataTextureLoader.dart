@@ -7,102 +7,80 @@ part of three_loaders;
  */
 
 class DataTextureLoader extends Loader {
+  DataTextureLoader(manager) : super(manager) {}
 
-	DataTextureLoader( manager ) : super( manager ) {
+  load(url, onLoad, onProgress, onError) {
+    var scope = this;
 
+    var texture = new DataTexture(
+        null, null, null, null, null, null, null, null, null, null, null, null);
 
-	}
+    var loader = new FileLoader(this.manager);
+    loader.setResponseType('arraybuffer');
+    loader.setRequestHeader(this.requestHeader);
+    loader.setPath(this.path);
+    loader.setWithCredentials(scope.withCredentials);
+    loader.load(url, (buffer) {
+      var texData = scope.parse(buffer);
 
-	load( url, onLoad, onProgress, onError ) {
+      if (texData == null) return;
 
-		var scope = this;
+      if (texData["image"] != null) {
+        texture.image = texData["image"];
+      } else if (texData["data"] != null) {
+        texture.image.width = texData["width"];
+        texture.image.height = texData["height"];
+        texture.image.data = texData["data"];
+      }
 
-		var texture = new DataTexture(null, null, null, null, null, null, null, null, null, null, null, null);
+      texture.wrapS =
+          texData["wrapS"] != null ? texData["wrapS"] : ClampToEdgeWrapping;
+      texture.wrapT =
+          texData["wrapT"] != null ? texData["wrapT"] : ClampToEdgeWrapping;
 
-		var loader = new FileLoader( this.manager );
-		loader.setResponseType( 'arraybuffer' );
-		loader.setRequestHeader( this.requestHeader );
-		loader.setPath( this.path );
-		loader.setWithCredentials( scope.withCredentials );
-		loader.load( url, ( buffer ) {
+      texture.magFilter =
+          texData["magFilter"] != null ? texData["magFilter"] : LinearFilter;
+      texture.minFilter =
+          texData["minFilter"] != null ? texData["minFilter"] : LinearFilter;
 
-			var texData = scope.parse( buffer );
+      texture.anisotropy =
+          texData["anisotropy"] != null ? texData["anisotropy"] : 1;
 
-			if ( texData == null ) return;
+      if (texData["encoding"] != null) {
+        texture.encoding = texData["encoding"];
+      }
 
-			if ( texData["image"] != null ) {
+      if (texData["flipY"] != null) {
+        texture.flipY = texData["flipY"];
+      }
 
-				texture.image = texData["image"];
+      if (texData["format"] != null) {
+        texture.format = texData["format"];
+      }
 
-			} else if ( texData["data"] != null ) {
+      if (texData["type"] != null) {
+        texture.type = texData["type"];
+      }
 
-				texture.image.width = texData["width"];
-				texture.image.height = texData["height"];
-				texture.image.data = texData["data"];
+      if (texData["mipmaps"] != null) {
+        texture.mipmaps = texData["mipmaps"];
+        texture.minFilter = LinearMipmapLinearFilter; // presumably...
 
-			}
+      }
 
-			texture.wrapS = texData["wrapS"] != null ? texData["wrapS"] : ClampToEdgeWrapping;
-			texture.wrapT = texData["wrapT"] != null ? texData["wrapT"] : ClampToEdgeWrapping;
+      if (texData["mipmapCount"] == 1) {
+        texture.minFilter = LinearFilter;
+      }
 
-			texture.magFilter = texData["magFilter"] != null ? texData["magFilter"] : LinearFilter;
-			texture.minFilter = texData["minFilter"] != null ? texData["minFilter"] : LinearFilter;
+      if (texData["generateMipmaps"] != null) {
+        texture.generateMipmaps = texData["generateMipmaps"];
+      }
 
-			texture.anisotropy = texData["anisotropy"] != null ? texData["anisotropy"] : 1;
+      texture.needsUpdate = true;
 
-			if ( texData["encoding"] != null ) {
+      if (onLoad != null) onLoad(texture, texData);
+    }, onProgress, onError);
 
-				texture.encoding = texData["encoding"];
-
-			}
-
-			if ( texData["flipY"] != null ) {
-
-				texture.flipY = texData["flipY"];
-
-			}
-
-			if ( texData["format"] != null ) {
-
-				texture.format = texData["format"];
-
-			}
-
-			if ( texData["type"] != null ) {
-
-				texture.type = texData["type"];
-
-			}
-
-			if ( texData["mipmaps"] != null ) {
-
-				texture.mipmaps = texData["mipmaps"];
-				texture.minFilter = LinearMipmapLinearFilter; // presumably...
-
-			}
-
-			if ( texData["mipmapCount"] == 1 ) {
-
-				texture.minFilter = LinearFilter;
-
-			}
-
-			if ( texData["generateMipmaps"] != null ) {
-
-				texture.generateMipmaps = texData["generateMipmaps"];
-
-			}
-
-			texture.needsUpdate = true;
-
-			if ( onLoad != null ) onLoad( texture, texData );
-
-		}, onProgress, onError );
-
-
-		return texture;
-
-	}
-
+    return texture;
+  }
 }
-

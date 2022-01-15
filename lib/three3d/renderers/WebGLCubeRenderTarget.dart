@@ -1,40 +1,44 @@
 part of three_renderers;
 
 class WebGLCubeRenderTarget extends WebGLRenderTarget {
-
   bool isWebGLCubeRenderTarget = true;
 
   WebGLCubeRenderTarget(int size, options, dummy) : super(size, size, options) {
-    if ( options is num ) {
-
-      print( 'THREE.WebGLCubeRenderTarget: constructor signature is now WebGLCubeRenderTarget( size, options )' );
+    if (options is num) {
+      print(
+          'THREE.WebGLCubeRenderTarget: constructor signature is now WebGLCubeRenderTarget( size, options )');
 
       options = dummy;
-
     }
 
     options = options ?? {};
 
     // By convention -- likely based on the RenderMan spec from the 1990's -- cube maps are specified by WebGL (and three.js)
-		// in a coordinate system in which positive-x is to the right when looking up the positive-z axis -- in other words,
-		// in a left-handed coordinate system. By continuing this convention, preexisting cube maps continued to render correctly.
+    // in a coordinate system in which positive-x is to the right when looking up the positive-z axis -- in other words,
+    // in a left-handed coordinate system. By continuing this convention, preexisting cube maps continued to render correctly.
 
-		// three.js uses a right-handed coordinate system. So environment maps used in three.js appear to have px and nx swapped
-		// and the flag isRenderTargetTexture controls this conversion. The flip is not required when using WebGLCubeRenderTarget.texture
-		// as a cube texture (this is detected when isRenderTargetTexture is set to true for cube textures).
+    // three.js uses a right-handed coordinate system. So environment maps used in three.js appear to have px and nx swapped
+    // and the flag isRenderTargetTexture controls this conversion. The flip is not required when using WebGLCubeRenderTarget.texture
+    // as a cube texture (this is detected when isRenderTargetTexture is set to true for cube textures).
 
-    this.texture = CubeTexture( null, options["mapping"], options["wrapS"], options["wrapT"], options["magFilter"], options["minFilter"], options["format"], options["type"], options["anisotropy"], options["encoding"] );
+    this.texture = CubeTexture(
+        null,
+        options["mapping"],
+        options["wrapS"],
+        options["wrapT"],
+        options["magFilter"],
+        options["minFilter"],
+        options["format"],
+        options["type"],
+        options["anisotropy"],
+        options["encoding"]);
     this.texture.isRenderTargetTexture = true;
-    
-    this.texture.generateMipmaps = options["generateMipmaps"] ?? false;
-		this.texture.minFilter = options["minFilter"] ?? LinearFilter;
 
+    this.texture.generateMipmaps = options["generateMipmaps"] ?? false;
+    this.texture.minFilter = options["minFilter"] ?? LinearFilter;
   }
 
-
-    
-  fromEquirectangularTexture ( renderer, texture ) {
-
+  fromEquirectangularTexture(renderer, texture) {
     this.texture.type = texture.type;
     this.texture.format = RGBAFormat; // see #18859
     this.texture.encoding = texture.encoding;
@@ -44,11 +48,9 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
     this.texture.magFilter = texture.magFilter;
 
     var shader = {
-
       "uniforms": {
-        "tEquirect": {  },
+        "tEquirect": {},
       },
-
       "vertexShader": """
 
         varying vec3 vWorldDirection;
@@ -68,7 +70,6 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
 
         }
       """,
-
       "fragmentShader": """
 
         uniform sampler2D tEquirect;
@@ -89,31 +90,29 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
       """
     };
 
-    var geometry = new BoxGeometry( 5, 5, 5 );
+    var geometry = new BoxGeometry(5, 5, 5);
 
-    var material = new ShaderMaterial( {
-
+    var material = new ShaderMaterial({
       "name": 'CubemapFromEquirect',
-
-      "uniforms": cloneUniforms( shader["uniforms"] as Map<String, dynamic> ),
+      "uniforms": cloneUniforms(shader["uniforms"] as Map<String, dynamic>),
       "vertexShader": shader["vertexShader"],
       "fragmentShader": shader["fragmentShader"],
       "side": BackSide,
       "blending": NoBlending
-
-    } );
+    });
 
     material.uniforms!["tEquirect"]["value"] = texture;
 
-    var mesh = Mesh( geometry, material );
+    var mesh = Mesh(geometry, material);
 
     var currentMinFilter = texture.minFilter;
 
     // Avoid blurred poles
-    if ( texture.minFilter == LinearMipmapLinearFilter ) texture.minFilter = LinearFilter;
+    if (texture.minFilter == LinearMipmapLinearFilter)
+      texture.minFilter = LinearFilter;
 
-    var camera = CubeCamera( 1, 10, this );
-    camera.update( renderer, mesh );
+    var camera = CubeCamera(1, 10, this);
+    camera.update(renderer, mesh);
 
     texture.minFilter = currentMinFilter;
 
@@ -121,25 +120,17 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
     mesh.material.dispose();
 
     return this;
-
   }
 
-  clear ( renderer, color, depth, stencil ) {
-
+  clear(renderer, color, depth, stencil) {
     var currentRenderTarget = renderer.getRenderTarget();
 
-    for ( var i = 0; i < 6; i ++ ) {
+    for (var i = 0; i < 6; i++) {
+      renderer.setRenderTarget(this, i);
 
-      renderer.setRenderTarget( this, i );
-
-      renderer.clear( color, depth, stencil );
-
+      renderer.clear(color, depth, stencil);
     }
 
-    renderer.setRenderTarget( currentRenderTarget );
-
+    renderer.setRenderTarget(currentRenderTarget);
   }
-	
-
 }
-

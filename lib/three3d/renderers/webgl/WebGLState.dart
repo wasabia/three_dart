@@ -16,11 +16,8 @@ class WebGLState {
   late Map<int, int> equationToGL;
   late Map<int, int> factorToGL;
 
-  Map<String, dynamic> get buffers => {
-    "color": colorBuffer, 
-    "depth": depthBuffer, 
-    "stencil": stencilBuffer
-  };
+  Map<String, dynamic> get buffers =>
+      {"color": colorBuffer, "depth": depthBuffer, "stencil": stencilBuffer};
 
   //
 
@@ -128,7 +125,7 @@ class WebGLState {
     // currentViewport = new Vector4.init().fromArray( viewportParam );
 
     print(" WebGLState..................init........... ");
-    var _data = gl.getParameter( gl.SCISSOR_BOX );
+    var _data = gl.getParameter(gl.SCISSOR_BOX);
     print(" WebGLState. getParameter _data: ${_data}");
 
     currentScissor = new Vector4.init();
@@ -136,9 +133,9 @@ class WebGLState {
   }
 
   createTexture(int type, int target, num count) {
-    var data = Uint8Array(4); 
+    var data = Uint8Array(4);
     // 4 is required to match default unpack alignment of 4.
-    // 
+    //
     var texture = gl.createTexture();
 
     gl.bindTexture(type, texture);
@@ -146,7 +143,8 @@ class WebGLState {
     gl.texParameteri(type, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
     for (var i = 0; i < count; i++) {
-      gl.texImage2D(target + i, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+      gl.texImage2D(
+          target + i, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
     }
 
     return texture;
@@ -168,57 +166,43 @@ class WebGLState {
     }
   }
 
-  bindXRFramebuffer( framebuffer ) {
+  bindXRFramebuffer(framebuffer) {
+    if (framebuffer != xrFramebuffer) {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
-		if ( framebuffer != xrFramebuffer ) {
+      xrFramebuffer = framebuffer;
+    }
+  }
 
-			gl.bindFramebuffer( gl.FRAMEBUFFER, framebuffer );
+  bindFramebuffer(target, framebuffer) {
+    if (framebuffer == null && xrFramebuffer != null)
+      framebuffer = xrFramebuffer; // use active XR framebuffer if available
 
-			xrFramebuffer = framebuffer;
+    if (currentBoundFramebuffers[target] != framebuffer) {
+      gl.bindFramebuffer(target, framebuffer);
 
-		}
+      currentBoundFramebuffers[target] = framebuffer;
 
-	}
+      if (isWebGL2) {
+        // gl.DRAW_FRAMEBUFFER is equivalent to gl.FRAMEBUFFER
 
-  bindFramebuffer( target, framebuffer ) {
+        if (target == gl.DRAW_FRAMEBUFFER) {
+          currentBoundFramebuffers[gl.FRAMEBUFFER] = framebuffer;
+        }
 
-		if ( framebuffer == null && xrFramebuffer != null ) framebuffer = xrFramebuffer; // use active XR framebuffer if available
+        if (target == gl.FRAMEBUFFER) {
+          currentBoundFramebuffers[gl.DRAW_FRAMEBUFFER] = framebuffer;
+        }
+      }
 
-		if ( currentBoundFramebuffers[ target ] != framebuffer ) {
+      return true;
+    }
 
-			gl.bindFramebuffer( target, framebuffer );
-
-			currentBoundFramebuffers[ target ] = framebuffer;
-
-			if ( isWebGL2 ) {
-
-				// gl.DRAW_FRAMEBUFFER is equivalent to gl.FRAMEBUFFER
-
-				if ( target == gl.DRAW_FRAMEBUFFER ) {
-
-					currentBoundFramebuffers[ gl.FRAMEBUFFER ] = framebuffer;
-
-				}
-
-				if ( target == gl.FRAMEBUFFER ) {
-
-					currentBoundFramebuffers[ gl.DRAW_FRAMEBUFFER ] = framebuffer;
-
-				}
-
-			}
-
-			return true;
-
-		}
-
-		return false;
-
-	}
+    return false;
+  }
 
   useProgram(program) {
     if (currentProgram != program) {
-     
       gl.useProgram(program);
       currentProgram = program;
       return true;
@@ -227,10 +211,15 @@ class WebGLState {
     return false;
   }
 
-  setBlending(int blending, int? blendEquation, int? blendSrc, int? blendDst, int? blendEquationAlpha,
-      int? blendSrcAlpha, int? blendDstAlpha, bool? premultipliedAlpha) {
-
-
+  setBlending(
+      int blending,
+      int? blendEquation,
+      int? blendSrc,
+      int? blendDst,
+      int? blendEquationAlpha,
+      int? blendSrcAlpha,
+      int? blendDstAlpha,
+      bool? premultipliedAlpha) {
     if (blending == NoBlending) {
       if (currentBlendingEnabled) {
         disable(gl.BLEND);
@@ -385,11 +374,12 @@ class WebGLState {
           material.stencilFail, material.stencilZFail, material.stencilZPass);
     }
 
-    setPolygonOffset(material.polygonOffset, material.polygonOffsetFactor, material.polygonOffsetUnits);
+    setPolygonOffset(material.polygonOffset, material.polygonOffsetFactor,
+        material.polygonOffsetUnits);
 
     material.alphaToCoverage == true
-			? enable( gl.SAMPLE_ALPHA_TO_COVERAGE )
-			: disable( gl.SAMPLE_ALPHA_TO_COVERAGE );
+        ? enable(gl.SAMPLE_ALPHA_TO_COVERAGE)
+        : disable(gl.SAMPLE_ALPHA_TO_COVERAGE);
   }
 
   //
@@ -435,11 +425,11 @@ class WebGLState {
   }
 
   setPolygonOffset(bool polygonOffset, num? factor, num? units) {
-
     if (polygonOffset) {
       enable(gl.POLYGON_OFFSET_FILL);
 
-      if (currentPolygonOffsetFactor != factor ||  currentPolygonOffsetUnits != units) {
+      if (currentPolygonOffsetFactor != factor ||
+          currentPolygonOffsetUnits != units) {
         gl.polygonOffset(factor, units);
 
         currentPolygonOffsetFactor = factor;
@@ -464,11 +454,8 @@ class WebGLState {
     if (webglSlot == null) webglSlot = gl.TEXTURE0 + maxTextures - 1;
 
     if (currentTextureSlot != webglSlot) {
-
-
-
       gl.activeTexture(webglSlot);
-      
+
       currentTextureSlot = webglSlot;
     }
   }
@@ -478,12 +465,9 @@ class WebGLState {
       activeTexture(null);
     }
 
- 
     var boundTexture = currentBoundTextures[currentTextureSlot];
 
-
     // print("WebGLState.boundTexture boundTexture: ${boundTexture} currentTextureSlot: ${currentTextureSlot} ");
-
 
     if (boundTexture == null) {
       boundTexture = BoundTexture(null, null);
@@ -500,10 +484,10 @@ class WebGLState {
     // 暂时先注释掉if条件  原因不明
     // if (boundTexture.type != webglType || boundTexture.texture != webglTexture) {
 
-      gl.bindTexture(webglType, webglTexture ?? emptyTextures[webglType]);
+    gl.bindTexture(webglType, webglTexture ?? emptyTextures[webglType]);
 
-      boundTexture.type = webglType;
-      boundTexture.texture = webglTexture;
+    boundTexture.type = webglType;
+    boundTexture.texture = webglTexture;
     // }
   }
 
@@ -518,20 +502,27 @@ class WebGLState {
     }
   }
 
-  compressedTexImage2D(int target, int level, int internalformat, int width, int height, int border, imageSize, data) {
-    gl.compressedTexImage2D(target, level, internalformat, width, height, border, imageSize, data);
+  compressedTexImage2D(int target, int level, int internalformat, int width,
+      int height, int border, imageSize, data) {
+    gl.compressedTexImage2D(
+        target, level, internalformat, width, height, border, imageSize, data);
   }
 
-  texImage2D(int target, int level, int internalformat, width, height, border, int format, int type, data) {
-    gl.texImage2D(target, level, internalformat, width, height, border, format, type, data);
+  texImage2D(int target, int level, int internalformat, width, height, border,
+      int format, int type, data) {
+    gl.texImage2D(target, level, internalformat, width, height, border, format,
+        type, data);
   }
 
-  texImage2D_NOSIZE(int target, int level, int internalformat, int format, int type, data) {
+  texImage2D_NOSIZE(
+      int target, int level, int internalformat, int format, int type, data) {
     gl.texImage2D_NOSIZE(target, level, internalformat, format, type, data);
   }
 
-  texImage3D(int target, int level, int internalformat, int width, int height, int depth, int border, int format, int type, offset) {
-    gl.texImage3D(target, level, internalformat, width, height, depth, border, format, type, offset);
+  texImage3D(int target, int level, int internalformat, int width, int height,
+      int depth, int border, int format, int type, offset) {
+    gl.texImage3D(target, level, internalformat, width, height, depth, border,
+        format, type, offset);
   }
 
   //
@@ -555,59 +546,56 @@ class WebGLState {
   reset() {
     // reset state
 
-		gl.disable( gl.BLEND );
-		gl.disable( gl.CULL_FACE );
-		gl.disable( gl.DEPTH_TEST );
-		gl.disable( gl.POLYGON_OFFSET_FILL );
-		gl.disable( gl.SCISSOR_TEST );
-		gl.disable( gl.STENCIL_TEST );
-    gl.disable( gl.SAMPLE_ALPHA_TO_COVERAGE );
-    
-		gl.blendEquation( gl.FUNC_ADD );
-		gl.blendFunc( gl.ONE, gl.ZERO );
-		gl.blendFuncSeparate( gl.ONE, gl.ZERO, gl.ONE, gl.ZERO );
+    gl.disable(gl.BLEND);
+    gl.disable(gl.CULL_FACE);
+    gl.disable(gl.DEPTH_TEST);
+    gl.disable(gl.POLYGON_OFFSET_FILL);
+    gl.disable(gl.SCISSOR_TEST);
+    gl.disable(gl.STENCIL_TEST);
+    gl.disable(gl.SAMPLE_ALPHA_TO_COVERAGE);
 
-		gl.colorMask( true, true, true, true );
-		gl.clearColor( 0, 0, 0, 0 );
+    gl.blendEquation(gl.FUNC_ADD);
+    gl.blendFunc(gl.ONE, gl.ZERO);
+    gl.blendFuncSeparate(gl.ONE, gl.ZERO, gl.ONE, gl.ZERO);
 
-		gl.depthMask( true );
-		gl.depthFunc( gl.LESS );
-		gl.clearDepth( 1 );
+    gl.colorMask(true, true, true, true);
+    gl.clearColor(0, 0, 0, 0);
 
-		gl.stencilMask( 0xffffffff );
-		gl.stencilFunc( gl.ALWAYS, 0, 0xffffffff );
-		gl.stencilOp( gl.KEEP, gl.KEEP, gl.KEEP );
-		gl.clearStencil( 0 );
+    gl.depthMask(true);
+    gl.depthFunc(gl.LESS);
+    gl.clearDepth(1);
 
-		gl.cullFace( gl.BACK );
-		gl.frontFace( gl.CCW );
+    gl.stencilMask(0xffffffff);
+    gl.stencilFunc(gl.ALWAYS, 0, 0xffffffff);
+    gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
+    gl.clearStencil(0);
 
-		gl.polygonOffset( 0, 0 );
+    gl.cullFace(gl.BACK);
+    gl.frontFace(gl.CCW);
 
-		gl.activeTexture( gl.TEXTURE0 );
+    gl.polygonOffset(0, 0);
 
-    if ( isWebGL2 == true ) {
+    gl.activeTexture(gl.TEXTURE0);
 
-			gl.bindFramebuffer( gl.DRAW_FRAMEBUFFER, null ); // Equivalent to gl.FRAMEBUFFER
-			gl.bindFramebuffer( gl.READ_FRAMEBUFFER, null );
+    if (isWebGL2 == true) {
+      gl.bindFramebuffer(
+          gl.DRAW_FRAMEBUFFER, null); // Equivalent to gl.FRAMEBUFFER
+      gl.bindFramebuffer(gl.READ_FRAMEBUFFER, null);
+    } else {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    }
 
-		} else {
+    gl.useProgram(null);
 
-			gl.bindFramebuffer( gl.FRAMEBUFFER, null );
-
-		}
-
-		gl.useProgram( null );
-
-		gl.lineWidth( 1 );
+    gl.lineWidth(1);
 
     // TODO app gl no canvas ???
-		// gl.scissor( 0, 0, gl.canvas.width, gl.canvas.height );
-		// gl.viewport( 0, 0, gl.canvas.width, gl.canvas.height );
-    gl.scissor( 0, 0, 0, 0 );
-		gl.viewport( 0, 0, 0, 0 );
+    // gl.scissor( 0, 0, gl.canvas.width, gl.canvas.height );
+    // gl.viewport( 0, 0, gl.canvas.width, gl.canvas.height );
+    gl.scissor(0, 0, 0, 0);
+    gl.viewport(0, 0, 0, 0);
 
-		// reset internals
+    // reset internals
 
     enabledCapabilities = {};
 
@@ -615,7 +603,7 @@ class WebGLState {
     currentBoundTextures = {};
 
     xrFramebuffer = null;
-		currentBoundFramebuffers = {};
+    currentBoundFramebuffers = {};
 
     currentProgram = null;
 
@@ -655,8 +643,7 @@ class ColorBuffer {
   bool? currentColorMask = null;
   Vector4 currentColorClear = Vector4(0, 0, 0, 0);
 
-  ColorBuffer(this.gl) {
-  }
+  ColorBuffer(this.gl) {}
 
   setMask(bool colorMask) {
     if (currentColorMask != colorMask && !locked) {
@@ -705,8 +692,7 @@ class DepthBuffer {
   int? currentDepthFunc;
   num? currentDepthClear = null;
 
-  DepthBuffer(this.gl) {
-  }
+  DepthBuffer(this.gl) {}
 
   setTest(depthTest) {
     if (depthTest) {
@@ -807,9 +793,7 @@ class StencilBuffer {
   num? currentStencilZPass = null;
   num? currentStencilClear = null;
 
-  StencilBuffer(this.gl) {
-
-  }
+  StencilBuffer(this.gl) {}
 
   setTest(bool stencilTest) {
     if (!locked) {

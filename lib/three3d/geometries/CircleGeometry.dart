@@ -1,78 +1,75 @@
 part of three_geometries;
 
 class CircleGeometry extends BufferGeometry {
+  CircleGeometry(
+      {radius = 1, segments = 8, thetaStart = 0, thetaLength = Math.PI * 2})
+      : super() {
+    this.type = 'CircleGeometry';
 
-	CircleGeometry( {radius = 1, segments = 8, thetaStart = 0, thetaLength = Math.PI * 2} ) : super() {
+    this.parameters = {
+      "radius": radius,
+      "segments": segments,
+      "thetaStart": thetaStart,
+      "thetaLength": thetaLength
+    };
 
-		this.type = 'CircleGeometry';
+    segments = Math.max(3, segments);
 
-		this.parameters = {
-			"radius": radius,
-			"segments": segments,
-			"thetaStart": thetaStart,
-			"thetaLength": thetaLength
-		};
+    // buffers
 
-		segments = Math.max( 3, segments );
+    List<int> indices = [];
+    List<double> vertices = [];
+    List<double> normals = [];
+    List<double> uvs = [];
 
-		// buffers
+    // helper variables
 
-		List<int> indices = [];
-		List<double> vertices = [];
-		List<double> normals = [];
-		List<double> uvs = [];
+    var vertex = new Vector3.init();
+    var uv = new Vector2(null, null);
 
-		// helper variables
+    // center point
 
-		var vertex = new Vector3.init();
-		var uv = new Vector2(null, null);
+    vertices.addAll([0, 0, 0]);
+    normals.addAll([0, 0, 1]);
+    uvs.addAll([0.5, 0.5]);
 
-		// center point
+    for (var s = 0, i = 3; s <= segments; s++, i += 3) {
+      var segment = thetaStart + s / segments * thetaLength;
 
-		vertices.addAll( [0, 0, 0] );
-		normals.addAll( [0, 0, 1] );
-		uvs.addAll( [0.5, 0.5] );
+      // vertex
 
-		for ( var s = 0, i = 3; s <= segments; s ++, i += 3 ) {
+      vertex.x = radius * Math.cos(segment);
+      vertex.y = radius * Math.sin(segment);
 
-			var segment = thetaStart + s / segments * thetaLength;
+      vertices.addAll(
+          [vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
 
-			// vertex
+      // normal
 
-			vertex.x = radius * Math.cos( segment );
-			vertex.y = radius * Math.sin( segment );
+      normals.addAll([0.0, 0.0, 1.0]);
 
-			vertices.addAll( [vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()] );
+      // uvs
 
-			// normal
+      uv.x = (vertices[i] / radius + 1) / 2;
+      uv.y = (vertices[i + 1] / radius + 1) / 2;
 
-			normals.addAll( [0.0, 0.0, 1.0] );
+      uvs.addAll([uv.x.toDouble(), uv.y.toDouble()]);
+    }
 
-			// uvs
+    // indices
 
-			uv.x = ( vertices[ i ] / radius + 1 ) / 2;
-			uv.y = ( vertices[ i + 1 ] / radius + 1 ) / 2;
+    for (var i = 1; i <= segments; i++) {
+      indices.addAll([i, i + 1, 0]);
+    }
 
-			uvs.addAll( [uv.x.toDouble(), uv.y.toDouble()] );
+    // build geometry
 
-		}
-
-		// indices
-
-		for ( var i = 1; i <= segments; i ++ ) {
-
-			indices.addAll( [i, i + 1, 0] );
-
-		}
-
-		// build geometry
-
-		this.setIndex( indices );
-		this.setAttribute( 'position', new Float32BufferAttribute( Float32Array.from(vertices), 3, false ) );
-		this.setAttribute( 'normal', new Float32BufferAttribute( Float32Array.from(normals), 3, false ) );
-		this.setAttribute( 'uv', new Float32BufferAttribute( Float32Array.from(uvs), 2, false ) );
-
-	}
-
+    this.setIndex(indices);
+    this.setAttribute('position',
+        new Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    this.setAttribute('normal',
+        new Float32BufferAttribute(Float32Array.from(normals), 3, false));
+    this.setAttribute(
+        'uv', new Float32BufferAttribute(Float32Array.from(uvs), 2, false));
+  }
 }
-

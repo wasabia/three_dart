@@ -7,81 +7,60 @@
 
 part of three_math;
 
-
 class Spherical {
-
   late num radius;
   late num phi;
   late num theta;
 
-	Spherical( {num radius = 1, num phi = 0, num theta = 0} ) {
+  Spherical({num radius = 1, num phi = 0, num theta = 0}) {
+    this.radius = radius;
+    this.phi = phi; // polar angle
+    this.theta = theta; // azimuthal angle
+  }
 
-		this.radius = radius;
-		this.phi = phi; // polar angle
-		this.theta = theta; // azimuthal angle
+  set(radius, phi, theta) {
+    this.radius = radius;
+    this.phi = phi;
+    this.theta = theta;
 
-	}
+    return this;
+  }
 
-	set( radius, phi, theta ) {
+  clone() {
+    return new Spherical().copy(this);
+  }
 
-		this.radius = radius;
-		this.phi = phi;
-		this.theta = theta;
+  copy(other) {
+    this.radius = other.radius;
+    this.phi = other.phi;
+    this.theta = other.theta;
 
-		return this;
+    return this;
+  }
 
-	}
+  // restrict phi to be betwee EPS and PI-EPS
+  makeSafe() {
+    const EPS = 0.000001;
+    this.phi = Math.max(EPS, Math.min(Math.PI - EPS, this.phi)).toDouble();
 
-	clone() {
+    return this;
+  }
 
-		return new Spherical().copy( this );
+  setFromVector3(v) {
+    return this.setFromCartesianCoords(v.x, v.y, v.z);
+  }
 
-	}
+  setFromCartesianCoords(x, y, z) {
+    this.radius = Math.sqrt(x * x + y * y + z * z);
 
-	copy( other ) {
+    if (this.radius == 0) {
+      this.theta = 0;
+      this.phi = 0;
+    } else {
+      this.theta = Math.atan2(x, z);
+      this.phi = Math.acos(MathUtils.clamp(y / this.radius, -1, 1));
+    }
 
-		this.radius = other.radius;
-		this.phi = other.phi;
-		this.theta = other.theta;
-
-		return this;
-
-	}
-
-	// restrict phi to be betwee EPS and PI-EPS
-	makeSafe() {
-
-		const EPS = 0.000001;
-		this.phi = Math.max( EPS, Math.min( Math.PI - EPS, this.phi ) ).toDouble();
-
-		return this;
-
-	}
-
-	setFromVector3( v ) {
-
-		return this.setFromCartesianCoords( v.x, v.y, v.z );
-
-	}
-
-	setFromCartesianCoords( x, y, z ) {
-
-		this.radius = Math.sqrt( x * x + y * y + z * z );
-
-		if ( this.radius == 0 ) {
-
-			this.theta = 0;
-			this.phi = 0;
-
-		} else {
-
-			this.theta = Math.atan2( x, z );
-			this.phi = Math.acos( MathUtils.clamp( y / this.radius, - 1, 1 ) );
-
-		}
-
-		return this;
-
-	}
-
+    return this;
+  }
 }

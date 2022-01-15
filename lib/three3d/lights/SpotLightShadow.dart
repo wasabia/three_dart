@@ -1,42 +1,34 @@
 part of three_lights;
 
 class SpotLightShadow extends LightShadow {
-
   bool isSpotLightShadow = true;
 
-  SpotLightShadow() : super( PerspectiveCamera( 50, 1, 0.5, 500 ) ) {
+  SpotLightShadow() : super(PerspectiveCamera(50, 1, 0.5, 500)) {
     this.focus = 1;
   }
 
+  updateMatrices(light, {int viewportIndex = 0}) {
+    PerspectiveCamera camera = this.camera as PerspectiveCamera;
 
-  updateMatrices ( light, {int viewportIndex = 0} ) {
+    var fov = MathUtils.RAD2DEG * 2 * light.angle * this.focus;
+    var aspect = this.mapSize.width / this.mapSize.height;
+    var far = light.distance ?? camera.far;
 
-		PerspectiveCamera camera = this.camera as PerspectiveCamera;
+    if (fov != camera.fov || aspect != camera.aspect || far != camera.far) {
+      camera.fov = fov;
+      camera.aspect = aspect;
+      camera.far = far;
+      camera.updateProjectionMatrix();
+    }
 
-		var fov = MathUtils.RAD2DEG * 2 * light.angle * this.focus;
-		var aspect = this.mapSize.width / this.mapSize.height;
-		var far = light.distance ?? camera.far;
+    super.updateMatrices(light, viewportIndex: viewportIndex);
+  }
 
-		if ( fov != camera.fov || aspect != camera.aspect || far != camera.far ) {
-			camera.fov = fov;
-			camera.aspect = aspect;
-			camera.far = far;
-			camera.updateProjectionMatrix();
-		}
+  copy(source) {
+    super.copy(source);
 
-		super.updateMatrices( light, viewportIndex: viewportIndex );
+    this.focus = source.focus;
 
-	}
-
-  copy( source ) {
-
-		super.copy( source );
-
-		this.focus = source.focus;
-
-		return this;
-
-	}
-
+    return this;
+  }
 }
-

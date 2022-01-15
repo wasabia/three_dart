@@ -1,9 +1,6 @@
 part of three_loaders;
 
-
-
 class LoadingManager {
-
   bool isLoading = false;
   int itemsLoaded = 0;
   int itemsTotal = 0;
@@ -15,10 +12,7 @@ class LoadingManager {
   Function? onProgress;
   Function? onError;
 
-  LoadingManager( [onLoad, onProgress, onError] ) {
-
-    
-
+  LoadingManager([onLoad, onProgress, onError]) {
     // Refer to #5689 for the reason why we don't set .onStart
     // in the constructor
 
@@ -27,123 +21,85 @@ class LoadingManager {
     this.onProgress = onProgress;
     this.onError = onError;
   }
-	
 
-	itemStart ( String url ) {
+  itemStart(String url) {
+    itemsTotal++;
 
-		itemsTotal ++;
+    if (isLoading == false) {
+      if (this.onStart != null) {
+        this.onStart!(url, itemsLoaded, itemsTotal);
+      }
+    }
 
-		if ( isLoading == false ) {
+    isLoading = true;
+  }
 
-			if ( this.onStart != null ) {
+  itemEnd(url) {
+    itemsLoaded++;
 
-				this.onStart!( url, itemsLoaded, itemsTotal );
+    if (this.onProgress != null) {
+      this.onProgress!(url, itemsLoaded, itemsTotal);
+    }
 
-			}
+    if (itemsLoaded == itemsTotal) {
+      isLoading = false;
 
-		}
+      if (this.onLoad != null) {
+        this.onLoad!();
+      }
+    }
+  }
 
-		isLoading = true;
+  itemError(url) {
+    if (this.onError != null) {
+      this.onError!(url);
+    }
+  }
 
-	}
+  resolveURL(url) {
+    if (urlModifier != null) {
+      return urlModifier!(url);
+    }
 
-	itemEnd ( url ) {
+    return url;
+  }
 
-		itemsLoaded ++;
+  setURLModifier(transform) {
+    urlModifier = transform;
 
-		if ( this.onProgress != null ) {
-			this.onProgress!( url, itemsLoaded, itemsTotal );
-		}
+    return this;
+  }
 
-		if ( itemsLoaded == itemsTotal ) {
+  addHandler(RegExp regex, Loader loader) {
+    handlers.addAll([regex, loader]);
 
-			isLoading = false;
+    return this;
+  }
 
-			if ( this.onLoad != null ) {
+  removeHandler(RegExp regex) {
+    var index = handlers.indexOf(regex);
 
-				this.onLoad!();
+    if (index != -1) {
+      handlers.removeRange(index, index + 1);
+    }
 
-			}
+    return this;
+  }
 
-		}
+  getHandler(file) {
+    for (var i = 0, l = handlers.length; i < l; i += 2) {
+      var regex = handlers[i];
+      var loader = handlers[i + 1];
 
-	}
+      if (regex.global) regex.lastIndex = 0; // see #17920
 
-	itemError ( url ) {
+      if (regex.test(file)) {
+        return loader;
+      }
+    }
 
-		if ( this.onError != null ) {
-
-			this.onError!( url );
-
-		}
-
-	}
-
-	resolveURL ( url ) {
-
-		if ( urlModifier != null ) {
-
-			return urlModifier!( url );
-
-		}
-
-		return url;
-
-	}
-
-	setURLModifier ( transform ) {
-
-		urlModifier = transform;
-
-		return this;
-
-	}
-
-	addHandler (RegExp regex, Loader loader ) {
-
-		handlers.addAll( [regex, loader] );
-
-		return this;
-
-	}
-
-	removeHandler ( RegExp regex ) {
-
-		var index = handlers.indexOf( regex );
-
-		if ( index != - 1 ) {
-
-			handlers.removeRange( index, index+1 );
-
-		}
-
-		return this;
-
-	}
-
-	getHandler ( file ) {
-
-		for ( var i = 0, l = handlers.length; i < l; i += 2 ) {
-
-			var regex = handlers[ i ];
-			var loader = handlers[ i + 1 ];
-
-			if ( regex.global ) regex.lastIndex = 0; // see #17920
-
-			if ( regex.test( file ) ) {
-
-				return loader;
-
-			}
-
-		}
-
-		return null;
-
-	}
-
+    return null;
+  }
 }
 
 var DefaultLoadingManager = new LoadingManager(null, null, null);
-
-

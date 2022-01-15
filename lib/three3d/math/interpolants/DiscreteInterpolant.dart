@@ -7,15 +7,11 @@ part of three_math;
  */
 
 class DiscreteInterpolant extends Interpolant {
+  DiscreteInterpolant(
+      parameterPositions, sampleValues, sampleSize, resultBuffer)
+      : super(parameterPositions, sampleValues, sampleSize, resultBuffer) {}
 
-  DiscreteInterpolant( parameterPositions, sampleValues, sampleSize, resultBuffer ) : super(parameterPositions, sampleValues, sampleSize, resultBuffer) {
-
+  interpolate(i1, t0, t, t1) {
+    return this.copySampleValue(i1 - 1);
   }
-
-  interpolate( i1, t0, t, t1 ) {
-
-		return this.copySampleValue( i1 - 1 );
-
-	}
-
 }

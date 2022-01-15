@@ -192,26 +192,23 @@ class Color {
     this.b = b ?? 1.0;
   }
 
-
-  // 
+  //
   factory Color.setRGB255(int r, int g, int b) {
-
     var _color = Color(r / 255.0, g / 255.0, b / 255.0);
-  
+
     return _color;
   }
 
   factory Color.setRGBArray(List<num> cl) {
-
     var _color = Color(cl[0], cl[1], cl[2]);
-  
+
     return _color;
   }
 
-  // 0 ~ 255 
+  // 0 ~ 255
   factory Color.fromArray(List<int> list) {
     var _color = Color.setRGB255(list[0], list[1], list[2]);
-  
+
     return _color;
   }
 
@@ -219,9 +216,8 @@ class Color {
     return Color(0.0, 0.0, 0.0).setHex(hex);
   }
 
-
   equal(color) {
-    return r == color.r && g == color.g && b == color.b; 
+    return r == color.r && g == color.g && b == color.b;
   }
 
   setScalar(scalar) {
@@ -308,7 +304,6 @@ class Color {
 
         // print(" match.groupCount: ${match.groupCount} 1: ${match.group(1)} 2: ${match.group(2)} ");
 
-     
         var name = match.group(1)!;
         var components = match.group(2)!;
 
@@ -381,11 +376,9 @@ class Color {
             break;
         }
       } else {
-
-        if ( style != null && style.length > 0 ) {
-          return this.setColorName( style );
+        if (style != null && style.length > 0) {
+          return this.setColorName(style);
         }
-
       }
     }
 
@@ -402,7 +395,7 @@ class Color {
 
   setColorName(String style) {
     // color keywords
-    var hex = _colorKeywords[ style.toLowerCase() ];
+    var hex = _colorKeywords[style.toLowerCase()];
 
     if (hex != null) {
       // red
@@ -420,7 +413,6 @@ class Color {
   }
 
   copy(color) {
-  
     this.r = color.r;
     this.g = color.g;
     this.b = color.b;
@@ -497,68 +489,58 @@ class Color {
   }
 
   // target map target = { "h": 0, "s": 0, "l": 0 };
-  getHSL( target ) {
+  getHSL(target) {
+    // h,s,l ranges are in 0.0 - 1.0
+    var r = this.r, g = this.g, b = this.b;
 
-		// h,s,l ranges are in 0.0 - 1.0
-		var r = this.r, g = this.g, b = this.b;
+    var max = Math.max3(r, g, b);
+    var min = Math.min3(r, g, b);
 
-		var max = Math.max3( r, g, b );
-		var min = Math.min3( r, g, b );
+    var hue, saturation;
+    var lightness = (min + max) / 2.0;
 
-		var hue, saturation;
-		var lightness = ( min + max ) / 2.0;
+    if (min == max) {
+      hue = 0;
+      saturation = 0;
+    } else {
+      var delta = max - min;
 
-		if ( min == max ) {
+      saturation =
+          lightness <= 0.5 ? delta / (max + min) : delta / (2 - max - min);
 
-			hue = 0;
-			saturation = 0;
-
-		} else {
-
-			var delta = max - min;
-
-			saturation = lightness <= 0.5 ? delta / ( max + min ) : delta / ( 2 - max - min );
-
-			if ( max == r ) {
-        hue = ( g - b ) / delta + ( g < b ? 6 : 0 );
+      if (max == r) {
+        hue = (g - b) / delta + (g < b ? 6 : 0);
       } else if (max == g) {
-        hue = ( b - r ) / delta + 2;
-      } else if(max == b) {
-        hue = ( r - g ) / delta + 4;
+        hue = (b - r) / delta + 2;
+      } else if (max == b) {
+        hue = (r - g) / delta + 4;
       }
-	
 
-			hue /= 6;
+      hue /= 6;
+    }
 
-		}
+    target["h"] = hue;
+    target["s"] = saturation;
+    target["l"] = lightness;
 
-		target["h"] = hue;
-		target["s"] = saturation;
-		target["l"] = lightness;
-
-		return target;
-
-	}
+    return target;
+  }
 
   getStyle() {
+    return 'rgb(${((this.r * 255).toInt() | 0)},${((this.g * 255).toInt() | 0)},${((this.b * 255).toInt() | 0)})';
+  }
 
-		return 'rgb(${( ( this.r * 255 ).toInt() | 0 )},${( ( this.g * 255 ).toInt() | 0 )},${( ( this.b * 255 ).toInt() | 0 )})';
+  offsetHSL(h, s, l) {
+    this.getHSL(_hslA);
 
-	}
-
-	offsetHSL( h, s, l ) {
-
-		this.getHSL( _hslA );
-
-		_hslA["h"] = _hslA["h"]! + h; 
-    _hslA["s"] = _hslA["s"]! + s; 
+    _hslA["h"] = _hslA["h"]! + h;
+    _hslA["s"] = _hslA["s"]! + s;
     _hslA["l"] = _hslA["l"]! + l;
 
-		this.setHSL( _hslA["h"], _hslA["s"], _hslA["l"] );
+    this.setHSL(_hslA["h"], _hslA["s"], _hslA["l"]);
 
-		return this;
-
-	}
+    return this;
+  }
 
   add(color) {
     this.r += color.r;
@@ -616,41 +598,34 @@ class Color {
     return this;
   }
 
-  lerpColors( Color color1, Color color2, num alpha ) {
+  lerpColors(Color color1, Color color2, num alpha) {
+    this.r = color1.r + (color2.r - color1.r) * alpha;
+    this.g = color1.g + (color2.g - color1.g) * alpha;
+    this.b = color1.b + (color2.b - color1.b) * alpha;
 
-		this.r = color1.r + ( color2.r - color1.r ) * alpha;
-		this.g = color1.g + ( color2.g - color1.g ) * alpha;
-		this.b = color1.b + ( color2.b - color1.b ) * alpha;
+    return this;
+  }
 
-		return this;
+  lerpHSL(color, alpha) {
+    this.getHSL(_hslA);
+    color.getHSL(_hslB);
 
-	}
+    var h = MathUtils.lerp(_hslA["h"], _hslB["h"], alpha);
+    var s = MathUtils.lerp(_hslA["s"], _hslB["s"], alpha);
+    var l = MathUtils.lerp(_hslA["l"], _hslB["l"], alpha);
 
-	lerpHSL( color, alpha ) {
+    this.setHSL(h, s, l);
 
-		this.getHSL( _hslA );
-		color.getHSL( _hslB );
-
-		var h = MathUtils.lerp( _hslA["h"], _hslB["h"], alpha );
-		var s = MathUtils.lerp( _hslA["s"], _hslB["s"], alpha );
-		var l = MathUtils.lerp( _hslA["l"], _hslB["l"], alpha );
-
-		this.setHSL( h, s, l );
-
-		return this;
-
-	}
-
+    return this;
+  }
 
   equals(c) {
     return (c.r == this.r) && (c.g == this.g) && (c.b == this.b);
   }
 
   isBlack() {
-
-		return ( this.r == 0 ) && ( this.g == 0 ) && ( this.b == 0 );
-
-	}
+    return (this.r == 0) && (this.g == 0) && (this.b == 0);
+  }
 
   fromArray(array, {int offset = 0}) {
     this.r = array[offset];
@@ -695,10 +670,6 @@ class Color {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'r': r,
-      'g': g,
-      'b': b
-    };
+    return {'r': r, 'g': g, 'b': b};
   }
 }

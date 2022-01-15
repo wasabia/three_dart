@@ -27,71 +27,63 @@ part of three_materials;
  */
 
 class MeshMatcapMaterial extends Material {
-
   bool isMeshMatcapMaterial = true;
 
-	MeshMatcapMaterial( [parameters] ) : super() {
+  MeshMatcapMaterial([parameters]) : super() {
+    this.defines = {'MATCAP': ''};
 
-		this.defines = { 'MATCAP': '' };
+    this.type = 'MeshMatcapMaterial';
 
-		this.type = 'MeshMatcapMaterial';
+    this.color = Color.fromHex(0xffffff); // diffuse
 
-		this.color = Color.fromHex( 0xffffff ); // diffuse
+    this.matcap = null;
 
-		this.matcap = null;
+    this.map = null;
 
-		this.map = null;
+    this.bumpMap = null;
+    this.bumpScale = 1;
 
-		this.bumpMap = null;
-		this.bumpScale = 1;
+    this.normalMap = null;
+    this.normalMapType = TangentSpaceNormalMap;
+    this.normalScale = new Vector2(1, 1);
 
-		this.normalMap = null;
-		this.normalMapType = TangentSpaceNormalMap;
-		this.normalScale = new Vector2( 1, 1 );
+    this.displacementMap = null;
+    this.displacementScale = 1;
+    this.displacementBias = 0;
 
-		this.displacementMap = null;
-		this.displacementScale = 1;
-		this.displacementBias = 0;
+    this.alphaMap = null;
 
-		this.alphaMap = null;
+    this.flatShading = false;
 
-		this.flatShading = false;
+    this.setValues(parameters);
+  }
 
-		this.setValues( parameters );
+  copy(source) {
+    super.copy(source);
 
-	}
+    this.defines = {'MATCAP': ''};
 
+    this.color!.copy(source.color);
 
-	copy( source ) {
+    this.matcap = source.matcap;
 
-		super.copy( source );
+    this.map = source.map;
 
-		this.defines = { 'MATCAP': '' };
+    this.bumpMap = source.bumpMap;
+    this.bumpScale = source.bumpScale;
 
-		this.color!.copy( source.color );
+    this.normalMap = source.normalMap;
+    this.normalMapType = source.normalMapType;
+    this.normalScale!.copy(source.normalScale);
 
-		this.matcap = source.matcap;
+    this.displacementMap = source.displacementMap;
+    this.displacementScale = source.displacementScale;
+    this.displacementBias = source.displacementBias;
 
-		this.map = source.map;
+    this.alphaMap = source.alphaMap;
 
-		this.bumpMap = source.bumpMap;
-		this.bumpScale = source.bumpScale;
+    this.flatShading = source.flatShading;
 
-		this.normalMap = source.normalMap;
-		this.normalMapType = source.normalMapType;
-		this.normalScale!.copy( source.normalScale );
-
-		this.displacementMap = source.displacementMap;
-		this.displacementScale = source.displacementScale;
-		this.displacementBias = source.displacementBias;
-
-		this.alphaMap = source.alphaMap;
-
-		this.flatShading = source.flatShading;
-
-		return this;
-
-	}
-
+    return this;
+  }
 }
-

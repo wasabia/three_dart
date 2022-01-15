@@ -1,27 +1,24 @@
 part of three_webgl;
 
 class BaseWebGLBufferRenderer {
-  setIndex( value ) {
-    throw(" BaseWebGLBufferRenderer.setIndex value: ${value}  ");
-	}
+  setIndex(value) {
+    throw (" BaseWebGLBufferRenderer.setIndex value: ${value}  ");
+  }
 
   render(start, count) {
-    throw(" BaseWebGLBufferRenderer.render start: ${start} ${count}  ");
+    throw (" BaseWebGLBufferRenderer.render start: ${start} ${count}  ");
   }
 
-  renderInstances( start, count, primcount ) {
-    throw(" BaseWebGLBufferRenderer.renderInstances start: ${start} ${count} primcount: ${primcount}  ");
+  renderInstances(start, count, primcount) {
+    throw (" BaseWebGLBufferRenderer.renderInstances start: ${start} ${count} primcount: ${primcount}  ");
   }
 
-
-	setMode( value ) {
-    throw(" BaseWebGLBufferRenderer.setMode value: ${value} ");
+  setMode(value) {
+    throw (" BaseWebGLBufferRenderer.setMode value: ${value} ");
   }
-
 }
 
 class WebGLBufferRenderer extends BaseWebGLBufferRenderer {
-
   dynamic gl;
   bool isWebGL2 = true;
   var mode;
@@ -29,64 +26,45 @@ class WebGLBufferRenderer extends BaseWebGLBufferRenderer {
   WebGLInfo info;
   WebGLCapabilities capabilities;
 
-  WebGLBufferRenderer(this.gl, this.extensions, this.info, this.capabilities ) {
+  WebGLBufferRenderer(this.gl, this.extensions, this.info, this.capabilities) {
     this.isWebGL2 = capabilities.isWebGL2;
   }
 
-	
+  setMode(value) {
+    mode = value;
+  }
 
-	
-
-	setMode( value ) {
-
-		mode = value;
-
-	}
-
-	render( start, count ) {
-
+  render(start, count) {
     // print("WebGLBufferRenderer.render mode: ${mode} start: ${start} count: ${count}  ");
 
-		gl.drawArrays( mode, start, count );
+    gl.drawArrays(mode, start, count);
 
-		info.update( count, mode, 1 );
-	}
+    info.update(count, mode, 1);
+  }
 
-	renderInstances( start, count, primcount ) {
-   
+  renderInstances(start, count, primcount) {
     // print(" WebGLBufferRenderer.renderInstances mode: ${mode}  start: ${start} count: ${count} primcount: ${primcount} ");
 
-		if ( primcount == 0 ) return;
+    if (primcount == 0) return;
 
-		var extension, methodName;
+    var extension, methodName;
 
-		if ( isWebGL2 ) {
+    if (isWebGL2) {
+      extension = gl;
+      methodName = 'drawArraysInstanced';
+    } else {
+      extension = extensions.get('ANGLE_instanced_arrays');
+      methodName = 'drawArraysInstancedANGLE';
 
-			extension = gl;
-			methodName = 'drawArraysInstanced';
+      if (extension == null) {
+        print(
+            'THREE.WebGLBufferRenderer: using THREE.InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays.');
+        return;
+      }
+    }
 
-		} else {
+    extension[methodName](mode, start, count, primcount);
 
-			extension = extensions.get( 'ANGLE_instanced_arrays' );
-			methodName = 'drawArraysInstancedANGLE';
-
-			if ( extension == null ) {
-
-				print( 'THREE.WebGLBufferRenderer: using THREE.InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays.' );
-				return;
-
-			}
-
-		}
-
-		extension[ methodName ]( mode, start, count, primcount );
-
-		info.update( count, mode, primcount );
-
-	}
-
-
-
-
-
+    info.update(count, mode, primcount);
+  }
 }

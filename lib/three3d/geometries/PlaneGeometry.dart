@@ -1,85 +1,78 @@
-
 part of three_geometries;
 
 class PlaneGeometry extends BufferGeometry {
+  PlaneGeometry(
+      [num width = 1,
+      num height = 1,
+      num widthSegments = 1,
+      num heightSegments = 1])
+      : super() {
+    this.type = 'PlaneGeometry';
 
+    this.parameters = {
+      "width": width,
+      "height": height,
+      "widthSegments": widthSegments,
+      "heightSegments": heightSegments
+    };
 
-	PlaneGeometry( [num width = 1, num height = 1, num widthSegments = 1, num heightSegments = 1] ) : super() {
+    num width_half = width / 2.0;
+    num height_half = height / 2.0;
 
-		this.type = 'PlaneGeometry';
+    num gridX = Math.floor(widthSegments);
+    num gridY = Math.floor(heightSegments);
 
-		this.parameters = {
-			"width": width,
-			"height": height,
-			"widthSegments": widthSegments,
-			"heightSegments": heightSegments
-		};
+    num gridX1 = gridX + 1;
+    num gridY1 = gridY + 1;
 
-		num width_half = width / 2.0;
-		num height_half = height / 2.0;
+    num segment_width = width / gridX;
+    num segment_height = height / gridY;
 
-		num gridX = Math.floor( widthSegments );
-		num gridY = Math.floor( heightSegments );
+    //
 
-		num gridX1 = gridX + 1;
-		num gridY1 = gridY + 1;
+    List<num> indices = [];
+    List<double> vertices = [];
+    List<double> normals = [];
+    List<double> uvs = [];
 
-		num segment_width = width / gridX;
-		num segment_height = height / gridY;
+    for (var iy = 0; iy < gridY1; iy++) {
+      var y = iy * segment_height - height_half;
 
-		//
+      for (var ix = 0; ix < gridX1; ix++) {
+        var x = ix * segment_width - width_half;
 
-		List<num> indices = [];
-		List<double> vertices = [];
-		List<double> normals = [];
-		List<double> uvs = [];
+        vertices.addAll([x.toDouble(), -y.toDouble(), 0.0]);
 
-		for ( var iy = 0; iy < gridY1; iy ++ ) {
+        normals.addAll([0.0, 0.0, 1.0]);
 
-			var y = iy * segment_height - height_half;
+        uvs.add(ix / gridX);
+        uvs.add(1 - (iy / gridY));
+      }
+    }
 
-			for ( var ix = 0; ix < gridX1; ix ++ ) {
+    for (var iy = 0; iy < gridY; iy++) {
+      for (var ix = 0; ix < gridX; ix++) {
+        var a = ix + gridX1 * iy;
+        var b = ix + gridX1 * (iy + 1);
+        var c = (ix + 1) + gridX1 * (iy + 1);
+        var d = (ix + 1) + gridX1 * iy;
 
-				var x = ix * segment_width - width_half;
+        indices.addAll([a, b, d]);
+        indices.addAll([b, c, d]);
+      }
+    }
 
-				vertices.addAll( [x.toDouble(), - y.toDouble(), 0.0] );
+    this.setIndex(indices);
+    this.setAttribute('position',
+        new Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    this.setAttribute('normal',
+        new Float32BufferAttribute(Float32Array.from(normals), 3, false));
+    this.setAttribute(
+        'uv', new Float32BufferAttribute(Float32Array.from(uvs), 2, false));
+  }
 
-				normals.addAll( [0.0, 0.0, 1.0] );
-
-				uvs.add( ix / gridX );
-				uvs.add( 1 - ( iy / gridY ) );
-
-			}
-
-		}
-
-		for ( var iy = 0; iy < gridY; iy ++ ) {
-
-			for ( var ix = 0; ix < gridX; ix ++ ) {
-
-				var a = ix + gridX1 * iy;
-				var b = ix + gridX1 * ( iy + 1 );
-				var c = ( ix + 1 ) + gridX1 * ( iy + 1 );
-				var d = ( ix + 1 ) + gridX1 * iy;
-
-				indices.addAll( [a, b, d] );
-				indices.addAll( [b, c, d] );
-
-			}
-
-		}
-
-		this.setIndex( indices );
-		this.setAttribute( 'position', new Float32BufferAttribute( Float32Array.from(vertices), 3, false ) );
-		this.setAttribute( 'normal', new Float32BufferAttribute( Float32Array.from(normals), 3, false ) );
-		this.setAttribute( 'uv', new Float32BufferAttribute( Float32Array.from(uvs), 2, false ) );
-
-	}
-
-  static fromJSON( data ) {
-
-		return new PlaneGeometry( data["width"], data["height"], data["widthSegments"], data["heightSegments"] );
-
-	}
-
+  static fromJSON(data) {
+    return new PlaneGeometry(data["width"], data["height"],
+        data["widthSegments"], data["heightSegments"]);
+  }
 }

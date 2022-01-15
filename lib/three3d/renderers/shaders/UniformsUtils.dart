@@ -23,7 +23,7 @@ Map<String, dynamic> cloneUniforms(Map<String, dynamic> src) {
               property.runtimeType == Vector2 ||
               property.runtimeType == Vector3 ||
               property.runtimeType == Vector4 ||
-              property.runtimeType == Texture || 
+              property.runtimeType == Texture ||
               property.runtimeType == Quaternion)) {
         dst[u][p] = property.clone();
       } else if (property is List) {
@@ -51,9 +51,7 @@ Map<String, dynamic> mergeUniforms(uniforms) {
   return merged;
 }
 
-
 class UniformsUtils {
-
   static clone(p) {
     return cloneUniforms(p);
   }
@@ -61,5 +59,4 @@ class UniformsUtils {
   static merge(p) {
     return mergeUniforms(p);
   }
-
 }

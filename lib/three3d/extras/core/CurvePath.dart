@@ -1,13 +1,11 @@
 part of three_extra;
 
-
 /**************************************************************
  *	Curved Path - a curve path is simply a array of connected
  *  curves, but retains the api of a curve
  **************************************************************/
 
 class CurvePath extends Curve {
-
   String type = 'CurvePath';
 
   CurvePath() : super() {
@@ -15,254 +13,207 @@ class CurvePath extends Curve {
     this.autoClose = false; // Automatically closes the path
   }
 
+  CurvePath.fromJSON(Map<String, dynamic> json) : super.fromJSON(json) {
+    this.autoClose = json["autoClose"];
+    this.curves = [];
 
-  CurvePath.fromJSON ( Map<String, dynamic> json ) : super.fromJSON(json) {
+    for (var i = 0, l = json["curves"].length; i < l; i++) {
+      var curve = json["curves"][i];
+      this.curves.add(Curve.castJSON(curve));
+    }
+  }
 
-		this.autoClose = json["autoClose"];
-		this.curves = [];
+  add(Curve curve) {
+    this.curves.add(curve);
+  }
 
-		for ( var i = 0, l = json["curves"].length; i < l; i ++ ) {
+  closePath() {
+    // Add a line curve if start and end of lines are not connected
+    var startPoint = this.curves[0].getPoint(0, null);
+    var endPoint = this.curves[this.curves.length - 1].getPoint(1, null);
 
-			var curve = json["curves"][ i ];
-			this.curves.add( Curve.castJSON( curve ) );
+    if (!startPoint.equals(endPoint)) {
+      this.curves.add(LineCurve(endPoint, startPoint));
+    }
+  }
 
-		}
-	}
+  // To get accurate point with reference to
+  // entire path distance at time t,
+  // following has to be done:
 
+  // 1. Length of each sub path have to be known
+  // 2. Locate and identify type of curve
+  // 3. Get t for the curve
+  // 4. Return curve.getPointAt(t')
 
-  add ( Curve curve ) {
+  getPoint(t, optionalTarget) {
+    var d = t * this.getLength();
+    var curveLengths = this.getCurveLengths();
+    var i = 0;
 
-		this.curves.add( curve );
+    // To think about boundaries points.
 
-	}
+    while (i < curveLengths.length) {
+      if (curveLengths[i] >= d) {
+        var diff = curveLengths[i] - d;
+        var curve = this.curves[i];
 
-	closePath () {
+        var segmentLength = curve.getLength();
+        var u = segmentLength == 0 ? 0 : 1 - diff / segmentLength;
 
-		// Add a line curve if start and end of lines are not connected
-		var startPoint = this.curves[ 0 ].getPoint( 0, null );
-		var endPoint = this.curves[ this.curves.length - 1 ].getPoint( 1, null );
+        return curve.getPointAt(u, null);
+      }
 
-		if ( ! startPoint.equals( endPoint ) ) {
+      i++;
+    }
 
-			this.curves.add( LineCurve( endPoint, startPoint ) );
+    return null;
 
-		}
+    // loop where sum != 0, sum > d , sum+1 <d
+  }
 
-	}
+  // We cannot use the default THREE.Curve getPoint() with getLength() because in
+  // THREE.Curve, getLength() depends on getPoint() but in THREE.CurvePath
+  // getPoint() depends on getLength
 
-	// To get accurate point with reference to
-	// entire path distance at time t,
-	// following has to be done:
+  getLength() {
+    var lens = this.getCurveLengths();
+    return lens[lens.length - 1];
+  }
 
-	// 1. Length of each sub path have to be known
-	// 2. Locate and identify type of curve
-	// 3. Get t for the curve
-	// 4. Return curve.getPointAt(t')
+  // cacheLengths must be recalculated.
+  updateArcLengths() {
+    this.needsUpdate = true;
+    this.cacheLengths = null;
+    this.getCurveLengths();
+  }
 
-	getPoint ( t, optionalTarget ) {
+  // Compute lengths and cache them
+  // We cannot overwrite getLengths() because UtoT mapping uses it.
 
-		var d = t * this.getLength();
-		var curveLengths = this.getCurveLengths();
-		var i = 0;
+  List<num> getCurveLengths() {
+    // We use cache values if curves and cache array are same length
 
-		// To think about boundaries points.
+    if (this.cacheLengths != null &&
+        this.cacheLengths!.length == this.curves.length) {
+      return this.cacheLengths!;
+    }
 
-		while ( i < curveLengths.length ) {
+    // Get length of sub-curve
+    // Push sums into cached array
 
-			if ( curveLengths[ i ] >= d ) {
+    List<num> lengths = [];
+    num sums = 0.0;
 
-				var diff = curveLengths[ i ] - d;
-				var curve = this.curves[ i ];
+    for (var i = 0, l = this.curves.length; i < l; i++) {
+      sums += this.curves[i].getLength();
+      lengths.add(sums);
+    }
 
-				var segmentLength = curve.getLength();
-				var u = segmentLength == 0 ? 0 : 1 - diff / segmentLength;
+    this.cacheLengths = lengths;
 
-				return curve.getPointAt( u, null );
+    return lengths;
+  }
 
-			}
+  getSpacedPoints([num divisions = 40, num offset = 0.0]) {
+    var points = [];
 
-			i ++;
-
-		}
-
-		return null;
-
-		// loop where sum != 0, sum > d , sum+1 <d
-
-	}
-
-	// We cannot use the default THREE.Curve getPoint() with getLength() because in
-	// THREE.Curve, getLength() depends on getPoint() but in THREE.CurvePath
-	// getPoint() depends on getLength
-
-	getLength () {
-
-		var lens = this.getCurveLengths();
-		return lens[ lens.length - 1 ];
-
-	}
-
-	// cacheLengths must be recalculated.
-	updateArcLengths () {
-
-		this.needsUpdate = true;
-		this.cacheLengths = null;
-		this.getCurveLengths();
-
-	}
-
-	// Compute lengths and cache them
-	// We cannot overwrite getLengths() because UtoT mapping uses it.
-
-	List<num> getCurveLengths () {
-
-		// We use cache values if curves and cache array are same length
-
-		if ( this.cacheLengths != null && this.cacheLengths!.length == this.curves.length ) {
-
-			return this.cacheLengths!;
-
-		}
-
-		// Get length of sub-curve
-		// Push sums into cached array
-
-		List<num> lengths = [];
-		num sums = 0.0;
-
-		for ( var i = 0, l = this.curves.length; i < l; i ++ ) {
-
-			sums += this.curves[ i ].getLength();
-			lengths.add( sums );
-
-		}
-
-		this.cacheLengths = lengths;
-
-		return lengths;
-
-	}
-
-	getSpacedPoints ( [num divisions = 40, num offset = 0.0] ) {
-
-		var points = [];
-
-		for ( var i = 0; i <= divisions; i ++ ) {
-
+    for (var i = 0; i <= divisions; i++) {
       var _offset = offset + i / divisions;
-      if(_offset > 1.0) {
+      if (_offset > 1.0) {
         _offset = _offset - 1.0;
       }
 
-			points.add( this.getPoint( _offset, null ) );
+      points.add(this.getPoint(_offset, null));
+    }
 
-		}
+    if (this.autoClose) {
+      points.add(points[0]);
+    }
 
-		if ( this.autoClose ) {
+    return points;
+  }
 
-			points.add( points[ 0 ] );
+  List getPoints({num divisions = 12}) {
+    var points = [];
+    var last;
 
-		}
+    for (var i = 0, curves = this.curves; i < curves.length; i++) {
+      var curve = curves[i];
+      var resolution = (curve != null && curve.isEllipseCurve)
+          ? divisions * 2
+          : (curve != null && (curve.isLineCurve || curve.isLineCurve3))
+              ? 1
+              : (curve != null && curve.isSplineCurve)
+                  ? divisions * curve.points.length
+                  : divisions;
 
-		return points;
+      var pts = curve.getPoints(divisions: resolution);
 
-	}
+      for (var j = 0; j < pts.length; j++) {
+        var point = pts[j];
 
-	List getPoints ( {num divisions = 12} ) {
+        if (last != null && last.equals(point))
+          continue; // ensures no consecutive points are duplicates
 
-		var points = [];
-		var last;
+        points.add(point);
+        last = point;
+      }
+    }
 
-		for ( var i = 0, curves = this.curves; i < curves.length; i ++ ) {
+    if (this.autoClose &&
+        points.length > 1 &&
+        !points[points.length - 1].equals(points[0])) {
+      points.add(points[0]);
+    }
 
-			var curve = curves[ i ];
-			var resolution = ( curve != null && curve.isEllipseCurve ) ? divisions * 2
-				: ( curve != null && ( curve.isLineCurve || curve.isLineCurve3 ) ) ? 1
-					: ( curve != null && curve.isSplineCurve ) ? divisions * curve.points.length
-						: divisions;
+    return points;
+  }
 
-			var pts = curve.getPoints( divisions: resolution );
+  copy(source) {
+    super.copy(source);
 
-			for ( var j = 0; j < pts.length; j ++ ) {
+    this.curves = [];
 
-				var point = pts[ j ];
+    for (var i = 0, l = source.curves.length; i < l; i++) {
+      var curve = source.curves[i];
 
-				if ( last != null && last.equals( point ) ) continue; // ensures no consecutive points are duplicates
+      this.curves.add(curve.clone());
+    }
 
-				points.add( point );
-				last = point;
+    this.autoClose = source.autoClose;
 
-			}
+    return this;
+  }
 
-		}
+  toJSON() {
+    var data = super.toJSON();
 
-		if ( this.autoClose && points.length > 1 && ! points[ points.length - 1 ].equals( points[ 0 ] ) ) {
+    data["autoClose"] = this.autoClose;
+    data["curves"] = [];
 
-			points.add( points[ 0 ] );
+    for (var i = 0, l = this.curves.length; i < l; i++) {
+      var curve = this.curves[i];
+      data["curves"].add(curve.toJSON());
+    }
 
-		}
+    return data;
+  }
 
-		return points;
+  fromJSON(json) {
+    super.fromJSON(json);
 
-	}
+    this.autoClose = json.autoClose;
+    this.curves = [];
 
-	copy ( source ) {
+    for (var i = 0, l = json.curves.length; i < l; i++) {
+      var curve = json.curves[i];
 
-		super.copy( source );
+      throw (" CurvePath fromJSON todo ");
+      // this.curves.add( new Curves[ curve.type ]().fromJSON( curve ) );
 
-		this.curves = [];
+    }
 
-		for ( var i = 0, l = source.curves.length; i < l; i ++ ) {
-
-			var curve = source.curves[ i ];
-
-			this.curves.add( curve.clone() );
-
-		}
-
-		this.autoClose = source.autoClose;
-
-		return this;
-
-	}
-
-	toJSON () {
-
-		var data = super.toJSON();
-
-		data["autoClose"] = this.autoClose;
-		data["curves"] = [];
-
-		for ( var i = 0, l = this.curves.length; i < l; i ++ ) {
-
-			var curve = this.curves[ i ];
-			data["curves"].add( curve.toJSON() );
-
-		}
-
-		return data;
-
-	}
-
-	
-  fromJSON( json ) {
-
-		super.fromJSON( json );
-
-		this.autoClose = json.autoClose;
-		this.curves = [];
-
-		for ( var i = 0, l = json.curves.length; i < l; i ++ ) {
-
-			var curve = json.curves[ i ];
-
-      throw(" CurvePath fromJSON todo ");
-			// this.curves.add( new Curves[ curve.type ]().fromJSON( curve ) );
-
-		}
-
-		return this;
-
-	}
-
+    return this;
+  }
 }

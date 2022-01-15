@@ -1,8 +1,6 @@
 part of three_math;
 
-
 class Math {
-
   static double Infinity = double.maxFinite;
   static const double PI = math.pi;
   static double LN2 = math.ln2;
@@ -77,7 +75,7 @@ class Math {
     return result;
   }
 
-  static num pow( num x, num y ) {
+  static num pow(num x, num y) {
     return math.pow(x, y);
   }
 
@@ -106,15 +104,12 @@ class Math {
   }
 
   // Random float from <low, high> interval
-  static randFloat( low, high ) {
-	  return low + Math.random() * ( high - low );
+  static randFloat(low, high) {
+    return low + Math.random() * (high - low);
   }
 
   // Random float from <-range/2, range/2> interval
-  static randFloatSpread( range ) {
-
-    return range * ( 0.5 - Math.random() );
-
+  static randFloatSpread(range) {
+    return range * (0.5 - Math.random());
   }
-
 }

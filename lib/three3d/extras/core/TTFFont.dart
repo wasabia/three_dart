@@ -6,12 +6,11 @@ class Font {
   bool isFont = true;
 
   List<Shape> generateShapes(text, {int size = 100}) {
-    throw("Font generateShapes need implement .... ");
+    throw ("Font generateShapes need implement .... ");
   }
 }
 
 class TTFFont extends Font {
-
   TTFFont(data) {
     this.data = data;
   }
@@ -27,8 +26,8 @@ class TTFFont extends Font {
     return shapes;
   }
 
-
-  List<ShapePath> createPaths(String text, num size, Map<String, dynamic> data) {
+  List<ShapePath> createPaths(
+      String text, num size, Map<String, dynamic> data) {
     // var chars = Array.from ? Array.from( text ) : String( text ).split( '' ); // workaround for IE11, see #13988
     List<String> chars = text.split("");
 
@@ -64,7 +63,8 @@ class TTFFont extends Font {
     var glyph = data["glyphs"][char] ?? data["glyphs"]['?'];
 
     if (glyph == null) {
-      print("THREE.Font: character ${char} does not exists in font family ${data.familyName}");
+      print(
+          "THREE.Font: character ${char} does not exists in font family ${data.familyName}");
       // return null;
       glyph = data["glyphs"]["a"];
     }
@@ -137,8 +137,5 @@ class TTFFont extends Font {
     return {"offsetX": glyph["ha"] * scale, "path": path};
   }
 
-
-  dispose() {
-    
-  }
+  dispose() {}
 }

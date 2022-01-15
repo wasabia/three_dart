@@ -5,7 +5,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:developer' as developer;
 
-
 import 'package:flutter/foundation.dart';
 import 'package:three_dart/three_dart.dart';
 import 'package:flutter_gl/flutter_gl.dart';
@@ -25,7 +24,6 @@ import 'package:three_dart/three3d/renderers/index.dart';
 import 'package:three_dart/three3d/renderers/shaders/index.dart';
 import 'package:three_dart/three3d/textures/index.dart';
 import 'package:three_dart/three3d/utils.dart';
-
 
 part './WebGLAnimation.dart';
 part './WebGLAttributes.dart';

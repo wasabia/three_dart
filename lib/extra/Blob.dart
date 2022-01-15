@@ -1,5 +1,4 @@
 class Blob {
-
   dynamic data;
   late Map<String, dynamic> options;
 
@@ -7,13 +6,8 @@ class Blob {
     this.data = data;
     this.options = options;
   }
-
-
-
-
 }
 
-
-createObjectURL( blob ) {
+createObjectURL(blob) {
   return blob;
 }

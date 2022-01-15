@@ -1,24 +1,22 @@
-
 // 支持List 自动扩展长度
 Function listSetter = (List list, int idx, dynamic? value) {
-
-  if(list.length > idx) {
+  if (list.length > idx) {
     list[idx] = value;
-  } else if(list.length == idx) {
+  } else if (list.length == idx) {
     list.add(value);
   } else {
     list.addAll(List<num>.filled(idx + 1 - list.length, 0));
     list[idx] = value;
   }
-
 };
-
 
 // https://github.com/dartist/node_shims/blob/master/lib/src/js.dart
 
 /// JS Patterns
 dynamic or(value, defaultValue) => falsey(value)
-    ? defaultValue is Function ? defaultValue() : defaultValue
+    ? defaultValue is Function
+        ? defaultValue()
+        : defaultValue
     : value;
 
 bool falsey(value) =>
@@ -70,7 +68,12 @@ int unshift(List list, item) {
 
 List slice(List list, int begin, [int? end]) => list
     .getRange(
-        begin, end == null ? list.length : end < 0 ? list.length + end : end)
+        begin,
+        end == null
+            ? list.length
+            : end < 0
+                ? list.length + end
+                : end)
     .toList();
 
 bool every(List list, dynamic Function(dynamic e) fn) =>
@@ -132,7 +135,7 @@ dynamic reduceRight(List list,
 }
 
 /// Strings
-String charAt(String str, int atPos) => str.substring(atPos, atPos+1);
+String charAt(String str, int atPos) => str.substring(atPos, atPos + 1);
 
 int charCodeAt(String str, int atPos) => str.codeUnitAt(atPos);
 
@@ -154,7 +157,9 @@ String substr(String str, int start, [int? length]) {
   }
   var end = length == null
       ? str.length
-      : start + length > str.length ? str.length : start + length;
+      : start + length > str.length
+          ? str.length
+          : start + length;
   return str.substring(start, end);
 }
 
@@ -184,7 +189,6 @@ List<String?>? exec(RegExp regex, String str) {
   return retVal;
 }
 
-
 String toFixed(num x, int l) {
   return x.toStringAsFixed(l);
 }
@@ -194,15 +198,13 @@ double parseFloat(String n) {
 }
 
 setList(List target, List source) {
-
   int tlen = target.length;
   int slen = source.length;
 
-  for(var i = 0; i < slen; i ++) {
-    if(i >= tlen) {
+  for (var i = 0; i < slen; i++) {
+    if (i >= tlen) {
       break;
     }
     target[i] = source[i];
   }
-
 }

@@ -1,11 +1,9 @@
-
 part of three_core;
 
 class InterleavedBuffer {
-
   dynamic array;
   int stride;
-  
+
   late int count;
   late int usage;
   late Map<String, dynamic> updateRange;
@@ -16,12 +14,11 @@ class InterleavedBuffer {
 
   String type = "InterleavedBuffer";
 
-
-  InterleavedBuffer( this.array, this.stride ) {
+  InterleavedBuffer(this.array, this.stride) {
     this.count = array != null ? (array.length / stride).toInt() : 0;
 
     this.usage = StaticDrawUsage;
-    this.updateRange = { "offset": 0, "count": - 1 };
+    this.updateRange = {"offset": 0, "count": -1};
 
     this.version = 0;
 
@@ -29,130 +26,106 @@ class InterleavedBuffer {
   }
 
   set needsUpdate(bool value) {
-    if ( value == true ) {
-      this.version ++;
+    if (value == true) {
+      this.version++;
     }
   }
 
+  setUsage(value) {
+    this.usage = value;
 
+    return this;
+  }
 
-	setUsage ( value ) {
+  copy(InterleavedBuffer source) {
+    this.array = source.array.clone();
+    this.count = source.count;
+    this.stride = source.stride;
+    this.usage = source.usage;
 
-		this.usage = value;
+    return this;
+  }
 
-		return this;
+  copyAt(index1, attribute, index2) {
+    index1 *= this.stride;
+    index2 *= attribute.stride;
 
-	}
+    for (var i = 0, l = this.stride; i < l; i++) {
+      this.array[index1 + i] = attribute.array[index2 + i];
+    }
 
-	copy (InterleavedBuffer source ) {
+    return this;
+  }
 
-		this.array = source.array.clone();
-		this.count = source.count;
-		this.stride = source.stride;
-		this.usage = source.usage;
+  // set ( value, {int offset = 0} ) {
 
-		return this;
+  // 	this.array.set( value, offset );
 
-	}
+  // 	return this;
 
-	copyAt ( index1, attribute, index2 ) {
+  // }
 
-		index1 *= this.stride;
-		index2 *= attribute.stride;
-
-		for ( var i = 0, l = this.stride; i < l; i ++ ) {
-
-			this.array[ index1 + i ] = attribute.array[ index2 + i ];
-
-		}
-
-		return this;
-
-	}
-
-	// set ( value, {int offset = 0} ) {
-
-	// 	this.array.set( value, offset );
-
-	// 	return this;
-
-	// }
-
-	clone ( data ) {
-
-		if ( data.arrayBuffers == null ) {
-
-			data.arrayBuffers = {};
-
-		}
+  clone(data) {
+    if (data.arrayBuffers == null) {
+      data.arrayBuffers = {};
+    }
 
     print("InterleavedBuffer clone todo  ");
 
-		// if ( this.array.buffer._uuid == null ) {
+    // if ( this.array.buffer._uuid == null ) {
 
-		// 	this.array.buffer._uuid = MathUtils.generateUUID();
+    // 	this.array.buffer._uuid = MathUtils.generateUUID();
 
-		// }
+    // }
 
-		// if ( data.arrayBuffers[ this.array.buffer._uuid ] == null ) {
+    // if ( data.arrayBuffers[ this.array.buffer._uuid ] == null ) {
 
-		// 	data.arrayBuffers[ this.array.buffer._uuid ] = this.array.slice( 0 ).buffer;
+    // 	data.arrayBuffers[ this.array.buffer._uuid ] = this.array.slice( 0 ).buffer;
 
-		// }
+    // }
 
-		// const array = new this.array.constructor( data.arrayBuffers[ this.array.buffer._uuid ] );
+    // const array = new this.array.constructor( data.arrayBuffers[ this.array.buffer._uuid ] );
 
-		// const ib = new InterleavedBuffer( array, this.stride );
-		// ib.setUsage( this.usage );
+    // const ib = new InterleavedBuffer( array, this.stride );
+    // ib.setUsage( this.usage );
 
-		// return ib;
+    // return ib;
+  }
 
-	}
+  onUpload(callback) {
+    this.onUploadCallback = callback;
 
-	onUpload ( callback ) {
+    return this;
+  }
 
-		this.onUploadCallback = callback;
+  toJSON(data) {
+    if (data.arrayBuffers == null) {
+      data.arrayBuffers = {};
+    }
 
-		return this;
+    // generate UUID for array buffer if necessary
 
-	}
+    // if ( this.array.buffer._uuid == null ) {
 
-	toJSON ( data ) {
+    // 	this.array.buffer._uuid = MathUtils.generateUUID();
 
-		if ( data.arrayBuffers == null ) {
+    // }
 
-			data.arrayBuffers = {};
+    // if ( data.arrayBuffers[ this.array.buffer._uuid ] == null ) {
 
-		}
+    // 	data.arrayBuffers[ this.array.buffer._uuid ] = Array.prototype.slice.call( new Uint32Array( this.array.buffer ) );
 
-		// generate UUID for array buffer if necessary
+    // }
 
-		// if ( this.array.buffer._uuid == null ) {
+    //
 
-		// 	this.array.buffer._uuid = MathUtils.generateUUID();
-
-		// }
-
-		// if ( data.arrayBuffers[ this.array.buffer._uuid ] == null ) {
-
-		// 	data.arrayBuffers[ this.array.buffer._uuid ] = Array.prototype.slice.call( new Uint32Array( this.array.buffer ) );
-
-		// }
-
-		//
-
-		return {
-			"uuid": this.uuid,
-			// "buffer": this.array.buffer._uuid,
-			// "type": this.array.constructor.name,
+    return {
+      "uuid": this.uuid,
+      // "buffer": this.array.buffer._uuid,
+      // "type": this.array.constructor.name,
       "buffer": this.array,
       "type": "List",
-			"stride": this.stride
-		};
-
-	}
-
-
+      "stride": this.stride
+    };
+  }
 }
-
-

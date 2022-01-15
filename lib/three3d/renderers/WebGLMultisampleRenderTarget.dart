@@ -1,28 +1,22 @@
 part of three_renderers;
 
-
-
-class WebGLMultisampleRenderTarget extends WebGLRenderTarget{
-
+class WebGLMultisampleRenderTarget extends WebGLRenderTarget {
   bool isWebGLMultisampleRenderTarget = true;
   int samples = 4;
 
-  WebGLMultisampleRenderTarget( width, height, options ) : super(width, height, options) {
-    
-  }
+  WebGLMultisampleRenderTarget(width, height, options)
+      : super(width, height, options) {}
 
   clone() {
-    return WebGLMultisampleRenderTarget(this.width, this.height, this.options).copy(this);
+    return WebGLMultisampleRenderTarget(this.width, this.height, this.options)
+        .copy(this);
   }
 
-	copy( source ) {
+  copy(source) {
+    super.copy(source);
 
-		super.copy(source);
+    this.samples = source.samples;
 
-		this.samples = source.samples;
-
-		return this;
-
-	}
-
+    return this;
+  }
 }

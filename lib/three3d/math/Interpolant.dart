@@ -21,9 +21,7 @@
 
 part of three_math;
 
-
 class Interpolant {
-
   late dynamic parameterPositions;
   int _cachedIndex = 0;
   late dynamic resultBuffer;
@@ -31,12 +29,11 @@ class Interpolant {
   late dynamic valueSize;
   late dynamic settings;
 
-  	// --- Protected interface
+  // --- Protected interface
 
-	dynamic DefaultSettings = {};
+  dynamic DefaultSettings = {};
 
-  Interpolant( parameterPositions, sampleValues, sampleSize, resultBuffer ) {
-
+  Interpolant(parameterPositions, sampleValues, sampleSize, resultBuffer) {
     // print(" parameterPositions sampleSize: ${sampleSize} ");
     // print(parameterPositions);
 
@@ -47,251 +44,202 @@ class Interpolant {
     this.valueSize = sampleSize;
   }
 
-
-
-  evaluate( double t ) {
-
-		var pp = this.parameterPositions;
-		int i1 = this._cachedIndex;
+  evaluate(double t) {
+    var pp = this.parameterPositions;
+    int i1 = this._cachedIndex;
 
     num? t1;
-		num? t0;
+    num? t0;
 
-    if(i1 < pp.length) {
-      t1 = pp[ i1 ];
+    if (i1 < pp.length) {
+      t1 = pp[i1];
     }
-    if(i1 - 1 >= 0) {
-      t0 = pp[ i1 - 1 ];
+    if (i1 - 1 >= 0) {
+      t0 = pp[i1 - 1];
     }
 
- 
-		validate_interval: {
-			seek: {
+    validate_interval:
+    {
+      seek:
+      {
+        int right;
 
-				int right;
+        linear_scan:
+        {
+          //- See http://jsperf.com/comparison-to-undefined/3
+          //- slower code:
+          //-
+          //- 				if ( t >= t1 || t1 == null ) {
+          forward_scan:
+          if (t1 == null || t >= t1) {
+            for (var giveUpAt = i1 + 2;;) {
+              if (t1 == null) {
+                if (t < t0!) break forward_scan;
 
-				linear_scan: {
+                // after end
 
-					//- See http://jsperf.com/comparison-to-undefined/3
-					//- slower code:
-					//-
-					//- 				if ( t >= t1 || t1 == null ) {
-					forward_scan: if ( t1 == null || t >= t1 ) {
+                i1 = pp.length;
+                this._cachedIndex = i1;
+                return this.afterEnd(i1 - 1, t, t0);
+              }
 
-						for ( var giveUpAt = i1 + 2; ; ) {
+              if (i1 == giveUpAt) break; // this loop
 
-							if ( t1 == null ) {
+              t0 = t1;
 
-								if ( t < t0! ) break forward_scan;
+              int _idx = ++i1;
 
-								// after end
-
-								i1 = pp.length;
-								this._cachedIndex = i1;
-								return this.afterEnd( i1 - 1, t, t0 );
-
-							}
-
-							if ( i1 == giveUpAt ) break; // this loop
-
-							t0 = t1;
-
-              int _idx = ++ i1;
-
-              if(_idx < pp.length) {
-                t1 = pp[ _idx ];
+              if (_idx < pp.length) {
+                t1 = pp[_idx];
               } else {
                 t1 = null;
               }
 
-							if (t1 != null && t < t1 ) {
+              if (t1 != null && t < t1) {
+                // we have arrived at the sought interval
+                break seek;
+              }
+            }
 
-								// we have arrived at the sought interval
-								break seek;
+            // prepare binary search on the right side of the index
+            right = pp.length;
+            break linear_scan;
+          }
 
-							}
+          //- slower code:
+          //-					if ( t < t0 || t0 == null ) {
+          if (t0 == null || !(t >= t0)) {
+            // looping?
 
-						}
+            var t1global = pp[1];
 
-						// prepare binary search on the right side of the index
-						right = pp.length;
-						break linear_scan;
+            if (t < t1global) {
+              i1 = 2; // + 1, using the scan for the details
+              t0 = t1global;
+            }
 
-					}
+            // linear reverse scan
 
-					//- slower code:
-					//-					if ( t < t0 || t0 == null ) {
-					if (t0 == null || ! ( t >= t0 ) ) {
+            for (var giveUpAt = i1 - 2;;) {
+              if (t0 == null) {
+                // before start
 
-						// looping?
+                this._cachedIndex = 0;
+                return this.beforeStart(0, t, t1);
+              }
 
-						var t1global = pp[ 1 ];
+              if (i1 == giveUpAt) break; // this loop
 
-						if ( t < t1global ) {
+              t1 = t0;
 
-							i1 = 2; // + 1, using the scan for the details
-							t0 = t1global;
-
-						}
-
-						// linear reverse scan
-
-						for ( var giveUpAt = i1 - 2; ; ) {
-
-							if ( t0 == null ) {
-
-								// before start
-
-								this._cachedIndex = 0;
-								return this.beforeStart( 0, t, t1 );
-
-							}
-
-							if ( i1 == giveUpAt ) break; // this loop
-
-							t1 = t0;
-
-              int iii = -- i1 - 1;
-              if(iii < 0) {
+              int iii = --i1 - 1;
+              if (iii < 0) {
                 t0 = null;
               } else {
-                t0 = pp[ iii ];
+                t0 = pp[iii];
               }
-							
 
-							if ( t0 != null && t >= t0 ) {
+              if (t0 != null && t >= t0) {
+                // we have arrived at the sought interval
+                break seek;
+              }
+            }
 
-								// we have arrived at the sought interval
-								break seek;
+            // prepare binary search on the left side of the index
+            right = i1;
+            i1 = 0;
+            break linear_scan;
+          }
 
-							}
+          // the interval is valid
 
-						}
+          break validate_interval;
+        } // linear scan
 
-						// prepare binary search on the left side of the index
-						right = i1;
-						i1 = 0;
-						break linear_scan;
+        // binary search
 
-					}
-
-					// the interval is valid
-
-					break validate_interval;
-
-				} // linear scan
-
-				// binary search
-
-				while ( i1 < right ) {
-
-					var mid = ( i1 + right ) >> 1;
+        while (i1 < right) {
+          var mid = (i1 + right) >> 1;
 
           // print(" Interpolant i1: ${i1} right: ${right} pp: ${pp.length} mid: ${mid} ");
 
-					if ( t < pp[ mid ] ) {
-
-						right = mid;
-
-					} else {
-
-						i1 = mid + 1;
-
-					}
-
-				}
+          if (t < pp[mid]) {
+            right = mid;
+          } else {
+            i1 = mid + 1;
+          }
+        }
 
         t1 = null;
         t0 = null;
 
-        if(i1 < pp.length) {
-          t1 = pp[ i1 ];
+        if (i1 < pp.length) {
+          t1 = pp[i1];
         }
-        if(i1 - 1 < pp.length) {
-          t0 = pp[ i1 - 1 ];
+        if (i1 - 1 < pp.length) {
+          t0 = pp[i1 - 1];
         }
-				
 
-				// check boundary cases, again
+        // check boundary cases, again
 
-				if ( t0 == null ) {
+        if (t0 == null) {
+          this._cachedIndex = 0;
+          return this.beforeStart(0, t, t1);
+        }
 
-					this._cachedIndex = 0;
-					return this.beforeStart( 0, t, t1 );
+        if (t1 == null) {
+          i1 = pp.length;
+          this._cachedIndex = i1;
+          return this.afterEnd(i1 - 1, t0, t);
+        }
+      } // seek
 
-				}
+      this._cachedIndex = i1;
 
-				if ( t1 == null ) {
+      this.intervalChanged(i1, t0, t1);
+    } // validate_interval
 
-					i1 = pp.length;
-					this._cachedIndex = i1;
-					return this.afterEnd( i1 - 1, t0, t );
+    return this.interpolate(i1, t0, t, t1!);
+  }
 
-				}
+  getSettings() {
+    return this.settings ?? this.DefaultSettings;
+  }
 
-			} // seek
+  copySampleValue(index) {
+    // copies a sample value to the result buffer
 
-			this._cachedIndex = i1;
+    var result = this.resultBuffer,
+        values = this.sampleValues,
+        stride = this.valueSize,
+        offset = index * stride;
 
-			this.intervalChanged( i1, t0, t1 );
+    for (var i = 0; i != stride; ++i) {
+      result[i] = values[offset + i];
+    }
 
-		} // validate_interval
+    return result;
+  }
 
-		return this.interpolate( i1, t0, t, t1! );
+  // Template methods for derived classes:
 
-	}
+  interpolate(int i1, num t0, num t, num t1) {
+    throw ('call to abstract method');
+    // implementations shall return this.resultBuffer
+  }
 
-
-
-	getSettings() {
-
-		return this.settings ?? this.DefaultSettings;
-
-	}
-
-	copySampleValue( index ) {
-
-		// copies a sample value to the result buffer
-
-		var result = this.resultBuffer,
-			values = this.sampleValues,
-			stride = this.valueSize,
-			offset = index * stride;
-
-		for ( var i = 0; i != stride; ++ i ) {
-
-			result[ i ] = values[ offset + i ];
-
-		}
-
-		return result;
-
-	}
-
-	// Template methods for derived classes:
-
-	interpolate( int i1, num t0, num t, num t1 ) {
-
-		throw ( 'call to abstract method' );
-		// implementations shall return this.resultBuffer
-
-	}
-
-	intervalChanged(v1, v2, v3) {
-
-		// empty
-
-	}
+  intervalChanged(v1, v2, v3) {
+    // empty
+  }
 
   beforeStart(v1, v2, v3) {
     // return copySampleValue_(v1, v2, v3);
   }
 
-	//( N-1, tN-1, t ), returns this.resultBuffer
-	// afterEnd_: Interpolant.prototype.copySampleValue_,
+  //( N-1, tN-1, t ), returns this.resultBuffer
+  // afterEnd_: Interpolant.prototype.copySampleValue_,
 
   afterEnd(v1, v2, v3) {
     // return copySampleValue_(v1, v2, v3);
   }
-
 }

@@ -12,7 +12,6 @@ import 'package:three_dart/three_dart.dart';
 
 import '../constants.dart';
 
-
 part './Bone.dart';
 part './Group.dart';
 part './InstancedMesh.dart';

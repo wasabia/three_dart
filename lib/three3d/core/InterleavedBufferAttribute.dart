@@ -3,7 +3,6 @@ part of three_core;
 var _vector = new Vector3.init();
 
 class InterleavedBufferAttribute extends BaseBufferAttribute {
-
   String name = "";
   InterleavedBuffer? data;
   int itemSize;
@@ -12,268 +11,217 @@ class InterleavedBufferAttribute extends BaseBufferAttribute {
   bool isInterleavedBufferAttribute = true;
   String type = "InterleavedBufferAttribute";
 
-  InterleavedBufferAttribute( this.data, this.itemSize, this.offset, this.normalized ) : super() {
-  }
+  InterleavedBufferAttribute(
+      this.data, this.itemSize, this.offset, this.normalized)
+      : super() {}
 
   get count {
-		return this.data!.count;
-	}
+    return this.data!.count;
+  }
 
-	get array {
+  get array {
     return this.data!.array;
-	}
+  }
 
-	set needsUpdate(value) {
+  set needsUpdate(value) {
     this.data!.needsUpdate = value;
-	}
+  }
 
+  applyMatrix4(m) {
+    for (var i = 0, l = this.data!.count; i < l; i++) {
+      _vector.x = this.getX(i);
+      _vector.y = this.getY(i);
+      _vector.z = this.getZ(i);
 
-  applyMatrix4 ( m ) {
+      _vector.applyMatrix4(m);
 
-		for ( var i = 0, l = this.data!.count; i < l; i ++ ) {
+      this.setXYZ(i, _vector.x, _vector.y, _vector.z);
+    }
 
-			_vector.x = this.getX( i );
-			_vector.y = this.getY( i );
-			_vector.z = this.getZ( i );
+    return this;
+  }
 
-			_vector.applyMatrix4( m );
+  applyNormalMatrix(m) {
+    for (var i = 0, l = this.count; i < l; i++) {
+      _vector.x = this.getX(i);
+      _vector.y = this.getY(i);
+      _vector.z = this.getZ(i);
 
-			this.setXYZ( i, _vector.x, _vector.y, _vector.z );
+      _vector.applyNormalMatrix(m);
 
-		}
+      this.setXYZ(i, _vector.x, _vector.y, _vector.z);
+    }
 
-		return this;
+    return this;
+  }
 
-	}
+  transformDirection(m) {
+    for (var i = 0, l = this.count; i < l; i++) {
+      _vector.x = this.getX(i);
+      _vector.y = this.getY(i);
+      _vector.z = this.getZ(i);
 
-  applyNormalMatrix( m ) {
+      _vector.transformDirection(m);
 
-		for ( var i = 0, l = this.count; i < l; i ++ ) {
+      this.setXYZ(i, _vector.x, _vector.y, _vector.z);
+    }
 
-			_vector.x = this.getX( i );
-			_vector.y = this.getY( i );
-			_vector.z = this.getZ( i );
+    return this;
+  }
 
-			_vector.applyNormalMatrix( m );
+  setX(index, x) {
+    this.data!.array[index * this.data!.stride + this.offset] = x;
 
-			this.setXYZ( i, _vector.x, _vector.y, _vector.z );
+    return this;
+  }
 
-		}
+  setY(index, y) {
+    this.data!.array[index * this.data!.stride + this.offset + 1] = y;
 
-		return this;
+    return this;
+  }
 
-	}
+  setZ(index, z) {
+    this.data!.array[index * this.data!.stride + this.offset + 2] = z;
 
-	transformDirection( m ) {
+    return this;
+  }
 
-		for ( var i = 0, l = this.count; i < l; i ++ ) {
+  setW(index, w) {
+    this.data!.array[index * this.data!.stride + this.offset + 3] = w;
 
-			_vector.x = this.getX( i );
-			_vector.y = this.getY( i );
-			_vector.z = this.getZ( i );
+    return this;
+  }
 
-			_vector.transformDirection( m );
+  getX(index) {
+    return this.data!.array[index * this.data!.stride + this.offset];
+  }
 
-			this.setXYZ( i, _vector.x, _vector.y, _vector.z );
+  getY(index) {
+    return this.data!.array[index * this.data!.stride + this.offset + 1];
+  }
 
-		}
+  getZ(index) {
+    return this.data!.array[index * this.data!.stride + this.offset + 2];
+  }
 
-		return this;
+  getW(index) {
+    return this.data!.array[index * this.data!.stride + this.offset + 3];
+  }
 
-	}
+  setXY(index, x, y) {
+    index = index * this.data!.stride + this.offset;
 
-	setX ( index, x ) {
+    this.data!.array[index + 0] = x;
+    this.data!.array[index + 1] = y;
 
-		this.data!.array[ index * this.data!.stride + this.offset ] = x;
+    return this;
+  }
 
-		return this;
+  setXYZ(index, x, y, z) {
+    index = index * this.data!.stride + this.offset;
 
-	}
+    this.data!.array[index + 0] = x;
+    this.data!.array[index + 1] = y;
+    this.data!.array[index + 2] = z;
 
-	setY ( index, y ) {
+    return this;
+  }
 
-		this.data!.array[ index * this.data!.stride + this.offset + 1 ] = y;
+  setXYZW(index, x, y, z, w) {
+    index = index * this.data!.stride + this.offset;
 
-		return this;
+    this.data!.array[index + 0] = x;
+    this.data!.array[index + 1] = y;
+    this.data!.array[index + 2] = z;
+    this.data!.array[index + 3] = w;
 
-	}
+    return this;
+  }
 
-	setZ ( index, z ) {
+  // clone ( data ) {
 
-		this.data!.array[ index * this.data!.stride + this.offset + 2 ] = z;
+  // 	if ( data == null ) {
 
-		return this;
+  // 		print( 'THREE.InterleavedBufferAttribute.clone(): Cloning an interlaved buffer attribute will deinterleave buffer data!.' );
 
-	}
+  // 		var array = [];
 
-	setW ( index, w ) {
+  // 		for ( var i = 0; i < this.count; i ++ ) {
 
-		this.data!.array[ index * this.data!.stride + this.offset + 3 ] = w;
+  // 			var index = i * this.data!.stride + this.offset;
 
-		return this;
+  // 			for ( var j = 0; j < this.itemSize; j ++ ) {
 
-	}
+  // 				array.add( this.data!.array[ index + j ] );
 
-	getX ( index ) {
+  // 			}
 
-		return this.data!.array[ index * this.data!.stride + this.offset ];
+  // 		}
 
-	}
+  // 		return new BufferAttribute(array, this.itemSize, this.normalized );
 
-	getY ( index ) {
+  // 	} else {
 
-		return this.data!.array[ index * this.data!.stride + this.offset + 1 ];
+  // 		if ( data!.interleavedBuffers == null ) {
 
-	}
+  // 			data!.interleavedBuffers = {};
 
-	getZ ( index ) {
+  // 		}
 
-		return this.data!.array[ index * this.data!.stride + this.offset + 2 ];
+  // 		if ( data!.interleavedBuffers[ this.data!.uuid ] == null ) {
 
-	}
+  // 			data!.interleavedBuffers[ this.data!.uuid ] = this.data!.clone( data );
 
-	getW ( index ) {
+  // 		}
 
-		return this.data!.array[ index * this.data!.stride + this.offset + 3 ];
+  // 		return new InterleavedBufferAttribute( data!.interleavedBuffers[ this.data!.uuid ], this.itemSize, this.offset, this.normalized );
 
-	}
+  // 	}
 
-	setXY ( index, x, y ) {
+  // }
 
-		index = index * this.data!.stride + this.offset;
+  toJSON(data) {
+    if (data == null) {
+      print(
+          'THREE.InterleavedBufferAttribute.toJSON(): Serializing an interlaved buffer attribute will deinterleave buffer data!.');
 
-		this.data!.array[ index + 0 ] = x;
-		this.data!.array[ index + 1 ] = y;
+      var array = [];
 
-		return this;
+      for (var i = 0; i < this.count; i++) {
+        var index = i * this.data!.stride + this.offset;
 
-	}
+        for (var j = 0; j < this.itemSize; j++) {
+          array.add(this.data!.array[index + j]);
+        }
+      }
 
-	setXYZ ( index, x, y, z ) {
+      // deinterleave data and save it as an ordinary buffer attribute for now
 
-		index = index * this.data!.stride + this.offset;
+      return {
+        "itemSize": this.itemSize,
+        "type": this.array.runtimeType.toString(),
+        "array": array,
+        "normalized": this.normalized
+      };
+    } else {
+      // save as true interlaved attribtue
 
-		this.data!.array[ index + 0 ] = x;
-		this.data!.array[ index + 1 ] = y;
-		this.data!.array[ index + 2 ] = z;
+      if (data.interleavedBuffers == null) {
+        data.interleavedBuffers = {};
+      }
 
-		return this;
+      if (data.interleavedBuffers[this.data!.uuid] == null) {
+        data.interleavedBuffers[this.data!.uuid] = this.data!.toJSON(data);
+      }
 
-	}
-
-	setXYZW ( index, x, y, z, w ) {
-
-		index = index * this.data!.stride + this.offset;
-
-		this.data!.array[ index + 0 ] = x;
-		this.data!.array[ index + 1 ] = y;
-		this.data!.array[ index + 2 ] = z;
-		this.data!.array[ index + 3 ] = w;
-
-		return this;
-
-	}
-
-	// clone ( data ) {
-
-	// 	if ( data == null ) {
-
-	// 		print( 'THREE.InterleavedBufferAttribute.clone(): Cloning an interlaved buffer attribute will deinterleave buffer data!.' );
-
-	// 		var array = [];
-
-	// 		for ( var i = 0; i < this.count; i ++ ) {
-
-	// 			var index = i * this.data!.stride + this.offset;
-
-	// 			for ( var j = 0; j < this.itemSize; j ++ ) {
-
-	// 				array.add( this.data!.array[ index + j ] );
-
-	// 			}
-
-	// 		}
-
-	// 		return new BufferAttribute(array, this.itemSize, this.normalized );
-
-	// 	} else {
-
-	// 		if ( data!.interleavedBuffers == null ) {
-
-	// 			data!.interleavedBuffers = {};
-
-	// 		}
-
-	// 		if ( data!.interleavedBuffers[ this.data!.uuid ] == null ) {
-
-	// 			data!.interleavedBuffers[ this.data!.uuid ] = this.data!.clone( data );
-
-	// 		}
-
-	// 		return new InterleavedBufferAttribute( data!.interleavedBuffers[ this.data!.uuid ], this.itemSize, this.offset, this.normalized );
-
-	// 	}
-
-	// }
-
-	toJSON ( data ) {
-
-		if ( data == null ) {
-
-			print( 'THREE.InterleavedBufferAttribute.toJSON(): Serializing an interlaved buffer attribute will deinterleave buffer data!.' );
-
-			var array = [];
-
-			for ( var i = 0; i < this.count; i ++ ) {
-
-				var index = i * this.data!.stride + this.offset;
-
-				for ( var j = 0; j < this.itemSize; j ++ ) {
-
-					array.add( this.data!.array[ index + j ] );
-
-				}
-
-			}
-
-			// deinterleave data and save it as an ordinary buffer attribute for now
-
-			return {
-				"itemSize": this.itemSize,
-				"type": this.array.runtimeType.toString(),
-				"array": array,
-				"normalized": this.normalized
-			};
-
-		} else {
-
-			// save as true interlaved attribtue
-
-			if ( data.interleavedBuffers == null ) {
-
-				data.interleavedBuffers = {};
-
-			}
-
-			if ( data.interleavedBuffers[ this.data!.uuid ] == null ) {
-
-				data.interleavedBuffers[ this.data!.uuid ] = this.data!.toJSON( data );
-
-			}
-
-			return {
-				"isInterleavedBufferAttribute": true,
-				"itemSize": this.itemSize,
-				"data": this.data!.uuid,
-				"offset": this.offset,
-				"normalized": this.normalized
-			};
-
-		}
-
-	}
-
-
+      return {
+        "isInterleavedBufferAttribute": true,
+        "itemSize": this.itemSize,
+        "data": this.data!.uuid,
+        "offset": this.offset,
+        "normalized": this.normalized
+      };
+    }
+  }
 }
-
-
