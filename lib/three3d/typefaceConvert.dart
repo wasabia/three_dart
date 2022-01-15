@@ -9,7 +9,7 @@ class TypefaceConvert {
 
   static exportToFile(font, String filePath) {
     String content = convertFont(font);
-    
+
     final file = File(filePath);
 
     // Write the file.

@@ -2,7 +2,6 @@ import 'dart:html';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
-
 class app_debug2 extends StatefulWidget {
   String fileName;
 
@@ -12,7 +11,6 @@ class app_debug2 extends StatefulWidget {
 }
 
 class webgl_debugState extends State<app_debug2> {
-
   CanvasElement? element;
   dynamic gl;
   String divId = DateTime.now().microsecondsSinceEpoch.toString();
@@ -21,23 +19,21 @@ class webgl_debugState extends State<app_debug2> {
   void initState() {
     super.initState();
 
-
     init();
   }
 
   init() {
     ui.platformViewRegistry.registerViewFactory(divId, (int viewId) {
-      this.element = CanvasElement(width: 300, height: 300)
-      ..id = 'canvas-id';
+      this.element = CanvasElement(width: 300, height: 300)..id = 'canvas-id';
 
       print(" set element ");
       print(" set gl ");
-      
-      this.gl = this.element!.getContext("webgl2", {"alpha": true, "antialias": true});
+
+      this.gl = this
+          .element!
+          .getContext("webgl2", {"alpha": true, "antialias": true});
       return this.element!;
     });
-
-    
   }
 
   @override
@@ -67,9 +63,5 @@ class webgl_debugState extends State<app_debug2> {
 
     print(" _ext: ${_ext} ");
     print(" _ext: ${_ext.TEXTURE_MAX_ANISOTROPY_EXT} ");
-
   }
-
 }
-
-

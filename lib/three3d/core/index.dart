@@ -3,10 +3,8 @@ library three_core;
 import 'dart:convert';
 import 'dart:typed_data';
 
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart';
-
 
 import 'package:three_dart/three3d/cameras/index.dart';
 import 'package:three_dart/three3d/extras/index.dart';
@@ -23,7 +21,6 @@ import 'package:three_dart/three3d/scenes/index.dart';
 import 'package:three_dart/three3d/textures/index.dart';
 import 'package:three_dart/three3d/utils.dart';
 import '../constants.dart';
-
 
 part './BaseBufferAttribute.dart';
 part './BufferAttribute.dart';
@@ -43,5 +40,3 @@ part './InstancedInterleavedBuffer.dart';
 part './Layers.dart';
 part './Object3D.dart';
 part './Raycaster.dart';
-
-

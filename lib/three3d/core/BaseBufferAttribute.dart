@@ -1,14 +1,11 @@
 part of three_core;
 
-
 class BaseBufferAttribute {
-
-
   dynamic array;
   late int itemSize;
 
   InterleavedBuffer? data;
-  
+
   late String type;
   String name = "";
 
@@ -19,7 +16,7 @@ class BaseBufferAttribute {
   Map<String, int>? updateRange;
 
   Function? onUploadCallback;
-  
+
   int? buffer;
   int? elementSize;
 
@@ -28,10 +25,5 @@ class BaseBufferAttribute {
   bool isInstancedBufferAttribute = false;
   bool isFloat16BufferAttribute = false;
 
-  BaseBufferAttribute() {
-
-  }
-
-
-
+  BaseBufferAttribute() {}
 }

@@ -1,4 +1,3 @@
-
 part of three_materials;
 
 /**
@@ -23,7 +22,6 @@ part of three_materials;
  */
 
 class MeshNormalMaterial extends Material {
-
   bool isMeshNormalMaterial = true;
 
   String type = "MeshNormalMaterial";
@@ -33,7 +31,7 @@ class MeshNormalMaterial extends Material {
   Texture? normalMap;
   int? normalMapType = TangentSpaceNormalMap;
 
-  Vector2? normalScale = Vector2( 1, 1 );
+  Vector2? normalScale = Vector2(1, 1);
 
   Texture? displacementMap;
   num? displacementScale = 1;
@@ -44,10 +42,7 @@ class MeshNormalMaterial extends Material {
 
   bool fog = false;
 
-
-  MeshNormalMaterial( [Map<String, dynamic>? parameters] ) : super() {
-    this.setValues( parameters );
+  MeshNormalMaterial([Map<String, dynamic>? parameters]) : super() {
+    this.setValues(parameters);
   }
-
-
 }

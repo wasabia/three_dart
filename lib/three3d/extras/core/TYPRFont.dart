@@ -1,8 +1,6 @@
 part of three_extra;
 
 class TYPRFont extends Font {
-  
-
   TYPRFont(data) {
     this.data = data;
   }
@@ -22,15 +20,19 @@ class TYPRFont extends Font {
   Map<String, dynamic> generateShapes2(text, {int size = 100}) {
     return createPaths2(text, size, this.data);
   }
+
   // 同样文字路径不重复生成
   // 生成唯一文字路径
   // 记录 offset
-  Map<String, dynamic> createPaths2(String text, num size, Map<String, dynamic> data) {
+  Map<String, dynamic> createPaths2(
+      String text, num size, Map<String, dynamic> data) {
     List<String> chars = text.split("");
 
     num scale = size / data["resolution"];
-    num line_height = (data["boundingBox"]["yMax"] - data["boundingBox"]["yMin"] +
-            data["underlineThickness"]) * scale;
+    num line_height = (data["boundingBox"]["yMax"] -
+            data["boundingBox"]["yMin"] +
+            data["underlineThickness"]) *
+        scale;
 
     // List<ShapePath> paths = [];
 
@@ -50,12 +52,12 @@ class TYPRFont extends Font {
         offsetY -= line_height;
       } else {
         var charPath = paths[char];
-        if(charPath == null) {
+        if (charPath == null) {
           var ret = createPath(char, scale, 0.0, 0.0, data);
           paths[char] = ret;
           charPath = ret;
         }
-        
+
         Map<String, dynamic> charData = {
           "char": char,
           "offsetX": offsetX,
@@ -67,7 +69,7 @@ class TYPRFont extends Font {
         offsetX += charPath["offsetX"];
         // paths.add(ret["path"]);
 
-        if(offsetX > maxWidth) {
+        if (offsetX > maxWidth) {
           maxWidth = offsetX;
         }
       }
@@ -82,8 +84,9 @@ class TYPRFont extends Font {
 
     return _data;
   }
-  
-  List<ShapePath> createPaths(String text, num size, Map<String, dynamic> data) {
+
+  List<ShapePath> createPaths(
+      String text, num size, Map<String, dynamic> data) {
     // var chars = Array.from ? Array.from( text ) : String( text ).split( '' ); // workaround for IE11, see #13988
     List<String> chars = text.split("");
 
@@ -114,25 +117,22 @@ class TYPRFont extends Font {
     return paths;
   }
 
-  Map<String, dynamic> createPath(String char, num scale, num offsetX, num offsetY, data) {
-    
+  Map<String, dynamic> createPath(
+      String char, num scale, num offsetX, num offsetY, data) {
     var _font = data["font"];
     List<int> _glyphs = List<int>.from(_font.stringToGlyphs(char));
 
     var gid = _glyphs[0];
     var charPath = _font.glyphToPath(gid);
 
-
-    var _preScale = ( 100000 ) / ( ( _font.head["unitsPerEm"] ?? 2048 ) * 72 );
+    var _preScale = (100000) / ((_font.head["unitsPerEm"] ?? 2048) * 72);
     // var _preScale = 1;
     var ha = Math.round(_font.hmtx["aWidth"][gid] * _preScale);
-    
-
 
     var path = ShapePath();
 
     num x = 0.1;
-    num y = 0.1;  
+    num y = 0.1;
     num cpx, cpy, cpx1, cpy1, cpx2, cpy2;
 
     var cmds = charPath["cmds"];
@@ -180,8 +180,8 @@ class TYPRFont extends Font {
 
           break;
 
-        case 'B': 
-        case 'C':  // bezierCurveTo
+        case 'B':
+        case 'C': // bezierCurveTo
 
           cpx = crds[i++] * scale + offsetX;
           cpy = crds[i++] * scale + offsetY;
@@ -199,8 +199,5 @@ class TYPRFont extends Font {
     return {"offsetX": ha * scale, "path": path};
   }
 
-
-  dispose() {
-    
-  }
+  dispose() {}
 }

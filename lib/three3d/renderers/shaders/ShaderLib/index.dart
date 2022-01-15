@@ -1,4 +1,3 @@
-
 export './background_frag.glsl.dart';
 export './background_vert.glsl.dart';
 export './cube_frag.glsl.dart';

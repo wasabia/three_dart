@@ -1,8 +1,6 @@
 part of three_lights;
 
-
 class LightShadow {
-
   Camera? camera;
 
   num bias = 0;
@@ -10,7 +8,7 @@ class LightShadow {
   num radius = 1;
   num blurSamples = 8;
 
-  Vector2 mapSize = Vector2( 512, 512 );
+  Vector2 mapSize = Vector2(512, 512);
 
   RenderTarget? map;
   RenderTarget? mapPass;
@@ -19,14 +17,12 @@ class LightShadow {
   bool autoUpdate = true;
   bool needsUpdate = false;
 
-  Frustum _frustum = new Frustum(null,null,null,null,null,null);
-  Vector2 _frameExtents = new Vector2( 1, 1 );
+  Frustum _frustum = new Frustum(null, null, null, null, null, null);
+  Vector2 _frameExtents = new Vector2(1, 1);
 
   num _viewportCount = 1;
 
-  List<Vector4> _viewports = [
-    Vector4( 0, 0, 1, 1 )
-  ];
+  List<Vector4> _viewports = [Vector4(0, 0, 1, 1)];
 
   Matrix4 _projScreenMatrix = Matrix4();
   Vector3 _lightPositionWorld = Vector3.init();
@@ -36,120 +32,87 @@ class LightShadow {
   bool isSpotLightShadow = false;
   bool isPointLightShadow = false;
 
+  LightShadow(this.camera) {}
 
+  LightShadow.fromJSON(
+      Map<String, dynamic> json, Map<String, dynamic> rootJSON) {}
 
-  LightShadow( this.camera ) {
+  getViewportCount() {
+    return this._viewportCount;
   }
 
-  LightShadow.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) {
-    
+  getFrustum() {
+    return this._frustum;
   }
 
+  updateMatrices(light, {int viewportIndex = 0}) {
+    var shadowCamera = this.camera;
+    var shadowMatrix = this.matrix;
 
+    var lightPositionWorld = this._lightPositionWorld;
 
-	getViewportCount () {
+    lightPositionWorld.setFromMatrixPosition(light.matrixWorld);
+    shadowCamera!.position.copy(lightPositionWorld);
 
-		return this._viewportCount;
+    _lookTarget.setFromMatrixPosition(light.target.matrixWorld);
+    shadowCamera.lookAt(_lookTarget);
+    shadowCamera.updateMatrixWorld(false);
 
-	}
+    _projScreenMatrix.multiplyMatrices(
+        shadowCamera.projectionMatrix, shadowCamera.matrixWorldInverse);
+    this._frustum.setFromProjectionMatrix(_projScreenMatrix);
 
-	getFrustum () {
+    shadowMatrix.set(0.5, 0.0, 0.0, 0.5, 0.0, 0.5, 0.0, 0.5, 0.0, 0.0, 0.5, 0.5,
+        0.0, 0.0, 0.0, 1.0);
 
-		return this._frustum;
+    shadowMatrix.multiply(shadowCamera.projectionMatrix);
+    shadowMatrix.multiply(shadowCamera.matrixWorldInverse);
+  }
 
-	}
+  getViewport(viewportIndex) {
+    return this._viewports[viewportIndex];
+  }
 
-	updateMatrices ( light, {int viewportIndex = 0} ) {
+  getFrameExtents() {
+    return this._frameExtents;
+  }
 
-		var shadowCamera = this.camera;
-		var shadowMatrix = this.matrix;
+  copy(source) {
+    this.camera = source.camera.clone();
 
-		var lightPositionWorld = this._lightPositionWorld;
+    this.bias = source.bias;
+    this.radius = source.radius;
 
+    this.mapSize.copy(source.mapSize);
 
-		lightPositionWorld.setFromMatrixPosition( light.matrixWorld );
-		shadowCamera!.position.copy( lightPositionWorld );
+    return this;
+  }
 
-		_lookTarget.setFromMatrixPosition( light.target.matrixWorld );
-		shadowCamera.lookAt( _lookTarget);
-		shadowCamera.updateMatrixWorld(false);
+  clone() {
+    return LightShadow(null).copy(this);
+  }
 
-		_projScreenMatrix.multiplyMatrices( shadowCamera.projectionMatrix, shadowCamera.matrixWorldInverse );
-		this._frustum.setFromProjectionMatrix( _projScreenMatrix );
+  toJSON() {
+    Map<String, dynamic> object = {};
 
-		shadowMatrix.set(
-			0.5, 0.0, 0.0, 0.5,
-			0.0, 0.5, 0.0, 0.5,
-			0.0, 0.0, 0.5, 0.5,
-			0.0, 0.0, 0.0, 1.0
-		);
+    if (this.bias != 0) object["bias"] = this.bias;
+    if (this.normalBias != 0) object["normalBias"] = this.normalBias;
+    if (this.radius != 1) object["radius"] = this.radius;
+    if (this.mapSize.x != 512 || this.mapSize.y != 512)
+      object["mapSize"] = this.mapSize.toArray();
 
-		shadowMatrix.multiply( shadowCamera.projectionMatrix );
-		shadowMatrix.multiply( shadowCamera.matrixWorldInverse );
+    object["camera"] = this.camera!.toJSON()["object"];
 
-	}
-
-	getViewport ( viewportIndex ) {
-
-		return this._viewports[ viewportIndex ];
-
-	}
-
-	getFrameExtents () {
-
-		return this._frameExtents;
-
-	}
-
-	copy ( source ) {
-
-		this.camera = source.camera.clone();
-
-		this.bias = source.bias;
-		this.radius = source.radius;
-
-		this.mapSize.copy( source.mapSize );
-
-		return this;
-
-	}
-
-	clone () {
-
-		return LightShadow(null).copy( this );
-
-	}
-
-	toJSON () {
-
-		Map<String, dynamic> object = {};
-
-		if ( this.bias != 0 ) object["bias"] = this.bias;
-		if ( this.normalBias != 0 ) object["normalBias"] = this.normalBias;
-		if ( this.radius != 1 ) object["radius"] = this.radius;
-		if ( this.mapSize.x != 512 || this.mapSize.y != 512 ) object["mapSize"] = this.mapSize.toArray();
-
-		object["camera"] = this.camera!.toJSON()["object"];
-
-		return object;
-
-	}
+    return object;
+  }
 
   dispose() {
+    if (this.map != null) {
+      this.map!.dispose();
+    }
 
-		if ( this.map != null ) {
-
-			this.map!.dispose();
-
-		}
-
-		if ( this.mapPass != null ) {
-
-			this.mapPass!.dispose();
-
-		}
-
-	}
-
+    if (this.mapPass != null) {
+      this.mapPass!.dispose();
+    }
+  }
 }
-

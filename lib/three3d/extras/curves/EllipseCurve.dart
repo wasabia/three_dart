@@ -1,7 +1,6 @@
 part of three_extra;
 
 class EllipseCurve extends Curve {
-
   late num aX;
   late num aY;
   late num xRadius;
@@ -16,8 +15,8 @@ class EllipseCurve extends Curve {
 
   bool isEllipseCurve = true;
 
-  EllipseCurve( aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise, aRotation ) {
-    
+  EllipseCurve(
+      aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise, aRotation) {
     this.type = 'EllipseCurve';
 
     this.aX = aX ?? 0;
@@ -34,10 +33,7 @@ class EllipseCurve extends Curve {
     this.aRotation = aRotation ?? 0;
   }
 
-
-
-  EllipseCurve.fromJSON ( Map<String, dynamic> json ) : super.fromJSON(json) {
-
+  EllipseCurve.fromJSON(Map<String, dynamic> json) : super.fromJSON(json) {
     this.aX = json["aX"];
     this.aY = json["aY"];
 
@@ -50,58 +46,42 @@ class EllipseCurve extends Curve {
     this.aClockwise = json["aClockwise"];
 
     this.aRotation = json["aRotation"];
-
   }
 
-
-  getPoint ( t, optionalTarget ) {
-
+  getPoint(t, optionalTarget) {
     var point = optionalTarget ?? new Vector2(null, null);
 
     var twoPi = Math.PI * 2;
     var deltaAngle = this.aEndAngle - this.aStartAngle;
-    var samePoints = Math.abs( deltaAngle ) < Math.EPSILON;
+    var samePoints = Math.abs(deltaAngle) < Math.EPSILON;
 
     // ensures that deltaAngle is 0 .. 2 PI
-    while ( deltaAngle < 0 ) deltaAngle += twoPi;
-    while ( deltaAngle > twoPi ) deltaAngle -= twoPi;
+    while (deltaAngle < 0) deltaAngle += twoPi;
+    while (deltaAngle > twoPi) deltaAngle -= twoPi;
 
-    if ( deltaAngle < Math.EPSILON ) {
-
-      if ( samePoints ) {
-
+    if (deltaAngle < Math.EPSILON) {
+      if (samePoints) {
         deltaAngle = 0;
-
       } else {
-
         deltaAngle = twoPi;
-
       }
-
     }
 
-    if ( this.aClockwise == true && ! samePoints ) {
-
-      if ( deltaAngle == twoPi ) {
-
-        deltaAngle = - twoPi;
-
+    if (this.aClockwise == true && !samePoints) {
+      if (deltaAngle == twoPi) {
+        deltaAngle = -twoPi;
       } else {
-
         deltaAngle = deltaAngle - twoPi;
-
       }
-
     }
 
     var angle = this.aStartAngle + t * deltaAngle;
-    var x = this.aX + this.xRadius * Math.cos( angle );
-    var y = this.aY + this.yRadius * Math.sin( angle );
+    var x = this.aX + this.xRadius * Math.cos(angle);
+    var y = this.aY + this.yRadius * Math.sin(angle);
 
-    if ( this.aRotation != 0 ) {
-
-      var cos = Math.cos( this.aRotation );
-      var sin = Math.sin( this.aRotation );
+    if (this.aRotation != 0) {
+      var cos = Math.cos(this.aRotation);
+      var sin = Math.sin(this.aRotation);
 
       var tx = x - this.aX;
       var ty = y - this.aY;
@@ -109,16 +89,13 @@ class EllipseCurve extends Curve {
       // Rotate the point about the center of the ellipse.
       x = tx * cos - ty * sin + this.aX;
       y = tx * sin + ty * cos + this.aY;
-
     }
 
-    return point.set( x, y );
-
+    return point.set(x, y);
   }
 
-  copy( source ) {
-
-    super.copy( source );
+  copy(source) {
+    super.copy(source);
 
     this.aX = source.aX;
     this.aY = source.aY;
@@ -134,13 +111,10 @@ class EllipseCurve extends Curve {
     this.aRotation = source.aRotation;
 
     return this;
-
   }
 
-
-  toJSON () {
-
-    var data = super.toJSON( );
+  toJSON() {
+    var data = super.toJSON();
 
     data["aX"] = this.aX;
     data["aY"] = this.aY;
@@ -156,10 +130,5 @@ class EllipseCurve extends Curve {
     data["aRotation"] = this.aRotation;
 
     return data;
-
   }
-
-
-
 }
-

@@ -7,12 +7,11 @@
 
 part of three_renderers;
 
-
 class RenderTarget with EventDispatcher {
   late int width;
   late int height;
   int depth = 1;
-  
+
   late bool depthBuffer;
   bool isWebGLCubeRenderTarget = false;
   bool isWebGLMultisampleRenderTarget = false;
@@ -24,32 +23,29 @@ class RenderTarget with EventDispatcher {
   late bool scissorTest;
   late Vector4 viewport;
 
-
   late bool stencilBuffer;
   DepthTexture? depthTexture;
 
   clone() {
-    throw("RenderTarget clone need implemnt ");
+    throw ("RenderTarget clone need implemnt ");
   }
 
   setSize(width, height) {
-    throw("RenderTarget setSize need implemnt ");
+    throw ("RenderTarget setSize need implemnt ");
   }
 
   is3D() {
-    throw("RenderTarget is3D need implemnt ");
+    throw ("RenderTarget is3D need implemnt ");
   }
 
   dispose() {
-    throw("RenderTarget dispose need implemnt ");
+    throw ("RenderTarget dispose need implemnt ");
   }
 }
 
 class WebGLRenderTarget extends RenderTarget {
-  
   bool isWebGLRenderTarget = true;
   late WebGLRenderTargetOptions options;
-  
 
   WebGLRenderTarget(int width, int height, WebGLRenderTargetOptions? options) {
     this.width = width;
@@ -61,61 +57,61 @@ class WebGLRenderTarget extends RenderTarget {
 
     this.options = options ?? WebGLRenderTargetOptions({});
 
-    this.texture = Texture(null,
-      this.options.mapping,
-      this.options.wrapS,
-      this.options.wrapT,
-      this.options.magFilter,
-      this.options.minFilter,
-      this.options.format,
-      this.options.type,
-      this.options.anisotropy,
-      this.options.encoding);
+    this.texture = Texture(
+        null,
+        this.options.mapping,
+        this.options.wrapS,
+        this.options.wrapT,
+        this.options.magFilter,
+        this.options.minFilter,
+        this.options.format,
+        this.options.type,
+        this.options.anisotropy,
+        this.options.encoding);
     this.texture.isRenderTargetTexture = true;
-    
+
     ImageElement image = ImageElement(width: width, height: height);
 
     this.texture.image = image;
 
+    this.texture.generateMipmaps = this.options.generateMipmaps != null
+        ? this.options.generateMipmaps
+        : false;
+    this.texture.minFilter =
+        this.options.minFilter != null ? this.options.minFilter! : LinearFilter;
 
-    this.texture.generateMipmaps = this.options.generateMipmaps != null ? this.options.generateMipmaps : false;
-    this.texture.minFilter = this.options.minFilter != null ? this.options.minFilter! : LinearFilter;
-
-    this.depthBuffer = this.options.depthBuffer != null ? this.options.depthBuffer! : true;
-    this.stencilBuffer = this.options.stencilBuffer != null ? this.options.stencilBuffer : false;
-    this.depthTexture = this.options.depthTexture != null ? this.options.depthTexture : null;
+    this.depthBuffer =
+        this.options.depthBuffer != null ? this.options.depthBuffer! : true;
+    this.stencilBuffer =
+        this.options.stencilBuffer != null ? this.options.stencilBuffer : false;
+    this.depthTexture =
+        this.options.depthTexture != null ? this.options.depthTexture : null;
   }
 
-  setTexture( texture ) {
+  setTexture(texture) {
     texture.image!.width = this.width;
     texture.image!.height = this.height;
     texture.image!.depth = this.depth;
 
-		this.texture = texture;
+    this.texture = texture;
+  }
 
-	}
+  setSize(width, height, {depth = 1}) {
+    if (this.width != width || this.height != height || this.depth != depth) {
+      this.width = width;
+      this.height = height;
+      this.depth = depth;
 
-	setSize( width, height, {depth = 1} ) {
+      this.texture.image!.width = width;
+      this.texture.image!.height = height;
+      this.texture.image!.depth = depth;
 
-		if ( this.width != width || this.height != height || this.depth != depth ) {
+      this.dispose();
+    }
 
-			this.width = width;
-			this.height = height;
-			this.depth = depth;
-
-			this.texture.image!.width = width;
-			this.texture.image!.height = height;
-			this.texture.image!.depth = depth;
-
-			this.dispose();
-
-		}
-
-		this.viewport.set( 0, 0, width, height );
-		this.scissor.set( 0, 0, width, height );
-
-	}
-
+    this.viewport.set(0, 0, width, height);
+    this.scissor.set(0, 0, width, height);
+  }
 
   clone() {
     return WebGLRenderTarget(this.width, this.height, this.options).copy(this);
@@ -142,8 +138,8 @@ class WebGLRenderTarget extends RenderTarget {
   }
 
   is3D() {
-		return this.texture.isDataTexture3D || this.texture.isDataTexture2DArray;
-	}
+    return this.texture.isDataTexture3D || this.texture.isDataTexture2DArray;
+  }
 
   dispose() {
     print(" WebGLRenderTarget dispose() ......... ");
@@ -151,9 +147,7 @@ class WebGLRenderTarget extends RenderTarget {
   }
 }
 
-
 class WebGLRenderTargetOptions {
-
   int? wrapS;
   int? wrapT;
   int? magFilter;
@@ -170,40 +164,40 @@ class WebGLRenderTargetOptions {
   int? encoding;
 
   WebGLRenderTargetOptions(Map<String, dynamic> json) {
-    if(json["wrapS"] != null) {
+    if (json["wrapS"] != null) {
       wrapS = json["wrapS"];
     }
-    if(json["wrapT"] != null) {
+    if (json["wrapT"] != null) {
       wrapT = json["wrapT"];
     }
-    if(json["magFilter"] != null) {
+    if (json["magFilter"] != null) {
       magFilter = json["magFilter"];
     }
-    if(json["minFilter"] != null) {
+    if (json["minFilter"] != null) {
       minFilter = json["minFilter"];
     }
-    if(json["format"] != null) {
+    if (json["format"] != null) {
       format = json["format"];
     }
-    if(json["type"] != null) {
+    if (json["type"] != null) {
       type = json["type"];
     }
-    if(json["anisotropy"] != null) {
+    if (json["anisotropy"] != null) {
       anisotropy = json["anisotropy"];
     }
-    if(json["depthBuffer"] != null) {
+    if (json["depthBuffer"] != null) {
       depthBuffer = json["depthBuffer"];
     }
-    if(json["mapping"] != null) {
+    if (json["mapping"] != null) {
       mapping = json["mapping"];
     }
-    if(json["generateMipmaps"] != null) {
+    if (json["generateMipmaps"] != null) {
       generateMipmaps = json["generateMipmaps"];
     }
-    if(json["depthTexture"] != null) {
+    if (json["depthTexture"] != null) {
       depthTexture = json["depthTexture"];
     }
-    if(json["encoding"] != null) {
+    if (json["encoding"] != null) {
       encoding = json["encoding"];
     }
   }
@@ -225,5 +219,4 @@ class WebGLRenderTargetOptions {
       "encoding": encoding
     };
   }
-
 }

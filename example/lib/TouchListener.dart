@@ -1,8 +1,6 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 
 class EventTouch {
   late int pointer;
@@ -11,7 +9,6 @@ class EventTouch {
 
   num? clientX;
   num? clientY;
-
 }
 
 class EventPage {
@@ -19,8 +16,6 @@ class EventPage {
   num? y;
 
   EventPage(this.x, this.y) {}
-
-
 }
 
 class TouchEvent {
@@ -39,12 +34,9 @@ class TouchEvent {
 
   List<EventTouch> touches = [];
   List<EventTouch> changedTouches = [];
-
 }
 
-
 class TouchListener extends StatefulWidget {
-
   late Widget child;
   Function? touchstart;
   Function? touchmove;
@@ -54,24 +46,23 @@ class TouchListener extends StatefulWidget {
   Function? pointerup;
   Function? wheel;
 
-  TouchListener({
-    Key? key, 
-    required this.child,
-    this.touchstart,
-    this.touchmove,
-    this.touchend,
-    this.pointerdown,
-    this.pointermove,
-    this.pointerup,
-    this.wheel
-  }) : super(key: key);
+  TouchListener(
+      {Key? key,
+      required this.child,
+      this.touchstart,
+      this.touchmove,
+      this.touchend,
+      this.pointerdown,
+      this.pointermove,
+      this.pointerup,
+      this.wheel})
+      : super(key: key);
 
   @override
   TouchListenerState createState() => TouchListenerState();
 }
 
 class TouchListenerState extends State<TouchListener> {
-  
   late TouchEvent touchEvent;
 
   bool moved = false;
@@ -95,12 +86,10 @@ class TouchListenerState extends State<TouchListener> {
         _touch.pageX = event.position.dx;
         _touch.pageY = event.position.dy;
 
-
-
         _touch.clientX = local.dx;
         _touch.clientY = local.dy;
 
-        touchEvent.touches.add( _touch );
+        touchEvent.touches.add(_touch);
         touchEvent.changedTouches = [_touch];
 
         touchEvent.clientX = local.dx;
@@ -115,15 +104,17 @@ class TouchListenerState extends State<TouchListener> {
 
         // print("onPointerDown ${_touch.clientX} ${_touch.clientY}  ");
 
-        if(widget.touchstart != null) widget.touchstart!(touchEvent);
-        if(widget.pointerdown != null) widget.pointerdown!(touchEvent);
+        if (widget.touchstart != null) widget.touchstart!(touchEvent);
+        if (widget.pointerdown != null) widget.pointerdown!(touchEvent);
       },
       onPointerMove: (PointerMoveEvent event) {
         RenderBox getBox = context.findRenderObject() as RenderBox;
         var local = getBox.globalToLocal(event.position);
-        
-        var _touches = touchEvent.touches.where((t) => t.pointer == event.pointer).toList();
-        if(_touches == null || _touches.length == 0) {
+
+        var _touches = touchEvent.touches
+            .where((t) => t.pointer == event.pointer)
+            .toList();
+        if (_touches == null || _touches.length == 0) {
           return;
         }
         var _touch = _touches[0];
@@ -147,13 +138,13 @@ class TouchListenerState extends State<TouchListener> {
 
         touchEvent.button = event.buttons;
 
-        if(widget.touchmove != null) widget.touchmove!(touchEvent);
-        if(widget.pointermove != null) widget.pointermove!(touchEvent);
+        if (widget.touchmove != null) widget.touchmove!(touchEvent);
+        if (widget.pointermove != null) widget.pointermove!(touchEvent);
       },
       onPointerUp: (PointerUpEvent event) {
-        var _touch = touchEvent.touches.firstWhere((t) => t.pointer == event.pointer);
+        var _touch =
+            touchEvent.touches.firstWhere((t) => t.pointer == event.pointer);
         touchEvent.touches.remove(_touch);
-        
 
         RenderBox getBox = context.findRenderObject() as RenderBox;
         var local = getBox.globalToLocal(event.position);
@@ -173,16 +164,16 @@ class TouchListenerState extends State<TouchListener> {
 
         // print("onPointerUp ${_touch.clientX} ${_touch.clientY}  ");
         touchEvent.button = event.buttons;
-     
-        if(widget.touchend != null) widget.touchend!(touchEvent);
-        if(widget.pointerup != null) widget.pointerup!(touchEvent);
+
+        if (widget.touchend != null) widget.touchend!(touchEvent);
+        if (widget.pointerup != null) widget.pointerup!(touchEvent);
       },
       onPointerSignal: (pointerSignal) {
-        if(pointerSignal is PointerScrollEvent){
+        if (pointerSignal is PointerScrollEvent) {
           // do something when scrolled
 
           var event = pointerSignal;
-          
+
           var _touch = EventTouch();
           _touch.pointer = event.pointer;
           _touch.pageX = event.position.dx;
@@ -191,12 +182,12 @@ class TouchListenerState extends State<TouchListener> {
           touchEvent.deltaX = event.delta.dx;
           touchEvent.deltaY = event.delta.dy;
 
-          touchEvent.touches.add( _touch );
+          touchEvent.touches.add(_touch);
 
           // print("onPointerUp ${_touch.clientX} ${_touch.clientY}  ");
           touchEvent.button = event.buttons;
-         
-          if(widget.wheel != null) widget.wheel!(touchEvent);
+
+          if (widget.wheel != null) widget.wheel!(touchEvent);
         }
       },
       onPointerCancel: (PointerCancelEvent event) {
@@ -205,6 +196,4 @@ class TouchListenerState extends State<TouchListener> {
       child: widget.child,
     );
   }
-
 }
-

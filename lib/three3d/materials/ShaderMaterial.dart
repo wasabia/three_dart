@@ -1,7 +1,5 @@
 part of three_materials;
 
-
-
 /**
  * parameters = {
  *  defines: { "label" : "value" },
@@ -22,8 +20,7 @@ class ShaderMaterial extends Material {
 
   bool isShaderMaterial = true;
 
-  ShaderMaterial( [Map<String, dynamic>? parameters] ) : super() {
-  
+  ShaderMaterial([Map<String, dynamic>? parameters]) : super() {
     this.defines = {};
     this.uniforms = {};
 
@@ -49,9 +46,9 @@ class ShaderMaterial extends Material {
     // When rendered geometry doesn't include these attributes but the material does,
     // use these default values in WebGL. This avoids errors when buffer data is missing.
     this.defaultAttributeValues = {
-      'color': [ 1, 1, 1 ],
-      'uv': [ 0, 0 ],
-      'uv2': [ 0, 0 ]
+      'color': [1, 1, 1],
+      'uv': [0, 0],
+      'uv2': [0, 0]
     };
 
     this.index0AttributeName = null;
@@ -59,26 +56,23 @@ class ShaderMaterial extends Material {
 
     this.glslVersion = null;
 
-    if ( parameters != null ) {
-      if ( parameters["attributes"] != null ) {
-        print( 'THREE.ShaderMaterial: attributes should now be defined in THREE.BufferGeometry instead.' );
+    if (parameters != null) {
+      if (parameters["attributes"] != null) {
+        print(
+            'THREE.ShaderMaterial: attributes should now be defined in THREE.BufferGeometry instead.');
       }
 
-      this.setValues( parameters );
-
+      this.setValues(parameters);
     }
-
   }
 
-
-  copy( source ) {
-
+  copy(source) {
     super.copy(source);
 
     this.fragmentShader = source.fragmentShader;
     this.vertexShader = source.vertexShader;
 
-    this.uniforms = cloneUniforms( source.uniforms );
+    this.uniforms = cloneUniforms(source.uniforms);
 
     this.defines = json.decode(json.encode(source.defines));
 
@@ -93,11 +87,10 @@ class ShaderMaterial extends Material {
     this.glslVersion = source.glslVersion;
 
     return this;
-
   }
 
   clone() {
-    return ShaderMaterial({}).copy( this );
+    return ShaderMaterial({}).copy(this);
   }
 
   // toJSON( meta ) {

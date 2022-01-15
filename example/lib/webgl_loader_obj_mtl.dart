@@ -16,8 +16,6 @@ class webgl_loader_obj_mtl extends StatefulWidget {
 }
 
 class _MyAppState extends State<webgl_loader_obj_mtl> {
-
-
   late FlutterGlPlugin three3dRender;
   THREE.WebGLRenderer? renderer;
 
@@ -30,7 +28,7 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
   late THREE.Scene scene;
   late THREE.Camera camera;
   late THREE.Mesh mesh;
-  
+
   num dpr = 1.0;
 
   var AMOUNT = 4;
@@ -49,7 +47,6 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
   @override
   void initState() {
     super.initState();
-    
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -62,27 +59,22 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
     Map<String, dynamic> _options = {
       "antialias": true,
       "alpha": false,
-      "width": width.toInt(), 
-      "height": height.toInt(), 
+      "width": width.toInt(),
+      "height": height.toInt(),
       "dpr": dpr
     };
-    
+
     await three3dRender.initialize(options: _options);
 
-    setState(() { });
+    setState(() {});
 
     // TODO web wait dom ok!!!
     Future.delayed(Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
-      animate();
-      
     });
-  
   }
-
-  
 
   initSize(BuildContext context) {
     if (screenSize != null) {
@@ -105,10 +97,8 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
       ),
       body: Builder(
         builder: (BuildContext context) {
-          initSize(context);  
-          return SingleChildScrollView(
-            child: _build(context)
-          );
+          initSize(context);
+          return SingleChildScrollView(child: _build(context));
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -120,8 +110,6 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
     );
   }
 
-  
-  
   Widget _build(BuildContext context) {
     return Column(
       children: [
@@ -129,117 +117,108 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
           child: Stack(
             children: [
               Container(
-                width: width,
-                height: height,
-                color: Colors.black,
-                child: Builder(
-                  builder: (BuildContext context) {
-                    if(kIsWeb) {
-                      return three3dRender.isInitialized ? HtmlElementView(viewType: three3dRender.textureId!.toString()) : Container();
+                  width: width,
+                  height: height,
+                  color: Colors.black,
+                  child: Builder(builder: (BuildContext context) {
+                    if (kIsWeb) {
+                      return three3dRender.isInitialized
+                          ? HtmlElementView(
+                              viewType: three3dRender.textureId!.toString())
+                          : Container();
                     } else {
-                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
+                      return three3dRender.isInitialized
+                          ? Texture(textureId: three3dRender.textureId!)
+                          : Container();
                     }
-                  }
-                )
-              ),
-              
+                  })),
             ],
           ),
         ),
-
       ],
     );
   }
 
   render() {
-
     int _t = DateTime.now().millisecondsSinceEpoch;
 
     final _gl = three3dRender.gl;
 
-     
-
     renderer!.render(scene, camera);
 
-   
     int _t1 = DateTime.now().millisecondsSinceEpoch;
 
-    if(verbose) {
+    if (verbose) {
       print("render cost: ${_t1 - _t} ");
       print(renderer!.info.memory);
       print(renderer!.info.render);
     }
-    
-   
+
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if(verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
 
-    if(!kIsWeb) {
+    if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
     }
-    
   }
 
   initRenderer() {
     Map<String, dynamic> _options = {
-      "width": width, 
+      "width": width,
       "height": height,
-      "gl":  three3dRender.gl,
+      "gl": three3dRender.gl,
       "antialias": true,
       "canvas": three3dRender.element
     };
     renderer = THREE.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
-    renderer!.setSize( width, height, false );
+    renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
-    
-    if(!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({ "format": THREE.RGBAFormat });
-      renderTarget = THREE.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
+
+    if (!kIsWeb) {
+      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
+      renderTarget = THREE.WebGLMultisampleRenderTarget(
+          (width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }
   }
 
-
-  
   initScene() {
     initRenderer();
     initPage();
   }
 
   initPage() async {
-
-    camera = new THREE.PerspectiveCamera( 45, width / height, 1, 2000 );
+    camera = new THREE.PerspectiveCamera(45, width / height, 1, 2000);
     camera.position.z = 250;
 
     // scene
 
     scene = new THREE.Scene();
 
-    var ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 );
-    scene.add( ambientLight );
+    var ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
+    scene.add(ambientLight);
 
-    var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
-    camera.add( pointLight );
-    scene.add( camera );
+    var pointLight = new THREE.PointLight(0xffffff, 0.8);
+    camera.add(pointLight);
+    scene.add(camera);
 
-    
     // texture
     var manager = new THREE.LoadingManager();
 
-    var mtlLoader = new THREE_JSM.MTLLoader( manager );
-    mtlLoader.setPath( 'assets/models/obj/male02/' );
-    var materials = await mtlLoader.loadAsync( 'male02.mtl', null );
+    var mtlLoader = new THREE_JSM.MTLLoader(manager);
+    mtlLoader.setPath('assets/models/obj/male02/');
+    var materials = await mtlLoader.loadAsync('male02.mtl', null);
     await materials.preload();
 
-    var loader = THREE_JSM.OBJLoader( null );
-    loader.setMaterials( materials );
-    object = await loader.loadAsync( 'assets/models/obj/male02/male02.obj', null);
-
+    var loader = THREE_JSM.OBJLoader(null);
+    loader.setMaterials(materials);
+    object =
+        await loader.loadAsync('assets/models/obj/male02/male02.obj', null);
 
     // object.traverse( ( child ) {
 
@@ -250,16 +229,16 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
     // } );
 
     object.scale.set(0.5, 0.5, 0.5);
-    scene.add( object );
+    scene.add(object);
+
+
+    animate();
   }
 
   animate() {
-
-    if(!mounted || disposed) {
+    if (!mounted || disposed) {
       return;
     }
-
-    
 
     render();
 
@@ -268,17 +247,12 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
     // });
   }
 
-
   @override
   void dispose() {
-    
     print(" dispose ............. ");
     disposed = true;
     three3dRender.dispose();
 
     super.dispose();
   }
-
-
- 
 }

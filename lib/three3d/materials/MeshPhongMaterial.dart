@@ -1,4 +1,3 @@
-
 part of three_materials;
 
 /**
@@ -48,22 +47,19 @@ part of three_materials;
  */
 
 class MeshPhongMaterial extends Material {
-
   bool isMeshPhongMaterial = true;
 
   num? bumpScale = 1;
   num? shininess = 30;
-  Color? specular = Color( 0.067, 0.067, 0.067);
-  Color? color = Color( 1,1,1 ); // diffuse
+  Color? specular = Color(0.067, 0.067, 0.067);
+  Color? color = Color(1, 1, 1); // diffuse
 
   String type = "MeshPhongMaterial";
-  Color? emissive = Color( 0,0,0 );
+  Color? emissive = Color(0, 0, 0);
   int? normalMapType = TangentSpaceNormalMap;
-  Vector2? normalScale = Vector2( 1, 1 );
+  Vector2? normalScale = Vector2(1, 1);
 
-	MeshPhongMaterial( [Map<String, dynamic>? parameters] ) : super() {
-
- 
+  MeshPhongMaterial([Map<String, dynamic>? parameters]) : super() {
     this.map = null;
 
     this.lightMap = null;
@@ -77,7 +73,6 @@ class MeshPhongMaterial extends Material {
 
     this.normalMap = null;
 
-  
     this.displacementMap = null;
     this.displacementScale = 1;
     this.displacementBias = 0;
@@ -96,19 +91,14 @@ class MeshPhongMaterial extends Material {
     this.wireframeLinecap = 'round';
     this.wireframeLinejoin = 'round';
 
-    this.setValues( parameters );
+    this.setValues(parameters);
   }
 
+  copy(source) {
+    super.copy(source);
 
-  
-
-
-  copy( source ) {
-
-    super.copy( source );
-
-    this.color!.copy( source.color );
-    this.specular!.copy( source.specular );
+    this.color!.copy(source.color);
+    this.specular!.copy(source.specular);
     this.shininess = source.shininess;
 
     this.map = source.map;
@@ -119,7 +109,7 @@ class MeshPhongMaterial extends Material {
     this.aoMap = source.aoMap;
     this.aoMapIntensity = source.aoMapIntensity;
 
-    this.emissive!.copy( source.emissive );
+    this.emissive!.copy(source.emissive);
     this.emissiveMap = source.emissiveMap;
     this.emissiveIntensity = source.emissiveIntensity;
 
@@ -128,7 +118,7 @@ class MeshPhongMaterial extends Material {
 
     this.normalMap = source.normalMap;
     this.normalMapType = source.normalMapType;
-    this.normalScale!.copy( source.normalScale );
+    this.normalScale!.copy(source.normalScale);
 
     this.displacementMap = source.displacementMap;
     this.displacementScale = source.displacementScale;
@@ -150,7 +140,5 @@ class MeshPhongMaterial extends Material {
     this.flatShading = source.flatShading;
 
     return this;
-
   }
-
 }

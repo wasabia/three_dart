@@ -34,7 +34,6 @@ class WebGLBackground {
     // Ignore background in AR
     // TODO: Reconsider this.
 
-
     // var xr = renderer.xr;
     // var session = xr.getSession && xr.getSession();
 
@@ -56,135 +55,128 @@ class WebGLBackground {
           renderer.autoClearStencil);
     }
 
-    if ( background != null && ( background is CubeTexture || (background is Texture && background.mapping == CubeUVReflectionMapping) ) ) {
+    if (background != null &&
+        (background is CubeTexture ||
+            (background is Texture &&
+                background.mapping == CubeUVReflectionMapping))) {
+      if (boxMesh == null) {
+        boxMesh = new Mesh(
+            new BoxGeometry(1, 1, 1),
+            new ShaderMaterial({
+              "name": 'BackgroundCubeMaterial',
+              "uniforms": cloneUniforms(ShaderLib["cube"]["uniforms"]),
+              "vertexShader": ShaderLib["cube"]["vertexShader"],
+              "fragmentShader": ShaderLib["cube"]["fragmentShader"],
+              "side": BackSide,
+              "depthTest": false,
+              "depthWrite": false,
+              "fog": false
+            }));
 
-    	if ( boxMesh == null ) {
+        boxMesh!.geometry!.deleteAttribute('normal');
+        boxMesh!.geometry!.deleteAttribute('uv');
 
-    		boxMesh = new Mesh(
-    			new BoxGeometry( 1, 1, 1 ),
-    			new ShaderMaterial( {
-    				"name": 'BackgroundCubeMaterial',
-    				"uniforms": cloneUniforms( ShaderLib["cube"]["uniforms"] ),
-    				"vertexShader": ShaderLib["cube"]["vertexShader"],
-    				"fragmentShader": ShaderLib["cube"]["fragmentShader"],
-    				"side": BackSide,
-    				"depthTest": false,
-    				"depthWrite": false,
-    				"fog": false
-    			} )
-    		);
-
-    		boxMesh!.geometry!.deleteAttribute( 'normal' );
-    		boxMesh!.geometry!.deleteAttribute( 'uv' );
-
-    		boxMesh!.onBeforeRender = ( {renderer, mesh, scene, camera, geometry, material, group} ) {
-    			mesh.matrixWorld.copyPosition( camera.matrixWorld );
-    		};
+        boxMesh!.onBeforeRender =
+            ({renderer, mesh, scene, camera, geometry, material, group}) {
+          mesh.matrixWorld.copyPosition(camera.matrixWorld);
+        };
 
         // TODO see line NO.107 only for dart
-    		// enable code injection for non-built-in material
-    		// Object.defineProperty( boxMesh.material, 'envMap', {
-    		// 	get: function () {
-    		// 		return this.uniforms.envMap.value;
-    		// 	}
-    		// } );
+        // enable code injection for non-built-in material
+        // Object.defineProperty( boxMesh.material, 'envMap', {
+        // 	get: function () {
+        // 		return this.uniforms.envMap.value;
+        // 	}
+        // } );
 
-    		objects.update( boxMesh );
+        objects.update(boxMesh);
+      }
 
-    	}
+      if (background is WebGLCubeRenderTarget) {
+        // TODO Deprecate
 
-    	if ( background is WebGLCubeRenderTarget ) {
+        background = background.texture;
+      }
 
-    		// TODO Deprecate
-
-    		background = background.texture;
-
-    	}
-
-    	boxMesh!.material.uniforms["envMap"]["value"] = background;
-    	boxMesh!.material.uniforms["flipEnvMap"]["value"] = ( (background is CubeTexture) && ((background.isRenderTargetTexture) == false) ) ? - 1 : 1;
+      boxMesh!.material.uniforms["envMap"]["value"] = background;
+      boxMesh!.material.uniforms["flipEnvMap"]["value"] =
+          ((background is CubeTexture) &&
+                  ((background.isRenderTargetTexture) == false))
+              ? -1
+              : 1;
 
       // only for dart see line line NO.84 enable code injection for non-built-in material
       // TODO
       boxMesh!.material.envMap = background;
 
+      if (currentBackground != background ||
+          currentBackgroundVersion != background.version ||
+          currentTonemapping != renderer.toneMapping) {
+        boxMesh!.material.needsUpdate = true;
 
-    	if ( currentBackground != background ||
-    		currentBackgroundVersion != background.version ||
-    		currentTonemapping != renderer.toneMapping ) {
+        currentBackground = background;
+        currentBackgroundVersion = background.version;
+        currentTonemapping = renderer.toneMapping;
+      }
 
-    		boxMesh!.material.needsUpdate = true;
+      // push to the pre-sorted opaque render list
+      renderList.unshift(
+          boxMesh, boxMesh!.geometry, boxMesh!.material, 0, 0, null);
+    } else if (background != null && background.isTexture) {
+      if (planeMesh == null) {
+        planeMesh = new Mesh(
+            new PlaneGeometry(2, 2),
+            new ShaderMaterial({
+              "name": 'BackgroundMaterial',
+              "uniforms": cloneUniforms(ShaderLib["background"]["uniforms"]),
+              "vertexShader": ShaderLib["background"]["vertexShader"],
+              "fragmentShader": ShaderLib["background"]["fragmentShader"],
+              "side": FrontSide,
+              "depthTest": false,
+              "depthWrite": false,
+              "fog": false
+            }));
 
-    		currentBackground = background;
-    		currentBackgroundVersion = background.version;
-    		currentTonemapping = renderer.toneMapping;
+        planeMesh!.geometry!.deleteAttribute('normal');
 
-    	}
+        // enable code injection for non-built-in material
+        // Object.defineProperty( planeMesh.material, 'map', {
+        // 	get: function () {
+        // 		return this.uniforms.t2D.value;
+        // 	}
+        // } );
 
-    	// push to the pre-sorted opaque render list
-    	renderList.unshift( boxMesh, boxMesh!.geometry, boxMesh!.material, 0, 0, null );
+        objects.update(planeMesh);
+      }
 
-    } else if ( background != null && background.isTexture ) {
+      planeMesh!.material.uniforms["t2D"]["value"] = background;
 
-    	if ( planeMesh == null ) {
+      if (background.matrixAutoUpdate == true) {
+        background.updateMatrix();
+      }
 
-    		planeMesh = new Mesh(
-    			new PlaneGeometry( 2, 2 ),
-    			new ShaderMaterial( {
-    				"name": 'BackgroundMaterial',
-    				"uniforms": cloneUniforms( ShaderLib["background"]["uniforms"] ),
-    				"vertexShader": ShaderLib["background"]["vertexShader"],
-    				"fragmentShader": ShaderLib["background"]["fragmentShader"],
-    				"side": FrontSide,
-    				"depthTest": false,
-    				"depthWrite": false,
-    				"fog": false
-    			} )
-    		);
+      planeMesh!.material.uniforms["uvTransform"]["value"]
+          .copy(background.matrix);
 
-    		planeMesh!.geometry!.deleteAttribute( 'normal' );
+      if (currentBackground != background ||
+          currentBackgroundVersion != background.version ||
+          currentTonemapping != renderer.toneMapping) {
+        planeMesh!.material.needsUpdate = true;
 
-    		// enable code injection for non-built-in material
-    		// Object.defineProperty( planeMesh.material, 'map', {
-    		// 	get: function () {
-    		// 		return this.uniforms.t2D.value;
-    		// 	}
-    		// } );
+        currentBackground = background;
+        currentBackgroundVersion = background.version;
+        currentTonemapping = renderer.toneMapping;
+      }
 
-    		objects.update( planeMesh );
-
-    	}
-
-    	planeMesh!.material.uniforms["t2D"]["value"] = background;
-
-    	if ( background.matrixAutoUpdate == true ) {
-
-    		background.updateMatrix();
-
-    	}
-
-    	planeMesh!.material.uniforms["uvTransform"]["value"].copy( background.matrix );
-
-    	if ( currentBackground != background ||
-    		currentBackgroundVersion != background.version ||
-    		currentTonemapping != renderer.toneMapping ) {
-
-    		planeMesh!.material.needsUpdate = true;
-
-    		currentBackground = background;
-    		currentBackgroundVersion = background.version;
-    		currentTonemapping = renderer.toneMapping;
-
-    	}
-
-    	// push to the pre-sorted opaque render list
-    	renderList.unshift( planeMesh, planeMesh!.geometry, planeMesh!.material, 0, 0, null );
-
+      // push to the pre-sorted opaque render list
+      renderList.unshift(
+          planeMesh, planeMesh!.geometry, planeMesh!.material, 0, 0, null);
     }
   }
 
   setClear(color, alpha) {
-    state.buffers["color"].setClear(color.r, color.g, color.b, alpha, premultipliedAlpha);
+    state.buffers["color"]
+        .setClear(color.r, color.g, color.b, alpha, premultipliedAlpha);
   }
 
   getClearColor() {

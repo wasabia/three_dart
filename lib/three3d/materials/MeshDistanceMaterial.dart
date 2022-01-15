@@ -1,6 +1,5 @@
 part of three_materials;
 
-
 /**
  * parameters = {
  *
@@ -20,24 +19,19 @@ part of three_materials;
  */
 
 class MeshDistanceMaterial extends Material {
-
   bool isMeshDistanceMaterial = true;
 
   late Vector3 referencePosition;
   late num nearDistance;
   late num farDistance;
 
-
-
-
-  MeshDistanceMaterial( parameters ) : super() {
-
+  MeshDistanceMaterial(parameters) : super() {
     this.type = 'MeshDistanceMaterial';
 
     this.referencePosition = new Vector3.init();
     this.nearDistance = 1;
     this.farDistance = 1000;
-    
+
     this.map = null;
 
     this.alphaMap = null;
@@ -48,18 +42,16 @@ class MeshDistanceMaterial extends Material {
 
     this.fog = false;
 
-    this.setValues( parameters );
+    this.setValues(parameters);
   }
 
+  copy(source) {
+    super.copy(source);
 
-  copy ( source ) {
-
-    super.copy( source );
-
-    this.referencePosition.copy( source.referencePosition );
+    this.referencePosition.copy(source.referencePosition);
     this.nearDistance = source.nearDistance;
     this.farDistance = source.farDistance;
-    
+
     this.map = source.map;
 
     this.alphaMap = source.alphaMap;
@@ -69,8 +61,5 @@ class MeshDistanceMaterial extends Material {
     this.displacementBias = source.displacementBias;
 
     return this;
-
   }
-
-
 }

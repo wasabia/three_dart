@@ -10,7 +10,6 @@ import 'package:three_dart/three3d/core/index.dart';
 import '../constants.dart';
 import 'Uuid.dart';
 
-
 part 'MathUtils.dart';
 part 'math.dart';
 part 'Box2.dart';

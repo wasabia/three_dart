@@ -46,32 +46,27 @@ part of three_webgl;
 // Root Container
 
 class WebGLUniforms with WebGLUniform {
-
   dynamic gl;
   WebGLProgram program;
-  
-  WebGLUniforms( this.gl, this.program ) {
 
+  WebGLUniforms(this.gl, this.program) {
     this.seq = [];
     this.map = {};
 
-    var n = gl.getProgramParameter( program.program, gl.ACTIVE_UNIFORMS );
+    var n = gl.getProgramParameter(program.program, gl.ACTIVE_UNIFORMS);
 
-    for ( var i = 0; i < n; ++ i ) {
-
-      var info = gl.getActiveUniform( program.program, i );
-      var addr = gl.getUniformLocation( program.program, info.name );
+    for (var i = 0; i < n; ++i) {
+      var info = gl.getActiveUniform(program.program, i);
+      var addr = gl.getUniformLocation(program.program, info.name);
 
       // print(" WebGLUniforms info.name: ${info.name} addr: ${addr}  ");
 
-      parseUniform( info, addr, this );
-
+      parseUniform(info, addr, this);
     }
-
   }
 
-  setValue( gl, name, value, WebGLTextures? textures ) {
-    var u = this.map[ name ];
+  setValue(gl, name, value, WebGLTextures? textures) {
+    var u = this.map[name];
 
     // var _vt = value.runtimeType.toString();
     // print("WebGLUniforms.setValue name: ${name}  value: ${_vt} ");
@@ -81,25 +76,20 @@ class WebGLUniforms with WebGLUniform {
     //   print(value);
     // }
 
-    if ( u != null ) u.setValue( gl, value, textures );
-
+    if (u != null) u.setValue(gl, value, textures);
   }
 
-  setOptional ( gl, object, name ) {
-
+  setOptional(gl, object, name) {
     // var v = object[ name ];
     var v = object.getValue(name);
 
-    if ( v != null ) this.setValue( gl, name, v, null );
-
+    if (v != null) this.setValue(gl, name, v, null);
   }
 
-  static upload ( gl, seq, values, textures ) {
-    for ( var i = 0, n = seq.length; i != n; ++ i ) {
-
-      var u = seq[ i ];
-      var v = values[ u.id ];
-
+  static upload(gl, seq, values, textures) {
+    for (var i = 0, n = seq.length; i != n; ++i) {
+      var u = seq[i];
+      var v = values[u.id];
 
       // var value = v["value"];
       // var _vt = value.runtimeType.toString();
@@ -124,39 +114,28 @@ class WebGLUniforms with WebGLUniform {
       //   print(value);
       // }
 
-
-      if ( v["needsUpdate"] != false ) {
+      if (v["needsUpdate"] != false) {
         // note: always updating when .needsUpdate is null
-        u.setValue( gl, v["value"], textures );
+        u.setValue(gl, v["value"], textures);
       }
-
     }
-
   }
 
-  static List<dynamic> seqWithValue ( List seq, Map<String, dynamic> values ) {
-
+  static List<dynamic> seqWithValue(List seq, Map<String, dynamic> values) {
     List<dynamic> r = [];
 
-    for ( var i = 0, n = seq.length; i != n; ++ i ) {
-
-      var u = seq[ i ];
+    for (var i = 0, n = seq.length; i != n; ++i) {
+      var u = seq[i];
 
       // print("seqWithValue  u.id: ${u.id} ");
 
-      if ( values.keys.toList().indexOf(u.id) >= 0) {
-        r.add( u );
+      if (values.keys.toList().indexOf(u.id) >= 0) {
+        r.add(u);
       } else {
         // print("seqWithValue  u.id: ${u.id} is not add ");
       }
-
     }
 
     return r;
-
   }
-
 }
-
-
-

@@ -1,717 +1,710 @@
-
 part of three_renderers;
 
-
 class WebXRManager with EventDispatcher {
-
   bool enabled = false;
 
-	WebXRManager( renderer, gl ) : super() {
+  WebXRManager(renderer, gl) : super() {
+    // 	const scope = this;
+    // 	const state = renderer.state;
 
-	// 	const scope = this;
-	// 	const state = renderer.state;
+    // 	let session = null;
+    // 	let framebufferScaleFactor = 1.0;
 
-	// 	let session = null;
-	// 	let framebufferScaleFactor = 1.0;
+    // 	let referenceSpace = null;
+    // 	let referenceSpaceType = 'local-floor';
 
-	// 	let referenceSpace = null;
-	// 	let referenceSpaceType = 'local-floor';
+    // 	let pose = null;
+    // 	let glBinding = null;
+    // 	let glFramebuffer = null;
+    // 	let glProjLayer = null;
+    // 	let glBaseLayer = null;
+    // 	let isMultisample = false;
+    // 	let glMultisampledFramebuffer = null;
+    // 	let glColorRenderbuffer = null;
+    // 	let glDepthRenderbuffer = null;
+    // 	let xrFrame = null;
+    // 	let depthStyle = null;
+    // 	let clearStyle = null;
 
-	// 	let pose = null;
-	// 	let glBinding = null;
-	// 	let glFramebuffer = null;
-	// 	let glProjLayer = null;
-	// 	let glBaseLayer = null;
-	// 	let isMultisample = false;
-	// 	let glMultisampledFramebuffer = null;
-	// 	let glColorRenderbuffer = null;
-	// 	let glDepthRenderbuffer = null;
-	// 	let xrFrame = null;
-	// 	let depthStyle = null;
-	// 	let clearStyle = null;
+    // 	const controllers = [];
+    // 	const inputSourcesMap = new Map();
 
-	// 	const controllers = [];
-	// 	const inputSourcesMap = new Map();
+    // 	//
 
-	// 	//
+    // 	const cameraL = new PerspectiveCamera();
+    // 	cameraL.layers.enable( 1 );
+    // 	cameraL.viewport = new Vector4();
 
-	// 	const cameraL = new PerspectiveCamera();
-	// 	cameraL.layers.enable( 1 );
-	// 	cameraL.viewport = new Vector4();
+    // 	const cameraR = new PerspectiveCamera();
+    // 	cameraR.layers.enable( 2 );
+    // 	cameraR.viewport = new Vector4();
 
-	// 	const cameraR = new PerspectiveCamera();
-	// 	cameraR.layers.enable( 2 );
-	// 	cameraR.viewport = new Vector4();
+    // 	const cameras = [ cameraL, cameraR ];
 
-	// 	const cameras = [ cameraL, cameraR ];
+    // 	const cameraVR = new ArrayCamera();
+    // 	cameraVR.layers.enable( 1 );
+    // 	cameraVR.layers.enable( 2 );
 
-	// 	const cameraVR = new ArrayCamera();
-	// 	cameraVR.layers.enable( 1 );
-	// 	cameraVR.layers.enable( 2 );
+    // 	let _currentDepthNear = null;
+    // 	let _currentDepthFar = null;
 
-	// 	let _currentDepthNear = null;
-	// 	let _currentDepthFar = null;
+    // 	//
 
-	// 	//
+    // 	this.cameraAutoUpdate = true;
+    // 	this.enabled = false;
 
-	// 	this.cameraAutoUpdate = true;
-	// 	this.enabled = false;
+    // 	this.isPresenting = false;
 
-	// 	this.isPresenting = false;
+    // 	this.getController = function ( index ) {
 
-	// 	this.getController = function ( index ) {
+    // 		let controller = controllers[ index ];
 
-	// 		let controller = controllers[ index ];
+    // 		if ( controller === undefined ) {
 
-	// 		if ( controller === undefined ) {
+    // 			controller = new WebXRController();
+    // 			controllers[ index ] = controller;
 
-	// 			controller = new WebXRController();
-	// 			controllers[ index ] = controller;
+    // 		}
 
-	// 		}
+    // 		return controller.getTargetRaySpace();
 
-	// 		return controller.getTargetRaySpace();
+    // 	};
 
-	// 	};
+    // 	this.getControllerGrip = function ( index ) {
 
-	// 	this.getControllerGrip = function ( index ) {
+    // 		let controller = controllers[ index ];
 
-	// 		let controller = controllers[ index ];
+    // 		if ( controller === undefined ) {
 
-	// 		if ( controller === undefined ) {
+    // 			controller = new WebXRController();
+    // 			controllers[ index ] = controller;
 
-	// 			controller = new WebXRController();
-	// 			controllers[ index ] = controller;
+    // 		}
 
-	// 		}
+    // 		return controller.getGripSpace();
 
-	// 		return controller.getGripSpace();
+    // 	};
 
-	// 	};
+    // 	this.getHand = function ( index ) {
 
-	// 	this.getHand = function ( index ) {
+    // 		let controller = controllers[ index ];
 
-	// 		let controller = controllers[ index ];
+    // 		if ( controller === undefined ) {
 
-	// 		if ( controller === undefined ) {
+    // 			controller = new WebXRController();
+    // 			controllers[ index ] = controller;
 
-	// 			controller = new WebXRController();
-	// 			controllers[ index ] = controller;
+    // 		}
 
-	// 		}
+    // 		return controller.getHandSpace();
 
-	// 		return controller.getHandSpace();
+    // 	};
 
-	// 	};
+    // 	//
 
-	// 	//
+    // 	function onSessionEvent( event ) {
 
-	// 	function onSessionEvent( event ) {
+    // 		const controller = inputSourcesMap.get( event.inputSource );
 
-	// 		const controller = inputSourcesMap.get( event.inputSource );
+    // 		if ( controller ) {
 
-	// 		if ( controller ) {
+    // 			controller.dispatchEvent( { type: event.type, data: event.inputSource } );
 
-	// 			controller.dispatchEvent( { type: event.type, data: event.inputSource } );
+    // 		}
 
-	// 		}
+    // 	}
 
-	// 	}
+    // 	function onSessionEnd() {
 
-	// 	function onSessionEnd() {
+    // 		inputSourcesMap.forEach( function ( controller, inputSource ) {
 
-	// 		inputSourcesMap.forEach( function ( controller, inputSource ) {
+    // 			controller.disconnect( inputSource );
 
-	// 			controller.disconnect( inputSource );
+    // 		} );
 
-	// 		} );
+    // 		inputSourcesMap.clear();
 
-	// 		inputSourcesMap.clear();
+    // 		_currentDepthNear = null;
+    // 		_currentDepthFar = null;
 
-	// 		_currentDepthNear = null;
-	// 		_currentDepthFar = null;
+    // 		// restore framebuffer/rendering state
 
-	// 		// restore framebuffer/rendering state
+    // 		state.bindXRFramebuffer( null );
+    // 		renderer.setRenderTarget( renderer.getRenderTarget() );
 
-	// 		state.bindXRFramebuffer( null );
-	// 		renderer.setRenderTarget( renderer.getRenderTarget() );
+    // 		if ( glFramebuffer ) gl.deleteFramebuffer( glFramebuffer );
+    // 		if ( glMultisampledFramebuffer ) gl.deleteFramebuffer( glMultisampledFramebuffer );
+    // 		if ( glColorRenderbuffer ) gl.deleteRenderbuffer( glColorRenderbuffer );
+    // 		if ( glDepthRenderbuffer ) gl.deleteRenderbuffer( glDepthRenderbuffer );
+    // 		glFramebuffer = null;
+    // 		glMultisampledFramebuffer = null;
+    // 		glColorRenderbuffer = null;
+    // 		glDepthRenderbuffer = null;
+    // 		glBaseLayer = null;
+    // 		glProjLayer = null;
+    // 		glBinding = null;
+    // 		session = null;
 
-	// 		if ( glFramebuffer ) gl.deleteFramebuffer( glFramebuffer );
-	// 		if ( glMultisampledFramebuffer ) gl.deleteFramebuffer( glMultisampledFramebuffer );
-	// 		if ( glColorRenderbuffer ) gl.deleteRenderbuffer( glColorRenderbuffer );
-	// 		if ( glDepthRenderbuffer ) gl.deleteRenderbuffer( glDepthRenderbuffer );
-	// 		glFramebuffer = null;
-	// 		glMultisampledFramebuffer = null;
-	// 		glColorRenderbuffer = null;
-	// 		glDepthRenderbuffer = null;
-	// 		glBaseLayer = null;
-	// 		glProjLayer = null;
-	// 		glBinding = null;
-	// 		session = null;
+    // 		//
 
-	// 		//
+    // 		animation.stop();
 
-	// 		animation.stop();
+    // 		scope.isPresenting = false;
 
-	// 		scope.isPresenting = false;
+    // 		scope.dispatchEvent( { type: 'sessionend' } );
 
-	// 		scope.dispatchEvent( { type: 'sessionend' } );
+    // 	}
 
-	// 	}
+    // 	this.setFramebufferScaleFactor = function ( value ) {
 
-	// 	this.setFramebufferScaleFactor = function ( value ) {
+    // 		framebufferScaleFactor = value;
 
-	// 		framebufferScaleFactor = value;
+    // 		if ( scope.isPresenting === true ) {
 
-	// 		if ( scope.isPresenting === true ) {
+    // 			console.warn( 'THREE.WebXRManager: Cannot change framebuffer scale while presenting.' );
 
-	// 			console.warn( 'THREE.WebXRManager: Cannot change framebuffer scale while presenting.' );
+    // 		}
 
-	// 		}
+    // 	};
 
-	// 	};
+    // 	this.setReferenceSpaceType = function ( value ) {
 
-	// 	this.setReferenceSpaceType = function ( value ) {
+    // 		referenceSpaceType = value;
 
-	// 		referenceSpaceType = value;
+    // 		if ( scope.isPresenting === true ) {
 
-	// 		if ( scope.isPresenting === true ) {
+    // 			console.warn( 'THREE.WebXRManager: Cannot change reference space type while presenting.' );
 
-	// 			console.warn( 'THREE.WebXRManager: Cannot change reference space type while presenting.' );
+    // 		}
 
-	// 		}
+    // 	};
 
-	// 	};
+    // 	this.getReferenceSpace = function () {
 
-	// 	this.getReferenceSpace = function () {
+    // 		return referenceSpace;
 
-	// 		return referenceSpace;
+    // 	};
 
-	// 	};
+    // 	this.getBaseLayer = function () {
 
-	// 	this.getBaseLayer = function () {
+    // 		return glProjLayer !== null ? glProjLayer : glBaseLayer;
 
-	// 		return glProjLayer !== null ? glProjLayer : glBaseLayer;
+    // 	};
 
-	// 	};
+    // 	this.getBinding = function () {
 
-	// 	this.getBinding = function () {
+    // 		return glBinding;
 
-	// 		return glBinding;
+    // 	};
 
-	// 	};
+    // 	this.getFrame = function () {
 
-	// 	this.getFrame = function () {
+    // 		return xrFrame;
 
-	// 		return xrFrame;
+    // 	};
 
-	// 	};
+    // 	this.getSession = function () {
 
-	// 	this.getSession = function () {
+    // 		return session;
 
-	// 		return session;
+    // 	};
 
-	// 	};
+    // 	this.setSession = async function ( value ) {
 
-	// 	this.setSession = async function ( value ) {
+    // 		session = value;
 
-	// 		session = value;
+    // 		if ( session !== null ) {
 
-	// 		if ( session !== null ) {
+    // 			session.addEventListener( 'select', onSessionEvent );
+    // 			session.addEventListener( 'selectstart', onSessionEvent );
+    // 			session.addEventListener( 'selectend', onSessionEvent );
+    // 			session.addEventListener( 'squeeze', onSessionEvent );
+    // 			session.addEventListener( 'squeezestart', onSessionEvent );
+    // 			session.addEventListener( 'squeezeend', onSessionEvent );
+    // 			session.addEventListener( 'end', onSessionEnd );
+    // 			session.addEventListener( 'inputsourceschange', onInputSourcesChange );
 
-	// 			session.addEventListener( 'select', onSessionEvent );
-	// 			session.addEventListener( 'selectstart', onSessionEvent );
-	// 			session.addEventListener( 'selectend', onSessionEvent );
-	// 			session.addEventListener( 'squeeze', onSessionEvent );
-	// 			session.addEventListener( 'squeezestart', onSessionEvent );
-	// 			session.addEventListener( 'squeezeend', onSessionEvent );
-	// 			session.addEventListener( 'end', onSessionEnd );
-	// 			session.addEventListener( 'inputsourceschange', onInputSourcesChange );
+    // 			const attributes = gl.getContextAttributes();
 
-	// 			const attributes = gl.getContextAttributes();
+    // 			if ( attributes.xrCompatible !== true ) {
 
-	// 			if ( attributes.xrCompatible !== true ) {
+    // 				await gl.makeXRCompatible();
 
-	// 				await gl.makeXRCompatible();
+    // 			}
 
-	// 			}
+    // 			if ( session.renderState.layers === undefined ) {
 
-	// 			if ( session.renderState.layers === undefined ) {
+    // 				const layerInit = {
+    // 					antialias: attributes.antialias,
+    // 					alpha: attributes.alpha,
+    // 					depth: attributes.depth,
+    // 					stencil: attributes.stencil,
+    // 					framebufferScaleFactor: framebufferScaleFactor
+    // 				};
 
-	// 				const layerInit = {
-	// 					antialias: attributes.antialias,
-	// 					alpha: attributes.alpha,
-	// 					depth: attributes.depth,
-	// 					stencil: attributes.stencil,
-	// 					framebufferScaleFactor: framebufferScaleFactor
-	// 				};
+    // 				glBaseLayer = new XRWebGLLayer( session, gl, layerInit );
 
-	// 				glBaseLayer = new XRWebGLLayer( session, gl, layerInit );
+    // 				session.updateRenderState( { baseLayer: glBaseLayer } );
 
-	// 				session.updateRenderState( { baseLayer: glBaseLayer } );
+    // 			} else if ( gl instanceof WebGLRenderingContext ) {
 
-	// 			} else if ( gl instanceof WebGLRenderingContext ) {
+    // 				// Use old style webgl layer because we can't use MSAA
+    // 				// WebGL2 support.
 
-	// 				// Use old style webgl layer because we can't use MSAA
-	// 				// WebGL2 support.
+    // 				const layerInit = {
+    // 					antialias: true,
+    // 					alpha: attributes.alpha,
+    // 					depth: attributes.depth,
+    // 					stencil: attributes.stencil,
+    // 					framebufferScaleFactor: framebufferScaleFactor
+    // 				};
 
-	// 				const layerInit = {
-	// 					antialias: true,
-	// 					alpha: attributes.alpha,
-	// 					depth: attributes.depth,
-	// 					stencil: attributes.stencil,
-	// 					framebufferScaleFactor: framebufferScaleFactor
-	// 				};
+    // 				glBaseLayer = new XRWebGLLayer( session, gl, layerInit );
 
-	// 				glBaseLayer = new XRWebGLLayer( session, gl, layerInit );
+    // 				session.updateRenderState( { layers: [ glBaseLayer ] } );
 
-	// 				session.updateRenderState( { layers: [ glBaseLayer ] } );
+    // 			} else {
 
-	// 			} else {
+    // 				isMultisample = attributes.antialias;
+    // 				let depthFormat = null;
 
-	// 				isMultisample = attributes.antialias;
-	// 				let depthFormat = null;
+    // 				if ( attributes.depth ) {
 
+    // 					clearStyle = gl.DEPTH_BUFFER_BIT;
 
-	// 				if ( attributes.depth ) {
+    // 					if ( attributes.stencil ) clearStyle |= gl.STENCIL_BUFFER_BIT;
 
-	// 					clearStyle = gl.DEPTH_BUFFER_BIT;
+    // 					depthStyle = attributes.stencil ? gl.DEPTH_STENCIL_ATTACHMENT : gl.DEPTH_ATTACHMENT;
+    // 					depthFormat = attributes.stencil ? gl.DEPTH24_STENCIL8 : gl.DEPTH_COMPONENT24;
 
-	// 					if ( attributes.stencil ) clearStyle |= gl.STENCIL_BUFFER_BIT;
+    // 				}
 
-	// 					depthStyle = attributes.stencil ? gl.DEPTH_STENCIL_ATTACHMENT : gl.DEPTH_ATTACHMENT;
-	// 					depthFormat = attributes.stencil ? gl.DEPTH24_STENCIL8 : gl.DEPTH_COMPONENT24;
+    // 				const projectionlayerInit = {
+    // 					colorFormat: attributes.alpha ? gl.RGBA8 : gl.RGB8,
+    // 					depthFormat: depthFormat,
+    // 					scaleFactor: framebufferScaleFactor
+    // 				};
 
-	// 				}
+    // 				glBinding = new XRWebGLBinding( session, gl );
 
-	// 				const projectionlayerInit = {
-	// 					colorFormat: attributes.alpha ? gl.RGBA8 : gl.RGB8,
-	// 					depthFormat: depthFormat,
-	// 					scaleFactor: framebufferScaleFactor
-	// 				};
+    // 				glProjLayer = glBinding.createProjectionLayer( projectionlayerInit );
 
-	// 				glBinding = new XRWebGLBinding( session, gl );
+    // 				glFramebuffer = gl.createFramebuffer();
 
-	// 				glProjLayer = glBinding.createProjectionLayer( projectionlayerInit );
+    // 				session.updateRenderState( { layers: [ glProjLayer ] } );
 
-	// 				glFramebuffer = gl.createFramebuffer();
+    // 				if ( isMultisample ) {
 
-	// 				session.updateRenderState( { layers: [ glProjLayer ] } );
+    // 					glMultisampledFramebuffer = gl.createFramebuffer();
+    // 					glColorRenderbuffer = gl.createRenderbuffer();
+    // 					gl.bindRenderbuffer( gl.RENDERBUFFER, glColorRenderbuffer );
+    // 					gl.renderbufferStorageMultisample(
+    // 						gl.RENDERBUFFER,
+    // 						4,
+    // 						gl.RGBA8,
+    // 						glProjLayer.textureWidth,
+    // 						glProjLayer.textureHeight );
+    // 					state.bindFramebuffer( gl.FRAMEBUFFER, glMultisampledFramebuffer );
+    // 					gl.framebufferRenderbuffer( gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.RENDERBUFFER, glColorRenderbuffer );
+    // 					gl.bindRenderbuffer( gl.RENDERBUFFER, null );
 
-	// 				if ( isMultisample ) {
+    // 					if ( depthFormat !== null ) {
 
-	// 					glMultisampledFramebuffer = gl.createFramebuffer();
-	// 					glColorRenderbuffer = gl.createRenderbuffer();
-	// 					gl.bindRenderbuffer( gl.RENDERBUFFER, glColorRenderbuffer );
-	// 					gl.renderbufferStorageMultisample(
-	// 						gl.RENDERBUFFER,
-	// 						4,
-	// 						gl.RGBA8,
-	// 						glProjLayer.textureWidth,
-	// 						glProjLayer.textureHeight );
-	// 					state.bindFramebuffer( gl.FRAMEBUFFER, glMultisampledFramebuffer );
-	// 					gl.framebufferRenderbuffer( gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.RENDERBUFFER, glColorRenderbuffer );
-	// 					gl.bindRenderbuffer( gl.RENDERBUFFER, null );
+    // 						glDepthRenderbuffer = gl.createRenderbuffer();
+    // 						gl.bindRenderbuffer( gl.RENDERBUFFER, glDepthRenderbuffer );
+    // 						gl.renderbufferStorageMultisample( gl.RENDERBUFFER, 4, depthFormat, glProjLayer.textureWidth, glProjLayer.textureHeight );
+    // 						gl.framebufferRenderbuffer( gl.FRAMEBUFFER, depthStyle, gl.RENDERBUFFER, glDepthRenderbuffer );
+    // 						gl.bindRenderbuffer( gl.RENDERBUFFER, null );
 
-	// 					if ( depthFormat !== null ) {
+    // 					}
 
-	// 						glDepthRenderbuffer = gl.createRenderbuffer();
-	// 						gl.bindRenderbuffer( gl.RENDERBUFFER, glDepthRenderbuffer );
-	// 						gl.renderbufferStorageMultisample( gl.RENDERBUFFER, 4, depthFormat, glProjLayer.textureWidth, glProjLayer.textureHeight );
-	// 						gl.framebufferRenderbuffer( gl.FRAMEBUFFER, depthStyle, gl.RENDERBUFFER, glDepthRenderbuffer );
-	// 						gl.bindRenderbuffer( gl.RENDERBUFFER, null );
+    // 					state.bindFramebuffer( gl.FRAMEBUFFER, null );
 
-	// 					}
+    // 				}
 
-	// 					state.bindFramebuffer( gl.FRAMEBUFFER, null );
+    // 			}
 
-	// 				}
+    // 			referenceSpace = await session.requestReferenceSpace( referenceSpaceType );
 
-	// 			}
+    // 			animation.setContext( session );
+    // 			animation.start();
 
-	// 			referenceSpace = await session.requestReferenceSpace( referenceSpaceType );
+    // 			scope.isPresenting = true;
 
-	// 			animation.setContext( session );
-	// 			animation.start();
+    // 			scope.dispatchEvent( { type: 'sessionstart' } );
 
-	// 			scope.isPresenting = true;
+    // 		}
 
-	// 			scope.dispatchEvent( { type: 'sessionstart' } );
+    // 	};
 
-	// 		}
+    // 	function onInputSourcesChange( event ) {
 
-	// 	};
+    // 		const inputSources = session.inputSources;
 
-	// 	function onInputSourcesChange( event ) {
+    // 		// Assign inputSources to available controllers
 
-	// 		const inputSources = session.inputSources;
+    // 		for ( let i = 0; i < controllers.length; i ++ ) {
 
-	// 		// Assign inputSources to available controllers
+    // 			inputSourcesMap.set( inputSources[ i ], controllers[ i ] );
 
-	// 		for ( let i = 0; i < controllers.length; i ++ ) {
+    // 		}
 
-	// 			inputSourcesMap.set( inputSources[ i ], controllers[ i ] );
+    // 		// Notify disconnected
 
-	// 		}
+    // 		for ( let i = 0; i < event.removed.length; i ++ ) {
 
-	// 		// Notify disconnected
+    // 			const inputSource = event.removed[ i ];
+    // 			const controller = inputSourcesMap.get( inputSource );
 
-	// 		for ( let i = 0; i < event.removed.length; i ++ ) {
+    // 			if ( controller ) {
 
-	// 			const inputSource = event.removed[ i ];
-	// 			const controller = inputSourcesMap.get( inputSource );
+    // 				controller.dispatchEvent( { type: 'disconnected', data: inputSource } );
+    // 				inputSourcesMap.delete( inputSource );
 
-	// 			if ( controller ) {
+    // 			}
 
-	// 				controller.dispatchEvent( { type: 'disconnected', data: inputSource } );
-	// 				inputSourcesMap.delete( inputSource );
+    // 		}
 
-	// 			}
+    // 		// Notify connected
 
-	// 		}
+    // 		for ( let i = 0; i < event.added.length; i ++ ) {
 
-	// 		// Notify connected
+    // 			const inputSource = event.added[ i ];
+    // 			const controller = inputSourcesMap.get( inputSource );
 
-	// 		for ( let i = 0; i < event.added.length; i ++ ) {
+    // 			if ( controller ) {
 
-	// 			const inputSource = event.added[ i ];
-	// 			const controller = inputSourcesMap.get( inputSource );
+    // 				controller.dispatchEvent( { type: 'connected', data: inputSource } );
 
-	// 			if ( controller ) {
+    // 			}
 
-	// 				controller.dispatchEvent( { type: 'connected', data: inputSource } );
+    // 		}
 
-	// 			}
+    // 	}
 
-	// 		}
+    // 	//
 
-	// 	}
+    // 	const cameraLPos = new Vector3();
+    // 	const cameraRPos = new Vector3();
 
-	// 	//
+    // 	/**
+    // 	 * Assumes 2 cameras that are parallel and share an X-axis, and that
+    // 	 * the cameras' projection and world matrices have already been set.
+    // 	 * And that near and far planes are identical for both cameras.
+    // 	 * Visualization of this technique: https://computergraphics.stackexchange.com/a/4765
+    // 	 */
+    // 	function setProjectionFromUnion( camera, cameraL, cameraR ) {
 
-	// 	const cameraLPos = new Vector3();
-	// 	const cameraRPos = new Vector3();
+    // 		cameraLPos.setFromMatrixPosition( cameraL.matrixWorld );
+    // 		cameraRPos.setFromMatrixPosition( cameraR.matrixWorld );
 
-	// 	/**
-	// 	 * Assumes 2 cameras that are parallel and share an X-axis, and that
-	// 	 * the cameras' projection and world matrices have already been set.
-	// 	 * And that near and far planes are identical for both cameras.
-	// 	 * Visualization of this technique: https://computergraphics.stackexchange.com/a/4765
-	// 	 */
-	// 	function setProjectionFromUnion( camera, cameraL, cameraR ) {
+    // 		const ipd = cameraLPos.distanceTo( cameraRPos );
 
-	// 		cameraLPos.setFromMatrixPosition( cameraL.matrixWorld );
-	// 		cameraRPos.setFromMatrixPosition( cameraR.matrixWorld );
+    // 		const projL = cameraL.projectionMatrix.elements;
+    // 		const projR = cameraR.projectionMatrix.elements;
 
-	// 		const ipd = cameraLPos.distanceTo( cameraRPos );
+    // 		// VR systems will have identical far and near planes, and
+    // 		// most likely identical top and bottom frustum extents.
+    // 		// Use the left camera for these values.
+    // 		const near = projL[ 14 ] / ( projL[ 10 ] - 1 );
+    // 		const far = projL[ 14 ] / ( projL[ 10 ] + 1 );
+    // 		const topFov = ( projL[ 9 ] + 1 ) / projL[ 5 ];
+    // 		const bottomFov = ( projL[ 9 ] - 1 ) / projL[ 5 ];
 
-	// 		const projL = cameraL.projectionMatrix.elements;
-	// 		const projR = cameraR.projectionMatrix.elements;
+    // 		const leftFov = ( projL[ 8 ] - 1 ) / projL[ 0 ];
+    // 		const rightFov = ( projR[ 8 ] + 1 ) / projR[ 0 ];
+    // 		const left = near * leftFov;
+    // 		const right = near * rightFov;
 
-	// 		// VR systems will have identical far and near planes, and
-	// 		// most likely identical top and bottom frustum extents.
-	// 		// Use the left camera for these values.
-	// 		const near = projL[ 14 ] / ( projL[ 10 ] - 1 );
-	// 		const far = projL[ 14 ] / ( projL[ 10 ] + 1 );
-	// 		const topFov = ( projL[ 9 ] + 1 ) / projL[ 5 ];
-	// 		const bottomFov = ( projL[ 9 ] - 1 ) / projL[ 5 ];
+    // 		// Calculate the new camera's position offset from the
+    // 		// left camera. xOffset should be roughly half `ipd`.
+    // 		const zOffset = ipd / ( - leftFov + rightFov );
+    // 		const xOffset = zOffset * - leftFov;
 
-	// 		const leftFov = ( projL[ 8 ] - 1 ) / projL[ 0 ];
-	// 		const rightFov = ( projR[ 8 ] + 1 ) / projR[ 0 ];
-	// 		const left = near * leftFov;
-	// 		const right = near * rightFov;
+    // 		// TODO: Better way to apply this offset?
+    // 		cameraL.matrixWorld.decompose( camera.position, camera.quaternion, camera.scale );
+    // 		camera.translateX( xOffset );
+    // 		camera.translateZ( zOffset );
+    // 		camera.matrixWorld.compose( camera.position, camera.quaternion, camera.scale );
+    // 		camera.matrixWorldInverse.copy( camera.matrixWorld ).invert();
 
-	// 		// Calculate the new camera's position offset from the
-	// 		// left camera. xOffset should be roughly half `ipd`.
-	// 		const zOffset = ipd / ( - leftFov + rightFov );
-	// 		const xOffset = zOffset * - leftFov;
+    // 		// Find the union of the frustum values of the cameras and scale
+    // 		// the values so that the near plane's position does not change in world space,
+    // 		// although must now be relative to the new union camera.
+    // 		const near2 = near + zOffset;
+    // 		const far2 = far + zOffset;
+    // 		const left2 = left - xOffset;
+    // 		const right2 = right + ( ipd - xOffset );
+    // 		const top2 = topFov * far / far2 * near2;
+    // 		const bottom2 = bottomFov * far / far2 * near2;
 
-	// 		// TODO: Better way to apply this offset?
-	// 		cameraL.matrixWorld.decompose( camera.position, camera.quaternion, camera.scale );
-	// 		camera.translateX( xOffset );
-	// 		camera.translateZ( zOffset );
-	// 		camera.matrixWorld.compose( camera.position, camera.quaternion, camera.scale );
-	// 		camera.matrixWorldInverse.copy( camera.matrixWorld ).invert();
+    // 		camera.projectionMatrix.makePerspective( left2, right2, top2, bottom2, near2, far2 );
 
-	// 		// Find the union of the frustum values of the cameras and scale
-	// 		// the values so that the near plane's position does not change in world space,
-	// 		// although must now be relative to the new union camera.
-	// 		const near2 = near + zOffset;
-	// 		const far2 = far + zOffset;
-	// 		const left2 = left - xOffset;
-	// 		const right2 = right + ( ipd - xOffset );
-	// 		const top2 = topFov * far / far2 * near2;
-	// 		const bottom2 = bottomFov * far / far2 * near2;
+    // 	}
 
-	// 		camera.projectionMatrix.makePerspective( left2, right2, top2, bottom2, near2, far2 );
+    // 	function updateCamera( camera, parent ) {
 
-	// 	}
+    // 		if ( parent === null ) {
 
-	// 	function updateCamera( camera, parent ) {
+    // 			camera.matrixWorld.copy( camera.matrix );
 
-	// 		if ( parent === null ) {
+    // 		} else {
 
-	// 			camera.matrixWorld.copy( camera.matrix );
+    // 			camera.matrixWorld.multiplyMatrices( parent.matrixWorld, camera.matrix );
 
-	// 		} else {
+    // 		}
 
-	// 			camera.matrixWorld.multiplyMatrices( parent.matrixWorld, camera.matrix );
+    // 		camera.matrixWorldInverse.copy( camera.matrixWorld ).invert();
 
-	// 		}
+    // 	}
 
-	// 		camera.matrixWorldInverse.copy( camera.matrixWorld ).invert();
+    // 	this.updateCamera = function ( camera ) {
 
-	// 	}
+    // 		if ( session === null ) return;
 
-	// 	this.updateCamera = function ( camera ) {
+    // 		cameraVR.near = cameraR.near = cameraL.near = camera.near;
+    // 		cameraVR.far = cameraR.far = cameraL.far = camera.far;
 
-	// 		if ( session === null ) return;
+    // 		if ( _currentDepthNear !== cameraVR.near || _currentDepthFar !== cameraVR.far ) {
 
-	// 		cameraVR.near = cameraR.near = cameraL.near = camera.near;
-	// 		cameraVR.far = cameraR.far = cameraL.far = camera.far;
+    // 			// Note that the new renderState won't apply until the next frame. See #18320
 
-	// 		if ( _currentDepthNear !== cameraVR.near || _currentDepthFar !== cameraVR.far ) {
+    // 			session.updateRenderState( {
+    // 				depthNear: cameraVR.near,
+    // 				depthFar: cameraVR.far
+    // 			} );
 
-	// 			// Note that the new renderState won't apply until the next frame. See #18320
+    // 			_currentDepthNear = cameraVR.near;
+    // 			_currentDepthFar = cameraVR.far;
 
-	// 			session.updateRenderState( {
-	// 				depthNear: cameraVR.near,
-	// 				depthFar: cameraVR.far
-	// 			} );
+    // 		}
 
-	// 			_currentDepthNear = cameraVR.near;
-	// 			_currentDepthFar = cameraVR.far;
+    // 		const parent = camera.parent;
+    // 		const cameras = cameraVR.cameras;
 
-	// 		}
+    // 		updateCamera( cameraVR, parent );
 
-	// 		const parent = camera.parent;
-	// 		const cameras = cameraVR.cameras;
+    // 		for ( let i = 0; i < cameras.length; i ++ ) {
 
-	// 		updateCamera( cameraVR, parent );
+    // 			updateCamera( cameras[ i ], parent );
 
-	// 		for ( let i = 0; i < cameras.length; i ++ ) {
+    // 		}
 
-	// 			updateCamera( cameras[ i ], parent );
+    // 		cameraVR.matrixWorld.decompose( cameraVR.position, cameraVR.quaternion, cameraVR.scale );
 
-	// 		}
+    // 		// update user camera and its children
 
-	// 		cameraVR.matrixWorld.decompose( cameraVR.position, cameraVR.quaternion, cameraVR.scale );
+    // 		camera.position.copy( cameraVR.position );
+    // 		camera.quaternion.copy( cameraVR.quaternion );
+    // 		camera.scale.copy( cameraVR.scale );
+    // 		camera.matrix.copy( cameraVR.matrix );
+    // 		camera.matrixWorld.copy( cameraVR.matrixWorld );
 
-	// 		// update user camera and its children
+    // 		const children = camera.children;
 
-	// 		camera.position.copy( cameraVR.position );
-	// 		camera.quaternion.copy( cameraVR.quaternion );
-	// 		camera.scale.copy( cameraVR.scale );
-	// 		camera.matrix.copy( cameraVR.matrix );
-	// 		camera.matrixWorld.copy( cameraVR.matrixWorld );
+    // 		for ( let i = 0, l = children.length; i < l; i ++ ) {
 
-	// 		const children = camera.children;
+    // 			children[ i ].updateMatrixWorld( true );
 
-	// 		for ( let i = 0, l = children.length; i < l; i ++ ) {
+    // 		}
 
-	// 			children[ i ].updateMatrixWorld( true );
+    // 		// update projection matrix for proper view frustum culling
 
-	// 		}
+    // 		if ( cameras.length === 2 ) {
 
-	// 		// update projection matrix for proper view frustum culling
+    // 			setProjectionFromUnion( cameraVR, cameraL, cameraR );
 
-	// 		if ( cameras.length === 2 ) {
+    // 		} else {
 
-	// 			setProjectionFromUnion( cameraVR, cameraL, cameraR );
+    // 			// assume single camera setup (AR)
 
-	// 		} else {
+    // 			cameraVR.projectionMatrix.copy( cameraL.projectionMatrix );
 
-	// 			// assume single camera setup (AR)
+    // 		}
 
-	// 			cameraVR.projectionMatrix.copy( cameraL.projectionMatrix );
+    // 	};
 
-	// 		}
+    // 	this.getCamera = function () {
 
-	// 	};
+    // 		return cameraVR;
 
-	// 	this.getCamera = function () {
+    // 	};
 
-	// 		return cameraVR;
+    // 	this.getFoveation = function () {
 
-	// 	};
+    // 		if ( glProjLayer !== null ) {
 
-	// 	this.getFoveation = function () {
+    // 			return glProjLayer.fixedFoveation;
 
-	// 		if ( glProjLayer !== null ) {
+    // 		}
 
-	// 			return glProjLayer.fixedFoveation;
+    // 		if ( glBaseLayer !== null ) {
 
-	// 		}
+    // 			return glBaseLayer.fixedFoveation;
 
-	// 		if ( glBaseLayer !== null ) {
+    // 		}
 
-	// 			return glBaseLayer.fixedFoveation;
+    // 		return undefined;
 
-	// 		}
+    // 	};
 
-	// 		return undefined;
+    // 	this.setFoveation = function ( foveation ) {
 
-	// 	};
+    // 		// 0 = no foveation = full resolution
+    // 		// 1 = maximum foveation = the edges render at lower resolution
 
-	// 	this.setFoveation = function ( foveation ) {
+    // 		if ( glProjLayer !== null ) {
 
-	// 		// 0 = no foveation = full resolution
-	// 		// 1 = maximum foveation = the edges render at lower resolution
+    // 			glProjLayer.fixedFoveation = foveation;
 
-	// 		if ( glProjLayer !== null ) {
+    // 		}
 
-	// 			glProjLayer.fixedFoveation = foveation;
+    // 		if ( glBaseLayer !== null && glBaseLayer.fixedFoveation !== undefined ) {
 
-	// 		}
+    // 			glBaseLayer.fixedFoveation = foveation;
 
-	// 		if ( glBaseLayer !== null && glBaseLayer.fixedFoveation !== undefined ) {
+    // 		}
 
-	// 			glBaseLayer.fixedFoveation = foveation;
+    // 	};
 
-	// 		}
+    // 	// Animation Loop
 
-	// 	};
+    // 	let onAnimationFrameCallback = null;
 
-	// 	// Animation Loop
+    // 	function onAnimationFrame( time, frame ) {
 
-	// 	let onAnimationFrameCallback = null;
+    // 		pose = frame.getViewerPose( referenceSpace );
+    // 		xrFrame = frame;
 
-	// 	function onAnimationFrame( time, frame ) {
+    // 		if ( pose !== null ) {
 
-	// 		pose = frame.getViewerPose( referenceSpace );
-	// 		xrFrame = frame;
+    // 			const views = pose.views;
 
-	// 		if ( pose !== null ) {
+    // 			if ( glBaseLayer !== null ) {
 
-	// 			const views = pose.views;
+    // 				state.bindXRFramebuffer( glBaseLayer.framebuffer );
 
-	// 			if ( glBaseLayer !== null ) {
+    // 			}
 
-	// 				state.bindXRFramebuffer( glBaseLayer.framebuffer );
+    // 			let cameraVRNeedsUpdate = false;
 
-	// 			}
+    // 			// check if it's necessary to rebuild cameraVR's camera list
 
-	// 			let cameraVRNeedsUpdate = false;
+    // 			if ( views.length !== cameraVR.cameras.length ) {
 
-	// 			// check if it's necessary to rebuild cameraVR's camera list
+    // 				cameraVR.cameras.length = 0;
 
-	// 			if ( views.length !== cameraVR.cameras.length ) {
+    // 				cameraVRNeedsUpdate = true;
 
-	// 				cameraVR.cameras.length = 0;
+    // 			}
 
-	// 				cameraVRNeedsUpdate = true;
+    // 			for ( let i = 0; i < views.length; i ++ ) {
 
-	// 			}
+    // 				const view = views[ i ];
 
-	// 			for ( let i = 0; i < views.length; i ++ ) {
+    // 				let viewport = null;
 
-	// 				const view = views[ i ];
+    // 				if ( glBaseLayer !== null ) {
 
-	// 				let viewport = null;
+    // 					viewport = glBaseLayer.getViewport( view );
 
-	// 				if ( glBaseLayer !== null ) {
+    // 				} else {
 
-	// 					viewport = glBaseLayer.getViewport( view );
+    // 					const glSubImage = glBinding.getViewSubImage( glProjLayer, view );
 
-	// 				} else {
+    // 					state.bindXRFramebuffer( glFramebuffer );
 
-	// 					const glSubImage = glBinding.getViewSubImage( glProjLayer, view );
+    // 					if ( glSubImage.depthStencilTexture !== undefined ) {
 
-	// 					state.bindXRFramebuffer( glFramebuffer );
+    // 						gl.framebufferTexture2D( gl.FRAMEBUFFER, depthStyle, gl.TEXTURE_2D, glSubImage.depthStencilTexture, 0 );
 
-	// 					if ( glSubImage.depthStencilTexture !== undefined ) {
+    // 					}
 
-	// 						gl.framebufferTexture2D( gl.FRAMEBUFFER, depthStyle, gl.TEXTURE_2D, glSubImage.depthStencilTexture, 0 );
+    // 					gl.framebufferTexture2D( gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, glSubImage.colorTexture, 0 );
 
-	// 					}
+    // 					viewport = glSubImage.viewport;
 
-	// 					gl.framebufferTexture2D( gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, glSubImage.colorTexture, 0 );
+    // 				}
 
-	// 					viewport = glSubImage.viewport;
+    // 				const camera = cameras[ i ];
 
-	// 				}
+    // 				camera.matrix.fromArray( view.transform.matrix );
+    // 				camera.projectionMatrix.fromArray( view.projectionMatrix );
+    // 				camera.viewport.set( viewport.x, viewport.y, viewport.width, viewport.height );
 
-	// 				const camera = cameras[ i ];
+    // 				if ( i === 0 ) {
 
-	// 				camera.matrix.fromArray( view.transform.matrix );
-	// 				camera.projectionMatrix.fromArray( view.projectionMatrix );
-	// 				camera.viewport.set( viewport.x, viewport.y, viewport.width, viewport.height );
+    // 					cameraVR.matrix.copy( camera.matrix );
 
-	// 				if ( i === 0 ) {
+    // 				}
 
-	// 					cameraVR.matrix.copy( camera.matrix );
+    // 				if ( cameraVRNeedsUpdate === true ) {
 
-	// 				}
+    // 					cameraVR.cameras.push( camera );
 
-	// 				if ( cameraVRNeedsUpdate === true ) {
+    // 				}
 
-	// 					cameraVR.cameras.push( camera );
+    // 			}
 
-	// 				}
+    // 			if ( isMultisample ) {
 
-	// 			}
+    // 				state.bindXRFramebuffer( glMultisampledFramebuffer );
 
-	// 			if ( isMultisample ) {
+    // 				if ( clearStyle !== null ) gl.clear( clearStyle );
 
-	// 				state.bindXRFramebuffer( glMultisampledFramebuffer );
+    // 			}
 
-	// 				if ( clearStyle !== null ) gl.clear( clearStyle );
+    // 		}
 
-	// 			}
+    // 		//
 
-	// 		}
+    // 		const inputSources = session.inputSources;
 
-	// 		//
+    // 		for ( let i = 0; i < controllers.length; i ++ ) {
 
-	// 		const inputSources = session.inputSources;
+    // 			const controller = controllers[ i ];
+    // 			const inputSource = inputSources[ i ];
 
-	// 		for ( let i = 0; i < controllers.length; i ++ ) {
+    // 			controller.update( inputSource, frame, referenceSpace );
 
-	// 			const controller = controllers[ i ];
-	// 			const inputSource = inputSources[ i ];
+    // 		}
 
-	// 			controller.update( inputSource, frame, referenceSpace );
+    // 		if ( onAnimationFrameCallback ) onAnimationFrameCallback( time, frame );
 
-	// 		}
+    // 		if ( isMultisample ) {
 
-	// 		if ( onAnimationFrameCallback ) onAnimationFrameCallback( time, frame );
+    // 			const width = glProjLayer.textureWidth;
+    // 			const height = glProjLayer.textureHeight;
 
-	// 		if ( isMultisample ) {
+    // 			state.bindFramebuffer( gl.READ_FRAMEBUFFER, glMultisampledFramebuffer );
+    // 			state.bindFramebuffer( gl.DRAW_FRAMEBUFFER, glFramebuffer );
+    // 			// Invalidate the depth here to avoid flush of the depth data to main memory.
+    // 			gl.invalidateFramebuffer( gl.READ_FRAMEBUFFER, [ depthStyle ] );
+    // 			gl.invalidateFramebuffer( gl.DRAW_FRAMEBUFFER, [ depthStyle ] );
+    // 			gl.blitFramebuffer( 0, 0, width, height, 0, 0, width, height, gl.COLOR_BUFFER_BIT, gl.NEAREST );
+    // 			// Invalidate the MSAA buffer because it's not needed anymore.
+    // 			gl.invalidateFramebuffer( gl.READ_FRAMEBUFFER, [ gl.COLOR_ATTACHMENT0 ] );
+    // 			state.bindFramebuffer( gl.READ_FRAMEBUFFER, null );
+    // 			state.bindFramebuffer( gl.DRAW_FRAMEBUFFER, null );
 
-	// 			const width = glProjLayer.textureWidth;
-	// 			const height = glProjLayer.textureHeight;
+    // 			state.bindFramebuffer( gl.FRAMEBUFFER, glMultisampledFramebuffer );
 
-	// 			state.bindFramebuffer( gl.READ_FRAMEBUFFER, glMultisampledFramebuffer );
-	// 			state.bindFramebuffer( gl.DRAW_FRAMEBUFFER, glFramebuffer );
-	// 			// Invalidate the depth here to avoid flush of the depth data to main memory.
-	// 			gl.invalidateFramebuffer( gl.READ_FRAMEBUFFER, [ depthStyle ] );
-	// 			gl.invalidateFramebuffer( gl.DRAW_FRAMEBUFFER, [ depthStyle ] );
-	// 			gl.blitFramebuffer( 0, 0, width, height, 0, 0, width, height, gl.COLOR_BUFFER_BIT, gl.NEAREST );
-	// 			// Invalidate the MSAA buffer because it's not needed anymore.
-	// 			gl.invalidateFramebuffer( gl.READ_FRAMEBUFFER, [ gl.COLOR_ATTACHMENT0 ] );
-	// 			state.bindFramebuffer( gl.READ_FRAMEBUFFER, null );
-	// 			state.bindFramebuffer( gl.DRAW_FRAMEBUFFER, null );
+    // 		}
 
-	// 			state.bindFramebuffer( gl.FRAMEBUFFER, glMultisampledFramebuffer );
+    // 		xrFrame = null;
 
-	// 		}
+    // 	}
 
-	// 		xrFrame = null;
+    // 	const animation = new WebGLAnimation();
 
-	// 	}
+    // 	animation.setAnimationLoop( onAnimationFrame );
 
-	// 	const animation = new WebGLAnimation();
+    // 	this.setAnimationLoop = function ( callback ) {
 
-	// 	animation.setAnimationLoop( onAnimationFrame );
+    // 		onAnimationFrameCallback = callback;
 
-	// 	this.setAnimationLoop = function ( callback ) {
+    // 	};
 
-	// 		onAnimationFrameCallback = callback;
-
-	// 	};
-
-	// 	this.dispose = function () {};
-
-	}
-
+    // 	this.dispose = function () {};
+  }
 }

@@ -1,7 +1,6 @@
-﻿part of three_webgl;
+part of three_webgl;
 
 class WebGLBindingStates {
-
   dynamic gl;
   WebGLExtensions extensions;
   WebGLAttributes attributes;
@@ -15,591 +14,474 @@ class WebGLBindingStates {
   late Map<String, dynamic> currentState;
   late Map<int, dynamic> bindingStates;
 
-  WebGLBindingStates(this.gl, this.extensions, this.attributes, this.capabilities ) {
-  
-	  maxVertexAttributes = gl.getParameter( gl.MAX_VERTEX_ATTRIBS );
+  WebGLBindingStates(
+      this.gl, this.extensions, this.attributes, this.capabilities) {
+    maxVertexAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
 
-	  bindingStates = Map<int, dynamic>();
+    bindingStates = Map<int, dynamic>();
 
-	  this.defaultState = createBindingState( null );
-	  this.currentState = defaultState;
+    this.defaultState = createBindingState(null);
+    this.currentState = defaultState;
   }
 
+  setup(object, material, program, geometry, index) {
+    bool updateBuffers = false;
 
+    if (vaoAvailable) {
+      var state = getBindingState(geometry, program, material);
 
-	setup( object, material, program, geometry, index ) {
+      if (currentState != state) {
+        currentState = state;
+        bindVertexArrayObject(currentState["object"]);
+      }
 
-		bool updateBuffers = false;
-
-		if ( vaoAvailable ) {
-			var state = getBindingState( geometry, program, material );
-
-			if ( currentState != state ) {
-
-				currentState = state;
-				bindVertexArrayObject( currentState["object"] );
-
-			}
-
-			updateBuffers = needsUpdate( geometry, index );
+      updateBuffers = needsUpdate(geometry, index);
 
       // print("WebGLBindingStates.dart setup object: ${object}  updateBuffers: ${updateBuffers}  ");
 
+      if (updateBuffers) saveCache(geometry, index);
+    } else {
+      var wireframe = (material.wireframe == true);
 
-			if ( updateBuffers ) saveCache( geometry, index );
+      if (currentState["geometry"] != geometry.id ||
+          currentState["program"] != program.id ||
+          currentState["wireframe"] != wireframe) {
+        currentState["geometry"] = geometry.id;
+        currentState["program"] = program.id;
+        currentState["wireframe"] = wireframe;
 
-		} else {
+        updateBuffers = true;
+      }
+    }
 
-			var wireframe = ( material.wireframe == true );
+    if (object.isInstancedMesh == true) {
+      updateBuffers = true;
+    }
 
-			if ( currentState["geometry"] != geometry.id ||
-				currentState["program"] != program.id ||
-				currentState["wireframe"] != wireframe ) {
+    if (index != null) {
+      attributes.update(index, gl.ELEMENT_ARRAY_BUFFER);
+    }
 
-				currentState["geometry"] = geometry.id;
-				currentState["program"] = program.id;
-				currentState["wireframe"] = wireframe;
+    if (updateBuffers) {
+      setupVertexAttributes(object, material, program, geometry);
 
-				updateBuffers = true;
+      if (index != null) {
+        var _buffer = attributes.get(index)["buffer"];
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, _buffer);
+      }
+    }
+  }
 
-			}
+  createVertexArrayObject() {
+    if (capabilities.isWebGL2) return gl.createVertexArray();
 
-		}
+    return extension.createVertexArrayOES();
+  }
 
-		if ( object.isInstancedMesh == true ) {
-
-			updateBuffers = true;
-
-		}
-
-
-		if ( index != null ) {
-			attributes.update( index, gl.ELEMENT_ARRAY_BUFFER );
-		}
-
-
-		if ( updateBuffers ) {
-      
-			setupVertexAttributes( object, material, program, geometry );
-
-
-			if ( index != null ) {
-
-        var _buffer = attributes.get( index )["buffer"];
-				gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, _buffer);
- 
-			}
-
-		}
-
-	}
-
-	createVertexArrayObject() {
-
-		if ( capabilities.isWebGL2 ) return gl.createVertexArray();
-
-		return extension.createVertexArrayOES();
-
-	}
-
-	bindVertexArrayObject( vao ) {
-
-		if ( capabilities.isWebGL2 ) {
-      if(vao != null) {
-        return gl.bindVertexArray( vao );
+  bindVertexArrayObject(vao) {
+    if (capabilities.isWebGL2) {
+      if (vao != null) {
+        return gl.bindVertexArray(vao);
       } else {
         print(" WebGLBindingStates.dart  bindVertexArrayObject VAO is null");
         return;
       }
     }
 
-		return extension.bindVertexArrayOES( vao );
+    return extension.bindVertexArrayOES(vao);
+  }
 
-	}
+  deleteVertexArrayObject(vao) {
+    if (capabilities.isWebGL2) return gl.deleteVertexArray(vao);
 
-	deleteVertexArrayObject( vao ) {
+    return extension.deleteVertexArrayOES(vao);
+  }
 
-		if ( capabilities.isWebGL2 ) return gl.deleteVertexArray( vao );
+  getBindingState(geometry, program, material) {
+    var wireframe = (material.wireframe == true);
 
-		return extension.deleteVertexArrayOES( vao );
+    var programMap = bindingStates[geometry.id];
 
-	}
+    if (programMap == null) {
+      programMap = {};
+      bindingStates[geometry.id] = programMap;
+    }
 
-	getBindingState( geometry, program, material ) {
+    var stateMap = programMap[program.id];
 
-		var wireframe = ( material.wireframe == true );
+    if (stateMap == null) {
+      stateMap = {};
+      programMap[program.id] = stateMap;
+    }
 
-		var programMap = bindingStates[ geometry.id ];
+    var state = stateMap[wireframe];
 
-		if ( programMap == null ) {
+    if (state == null) {
+      state = createBindingState(createVertexArrayObject());
+      stateMap[wireframe] = state;
+    }
 
-			programMap = {};
-			bindingStates[ geometry.id ] = programMap;
+    return state;
+  }
 
-		}
+  Map<String, dynamic> createBindingState(vao) {
+    var newAttributes = List<int>.filled(maxVertexAttributes, 0);
+    var enabledAttributes = List<int>.filled(maxVertexAttributes, 0);
+    var attributeDivisors = List<int>.filled(maxVertexAttributes, 0);
 
-		var stateMap = programMap[ program.id ];
+    for (var i = 0; i < maxVertexAttributes; i++) {
+      newAttributes[i] = 0;
+      enabledAttributes[i] = 0;
+      attributeDivisors[i] = 0;
+    }
 
-		if ( stateMap == null ) {
+    return {
+      // for backward compatibility on non-VAO support browser
+      "geometry": null,
+      "program": null,
+      "wireframe": false,
 
-			stateMap = {};
-			programMap[ program.id ] = stateMap;
+      "newAttributes": newAttributes,
+      "enabledAttributes": enabledAttributes,
+      "attributeDivisors": attributeDivisors,
+      "object": vao,
+      "attributes": {},
+      "index": null
+    };
+  }
 
-		}
+  needsUpdate(geometry, index) {
+    var cachedAttributes = currentState["attributes"];
+    var geometryAttributes = geometry.attributes;
 
-		var state = stateMap[ wireframe ];
+    var attributesNum = 0;
 
-		if ( state == null ) {
+    geometryAttributes.keys.forEach((key) {
+      var cachedAttribute = cachedAttributes[key];
+      var geometryAttribute = geometryAttributes[key];
 
-			state = createBindingState( createVertexArrayObject() );
-			stateMap[ wireframe ] = state;
+      if (cachedAttribute == null) return true;
 
-		}
+      if (cachedAttribute["attribute"] != geometryAttribute) return true;
 
-		return state;
+      if (cachedAttribute["data"] != geometryAttribute.data) return true;
 
-	}
+      attributesNum++;
+    });
 
-	Map<String, dynamic> createBindingState( vao ) {
+    if (currentState["attributesNum"] != attributesNum) return true;
 
-		var newAttributes = List<int>.filled(maxVertexAttributes, 0);
-		var enabledAttributes = List<int>.filled(maxVertexAttributes, 0);
-		var attributeDivisors = List<int>.filled(maxVertexAttributes, 0);
+    if (currentState["index"] != index) return true;
 
-		for ( var i = 0; i < maxVertexAttributes; i ++ ) {
+    return false;
+  }
 
-			newAttributes[ i ] = 0;
-			enabledAttributes[ i ] = 0;
-			attributeDivisors[ i ] = 0;
+  saveCache(geometry, index) {
+    var cache = {};
+    var attributes = geometry.attributes;
+    var attributesNum = 0;
 
-		}
+    attributes.keys.forEach((key) {
+      var attribute = attributes[key];
 
-		return {
+      var data = {};
+      data["attribute"] = attribute;
 
-			// for backward compatibility on non-VAO support browser
-			"geometry": null,
-			"program": null,
-			"wireframe": false,
+      if (attribute.data != null) {
+        data["data"] = attribute.data;
+      }
 
-			"newAttributes": newAttributes,
-			"enabledAttributes": enabledAttributes,
-			"attributeDivisors": attributeDivisors,
-			"object": vao,
-			"attributes": {},
-			"index": null
+      cache[key] = data;
 
-		};
+      attributesNum++;
+    });
 
-	}
+    currentState["attributes"] = cache;
+    currentState["attributesNum"] = attributesNum;
 
-	needsUpdate( geometry, index ) {
+    currentState["index"] = index;
+  }
 
-		var cachedAttributes = currentState["attributes"];
-		var geometryAttributes = geometry.attributes;
+  initAttributes() {
+    var newAttributes = currentState["newAttributes"];
 
-		var attributesNum = 0;
+    for (var i = 0, il = newAttributes.length; i < il; i++) {
+      newAttributes[i] = 0;
+    }
+  }
 
-		geometryAttributes.keys.forEach(( key ) {
+  enableAttribute(attribute) {
+    enableAttributeAndDivisor(attribute, 0);
+  }
 
-			var cachedAttribute = cachedAttributes[ key ];
-			var geometryAttribute = geometryAttributes[ key ];
+  enableAttributeAndDivisor(attribute, meshPerAttribute) {
+    var newAttributes = currentState["newAttributes"];
+    var enabledAttributes = currentState["enabledAttributes"];
+    var attributeDivisors = currentState["attributeDivisors"];
 
-			if ( cachedAttribute == null ) return true;
+    newAttributes[attribute] = 1;
 
-			if ( cachedAttribute["attribute"] != geometryAttribute ) return true;
+    if (enabledAttributes[attribute] == 0) {
+      gl.enableVertexAttribArray(attribute);
+      enabledAttributes[attribute] = 1;
+    }
 
-			if ( cachedAttribute["data"] != geometryAttribute.data ) return true;
+    if (attributeDivisors[attribute] != meshPerAttribute) {
+      // var extension = capabilities.isWebGL2 ? gl : extensions.get( 'ANGLE_instanced_arrays' );
+      // extension[ capabilities.isWebGL2 ? 'vertexAttribDivisor' : 'vertexAttribDivisorANGLE' ]( attribute, meshPerAttribute );
 
-			attributesNum ++;
+      gl.vertexAttribDivisor(attribute, meshPerAttribute);
+      attributeDivisors[attribute] = meshPerAttribute;
+    }
+  }
 
-		});
+  disableUnusedAttributes() {
+    var newAttributes = currentState["newAttributes"];
+    var enabledAttributes = currentState["enabledAttributes"];
 
-		if ( currentState["attributesNum"] != attributesNum ) return true;
+    for (var i = 0, il = enabledAttributes.length; i < il; i++) {
+      if (enabledAttributes[i] != newAttributes[i]) {
+        gl.disableVertexAttribArray(i);
+        enabledAttributes[i] = 0;
+      }
+    }
+  }
 
-		if ( currentState["index"] != index ) return true;
+  vertexAttribPointer(index, size, type, normalized, stride, offset) {
+    if (capabilities.isWebGL2 == true &&
+        (type == gl.INT || type == gl.UNSIGNED_INT)) {
+      gl.vertexAttribIPointer(index, size, type, stride, offset);
+    } else {
+      gl.vertexAttribPointer(index, size, type, normalized, stride, offset);
+    }
+  }
 
-		return false;
+  setupVertexAttributes(object, material, program, geometry) {
+    if (capabilities.isWebGL2 == false &&
+        (object.isInstancedMesh || geometry.isInstancedBufferGeometry)) {
+      if (extensions.get('ANGLE_instanced_arrays') == null) return;
+    }
 
-	}
+    initAttributes();
 
-	saveCache( geometry, index ) {
+    var geometryAttributes = geometry.attributes;
 
-		var cache = {};
-		var attributes = geometry.attributes;
-		var attributesNum = 0;
+    var programAttributes = program.getAttributes();
 
-		attributes.keys.forEach( (key) {
+    var materialDefaultAttributeValues = material.defaultAttributeValues;
 
-			var attribute = attributes[ key ];
+    for (var name in programAttributes.keys) {
+      var programAttribute = programAttributes[name];
 
-			var data = {};
-			data["attribute"] = attribute;
+      if (programAttribute["location"] >= 0) {
+        // var geometryAttribute = geometryAttributes[ name ];
+        var geometryAttribute = geometryAttributes[name];
 
-			if ( attribute.data != null ) {
+        if (geometryAttribute == null) {
+          if (name == 'instanceMatrix' && object.instanceMatrix != null)
+            geometryAttribute = object.instanceMatrix;
+          if (name == 'instanceColor' && object.instanceColor != null)
+            geometryAttribute = object.instanceColor;
+        }
 
-				data["data"] = attribute.data;
+        if (geometryAttribute != null) {
+          var normalized = geometryAttribute.normalized;
+          var size = geometryAttribute.itemSize;
 
-			}
+          var attribute = attributes.get(geometryAttribute);
 
-			cache[ key ] = data;
+          // TODO Attribute may not be available on context restore
 
-			attributesNum ++;
-
-		});
-
-		currentState["attributes"] = cache;
-		currentState["attributesNum"] = attributesNum;
-
-		currentState["index"] = index;
-
-	}
-
-	initAttributes() {
-
-		var newAttributes = currentState["newAttributes"];
-
-
-
-		for ( var i = 0, il = newAttributes.length; i < il; i ++ ) {
-
-			newAttributes[ i ] = 0;
-
-		}
-
-	}
-
-	enableAttribute( attribute ) {
-
-		enableAttributeAndDivisor( attribute, 0 );
-
-	}
-
-	enableAttributeAndDivisor( attribute, meshPerAttribute ) {
-
-
-		var newAttributes = currentState["newAttributes"];
-		var enabledAttributes = currentState["enabledAttributes"];
-		var attributeDivisors = currentState["attributeDivisors"];
-
-		newAttributes[ attribute ] = 1;
-
-		if ( enabledAttributes[ attribute ] == 0 ) {
-			gl.enableVertexAttribArray( attribute );
-			enabledAttributes[ attribute ] = 1;
-		}
-
-		if ( attributeDivisors[ attribute ] != meshPerAttribute ) {
-
-			// var extension = capabilities.isWebGL2 ? gl : extensions.get( 'ANGLE_instanced_arrays' );
-			// extension[ capabilities.isWebGL2 ? 'vertexAttribDivisor' : 'vertexAttribDivisorANGLE' ]( attribute, meshPerAttribute );
-			
-      gl.vertexAttribDivisor( attribute, meshPerAttribute );
-      attributeDivisors[ attribute ] = meshPerAttribute;
-		}
-
-	}
-
-	disableUnusedAttributes() {
-
-		var newAttributes = currentState["newAttributes"];
-		var enabledAttributes = currentState["enabledAttributes"];
-
-		for ( var i = 0, il = enabledAttributes.length; i < il; i ++ ) {
-
-			if ( enabledAttributes[ i ] != newAttributes[ i ] ) {
-
-  
-
-				gl.disableVertexAttribArray( i );
-				enabledAttributes[ i ] = 0;
-
-			}
-
-		}
-
-	}
-
-	vertexAttribPointer( index, size, type, normalized, stride, offset ) {
-		if ( capabilities.isWebGL2 == true && ( type == gl.INT || type == gl.UNSIGNED_INT ) ) {
-			gl.vertexAttribIPointer( index, size, type, stride, offset );
-		} else {
-			gl.vertexAttribPointer( index, size, type, normalized, stride, offset );
-		}
-	}
-
-	setupVertexAttributes( object, material, program, geometry ) {
-
-
-		if ( capabilities.isWebGL2 == false && ( object.isInstancedMesh || geometry.isInstancedBufferGeometry ) ) {
-			if ( extensions.get( 'ANGLE_instanced_arrays' ) == null ) return;
-		}
-
-		initAttributes();
-
-		var geometryAttributes = geometry.attributes;
-
-		var programAttributes = program.getAttributes();
-
-		var materialDefaultAttributeValues = material.defaultAttributeValues;
-
-
-		for( var name in programAttributes.keys ) {
-
-			var programAttribute = programAttributes[ name ];
-
-			if ( programAttribute["location"] >= 0 ) {
-
-				// var geometryAttribute = geometryAttributes[ name ];
-        var geometryAttribute = geometryAttributes[ name ];
-
-				if ( geometryAttribute == null ) {
-					if ( name == 'instanceMatrix' && object.instanceMatrix != null ) geometryAttribute = object.instanceMatrix;
-					if ( name == 'instanceColor' && object.instanceColor != null ) geometryAttribute = object.instanceColor;
-				}
-
-				if ( geometryAttribute != null ) {
-      
-					var normalized = geometryAttribute.normalized;
-					var size = geometryAttribute.itemSize;
-
-					var attribute = attributes.get( geometryAttribute );
-
-					// TODO Attribute may not be available on context restore
-
-					if ( attribute == null ) {
-            print("WebGLBindingState setupVertexAttributes name: ${name} attribute == null ");
+          if (attribute == null) {
+            print(
+                "WebGLBindingState setupVertexAttributes name: ${name} attribute == null ");
             continue;
           }
 
-					var buffer = attribute["buffer"];
-					var type = attribute["type"];
-					var bytesPerElement = attribute["bytesPerElement"];
+          var buffer = attribute["buffer"];
+          var type = attribute["type"];
+          var bytesPerElement = attribute["bytesPerElement"];
 
-					if ( geometryAttribute.isInterleavedBufferAttribute ) {
-            
-         
-						var data = geometryAttribute.data;
-						var stride = data.stride;
-						var offset = geometryAttribute.offset;
+          if (geometryAttribute.isInterleavedBufferAttribute) {
+            var data = geometryAttribute.data;
+            var stride = data.stride;
+            var offset = geometryAttribute.offset;
 
-						if ( data != null && data.type == "InstancedInterleavedBuffer" ) {
+            if (data != null && data.type == "InstancedInterleavedBuffer") {
+              // enableAttributeAndDivisor( programAttribute, data.meshPerAttribute );
+              for (var i = 0; i < programAttribute["locationSize"]; i++) {
+                enableAttributeAndDivisor(
+                    programAttribute["location"] + i, data.meshPerAttribute);
+              }
 
-							// enableAttributeAndDivisor( programAttribute, data.meshPerAttribute );
-              for ( var i = 0; i < programAttribute["locationSize"]; i ++ ) {
+              if (object.isInstancedMesh != true &&
+                  geometry.maxInstanceCount == null) {
+                geometry.maxInstanceCount = data.meshPerAttribute * data.count;
+              }
+            } else {
+              // enableAttribute( programAttribute );
+              for (var i = 0; i < programAttribute["locationSize"]; i++) {
+                enableAttribute(programAttribute["location"] + i);
+              }
+            }
 
-								enableAttributeAndDivisor( programAttribute["location"] + i, data.meshPerAttribute );
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 
-							}
-
-							if ( object.isInstancedMesh != true && geometry.maxInstanceCount == null ) {
-
-								geometry.maxInstanceCount = data.meshPerAttribute * data.count;
-
-							}
-
-						} else {
-							// enableAttribute( programAttribute );
-              for ( var i = 0; i < programAttribute["locationSize"]; i ++ ) {
-
-								enableAttribute( programAttribute["location"] + i );
-
-							}
-						}
-            
-						gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
-
-						// vertexAttribPointer( programAttribute, size, type, normalized, stride * bytesPerElement, offset * bytesPerElement );
-            for ( var i = 0; i < programAttribute["locationSize"]; i ++ ) {
-
-							vertexAttribPointer(
-								programAttribute["location"] + i,
-								size ~/ programAttribute["locationSize"],
-								type,
-								normalized,
-								stride * bytesPerElement,
-								( offset + ( size ~/ programAttribute["locationSize"] ) * i ) * bytesPerElement
-							);
-
-						}
+            // vertexAttribPointer( programAttribute, size, type, normalized, stride * bytesPerElement, offset * bytesPerElement );
+            for (var i = 0; i < programAttribute["locationSize"]; i++) {
+              vertexAttribPointer(
+                  programAttribute["location"] + i,
+                  size ~/ programAttribute["locationSize"],
+                  type,
+                  normalized,
+                  stride * bytesPerElement,
+                  (offset + (size ~/ programAttribute["locationSize"]) * i) *
+                      bytesPerElement);
+            }
           } else {
+            if (geometryAttribute.isInstancedBufferAttribute) {
+              // enableAttributeAndDivisor( programAttribute, geometryAttribute.meshPerAttribute );
+              for (var i = 0; i < programAttribute["locationSize"]; i++) {
+                enableAttributeAndDivisor(programAttribute["location"] + i,
+                    geometryAttribute.meshPerAttribute);
+              }
 
-						if ( geometryAttribute.isInstancedBufferAttribute ) {
+              if (geometry.maxInstanceCount == null) {
+                geometry.maxInstanceCount = geometryAttribute.meshPerAttribute *
+                    geometryAttribute.count;
+              }
+            } else {
+              // enableAttribute( programAttribute );
+              for (var i = 0; i < programAttribute["locationSize"]; i++) {
+                enableAttribute(programAttribute["location"] + i);
+              }
+            }
 
-							// enableAttributeAndDivisor( programAttribute, geometryAttribute.meshPerAttribute );
-              for ( var i = 0; i < programAttribute["locationSize"]; i ++ ) {
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            // vertexAttribPointer( programAttribute, size, type, normalized, 0, 0 );
+            for (var i = 0; i < programAttribute["locationSize"]; i++) {
+              vertexAttribPointer(
+                  programAttribute["location"] + i,
+                  size ~/ programAttribute["locationSize"],
+                  type,
+                  normalized,
+                  size * bytesPerElement,
+                  (size ~/ programAttribute["locationSize"]) *
+                      i *
+                      bytesPerElement);
+            }
+          }
+        } else if (materialDefaultAttributeValues != null) {
+          var value = materialDefaultAttributeValues[name];
 
-								enableAttributeAndDivisor( programAttribute["location"] + i, geometryAttribute.meshPerAttribute );
+          if (value != null) {
+            switch (value.length) {
+              case 2:
+                gl.vertexAttrib2fv(programAttribute["location"], value);
+                break;
 
-							}
+              case 3:
+                gl.vertexAttrib3fv(programAttribute["location"], value);
+                break;
 
-							if ( geometry.maxInstanceCount == null ) {
+              case 4:
+                gl.vertexAttrib4fv(programAttribute["location"], value);
+                break;
 
-								geometry.maxInstanceCount = geometryAttribute.meshPerAttribute * geometryAttribute.count;
+              default:
+                gl.vertexAttrib1fv(programAttribute["location"], value);
+            }
+          }
+        }
+      }
+    }
+    ;
 
-							}
+    disableUnusedAttributes();
+  }
 
-						} else {
-							// enableAttribute( programAttribute );
-              for ( var i = 0; i < programAttribute["locationSize"]; i ++ ) {
+  dispose() {
+    reset();
 
-								enableAttribute( programAttribute["location"] + i );
+    // for ( var geometryId in bindingStates ) {
 
-							}
-						}
+    // 	var programMap = bindingStates[ geometryId ];
 
-      
-     
-						gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
-						// vertexAttribPointer( programAttribute, size, type, normalized, 0, 0 );
-            for ( var i = 0; i < programAttribute["locationSize"]; i ++ ) {
+    // 	for ( var programId in programMap ) {
 
-							vertexAttribPointer(
-								programAttribute["location"] + i,
-								size ~/ programAttribute["locationSize"],
-								type,
-								normalized,
-								size * bytesPerElement,
-								( size ~/ programAttribute["locationSize"] ) * i * bytesPerElement
-							);
+    // 		var stateMap = programMap[ programId ];
 
-						}
-					}
+    // 		for ( var wireframe in stateMap ) {
 
-				} else if ( materialDefaultAttributeValues != null ) {
+    // 			deleteVertexArrayObject( stateMap[ wireframe ].object );
 
-      
-					var value = materialDefaultAttributeValues[ name ];
+    // 			delete stateMap[ wireframe ];
 
-					if ( value != null ) {
+    // 		}
 
-						switch ( value.length ) {
+    // 		delete programMap[ programId ];
 
-							case 2:
-								gl.vertexAttrib2fv( programAttribute["location"], value );
-								break;
+    // 	}
 
-							case 3:
-								gl.vertexAttrib3fv( programAttribute["location"], value );
-								break;
+    // 	delete bindingStates[ geometryId ];
 
-							case 4:
-								gl.vertexAttrib4fv( programAttribute["location"], value );
-								break;
+    // }
+  }
 
-							default:
-								gl.vertexAttrib1fv( programAttribute["location"], value );
+  releaseStatesOfGeometry(geometry) {
+    if (this.bindingStates[geometry.id] == null) return;
 
-						}
-
-					}
-
-				}
-
-			}
-
-		};
-
-		disableUnusedAttributes();
-
-	}
-
-	dispose() {
-
-		reset();
-
-
-		// for ( var geometryId in bindingStates ) {
-
-		// 	var programMap = bindingStates[ geometryId ];
-
-		// 	for ( var programId in programMap ) {
-
-		// 		var stateMap = programMap[ programId ];
-
-		// 		for ( var wireframe in stateMap ) {
-
-		// 			deleteVertexArrayObject( stateMap[ wireframe ].object );
-
-		// 			delete stateMap[ wireframe ];
-
-		// 		}
-
-		// 		delete programMap[ programId ];
-
-		// 	}
-
-		// 	delete bindingStates[ geometryId ];
-
-		// }
-
-	}
-
-	releaseStatesOfGeometry( geometry ) {
-
-		if ( this.bindingStates[ geometry.id ] == null ) return;
-
-		var programMap = this.bindingStates[ geometry.id ];
-		for ( var programId in programMap.keys ) {
-			var stateMap = programMap[ programId ];
-			for ( var wireframe in stateMap.keys ) {
-				deleteVertexArrayObject( stateMap[ wireframe ]["object"] );
-			}
+    var programMap = this.bindingStates[geometry.id];
+    for (var programId in programMap.keys) {
+      var stateMap = programMap[programId];
+      for (var wireframe in stateMap.keys) {
+        deleteVertexArrayObject(stateMap[wireframe]["object"]);
+      }
       stateMap.clear();
-		}
+    }
     programMap.clear();
 
-		bindingStates.remove( geometry.id );
+    bindingStates.remove(geometry.id);
+  }
 
-	}
-
-	releaseStatesOfProgram( program ) {
-
+  releaseStatesOfProgram(program) {
     print(" WebGLBindingStates releaseStatesOfProgram ");
 
+    // for ( var geometryId in bindingStates ) {
 
-		// for ( var geometryId in bindingStates ) {
+    // 	var programMap = bindingStates[ geometryId ];
 
-		// 	var programMap = bindingStates[ geometryId ];
+    // 	if ( programMap[ program.id ] == null ) continue;
 
-		// 	if ( programMap[ program.id ] == null ) continue;
+    // 	var stateMap = programMap[ program.id ];
 
-		// 	var stateMap = programMap[ program.id ];
+    // 	for ( var wireframe in stateMap ) {
 
-		// 	for ( var wireframe in stateMap ) {
+    // 		deleteVertexArrayObject( stateMap[ wireframe ].object );
 
-		// 		deleteVertexArrayObject( stateMap[ wireframe ].object );
+    // 		delete stateMap[ wireframe ];
 
-		// 		delete stateMap[ wireframe ];
+    // 	}
 
-		// 	}
+    // 	delete programMap[ program.id ];
 
-		// 	delete programMap[ program.id ];
+    // }
+  }
 
-		// }
+  reset() {
+    resetDefaultState();
 
-	}
+    if (currentState == defaultState) return;
 
-	reset() {
+    currentState = defaultState;
+    bindVertexArrayObject(currentState["object"]);
+  }
 
-		resetDefaultState();
+  // for backward-compatilibity
 
-		if ( currentState == defaultState ) return;
-
-		currentState = defaultState;
-		bindVertexArrayObject( currentState["object"] );
-
-	}
-
-	// for backward-compatilibity
-
-	resetDefaultState() {
-
-		defaultState["geometry"] = null;
-		defaultState["program"] = null;
-		defaultState["wireframe"] = false;
-
-	}
-
-
+  resetDefaultState() {
+    defaultState["geometry"] = null;
+    defaultState["program"] = null;
+    defaultState["wireframe"] = false;
+  }
 }
-

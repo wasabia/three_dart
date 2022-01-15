@@ -14,7 +14,6 @@ import 'package:three_dart/three3d/renderers/index.dart';
 import 'package:three_dart/three_dart.dart';
 import '../dartHelpers.dart';
 
-
 part './core/Curve.dart';
 part './core/CurvePath.dart';
 part 'core/TYPRFont.dart';

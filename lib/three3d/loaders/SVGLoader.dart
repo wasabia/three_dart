@@ -1,80 +1,65 @@
 part of three_loaders;
 
-
 class SVGLoader extends Loader {
-
   // Default dots per inch
   num defaultDPI = 90;
 
   // Accepted units: 'mm', 'cm', 'in', 'pt', 'pc', 'px'
-	String defaultUnit = 'px';
+  String defaultUnit = 'px';
 
-	SVGLoader(manager) : super(manager) {}
+  SVGLoader(manager) : super(manager) {}
 
-  loadAsync( url, onProgress ) async {
+  loadAsync(url, onProgress) async {
     var completer = Completer();
 
-    load(
-      url,
-      (result) {
-        completer.complete(result);
-      }, 
-      onProgress, 
-      () {
-
-      }
-    );
+    load(url, (result) {
+      completer.complete(result);
+    }, onProgress, () {});
 
     return completer.future;
   }
 
+  load(url, onLoad, onProgress, onError) {
+    var scope = this;
 
-  load( url, onLoad, onProgress, onError ) {
+    var loader = new FileLoader(scope.manager);
+    loader.setPath(scope.path);
+    loader.setRequestHeader(scope.requestHeader);
+    loader.setWithCredentials(scope.withCredentials);
+    loader.load(url, (text) {
+      // try {
+      if (onLoad != null) {
+        onLoad(scope.parse(text));
+      }
 
-		var scope = this;
+      // } catch ( e ) {
 
-		var loader = new FileLoader( scope.manager );
-		loader.setPath( scope.path );
-		loader.setRequestHeader( scope.requestHeader );
-		loader.setWithCredentials( scope.withCredentials );
-		loader.load( url, ( text ) {
+      // 	if ( onError != null ) {
 
-			// try {
-        if(onLoad != null) {
-          onLoad( scope.parse( text ) );
-        }
-				
+      // 		onError( e );
 
-			// } catch ( e ) {
-
-			// 	if ( onError != null ) {
-
-			// 		onError( e );
-
-			// 	} else {
+      // 	} else {
       //     print("SVGLoader load error.... ");
-			// 		print( e );
+      // 		print( e );
 
-			// 	}
+      // 	}
 
-			// 	scope.manager.itemError( url );
+      // 	scope.manager.itemError( url );
 
-			// }
-
-		}, onProgress, onError );
-
-	}
+      // }
+    }, onProgress, onError);
+  }
 
   // Function parse =========== start
-	parse( text, {String? path, Function? onLoad, Function? onError} ) {
-    var _parse = SVGLoaderParser(text, defaultUnit: this.defaultUnit, defaultDPI: this.defaultDPI);
+  parse(text, {String? path, Function? onLoad, Function? onError}) {
+    var _parse = SVGLoaderParser(text,
+        defaultUnit: this.defaultUnit, defaultDPI: this.defaultDPI);
     return _parse.parse(text);
-	}
+  }
   // Function parse ================ end
 
-  
-  static Map<String, dynamic> getStrokeStyle( width, color, lineJoin, lineCap, miterLimit ) {
-
+  static Map<String, dynamic> getStrokeStyle(
+      width, color, lineJoin, lineCap, miterLimit) {
     // Param width: Stroke width
     // Param color: As returned by THREE.Color.getStyle()
     // Param lineJoin: One of "round", "bevel", "miter" or "miter-limit"
@@ -95,13 +80,9 @@ class SVGLoader extends Loader {
       "strokeLineCap": lineCap,
       "strokeMiterLimit": miterLimit
     };
-
   }
 
-
-
-  static pointsToStroke( points, style, arcDivisions, minDistance ) {
-
+  static pointsToStroke(points, style, arcDivisions, minDistance) {
     // Generates a stroke with some witdh around the given path.
     // The path can be open or closed (last point equals to first point)
     // Param points: Array of Vector2D (the path). Minimum 2 points.
@@ -114,28 +95,26 @@ class SVGLoader extends Loader {
     List<double> normals = [];
     List<double> uvs = [];
 
-    if ( SVGLoader.pointsToStrokeWithBuffers( points, style, arcDivisions, minDistance, vertices, normals, uvs, 0 ) == 0 ) {
+    if (SVGLoader.pointsToStrokeWithBuffers(points, style, arcDivisions,
+            minDistance, vertices, normals, uvs, 0) ==
+        0) {
       return null;
     }
 
     var geometry = new BufferGeometry();
-    geometry.setAttribute( 'position', new Float32BufferAttribute( vertices, 3, false ) );
-    geometry.setAttribute( 'normal', new Float32BufferAttribute( normals, 3, false ) );
-    geometry.setAttribute( 'uv', new Float32BufferAttribute( uvs, 2, false ) );
+    geometry.setAttribute(
+        'position', new Float32BufferAttribute(vertices, 3, false));
+    geometry.setAttribute(
+        'normal', new Float32BufferAttribute(normals, 3, false));
+    geometry.setAttribute('uv', new Float32BufferAttribute(uvs, 2, false));
 
     return geometry;
-
   }
 
-
-
-  static pointsToStrokeWithBuffers(points, style, arcDivisions, minDistance, vertices, normals, uvs, vertexOffset) {
-    var svgLPTS = SVGLoaderPointsToStroke(points, style, arcDivisions, minDistance, vertices, normals, uvs, vertexOffset);
+  static pointsToStrokeWithBuffers(points, style, arcDivisions, minDistance,
+      vertices, normals, uvs, vertexOffset) {
+    var svgLPTS = SVGLoaderPointsToStroke(points, style, arcDivisions,
+        minDistance, vertices, normals, uvs, vertexOffset);
     return svgLPTS.convert();
   }
-
 }
-
-
-
-

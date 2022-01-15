@@ -48,7 +48,6 @@ part of three_materials;
  */
 
 class MeshStandardMaterial extends Material {
-
   bool isMeshStandardMaterial = true;
   String type = "MeshStandardMaterial";
 
@@ -57,16 +56,14 @@ class MeshStandardMaterial extends Material {
 
   num? bumpScale = 1.0;
 
-  Vector2? normalScale = Vector2( 1, 1 );
+  Vector2? normalScale = Vector2(1, 1);
 
   num? envMapIntensity = 1.0;
 
+  MeshStandardMaterial([Map<String, dynamic>? parameters]) : super() {
+    this.defines = {'STANDARD': ''};
 
-  MeshStandardMaterial( [Map<String, dynamic>? parameters] ) : super() {
-
-    this.defines = { 'STANDARD': '' };
-
-    this.color = Color.fromHex( 0xffffff ); // diffuse
+    this.color = Color.fromHex(0xffffff); // diffuse
     this.roughness = 1.0;
     this.metalness = 0.0;
 
@@ -78,7 +75,7 @@ class MeshStandardMaterial extends Material {
     this.aoMap = null;
     this.aoMapIntensity = 1.0;
 
-    this.emissive = Color.fromHex( 0x000000 );
+    this.emissive = Color.fromHex(0x000000);
     this.emissiveIntensity = 1.0;
     this.emissiveMap = null;
 
@@ -87,7 +84,7 @@ class MeshStandardMaterial extends Material {
 
     this.normalMap = null;
     this.normalMapType = TangentSpaceNormalMap;
-    this.normalScale = new Vector2( 1, 1 );
+    this.normalScale = new Vector2(1, 1);
 
     this.displacementMap = null;
     this.displacementScale = 1;
@@ -109,19 +106,17 @@ class MeshStandardMaterial extends Material {
     this.wireframeLinecap = 'round';
     this.wireframeLinejoin = 'round';
 
-    this.setValues( parameters );
+    this.setValues(parameters);
   }
-
 
   clone() {
     return MeshStandardMaterial(Map<String, dynamic>()).copy(this);
   }
 
+  copy(source) {
+    super.copy(source);
 
-  copy( source ) {
-    super.copy( source );
-
-    this.defines = { 'STANDARD': '' };
+    this.defines = {'STANDARD': ''};
 
     this.color = source.color?.clone();
     this.roughness = source.roughness;
@@ -169,9 +164,5 @@ class MeshStandardMaterial extends Material {
     this.flatShading = source.flatShading;
 
     return this;
-
   }
-
-
 }
-

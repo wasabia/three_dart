@@ -8,56 +8,48 @@ Map<String, dynamic> UniformsLib = {
   "common": {
     "diffuse": {"value": Color.fromHex(0xffffff)},
     "opacity": {"value": 1.0},
-    "map": { },
+    "map": {},
     "uvTransform": {"value": new Matrix3()},
     "uv2Transform": {"value": new Matrix3()},
-    "alphaMap": { },
-    "alphaTest": { "value": 0.0 }
+    "alphaMap": {},
+    "alphaTest": {"value": 0.0}
   },
   "specularmap": {
-    "specularMap": { },
+    "specularMap": {},
   },
   "envmap": {
-    "envMap": { },
+    "envMap": {},
     "flipEnvMap": {"value": -1},
-    "reflectivity": { "value": 1.0 }, // basic, lambert, phong
-		"ior": { "value": 1.5 }, // standard, physical
+    "reflectivity": {"value": 1.0}, // basic, lambert, phong
+    "ior": {"value": 1.5}, // standard, physical
     "refractionRatio": {"value": 0.98},
     "maxMipLevel": {"value": 0}
   },
   "aomap": {
-    "aoMap": { },
+    "aoMap": {},
     "aoMapIntensity": {"value": 1}
   },
   "lightmap": {
-    "lightMap": { },
+    "lightMap": {},
     "lightMapIntensity": {"value": 1}
   },
-  "emissivemap": {
-    "emissiveMap": { }
-  },
+  "emissivemap": {"emissiveMap": {}},
   "bumpmap": {
-    "bumpMap": { },
+    "bumpMap": {},
     "bumpScale": {"value": 1}
   },
   "normalmap": {
-    "normalMap": { },
+    "normalMap": {},
     "normalScale": {"value": new Vector2(1, 1)}
   },
   "displacementmap": {
-    "displacementMap": { },
+    "displacementMap": {},
     "displacementScale": {"value": 1},
     "displacementBias": {"value": 0}
   },
-  "roughnessmap": {
-    "roughnessMap": { }
-  },
-  "metalnessmap": {
-    "metalnessMap": { }
-  },
-  "gradientmap": {
-    "gradientMap": { }
-  },
+  "roughnessmap": {"roughnessMap": {}},
+  "metalnessmap": {"metalnessMap": {}},
+  "gradientmap": {"gradientMap": {}},
   "fog": {
     "fogDensity": {"value": 0.00025},
     "fogNear": {"value": 1},
@@ -144,27 +136,27 @@ Map<String, dynamic> UniformsLib = {
       "properties": {"color": {}, "position": {}, "width": {}, "height": {}}
     },
 
-    "ltc_1": { },
-    "ltc_2": { }
+    "ltc_1": {},
+    "ltc_2": {}
   },
   "points": {
-    "diffuse": { "value": Color.fromHex(0xffffff) },
+    "diffuse": {"value": Color.fromHex(0xffffff)},
     "opacity": {"value": 1.0},
     "size": {"value": 1.0},
     "scale": {"value": 1.0},
-    "map": { },
-    "alphaMap": { },
-    "alphaTest": { "value": 0.0 },
+    "map": {},
+    "alphaMap": {},
+    "alphaTest": {"value": 0.0},
     "uvTransform": {"value": new Matrix3()}
   },
   "sprite": {
-    "diffuse": { "value": Color.fromHex(0xffffff) },
+    "diffuse": {"value": Color.fromHex(0xffffff)},
     "opacity": {"value": 1.0},
     "center": {"value": new Vector2(0.5, 0.5)},
     "rotation": {"value": 0.0},
-    "map": { },
-    "alphaMap": { },
-    "alphaTest": { "value": 0.0 },
+    "map": {},
+    "alphaMap": {},
+    "alphaTest": {"value": 0.0},
     "uvTransform": {"value": new Matrix3()}
   }
 };

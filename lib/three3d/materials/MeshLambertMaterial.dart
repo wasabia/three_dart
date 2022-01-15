@@ -1,6 +1,5 @@
 part of three_materials;
 
-
 /**
  * Lambert网格材质，与光照有反应，漫反射
  * parameters = {
@@ -34,13 +33,11 @@ part of three_materials;
  */
 
 class MeshLambertMaterial extends Material {
-
   String type = "MeshLambertMaterial";
   bool isMeshLambertMaterial = true;
 
-  MeshLambertMaterial( [parameters] ) : super() {
-
-    this.color = new Color(0,0,0).setHex( 0xffffff ); // diffuse
+  MeshLambertMaterial([parameters]) : super() {
+    this.color = new Color(0, 0, 0).setHex(0xffffff); // diffuse
 
     this.map = null;
 
@@ -50,7 +47,7 @@ class MeshLambertMaterial extends Material {
     this.aoMap = null;
     this.aoMapIntensity = 1.0;
 
-    this.emissive = new Color(0,0,0);
+    this.emissive = new Color(0, 0, 0);
     this.emissiveIntensity = 1.0;
     this.emissiveMap = null;
 
@@ -68,9 +65,8 @@ class MeshLambertMaterial extends Material {
     this.wireframeLinecap = 'round';
     this.wireframeLinejoin = 'round';
 
-    this.setValues( parameters );
+    this.setValues(parameters);
   }
-
 
   // copy( source ) {
 
@@ -107,6 +103,5 @@ class MeshLambertMaterial extends Material {
   //   return this;
 
   // }
-
 
 }

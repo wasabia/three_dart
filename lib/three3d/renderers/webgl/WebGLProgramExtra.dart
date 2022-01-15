@@ -169,15 +169,15 @@ class WebGLProgramExtra {
       // attributes[name] = gl.getAttribLocation(program, name);
 
       var locationSize = 1;
-      if ( info.type == gl.FLOAT_MAT2 ) locationSize = 2;
-      if ( info.type == gl.FLOAT_MAT3 ) locationSize = 3;
-      if ( info.type == gl.FLOAT_MAT4 ) locationSize = 4;
+      if (info.type == gl.FLOAT_MAT2) locationSize = 2;
+      if (info.type == gl.FLOAT_MAT3) locationSize = 3;
+      if (info.type == gl.FLOAT_MAT4) locationSize = 4;
 
       // console.log( 'THREE.WebGLProgram: ACTIVE VERTEX ATTRIBUTE:', name, i );
 
-      attributes[ name ] = {
+      attributes[name] = {
         "type": info.type,
-        "location": gl.getAttribLocation( program, name ),
+        "location": gl.getAttribLocation(program, name),
         "locationSize": locationSize
       };
     }
@@ -190,25 +190,33 @@ class WebGLProgramExtra {
   }
 
   String replaceLightNums(String string, WebGLParameters parameters) {
-
-
-
-    string = string.replaceAll("NUM_DIR_LIGHTS", parameters.numDirLights.toString());
-    string = string.replaceAll("NUM_SPOT_LIGHTS", parameters.numSpotLights.toString());
-    string = string.replaceAll("NUM_RECT_AREA_LIGHTS", parameters.numRectAreaLights.toString());
-    string = string.replaceAll("NUM_POINT_LIGHTS", parameters.numPointLights.toString());
-    string = string.replaceAll("NUM_HEMI_LIGHTS", parameters.numHemiLights.toString());
-    string = string.replaceAll("NUM_DIR_LIGHT_SHADOWS", parameters.numDirLightShadows.toString());
-    string = string.replaceAll("NUM_SPOT_LIGHT_SHADOWS", parameters.numSpotLightShadows.toString());
-    string = string.replaceAll("NUM_POINT_LIGHT_SHADOWS", parameters.numPointLightShadows.toString());
+    string =
+        string.replaceAll("NUM_DIR_LIGHTS", parameters.numDirLights.toString());
+    string = string.replaceAll(
+        "NUM_SPOT_LIGHTS", parameters.numSpotLights.toString());
+    string = string.replaceAll(
+        "NUM_RECT_AREA_LIGHTS", parameters.numRectAreaLights.toString());
+    string = string.replaceAll(
+        "NUM_POINT_LIGHTS", parameters.numPointLights.toString());
+    string = string.replaceAll(
+        "NUM_HEMI_LIGHTS", parameters.numHemiLights.toString());
+    string = string.replaceAll(
+        "NUM_DIR_LIGHT_SHADOWS", parameters.numDirLightShadows.toString());
+    string = string.replaceAll(
+        "NUM_SPOT_LIGHT_SHADOWS", parameters.numSpotLightShadows.toString());
+    string = string.replaceAll(
+        "NUM_POINT_LIGHT_SHADOWS", parameters.numPointLightShadows.toString());
 
     return string;
   }
 
   String replaceClippingPlaneNums(String string, WebGLParameters parameters) {
-    
-    string = string.replaceAll("NUM_CLIPPING_PLANES", parameters.numClippingPlanes.toString());
-    string = string.replaceAll("UNION_CLIPPING_PLANES", (parameters.numClippingPlanes - parameters.numClipIntersection).toString());
+    string = string.replaceAll(
+        "NUM_CLIPPING_PLANES", parameters.numClippingPlanes.toString());
+    string = string.replaceAll(
+        "UNION_CLIPPING_PLANES",
+        (parameters.numClippingPlanes - parameters.numClipIntersection)
+            .toString());
 
     return string;
   }
@@ -218,12 +226,10 @@ class WebGLProgramExtra {
   var includePattern = RegExp(r"[ \t]*#include +<([\w\d./]+)>"); //gm;
 
   String resolveIncludes(String string) {
-    
     // return string.replaceAll(includePattern, includeReplacer);
 
     // Loop through all matches.
     for (var match in includePattern.allMatches(string)) {
-
       /**
        * Returns the string matched by the given [group].
        *
@@ -234,7 +240,7 @@ class WebGLProgramExtra {
        */
       // print(" resolveIncludes ");
       // print(match.group(0)); // 15, then 20
-      
+
       String includeString = match.group(1)!;
 
       // print(" includeString: ${includeString} ");
@@ -246,7 +252,6 @@ class WebGLProgramExtra {
       String fromString = match.group(0)!;
 
       string = string.replaceFirst(fromString, targetString2);
-
     }
 
     return string;
@@ -270,10 +275,8 @@ class WebGLProgramExtra {
       r"#pragma unroll_loop_start\s+for\s*\(\s*int\s+i\s*=\s*(\d+)\s*;\s*i\s*<\s*(\d+)\s*;\s*i\s*\+\+\s*\)\s*{([\s\S]+?)}\s+#pragma unroll_loop_end");
 
   unrollLoops(String string) {
-    
     string = unrollLoopPatternReplace(string);
     string = deprecatedUnrollLoopPatternReplace(string);
-
 
     // print(" unrollLoops ======================== ");
     // print(string);
@@ -288,28 +291,22 @@ class WebGLProgramExtra {
   String unrollLoopPatternReplace(String string) {
     var matches = unrollLoopPattern.allMatches(string);
 
-    
-
-
     matches.forEach((RegExpMatch match) {
-      
       var stringResult = '';
 
       int start = int.parse(match.group(1)!);
       int end = int.parse(match.group(2)!);
       var snippet = match.group(3)!;
 
-     
-      for ( var i = start; i < end; i ++ ) {
-
+      for (var i = start; i < end; i++) {
         var snippet2 = snippet.replaceAll(RegExp(r"\[\s*i\s*\]"), "[${i}]");
-        snippet2 = snippet2.replaceAll(RegExp(r"UNROLLED_LOOP_INDEX"), i.toString());
+        snippet2 =
+            snippet2.replaceAll(RegExp(r"UNROLLED_LOOP_INDEX"), i.toString());
         // string += snippet
         //   .replace( /\[\s*i\s*\]/g, '[ ' + i + ' ]' )
         //   .replace( /UNROLLED_LOOP_INDEX/g, i );
 
         stringResult = stringResult + snippet2;
-
       }
 
       string = string.replaceFirst(match.group(0)!, stringResult);
@@ -322,7 +319,7 @@ class WebGLProgramExtra {
     // } else {
     //   print("unrollLoopPatternReplace match is null  ");
     // }
-   
+
     return string;
   }
 
@@ -331,9 +328,9 @@ class WebGLProgramExtra {
     return string;
   }
 
-
   deprecatedLoopReplacer(match, start, end, snippet) {
-    print('WebGLProgram: #pragma unroll_loop shader syntax is deprecated. Please use #pragma unroll_loop_start syntax instead.');
+    print(
+        'WebGLProgram: #pragma unroll_loop shader syntax is deprecated. Please use #pragma unroll_loop_start syntax instead.');
     return loopReplacer(match, start, end, snippet);
   }
 
@@ -345,8 +342,8 @@ class WebGLProgramExtra {
 
     for (var i = _start; i < _end; i++) {
       snippet = snippet
-          ..replaceAll(RegExp(r"\[\s*i\s*\]"), '[ ${i} ]')
-          ..replaceAll(RegExp(r"UNROLLED_LOOP_INDEX"), i);
+        ..replaceAll(RegExp(r"\[\s*i\s*\]"), '[ ${i} ]')
+        ..replaceAll(RegExp(r"UNROLLED_LOOP_INDEX"), i);
 
       string += snippet;
     }

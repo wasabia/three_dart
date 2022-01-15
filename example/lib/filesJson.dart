@@ -21,5 +21,7 @@ var filesJson = [
   "webgl_clipping_stencil",
   "webgl_clipping",
   "webgl_geometries",
-  "webgl_materials"
+  "webgl_materials",
+  "webgl_animation_skinning_blending",
+  "webgl_animation_skinning_additive_blending"
 ];

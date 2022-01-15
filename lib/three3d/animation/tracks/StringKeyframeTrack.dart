@@ -5,23 +5,15 @@ part of three_animation;
  */
 
 class StringKeyframeTrack extends KeyframeTrack {
-
   var ValueTypeName = 'string';
-	var ValueBufferType = "Array";
+  var ValueBufferType = "Array";
 
-	var DefaultInterpolation = InterpolateDiscrete;
+  var DefaultInterpolation = InterpolateDiscrete;
 
-  StringKeyframeTrack( name, times, values, interpolation ) : super(name, times, values, interpolation) {
+  StringKeyframeTrack(name, times, values, interpolation)
+      : super(name, times, values, interpolation) {}
 
-  }
+  InterpolantFactoryMethodLinear(result) {}
 
-
-	InterpolantFactoryMethodLinear(result) {
-
-  }
-
-	InterpolantFactoryMethodSmooth(result) {
-
-  }
-
+  InterpolantFactoryMethodSmooth(result) {}
 }

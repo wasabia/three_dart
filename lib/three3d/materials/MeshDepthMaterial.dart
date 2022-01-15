@@ -19,7 +19,6 @@ part of three_materials;
  */
 
 class MeshDepthMaterial extends Material {
-
   bool isMeshDepthMaterial = true;
   String type = "MeshDepthMaterial";
   int? depthPacking = BasicDepthPacking;
@@ -30,19 +29,14 @@ class MeshDepthMaterial extends Material {
   num? wireframeLinewidth = 1;
   bool fog = false;
 
-
-  MeshDepthMaterial( [Map<String, dynamic>? parameters] ) : super() {
-
+  MeshDepthMaterial([Map<String, dynamic>? parameters]) : super() {
     this.displacementMap = null;
 
-    this.setValues( parameters );
+    this.setValues(parameters);
   }
 
-
-
-  copy ( source ) {
-
-    super.copy( source );
+  copy(source) {
+    super.copy(source);
 
     this.depthPacking = source.depthPacking;
 
@@ -58,12 +52,9 @@ class MeshDepthMaterial extends Material {
     this.wireframeLinewidth = source.wireframeLinewidth;
 
     return this;
-
   }
 
   clone() {
     return MeshDepthMaterial().copy(this);
   }
-
 }
-

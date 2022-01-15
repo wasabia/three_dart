@@ -1,4 +1,3 @@
-
 import 'package:example/ExamplePage.dart';
 import 'package:example/HomePage.dart';
 import 'package:flutter/material.dart';
@@ -10,15 +9,14 @@ class ExampleApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<ExampleApp> {
-
   AppRouterDelegate _routerDelegate = AppRouterDelegate();
-  AppRouteInformationParser _routeInformationParser = AppRouteInformationParser();
+  AppRouteInformationParser _routeInformationParser =
+      AppRouteInformationParser();
 
   @override
   void initState() {
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +26,7 @@ class _MyAppState extends State<ExampleApp> {
       routeInformationParser: _routeInformationParser,
     );
   }
-
 }
-
 
 class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
   @override
@@ -72,9 +68,8 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
   }
 }
 
-
-
-class AppRouterDelegate extends RouterDelegate<AppRoutePath> with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRoutePath> {
+class AppRouterDelegate extends RouterDelegate<AppRoutePath>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRoutePath> {
   final GlobalKey<NavigatorState> navigatorKey;
 
   String? _selectedExample;
@@ -86,7 +81,9 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath> with ChangeNotifier
     if (show404) {
       return AppRoutePath.unknown();
     }
-    return _selectedExample == null ? AppRoutePath.home() : AppRoutePath.details(_selectedExample);
+    return _selectedExample == null
+        ? AppRoutePath.home()
+        : AppRoutePath.details(_selectedExample);
   }
 
   @override
@@ -96,22 +93,16 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath> with ChangeNotifier
       pages: [
         MaterialPage(
           key: ValueKey('HomePage'),
-          child: HomePage(
-            chooseExample: (id) {
-              _handleExampleTapped(id);
-            }
-          ),
+          child: HomePage(chooseExample: (id) {
+            _handleExampleTapped(id);
+          }),
         ),
         if (show404)
-          MaterialPage(
-            key: ValueKey('UnknownPage'), 
-            child: UnknownScreen()
-          )
+          MaterialPage(key: ValueKey('UnknownPage'), child: UnknownScreen())
         else if (_selectedExample != null)
           MaterialPage(
-            key: ValueKey('ExamplePage'), 
-            child: ExamplePage(id: _selectedExample)
-          )
+              key: ValueKey('ExamplePage'),
+              child: ExamplePage(id: _selectedExample))
       ],
       onPopPage: (route, result) {
         if (!route.didPop(result)) {
@@ -156,20 +147,21 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath> with ChangeNotifier
   }
 }
 
-
 class AppRoutePath {
   final String? id;
   final bool isUnknown;
 
-  AppRoutePath.home() : id = null, isUnknown = false;
+  AppRoutePath.home()
+      : id = null,
+        isUnknown = false;
   AppRoutePath.details(this.id) : isUnknown = false;
-  AppRoutePath.unknown() : id = null, isUnknown = true;
+  AppRoutePath.unknown()
+      : id = null,
+        isUnknown = true;
 
   bool get isHomePage => id == null;
   bool get isDetailsPage => id != null;
 }
-
-
 
 class UnknownScreen extends StatelessWidget {
   @override

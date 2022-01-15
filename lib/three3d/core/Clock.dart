@@ -1,82 +1,62 @@
 part of three_core;
 
 class Clock {
-
-
   late bool autoStart;
   late num startTime;
   late num oldTime;
   late num elapsedTime;
   late bool running;
 
-	Clock( [autoStart] ) {
+  Clock([autoStart]) {
+    this.autoStart = (autoStart != null) ? autoStart : true;
 
-		this.autoStart = ( autoStart != null ) ? autoStart : true;
+    this.startTime = 0;
+    this.oldTime = 0;
+    this.elapsedTime = 0;
 
-		this.startTime = 0;
-		this.oldTime = 0;
-		this.elapsedTime = 0;
+    this.running = false;
+  }
 
-		this.running = false;
+  start() {
+    this.startTime = now();
 
-	}
+    this.oldTime = this.startTime;
+    this.elapsedTime = 0;
+    this.running = true;
+  }
 
-	start() {
+  stop() {
+    this.getElapsedTime();
+    this.running = false;
+    this.autoStart = false;
+  }
 
-		this.startTime = now();
+  getElapsedTime() {
+    this.getDelta();
+    return this.elapsedTime;
+  }
 
-		this.oldTime = this.startTime;
-		this.elapsedTime = 0;
-		this.running = true;
+  getDelta() {
+    num diff = 0;
 
-	}
+    if (this.autoStart && !this.running) {
+      this.start();
+      return 0;
+    }
 
-	stop() {
+    if (this.running) {
+      var newTime = now();
 
-		this.getElapsedTime();
-		this.running = false;
-		this.autoStart = false;
+      diff = (newTime - this.oldTime) / 1000;
+      this.oldTime = newTime;
 
-	}
+      this.elapsedTime += diff;
+    }
 
-	getElapsedTime() {
-
-		this.getDelta();
-		return this.elapsedTime;
-
-	}
-
-	getDelta() {
-
-		num diff = 0;
-
-		if ( this.autoStart && ! this.running ) {
-
-			this.start();
-			return 0;
-
-		}
-
-		if ( this.running ) {
-
-			var newTime = now();
-
-			diff = ( newTime - this.oldTime ) / 1000;
-			this.oldTime = newTime;
-
-			this.elapsedTime += diff;
-
-		}
-
-		return diff;
-
-	}
-
+    return diff;
+  }
 }
 
 now() {
-
-	return DateTime.now().millisecondsSinceEpoch; // see #10732
-
+  return DateTime.now().millisecondsSinceEpoch; // see #10732
 }
-

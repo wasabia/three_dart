@@ -1,6 +1,5 @@
 part of three_materials;
 
-
 /**
  * parameters = {
  *  clearcoat: <float>,
@@ -31,96 +30,76 @@ part of three_materials;
  */
 
 class MeshPhysicalMaterial extends MeshStandardMaterial {
-
   bool isMeshPhysicalMaterial = true;
 
   Texture? clearcoatMap;
   num? clearcoatRoughness = 0.0;
   String type = 'MeshPhysicalMaterial';
   Texture? clearcoatRoughnessMap;
-  Vector2? clearcoatNormalScale = Vector2( 1, 1 );
+  Vector2? clearcoatNormalScale = Vector2(1, 1);
   Texture? clearcoatNormalMap;
 
   // null will disable sheenTint bsdf
   Color? sheenTint;
 
   num? thickness = 0.01;
-  
-  Color? attenuationTint = new Color( 1, 1, 1 );
+
+  Color? attenuationTint = new Color(1, 1, 1);
   num? attenuationDistance = 0.0;
-  
 
   num? specularIntensity = 1.0;
   Texture? specularIntensityMap = null;
-  Color? specularTint = new Color( 1, 1, 1 );
+  Color? specularTint = new Color(1, 1, 1);
   Texture? specularTintMap = null;
   num? ior = 1.5;
 
+  MeshPhysicalMaterial([parameters]) : super(parameters) {
+    this.defines = {'STANDARD': '', 'PHYSICAL': ''};
 
-  MeshPhysicalMaterial( [parameters] ) : super(parameters) {
-    this.defines = {
-      'STANDARD': '',
-      'PHYSICAL': ''
-    };
-  
-    this.setValues( parameters );
+    this.setValues(parameters);
   }
 
-
-  num get reflectivity => ( MathUtils.clamp( 2.5 * ( this.ior! - 1 ) / ( this.ior! + 1 ), 0, 1 ) );
+  num get reflectivity =>
+      (MathUtils.clamp(2.5 * (this.ior! - 1) / (this.ior! + 1), 0, 1));
   set reflectivity(value) {
-    this.ior = ( 1 + 0.4 * value ) / ( 1 - 0.4 * value );
+    this.ior = (1 + 0.4 * value) / (1 - 0.4 * value);
   }
 
+  copy(source) {
+    super.copy(source);
 
-  copy( source ) {
-
-    super.copy( source );
-
-    this.defines = {
-
-      'STANDARD': '',
-      'PHYSICAL': ''
-
-    };
+    this.defines = {'STANDARD': '', 'PHYSICAL': ''};
 
     this.clearcoat = source.clearcoat;
     this.clearcoatMap = source.clearcoatMap;
     this.clearcoatRoughness = source.clearcoatRoughness;
     this.clearcoatRoughnessMap = source.clearcoatRoughnessMap;
     this.clearcoatNormalMap = source.clearcoatNormalMap;
-    this.clearcoatNormalScale!.copy( source.clearcoatNormalScale );
+    this.clearcoatNormalScale!.copy(source.clearcoatNormalScale);
 
     this.ior = source.ior;
 
-    if ( source.sheenTint != null ) {
-
-      this.sheenTint = ( this.sheenTint ?? new Color(0,0,0) ).copy( source.sheen );
-
+    if (source.sheenTint != null) {
+      this.sheenTint =
+          (this.sheenTint ?? new Color(0, 0, 0)).copy(source.sheen);
     } else {
-
       this.sheenTint = null;
-
     }
 
     this.transmission = source.transmission;
     this.transmissionMap = source.transmissionMap;
 
     this.thickness = source.thickness;
-		this.thicknessMap = source.thicknessMap;
+    this.thicknessMap = source.thicknessMap;
 
-    this.attenuationTint!.copy( source.attenuationTint );
-		this.attenuationDistance = source.attenuationDistance;
-		
+    this.attenuationTint!.copy(source.attenuationTint);
+    this.attenuationDistance = source.attenuationDistance;
 
     this.specularIntensity = source.specularIntensity;
-		this.specularIntensityMap = source.specularIntensityMap;
-		this.specularTint!.copy( source.specularTint );
-		this.specularTintMap = source.specularTintMap;
+    this.specularIntensityMap = source.specularIntensityMap;
+    this.specularTint!.copy(source.specularTint);
+    this.specularTintMap = source.specularTintMap;
 
     return this;
-
   }
-
-
 }

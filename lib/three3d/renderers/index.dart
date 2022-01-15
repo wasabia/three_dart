@@ -1,6 +1,4 @@
-
 library three_renderers;
-
 
 import 'dart:typed_data';
 
@@ -18,7 +16,6 @@ import 'package:three_dart/three3d/scenes/index.dart';
 import 'package:three_dart/three3d/textures/index.dart';
 import 'package:three_dart/three3d/renderers/webgl/index.dart';
 import 'package:three_dart/three3d/renderers/shaders/index.dart';
-
 
 part './WebGLCubeRenderTarget.dart';
 part './WebGLRenderer.dart';

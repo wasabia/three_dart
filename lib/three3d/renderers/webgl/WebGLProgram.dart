@@ -24,11 +24,11 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
   WebGLUniforms? cachedUniforms;
   Map<String, dynamic>? cachedAttributes;
 
-  WebGLProgram(this.renderer, this.cacheKey, this.parameters, this.bindingStates) {
-  
+  WebGLProgram(
+      this.renderer, this.cacheKey, this.parameters, this.bindingStates) {
     this.name = parameters.shaderName;
     this.id = programIdCount++;
-  
+
     this.gl = renderer.getContext();
     this.program = gl.createProgram();
     init();
@@ -55,26 +55,29 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
     String prefixVertex, prefixFragment;
 
-    String defaultVersionString = (!kIsWeb && Platform.isMacOS) ? "#version 140\n" : "";
+    String defaultVersionString =
+        (!kIsWeb && Platform.isMacOS) ? "#version 140\n" : "";
 
-    var versionString = parameters.glslVersion != null ? '#version ${parameters.glslVersion}\n' : defaultVersionString;
+    var versionString = parameters.glslVersion != null
+        ? '#version ${parameters.glslVersion}\n'
+        : defaultVersionString;
 
     if (parameters.isRawShaderMaterial) {
-      prefixVertex = [customDefines].where((s) => filterEmptyLine(s)).join('\n');
+      prefixVertex =
+          [customDefines].where((s) => filterEmptyLine(s)).join('\n');
 
       if (prefixVertex.length > 0) {
         prefixVertex = "${prefixVertex}\n";
       }
 
-      prefixFragment = [customExtensions, customDefines].where((s) => filterEmptyLine(s)).join('\n');
-
+      prefixFragment = [customExtensions, customDefines]
+          .where((s) => filterEmptyLine(s))
+          .join('\n');
 
       if (prefixFragment.length > 0) {
         prefixFragment = "${prefixFragment}\n";
       }
     } else {
-
- 
       prefixVertex = [
         generatePrecision(parameters),
         '#define SHADER_NAME ' + parameters.shaderName,
@@ -86,7 +89,6 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         '#define MAX_BONES ${parameters.maxBones}',
         (parameters.useFog && parameters.fog) ? '#define USE_FOG' : '',
         (parameters.useFog && parameters.fogExp2) ? '#define FOG_EXP2' : '',
-        
         parameters.map ? '#define USE_MAP' : '',
         parameters.envMap ? '#define USE_ENVMAP' : '',
         parameters.envMap ? '#define ' + envMapModeDefine : '',
@@ -102,7 +104,6 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
             ? '#define TANGENTSPACE_NORMALMAP'
             : '',
         parameters.clearcoatMap ? '#define USE_CLEARCOATMAP' : '',
-
         parameters.clearcoatRoughnessMap
             ? '#define USE_CLEARCOAT_ROUGHNESSMAP'
             : '',
@@ -111,8 +112,10 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
             ? '#define USE_DISPLACEMENTMAP'
             : '',
         parameters.specularMap ? '#define USE_SPECULARMAP' : '',
-        parameters.specularIntensityMap ? '#define USE_SPECULARINTENSITYMAP' : '',
-			  parameters.specularTintMap ? '#define USE_SPECULARTINTMAP' : '',
+        parameters.specularIntensityMap
+            ? '#define USE_SPECULARINTENSITYMAP'
+            : '',
+        parameters.specularTintMap ? '#define USE_SPECULARTINTMAP' : '',
         parameters.roughnessMap ? '#define USE_ROUGHNESSMAP' : '',
         parameters.metalnessMap ? '#define USE_METALNESSMAP' : '',
         parameters.alphaMap ? '#define USE_ALPHAMAP' : '',
@@ -227,8 +230,10 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
             : '',
         parameters.clearcoatNormalMap ? '#define USE_CLEARCOAT_NORMALMAP' : '',
         parameters.specularMap ? '#define USE_SPECULARMAP' : '',
-        parameters.specularIntensityMap ? '#define USE_SPECULARINTENSITYMAP' : '',
-			  parameters.specularTintMap ? '#define USE_SPECULARTINTMAP' : '',
+        parameters.specularIntensityMap
+            ? '#define USE_SPECULARINTENSITYMAP'
+            : '',
+        parameters.specularTintMap ? '#define USE_SPECULARTINTMAP' : '',
         parameters.roughnessMap ? '#define USE_ROUGHNESSMAP' : '',
         parameters.metalnessMap ? '#define USE_METALNESSMAP' : '',
         parameters.alphaMap ? '#define USE_ALPHAMAP' : '',
@@ -239,7 +244,9 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.thicknessMap ? '#define USE_THICKNESSMAP' : '',
 
         parameters.vertexTangents ? '#define USE_TANGENT' : '',
-        parameters.vertexColors || parameters.instancingColor ? '#define USE_COLOR' : '',
+        parameters.vertexColors || parameters.instancingColor
+            ? '#define USE_COLOR'
+            : '',
         parameters.vertexAlphas ? '#define USE_COLOR_ALPHA' : '',
         parameters.vertexUvs ? '#define USE_UV' : '',
         parameters.uvsVertexOnly ? '#define UVS_VERTEX_ONLY' : '',
@@ -266,7 +273,9 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
             ? '#define USE_LOGDEPTHBUF_EXT'
             : '',
 
-        ((parameters.extensionShaderTextureLOD || parameters.envMap || parameters.transmission) &&
+        ((parameters.extensionShaderTextureLOD ||
+                    parameters.envMap ||
+                    parameters.transmission) &&
                 parameters.rendererExtensionShaderTextureLod)
             ? '#define TEXTURE_LOD_EXT'
             : '',
@@ -276,23 +285,52 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         'uniform bool isOrthographic;',
 
         (parameters.toneMapping != NoToneMapping) ? '#define TONE_MAPPING' : '',
-        (parameters.toneMapping != NoToneMapping) ? ShaderChunk['tonemapping_pars_fragment'] : '', // this code is required here because it is used by the toneMapping() defined below
-        (parameters.toneMapping != NoToneMapping) ? getToneMappingFunction('toneMapping', parameters.toneMapping) : '',
+        (parameters.toneMapping != NoToneMapping)
+            ? ShaderChunk['tonemapping_pars_fragment']
+            : '', // this code is required here because it is used by the toneMapping() defined below
+        (parameters.toneMapping != NoToneMapping)
+            ? getToneMappingFunction('toneMapping', parameters.toneMapping)
+            : '',
 
         parameters.dithering ? '#define DITHERING' : '',
         parameters.blending == NoBlending ? '#define OPAQUE' : '',
 
-        ShaderChunk['encodings_pars_fragment'], // this code is required here because it is used by the various encoding/decoding defined below
-        parameters.map ? getTexelDecodingFunction('mapTexelToLinear', parameters.mapEncoding) : '',
-        parameters.matcap ? getTexelDecodingFunction('matcapTexelToLinear', parameters.matcapEncoding) : '',
-        parameters.envMap ? getTexelDecodingFunction('envMapTexelToLinear', parameters.envMapEncoding) : '',
-        parameters.emissiveMap ? getTexelDecodingFunction('emissiveMapTexelToLinear', parameters.emissiveMapEncoding) : '',
-        parameters.specularTintMap ? getTexelDecodingFunction( 'specularTintMapTexelToLinear', parameters.specularTintMapEncoding ) : '',    
-        parameters.sheenColorMap ? getTexelDecodingFunction( 'sheenColorMapTexelToLinear', parameters.sheenColorMapEncoding ) : '',
-        parameters.lightMap ? getTexelDecodingFunction('lightMapTexelToLinear', parameters.lightMapEncoding) : '',
-        getTexelEncodingFunction('linearToOutputTexel', parameters.outputEncoding),
+        ShaderChunk[
+            'encodings_pars_fragment'], // this code is required here because it is used by the various encoding/decoding defined below
+        parameters.map
+            ? getTexelDecodingFunction(
+                'mapTexelToLinear', parameters.mapEncoding)
+            : '',
+        parameters.matcap
+            ? getTexelDecodingFunction(
+                'matcapTexelToLinear', parameters.matcapEncoding)
+            : '',
+        parameters.envMap
+            ? getTexelDecodingFunction(
+                'envMapTexelToLinear', parameters.envMapEncoding)
+            : '',
+        parameters.emissiveMap
+            ? getTexelDecodingFunction(
+                'emissiveMapTexelToLinear', parameters.emissiveMapEncoding)
+            : '',
+        parameters.specularTintMap
+            ? getTexelDecodingFunction('specularTintMapTexelToLinear',
+                parameters.specularTintMapEncoding)
+            : '',
+        parameters.sheenColorMap
+            ? getTexelDecodingFunction(
+                'sheenColorMapTexelToLinear', parameters.sheenColorMapEncoding)
+            : '',
+        parameters.lightMap
+            ? getTexelDecodingFunction(
+                'lightMapTexelToLinear', parameters.lightMapEncoding)
+            : '',
+        getTexelEncodingFunction(
+            'linearToOutputTexel', parameters.outputEncoding),
 
-        parameters.depthPacking != null ? '#define DEPTH_PACKING ${parameters.depthPacking}' : '',
+        parameters.depthPacking != null
+            ? '#define DEPTH_PACKING ${parameters.depthPacking}'
+            : '',
 
         '\n'
       ].where((s) => filterEmptyLine(s)).join('\n');
@@ -309,10 +347,11 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     vertexShader = unrollLoops(vertexShader);
     fragmentShader = unrollLoops(fragmentShader);
 
-
     if (parameters.isWebGL2 && parameters.isRawShaderMaterial != true) {
       // GLSL 3.0 conversion for built-in materials and ShaderMaterial
-      versionString = (!kIsWeb && Platform.isMacOS) ? "#version 140\n" : "#version 300 es\n";
+      versionString = (!kIsWeb && Platform.isMacOS)
+          ? "#version 140\n"
+          : "#version 300 es\n";
 
       prefixVertex = [
             '#define attribute in',
@@ -348,13 +387,11 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     var vertexGlsl = versionString + prefixVertex + vertexShader;
     var fragmentGlsl = versionString + prefixFragment + fragmentShader;
 
-
     // developer.log(" alphaTest: ${parameters.alphaTest} ");
     // developer.log(" 111 ================= VERTEX  ");
     // developer.log(vertexGlsl);
     // developer.log("  111 ==================== FRAGMENT ");
     // developer.log(fragmentGlsl);
-
 
     var glVertexShader = WebGLShader(gl, gl.VERTEX_SHADER, vertexGlsl);
 
@@ -363,10 +400,8 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     this.vertexShader = glVertexShader.content;
     this.fragmentShader = glFragmentShader.content;
 
-
     gl.attachShader(this.program, glVertexShader.shader);
     gl.attachShader(this.program, glFragmentShader.shader);
-
 
     // Force a particular attribute to index 0.
 
@@ -381,7 +416,6 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
     gl.linkProgram(this.program);
 
-
     // check for link errors
     if (renderer.debug["checkShaderErrors"]) {
       var programLog = gl.getProgramInfoLog(program)?.trim();
@@ -391,16 +425,17 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
       var runnable = true;
       var haveDiagnostics = true;
 
-
       if (gl.getProgramParameter(program, gl.LINK_STATUS) == false) {
         runnable = false;
 
         var vertexErrors = getShaderErrors(gl, glVertexShader, 'vertex');
         var fragmentErrors = getShaderErrors(gl, glFragmentShader, 'fragment');
 
-        print('THREE.WebGLProgram: shader error: ${gl.getError()} gl.VALIDATE_STATUS ${gl.getProgramParameter(program, gl.VALIDATE_STATUS)} gl.getProgramInfoLog ${programLog}  ${vertexErrors} ${fragmentErrors} ');
+        print(
+            'THREE.WebGLProgram: shader error: ${gl.getError()} gl.VALIDATE_STATUS ${gl.getProgramParameter(program, gl.VALIDATE_STATUS)} gl.getProgramInfoLog ${programLog}  ${vertexErrors} ${fragmentErrors} ');
       } else if (programLog != '') {
-        print('THREE.WebGLProgram: gl.getProgramInfoLog() programLog: ${programLog} vertexLog: ${vertexLog} fragmentLog: ${fragmentLog} ');
+        print(
+            'THREE.WebGLProgram: gl.getProgramInfoLog() programLog: ${programLog} vertexLog: ${vertexLog} fragmentLog: ${fragmentLog} ');
       } else if (vertexLog == '' || fragmentLog == '') {
         haveDiagnostics = false;
       }
@@ -415,7 +450,6 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
       }
     }
 
-
     // Clean up
 
     // Crashes in iOS9 and iOS10. #18402
@@ -425,13 +459,11 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     gl.deleteShader(glVertexShader.shader);
     gl.deleteShader(glFragmentShader.shader);
 
- 
     // set up caching for uniform locations
   }
   // set up caching for attribute locations
 
   WebGLUniforms getUniforms() {
-
     if (cachedUniforms == null) {
       cachedUniforms = WebGLUniforms(gl, this);
     }

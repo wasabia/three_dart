@@ -5,13 +5,8 @@ part of three_animation;
  */
 
 class ColorKeyframeTrack extends KeyframeTrack {
-
   var ValueTypeName = 'color';
 
-  ColorKeyframeTrack( name, times, values, interpolation ) : super(name, times, values, interpolation) {
-
-  }
-
-
+  ColorKeyframeTrack(name, times, values, interpolation)
+      : super(name, times, values, interpolation) {}
 }
-

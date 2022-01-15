@@ -6,9 +6,7 @@ class WebGLAnimation {
   var animationLoop = null;
   var requestId = null;
 
-  WebGLAnimation() {
-    
-  }
+  WebGLAnimation() {}
 
   onAnimationFrame(time, frame) {
     animationLoop(time, frame);

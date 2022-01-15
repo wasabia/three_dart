@@ -4,10 +4,9 @@ class PointLightShadow extends LightShadow {
   late List<Vector3> _cubeDirections;
   late List<Vector3> _cubeUps;
 
-  PointLightShadow() : super(PerspectiveCamera( 90, 1, 0.5, 500 )) {
-
+  PointLightShadow() : super(PerspectiveCamera(90, 1, 0.5, 500)) {
     this.isPointLightShadow = true;
-    this._frameExtents = new Vector2( 4, 2 );
+    this._frameExtents = new Vector2(4, 2);
 
     this._viewportCount = 6;
 
@@ -26,64 +25,69 @@ class PointLightShadow extends LightShadow {
       // z - Negative z direction
 
       // positive X
-      new Vector4( 2, 1, 1, 1 ),
+      new Vector4(2, 1, 1, 1),
       // negative X
-      new Vector4( 0, 1, 1, 1 ),
+      new Vector4(0, 1, 1, 1),
       // positive Z
-      new Vector4( 3, 1, 1, 1 ),
+      new Vector4(3, 1, 1, 1),
       // negative Z
-      new Vector4( 1, 1, 1, 1 ),
+      new Vector4(1, 1, 1, 1),
       // positive Y
-      new Vector4( 3, 0, 1, 1 ),
+      new Vector4(3, 0, 1, 1),
       // negative Y
-      new Vector4( 1, 0, 1, 1 )
+      new Vector4(1, 0, 1, 1)
     ];
 
     this._cubeDirections = [
-      new Vector3( 1, 0, 0 ), new Vector3( - 1, 0, 0 ), new Vector3( 0, 0, 1 ),
-      new Vector3( 0, 0, - 1 ), new Vector3( 0, 1, 0 ), new Vector3( 0, - 1, 0 )
+      new Vector3(1, 0, 0),
+      new Vector3(-1, 0, 0),
+      new Vector3(0, 0, 1),
+      new Vector3(0, 0, -1),
+      new Vector3(0, 1, 0),
+      new Vector3(0, -1, 0)
     ];
 
     this._cubeUps = [
-      new Vector3( 0, 1, 0 ), new Vector3( 0, 1, 0 ), new Vector3( 0, 1, 0 ),
-      new Vector3( 0, 1, 0 ), new Vector3( 0, 0, 1 ),	new Vector3( 0, 0, - 1 )
+      new Vector3(0, 1, 0),
+      new Vector3(0, 1, 0),
+      new Vector3(0, 1, 0),
+      new Vector3(0, 1, 0),
+      new Vector3(0, 0, 1),
+      new Vector3(0, 0, -1)
     ];
-
   }
 
-  PointLightShadow.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) : super.fromJSON(json, rootJSON) {
+  PointLightShadow.fromJSON(
+      Map<String, dynamic> json, Map<String, dynamic> rootJSON)
+      : super.fromJSON(json, rootJSON) {
     camera = Object3D.castJSON(json["camera"], rootJSON);
   }
 
-  updateMatrices( light, {viewportIndex = 0} ) {
+  updateMatrices(light, {viewportIndex = 0}) {
+    var camera = this.camera;
+    var shadowMatrix = this.matrix;
 
-		var camera = this.camera;
-		var shadowMatrix = this.matrix;
+    var far = light.distance ?? camera!.far;
 
-		var far = light.distance ?? camera!.far;
+    if (far != camera!.far) {
+      camera.far = far;
+      camera.updateProjectionMatrix();
+    }
 
-		if ( far != camera!.far ) {
+    _lightPositionWorld.setFromMatrixPosition(light.matrixWorld);
+    camera.position.copy(_lightPositionWorld);
 
-			camera.far = far;
-			camera.updateProjectionMatrix();
+    _lookTarget.copy(camera.position);
+    _lookTarget.add(this._cubeDirections[viewportIndex]);
+    camera.up.copy(this._cubeUps[viewportIndex]);
+    camera.lookAt(_lookTarget);
+    camera.updateMatrixWorld(false);
 
-		}
+    shadowMatrix.makeTranslation(
+        -_lightPositionWorld.x, -_lightPositionWorld.y, -_lightPositionWorld.z);
 
-		_lightPositionWorld.setFromMatrixPosition( light.matrixWorld );
-		camera.position.copy( _lightPositionWorld );
-
-		_lookTarget.copy( camera.position );
-		_lookTarget.add( this._cubeDirections[ viewportIndex ] );
-		camera.up.copy( this._cubeUps[ viewportIndex ] );
-		camera.lookAt( _lookTarget );
-		camera.updateMatrixWorld(false);
-
-		shadowMatrix.makeTranslation( - _lightPositionWorld.x, - _lightPositionWorld.y, - _lightPositionWorld.z );
-
-		_projScreenMatrix.multiplyMatrices( camera.projectionMatrix, camera.matrixWorldInverse );
-		this._frustum.setFromProjectionMatrix( _projScreenMatrix );
-
-	}
-
+    _projScreenMatrix.multiplyMatrices(
+        camera.projectionMatrix, camera.matrixWorldInverse);
+    this._frustum.setFromProjectionMatrix(_projScreenMatrix);
+  }
 }
-

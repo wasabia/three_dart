@@ -141,7 +141,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.3"
+    version: "0.13.4"
   http_parser:
     dependency: transitive
     description:
@@ -155,7 +155,7 @@ packages:
       name: image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.2"
+    version: "3.1.1"
   js:
     dependency: transitive
     description:
@@ -191,13 +191,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
-  pedantic:
-    dependency: transitive
-    description:
-      name: pedantic
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.11.0"
   petitparser:
     dependency: transitive
     description:

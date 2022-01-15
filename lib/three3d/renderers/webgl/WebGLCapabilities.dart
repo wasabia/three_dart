@@ -1,14 +1,13 @@
 part of three_webgl;
 
 class WebGLCapabilities {
-
-	bool isWebGL2 = true;
+  bool isWebGL2 = true;
 
   Map<String, dynamic> parameters;
   dynamic gl;
   WebGLExtensions extensions;
 
-	String precision = 'highp';
+  String precision = 'highp';
   String maxPrecision = "highp";
 
   bool logarithmicDepthBuffer = false;
@@ -29,67 +28,52 @@ class WebGLCapabilities {
 
   late int maxSamples;
 
-  bool get drawBuffers => isWebGL2 || extensions.has( 'WEBGL_draw_buffers' );
-
+  bool get drawBuffers => isWebGL2 || extensions.has('WEBGL_draw_buffers');
 
   WebGLCapabilities(this.gl, this.extensions, this.parameters) {
     this.precision = parameters["precision"] ?? "highp";
 
-
-    maxPrecision = getMaxPrecision( precision );
-    if ( maxPrecision != precision ) {
-      print( 'THREE.WebGLRenderer: ${precision} not supported, using ${maxPrecision} instead.' );
+    maxPrecision = getMaxPrecision(precision);
+    if (maxPrecision != precision) {
+      print(
+          'THREE.WebGLRenderer: ${precision} not supported, using ${maxPrecision} instead.');
       precision = maxPrecision;
     }
 
+    logarithmicDepthBuffer = parameters["logarithmicDepthBuffer"] == true;
 
-	  logarithmicDepthBuffer = parameters["logarithmicDepthBuffer"] == true;
+    maxTextures = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
+    maxVertexTextures = gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
+    maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+    maxCubemapSize = gl.getParameter(gl.MAX_CUBE_MAP_TEXTURE_SIZE);
 
-	  maxTextures = gl.getParameter( gl.MAX_TEXTURE_IMAGE_UNITS );
-	  maxVertexTextures = gl.getParameter( gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS );
-	  maxTextureSize = gl.getParameter( gl.MAX_TEXTURE_SIZE );
-	  maxCubemapSize = gl.getParameter( gl.MAX_CUBE_MAP_TEXTURE_SIZE );
+    maxAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
+    maxVertexUniforms = gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS);
+    maxVaryings = gl.getParameter(gl.MAX_VARYING_VECTORS);
+    maxFragmentUniforms = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
 
-	  maxAttributes = gl.getParameter( gl.MAX_VERTEX_ATTRIBS );
-	  maxVertexUniforms = gl.getParameter( gl.MAX_VERTEX_UNIFORM_VECTORS );
-	  maxVaryings = gl.getParameter( gl.MAX_VARYING_VECTORS );
-	  maxFragmentUniforms = gl.getParameter( gl.MAX_FRAGMENT_UNIFORM_VECTORS );
+    vertexTextures = maxVertexTextures > 0;
+    floatFragmentTextures = isWebGL2;
+    floatVertexTextures = vertexTextures && floatFragmentTextures;
 
-	  vertexTextures = maxVertexTextures > 0;
-	  floatFragmentTextures = isWebGL2;
-	  floatVertexTextures = vertexTextures && floatFragmentTextures;
-
-	  maxSamples = isWebGL2 ? gl.getParameter( gl.MAX_SAMPLES ) : 0;
-
+    maxSamples = isWebGL2 ? gl.getParameter(gl.MAX_SAMPLES) : 0;
   }
 
-	
+  num getMaxAnisotropy() {
+    if (maxAnisotropy != null) return maxAnisotropy!;
 
-	num getMaxAnisotropy() {
+    var extension = extensions.get('EXT_texture_filter_anisotropic');
 
-		if ( maxAnisotropy != null ) return maxAnisotropy!;
+    if (extension != null) {
+      maxAnisotropy = gl.getParameter(gl.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+    } else {
+      maxAnisotropy = 0;
+    }
 
-		var extension = extensions.get( 'EXT_texture_filter_anisotropic' );
+    return maxAnisotropy!;
+  }
 
-		if ( extension != null ) {
-
-			maxAnisotropy = gl.getParameter( gl.MAX_TEXTURE_MAX_ANISOTROPY_EXT );
-
-		} else {
-
-			maxAnisotropy = 0;
-
-		}
-
-		return maxAnisotropy!;
-
-	}
-
-	String getMaxPrecision( precision ) {
-
-		return 'highp';
-
-	}
-
-
+  String getMaxPrecision(precision) {
+    return 'highp';
+  }
 }

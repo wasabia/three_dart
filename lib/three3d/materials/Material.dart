@@ -1,7 +1,5 @@
 part of three_materials;
 
-
-
 int materialId = 0;
 
 class Material with EventDispatcher {
@@ -48,7 +46,6 @@ class Material with EventDispatcher {
 
   num? shininess;
 
-
   String? precision;
   bool polygonOffset = false;
   num polygonOffsetFactor = 0;
@@ -59,13 +56,13 @@ class Material with EventDispatcher {
 
   num _clearcoat = 0;
   num get clearcoat => _clearcoat;
-  set clearcoat( num value ) {
-		if ( (this._clearcoat > 0) != (value > 0) ) {
-			this.version ++;
-		}
-		this._clearcoat = value;
-	}
-  
+  set clearcoat(num value) {
+    if ((this._clearcoat > 0) != (value > 0)) {
+      this.version++;
+    }
+    this._clearcoat = value;
+  }
+
   bool alphaToCoverage = false;
   num rotation = 0;
 
@@ -103,7 +100,7 @@ class Material with EventDispatcher {
   Texture? specularIntensityMap;
   Texture? specularTintMap;
   Texture? sheenColorMap;
-  
+
   Texture? gradientMap;
   Color? sheenTint;
   num transmission = 0.0;
@@ -114,7 +111,7 @@ class Material with EventDispatcher {
 
   Color? attenuationTint;
   num? attenuationDistance;
-  
+
   bool vertexTangents = false;
 
   Texture? map;
@@ -148,10 +145,9 @@ class Material with EventDispatcher {
   num? gapSize;
   num? scale;
 
-
   Color? emissive;
-	num emissiveIntensity = 1.0;
-	Texture? emissiveMap;
+  num emissiveIntensity = 1.0;
+  Texture? emissiveMap;
 
   bool isMeshStandardMaterial = false;
   bool isRawShaderMaterial = false;
@@ -184,7 +180,6 @@ class Material with EventDispatcher {
   Map<String, dynamic>? extensions;
   Map<String, dynamic>? defaultAttributeValues;
 
-
   bool? lights;
   bool? clipping;
 
@@ -197,7 +192,7 @@ class Material with EventDispatcher {
   set reflectivity(value) {
     _reflectivity = value;
   }
- 
+
   bool? uniformsNeedUpdate;
 
   Function? onBeforeCompile;
@@ -216,421 +211,419 @@ class Material with EventDispatcher {
     customProgramCacheKey = () {
       return this.onBeforeCompile?.toString();
     };
-
   }
 
   Material.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) {
     this.uuid = json["uuid"];
     this.type = json["type"];
-    this.color = Color(0,0,0).setHex(json["color"]);
-
+    this.color = Color(0, 0, 0).setHex(json["color"]);
   }
 
-  onBuild( shaderobject, renderer ) {}
+  onBuild(shaderobject, renderer) {}
 
   // onBeforeCompile(shaderobject, renderer) {}
 
   setValues(Map<String, dynamic>? values) {
+    if (values == null) return;
 
-    if ( values == null ) return;
+    for (var key in values.keys) {
+      var newValue = values[key];
 
-    for ( var key in values.keys ) {
-
-      var newValue = values[ key ];
-
-      if ( newValue == null ) {
-
-        print( 'THREE.Material setValues: ${key} parameter is null.' );
+      if (newValue == null) {
+        print('THREE.Material setValues: ${key} parameter is null.');
         continue;
-
       }
 
       setValue(key, newValue);
-
     }
   }
-
 
   setValue(String key, dynamic newValue) {
-    
-    if(key == "alphaTest") {
+    if (key == "alphaTest") {
       alphaTest = newValue;
-    } else if(key == "alphaMap") {
+    } else if (key == "alphaMap") {
       alphaMap = newValue;
-    } else if(key == "aoMap") {
+    } else if (key == "aoMap") {
       aoMap = newValue;
-    } else if(key == "blendDst") {
+    } else if (key == "blendDst") {
       blendDst = newValue;
-    } else if(key == "blendDstAlpha") {
+    } else if (key == "blendDstAlpha") {
       blendDstAlpha = newValue;
-    } else if(key == "blendSrcAlpha") {
+    } else if (key == "blendSrcAlpha") {
       blendSrcAlpha = newValue;
-    } else if(key == "blendEquation") {
-      blendEquation = newValue;  
-    } else if(key == "blending") {
+    } else if (key == "blendEquation") {
+      blendEquation = newValue;
+    } else if (key == "blending") {
       blending = newValue;
-    } else if(key == "blendSrc") {
+    } else if (key == "blendSrc") {
       blendSrc = newValue;
-    } else if(key == "blendSrcAlpha") {
+    } else if (key == "blendSrcAlpha") {
       blendSrcAlpha = newValue;
-    } else if(key == "clearcoat") {
+    } else if (key == "clearcoat") {
       clearcoat = newValue;
-    } else if(key == "clearcoatRoughness") {
-      clearcoatRoughness = newValue;  
-    } else if(key == "clipIntersection") {
+    } else if (key == "clearcoatRoughness") {
+      clearcoatRoughness = newValue;
+    } else if (key == "clipIntersection") {
       clipIntersection = newValue;
-    } else if(key == "clipping") {
-      clipping = newValue; 
-    } else if(key == "clippingPlanes") {
+    } else if (key == "clipping") {
+      clipping = newValue;
+    } else if (key == "clippingPlanes") {
       clippingPlanes = newValue;
-    } else if(key == "clipShadows") {
+    } else if (key == "clipShadows") {
       clipShadows = newValue;
-    } else if(key == "color") {
-      if(newValue.runtimeType == Color) {
+    } else if (key == "color") {
+      if (newValue.runtimeType == Color) {
         color = newValue;
       } else {
-        color = Color(0,0,0).setHex(newValue);
+        color = Color(0, 0, 0).setHex(newValue);
       }
-    } else if(key == "defines") {
+    } else if (key == "defines") {
       defines = newValue;
-    } else if(key == "depthPacking") {
+    } else if (key == "depthPacking") {
       depthPacking = newValue;
-    } else if(key == "depthTest") {
-      depthTest = newValue;  
-    } else if(key == "depthWrite") {
+    } else if (key == "depthTest") {
+      depthTest = newValue;
+    } else if (key == "depthWrite") {
       depthWrite = newValue;
-    } else if(key == "dithering") {
-      dithering = newValue;  
-    } else if(key == "emissive") {
-      if(newValue.runtimeType == Color) {
+    } else if (key == "dithering") {
+      dithering = newValue;
+    } else if (key == "emissive") {
+      if (newValue.runtimeType == Color) {
         emissive = newValue;
       } else {
-        emissive = Color(0,0,0).setHex(newValue);
+        emissive = Color(0, 0, 0).setHex(newValue);
       }
-    } else if(key == "emissiveMap") {
-      emissiveMap = newValue;    
-    } else if(key == "flatShading") {
-      flatShading = newValue;  
-    } else if(key == "fog") {
+    } else if (key == "emissiveMap") {
+      emissiveMap = newValue;
+    } else if (key == "flatShading") {
+      flatShading = newValue;
+    } else if (key == "fog") {
       fog = newValue;
-    } else if(key == "fragmentShader") {
+    } else if (key == "fragmentShader") {
       fragmentShader = newValue;
-    } else if(key == "instanced") {
+    } else if (key == "instanced") {
       instanced = newValue;
-    } else if(key == "lights") {
+    } else if (key == "lights") {
       lights = newValue;
-    } else if( key == "linecap" ) {
+    } else if (key == "linecap") {
       linecap = newValue;
-    } else if( key == "linejoin" ) {
+    } else if (key == "linejoin") {
       linejoin = newValue;
-    } else if(key == "linewidth") {
+    } else if (key == "linewidth") {
       linewidth = newValue;
-    } else if(key == "matcap") {
-      matcap = newValue; 
-    } else if(key == "map") {
+    } else if (key == "matcap") {
+      matcap = newValue;
+    } else if (key == "map") {
       map = newValue;
-    } else if(key == "metalness") {
+    } else if (key == "metalness") {
       metalness = newValue;
-    } else if(key == "metalnessMap") {
+    } else if (key == "metalnessMap") {
       metalnessMap = newValue;
-    } else if(key == "name") {
+    } else if (key == "name") {
       name = newValue;
-    } else if(key == "normalMap") {
-      normalMap = newValue;  
-    } else if(key == "normalScale") {
-      normalScale = newValue;  
-    } else if(key == "opacity") {
+    } else if (key == "normalMap") {
+      normalMap = newValue;
+    } else if (key == "normalScale") {
+      normalScale = newValue;
+    } else if (key == "opacity") {
       opacity = newValue;
-    } else if(key == "polygonOffset") {
-      polygonOffset = newValue;  
-    } else if(key == "polygonOffsetFactor") {
+    } else if (key == "polygonOffset") {
+      polygonOffset = newValue;
+    } else if (key == "polygonOffsetFactor") {
       polygonOffsetFactor = newValue;
-    } else if(key == "polygonOffsetUnits") {
+    } else if (key == "polygonOffsetUnits") {
       polygonOffsetUnits = newValue;
-    } else if(key == "premultipliedAlpha") {
+    } else if (key == "premultipliedAlpha") {
       premultipliedAlpha = newValue;
-     } else if(key == "reflectivity") {
+    } else if (key == "reflectivity") {
       reflectivity = newValue;
-    } else if(key == "roughness") {
+    } else if (key == "roughness") {
       roughness = newValue;
-    } else if(key == "roughnessMap") {
+    } else if (key == "roughnessMap") {
       roughnessMap = newValue;
-    } else if(key == "shading") {
-    //   // for backward compatability if shading is set in the constructor
-      throw( 'THREE.' + this.type + ': .shading has been removed. Use the boolean .flatShading instead.' );
-    //   this.flatShading = ( newValue == FlatShading ) ? true : false;
+    } else if (key == "shading") {
+      //   // for backward compatability if shading is set in the constructor
+      throw ('THREE.' +
+          this.type +
+          ': .shading has been removed. Use the boolean .flatShading instead.');
+      //   this.flatShading = ( newValue == FlatShading ) ? true : false;
 
-    } else if(key == "shininess") {
+    } else if (key == "shininess") {
       shininess = newValue;
-    } else if(key == "side") {
+    } else if (key == "side") {
       side = newValue;
-    } else if(key == "size") {
+    } else if (key == "size") {
       size = newValue;
-    } else if(key == "sizeAttenuation") {
+    } else if (key == "sizeAttenuation") {
       sizeAttenuation = newValue;
-    } else if(key == "stencilZFail") {
+    } else if (key == "stencilZFail") {
       stencilZFail = newValue;
-    } else if(key == "stencilZPass") {
+    } else if (key == "stencilZPass") {
       stencilZPass = newValue;
-      
-    } else if(key == "stencilFail") {
+    } else if (key == "stencilFail") {
       stencilFail = newValue;
-    } else if(key == "stencilFunc") {
-      stencilFunc = newValue;    
-    } else if(key == "stencilRef") {
+    } else if (key == "stencilFunc") {
+      stencilFunc = newValue;
+    } else if (key == "stencilRef") {
       stencilRef = newValue;
-    } else if(key == "stencilWrite") {
+    } else if (key == "stencilWrite") {
       stencilWrite = newValue;
-    } else if(key == "toneMapped") {
+    } else if (key == "toneMapped") {
       toneMapped = newValue;
-    } else if(key == "transparent") {
-      transparent = newValue;  
-    } else if(key == "uniforms") {
+    } else if (key == "transparent") {
+      transparent = newValue;
+    } else if (key == "uniforms") {
       uniforms = newValue;
-    } else if(key == "vertexShader") {
-      vertexShader = newValue;  
-    } else if(key == "visible") {
+    } else if (key == "vertexShader") {
+      vertexShader = newValue;
+    } else if (key == "visible") {
       visible = newValue;
-    } else if(key == "vertexColors") {
+    } else if (key == "vertexColors") {
       vertexColors = newValue;
-    } else if(key == "wireframe") {
+    } else if (key == "wireframe") {
       wireframe = newValue;
-    } else if(key == "wireframeLinewidth") {
+    } else if (key == "wireframeLinewidth") {
       wireframeLinewidth = newValue;
-    } else if(key == "shadowSide") {
-      shadowSide = newValue; 
-    } else if(key == "specular") {
-      if(newValue.runtimeType == Color) {
+    } else if (key == "shadowSide") {
+      shadowSide = newValue;
+    } else if (key == "specular") {
+      if (newValue.runtimeType == Color) {
         specular = newValue;
       } else {
-        specular = Color(0,0,0).setHex(newValue);
+        specular = Color(0, 0, 0).setHex(newValue);
       }
     } else {
-      throw("Material.setValues key: ${key} newValue: ${newValue} is not support");
+      throw ("Material.setValues key: ${key} newValue: ${newValue} is not support");
     }
   }
 
-  toJSON ( {Object3dMeta? meta} ) {
+  toJSON({Object3dMeta? meta}) {
+    var isRoot = (meta == null || meta is String);
 
-  	var isRoot = ( meta == null || meta is String );
+    if (isRoot) {
+      meta = Object3dMeta();
+    }
 
-    if ( isRoot ) {
-			meta = Object3dMeta();
-		}
+    Map<String, dynamic> data = {
+      "metadata": {
+        "version": 4.5,
+        "type": 'Material',
+        "generator": 'Material.toJSON'
+      }
+    };
 
-  	Map<String, dynamic> data = {
-  		"metadata": {
-  			"version": 4.5,
-  			"type": 'Material',
-  			"generator": 'Material.toJSON'
-  		}
-  	};
+    // standard Material serialization
+    data["uuid"] = this.uuid;
+    data["type"] = this.type;
 
-  	// standard Material serialization
-  	data["uuid"] = this.uuid;
-  	data["type"] = this.type;
+    if (this.name != '') data["name"] = this.name;
 
-  	if ( this.name != '' ) data["name"] = this.name;
+    if (this.color != null && this.color!.isColor)
+      data["color"] = this.color!.getHex();
 
-  	if ( this.color != null && this.color!.isColor ) data["color"] = this.color!.getHex();
+    if (this.roughness != null) data["roughness"] = this.roughness;
+    if (this.metalness != null) data["metalness"] = this.metalness;
 
-  	if ( this.roughness != null ) data["roughness"] = this.roughness;
-  	if ( this.metalness != null ) data["metalness"] = this.metalness;
+    if (this.sheenTint != null && this.sheenTint!.isColor)
+      data["sheenTint"] = this.sheenTint!.getHex();
+    if (this.emissive != null && this.emissive!.isColor)
+      data["emissive"] = this.emissive!.getHex();
+    if (this.emissiveIntensity != null && this.emissiveIntensity != 1)
+      data["emissiveIntensity"] = this.emissiveIntensity;
 
-  	if ( this.sheenTint != null && this.sheenTint!.isColor ) data["sheenTint"] = this.sheenTint!.getHex();
-  	if ( this.emissive != null && this.emissive!.isColor ) data["emissive"] = this.emissive!.getHex();
-  	if ( this.emissiveIntensity != null && this.emissiveIntensity != 1 ) data["emissiveIntensity"] = this.emissiveIntensity;
+    if (this.specular != null && this.specular!.isColor)
+      data["specular"] = this.specular!.getHex();
+    if (this.specularIntensity != null)
+      data["specularIntensity"] = this.specularIntensity;
+    if (this.specularTint != null && this.specularTint!.isColor)
+      data["specularTint"] = this.specularTint!.getHex();
+    if (this.shininess != null) data["shininess"] = this.shininess;
+    if (this.clearcoat != null) data["clearcoat"] = this.clearcoat;
+    if (this.clearcoatRoughness != null)
+      data["clearcoatRoughness"] = this.clearcoatRoughness;
 
-  	if ( this.specular != null && this.specular!.isColor ) data["specular"] = this.specular!.getHex();
-    if ( this.specularIntensity != null ) data["specularIntensity"] = this.specularIntensity;
-		if ( this.specularTint != null && this.specularTint!.isColor ) data["specularTint"] = this.specularTint!.getHex();
-    if ( this.shininess != null ) data["shininess"] = this.shininess;
-  	if ( this.clearcoat != null ) data["clearcoat"] = this.clearcoat;
-  	if ( this.clearcoatRoughness != null ) data["clearcoatRoughness"] = this.clearcoatRoughness;
+    if (this.clearcoatMap != null && this.clearcoatMap!.isTexture) {
+      data["clearcoatMap"] = this.clearcoatMap!.toJSON(meta).uuid;
+    }
 
-  	if ( this.clearcoatMap != null && this.clearcoatMap!.isTexture ) {
+    if (this.clearcoatRoughnessMap != null &&
+        this.clearcoatRoughnessMap!.isTexture) {
+      data["clearcoatRoughnessMap"] =
+          this.clearcoatRoughnessMap!.toJSON(meta).uuid;
+    }
 
-  		data["clearcoatMap"] = this.clearcoatMap!.toJSON( meta ).uuid;
+    if (this.clearcoatNormalMap != null && this.clearcoatNormalMap!.isTexture) {
+      data["clearcoatNormalMap"] = this.clearcoatNormalMap!.toJSON(meta).uuid;
+      data["clearcoatNormalScale"] = this.clearcoatNormalScale!.toArray();
+    }
 
-  	}
+    if (this.map != null && this.map!.isTexture)
+      data["map"] = this.map!.toJSON(meta)["uuid"];
+    if (this.matcap != null && this.matcap!.isTexture)
+      data["matcap"] = this.matcap!.toJSON(meta)["uuid"];
+    if (this.alphaMap != null && this.alphaMap!.isTexture)
+      data["alphaMap"] = this.alphaMap!.toJSON(meta)["uuid"];
+    if (this.lightMap != null && this.lightMap!.isTexture)
+      data["lightMap"] = this.lightMap!.toJSON(meta)["uuid"];
 
-  	if ( this.clearcoatRoughnessMap != null && this.clearcoatRoughnessMap!.isTexture ) {
+    if (this.lightMap != null && this.lightMap!.isTexture) {
+      data["lightMap"] = this.lightMap!.toJSON(meta).uuid;
+      data["lightMapIntensity"] = this.lightMapIntensity;
+    }
 
-  		data["clearcoatRoughnessMap"] = this.clearcoatRoughnessMap!.toJSON( meta ).uuid;
+    if (this.aoMap != null && this.aoMap!.isTexture) {
+      data["aoMap"] = this.aoMap!.toJSON(meta).uuid;
+      data["aoMapIntensity"] = this.aoMapIntensity;
+    }
 
-  	}
+    if (this.bumpMap != null && this.bumpMap!.isTexture) {
+      data["bumpMap"] = this.bumpMap!.toJSON(meta).uuid;
+      data["bumpScale"] = this.bumpScale;
+    }
 
-  	if ( this.clearcoatNormalMap != null && this.clearcoatNormalMap!.isTexture ) {
+    if (this.normalMap != null && this.normalMap!.isTexture) {
+      data["normalMap"] = this.normalMap!.toJSON(meta).uuid;
+      data["normalMapType"] = this.normalMapType;
+      data["normalScale"] = this.normalScale!.toArray();
+    }
 
-  		data["clearcoatNormalMap"] = this.clearcoatNormalMap!.toJSON( meta ).uuid;
-  		data["clearcoatNormalScale"] = this.clearcoatNormalScale!.toArray();
+    if (this.displacementMap != null && this.displacementMap!.isTexture) {
+      data["displacementMap"] = this.displacementMap!.toJSON(meta).uuid;
+      data["displacementScale"] = this.displacementScale;
+      data["displacementBias"] = this.displacementBias;
+    }
 
-  	}
+    if (this.roughnessMap != null && this.roughnessMap!.isTexture)
+      data["roughnessMap"] = this.roughnessMap!.toJSON(meta).uuid;
+    if (this.metalnessMap != null && this.metalnessMap!.isTexture)
+      data["metalnessMap"] = this.metalnessMap!.toJSON(meta).uuid;
 
-  	if ( this.map != null && this.map!.isTexture ) data["map"] = this.map!.toJSON( meta )["uuid"];
-  	if ( this.matcap != null && this.matcap!.isTexture ) data["matcap"] = this.matcap!.toJSON( meta )["uuid"];
-  	if ( this.alphaMap != null && this.alphaMap!.isTexture ) data["alphaMap"] = this.alphaMap!.toJSON( meta )["uuid"];
-  	if ( this.lightMap != null && this.lightMap!.isTexture ) data["lightMap"] = this.lightMap!.toJSON( meta )["uuid"];
+    if (this.emissiveMap != null && this.emissiveMap!.isTexture)
+      data["emissiveMap"] = this.emissiveMap!.toJSON(meta).uuid;
+    if (this.specularMap != null && this.specularMap!.isTexture)
+      data["specularMap"] = this.specularMap!.toJSON(meta).uuid;
+    if (this.specularIntensityMap != null &&
+        this.specularIntensityMap!.isTexture)
+      data["specularIntensityMap"] =
+          this.specularIntensityMap!.toJSON(meta).uuid;
+    if (this.specularTintMap != null && this.specularTintMap!.isTexture)
+      data["specularTintMap"] = this.specularTintMap!.toJSON(meta).uuid;
 
+    if (this.envMap != null && this.envMap!.isTexture) {
+      data["envMap"] = this.envMap!.toJSON(meta).uuid;
 
-		if ( this.lightMap != null && this.lightMap!.isTexture ) {
+      data["refractionRatio"] = this.refractionRatio;
 
-			data["lightMap"] = this.lightMap!.toJSON( meta ).uuid;
-			data["lightMapIntensity"] = this.lightMapIntensity;
+      if (this.combine != null) data["combine"] = this.combine;
+      if (this.envMapIntensity != null)
+        data["envMapIntensity"] = this.envMapIntensity;
+    }
 
-		}
+    if (this.gradientMap != null && this.gradientMap!.isTexture) {
+      data["gradientMap"] = this.gradientMap!.toJSON(meta).uuid;
+    }
 
+    if (this.transmission != null) data["transmission"] = this.transmission;
+    if (this.transmissionMap != null && this.transmissionMap!.isTexture)
+      data["transmissionMap"] = this.transmissionMap!.toJSON(meta).uuid;
+    if (this.thickness != null) data["thickness"] = this.thickness;
+    if (this.thicknessMap != null && this.thicknessMap!.isTexture)
+      data["thicknessMap"] = this.thicknessMap!.toJSON(meta).uuid;
+    if (this.attenuationTint != null)
+      data["attenuationTint"] = this.attenuationTint!.getHex();
+    if (this.attenuationDistance != null)
+      data["attenuationDistance"] = this.attenuationDistance;
 
-  	if ( this.aoMap != null && this.aoMap!.isTexture ) {
+    if (this.size != null) data["size"] = this.size;
+    if (this.shadowSide != null) data["shadowSide"] = this.shadowSide;
+    if (this.sizeAttenuation != null)
+      data["sizeAttenuation"] = this.sizeAttenuation;
 
-  		data["aoMap"] = this.aoMap!.toJSON( meta ).uuid;
-  		data["aoMapIntensity"] = this.aoMapIntensity;
+    if (this.blending != NormalBlending) data["blending"] = this.blending;
+    if (this.side != FrontSide) data["side"] = this.side;
+    if (this.vertexColors) data["vertexColors"] = true;
 
-  	}
+    if (this.opacity < 1) data["opacity"] = this.opacity;
+    if (this.transparent == true) data["transparent"] = this.transparent;
 
-  	if ( this.bumpMap != null && this.bumpMap!.isTexture ) {
-
-  		data["bumpMap"] = this.bumpMap!.toJSON( meta ).uuid;
-  		data["bumpScale"] = this.bumpScale;
-
-  	}
-
-  	if ( this.normalMap != null && this.normalMap!.isTexture ) {
-
-  		data["normalMap"] = this.normalMap!.toJSON( meta ).uuid;
-  		data["normalMapType"] = this.normalMapType;
-  		data["normalScale"] = this.normalScale!.toArray();
-
-  	}
-
-  	if ( this.displacementMap != null && this.displacementMap!.isTexture ) {
-
-  		data["displacementMap"] = this.displacementMap!.toJSON( meta ).uuid;
-  		data["displacementScale"] = this.displacementScale;
-  		data["displacementBias"] = this.displacementBias;
-
-  	}
-
-  	if ( this.roughnessMap != null && this.roughnessMap!.isTexture ) data["roughnessMap"] = this.roughnessMap!.toJSON( meta ).uuid;
-  	if ( this.metalnessMap != null && this.metalnessMap!.isTexture ) data["metalnessMap"] = this.metalnessMap!.toJSON( meta ).uuid;
-
-  	if ( this.emissiveMap != null && this.emissiveMap!.isTexture ) data["emissiveMap"] = this.emissiveMap!.toJSON( meta ).uuid;
-  	if ( this.specularMap != null && this.specularMap!.isTexture ) data["specularMap"] = this.specularMap!.toJSON( meta ).uuid;
-    if ( this.specularIntensityMap != null && this.specularIntensityMap!.isTexture ) data["specularIntensityMap"] = this.specularIntensityMap!.toJSON( meta ).uuid;
-		if ( this.specularTintMap != null && this.specularTintMap!.isTexture ) data["specularTintMap"] = this.specularTintMap!.toJSON( meta ).uuid;
-
-  	if ( this.envMap != null && this.envMap!.isTexture ) {
-
-  		data["envMap"] = this.envMap!.toJSON( meta ).uuid;
-
-  		data["refractionRatio"] = this.refractionRatio;
-
-  		if ( this.combine != null ) data["combine"] = this.combine;
-  		if ( this.envMapIntensity != null ) data["envMapIntensity"] = this.envMapIntensity;
-
-  	}
-
-  	if ( this.gradientMap != null && this.gradientMap!.isTexture ) {
-
-  		data["gradientMap"] = this.gradientMap!.toJSON( meta ).uuid;
-
-  	}
-
-
-		if ( this.transmission != null ) data["transmission"] = this.transmission;
-		if ( this.transmissionMap != null && this.transmissionMap!.isTexture ) data["transmissionMap"] = this.transmissionMap!.toJSON( meta ).uuid;
-		if ( this.thickness != null ) data["thickness"] = this.thickness;
-		if ( this.thicknessMap != null && this.thicknessMap!.isTexture ) data["thicknessMap"] = this.thicknessMap!.toJSON( meta ).uuid;
-		if ( this.attenuationTint != null ) data["attenuationTint"] = this.attenuationTint!.getHex();
-    if ( this.attenuationDistance != null ) data["attenuationDistance"] = this.attenuationDistance;
-
-  	if ( this.size != null ) data["size"] = this.size;
-    if ( this.shadowSide != null ) data["shadowSide"] = this.shadowSide;
-  	if ( this.sizeAttenuation != null ) data["sizeAttenuation"] = this.sizeAttenuation;
-
-  	if ( this.blending != NormalBlending ) data["blending"] = this.blending;
-  	if ( this.side != FrontSide ) data["side"] = this.side;
-  	if ( this.vertexColors ) data["vertexColors"] = true;
-
-  	if ( this.opacity < 1 ) data["opacity"] = this.opacity;
-  	if ( this.transparent == true ) data["transparent"] = this.transparent;
-
-  	data["depthFunc"] = this.depthFunc;
-  	data["depthTest"] = this.depthTest;
-  	data["depthWrite"] = this.depthWrite;
+    data["depthFunc"] = this.depthFunc;
+    data["depthTest"] = this.depthTest;
+    data["depthWrite"] = this.depthWrite;
     data["colorWrite"] = this.colorWrite;
 
-  	data["stencilWrite"] = this.stencilWrite;
-  	data["stencilWriteMask"] = this.stencilWriteMask;
-  	data["stencilFunc"] = this.stencilFunc;
-  	data["stencilRef"] = this.stencilRef;
-  	data["stencilFuncMask"] = this.stencilFuncMask;
-  	data["stencilFail"] = this.stencilFail;
-  	data["stencilZFail"] = this.stencilZFail;
-  	data["stencilZPass"] = this.stencilZPass;
+    data["stencilWrite"] = this.stencilWrite;
+    data["stencilWriteMask"] = this.stencilWriteMask;
+    data["stencilFunc"] = this.stencilFunc;
+    data["stencilRef"] = this.stencilRef;
+    data["stencilFuncMask"] = this.stencilFuncMask;
+    data["stencilFail"] = this.stencilFail;
+    data["stencilZFail"] = this.stencilZFail;
+    data["stencilZPass"] = this.stencilZPass;
 
-  	if ( this.rotation != null && this.rotation != 0 ) data["rotation"] = this.rotation;
+    if (this.rotation != null && this.rotation != 0)
+      data["rotation"] = this.rotation;
 
-  	if ( this.polygonOffset == true ) data["polygonOffset"] = true;
-  	if ( this.polygonOffsetFactor != 0 ) data["polygonOffsetFactor"] = this.polygonOffsetFactor;
-  	if ( this.polygonOffsetUnits != 0 ) data["polygonOffsetUnits"] = this.polygonOffsetUnits;
+    if (this.polygonOffset == true) data["polygonOffset"] = true;
+    if (this.polygonOffsetFactor != 0)
+      data["polygonOffsetFactor"] = this.polygonOffsetFactor;
+    if (this.polygonOffsetUnits != 0)
+      data["polygonOffsetUnits"] = this.polygonOffsetUnits;
 
-  	if ( this.linewidth != null && this.linewidth != 1 ) data["linewidth"] = this.linewidth;
-  	if ( this.dashSize != null ) data["dashSize"] = this.dashSize;
-  	if ( this.gapSize != null ) data["gapSize"] = this.gapSize;
-  	if ( this.scale != null ) data["scale"] = this.scale;
+    if (this.linewidth != null && this.linewidth != 1)
+      data["linewidth"] = this.linewidth;
+    if (this.dashSize != null) data["dashSize"] = this.dashSize;
+    if (this.gapSize != null) data["gapSize"] = this.gapSize;
+    if (this.scale != null) data["scale"] = this.scale;
 
-  	if ( this.dithering == true ) data["dithering"] = true;
+    if (this.dithering == true) data["dithering"] = true;
 
-  	if ( this.alphaTest > 0 ) data["alphaTest"] = this.alphaTest;
-    if ( this.alphaToCoverage == true ) data["alphaToCoverage"] = this.alphaToCoverage;
-  	if ( this.premultipliedAlpha == true ) data["premultipliedAlpha"] = this.premultipliedAlpha;
+    if (this.alphaTest > 0) data["alphaTest"] = this.alphaTest;
+    if (this.alphaToCoverage == true)
+      data["alphaToCoverage"] = this.alphaToCoverage;
+    if (this.premultipliedAlpha == true)
+      data["premultipliedAlpha"] = this.premultipliedAlpha;
 
-  	if ( this.wireframe == true ) data["wireframe"] = this.wireframe;
-  	if ( this.wireframeLinewidth != null && this.wireframeLinewidth! > 1 ) data["wireframeLinewidth"] = this.wireframeLinewidth;
-  	if ( this.wireframeLinecap != 'round' ) data["wireframeLinecap"] = this.wireframeLinecap;
-  	if ( this.wireframeLinejoin != 'round' ) data["wireframeLinejoin"] = this.wireframeLinejoin;
+    if (this.wireframe == true) data["wireframe"] = this.wireframe;
+    if (this.wireframeLinewidth != null && this.wireframeLinewidth! > 1)
+      data["wireframeLinewidth"] = this.wireframeLinewidth;
+    if (this.wireframeLinecap != 'round')
+      data["wireframeLinecap"] = this.wireframeLinecap;
+    if (this.wireframeLinejoin != 'round')
+      data["wireframeLinejoin"] = this.wireframeLinejoin;
 
-  	if ( this.visible == false ) data["visible"] = false;
+    if (this.visible == false) data["visible"] = false;
 
-  	if ( this.toneMapped == false ) data["toneMapped"] = false;
+    if (this.toneMapped == false) data["toneMapped"] = false;
 
-  	if ( jsonEncode( this.userData ) != '{}' ) data["userData"] = this.userData;
+    if (jsonEncode(this.userData) != '{}') data["userData"] = this.userData;
 
-  	// TODO: Copied from Object3D.toJSON
+    // TODO: Copied from Object3D.toJSON
 
-  	extractFromCache( cache ) {
+    extractFromCache(cache) {
+      var values = [];
 
-  		var values = [];
+      cache.keys.forEach((key) {
+        var data = cache[key];
+        data.remove("metadata");
+        values.add(data);
+      });
 
-  		cache.keys.forEach((key) {
+      return values;
+    }
 
-  			var data = cache[ key ];
-  			data.remove("metadata");
-  			values.add( data );
+    if (isRoot) {
+      var textures = extractFromCache(meta!.textures);
+      var images = extractFromCache(meta.images);
 
-  		});
+      if (textures.length > 0) data["textures"] = textures;
+      if (images.length > 0) data["images"] = images;
+    }
 
-  		return values;
-
-  	}
-
-  	if ( isRoot ) {
-
-      var textures = extractFromCache( meta!.textures );
-  		var images = extractFromCache( meta.images );
-
-  		if ( textures.length > 0 ) data["textures"] = textures;
-  		if ( images.length > 0 ) data["images"] = images;
-
-  	}
-
-  	return data;
-
+    return data;
   }
 
   clone() {
-    throw("Material.clone ${type} need implement.... ");
+    throw ("Material.clone ${type} need implement.... ");
   }
 
   copy(source) {
@@ -710,78 +703,73 @@ class Material with EventDispatcher {
     this.dispatchEvent(Event({"type": "dispose"}));
   }
 
-
   getProperty(propertyName) {
-    if(propertyName == "vertexParameters") {
+    if (propertyName == "vertexParameters") {
       return this.color;
-    } else if(propertyName == "opacity") {
+    } else if (propertyName == "opacity") {
       return this.opacity;
-    } else if(propertyName == "color") {
+    } else if (propertyName == "color") {
       return this.color;
-    } else if(propertyName == "emissive") {
+    } else if (propertyName == "emissive") {
       return this.emissive;
-    } else if(propertyName == "flatShading") {
+    } else if (propertyName == "flatShading") {
       return this.flatShading;
-    } else if(propertyName == "wireframe") {
-      return this.wireframe;  
-    } else if(propertyName == "vertexColors") {
-      return this.vertexColors;  
-    } else if(propertyName == "transparent") {
+    } else if (propertyName == "wireframe") {
+      return this.wireframe;
+    } else if (propertyName == "vertexColors") {
+      return this.vertexColors;
+    } else if (propertyName == "transparent") {
       return this.transparent;
-    } else if(propertyName == "depthTest") {
-      return this.depthTest;  
-    } else if(propertyName == "depthWrite") {
-      return this.depthWrite;      
-    } else if(propertyName == "visible") {
-      return this.visible; 
-    } else if(propertyName == "blending") {
-      return this.blending; 
-    } else if(propertyName == "side") {
-      return this.side; 
-    } else if(propertyName == "roughness") {
+    } else if (propertyName == "depthTest") {
+      return this.depthTest;
+    } else if (propertyName == "depthWrite") {
+      return this.depthWrite;
+    } else if (propertyName == "visible") {
+      return this.visible;
+    } else if (propertyName == "blending") {
+      return this.blending;
+    } else if (propertyName == "side") {
+      return this.side;
+    } else if (propertyName == "roughness") {
       return this.roughness;
-    } else if(propertyName == "metalness") {
-      return this.metalness;   
-    
-    
+    } else if (propertyName == "metalness") {
+      return this.metalness;
     } else {
-      throw("Material.getProperty type: ${type} propertyName: ${propertyName} is not support ");
+      throw ("Material.getProperty type: ${type} propertyName: ${propertyName} is not support ");
     }
   }
 
   setProperty(propertyName, value) {
-    if(propertyName == "color") {
+    if (propertyName == "color") {
       this.color = value;
-    } else if(propertyName == "opacity") {
+    } else if (propertyName == "opacity") {
       this.opacity = value;
-    } else if(propertyName == "emissive") {
+    } else if (propertyName == "emissive") {
       this.emissive = value;
-    } else if(propertyName == "flatShading") {
+    } else if (propertyName == "flatShading") {
       this.flatShading = value;
-    } else if(propertyName == "wireframe") {
+    } else if (propertyName == "wireframe") {
       this.wireframe = value;
-    } else if(propertyName == "vertexColors") {
+    } else if (propertyName == "vertexColors") {
       this.vertexColors = value;
-    } else if(propertyName == "transparent") {
+    } else if (propertyName == "transparent") {
       this.transparent = value;
-    } else if(propertyName == "depthTest") {
+    } else if (propertyName == "depthTest") {
       this.depthTest = value;
-    } else if(propertyName == "depthWrite") {
+    } else if (propertyName == "depthWrite") {
       this.depthWrite = value;
-    } else if(propertyName == "visible") {
+    } else if (propertyName == "visible") {
       this.visible = value;
-    } else if(propertyName == "blending") {
+    } else if (propertyName == "blending") {
       this.blending = value;
-    } else if(propertyName == "side") {
+    } else if (propertyName == "side") {
       this.side = value;
-    } else if(propertyName == "roughness") {
+    } else if (propertyName == "roughness") {
       this.roughness = value;
-    } else if(propertyName == "metalness") {
+    } else if (propertyName == "metalness") {
       this.metalness = value;
-    
-      
     } else {
-      throw("Material.setProperty type: ${type} propertyName: ${propertyName} is not support ");
+      throw ("Material.setProperty type: ${type} propertyName: ${propertyName} is not support ");
     }
   }
 

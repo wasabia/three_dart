@@ -1,36 +1,28 @@
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart';
 
-arrayMin( array ) {
+arrayMin(array) {
+  if (array.length == 0) return 9999999;
 
-	if ( array.length == 0 ) return 9999999;
+  var min = array[0];
 
-	var min = array[ 0 ];
+  for (var i = 1, l = array.length; i < l; ++i) {
+    if (array[i] < min) min = array[i];
+  }
 
-	for ( var i = 1, l = array.length; i < l; ++ i ) {
-
-		if ( array[ i ] < min ) min = array[ i ];
-
-	}
-
-	return min;
-
+  return min;
 }
 
-arrayMax( array ) {
+arrayMax(array) {
+  if (array.length == 0) return -99999999;
 
-	if ( array.length == 0 ) return - 99999999;
+  var max = array[0];
 
-	var max = array[ 0 ];
+  for (var i = 1, l = array.length; i < l; ++i) {
+    if (array[i] > max) max = array[i];
+  }
 
-	for ( var i = 1, l = array.length; i < l; ++ i ) {
-
-		if ( array[ i ] > max ) max = array[ i ];
-
-	}
-
-	return max;
-
+  return max;
 }
 
 // var TYPED_ARRAYS = {
@@ -46,17 +38,14 @@ arrayMax( array ) {
 // 	Float64Array: Float64Array
 // };
 
-getTypedArray( type, buffer ) {
-
-  if(type == "Uint32Array") {
+getTypedArray(type, buffer) {
+  if (type == "Uint32Array") {
     return Uint32Array.from(buffer);
-  } else if(type == "Uint16Array") {
+  } else if (type == "Uint16Array") {
     return Uint16Array.from(buffer);
-  } else if(type == "Float32Array") {
-    return Float32Array.from(buffer);  
+  } else if (type == "Float32Array") {
+    return Float32Array.from(buffer);
   } else {
-    throw(" Util.dart getTypedArray type: ${type} is not support "); 
+    throw (" Util.dart getTypedArray type: ${type} is not support ");
   }
-
 }
-

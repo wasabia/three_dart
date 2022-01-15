@@ -1,58 +1,52 @@
 part of three_webgl;
 
 class RenderItem {
-	num? id;
-	Object3D? object;
-	BufferGeometry? geometry;
-	Material? material;
-	dynamic? program;
-	num? groupOrder;
-	num? renderOrder;
-	num? z;
-	Map<String, dynamic>? group;
+  num? id;
+  Object3D? object;
+  BufferGeometry? geometry;
+  Material? material;
+  dynamic? program;
+  num? groupOrder;
+  num? renderOrder;
+  num? z;
+  Map<String, dynamic>? group;
 
   RenderItem(Map<String, dynamic> json) {
-    if(json["id"] != null) {
+    if (json["id"] != null) {
       id = json["id"];
     }
-    if(json["object"] != null) {
+    if (json["object"] != null) {
       object = json["object"];
     }
-    if(json["geometry"] != null) {
+    if (json["geometry"] != null) {
       geometry = json["geometry"];
     }
-    if(json["material"] != null) {
+    if (json["material"] != null) {
       material = json["material"];
     }
-    if(json["program"] != null) {
+    if (json["program"] != null) {
       program = json["program"];
     }
-    if(json["groupOrder"] != null) {
+    if (json["groupOrder"] != null) {
       groupOrder = json["groupOrder"];
     }
 
-    if(json["renderOrder"] != null) {
+    if (json["renderOrder"] != null) {
       renderOrder = json["renderOrder"];
     }
-    if(json["z"] != null) {
+    if (json["z"] != null) {
       z = json["z"];
     }
-    if(json["group"] != null) {
+    if (json["group"] != null) {
       group = json["group"];
     }
   }
-
-
 }
 
-
 class WebGLRenderList {
-
-
   WebGLProperties properties;
-  
-  WebGLRenderList(this.properties) {
-  }
+
+  WebGLRenderList(this.properties) {}
 
   Map<int, RenderItem> renderItems = {};
   var renderItemsIndex = 0;
@@ -107,45 +101,36 @@ class WebGLRenderList {
   }
 
   push(object, geometry, material, groupOrder, z, group) {
-    var renderItem = getNextRenderItem(object, geometry, material, groupOrder, z, group);
+    var renderItem =
+        getNextRenderItem(object, geometry, material, groupOrder, z, group);
 
-    if ( material.transmission > 0.0 ) {
-
-			transmissive.add( renderItem );
-
-		} else {
-
-			if(material.transparent == true) {
+    if (material.transmission > 0.0) {
+      transmissive.add(renderItem);
+    } else {
+      if (material.transparent == true) {
         transparent.add(renderItem);
       } else {
         opaque.add(renderItem);
       }
-
-		}
-
-    
+    }
   }
 
   unshift(object, geometry, material, groupOrder, z, group) {
     var renderItem =
         getNextRenderItem(object, geometry, material, groupOrder, z, group);
 
-
-    if ( material.transmission > 0.0 ) {
+    if (material.transmission > 0.0) {
       transmissive.insert(0, renderItem);
     } else {
-      if(material.transparent == true) {
+      if (material.transparent == true) {
         transparent.insert(0, renderItem);
       } else {
         opaque.insert(0, renderItem);
       }
     }
-
-    
   }
 
   sort(customOpaqueSort, customTransparentSort) {
-
     if (opaque.length > 1) {
       opaque.sort(customOpaqueSort ?? painterSortStable);
     }
@@ -153,11 +138,10 @@ class WebGLRenderList {
     if (transmissive.length > 1) {
       transmissive.sort(customTransparentSort ?? reversePainterSortStable);
     }
-  
+
     if (transparent.length > 1) {
       transparent.sort(customTransparentSort ?? reversePainterSortStable);
     }
-
   }
 
   finish() {
@@ -194,7 +178,6 @@ class WebGLRenderList {
   }
 
   int reversePainterSortStable(a, b) {
-
     // print("3 reversePainterSortStable ${a.id} ${b.id} ");
 
     if (a.groupOrder != b.groupOrder) {

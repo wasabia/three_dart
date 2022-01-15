@@ -73,7 +73,6 @@ class _MyAppState extends State<webgl_camera_array> {
       await three3dRender.prepareContext();
 
       initScene();
-      animate();
     });
   }
 
@@ -259,6 +258,10 @@ class _MyAppState extends State<webgl_camera_array> {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
     scene.add(mesh);
+
+
+
+    animate();
   }
 
   animate() {

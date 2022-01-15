@@ -1,128 +1,124 @@
 part of three_geometries;
 
 class SphereGeometry extends BufferGeometry {
-
   String type = "SphereGeometry";
 
-	SphereGeometry( [radius = 1, num widthSegments = 32, num heightSegments = 16, phiStart = 0, phiLength = Math.PI * 2, thetaStart = 0, thetaLength = Math.PI] ): super() {
+  SphereGeometry(
+      [radius = 1,
+      num widthSegments = 32,
+      num heightSegments = 16,
+      phiStart = 0,
+      phiLength = Math.PI * 2,
+      thetaStart = 0,
+      thetaLength = Math.PI])
+      : super() {
+    this.parameters = {
+      "radius": radius,
+      "widthSegments": widthSegments,
+      "heightSegments": heightSegments,
+      "phiStart": phiStart,
+      "phiLength": phiLength,
+      "thetaStart": thetaStart,
+      "thetaLength": thetaLength
+    };
 
-		this.parameters = {
-			"radius": radius,
-			"widthSegments": widthSegments,
-			"heightSegments": heightSegments,
-			"phiStart": phiStart,
-			"phiLength": phiLength,
-			"thetaStart": thetaStart,
-			"thetaLength": thetaLength
-		};
+    widthSegments = Math.max(3, Math.floor(widthSegments));
+    heightSegments = Math.max(2, Math.floor(heightSegments));
 
-		widthSegments = Math.max( 3, Math.floor( widthSegments ) );
-		heightSegments = Math.max( 2, Math.floor( heightSegments ) );
+    var thetaEnd = Math.min(thetaStart + thetaLength, Math.PI);
 
-		var thetaEnd = Math.min( thetaStart + thetaLength, Math.PI );
+    var index = 0;
+    var grid = [];
 
-		var index = 0;
-		var grid = [];
+    var vertex = Vector3.init();
+    var normal = Vector3.init();
 
-		var vertex = Vector3.init();
-		var normal = Vector3.init();
+    // buffers
 
-		// buffers
+    List<num> indices = [];
+    List<num> vertices = [];
+    List<num> normals = [];
+    List<num> uvs = [];
 
-		List<num> indices = [];
-		List<num> vertices = [];
-		List<num> normals = [];
-		List<num> uvs = [];
+    // generate vertices, normals and uvs
 
-		// generate vertices, normals and uvs
+    for (var iy = 0; iy <= heightSegments; iy++) {
+      var verticesRow = [];
 
-		for ( var iy = 0; iy <= heightSegments; iy ++ ) {
+      var v = iy / heightSegments;
 
-			var verticesRow = [];
+      // special case for the poles
 
-			var v = iy / heightSegments;
+      num uOffset = 0;
 
-			// special case for the poles
+      if (iy == 0 && thetaStart == 0) {
+        uOffset = 0.5 / widthSegments;
+      } else if (iy == heightSegments && thetaEnd == Math.PI) {
+        uOffset = -0.5 / widthSegments;
+      }
 
-			num uOffset = 0;
+      for (var ix = 0; ix <= widthSegments; ix++) {
+        var u = ix / widthSegments;
 
-			if ( iy == 0 && thetaStart == 0 ) {
+        // vertex
 
-				uOffset = 0.5 / widthSegments;
+        vertex.x = -radius *
+            Math.cos(phiStart + u * phiLength) *
+            Math.sin(thetaStart + v * thetaLength);
+        vertex.y = radius * Math.cos(thetaStart + v * thetaLength);
+        vertex.z = radius *
+            Math.sin(phiStart + u * phiLength) *
+            Math.sin(thetaStart + v * thetaLength);
 
-			} else if ( iy == heightSegments && thetaEnd == Math.PI ) {
+        vertices.addAll([vertex.x, vertex.y, vertex.z]);
 
-				uOffset = - 0.5 / widthSegments;
+        // normal
 
-			}
+        normal.copy(vertex).normalize();
+        normals.addAll([normal.x, normal.y, normal.z]);
 
-			for ( var ix = 0; ix <= widthSegments; ix ++ ) {
+        // uv
 
-				var u = ix / widthSegments;
+        uvs.addAll([u + uOffset, 1 - v]);
 
-				// vertex
+        verticesRow.add(index++);
+      }
 
-				vertex.x = - radius * Math.cos( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength );
-				vertex.y = radius * Math.cos( thetaStart + v * thetaLength );
-				vertex.z = radius * Math.sin( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength );
+      grid.add(verticesRow);
+    }
 
-				vertices.addAll( [vertex.x, vertex.y, vertex.z] );
+    // indices
 
-				// normal
+    for (var iy = 0; iy < heightSegments; iy++) {
+      for (var ix = 0; ix < widthSegments; ix++) {
+        var a = grid[iy][ix + 1];
+        var b = grid[iy][ix];
+        var c = grid[iy + 1][ix];
+        var d = grid[iy + 1][ix + 1];
 
-				normal.copy( vertex ).normalize();
-				normals.addAll( [normal.x, normal.y, normal.z] );
+        if (iy != 0 || thetaStart > 0) indices.addAll([a, b, d]);
+        if (iy != heightSegments - 1 || thetaEnd < Math.PI)
+          indices.addAll([b, c, d]);
+      }
+    }
 
-				// uv
+    // build geometry
 
-				uvs.addAll( [u + uOffset, 1 - v] );
+    this.setIndex(indices);
+    this.setAttribute(
+        'position', new Float32BufferAttribute(vertices, 3, false));
+    this.setAttribute('normal', new Float32BufferAttribute(normals, 3, false));
+    this.setAttribute('uv', new Float32BufferAttribute(uvs, 2, false));
+  }
 
-				verticesRow.add( index ++ );
-
-			}
-
-			grid.add( verticesRow );
-
-		}
-
-
-		// indices
-
-		for ( var iy = 0; iy < heightSegments; iy ++ ) {
-
-			for ( var ix = 0; ix < widthSegments; ix ++ ) {
-
-				var a = grid[ iy ][ ix + 1 ];
-				var b = grid[ iy ][ ix ];
-				var c = grid[ iy + 1 ][ ix ];
-				var d = grid[ iy + 1 ][ ix + 1 ];
-
-				if ( iy != 0 || thetaStart > 0 ) indices.addAll( [a, b, d] );
-				if ( iy != heightSegments - 1 || thetaEnd < Math.PI ) indices.addAll( [b, c, d] );
-
-			}
-
-		}
-
-		// build geometry
-
-		this.setIndex( indices );
-		this.setAttribute( 'position', new Float32BufferAttribute( vertices, 3, false ) );
-		this.setAttribute( 'normal', new Float32BufferAttribute( normals, 3, false ) );
-		this.setAttribute( 'uv', new Float32BufferAttribute( uvs, 2, false ) );
-
-	}
-
-  static fromJSON( data ) {
-		return new SphereGeometry( 
-      data["radius"], 
-      data["widthSegments"], 
-      data["heightSegments"],
-      data["phiStart"], 
-      data["phiLength"],
-      data["thetaStart"],
-      data["thetaLength"] 
-    );
-	}
-
+  static fromJSON(data) {
+    return new SphereGeometry(
+        data["radius"],
+        data["widthSegments"],
+        data["heightSegments"],
+        data["phiStart"],
+        data["phiLength"],
+        data["thetaStart"],
+        data["thetaLength"]);
+  }
 }

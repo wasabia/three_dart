@@ -20,7 +20,6 @@ class ImageElement {
     this.depth = depth;
   }
 
-
   dispose() {
     data?.dispose();
   }

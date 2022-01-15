@@ -16,7 +16,6 @@ class SVGLoaderParser {
 
   var currentTransform = new Matrix3();
 
-  
   String defaultUnit = "px";
   num defaultDPI = 90;
 
@@ -64,8 +63,8 @@ class SVGLoaderParser {
     "px": {'px': 1}
   };
 
-  SVGLoaderParser(String text, {num defaultDPI = 90, String defaultUnit = "px"}) {
-    
+  SVGLoaderParser(String text,
+      {num defaultDPI = 90, String defaultUnit = "px"}) {
     xml = parseXmlDocument(text); // application/xml
 
     this.defaultDPI = defaultDPI;
@@ -93,8 +92,7 @@ class SVGLoaderParser {
   }
 
   parseFloatWithUnits(string) {
-
-    if(string == null) {
+    if (string == null) {
       return null;
     }
 
@@ -130,7 +128,6 @@ class SVGLoaderParser {
       }
     }
 
-
     String _str = string;
     // if(_str.startsWith("-.")) {
     //   _str = _str.replaceFirst("-.", "-0.");
@@ -138,7 +135,7 @@ class SVGLoaderParser {
 
     List<String> _strs = _str.split(".");
 
-    if(_strs.length >= 3) {
+    if (_strs.length >= 3) {
       _strs = _strs.sublist(0, 2);
 
       _str = _strs.join(".");
@@ -150,7 +147,6 @@ class SVGLoaderParser {
   }
 
   parseFloats(String string) {
-   
     RegExp reg = RegExp(r"[\s,]+|(?=\s?[+\-])");
     var array = string.split(reg);
 
@@ -176,8 +172,6 @@ class SVGLoaderParser {
       // array[i] = parseFloatWithUnits(number);
       array2.add(parseFloatWithUnits(number));
     }
-
-
 
     return array2;
   }
@@ -208,7 +202,8 @@ class SVGLoaderParser {
         if (openParPos > 0 && openParPos < closeParPos) {
           var transformType = substr(transformText, 0, openParPos);
 
-          var floatStr = substr(transformText, openParPos + 1, closeParPos - openParPos - 1);
+          var floatStr = substr(
+              transformText, openParPos + 1, closeParPos - openParPos - 1);
 
           var array = parseFloats(floatStr);
 
@@ -370,7 +365,8 @@ class SVGLoaderParser {
           .getAttribute('class')
           .split(_reg)
           // .filter( Boolean )
-          .map((i) => i.trim()).toList();
+          .map((i) => i.trim())
+          .toList();
 
       for (var i = 0; i < classSelectors.length; i++) {
         // stylesheetStyles = Object.assign( stylesheetStyles, stylesheets[ '.' + classSelectors[ i ] ] );
@@ -401,12 +397,11 @@ class SVGLoaderParser {
       if (node.style != null) {
         var _style = node.style;
         var _value = _style.getPropertyValue(svgName);
-        if(_value != "") {
+        if (_value != "") {
           // print("svgName: ${svgName} value: ${_value} ");
           style2[jsName] = adjustFunction(_value);
         }
       }
-        
     };
 
     Function clamp = (v) {
@@ -540,7 +535,6 @@ class SVGLoaderParser {
 
     commands.forEach((item) {
       var command = item.group(0)!;
-
 
       var type = charAt(command, 0);
       var data = substr(command, 1).trim();
@@ -960,9 +954,8 @@ class SVGLoaderParser {
     var matches = regex.allMatches(_points);
 
     // print(" _points: ${_points} ");
-    
-    for(var match in matches) {
-      
+
+    for (var match in matches) {
       var a = match.group(1);
       var b = match.group(2);
 
@@ -1119,9 +1112,6 @@ class SVGLoaderParser {
       }
     }
   }
-
-
-	
 
   parseNode(node, style) {
     if (node.nodeType != 1) return;

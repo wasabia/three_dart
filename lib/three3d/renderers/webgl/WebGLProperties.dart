@@ -1,37 +1,30 @@
 part of three_webgl;
 
 class WebGLProperties {
+  var properties = WeakMap<dynamic, Map<String, dynamic>?>();
 
-	var properties = WeakMap<dynamic, Map<String, dynamic>?>();
-
-	Map<String, dynamic> get( object ) {
-
+  Map<String, dynamic> get(object) {
     Map<String, dynamic> map;
 
-		if ( !properties.contains(object) ) {
-			map = Map<String, dynamic>();
-			properties[object] = map;
-		} else {
+    if (!properties.contains(object)) {
+      map = Map<String, dynamic>();
+      properties[object] = map;
+    } else {
       map = properties[object]!;
     }
 
-		return map;
-	}
+    return map;
+  }
 
-	remove( object ) {
-		properties.remove( object );
-	}
+  remove(object) {
+    properties.remove(object);
+  }
 
-	update( object, key, value ) {
-
+  update(object, key, value) {
     var m = properties[object]!;
 
-		m[ key ] = value;
+    m[key] = value;
+  }
 
-	}
-
-	dispose() {
-    
-	}
-
+  dispose() {}
 }

@@ -1,7 +1,6 @@
 part of three_core;
 
 class Raycaster {
-
   late Ray ray;
   late num near;
   late num far;
@@ -9,9 +8,8 @@ class Raycaster {
   late Layers layers;
   late Map<String, dynamic> params;
 
-
-  Raycaster( origin, direction, near, far ) {
-    this.ray = Ray( origin, direction );
+  Raycaster(origin, direction, near, far) {
+    this.ray = Ray(origin, direction);
     // direction is assumed to be normalized (for accurate distance calculations)
 
     this.near = near ?? 0;
@@ -20,106 +18,86 @@ class Raycaster {
 
     this.params = {
       "Mesh": {},
-      "Line": { "threshold": 1 },
+      "Line": {"threshold": 1},
       "LOD": {},
-      "Points": { "threshold": 1 },
+      "Points": {"threshold": 1},
       "Sprite": {}
     };
   }
 
-
-  int ascSort( a, b ) {
-
+  int ascSort(a, b) {
     return a.distance - b.distance >= 0 ? 1 : -1;
-
   }
 
-  intersectObject4( object, raycaster, intersects, recursive ) {
-
-    if ( object.layers.test( raycaster.layers ) ) {
-      object.raycast( raycaster, intersects );
+  intersectObject4(object, raycaster, intersects, recursive) {
+    if (object.layers.test(raycaster.layers)) {
+      object.raycast(raycaster, intersects);
     }
 
-    if ( recursive == true ) {
-
+    if (recursive == true) {
       var children = object.children;
 
-      for ( var i = 0, l = children.length; i < l; i ++ ) {
-
-        intersectObject4( children[ i ], raycaster, intersects, true );
-
+      for (var i = 0, l = children.length; i < l; i++) {
+        intersectObject4(children[i], raycaster, intersects, true);
       }
-
     }
-
   }
 
+  set(origin, direction) {
+    // direction is assumed to be normalized (for accurate distance calculations)
 
-  set( origin, direction ) {
+    this.ray.set(origin, direction);
+  }
 
-		// direction is assumed to be normalized (for accurate distance calculations)
+  setFromCamera(coords, camera) {
+    if (camera != null && camera.isPerspectiveCamera) {
+      this.ray.origin.setFromMatrixPosition(camera.matrixWorld);
+      this
+          .ray
+          .direction
+          .set(coords.x, coords.y, 0.5)
+          .unproject(camera)
+          .sub(this.ray.origin)
+          .normalize();
+      this.camera = camera;
+    } else if (camera != null && camera.isOrthographicCamera) {
+      this
+          .ray
+          .origin
+          .set(coords.x, coords.y,
+              (camera.near + camera.far) / (camera.near - camera.far))
+          .unproject(camera); // set origin in plane of camera
+      this.ray.direction.set(0, 0, -1).transformDirection(camera.matrixWorld);
+      this.camera = camera;
+    } else {
+      print('THREE.Raycaster: Unsupported camera type: ' + camera.type);
+    }
+  }
 
-		this.ray.set( origin, direction );
-
-	}
-
-	setFromCamera ( coords, camera ) {
-
-		if ( camera != null && camera.isPerspectiveCamera ) {
-
-			this.ray.origin.setFromMatrixPosition( camera.matrixWorld );
-			this.ray.direction.set( coords.x, coords.y, 0.5 ).unproject( camera ).sub( this.ray.origin ).normalize();
-			this.camera = camera;
-
-		} else if ( camera != null && camera.isOrthographicCamera ) {
-
-			this.ray.origin.set( coords.x, coords.y, ( camera.near + camera.far ) / ( camera.near - camera.far ) ).unproject( camera ); // set origin in plane of camera
-			this.ray.direction.set( 0, 0, - 1 ).transformDirection( camera.matrixWorld );
-			this.camera = camera;
-
-		} else {
-
-			print( 'THREE.Raycaster: Unsupported camera type: ' + camera.type );
-
-		}
-
-	}
-
-	intersectObject( object, recursive, intersects ) {
-
+  intersectObject(object, recursive, intersects) {
     List<Intersection> _intersects = intersects ?? [];
 
-		intersectObject4( object, this, _intersects, recursive );
+    intersectObject4(object, this, _intersects, recursive);
 
-		_intersects.sort( ascSort );
+    _intersects.sort(ascSort);
 
-		return _intersects;
+    return _intersects;
+  }
 
-	}
-
-	intersectObjects( objects, recursive, {List<Intersection>? intersects} ) {
-
+  intersectObjects(objects, recursive, {List<Intersection>? intersects}) {
     intersects = intersects ?? List<Intersection>.from([]);
-    
 
-		for ( var i = 0, l = objects.length; i < l; i ++ ) {
+    for (var i = 0, l = objects.length; i < l; i++) {
+      intersectObject4(objects[i], this, intersects, recursive);
+    }
 
-			intersectObject4( objects[ i ], this, intersects, recursive );
+    intersects.sort(ascSort);
 
-		}
-
-		intersects.sort( ascSort );
-
-		return intersects;
-
-	}
-
+    return intersects;
+  }
 }
 
-
-
 class Intersection {
-
   late num instanceId;
   late num distance;
   late num distanceToRay;
@@ -130,51 +108,48 @@ class Intersection {
   late Object3D object;
   late Vector2 uv;
   Vector2? uv2;
-  
 
   Intersection(Map<String, dynamic> json) {
-    if(json["instanceId"] != null) {
+    if (json["instanceId"] != null) {
       instanceId = json["instanceId"];
     }
-    
-    if(json["distance"] != null) {
+
+    if (json["distance"] != null) {
       distance = json["distance"];
     }
-    
-    if(json["distanceToRay"] != null) {
+
+    if (json["distanceToRay"] != null) {
       distanceToRay = json["distanceToRay"];
     }
 
-    if(json["point"] != null) {
+    if (json["point"] != null) {
       point = json["point"];
     }
 
-    if(json["index"] != null) {
+    if (json["index"] != null) {
       index = json["index"];
     }
 
-    if(json["face"] != null) {
+    if (json["face"] != null) {
       face = json["face"];
     }
 
-    if(json["faceIndex"] != null) {
+    if (json["faceIndex"] != null) {
       faceIndex = json["faceIndex"];
     }
 
-    if(json["object"] != null) {
+    if (json["object"] != null) {
       object = json["object"];
     }
 
-    if(json["uv"] != null) {
+    if (json["uv"] != null) {
       uv = json["uv"];
     }
 
-    if(json["uv2"] != null) {
+    if (json["uv2"] != null) {
       uv2 = json["uv2"];
     }
   }
-
-  
 }
 
 class Face {
@@ -183,10 +158,11 @@ class Face {
   late num c;
   late Vector3 normal;
   late num materialIndex;
-  
+
   Face(this.a, this.b, this.c, this.normal, this.materialIndex) {}
 
   factory Face.fromJSON(json) {
-    return Face(json["a"], json["b"], json["c"], json["normal"], json["materialIndex"]);
+    return Face(
+        json["a"], json["b"], json["c"], json["normal"], json["materialIndex"]);
   }
 }

@@ -115,7 +115,6 @@ class _MyAppState extends State<webgl_shadow_contact> {
       await three3dRender.prepareContext();
 
       await initScene();
-      animate();
     });
   }
 
@@ -298,7 +297,7 @@ class _MyAppState extends State<webgl_shadow_contact> {
   initScene() async {
     initRenderer();
     await initPage();
-    inited = true;
+    
   }
 
   initPage() async {
@@ -406,10 +405,14 @@ class _MyAppState extends State<webgl_shadow_contact> {
 
     verticalBlurMaterial = new THREE.ShaderMaterial(VerticalBlurShader);
     verticalBlurMaterial.depthTest = false;
+
+
+    inited = true;
+    animate();
   }
 
   animate() {
-    if(!mounted || disposed) {
+    if (!mounted || disposed) {
       return;
     }
 

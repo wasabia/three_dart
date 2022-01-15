@@ -11,7 +11,6 @@ import 'package:three_dart/three3d/objects/index.dart';
 import 'package:three_dart/three_dart.dart';
 import '../constants.dart';
 
-
 part './ArrowHelper.dart';
 part './AxesHelper.dart';
 part './BoxHelper.dart';
