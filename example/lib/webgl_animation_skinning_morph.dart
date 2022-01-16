@@ -9,7 +9,6 @@ import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
-
 class webgl_animation_skinning_morph extends StatefulWidget {
   String fileName;
 
@@ -124,7 +123,6 @@ class _State extends State<webgl_animation_skinning_morph> {
     );
   }
 
-
   Widget _build(BuildContext context) {
     return Column(
       children: [
@@ -132,22 +130,22 @@ class _State extends State<webgl_animation_skinning_morph> {
           child: Stack(
             children: [
               Container(
-                child: Container(
-                    width: width,
-                    height: height,
-                    color: Colors.black,
-                    child: Builder(builder: (BuildContext context) {
-                      if (kIsWeb) {
-                        return three3dRender.isInitialized
-                            ? HtmlElementView(
-                                viewType: three3dRender.textureId!.toString())
-                            : Container();
-                      } else {
-                        return three3dRender.isInitialized
-                            ? Texture(textureId: three3dRender.textureId!)
-                            : Container();
-                      }
-                    }))),
+                  child: Container(
+                      width: width,
+                      height: height,
+                      color: Colors.black,
+                      child: Builder(builder: (BuildContext context) {
+                        if (kIsWeb) {
+                          return three3dRender.isInitialized
+                              ? HtmlElementView(
+                                  viewType: three3dRender.textureId!.toString())
+                              : Container();
+                        } else {
+                          return three3dRender.isInitialized
+                              ? Texture(textureId: three3dRender.textureId!)
+                              : Container();
+                        }
+                      }))),
             ],
           ),
         ),
@@ -210,77 +208,69 @@ class _State extends State<webgl_animation_skinning_morph> {
   }
 
   initPage() async {
-    
-    camera = new THREE.PerspectiveCamera( 45, width / height, 0.1, 1000 );
-    camera.position.set( - 5, 3, 10 );
+    camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+    camera.position.set(-5, 3, 10);
     camera.lookAt(THREE.Vector3(0, 2, 0));
 
     clock = new THREE.Clock();
 
     scene = new THREE.Scene();
-    scene.background = THREE.Color.fromHex( 0xffffff );
-    scene.fog = new THREE.Fog( 0xa0a0a0, 10, 50 );
+    scene.background = THREE.Color.fromHex(0xffffff);
+    scene.fog = new THREE.Fog(0xa0a0a0, 10, 50);
 
-    var hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444 );
-    hemiLight.position.set( 0, 20, 0 );
-    scene.add( hemiLight );
+    var hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
+    hemiLight.position.set(0, 20, 0);
+    scene.add(hemiLight);
 
-    var dirLight = new THREE.DirectionalLight( 0xffffff );
-    dirLight.position.set( 0, 20, 10 );
-    
-    scene.add( dirLight );
+    var dirLight = new THREE.DirectionalLight(0xffffff);
+    dirLight.position.set(0, 20, 10);
+
+    scene.add(dirLight);
 
     // scene.add( new THREE.CameraHelper( dirLight.shadow.camera ) );
 
     // ground
 
-    var mesh = new THREE.Mesh( 
-      new THREE.PlaneGeometry( 2000, 2000 ), 
-      new THREE.MeshPhongMaterial( { "color": 0x999999, "depthWrite": false } ) 
-    );
-    mesh.rotation.x = - THREE.Math.PI / 2;
-    scene.add( mesh );
+    var mesh = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000),
+        new THREE.MeshPhongMaterial({"color": 0x999999, "depthWrite": false}));
+    mesh.rotation.x = -THREE.Math.PI / 2;
+    scene.add(mesh);
 
-    var grid = new THREE.GridHelper( 200, 40, 0x000000, 0x000000 );
+    var grid = new THREE.GridHelper(200, 40, 0x000000, 0x000000);
     grid.material.opacity = 0.2;
     grid.material.transparent = true;
-    scene.add( grid );
-
+    scene.add(grid);
 
     var loader = new THREE_JSM.GLTFLoader(null);
-    var gltf = await loader.loadAsync( 'assets/models/gltf/RobotExpressive/RobotExpressive2.gltf', null);
-    
+    var gltf = await loader.loadAsync(
+        'assets/models/gltf/RobotExpressive/RobotExpressive2.gltf', null);
+
     model = gltf["scene"];
-    scene.add( model );
+    scene.add(model);
 
-   
-    model.traverse( ( object ) {
-
-      if ( object.isMesh ) object.castShadow = true;
-
-    } );
+    model.traverse((object) {
+      if (object.isMesh) object.castShadow = true;
+    });
 
     //
 
-    var skeleton = new THREE.SkeletonHelper( model );
+    var skeleton = new THREE.SkeletonHelper(model);
     skeleton.visible = true;
-    scene.add( skeleton );
+    scene.add(skeleton);
 
     //
 
     // createPanel();
 
-
     //
 
     var animations = gltf["animations"];
 
+    mixer = new THREE.AnimationMixer(model);
 
-    mixer = new THREE.AnimationMixer( model );
-
-    var idleAction = mixer.clipAction( animations[ 0 ] );
-    var walkAction = mixer.clipAction( animations[ 3 ] );
-    var runAction = mixer.clipAction( animations[ 1 ] );
+    var idleAction = mixer.clipAction(animations[0]);
+    var walkAction = mixer.clipAction(animations[3]);
+    var runAction = mixer.clipAction(animations[1]);
 
     // var actions = [ idleAction, walkAction, runAction ];
     walkAction.play();
@@ -310,7 +300,6 @@ class _State extends State<webgl_animation_skinning_morph> {
     var delta = clock.getDelta();
 
     mixer.update(delta);
-
 
     render();
 

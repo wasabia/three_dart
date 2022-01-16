@@ -48,16 +48,16 @@ class AxesHelper extends LineSegments {
     var array = this.geometry!.attributes["color"].array;
 
     color.copy(xAxisColor);
-    color.toArray(array, offset: 0);
-    color.toArray(array, offset: 3);
+    color.toArray(array, 0);
+    color.toArray(array, 3);
 
     color.copy(yAxisColor);
-    color.toArray(array, offset: 6);
-    color.toArray(array, offset: 9);
+    color.toArray(array, 6);
+    color.toArray(array, 9);
 
     color.copy(zAxisColor);
-    color.toArray(array, offset: 12);
-    color.toArray(array, offset: 15);
+    color.toArray(array, 12);
+    color.toArray(array, 15);
 
     this.geometry!.attributes["color"].needsUpdate = true;
 

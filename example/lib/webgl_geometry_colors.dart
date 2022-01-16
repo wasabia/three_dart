@@ -207,16 +207,15 @@ class _MyAppState extends State<webgl_geometry_colors> {
   }
 
   initPage() async {
-    
-    camera = new THREE.PerspectiveCamera( 20, width / height, 1, 10000 );
+    camera = new THREE.PerspectiveCamera(20, width / height, 1, 10000);
     camera.position.z = 1800;
 
     scene = new THREE.Scene();
-    scene.background = THREE.Color.fromHex( 0xffffff );
+    scene.background = THREE.Color.fromHex(0xffffff);
 
-    var light = new THREE.DirectionalLight( 0xffffff );
-    light.position.set( 0, 0, 1 );
-    scene.add( light );
+    var light = new THREE.DirectionalLight(0xffffff);
+    light.position.set(0, 0, 1);
+    scene.add(light);
 
     // shadow
 
@@ -234,39 +233,40 @@ class _MyAppState extends State<webgl_geometry_colors> {
 
     // var shadowTexture = new THREE.CanvasTexture( canvas );
 
-    var shadowMaterial = new THREE.MeshBasicMaterial( {  } );
-    var shadowGeo = new THREE.PlaneGeometry( 300, 300, 1, 1 );
+    var shadowMaterial = new THREE.MeshBasicMaterial({});
+    var shadowGeo = new THREE.PlaneGeometry(300, 300, 1, 1);
 
     var shadowMesh;
 
-    shadowMesh = new THREE.Mesh( shadowGeo, shadowMaterial );
-    shadowMesh.position.y = - 250;
-    shadowMesh.rotation.x = - THREE.Math.PI / 2;
-    scene.add( shadowMesh );
+    shadowMesh = new THREE.Mesh(shadowGeo, shadowMaterial);
+    shadowMesh.position.y = -250;
+    shadowMesh.rotation.x = -THREE.Math.PI / 2;
+    scene.add(shadowMesh);
 
-    shadowMesh = new THREE.Mesh( shadowGeo, shadowMaterial );
-    shadowMesh.position.y = - 250;
-    shadowMesh.position.x = - 400;
-    shadowMesh.rotation.x = - THREE.Math.PI / 2;
-    scene.add( shadowMesh );
+    shadowMesh = new THREE.Mesh(shadowGeo, shadowMaterial);
+    shadowMesh.position.y = -250;
+    shadowMesh.position.x = -400;
+    shadowMesh.rotation.x = -THREE.Math.PI / 2;
+    scene.add(shadowMesh);
 
-    shadowMesh = new THREE.Mesh( shadowGeo, shadowMaterial );
-    shadowMesh.position.y = - 250;
+    shadowMesh = new THREE.Mesh(shadowGeo, shadowMaterial);
+    shadowMesh.position.y = -250;
     shadowMesh.position.x = 400;
-    shadowMesh.rotation.x = - THREE.Math.PI / 2;
-    scene.add( shadowMesh );
+    shadowMesh.rotation.x = -THREE.Math.PI / 2;
+    scene.add(shadowMesh);
 
     var radius = 200;
 
-    var geometry1 = new THREE.IcosahedronGeometry( radius, 1 );
+    var geometry1 = new THREE.IcosahedronGeometry(radius, 1);
 
     var count = geometry1.attributes["position"].count;
-    geometry1.setAttribute( 'color', new THREE.Float32BufferAttribute( new Float32Array( count * 3 ), 3 ) );
+    geometry1.setAttribute('color',
+        new THREE.Float32BufferAttribute(new Float32Array(count * 3), 3));
 
     var geometry2 = geometry1.clone();
     var geometry3 = geometry1.clone();
 
-    var color = new THREE.Color(1,1,1);
+    var color = new THREE.Color(1, 1, 1);
     var positions1 = geometry1.attributes["position"];
     var positions2 = geometry2.attributes["position"];
     var positions3 = geometry3.attributes["position"];
@@ -274,53 +274,48 @@ class _MyAppState extends State<webgl_geometry_colors> {
     var colors2 = geometry2.attributes["color"];
     var colors3 = geometry3.attributes["color"];
 
-    for ( var i = 0; i < count; i ++ ) {
+    for (var i = 0; i < count; i++) {
+      color.setHSL((positions1.getY(i) / radius + 1) / 2, 1.0, 0.5);
+      colors1.setXYZ(i, color.r, color.g, color.b);
 
-      color.setHSL( ( positions1.getY( i ) / radius + 1 ) / 2, 1.0, 0.5 );
-      colors1.setXYZ( i, color.r, color.g, color.b );
+      color.setHSL(0, (positions2.getY(i) / radius + 1) / 2, 0.5);
+      colors2.setXYZ(i, color.r, color.g, color.b);
 
-      color.setHSL( 0, ( positions2.getY( i ) / radius + 1 ) / 2, 0.5 );
-      colors2.setXYZ( i, color.r, color.g, color.b );
-
-      color.setRGB( 1, 0.8 - ( positions3.getY( i ) / radius + 1 ) / 2, 0 );
-      colors3.setXYZ( i, color.r, color.g, color.b );
-
+      color.setRGB(1, 0.8 - (positions3.getY(i) / radius + 1) / 2, 0);
+      colors3.setXYZ(i, color.r, color.g, color.b);
     }
 
-    var material = new THREE.MeshPhongMaterial( {
+    var material = new THREE.MeshPhongMaterial({
       "color": 0xffffff,
       "flatShading": true,
       "vertexColors": true,
       "shininess": 0
-    } );
+    });
 
-    var wireframeMaterial = new THREE.MeshBasicMaterial( { 
-      "color": 0x000000, "wireframe": true, "transparent": true 
-    } );
+    var wireframeMaterial = new THREE.MeshBasicMaterial(
+        {"color": 0x000000, "wireframe": true, "transparent": true});
 
-    var mesh = new THREE.Mesh( geometry1, material );
-    var wireframe = new THREE.Mesh( geometry1, wireframeMaterial );
-    mesh.add( wireframe );
-    mesh.position.x = - 400;
-    mesh.rotation.x = - 1.87;
-    scene.add( mesh );
+    var mesh = new THREE.Mesh(geometry1, material);
+    var wireframe = new THREE.Mesh(geometry1, wireframeMaterial);
+    mesh.add(wireframe);
+    mesh.position.x = -400;
+    mesh.rotation.x = -1.87;
+    scene.add(mesh);
 
-    mesh = new THREE.Mesh( geometry2, material );
-    wireframe = new THREE.Mesh( geometry2, wireframeMaterial );
-    mesh.add( wireframe );
+    mesh = new THREE.Mesh(geometry2, material);
+    wireframe = new THREE.Mesh(geometry2, wireframeMaterial);
+    mesh.add(wireframe);
     mesh.position.x = 400;
-    scene.add( mesh );
+    scene.add(mesh);
 
-    mesh = new THREE.Mesh( geometry3, material );
-    wireframe = new THREE.Mesh( geometry3, wireframeMaterial );
-    mesh.add( wireframe );
-    scene.add( mesh );
-
+    mesh = new THREE.Mesh(geometry3, material);
+    wireframe = new THREE.Mesh(geometry3, wireframeMaterial);
+    mesh.add(wireframe);
+    scene.add(mesh);
 
     // scene.overrideMaterial = new THREE.MeshBasicMaterial();
 
     loaded = true;
-
 
     animate();
   }
@@ -372,7 +367,6 @@ class _MyAppState extends State<webgl_geometry_colors> {
     print(" animate render ");
 
     var delta = clock.getDelta();
-
 
     render();
 

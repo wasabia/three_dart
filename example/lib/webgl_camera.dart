@@ -163,16 +163,15 @@ class _MyAppState extends State<webgl_camera> {
 
     var r = DateTime.now().millisecondsSinceEpoch * 0.0005;
 
-    mesh.position.x = 700 * THREE.Math.cos( r );
-    mesh.position.z = 700 * THREE.Math.sin( r );
-    mesh.position.y = 700 * THREE.Math.sin( r );
+    mesh.position.x = 700 * THREE.Math.cos(r);
+    mesh.position.z = 700 * THREE.Math.sin(r);
+    mesh.position.y = 700 * THREE.Math.sin(r);
 
-    mesh.children[ 0 ].position.x = 70 * THREE.Math.cos( 2 * r );
-    mesh.children[ 0 ].position.z = 70 * THREE.Math.sin( r );
+    mesh.children[0].position.x = 70 * THREE.Math.cos(2 * r);
+    mesh.children[0].position.z = 70 * THREE.Math.sin(r);
 
-    if ( activeCamera == cameraPerspective ) {
-
-      cameraPerspective.fov = 35 + 30 * THREE.Math.sin( 0.5 * r );
+    if (activeCamera == cameraPerspective) {
+      cameraPerspective.fov = 35 + 30 * THREE.Math.sin(0.5 * r);
       cameraPerspective.far = mesh.position.length();
       cameraPerspective.updateProjectionMatrix();
 
@@ -180,9 +179,7 @@ class _MyAppState extends State<webgl_camera> {
       cameraPerspectiveHelper.visible = true;
 
       cameraOrthoHelper.visible = false;
-
     } else {
-
       cameraOrtho.far = mesh.position.length();
       cameraOrtho.updateProjectionMatrix();
 
@@ -190,25 +187,21 @@ class _MyAppState extends State<webgl_camera> {
       cameraOrthoHelper.visible = true;
 
       cameraPerspectiveHelper.visible = false;
-
     }
 
-    cameraRig.lookAt( mesh.position );
+    cameraRig.lookAt(mesh.position);
 
     renderer!.clear(null, null, null);
 
     activeHelper.visible = false;
 
-    renderer!.setViewport( 0, 0, width / 2, height );
-    renderer!.render( scene, activeCamera );
+    renderer!.setViewport(0, 0, width / 2, height);
+    renderer!.render(scene, activeCamera);
 
     activeHelper.visible = true;
 
-    renderer!.setViewport( width / 2, 0, width / 2, height );
-    renderer!.render( scene, camera );
-
-
-
+    renderer!.setViewport(width / 2, 0, width / 2, height);
+    renderer!.render(scene, camera);
 
     int _t1 = DateTime.now().millisecondsSinceEpoch;
 
@@ -271,25 +264,31 @@ class _MyAppState extends State<webgl_camera> {
 
     //
 
-    camera = new THREE.PerspectiveCamera( 50, 0.5 * aspect, 1, 10000 );
+    camera = new THREE.PerspectiveCamera(50, 0.5 * aspect, 1, 10000);
     camera.position.z = 2500;
 
-    cameraPerspective = new THREE.PerspectiveCamera( 50, 0.5 * aspect, 150, 1000 );
+    cameraPerspective =
+        new THREE.PerspectiveCamera(50, 0.5 * aspect, 150, 1000);
 
-    cameraPerspectiveHelper = new THREE.CameraHelper( cameraPerspective );
-    scene.add( cameraPerspectiveHelper );
+    cameraPerspectiveHelper = new THREE.CameraHelper(cameraPerspective);
+    scene.add(cameraPerspectiveHelper);
 
     //
-    cameraOrtho = new THREE.OrthographicCamera( 0.5 * frustumSize * aspect / - 2, 0.5 * frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 150, 1000 );
+    cameraOrtho = new THREE.OrthographicCamera(
+        0.5 * frustumSize * aspect / -2,
+        0.5 * frustumSize * aspect / 2,
+        frustumSize / 2,
+        frustumSize / -2,
+        150,
+        1000);
 
-    cameraOrthoHelper = new THREE.CameraHelper( cameraOrtho );
-    scene.add( cameraOrthoHelper );
+    cameraOrthoHelper = new THREE.CameraHelper(cameraOrtho);
+    scene.add(cameraOrthoHelper);
 
     //
 
     activeCamera = cameraPerspective;
     activeHelper = cameraPerspectiveHelper;
-
 
     // counteract different front orientation of cameras vs rig
 
@@ -298,53 +297,45 @@ class _MyAppState extends State<webgl_camera> {
 
     cameraRig = new THREE.Group();
 
-    cameraRig.add( cameraPerspective );
-    cameraRig.add( cameraOrtho );
+    cameraRig.add(cameraPerspective);
+    cameraRig.add(cameraOrtho);
 
-    scene.add( cameraRig );
+    scene.add(cameraRig);
 
     //
 
-    mesh = new THREE.Mesh(
-      new THREE.SphereGeometry( 100, 16, 8 ),
-      new THREE.MeshBasicMaterial( { "color": 0xffffff, "wireframe": true } )
-    );
-    scene.add( mesh );
+    mesh = new THREE.Mesh(new THREE.SphereGeometry(100, 16, 8),
+        new THREE.MeshBasicMaterial({"color": 0xffffff, "wireframe": true}));
+    scene.add(mesh);
 
-    var mesh2 = new THREE.Mesh(
-      new THREE.SphereGeometry( 50, 16, 8 ),
-      new THREE.MeshBasicMaterial( { "color": 0x00ff00, "wireframe": true } )
-    );
+    var mesh2 = new THREE.Mesh(new THREE.SphereGeometry(50, 16, 8),
+        new THREE.MeshBasicMaterial({"color": 0x00ff00, "wireframe": true}));
     mesh2.position.y = 150;
-    mesh.add( mesh2 );
+    mesh.add(mesh2);
 
-    var mesh3 = new THREE.Mesh(
-      new THREE.SphereGeometry( 5, 16, 8 ),
-      new THREE.MeshBasicMaterial( { "color": 0x0000ff, "wireframe": true } )
-    );
+    var mesh3 = new THREE.Mesh(new THREE.SphereGeometry(5, 16, 8),
+        new THREE.MeshBasicMaterial({"color": 0x0000ff, "wireframe": true}));
     mesh3.position.z = 150;
-    cameraRig.add( mesh3 );
+    cameraRig.add(mesh3);
 
     //
 
     var geometry = new THREE.BufferGeometry();
     var vertices = [];
 
-    for ( var i = 0; i < 10000; i ++ ) {
-
-      vertices.add( THREE.MathUtils.randFloatSpread( 2000 ) ); // x
-      vertices.add( THREE.MathUtils.randFloatSpread( 2000 ) ); // y
-      vertices.add( THREE.MathUtils.randFloatSpread( 2000 ) ); // z
+    for (var i = 0; i < 10000; i++) {
+      vertices.add(THREE.MathUtils.randFloatSpread(2000)); // x
+      vertices.add(THREE.MathUtils.randFloatSpread(2000)); // y
+      vertices.add(THREE.MathUtils.randFloatSpread(2000)); // z
 
     }
 
-    geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+    geometry.setAttribute(
+        'position', new THREE.Float32BufferAttribute(vertices, 3));
 
-    var particles = new THREE.Points( geometry, new THREE.PointsMaterial( { "color": 0x888888 } ) );
-    scene.add( particles );
-
-
-
+    var particles = new THREE.Points(
+        geometry, new THREE.PointsMaterial({"color": 0x888888}));
+    scene.add(particles);
 
     animate();
   }

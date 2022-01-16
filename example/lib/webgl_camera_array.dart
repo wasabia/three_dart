@@ -259,8 +259,6 @@ class _MyAppState extends State<webgl_camera_array> {
     mesh.receiveShadow = true;
     scene.add(mesh);
 
-
-
     animate();
   }
 

@@ -1,6 +1,6 @@
 name: three_dart
 description: three.js implement by Dart. Dart 3D library. an easy to use, lightweight, cross-platform, general purpose 3D library. 
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/wasabia/three_dart
 
 environment:

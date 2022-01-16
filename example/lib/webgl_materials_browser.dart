@@ -216,7 +216,6 @@ class _MyAppState extends State<webgl_materials_browser> {
 
     scene.add(object);
 
-
     animate();
   }
 

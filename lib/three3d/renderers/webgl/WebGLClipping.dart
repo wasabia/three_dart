@@ -115,7 +115,7 @@ class WebGLClipping {
         for (var i = 0, i4 = dstOffset; i != nPlanes; ++i, i4 += 4) {
           plane.copy(planes[i]).applyMatrix4(viewMatrix, viewNormalMatrix);
 
-          plane.normal.toArray(dstArray, offset: i4);
+          plane.normal.toArray(dstArray, i4);
           dstArray[i4 + 3] = plane.constant;
         }
       }

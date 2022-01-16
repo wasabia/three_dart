@@ -262,7 +262,6 @@ class _MyAppState extends State<webgl_loader_gltf_3> {
 
     loaded = true;
 
-
     animate();
   }
 

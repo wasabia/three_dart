@@ -21,7 +21,6 @@ class WebGLAttributes {
     // dynamic arrayList;
 
     // print(" WebGLAttributes.createBuffer attribute: ${attribute.runtimeType} arrayType: ${arrayType} array: ${array.length} ${array.runtimeType} name: ${name} ");
- 
 
     var type = gl.FLOAT;
     int bytesPerElement = 4;
@@ -110,7 +109,11 @@ class WebGLAttributes {
 
     gl.bindBuffer(bufferType, buffer);
 
-    gl.bufferData(bufferType, (array is NativeArray) ? array.bytesLength : array.lengthInBytes, array, usage);
+    gl.bufferData(
+        bufferType,
+        (array is NativeArray) ? array.bytesLength : array.lengthInBytes,
+        array,
+        usage);
 
     if (attribute.onUploadCallback != null) {
       attribute.onUploadCallback();
@@ -176,7 +179,8 @@ class WebGLAttributes {
 
     if (updateRange["count"] == -1) {
       // Not using update ranges
-      gl.bufferSubData(bufferType, 0, array, 0, (array is NativeArray) ? array.bytesLength : array.lengthInBytes);
+      gl.bufferSubData(bufferType, 0, array, 0,
+          (array is NativeArray) ? array.bytesLength : array.lengthInBytes);
     } else {
       print(" WebGLAttributes.dart gl.bufferSubData need debug confirm.... ");
       gl.bufferSubData(bufferType, updateRange["offset"] * attribute.itemSize,
@@ -193,7 +197,6 @@ class WebGLAttributes {
     } else {
       return buffers.get(attribute);
     }
-    ;
   }
 
   remove(BufferAttribute attribute) {
