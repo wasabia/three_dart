@@ -466,7 +466,7 @@ class Box3 {
 
   satForAxes(axes, v0, v1, v2, extents) {
     for (var i = 0, j = axes.length - 3; i <= j; i += 3) {
-      _testAxis.fromArray(axes, offset: i);
+      _testAxis.fromArray(axes, i);
       // project the aabb onto the seperating axis
       var r = extents.x * Math.abs(_testAxis.x) +
           extents.y * Math.abs(_testAxis.y) +

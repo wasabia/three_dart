@@ -146,21 +146,21 @@ class SphericalHarmonics3 {
     return new SphericalHarmonics3().copy(this);
   }
 
-  fromArray(List<double> array, {int offset = 0}) {
+  fromArray(List<double> array, [int offset = 0]) {
     var coefficients = this.coefficients;
 
     for (var i = 0; i < 9; i++) {
-      coefficients[i].fromArray(array, offset: offset + (i * 3));
+      coefficients[i].fromArray(array, offset + (i * 3));
     }
 
     return this;
   }
 
-  toArray(List<double> array, {int offset = 0}) {
+  toArray(List<double> array, [int offset = 0]) {
     var coefficients = this.coefficients;
 
     for (var i = 0; i < 9; i++) {
-      coefficients[i].toArray(array, offset: offset + (i * 3));
+      coefficients[i].toArray(array, offset + (i * 3));
     }
 
     return array;

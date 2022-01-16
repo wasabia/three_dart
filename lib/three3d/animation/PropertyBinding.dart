@@ -602,9 +602,7 @@ class PropertyBinding {
       bindingType = this.BindingType["HasFromToArray"];
 
       this.resolvedProperty = nodeProperty;
-
-    } else if (nodeProperty is List ) {
-
+    } else if (nodeProperty is List) {
       bindingType = this.BindingType["EntireArray"];
 
       this.resolvedProperty = nodeProperty;

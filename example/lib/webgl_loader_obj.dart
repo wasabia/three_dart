@@ -232,7 +232,6 @@ class _MyAppState extends State<webgl_loader_obj> {
     object.scale.set(0.5, 0.5, 0.5);
     scene.add(object);
 
-
     animate();
   }
 

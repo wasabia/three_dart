@@ -297,7 +297,6 @@ class _MyAppState extends State<webgl_shadow_contact> {
   initScene() async {
     initRenderer();
     await initPage();
-    
   }
 
   initPage() async {
@@ -405,7 +404,6 @@ class _MyAppState extends State<webgl_shadow_contact> {
 
     verticalBlurMaterial = new THREE.ShaderMaterial(VerticalBlurShader);
     verticalBlurMaterial.depthTest = false;
-
 
     inited = true;
     animate();

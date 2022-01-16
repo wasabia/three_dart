@@ -571,18 +571,18 @@ class Vector3 {
   }
 
   setFromMatrixColumn(Matrix4 m, int index) {
-    return this.fromArray(m.elements, offset: index * 4);
+    return this.fromArray(m.elements, index * 4);
   }
 
   setFromMatrix3Column(Matrix3 m, int index) {
-    return this.fromArray(m.elements, offset: index * 3);
+    return this.fromArray(m.elements, index * 3);
   }
 
   equals(v) {
     return ((v.x == this.x) && (v.y == this.y) && (v.z == this.z));
   }
 
-  fromArray(array, {int offset = 0}) {
+  fromArray(array, [int offset = 0]) {
     this.x = array[offset]!;
     this.y = array[offset + 1]!;
     this.z = array[offset + 2]!;
@@ -590,7 +590,7 @@ class Vector3 {
     return this;
   }
 
-  toArray(List<num?> array, {int offset = 0}) {
+  toArray(List<num?> array, [int offset = 0]) {
     array[offset] = this.x;
     array[offset + 1] = this.y;
     array[offset + 2] = this.z;

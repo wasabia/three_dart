@@ -240,7 +240,6 @@ class _MyAppState extends State<webgl_loader_gltf> {
 
     // scene.overrideMaterial = new THREE.MeshBasicMaterial();
 
-
     animate();
   }
 

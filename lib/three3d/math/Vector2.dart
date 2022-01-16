@@ -343,7 +343,7 @@ class Vector2 {
     return ((v.x == this.x) && (v.y == this.y));
   }
 
-  Vector2 fromArray(array, {int offset = 0}) {
+  Vector2 fromArray(array, [int offset = 0]) {
     this.x = array[offset];
     this.y = array[offset + 1];
 

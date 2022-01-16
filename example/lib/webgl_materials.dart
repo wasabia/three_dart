@@ -297,7 +297,6 @@ class _MyAppState extends State<webgl_materials> {
 
     loaded = true;
 
-
     animate();
   }
 

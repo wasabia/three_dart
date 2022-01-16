@@ -246,8 +246,6 @@ class _MyAppState extends State<webgl_debug_for_macos> {
 
   initPage() async {
     _initScene();
-
-    
   }
 
   _initScene() {

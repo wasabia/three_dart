@@ -3,12 +3,12 @@ part of three_geometries;
 class DodecahedronGeometry extends PolyhedronGeometry {
   String type = "DodecahedronGeometry";
 
-  DodecahedronGeometry(vertices, indices, radius, detail)
+  DodecahedronGeometry.create(vertices, indices, radius, detail)
       : super(vertices, indices, radius, detail) {
     this.parameters = {"radius": radius, "detail": detail};
   }
 
-  static DodecahedronGeometry create({radius = 1, detail = 0}) {
+  factory DodecahedronGeometry([num radius = 1, int detail = 0]) {
     var t = (1 + Math.sqrt(5)) / 2;
     var r = 1 / t;
 
@@ -144,7 +144,7 @@ class DodecahedronGeometry extends PolyhedronGeometry {
     ];
 
     DodecahedronGeometry _dbg =
-        DodecahedronGeometry(vertices, indices, radius, detail);
+        DodecahedronGeometry.create(vertices, indices, radius, detail);
 
     return _dbg;
   }

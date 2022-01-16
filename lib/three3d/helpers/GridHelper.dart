@@ -23,13 +23,13 @@ class GridHelper extends LineSegments {
 
       var color = (i == center) ? color_1 : color_2;
 
-      color.toArray(colors, offset: j);
+      color.toArray(colors, j);
       j += 3;
-      color.toArray(colors, offset: j);
+      color.toArray(colors, j);
       j += 3;
-      color.toArray(colors, offset: j);
+      color.toArray(colors, j);
       j += 3;
-      color.toArray(colors, offset: j);
+      color.toArray(colors, j);
       j += 3;
     }
 

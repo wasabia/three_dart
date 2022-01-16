@@ -221,7 +221,6 @@ class _MyAppState extends State<webgl_instancing_performance> {
 
     makeNaive(geometry);
 
-
     animate();
   }
 

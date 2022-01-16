@@ -264,7 +264,6 @@ class _MyAppState extends State<webgl_geometry_text> {
     plane.rotation.x = -THREE.Math.PI / 2;
     scene.add(plane);
 
-
     animate();
   }
 

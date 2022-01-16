@@ -227,7 +227,6 @@ class _MyAppState extends State<webgl_loader_texture_basis> {
     material.map = texture;
     material.needsUpdate = true;
 
-
     animate();
   }
 

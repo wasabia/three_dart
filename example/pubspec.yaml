@@ -30,14 +30,14 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_gl: ^0.0.8
   three_dart: ^0.0.3
-  three_dart_jsm: ^0.0.1
+  three_dart_jsm: ^0.0.2
 
 
 dependency_overrides:
   three_dart:
     path: ../
-  three_dart_jsm:
-    path: ../../three_dart_plugins/three_dart_jsm/
+  # three_dart_jsm:
+  #   path: ../../three_dart_plugins/three_dart_jsm/
 
 dev_dependencies:
   flutter_test:

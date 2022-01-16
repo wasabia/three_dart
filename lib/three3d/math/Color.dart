@@ -1,6 +1,6 @@
 part of three_math;
 
-var _colorKeywords = {
+const _colorKeywords = {
   'aliceblue': 0xF0F8FF,
   'antiquewhite': 0xFAEBD7,
   'aqua': 0x00FFFF,
@@ -178,19 +178,57 @@ class Color {
   String type = "Color";
 
   // TODO WebGLBackground Scene.background 多种类型 Texture or Color
+  // need fix
   bool isTexture = false;
 
-  late num r;
-  late num g;
-  late num b;
 
-  static Map<String, int> NAMES = _colorKeywords;
+  // set default value
+  // var c = Color(); 
+  // r g b is all 1.0;
+  num r = 1.0;
+  num g = 1.0;
+  num b = 1.0;
 
-  Color(num? r, num? g, num? b) {
-    this.r = r ?? 1.0;
-    this.g = g ?? 1.0;
-    this.b = b ?? 1.0;
+  static const Map<String, int> NAMES = _colorKeywords;
+
+
+  /// Color class.
+  /// r g b value range (0.0 ~ 1.0)
+  /// var color = Color(0xff00ff);
+  /// var color = Color(1.0, 0.0, 1.0);
+  /// var color = Color("#ff00ee");
+  /// r is THREE.Color, hex or string
+  Color([r, num? g, num? b]) {
+
+    if ( g == null && b == null ) {
+
+			// r is THREE.Color, hex or string
+			this.set( r );
+      
+		} else {
+      this.setRGB( r, g, b );
+    }
   }
+
+  set( value ) {
+
+		if ( value is Color ) {
+
+			this.copy( value );
+
+		} else if ( value is int ) {
+
+			this.setHex( value );
+
+		} else if ( value is String ) {
+
+			this.setStyle( value );
+
+		}
+
+		return this;
+
+	}
 
   //
   factory Color.setRGB255(int r, int g, int b) {
@@ -238,10 +276,10 @@ class Color {
     return this;
   }
 
-  setRGB(r, g, b) {
-    this.r = r;
-    this.g = g;
-    this.b = b;
+  setRGB([num? r, num? g, num? b]) {
+    this.r = r ?? 1.0;
+    this.g = g ?? 1.0;
+    this.b = b ?? 1.0;
 
     return this;
   }
@@ -420,7 +458,7 @@ class Color {
     return this;
   }
 
-  copyGammaToLinear(color, {double gammaFactor = 2.0}) {
+  copyGammaToLinear(color, [double gammaFactor = 2.0]) {
     this.r = Math.pow(color.r, gammaFactor).toDouble();
     this.g = Math.pow(color.g, gammaFactor).toDouble();
     this.b = Math.pow(color.b, gammaFactor).toDouble();
@@ -428,7 +466,7 @@ class Color {
     return this;
   }
 
-  copyLinearToGamma(color, {double gammaFactor = 2.0}) {
+  copyLinearToGamma(color, [double gammaFactor = 2.0]) {
     var safeInverse = (gammaFactor > 0) ? (1.0 / gammaFactor) : 1.0;
 
     this.r = Math.pow(color.r, safeInverse).toDouble();
@@ -438,14 +476,22 @@ class Color {
     return this;
   }
 
-  convertGammaToLinear(gammaFactor) {
-    this.copyGammaToLinear(this, gammaFactor: gammaFactor);
+  convertGammaToLinear([gammaFactor]) {
+    if(gammaFactor == null) {
+      this.copyGammaToLinear(this);
+    } else {
+      this.copyGammaToLinear(this, gammaFactor);
+    }
 
     return this;
   }
 
-  convertLinearToGamma(gammaFactor) {
-    this.copyLinearToGamma(this, gammaFactor: gammaFactor);
+  convertLinearToGamma([gammaFactor]) {
+    if(gammaFactor == null) {
+      this.copyLinearToGamma(this);
+    } else {
+      this.copyLinearToGamma(this, gammaFactor);
+    }
 
     return this;
   }
@@ -478,14 +524,15 @@ class Color {
     return this;
   }
 
-  getHex() {
+  int getHex() {
     return (this.r * 255).toInt() << 16 ^
         (this.g * 255).toInt() << 8 ^
         (this.b * 255).toInt() << 0;
   }
 
-  getHexString() {
-    return ('000000' + this.getHex().toString(16)).substring(-6);
+  String getHexString() {
+    String _str = ('000000' + this.getHex().toRadixString(16));
+    return _str.substring(_str.length-6);
   }
 
   // target map target = { "h": 0, "s": 0, "l": 0 };
@@ -627,7 +674,7 @@ class Color {
     return (this.r == 0) && (this.g == 0) && (this.b == 0);
   }
 
-  fromArray(array, {int offset = 0}) {
+  fromArray(array, [int offset = 0]) {
     this.r = array[offset];
     this.g = array[offset + 1];
     this.b = array[offset + 2];
@@ -635,7 +682,14 @@ class Color {
     return this;
   }
 
-  toArray(array, {int offset = 0}) {
+  /// dart array can not expand default
+  /// so have to set array length enough first.
+  toArray([array, int offset = 0]) {
+
+    if(array == null) {
+      array = List<num>.filled(3, 0.0);
+    }
+
     array[offset] = this.r;
     array[offset + 1] = this.g;
     array[offset + 2] = this.b;
@@ -659,17 +713,8 @@ class Color {
     return this;
   }
 
-  List<num> toJSON() {
-    return [this.r, this.g, this.b];
+  toJSON() {
+    return this.getHex();
   }
 
-  Color.fromJson(Map<String, dynamic> json) {
-    r = json['r'];
-    g = json['g'];
-    b = json['b'];
-  }
-
-  Map<String, dynamic> toJson() {
-    return {'r': r, 'g': g, 'b': b};
-  }
 }
