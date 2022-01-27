@@ -472,72 +472,6 @@ class WebGLRenderer {
     }
   }
 
-  // Buffer rendering
-
-  renderObjectImmediate(object, program) {
-    object.render((object) {
-      this.renderBufferImmediate(object, program);
-    });
-  }
-
-  renderBufferImmediate(object, program) {
-    bindingStates.initAttributes();
-
-    var buffers = properties.get(object);
-
-    if (object.hasPositions && buffers["position"] == null)
-      buffers["position"] = _gl.createBuffer();
-    if (object.hasNormals && buffers["normal"] == null)
-      buffers["normal"] = _gl.createBuffer();
-    if (object.hasUvs && buffers["uv"]) buffers["uv"] = _gl.createBuffer();
-    if (object.hasColors && buffers["color"] == null)
-      buffers["color"] = _gl.createBuffer();
-
-    var programAttributes = program.getAttributes();
-
-    if (object.hasPositions) {
-      _gl.bindBuffer(_gl.ARRAY_BUFFER, buffers["position"]);
-      _gl.bufferData(_gl.ARRAY_BUFFER, object.positionArray, _gl.DYNAMIC_DRAW);
-
-      bindingStates.enableAttribute(programAttributes.position.location);
-      _gl.vertexAttribPointer(
-          programAttributes.position.location, 3, _gl.FLOAT, false, 0, 0);
-    }
-
-    if (object.hasNormals) {
-      _gl.bindBuffer(_gl.ARRAY_BUFFER, buffers["normal"]);
-      _gl.bufferData(_gl.ARRAY_BUFFER, object.normalArray, _gl.DYNAMIC_DRAW);
-
-      bindingStates.enableAttribute(programAttributes.normal.location);
-      _gl.vertexAttribPointer(
-          programAttributes.normal.location, 3, _gl.FLOAT, false, 0, 0);
-    }
-
-    if (object.hasUvs) {
-      _gl.bindBuffer(_gl.ARRAY_BUFFER, buffers["uv"]);
-      _gl.bufferData(_gl.ARRAY_BUFFER, object.uvArray, _gl.DYNAMIC_DRAW);
-
-      bindingStates.enableAttribute(programAttributes.uv.location);
-      _gl.vertexAttribPointer(
-          programAttributes.uv.location, 2, _gl.FLOAT, false, 0, 0);
-    }
-
-    if (object.hasColors) {
-      _gl.bindBuffer(_gl.ARRAY_BUFFER, buffers["color"]);
-      _gl.bufferData(_gl.ARRAY_BUFFER, object.colorArray, _gl.DYNAMIC_DRAW);
-
-      bindingStates.enableAttribute(programAttributes.color.location);
-      _gl.vertexAttribPointer(
-          programAttributes.color.location, 3, _gl.FLOAT, false, 0, 0);
-    }
-
-    bindingStates.disableUnusedAttributes();
-
-    _gl.drawArrays(_gl.TRIANGLES, 0, object.count);
-
-    object.count = 0;
-  }
-
   renderBufferDirect(Camera camera, dynamic? scene, geometry, Material material,
       Object3D object, group) {
     // print("renderBufferDirect .............material: ${material.runtimeType}  ");
@@ -903,15 +837,7 @@ class WebGLRenderer {
                 .push(object, geometry, material, groupOrder, _vector3.z, null);
           }
         }
-      } else if (object.isImmediateRenderObject) {
-        if (sortObjects) {
-          _vector3
-              .setFromMatrixPosition(object.matrixWorld)
-              .applyMatrix4(projScreenMatrix);
-        }
-
-        currentRenderList!
-            .push(object, null, object.material, groupOrder, _vector3.z, null);
+      
       } else if (object.isMesh || object.isLine || object.isPoints) {
         if (object.type == "SkinnedMesh") {
           // update skeleton only once in a frame
@@ -1074,31 +1000,19 @@ class WebGLRenderer {
 
     if(material.onBeforeRender != null) material.onBeforeRender!( this, scene, camera, geometry, object, group );
 
-    if (object.isImmediateRenderObject) {
-      var program = setProgram(camera, scene, material, object);
+    if ( material.transparent == true && material.side == DoubleSide ) {
 
-      state.setMaterial(material, null);
+			material.side = BackSide;
+			material.needsUpdate = true;
+			renderBufferDirect( camera, scene, geometry, material, object, group );
 
-      bindingStates.reset();
+			material.side = FrontSide;
+			material.needsUpdate = true;
+			renderBufferDirect( camera, scene, geometry, material, object, group );
 
-      renderObjectImmediate(object, program);
+			material.side = DoubleSide;
     } else {
-      if (material.transparent == true && material.side == DoubleSide) {
-        material.side = BackSide;
-        material.needsUpdate = true;
-        this.renderBufferDirect(
-            camera, scene, geometry, material, object, group);
-
-        material.side = FrontSide;
-        material.needsUpdate = true;
-        this.renderBufferDirect(
-            camera, scene, geometry, material, object, group);
-
-        material.side = DoubleSide;
-      } else {
-        this.renderBufferDirect(
-            camera, scene, geometry, material, object, group);
-      }
+      renderBufferDirect( camera, scene, geometry, material, object, group );
     }
 
     object.onAfterRender(
