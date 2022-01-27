@@ -49,3 +49,4 @@ getTypedArray(type, buffer) {
     throw (" Util.dart getTypedArray type: ${type} is not support ");
   }
 }
+
