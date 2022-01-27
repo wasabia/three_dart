@@ -3,7 +3,7 @@ part of three_loaders;
 class ObjectLoader extends Loader {
   ObjectLoader(manager) : super(manager) {}
 
-  load(url, onLoad, onProgress, onError) {
+  load(url, onLoad, [onProgress, onError]) {
     var scope = this;
 
     var path = (this.path == '') ? LoaderUtils.extractUrlBase(url) : this.path;
@@ -35,11 +35,11 @@ class ObjectLoader extends Loader {
         return;
       }
 
-      scope.parse(json, onLoad: onLoad);
+      scope.parse(json, null, onLoad);
     }, onProgress, onError);
   }
 
-  loadAsync(url, onProgress) async {
+  loadAsync(url) async {
     var scope = this;
 
     var path = (this.path == '') ? LoaderUtils.extractUrlBase(url) : this.path;
@@ -50,7 +50,7 @@ class ObjectLoader extends Loader {
     loader.setRequestHeader(this.requestHeader);
     loader.setWithCredentials(this.withCredentials);
 
-    var text = await loader.loadAsync(url, onProgress);
+    var text = await loader.loadAsync(url);
 
     var json = convert.jsonDecode(text);
 
@@ -65,7 +65,7 @@ class ObjectLoader extends Loader {
     return await scope.parseAsync(json);
   }
 
-  parse(json, {String? path, Function? onLoad, Function? onError}) async {
+  parse(json, [String? path, Function? onLoad, Function? onError]) async {
     var animations = this.parseAnimations(json.animations);
     var shapes = this.parseShapes(json.shapes);
     var geometries = this.parseGeometries(json.geometries, shapes);
@@ -431,6 +431,7 @@ class ObjectLoader extends Loader {
           texture.premultiplyAlpha = data["premultiplyAlpha"];
         if (data["unpackAlignment"] != null)
           texture.unpackAlignment = data["unpackAlignment"];
+        if ( data["userData"] != null ) texture.userData = data["userData"];
 
         textures[data["uuid"]] = texture;
       }

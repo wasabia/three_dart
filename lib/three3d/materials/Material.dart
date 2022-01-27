@@ -18,6 +18,7 @@ class Material with EventDispatcher {
   Vector2? clearcoatNormalScale;
 
   num opacity = 1;
+  int format = RGBAFormat;
   bool transparent = false;
   int blendSrc = SrcAlphaFactor;
   int blendDst = OneMinusSrcAlphaFactor;
@@ -52,7 +53,16 @@ class Material with EventDispatcher {
   num polygonOffsetUnits = 0;
 
   bool dithering = false;
-  num alphaTest = 0;
+  num _alphaTest = 0;
+  num get alphaTest => _alphaTest;
+  set alphaTest(num value) {
+    if ( (this._alphaTest > 0) != (value > 0) ) {
+			this.version ++;
+		}
+
+		this._alphaTest = value;
+  }
+
 
   num _clearcoat = 0;
   num get clearcoat => _clearcoat;
@@ -81,7 +91,7 @@ class Material with EventDispatcher {
 
   Color? specular;
   num? specularIntensity;
-  Color? specularTint;
+  Color? specularColor;
   num? clearcoatRoughness;
   num? bumpScale;
   num? envMapIntensity;
@@ -98,18 +108,36 @@ class Material with EventDispatcher {
   Texture? metalnessMap;
   Texture? specularMap;
   Texture? specularIntensityMap;
-  Texture? specularTintMap;
+  Texture? specularColorMap;
   Texture? sheenColorMap;
 
   Texture? gradientMap;
-  Color? sheenTint;
-  num transmission = 0.0;
+  num sheen = 0.0;
+  Color? sheenColor;
+  Texture? sheenTintMap;
+
+  num sheenRoughness = 1.0;
+  Texture? sheenRoughnessMap;
+
+
+  num _transmission = 0.0;
+  num get transmission => _transmission;
+  set transmission(num value) {
+    if ( (this._transmission > 0) != (value > 0) ) {
+
+			this.version ++;
+
+		}
+
+		this._transmission = value;
+  }
+
   Texture? transmissionMap;
 
   num? thickness;
   Texture? thicknessMap;
 
-  Color? attenuationTint;
+  Color? attenuationColor;
   num? attenuationDistance;
 
   bool vertexTangents = false;
@@ -206,6 +234,9 @@ class Material with EventDispatcher {
   set shaderID(value) {
     shaderid = value;
   }
+
+  // ( /* renderer, scene, camera, geometry, object, group */ ) {}
+  Function? onBeforeRender;
 
   Material() {
     customProgramCacheKey = () {
@@ -423,9 +454,12 @@ class Material with EventDispatcher {
 
     if (this.roughness != null) data["roughness"] = this.roughness;
     if (this.metalness != null) data["metalness"] = this.metalness;
+    
 
-    if (this.sheenTint != null && this.sheenTint!.isColor)
-      data["sheenTint"] = this.sheenTint!.getHex();
+    if ( this.sheen != null ) data["sheen"] = this.sheen;
+		if ( this.sheenColor != null && this.sheenColor is Color ) data["sheenColor"] = this.sheenColor!.getHex();
+		if ( this.sheenRoughness != null ) data["sheenRoughness"] = this.sheenRoughness;
+    
     if (this.emissive != null && this.emissive!.isColor)
       data["emissive"] = this.emissive!.getHex();
     if (this.emissiveIntensity != null && this.emissiveIntensity != 1)
@@ -435,8 +469,8 @@ class Material with EventDispatcher {
       data["specular"] = this.specular!.getHex();
     if (this.specularIntensity != null)
       data["specularIntensity"] = this.specularIntensity;
-    if (this.specularTint != null && this.specularTint!.isColor)
-      data["specularTint"] = this.specularTint!.getHex();
+    if (this.specularColor != null && this.specularColor!.isColor)
+      data["specularColor"] = this.specularColor!.getHex();
     if (this.shininess != null) data["shininess"] = this.shininess;
     if (this.clearcoat != null) data["clearcoat"] = this.clearcoat;
     if (this.clearcoatRoughness != null)
@@ -506,8 +540,8 @@ class Material with EventDispatcher {
         this.specularIntensityMap!.isTexture)
       data["specularIntensityMap"] =
           this.specularIntensityMap!.toJSON(meta).uuid;
-    if (this.specularTintMap != null && this.specularTintMap!.isTexture)
-      data["specularTintMap"] = this.specularTintMap!.toJSON(meta).uuid;
+    if (this.specularColorMap != null && this.specularColorMap!.isTexture)
+      data["specularColorMap"] = this.specularColorMap!.toJSON(meta).uuid;
 
     if (this.envMap != null && this.envMap!.isTexture) {
       data["envMap"] = this.envMap!.toJSON(meta).uuid;
@@ -529,8 +563,8 @@ class Material with EventDispatcher {
     if (this.thickness != null) data["thickness"] = this.thickness;
     if (this.thicknessMap != null && this.thicknessMap!.isTexture)
       data["thicknessMap"] = this.thicknessMap!.toJSON(meta).uuid;
-    if (this.attenuationTint != null)
-      data["attenuationTint"] = this.attenuationTint!.getHex();
+    if (this.attenuationColor != null)
+      data["attenuationColor"] = this.attenuationColor!.getHex();
     if (this.attenuationDistance != null)
       data["attenuationDistance"] = this.attenuationDistance;
 
@@ -544,6 +578,7 @@ class Material with EventDispatcher {
     if (this.vertexColors) data["vertexColors"] = true;
 
     if (this.opacity < 1) data["opacity"] = this.opacity;
+    if ( this.format != RGBAFormat ) data["format"] = this.format;
     if (this.transparent == true) data["transparent"] = this.transparent;
 
     data["depthFunc"] = this.depthFunc;
@@ -636,6 +671,7 @@ class Material with EventDispatcher {
     this.vertexColors = source.vertexColors;
 
     this.opacity = source.opacity;
+    this.format = source.format;
     this.transparent = source.transparent;
 
     this.blendSrc = source.blendSrc;

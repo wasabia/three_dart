@@ -214,7 +214,7 @@ class _MyAppState extends State<webgl_loader_gltf_test> {
 
     var _loader = THREE_JSM.RGBELoader(null);
     _loader.setPath('assets/textures/equirectangular/');
-    var _hdrTexture = await _loader.loadAsync('royal_esplanade_1k.hdr', null);
+    var _hdrTexture = await _loader.loadAsync('royal_esplanade_1k.hdr');
 
     _hdrTexture.mapping = THREE.EquirectangularReflectionMapping;
 

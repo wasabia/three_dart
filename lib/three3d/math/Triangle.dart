@@ -25,7 +25,7 @@ class Triangle {
     this.c = (c != null) ? c : new Vector3.init();
   }
 
-  Triangle.init({Vector3? a = null, Vector3? b = null, Vector3? c = null}) {
+  Triangle.init({Vector3? a, Vector3? b, Vector3? c}) {
     this.a = (a != null) ? a : new Vector3.init();
     this.b = (b != null) ? b : new Vector3.init();
     this.c = (c != null) ? c : new Vector3.init();

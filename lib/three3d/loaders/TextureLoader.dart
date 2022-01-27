@@ -7,20 +7,17 @@ class TextureLoader extends Loader {
 
   TextureLoader(manager) : super(manager) {}
 
-  Future<Texture> loadAsync(url, Function? onProgress,
-      {Function? imageDecoder}) async {
+  Future<Texture> loadAsync(url, [Function? onProgress]) async {
     var completer = Completer<Texture>();
 
     load(url, (texture) {
       completer.complete(texture);
-    }, onProgress, () {}, imageDecoder: imageDecoder);
+    }, onProgress, () {});
 
     return completer.future;
   }
 
-  Future<Texture> load(
-      url, Function? onLoad, Function? onProgress, Function? onError,
-      {Function? imageDecoder}) {
+  load(url, Function onLoad, [Function? onProgress, Function? onError]) {
     Texture texture;
 
     // if(kIsWeb) {
@@ -76,7 +73,7 @@ class TextureLoader extends Loader {
       }
 
       completer.complete(texture);
-    }, onProgress, onError, imageDecoder: imageDecoder);
+    }, onProgress, onError);
 
     return completer.future;
   }

@@ -214,7 +214,7 @@ class _MyAppState extends State<webgl_loader_gltf> {
 
     var _loader = THREE_JSM.RGBELoader(null);
     _loader.setPath('assets/textures/equirectangular/');
-    var _hdrTexture = await _loader.loadAsync('royal_esplanade_1k.hdr', null);
+    var _hdrTexture = await _loader.loadAsync('royal_esplanade_1k.hdr');
 
     _hdrTexture.mapping = THREE.EquirectangularReflectionMapping;
 
@@ -224,7 +224,7 @@ class _MyAppState extends State<webgl_loader_gltf> {
     var loader = THREE_JSM.GLTFLoader(null)
         .setPath('assets/models/gltf/DamagedHelmet/glTF/');
 
-    var result = await loader.loadAsync('DamagedHelmet.gltf', null);
+    var result = await loader.loadAsync('DamagedHelmet.gltf');
 
     print(" gltf load sucess result: ${result}  ");
 

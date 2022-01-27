@@ -1,0 +1,5 @@
+include: package:lints/recommended.yaml
+
+analyzer:
+  errors:
+    undefined_prefixed_name: ignore

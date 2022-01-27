@@ -5,17 +5,17 @@ class ImageLoader extends Loader {
 
   ImageLoader(manager) : super(manager) {}
 
-  loadAsync(url, Function? onProgress, {Function? imageDecoder}) async {
+  loadAsync(url, [Function? onProgress]) async {
     var completer = Completer();
 
     load(url, (buffer) {
       completer.complete(buffer);
-    }, onProgress, () {}, imageDecoder: imageDecoder);
+    }, onProgress, () {});
 
     return completer.future;
   }
 
-  load(url, onLoad, onProgress, onError, {Function? imageDecoder}) async {
+  load(url, onLoad, [onProgress, onError]) async {
     if (this.path != "" && url is String) {
       url = this.path + url;
     }
@@ -38,8 +38,7 @@ class ImageLoader extends Loader {
       return cached;
     }
 
-    final _resp = await ImageLoaderLoader.loadImage(url, flipY,
-        imageDecoder: imageDecoder);
+    final _resp = await ImageLoaderLoader.loadImage(url, flipY);
     if (onLoad != null) {
       onLoad(_resp);
     }

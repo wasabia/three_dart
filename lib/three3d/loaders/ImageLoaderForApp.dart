@@ -25,28 +25,12 @@ class ImageLoaderLoader {
         bytes = await file.readAsBytes();
       }
 
-      // print(" load image and decode 1: ${DateTime.now().millisecondsSinceEpoch}............ ");
-
-      // var receivePort = ReceivePort();
-      // await Isolate.spawn(decodeIsolate, DecodeParam(bytes, receivePort.sendPort));
-      // image = await receivePort.first as Image?;
-
       image = await compute(imageProcess2, DecodeParam(bytes!, flipY, null));
-      // image = imageProcess2( DecodeParam(bytes!, flipY, null) );
-
-      // if(image != null) {
-      //   var _pixels = image.getBytes(format: Format.rgb);
-      //   imageElement = ImageElement(url: url, data: Uint8Array.from(_pixels) , width: image.width, height: image.height);
-      // }
-
+     
     } else {
-      // print(" imageDecoder is not null..... ");
-
+      
       image = await imageDecoder(null, url);
-      // if(image != null) {
-      //   imageElement = ImageElement(url: url, data: image.pixels, width: image.width, height: image.height);
-      // }
-
+     
     }
 
     return image;

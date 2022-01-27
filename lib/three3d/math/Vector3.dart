@@ -614,6 +614,22 @@ class Vector3 {
     return this;
   }
 
+  randomDirection() {
+
+		// Derived from https://mathworld.wolfram.com/SpherePointPicking.html
+
+		var u = ( Math.random() - 0.5 ) * 2;
+		var t = Math.random() * Math.PI * 2;
+		var f = Math.sqrt( 1 - u * u );
+
+		this.x = f * Math.cos( t );
+		this.y = f * Math.sin( t );
+		this.z = u;
+
+		return this;
+
+	}
+
   toJSON() {
     return [this.x, this.y, this.z];
   }

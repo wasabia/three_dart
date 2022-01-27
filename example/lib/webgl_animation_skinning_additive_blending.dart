@@ -242,7 +242,7 @@ class _State extends State<webgl_animation_skinning_additive_blending> {
     scene.add(mesh);
 
     var loader = new THREE_JSM.GLTFLoader(null);
-    var gltf = await loader.loadAsync('assets/models/gltf/Xbot.gltf', null);
+    var gltf = await loader.loadAsync('assets/models/gltf/Xbot.gltf');
 
     model = gltf["scene"];
     scene.add(model);

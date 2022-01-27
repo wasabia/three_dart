@@ -212,13 +212,13 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
 
     var mtlLoader = new THREE_JSM.MTLLoader(manager);
     mtlLoader.setPath('assets/models/obj/male02/');
-    var materials = await mtlLoader.loadAsync('male02.mtl', null);
+    var materials = await mtlLoader.loadAsync('male02.mtl');
     await materials.preload();
 
     var loader = THREE_JSM.OBJLoader(null);
     loader.setMaterials(materials);
     object =
-        await loader.loadAsync('assets/models/obj/male02/male02.obj', null);
+        await loader.loadAsync('assets/models/obj/male02/male02.obj');
 
     // object.traverse( ( child ) {
 

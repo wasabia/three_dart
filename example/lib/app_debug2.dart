@@ -23,15 +23,14 @@ class webgl_debugState extends State<app_debug2> {
   }
 
   init() {
+    // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(divId, (int viewId) {
       this.element = CanvasElement(width: 300, height: 300)..id = 'canvas-id';
 
       print(" set element ");
       print(" set gl ");
 
-      this.gl = this
-          .element!
-          .getContext("webgl2", {"alpha": true, "antialias": true});
+      this.gl = this.element!.getContext("webgl2", {"alpha": true, "antialias": true});
       return this.element!;
     });
   }

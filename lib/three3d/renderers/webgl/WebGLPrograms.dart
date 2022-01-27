@@ -49,8 +49,8 @@ class WebGLPrograms {
     'displacementMap',
     'specularMap',
     'specularIntensityMap',
-    'specularTintMap',
-    'specularTintMapEncoding',
+    'specularColorMap',
+    'specularColorMapEncoding',
     'roughnessMap',
     'metalnessMap',
     'gradientMap',
@@ -93,11 +93,12 @@ class WebGLPrograms {
     'numClipIntersection',
     'depthPacking',
     'dithering',
-    'blending',
-    'sheenTint',
+    'format',
+    'sheen',
     'transmission',
     'transmissionMap',
-    'thicknessMap'
+    'thicknessMap',
+    'sheenColorMap', 'sheenColorMapEncoding', 'sheenRoughnessMap'
   ];
 
   WebGLRenderer renderer;
@@ -269,15 +270,16 @@ class WebGLPrograms {
       "metalnessMap": material.metalnessMap != null,
       "specularMap": material.specularMap != null,
       "specularIntensityMap": material.specularIntensityMap != null,
-      "specularTintMap": material.specularTintMap != null,
-      "specularTintMapEncoding":
-          getTextureEncodingFromMap(material.specularTintMap),
+      "specularColorMap": material.specularColorMap != null,
+      "specularColorMapEncoding":
+          getTextureEncodingFromMap(material.specularColorMap),
       "alphaMap": material.alphaMap != null,
       "alphaTest": useAlphaTest,
-      "sheenColorMap": material.sheenColorMap != null,
       "gradientMap": material.gradientMap != null,
-      "sheenTint":
-          (material.sheenTint != null && !(material.sheenTint!.isBlack())),
+      "sheen": material.sheen > 0,
+      "sheenColorMap": material.sheenColorMap != null,
+			"sheenColorMapEncoding": getTextureEncodingFromMap( material.sheenColorMap ),
+			"sheenRoughnessMap": material.sheenRoughnessMap != null,    
       "sheenColorMapEncoding":
           getTextureEncodingFromMap(material.sheenColorMap),
       "transmission": material.transmission > 0,
@@ -307,7 +309,9 @@ class WebGLPrograms {
           material.transmissionMap != null ||
           material.thicknessMap != null ||
           material.specularIntensityMap != null ||
-          material.specularTintMap != null,
+          material.specularColorMap != null ||
+          material.sheenColorMap != null || 
+          material.sheenRoughnessMap != null,
       "uvsVertexOnly": !(material.map != null ||
               material.bumpMap != null ||
               material.normalMap != null ||
@@ -319,7 +323,10 @@ class WebGLPrograms {
               material.clearcoatNormalMap != null ||
               material.transmission != null ||
               material.transmissionMap != null ||
-              material.thicknessMap != null) &&
+              material.thicknessMap != null ||
+              material.sheen > 0 || 
+              material.sheenColorMap != null ||
+              material.sheenRoughnessMap != null) &&
           material.displacementMap != null,
       "flipNormalScaleY":
           ((material.normalMap != null && material.normalMap!.flipY == false ||
@@ -350,7 +357,7 @@ class WebGLPrograms {
       "numSpotLightShadows": lights.spotShadowMap.length,
       "numClippingPlanes": clipping.numPlanes,
       "numClipIntersection": clipping.numIntersection,
-      "blending": material.blending > 0,
+      "format": material.format,
       "dithering": material.dithering,
       "shadowMapEnabled": renderer.shadowMap.enabled && shadows.length > 0,
       "shadowMapType": renderer.shadowMap.type,

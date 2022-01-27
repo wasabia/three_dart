@@ -772,8 +772,8 @@ class WebGLRenderer {
 
     shadowMap.render(shadowsArray, scene, camera);
 
-    currentRenderState!.setupLights(physicallyCorrectLights);
-    currentRenderState!.setupLightsView(camera);
+    // currentRenderState!.setupLights(physicallyCorrectLights);
+    // currentRenderState!.setupLightsView(camera);
 
     if (_clippingEnabled == true) clipping.endShadows();
 
@@ -783,9 +783,30 @@ class WebGLRenderer {
 
     // render scene
 
-    var opaqueObjects = currentRenderList!.opaque;
-    var transmissiveObjects = currentRenderList!.transmissive;
-    var transparentObjects = currentRenderList!.transparent;
+    currentRenderState!.setupLights( this.physicallyCorrectLights );
+
+
+		if ( camera is ArrayCamera ) {
+
+			var cameras = camera.cameras;
+
+			for ( var i = 0, l = cameras.length; i < l; i ++ ) {
+
+				var camera2 = cameras[ i ];
+
+				renderScene( currentRenderList, scene, camera2, camera2.viewport );
+
+			}
+
+		} else {
+
+			renderScene( currentRenderList, scene, camera );
+
+		}
+
+    // var opaqueObjects = currentRenderList!.opaque;
+    // var transmissiveObjects = currentRenderList!.transmissive;
+    // var transparentObjects = currentRenderList!.transparent;
 
     // print("opaqueObjects: ${opaqueObjects} ");
     // print("transmissiveObjects: ${transmissiveObjects} ");
@@ -794,12 +815,15 @@ class WebGLRenderer {
     // print(" renderObjects: scene: ${scene} ${scene.name} -1:${DateTime.now().millisecondsSinceEpoch} - ${DateTime.now().microsecondsSinceEpoch}  ");
     // print(" ============================================ ");
 
-    if (opaqueObjects.length > 0) renderObjects(opaqueObjects, scene, camera);
-    if (transmissiveObjects.length > 0)
-      renderTransmissiveObjects(
-          opaqueObjects, transmissiveObjects, scene, camera);
-    if (transparentObjects.length > 0)
-      renderObjects(transparentObjects, scene, camera);
+    // if (opaqueObjects.length > 0) renderObjects(opaqueObjects, scene, camera);
+    // if (transmissiveObjects.length > 0)
+    //   renderTransmissiveObjects(
+    //       opaqueObjects, transmissiveObjects, scene, camera);
+    // if (transparentObjects.length > 0)
+    //   renderObjects(transparentObjects, scene, camera);
+
+
+
 
     if (_currentRenderTarget != null) {
       // resolve multisample renderbuffers to a single-sample texture if necessary
@@ -947,7 +971,26 @@ class WebGLRenderer {
     }
   }
 
-  renderTransmissiveObjects(opaqueObjects, transmissiveObjects, scene, camera) {
+  renderScene( currentRenderList, scene, camera, [viewport] ) {
+
+		var opaqueObjects = currentRenderList.opaque;
+		var transmissiveObjects = currentRenderList.transmissive;
+		var transparentObjects = currentRenderList.transparent;
+
+		currentRenderState!.setupLightsView( camera );
+
+		if ( transmissiveObjects.length > 0 ) renderTransmissionPass( opaqueObjects, scene, camera );
+
+		if ( viewport != null) state.viewport( _currentViewport.copy( viewport ) );
+
+		if ( opaqueObjects.length > 0 ) renderObjects( opaqueObjects, scene, camera );
+		if ( transmissiveObjects.length > 0 ) renderObjects( transmissiveObjects, scene, camera );
+		if ( transparentObjects.length > 0 ) renderObjects( transparentObjects, scene, camera );
+
+	}
+
+	renderTransmissionPass( opaqueObjects, scene, camera ) {
+
     if (_transmissionRenderTarget == null) {
       var needsAntialias = _antialias == true && capabilities.isWebGL2 == true;
       // var renderTargetType = needsAntialias ? WebGLMultisampleRenderTarget : WebGLRenderTarget;
@@ -988,47 +1031,22 @@ class WebGLRenderer {
     textures.updateRenderTargetMipmap(_transmissionRenderTarget);
 
     this.setRenderTarget(currentRenderTarget);
-
-    renderObjects(transmissiveObjects, scene, camera);
   }
 
   renderObjects(renderList, scene, camera) {
     var overrideMaterial =
         scene.isScene == true ? scene.overrideMaterial : null;
 
-    if (camera.isArrayCamera) {
-      var cameras = camera.cameras;
+    for ( int i = 0, l = renderList.length; i < l; i ++ ) {
 
-      for (var i = 0, l = cameras.length; i < l; i++) {
-        var camera2 = cameras[i];
+			var renderItem = renderList[ i ];
 
-        state.viewport(_currentViewport.copy(camera2.viewport));
+			var object = renderItem.object;
+			var geometry = renderItem.geometry;
+			var material = overrideMaterial == null ? renderItem.material : overrideMaterial;
+			var group = renderItem.group;
 
-        currentRenderState!.setupLightsView(camera2);
-
-        for (var j = 0, jl = renderList.length; j < jl; j++) {
-          var renderItem = renderList[j];
-
-          var object = renderItem.object;
-          var geometry = renderItem.geometry;
-          var material =
-              overrideMaterial == null ? renderItem.material : overrideMaterial;
-          var group = renderItem.group;
-
-          if (object.layers.test(camera2.layers)) {
-            renderObject(object, scene, camera2, geometry, material, group);
-          }
-        }
-      }
-    } else {
-      for (var j = 0, jl = renderList.length; j < jl; j++) {
-        var renderItem = renderList[j];
-
-        var object = renderItem.object;
-        var geometry = renderItem.geometry;
-        var material =
-            overrideMaterial == null ? renderItem.material : overrideMaterial;
-        var group = renderItem.group;
+			if ( object.layers.test( camera.layers ) ) {
         renderObject(object, scene, camera, geometry, material, group);
       }
     }
@@ -1053,6 +1071,8 @@ class WebGLRenderer {
     object.modelViewMatrix
         .multiplyMatrices(camera.matrixWorldInverse, object.matrixWorld);
     object.normalMatrix.getNormalMatrix(object.modelViewMatrix);
+
+    if(material.onBeforeRender != null) material.onBeforeRender!( this, scene, camera, geometry, object, group );
 
     if (object.isImmediateRenderObject) {
       var program = setProgram(camera, scene, material, object);
@@ -1251,7 +1271,7 @@ class WebGLRenderer {
         object.geometry != null &&
         object.geometry.attributes["color"] != null &&
         object.geometry.attributes["color"].itemSize == 4;
-    var vertexTangents = object.geometry != null &&
+    var vertexTangents = material.normalMap != null && object.geometry != null &&
         object.geometry.attributes["tangent"] != null;
     var morphTargets = object.geometry != null &&
         object.geometry.morphAttributes["position"] != null;

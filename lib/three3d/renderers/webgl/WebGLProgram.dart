@@ -115,13 +115,15 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.specularIntensityMap
             ? '#define USE_SPECULARINTENSITYMAP'
             : '',
-        parameters.specularTintMap ? '#define USE_SPECULARTINTMAP' : '',
+        parameters.specularColorMap ? '#define USE_SPECULARCOLORMAP' : '',
         parameters.roughnessMap ? '#define USE_ROUGHNESSMAP' : '',
         parameters.metalnessMap ? '#define USE_METALNESSMAP' : '',
         parameters.alphaMap ? '#define USE_ALPHAMAP' : '',
         parameters.transmission ? '#define USE_TRANSMISSION' : '',
         parameters.transmissionMap ? '#define USE_TRANSMISSIONMAP' : '',
         parameters.thicknessMap ? '#define USE_THICKNESSMAP' : '',
+        parameters.sheenColorMap ? '#define USE_SHEENCOLORMAP' : '',
+			  parameters.sheenRoughnessMap ? '#define USE_SHEENROUGHNESSMAP' : '',
         parameters.vertexTangents ? '#define USE_TANGENT' : '',
         parameters.vertexColors ? '#define USE_COLOR' : '',
         parameters.vertexAlphas ? '#define USE_COLOR_ALPHA' : '',
@@ -233,12 +235,14 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.specularIntensityMap
             ? '#define USE_SPECULARINTENSITYMAP'
             : '',
-        parameters.specularTintMap ? '#define USE_SPECULARTINTMAP' : '',
+        parameters.specularColorMap ? '#define USE_SPECULARCOLORMAP' : '',
         parameters.roughnessMap ? '#define USE_ROUGHNESSMAP' : '',
         parameters.metalnessMap ? '#define USE_METALNESSMAP' : '',
         parameters.alphaMap ? '#define USE_ALPHAMAP' : '',
         parameters.alphaTest ? '#define USE_ALPHATEST' : '',
-        parameters.sheenTint ? '#define USE_SHEEN' : '',
+        parameters.sheen ? '#define USE_SHEEN' : '',
+        parameters.sheenColorMap ? '#define USE_SHEENCOLORMAP' : '',
+			  parameters.sheenRoughnessMap ? '#define USE_SHEENROUGHNESSMAP' : '',
         parameters.transmission ? '#define USE_TRANSMISSION' : '',
         parameters.transmissionMap ? '#define USE_TRANSMISSIONMAP' : '',
         parameters.thicknessMap ? '#define USE_THICKNESSMAP' : '',
@@ -293,7 +297,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
             : '',
 
         parameters.dithering ? '#define DITHERING' : '',
-        parameters.blending == NoBlending ? '#define OPAQUE' : '',
+        parameters.format == RGBFormat ? '#define OPAQUE' : '',
 
         ShaderChunk[
             'encodings_pars_fragment'], // this code is required here because it is used by the various encoding/decoding defined below
@@ -313,14 +317,11 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
             ? getTexelDecodingFunction(
                 'emissiveMapTexelToLinear', parameters.emissiveMapEncoding)
             : '',
-        parameters.specularTintMap
-            ? getTexelDecodingFunction('specularTintMapTexelToLinear',
-                parameters.specularTintMapEncoding)
+        parameters.specularColorMap
+            ? getTexelDecodingFunction('specularColorMapTexelToLinear',
+                parameters.specularColorMapEncoding)
             : '',
-        parameters.sheenColorMap
-            ? getTexelDecodingFunction(
-                'sheenColorMapTexelToLinear', parameters.sheenColorMapEncoding)
-            : '',
+        parameters.sheenColorMap ? getTexelDecodingFunction( 'sheenColorMapTexelToLinear', parameters.sheenColorMapEncoding ) : '', 
         parameters.lightMap
             ? getTexelDecodingFunction(
                 'lightMapTexelToLinear', parameters.lightMapEncoding)

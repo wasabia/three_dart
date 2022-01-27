@@ -5,17 +5,17 @@ var loading = {};
 class FileLoader extends Loader {
   FileLoader(manager) : super(manager) {}
 
-  loadAsync(url, Function? onProgress) async {
+  loadAsync(url) async {
     var completer = Completer();
 
     load(url, (buffer) {
       completer.complete(buffer);
-    }, onProgress, () {});
+    });
 
     return completer.future;
   }
 
-  load(url, onLoad, onProgress, onError) async {
+  load(url, onLoad, [onProgress, onError]) async {
     if (url == null) url = '';
 
     if (this.path != null) url = this.path + url;
@@ -102,16 +102,8 @@ class FileLoader extends Loader {
       }
 
       // Wait for next browser tick like standard XMLHttpRequest event dispatching does
-      // setTimeout( function () {
-
-      // 	if ( onLoad ) onLoad( response );
-
-      // 	scope.manager.itemEnd( url );
-
-      // }, 0 );
-
       Future.delayed(Duration.zero, () {
-        if (onLoad != null) onLoad(response);
+        onLoad(response);
 
         scope.manager.itemEnd(url);
       });
