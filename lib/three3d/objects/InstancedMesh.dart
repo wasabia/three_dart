@@ -89,11 +89,11 @@ class InstancedMesh extends Mesh {
           Float32Array((this.instanceMatrix.count * 3).toInt()), 3, false);
     }
 
-    color.toArray(this.instanceColor!.array, offset: index * 3);
+    color.toArray(this.instanceColor!.array, index * 3);
   }
 
   setMatrixAt(index, Matrix4 matrix) {
-    matrix.toArray(this.instanceMatrix.array, offset: index * 16);
+    matrix.toArray(this.instanceMatrix.array, index * 16);
   }
 
   updateMorphTargets() {}

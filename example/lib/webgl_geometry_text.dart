@@ -269,7 +269,7 @@ class _MyAppState extends State<webgl_geometry_text> {
 
   loadFont() async {
     var loader = new THREE_JSM.TYPRLoader(null);
-    var fontJson = await loader.loadAsync("assets/pingfang.ttf", null);
+    var fontJson = await loader.loadAsync("assets/pingfang.ttf");
 
     return THREE.TYPRFont(fontJson);
   }

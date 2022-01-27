@@ -238,7 +238,7 @@ class _State extends State<webgl_animation_skinning_blending> {
     // ground
 
     var loader = new THREE_JSM.GLTFLoader(null);
-    var gltf = await loader.loadAsync('assets/models/gltf/Soldier.gltf', null);
+    var gltf = await loader.loadAsync('assets/models/gltf/Soldier.gltf');
 
     model = gltf["scene"];
     scene.add(model);

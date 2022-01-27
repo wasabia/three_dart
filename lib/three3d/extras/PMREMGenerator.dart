@@ -273,7 +273,9 @@ class PMREMGenerator {
   _textureToCubeUV(texture, cubeUVRenderTarget) {
     var renderer = this._renderer;
 
-    if (texture is CubeTexture) {
+    bool isCubeTexture = ( texture.mapping == CubeReflectionMapping || texture.mapping == CubeRefractionMapping );
+
+    if (isCubeTexture) {
       if (this._cubemapShader == null) {
         this._cubemapShader = _getCubemapShader();
       }
@@ -283,15 +285,14 @@ class PMREMGenerator {
       }
     }
 
-    var material =
-        (texture is CubeTexture) ? this._cubemapShader : this._equirectShader;
+    var material = isCubeTexture ? this._cubemapShader : this._equirectShader;
     var mesh = new Mesh(_lodPlanes[0], material);
 
     var uniforms = material.uniforms;
 
     uniforms['envMap']["value"] = texture;
 
-    if (!(texture is CubeTexture)) {
+    if (!isCubeTexture ) {
       uniforms['texelSize']["value"]
           .set(1.0 / texture.image.width, 1.0 / texture.image.height);
     }

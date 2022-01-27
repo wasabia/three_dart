@@ -7,7 +7,7 @@ class MaterialLoader extends Loader {
     this.textures = {};
   }
 
-  load(url, onLoad, onProgress, onError) {
+  load(url, onLoad, [onProgress, onError]) {
     var scope = this;
 
     var loader = new FileLoader(scope.manager);
@@ -16,7 +16,7 @@ class MaterialLoader extends Loader {
     loader.setWithCredentials(scope.withCredentials);
     loader.load(url, (text) {
       try {
-        onLoad!(scope.parse(convert.jsonDecode(text)));
+        onLoad(scope.parse(convert.jsonDecode(text)));
       } catch (e) {
         if (onError != null) {
           onError(e);
@@ -29,7 +29,7 @@ class MaterialLoader extends Loader {
     }, onProgress, onError);
   }
 
-  parse(json, {String? path, Function? onLoad, Function? onError}) {
+  parse(json, [String? path, Function? onLoad, Function? onError]) {
     var textures = this.textures;
 
     Function getTexture = (name) {
@@ -65,8 +65,8 @@ class MaterialLoader extends Loader {
     if (json["roughness"] != null) material.roughness = json["roughness"];
     if (json["metalness"] != null) material.metalness = json["metalness"];
     if (json["sheen"] != null) material.sheen = json["sheen"];
-    if (json["sheenTint"] != null)
-      material.sheenTint = new Color(0, 0, 0).setHex(json["sheenTint"]);
+    if (json["sheenColor"] != null)
+      material.sheenColor = new Color(0, 0, 0).setHex(json["sheenColor"]);
     if (json["sheenRoughness"] != null)
       material.sheenRoughness = json["sheenRoughness"];
     if (json["emissive"] != null && material.emissive != null)
@@ -75,8 +75,8 @@ class MaterialLoader extends Loader {
       material.specular.setHex(json["specular"]);
     if (json["specularIntensity"] != null)
       material.specularIntensity = json["specularIntensity"];
-    if (json["specularTint"] != null && material.specularTint != null)
-      material.specularTint.setHex(json["specularTint"]);
+    if (json["specularColor"] != null && material.specularColor != null)
+      material.specularColor.setHex(json["specularColor"]);
     if (json["shininess"] != null) material.shininess = json["shininess"];
     if (json["clearcoat"] != null) material.clearcoat = json["clearcoat"];
     if (json["clearcoatRoughness"] != null)
@@ -86,8 +86,8 @@ class MaterialLoader extends Loader {
     if (json["thickness"] != null) material.thickness = json["thickness"];
     if (json["attenuationDistance"] != null)
       material.attenuationDistance = json["attenuationDistance"];
-    if (json["attenuationTint"] != null && material.attenuationTint != null)
-      material.attenuationTint.setHex(json["attenuationTint"]);
+    if (json["attenuationColor"] != null && material.attenuationColor != null)
+      material.attenuationColor.setHex(json["attenuationColor"]);
     if (json["fog"] != null) material.fog = json["fog"];
     if (json["flatShading"] != null) material.flatShading = json["flatShading"];
     if (json["blending"] != null) material.blending = json["blending"];
@@ -279,8 +279,8 @@ class MaterialLoader extends Loader {
       material.specularMap = getTexture(json["specularMap"]);
     if (json["specularIntensityMap"] != null)
       material.specularIntensityMap = getTexture(json["specularIntensityMap"]);
-    if (json["specularTintMap"] != null)
-      material.specularTintMap = getTexture(json["specularTintMap"]);
+    if (json["specularColorMap"] != null)
+      material.specularColorMap = getTexture(json["specularColorMap"]);
 
     if (json["envMap"] != null) material.envMap = getTexture(json["envMap"]);
     if (json["envMapIntensity"] != null)
@@ -318,6 +318,9 @@ class MaterialLoader extends Loader {
       material.transmissionMap = getTexture(json["transmissionMap"]);
     if (json["thicknessMap"] != null)
       material.thicknessMap = getTexture(json["thicknessMap"]);
+
+    if ( json["sheenColorMap"] != null ) material.sheenColorMap = getTexture( json["sheenColorMap"] );
+		if ( json["sheenRoughnessMap"] != null ) material.sheenRoughnessMap = getTexture( json["sheenRoughnessMap"] );
 
     return material;
   }

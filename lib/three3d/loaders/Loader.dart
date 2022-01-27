@@ -1,6 +1,6 @@
 part of three_loaders;
 
-class Loader {
+abstract class Loader {
   late LoadingManager manager;
   late String crossOrigin;
   late bool withCredentials;
@@ -20,15 +20,15 @@ class Loader {
     this.requestHeader = {};
   }
 
-  load(url, Function? onLoad, Function? onProgress, Function? onError) {
+  load(url, Function onLoad, [Function? onProgress, Function? onError]) {
     throw (" load need implement ............. ");
   }
 
-  loadAsync(url, Function? onProgress) {
+  loadAsync(url) async {
     throw (" loadAsync need implement ............. ");
   }
 
-  parse(json, {String? path, Function? onLoad, Function? onError}) {}
+  parse(json, [String? path, Function? onLoad, Function? onError]) {}
 
   setCrossOrigin(crossOrigin) {
     this.crossOrigin = crossOrigin;

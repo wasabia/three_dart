@@ -221,7 +221,7 @@ class _MyAppState extends State<webgl_loader_obj> {
 
     var loader = THREE_JSM.OBJLoader(null);
     object =
-        await loader.loadAsync('assets/models/obj/male02/male02.obj', null);
+        await loader.loadAsync('assets/models/obj/male02/male02.obj');
 
     object.traverse((child) {
       if (child.isMesh) {

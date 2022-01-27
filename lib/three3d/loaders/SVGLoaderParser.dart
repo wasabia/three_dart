@@ -3,7 +3,7 @@ part of three_loaders;
 class SVGLoaderParser {
   //
   List<ShapePath> paths = [];
-  var stylesheets = {};
+  Map stylesheets = {};
 
   var transformStack = [];
 
@@ -100,7 +100,7 @@ class SVGLoaderParser {
 
     // print("SvgLoader.parseFloatWithUnits ${string} runtimeType: ${string.runtimeType} ");
 
-    if (string.runtimeType == String) {
+    if (string is String) {
       for (var i = 0, n = units.length; i < n; i++) {
         var u = units[i];
 
@@ -128,7 +128,7 @@ class SVGLoaderParser {
       }
     }
 
-    String _str = string;
+    String _str = "${string}";
     // if(_str.startsWith("-.")) {
     //   _str = _str.replaceFirst("-.", "-0.");
     // }
@@ -146,34 +146,246 @@ class SVGLoaderParser {
     return scale * num.parse("${_str}");
   }
 
-  parseFloats(String string) {
-    RegExp reg = RegExp(r"[\s,]+|(?=\s?[+\-])");
-    var array = string.split(reg);
+  // from https://github.com/ppvg/svg-numbers (MIT License)
+  parseFloats(input, [flags, stride]) {
 
-    List<num> array2 = [];
+    if ( input is! String ) {
 
-    // var array = string.split( /[\s,]+|(?=\s?[+\-])/ );
+      throw ('Invalid input: ${input.runtimeType} ' );
 
-    for (var i = 0; i < array.length; i++) {
-      var number = array[i];
-
-      // Handle values like 48.6037.7.8
-      // TODO Find a regex for this
-
-      if (number.indexOf('.') != number.lastIndexOf('.')) {
-        var split = number.split('.');
-
-        for (var s = 2; s < split.length; s++) {
-          // array.splice( i + s - 1, 0, '0.' + split[ s ] );
-          splice(array, i + s - 1, 0, '0.' + split[s]);
-        }
-      }
-
-      // array[i] = parseFloatWithUnits(number);
-      array2.add(parseFloatWithUnits(number));
     }
 
-    return array2;
+    // Character groups
+    Map<String, dynamic> RE = {
+      "SEPARATOR": RegExp(r"[ \t\r\n\,.\-+]"),
+      "WHITESPACE": RegExp(r"[ \t\r\n]"),
+      "DIGIT": RegExp(r"[\d]"),
+      "SIGN": RegExp(r"[-+]"),
+      "POINT": RegExp(r"\."),
+      "COMMA": RegExp(r","),
+      "EXP": RegExp(r"e", caseSensitive: false),
+      "FLAGS": RegExp(r"[01]")
+    };
+
+    // States
+    const SEP = 0;
+    const INT = 1;
+    const FLOAT = 2;
+    const EXP = 3;
+
+    var state = SEP;
+    var seenComma = true;
+    var number = '', exponent = '';
+    var result = [];
+
+    throwSyntaxError( current, i, partial ) {
+      var error = ( 'Unexpected character "' + current + '" at index ' + i + '.' );
+      throw(error);
+    }
+
+    newNumber() {
+
+      if ( number != '' ) {
+
+        if ( exponent == '' ) result.add( num.parse( number ) );
+        else result.add( num.parse( number ) * Math.pow( 10, num.parse( exponent ) ) );
+
+      }
+
+      number = '';
+      exponent = '';
+
+    }
+
+    var current;
+    var length = input.length;
+
+    for ( var i = 0; i < length; i ++ ) {
+
+      current = input[ i ];
+
+      // check for flags
+      if ( flags is List && flags.indexOf( result.length % stride ) >= 0 && RE["FLAGS"].hasMatch( current ) ) {
+
+        state = INT;
+        number = current;
+        newNumber();
+        continue;
+
+      }
+
+      // parse until next number
+      if ( state == SEP ) {
+
+        // eat whitespace
+        if ( RE["WHITESPACE"].hasMatch( current ) ) {
+
+          continue;
+
+        }
+
+        // start new number
+        if ( RE["DIGIT"].hasMatch( current ) || RE["SIGN"].hasMatch( current ) ) {
+
+          state = INT;
+          number = current;
+          continue;
+
+        }
+
+        if ( RE["POINT"].hasMatch( current ) ) {
+
+          state = FLOAT;
+          number = current;
+          continue;
+
+        }
+
+        // throw on double commas (e.g. "1, , 2")
+        if ( RE["COMMA"].hasMatch( current ) ) {
+
+          if ( seenComma ) {
+
+            throwSyntaxError( current, i, result );
+
+          }
+
+          seenComma = true;
+
+        }
+
+      }
+
+      // parse integer part
+      if ( state == INT ) {
+
+        if ( RE["DIGIT"].hasMatch( current ) ) {
+
+          number += current;
+          continue;
+
+        }
+
+        if ( RE["POINT"].hasMatch( current ) ) {
+
+          number += current;
+          state = FLOAT;
+          continue;
+
+        }
+
+        if ( RE["EXP"].hasMatch( current ) ) {
+
+          state = EXP;
+          continue;
+
+        }
+
+        // throw on double signs ("-+1"), but not on sign as separator ("-1-2")
+        if ( RE["SIGN"].hasMatch( current )
+            && number.length == 1
+            && RE["SIGN"].hasMatch( number[ 0 ] ) ) {
+
+          throwSyntaxError( current, i, result );
+
+        }
+
+      }
+
+      // parse decimal part
+      if ( state == FLOAT ) {
+
+        if ( RE["DIGIT"].hasMatch( current ) ) {
+
+          number += current;
+          continue;
+
+        }
+
+        if ( RE["EXP"].hasMatch( current ) ) {
+
+          state = EXP;
+          continue;
+
+        }
+
+        // throw on double decimal points (e.g. "1..2")
+        if ( RE["POINT"].hasMatch( current ) && number[ number.length - 1 ] == '.' ) {
+
+          throwSyntaxError( current, i, result );
+
+        }
+
+      }
+
+      // parse exponent part
+      if ( state == EXP ) {
+
+        if ( RE["DIGIT"].hasMatch( current ) ) {
+
+          exponent += current;
+          continue;
+
+        }
+
+        if ( RE["SIGN"].hasMatch( current ) ) {
+
+          if ( exponent == '' ) {
+
+            exponent += current;
+            continue;
+
+          }
+
+          if ( exponent.length == 1 && RE["SIGN"].hasMatch( exponent ) ) {
+
+            throwSyntaxError( current, i, result );
+
+          }
+
+        }
+
+      }
+
+
+      // end of number
+      if ( RE["WHITESPACE"].hasMatch( current ) ) {
+
+        newNumber();
+        state = SEP;
+        seenComma = false;
+
+      } else if ( RE["COMMA"].hasMatch( current ) ) {
+
+        newNumber();
+        state = SEP;
+        seenComma = true;
+
+      } else if ( RE["SIGN"].hasMatch( current ) ) {
+
+        newNumber();
+        state = INT;
+        number = current;
+
+      } else if ( RE["POINT"].hasMatch( current ) ) {
+
+        newNumber();
+        state = FLOAT;
+        number = current;
+
+      } else {
+
+        throwSyntaxError( current, i, result );
+
+      }
+
+    }
+
+    // add the last number found (if any)
+    newNumber();
+
+    return result;
+
   }
 
   parseNodeTransform(node) {
@@ -319,8 +531,9 @@ class SVGLoaderParser {
   }
 
   parseCSSStylesheet(node) {
-    if (!node.sheet || !node.sheet.cssRules || !node.sheet.cssRules.length)
+    if ( node.sheet == null || node.sheet.cssRules == null || node.sheet.cssRules.length == 0) {
       return;
+    }
 
     for (var i = 0; i < node.sheet.cssRules.length; i++) {
       var stylesheet = node.sheet.cssRules[i];
@@ -329,7 +542,7 @@ class SVGLoaderParser {
 
       RegExp _reg = RegExp(r",", multiLine: true);
       var selectorList =
-          stylesheet.selectorText.split(_reg).map((i) => i.trim());
+          stylesheet.selectorText.split(_reg).map((i) => i.trim()).toList();
 
       // var selectorList = stylesheet.selectorText
       // 	.split( /,/gm )
@@ -337,11 +550,13 @@ class SVGLoaderParser {
       // 	.map( i => i.trim() );
 
       for (var j = 0; j < selectorList.length; j++) {
-        if (stylesheets[selectorList[j]] == null) {
-          stylesheets[selectorList[j]] = {};
-        }
-        stylesheets[selectorList[j]].addAll(stylesheet.style);
 
+        var _sj = selectorList[j];
+
+        if (stylesheets[ _sj ] == null) {
+          stylesheets[ _sj ] = {};
+        }
+        stylesheets[ _sj ].addAll(stylesheet.style);
         // stylesheets[ selectorList[ j ] ] = Object.assign(
         // 	stylesheets[ selectorList[ j ] ] || {},
         // 	stylesheet.style
@@ -414,6 +629,7 @@ class SVGLoaderParser {
 
     addStyle('fill', 'fill');
     addStyle('fill-opacity', 'fillOpacity', clamp);
+    addStyle( 'fill-rule', 'fillRule' );
     addStyle('opacity', 'opacity', clamp);
     addStyle('stroke', 'stroke');
     addStyle('stroke-opacity', 'strokeOpacity', clamp);
@@ -678,7 +894,7 @@ class SVGLoaderParser {
           break;
 
         case 'A':
-          var numbers = parseFloats(data);
+          var numbers = parseFloats(data, [ 3, 4 ], 7);
 
           for (var j = 0, jl = numbers.length; j < jl; j += 7) {
             // skip command if start point == end point
@@ -841,7 +1057,7 @@ class SVGLoaderParser {
           break;
 
         case 'a':
-          var numbers = parseFloats(data);
+          var numbers = parseFloats(data, [ 3, 4 ], 7);
 
           for (var j = 0, jl = numbers.length; j < jl; j += 7) {
             // skip command if no displacement
@@ -1223,4 +1439,39 @@ class SVGLoaderParser {
       }
     }
   }
+
+
+
+  
+
+
+  static getStrokeStyle( width, color, lineJoin, lineCap, miterLimit ) {
+
+		// Param width: Stroke width
+		// Param color: As returned by THREE.Color.getStyle()
+		// Param lineJoin: One of "round", "bevel", "miter" or "miter-limit"
+		// Param lineCap: One of "round", "square" or "butt"
+		// Param miterLimit: Maximum join length, in multiples of the "width" parameter (join is truncated if it exceeds that distance)
+		// Returns style object
+
+		width = width != null ? width : 1;
+		color = color != null ? color : '#000';
+		lineJoin = lineJoin != null ? lineJoin : 'miter';
+		lineCap = lineCap != null ? lineCap : 'butt';
+		miterLimit = miterLimit != null ? miterLimit : 4;
+
+		return {
+			"strokeColor": color,
+			"strokeWidth": width,
+			"strokeLineJoin": lineJoin,
+			"strokeLineCap": lineCap,
+			"strokeMiterLimit": miterLimit
+		};
+
+	}
+
+
+
+  
+
 }

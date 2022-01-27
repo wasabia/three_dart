@@ -894,7 +894,7 @@ class Matrix4 {
     return true;
   }
 
-  fromArray(array, {int offset = 0}) {
+  fromArray(array, [int offset = 0]) {
     for (var i = 0; i < 16; i++) {
       this.elements[i] = array[i + offset];
     }
@@ -902,7 +902,7 @@ class Matrix4 {
     return this;
   }
 
-  toArray(array, {int offset = 0}) {
+  toArray(array, [int offset = 0]) {
     var te = this.elements;
 
     array[offset] = te[0];

@@ -94,7 +94,7 @@ class Curve {
   // - u [0 .. 1]
 
   getPointAt(u, optionalTarget) {
-    var t = this.getUtoTmapping(u, null);
+    var t = this.getUtoTmapping(u);
     return this.getPoint(t, optionalTarget);
   }
 
@@ -167,7 +167,7 @@ class Curve {
 
   // Given u ( 0 .. 1 ), get a t to find p. This gives you points which are equidistant
 
-  getUtoTmapping(u, distance) {
+  getUtoTmapping(u, [distance]) {
     var arcLengths = this.getLengths(null);
 
     int i = 0;

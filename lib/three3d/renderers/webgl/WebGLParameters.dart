@@ -3,7 +3,7 @@ part of three_webgl;
 class WebGLParameters {
   late bool isWebGL2;
 
-  late bool blending;
+  late int format;
 
   String? shaderID;
   late String shaderName;
@@ -48,15 +48,16 @@ class WebGLParameters {
   late bool metalnessMap;
   late bool specularMap;
   late bool specularIntensityMap;
-  late bool specularTintMap;
-  late int specularTintMapEncoding;
+  late bool specularColorMap;
+  late int specularColorMapEncoding;
   late bool alphaMap;
   late bool sheenColorMap;
 
   late int sheenColorMapEncoding;
 
   late bool gradientMap;
-  late bool sheenTint;
+  late bool sheenRoughnessMap;
+  late bool sheen;
   late bool transmission;
   late bool transmissionMap;
   late bool thicknessMap;
@@ -121,7 +122,7 @@ class WebGLParameters {
   late bool flipNormalScaleY;
 
   WebGLParameters(Map<String, dynamic> json) {
-    blending = json["blending"];
+    format = json["format"];
     isWebGL2 = json["isWebGL2"];
     shaderID = json["shaderID"];
     shaderName = json["shaderName"];
@@ -168,16 +169,17 @@ class WebGLParameters {
     metalnessMap = json["metalnessMap"];
     specularMap = json["specularMap"];
     specularIntensityMap = json["specularIntensityMap"];
-    specularTintMap = json["specularTintMap"];
-    specularTintMapEncoding = json["specularTintMapEncoding"];
+    specularColorMap = json["specularColorMap"];
+    specularColorMapEncoding = json["specularColorMapEncoding"];
     alphaMap = json["alphaMap"];
     gradientMap = json["gradientMap"];
-    sheenTint = json["sheenTint"];
     transmission = json["transmission"];
     transmissionMap = json["transmissionMap"];
     thicknessMap = json["thicknessMap"];
-
+    
+    sheen = json["sheen"];
     sheenColorMap = json["sheenColorMap"];
+    sheenRoughnessMap = json["sheenRoughnessMap"];
 
     combine = json["combine"];
     vertexTangents = json["vertexTangents"];
@@ -241,6 +243,7 @@ class WebGLParameters {
     flipNormalScaleY = json["flipNormalScaleY"];
 
     sheenColorMapEncoding = json["sheenColorMapEncoding"];
+    sheenColorMapEncoding = json["sheenColorMapEncoding"];
   }
 
   getValue(String name) {
@@ -251,7 +254,7 @@ class WebGLParameters {
 
   toJSON() {
     Map<String, dynamic> _json = {
-      "blending": blending,
+      "format": format,
       "isWebGL2": isWebGL2,
       "shaderID": shaderID,
       "shaderName": shaderName,
@@ -290,11 +293,13 @@ class WebGLParameters {
       "metalnessMap": metalnessMap,
       "specularMap": specularMap,
       "specularIntensityMap": specularIntensityMap,
-      "specularTintMap": specularTintMap,
-      "specularTintMapEncoding": specularTintMapEncoding,
+      "specularColorMap": specularColorMap,
+      "specularColorMapEncoding": specularColorMapEncoding,
       "alphaMap": alphaMap,
       "gradientMap": gradientMap,
-      "sheenTint": sheenTint,
+      "sheenColorMap": sheenColorMap,
+      "sheenRoughnessMap": sheenRoughnessMap,
+      "sheen": sheen,
       "transmission": transmission,
       "transmissionMap": transmissionMap,
       "thicknessMap": thicknessMap,
@@ -347,6 +352,7 @@ class WebGLParameters {
       "uniforms": uniforms,
       "vertexAlphas": vertexAlphas,
       "flipNormalScaleY": flipNormalScaleY,
+      "sheenColorMapEncoding": sheenColorMapEncoding,
       "sheenColorMapEncoding": sheenColorMapEncoding
     };
 

@@ -3,47 +3,47 @@ part of three_loaders;
 class BufferGeometryLoader extends Loader {
   BufferGeometryLoader(manager) : super(manager) {}
 
-  loadAsync(url, Function? onProgress) async {
+  loadAsync(url) async {
     var completer = Completer();
 
     load(url, (data) {
       completer.complete(data);
-    }, onProgress, () {});
+    });
 
     return completer.future;
   }
 
-  load(url, onLoad, onProgress, onError) {
+  load(url, onLoad, [onProgress, onError]) {
     var scope = this;
 
-    var loader = new FileLoader(scope.manager);
+    var loader = FileLoader(scope.manager);
     loader.setPath(scope.path);
     loader.setRequestHeader(scope.requestHeader);
     loader.setWithCredentials(scope.withCredentials);
     loader.load(url, (text) {
-      // try {
+      try {
 
-      onLoad!(scope.parse(convert.jsonDecode(text)));
+      onLoad(scope.parse(convert.jsonDecode(text)));
 
-      // } catch ( e ) {
+      } catch ( e ) {
 
-      // 	if ( onError != null ) {
+      	if ( onError != null ) {
 
-      // 		onError( e );
+      		onError( e );
 
-      // 	} else {
+      	} else {
 
-      // 		print( e );
+      		print( e );
 
-      // 	}
+      	}
 
-      // 	scope.manager.itemError( url );
+      	scope.manager.itemError( url );
 
-      // }
+      }
     }, onProgress, onError);
   }
 
-  parse(json, {String? path, Function? onLoad, Function? onError}) {
+  parse(json, [String? path, Function? onLoad, Function? onError]) {
     var interleavedBufferMap = {};
     var arrayBufferMap = {};
 

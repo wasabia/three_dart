@@ -31,7 +31,7 @@ dependencies:
   flutter_gl: ^0.0.10
   three_dart: ^0.0.3
   three_dart_jsm: ^0.0.3
-
+  universal_ui: ^0.0.8
 
 dependency_overrides:
   three_dart:
@@ -42,7 +42,8 @@ dependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  flutter_lints:
+  
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -74,6 +75,7 @@ flutter:
     - assets/models/gltf/test/
     - assets/models/gltf/RobotExpressive/
     - assets/models/gltf/DamagedHelmet/glTF/
+    - assets/models/svg/
     - assets/textures/
     - assets/textures/equirectangular/
     - assets/textures/terrain/

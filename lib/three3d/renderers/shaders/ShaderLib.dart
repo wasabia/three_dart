@@ -217,8 +217,10 @@ Map<String, dynamic> ShaderLib = {
         "clearcoatRoughnessMap": {"value": null},
         "clearcoatNormalScale": {"value": new Vector2(1, 1)},
         "clearcoatNormalMap": {"value": null},
-        "sheenTint": {"value": Color.fromHex(0x000000)},
+        "sheenColor": {"value": Color.fromHex(0x000000)},
+        "sheenColorMap": {  },
         "sheenRoughness": {"value": 0},
+        "sheenRoughnessMap": {  },
         "transmission": {"value": 0},
         "transmissionMap": {"value": null},
         "transmissionSamplerSize": {"value": new Vector2(null, null)},
@@ -226,11 +228,11 @@ Map<String, dynamic> ShaderLib = {
         "thickness": {"value": 0},
         "thicknessMap": {"value": null},
         "attenuationDistance": {"value": 0},
-        "attenuationTint": {"value": Color.fromHex(0x000000)},
+        "attenuationColor": {"value": Color.fromHex(0x000000)},
         "specularIntensity": {"value": 0},
         "specularIntensityMap": {"value": null},
-        "specularTint": {"value": new Color(1, 1, 1)},
-        "specularTintMap": {"value": null}
+        "specularColor": {"value": new Color(1, 1, 1)},
+        "specularColorMap": {"value": null}
       }
     ]),
     "vertexShader": ShaderChunk["meshphysical_vert"],

@@ -286,7 +286,7 @@ class PropertyBinding {
 
   // 3
   getValue_toArray(buffer, offset) {
-    this.resolvedProperty.toArray(buffer, offset: offset);
+    this.resolvedProperty.toArray(buffer, offset);
   }
 
   setterByBindingTypeAndVersioning(bindingType, versioning) {
@@ -404,18 +404,18 @@ class PropertyBinding {
   }
 
   setValue_fromArray(buffer, offset) {
-    this.resolvedProperty.fromArray(buffer, offset: offset);
+    this.resolvedProperty.fromArray(buffer, offset);
   }
 
   setValue_fromArray_setNeedsUpdate(buffer, offset) {
-    this.resolvedProperty.fromArray(buffer, offset: offset);
+    this.resolvedProperty.fromArray(buffer, offset);
     this.targetObject.needsUpdate = true;
   }
 
   setValue_fromArray_setMatrixWorldNeedsUpdate(buffer, offset) {
     // print("PropertyBinding this.resolvedProperty: ${this.resolvedProperty} ");
 
-    this.resolvedProperty.fromArray(buffer, offset: offset);
+    this.resolvedProperty.fromArray(buffer, offset);
     this.targetObject.matrixWorldNeedsUpdate = true;
   }
 

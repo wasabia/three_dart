@@ -11,3 +11,4 @@ part './Camera.dart';
 part './CubeCamera.dart';
 part './OrthographicCamera.dart';
 part './PerspectiveCamera.dart';
+part './StereoCamera.dart';

@@ -246,12 +246,12 @@ class WebGLUniformsHelper {
     }
 
     if (nBlocks != 0) {
-      // firstElem.toArray( r.data, offset: 0 );
+      // firstElem.toArray( r.data, 0 );
 
       // for ( var i = 1, offset = 0; i != nBlocks; ++ i ) {
 
       //   offset += blockSize;
-      //   array[ i ].toArray( r.data, offset: offset );
+      //   array[ i ].toArray( r.data, offset );
 
       // }
 

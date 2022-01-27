@@ -529,6 +529,29 @@ class Quaternion {
     this.copy(qa).slerp(qb, t);
   }
 
+  random() {
+
+		// Derived from http://planning.cs.uiuc.edu/node198.html
+		// Note, this source uses w, x, y, z ordering,
+		// so we swap the order below.
+
+		var u1 = Math.random();
+		var sqrt1u1 = Math.sqrt( 1 - u1 );
+		var sqrtu1 = Math.sqrt( u1 );
+
+		var u2 = 2 * Math.PI * Math.random();
+
+		var u3 = 2 * Math.PI * Math.random();
+
+		return this.set(
+			sqrt1u1 * Math.cos( u2 ),
+			sqrtu1 * Math.sin( u3 ),
+			sqrtu1 * Math.cos( u3 ),
+			sqrt1u1 * Math.sin( u2 ),
+		);
+
+	}
+
   equals(quaternion) {
     return (quaternion._x == this._x) &&
         (quaternion._y == this._y) &&
@@ -536,7 +559,7 @@ class Quaternion {
         (quaternion._w == this._w);
   }
 
-  fromArray(array, {int offset = 0}) {
+  fromArray(array, [int offset = 0]) {
     this._x = array[offset];
     this._y = array[offset + 1];
     this._z = array[offset + 2];
@@ -547,7 +570,7 @@ class Quaternion {
     return this;
   }
 
-  toArray(List<num?> array, {int offset = 0}) {
+  toArray(List<num?> array, [int offset = 0]) {
     array[offset] = this._x;
     array[offset + 1] = this._y;
     array[offset + 2] = this._z;

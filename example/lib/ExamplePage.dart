@@ -28,6 +28,8 @@ import 'package:example/webgl_shadowmap_viewer.dart';
 import 'package:example/webgl_skinning_simple.dart';
 import 'package:flutter/material.dart';
 
+import 'webgl_loader_svg.dart';
+
 class ExamplePage extends StatefulWidget {
   String? id;
   ExamplePage({Key? key, this.id}) : super(key: key);
@@ -104,6 +106,10 @@ class _MyAppState extends State<ExamplePage> {
       page = webgl_camera(fileName: fileName);
     } else if (fileName == "webgl_geometry_colors") {
       page = webgl_geometry_colors(fileName: fileName);
+    } else if (fileName == "webgl_loader_svg") {
+      page = webgl_loader_svg(fileName: fileName);
+
+      
     } else {
       throw ("ExamplePage fileName ${fileName} is not support yet ");
     }

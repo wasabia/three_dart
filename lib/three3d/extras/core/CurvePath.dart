@@ -61,7 +61,7 @@ class CurvePath extends Curve {
         var segmentLength = curve.getLength();
         var u = segmentLength == 0 ? 0 : 1 - diff / segmentLength;
 
-        return curve.getPointAt(u, null);
+        return curve.getPointAt(u, optionalTarget);
       }
 
       i++;

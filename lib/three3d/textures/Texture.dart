@@ -53,6 +53,10 @@ class Texture with EventDispatcher {
   // Also changing the encoding after already used by a Material will not automatically make the Material
   // update. You need to explicitly call Material.needsUpdate to trigger it to recompile.
   int encoding = LinearEncoding;
+
+  Map userData = {};
+
+
   int version = 0;
 
   Function? onUpdate;
@@ -127,6 +131,8 @@ class Texture with EventDispatcher {
     this.unpackAlignment = source.unpackAlignment;
     this.encoding = source.encoding;
 
+    this.userData = json.decode(json.encode(source.userData));
+
     return this;
   }
 
@@ -200,6 +206,8 @@ class Texture with EventDispatcher {
 
       output["image"] = image.uuid;
     }
+
+    if ( this.userData.isNotEmpty ) output["userData"] = this.userData;
 
     if (!isRootObject) {
       meta.textures[this.uuid] = output;

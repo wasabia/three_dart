@@ -104,7 +104,7 @@ class Skeleton {
 
       _offsetMatrix.multiplyMatrices(matrix, boneInverses[i]);
 
-      _offsetMatrix.toArray(boneMatrices, offset: i * 16);
+      _offsetMatrix.toArray(boneMatrices, i * 16);
     }
 
     if (boneTexture != null) {

@@ -5,20 +5,20 @@ part of three_loaders;
 class FontLoader extends Loader {
   FontLoader(manager) : super(manager) {}
 
-  loadAsync(url, Function? onProgress) async {
+  loadAsync(url, [Function? onProgress]) async {
     var loader = new FileLoader(this.manager);
     loader.setPath(this.path);
     loader.responseType = this.responseType;
     loader.setRequestHeader(this.requestHeader);
     loader.setWithCredentials(this.withCredentials);
-    var text = await loader.loadAsync(url, null);
+    var text = await loader.loadAsync(url);
 
     var jsonData = convert.jsonDecode(text);
 
     return this.parse(jsonData);
   }
 
-  load(url, onLoad, onProgress, onError) {
+  load(url, onLoad, [onProgress, onError]) {
     var scope = this;
 
     var loader = FileLoader(this.manager);
@@ -44,7 +44,7 @@ class FontLoader extends Loader {
     }, onProgress, onError);
   }
 
-  parse(json, {String? path, Function? onLoad, Function? onError}) {
+  parse(json, [String? path, Function? onLoad, Function? onError]) {
     return TTFFont(json);
   }
 }
