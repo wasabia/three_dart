@@ -279,7 +279,7 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
 
     var loader = THREE_JSM.GLTFLoader(null).setPath('assets/models/gltf/test/');
 
-    var result = await loader.loadAsync('tokyo.gltf', null);
+    var result = await loader.loadAsync('tokyo.gltf');
     // var result = await loader.loadAsync( 'animate7.gltf', null);
     // var result = await loader.loadAsync( 'untitled22.gltf', null);
 

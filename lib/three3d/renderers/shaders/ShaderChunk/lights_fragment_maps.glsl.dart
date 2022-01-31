@@ -4,7 +4,7 @@ String lights_fragment_maps = """
 	#ifdef USE_LIGHTMAP
 
 		vec4 lightMapTexel = texture2D( lightMap, vUv2 );
-		vec3 lightMapIrradiance = lightMapTexelToLinear( lightMapTexel ).rgb * lightMapIntensity;
+		vec3 lightMapIrradiance = lightMapTexel.rgb * lightMapIntensity;
 
 		#ifndef PHYSICALLY_CORRECT_LIGHTS
 
@@ -18,7 +18,7 @@ String lights_fragment_maps = """
 
 	#if defined( USE_ENVMAP ) && defined( STANDARD ) && defined( ENVMAP_TYPE_CUBE_UV )
 
-		iblIrradiance += getLightProbeIndirectIrradiance( /*lightProbe,*/ geometry, maxMipLevel );
+		iblIrradiance += getIBLIrradiance( geometry.normal );
 
 	#endif
 
@@ -26,11 +26,11 @@ String lights_fragment_maps = """
 
 #if defined( USE_ENVMAP ) && defined( RE_IndirectSpecular )
 
-	radiance += getLightProbeIndirectRadiance( /*specularLightProbe,*/ geometry.viewDir, geometry.normal, material.roughness, maxMipLevel );
+	radiance += getIBLRadiance( geometry.viewDir, geometry.normal, material.roughness );
 
 	#ifdef USE_CLEARCOAT
 
-		clearcoatRadiance += getLightProbeIndirectRadiance( /*specularLightProbe,*/ geometry.viewDir, geometry.clearcoatNormal, material.clearcoatRoughness, maxMipLevel );
+		clearcoatRadiance += getIBLRadiance( geometry.viewDir, geometry.clearcoatNormal, material.clearcoatRoughness );
 
 	#endif
 

@@ -3,50 +3,64 @@ part of three_webgl;
 class WebGLCubeUVMaps {
   var cubeUVmaps = new WeakMap();
   WebGLRenderer renderer;
-  var pmremGenerator = null;
+  dynamic pmremGenerator;
 
   WebGLCubeUVMaps(this.renderer) {}
 
   get(texture) {
     if (texture != null &&
-        texture.isTexture &&
-        texture.isRenderTargetTexture == false) {
+        texture.isTexture) {
       var mapping = texture.mapping;
 
-      var isEquirectMap = (mapping == EquirectangularReflectionMapping ||
+      bool isEquirectMap = (mapping == EquirectangularReflectionMapping ||
           mapping == EquirectangularRefractionMapping);
-      var isCubeMap = (mapping == CubeReflectionMapping ||
+      bool isCubeMap = (mapping == CubeReflectionMapping ||
           mapping == CubeRefractionMapping);
 
+      // equirect/cube map to cubeUV conversion
       if (isEquirectMap || isCubeMap) {
-        // equirect/cube map to cubeUV conversion
 
-        if (cubeUVmaps.has(texture)) {
-          return cubeUVmaps.get(texture).texture;
-        } else {
-          var image = texture.image;
+        if ( texture.isRenderTargetTexture && texture.needsPMREMUpdate == true ) {
 
-          if ((isEquirectMap && image != null && image.height > 0) ||
-              (isCubeMap && image != null && isCubeTextureComplete(image))) {
-            var currentRenderTarget = renderer.getRenderTarget();
+					texture.needsPMREMUpdate = false;
 
-            if (pmremGenerator == null)
-              pmremGenerator = new PMREMGenerator(renderer);
+					var renderTarget = cubeUVmaps.get( texture );
 
-            var renderTarget = isEquirectMap
-                ? pmremGenerator.fromEquirectangular(texture)
-                : pmremGenerator.fromCubemap(texture);
-            cubeUVmaps.add(key: texture, value: renderTarget);
+					if ( pmremGenerator == null ) pmremGenerator = new PMREMGenerator( renderer );
 
-            renderer.setRenderTarget(currentRenderTarget);
+					renderTarget = isEquirectMap ? pmremGenerator.fromEquirectangular( texture, renderTarget ) : pmremGenerator.fromCubemap( texture, renderTarget );
+					cubeUVmaps.add( key: texture, value: renderTarget );
 
-            texture.addEventListener('dispose', onTextureDispose);
+					return renderTarget.texture;
 
-            return renderTarget.texture;
-          } else {
-            // image not yet ready. try the conversion next frame
+				} else {
 
-            return null;
+					if ( cubeUVmaps.has( texture ) ) {
+
+						return cubeUVmaps.get( texture ).texture;
+
+					} else {
+
+						var image = texture.image;
+
+						if ( ( isEquirectMap && image != null && image.height > 0 ) || ( isCubeMap && image != null && isCubeTextureComplete( image ) ) ) {
+
+							if ( pmremGenerator == null ) pmremGenerator = new PMREMGenerator( renderer );
+
+							var renderTarget = isEquirectMap ? pmremGenerator.fromEquirectangular( texture ) : pmremGenerator.fromCubemap( texture );
+							cubeUVmaps.add( key: texture, value: renderTarget );
+
+							texture.addEventListener( 'dispose', onTextureDispose );
+
+							return renderTarget.texture;
+
+						} else {
+
+							// image not yet ready. try the conversion next frame
+
+							return null;
+
+						}
           }
         }
       }

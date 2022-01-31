@@ -207,3 +207,7 @@ const GLSL1 = '100';
 const GLSL3 = '300 es';
 
 const MAX_SAFE_INTEGER = 9999999999;
+
+
+const SRGBFormat = 1034; // fallback for WebGL 1
+const SRGBAFormat = 1035; // fallback for WebGL 1

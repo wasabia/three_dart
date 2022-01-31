@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:three_dart/three3d/utils.dart';
 import 'package:three_dart/three_dart.dart';
 import 'package:flutter_gl/flutter_gl.dart';
-
+import 'package:three_dart/extra/console.dart';
 
 part './WebGLAnimation.dart';
 part './WebGLAttributes.dart';
@@ -43,3 +43,4 @@ part './WebGLUniforms.dart';
 part './WebGLUniformsHelper.dart';
 part './WebGLUtils.dart';
 part './WebGLCubeUVMaps.dart';
+part './WebGLShaderCache.dart';

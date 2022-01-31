@@ -1,9 +1,8 @@
 part of three_webgl;
 
 class WebGLRenderLists {
-  WebGLProperties properties;
 
-  WebGLRenderLists(this.properties) {}
+  WebGLRenderLists() {}
 
   var lists = new WeakMap();
 
@@ -11,11 +10,11 @@ class WebGLRenderLists {
     var list;
 
     if (lists.has(scene) == false) {
-      list = new WebGLRenderList(properties);
+      list = new WebGLRenderList();
       lists.add(key: scene, value: [list]);
     } else {
       if (renderCallDepth >= lists.get(scene).length) {
-        list = new WebGLRenderList(properties);
+        list = new WebGLRenderList();
         lists.get(scene).add(list);
       } else {
         list = lists.get(scene)[renderCallDepth];

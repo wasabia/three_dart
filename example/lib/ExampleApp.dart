@@ -102,10 +102,12 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
         else if (_selectedExample != null)
           MaterialPage(
               key: ValueKey('ExamplePage'),
-              child: Builder(builder: (BuildContext context) {
-                print(" Builder ExamplePage.... ");
-                return ExamplePage(id: _selectedExample);
-              },))
+              child: Builder(
+                builder: (BuildContext context) {
+                  print(" Builder ExamplePage.... ");
+                  return ExamplePage(id: _selectedExample);
+                },
+              ))
       ],
       onPopPage: (route, result) {
         if (!route.didPop(result)) {

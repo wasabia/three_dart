@@ -44,9 +44,7 @@ class WebGLShadowMap {
     _distanceMaterial = new MeshDistanceMaterial(null);
 
     shadowMaterialVertical = ShaderMaterial({
-      "defines": {
-        "VSM_SAMPLES": 8
-      },
+      "defines": {"VSM_SAMPLES": 8},
       "uniforms": {
         "shadow_pass": {"value": null},
         "resolution": {"value": new Vector2(null, null)},
@@ -191,22 +189,19 @@ class WebGLShadowMap {
 
     scope.needsUpdate = false;
 
-    _renderer.setRenderTarget(currentRenderTarget,
-        activeCubeFace: activeCubeFace, activeMipmapLevel: activeMipmapLevel);
+    _renderer.setRenderTarget(currentRenderTarget, activeCubeFace, activeMipmapLevel);
   }
 
   VSMPass(shadow, camera) {
     var geometry = _objects.update(fullScreenMesh);
 
-    if ( shadowMaterialVertical.defines!["VSM_SAMPLES"] != shadow.blurSamples ) {
+    if (shadowMaterialVertical.defines!["VSM_SAMPLES"] != shadow.blurSamples) {
+      shadowMaterialVertical.defines!["VSM_SAMPLES"] = shadow.blurSamples;
+      shadowMaterialHorizontal.defines!["VSM_SAMPLES"] = shadow.blurSamples;
 
-			shadowMaterialVertical.defines!["VSM_SAMPLES"] = shadow.blurSamples;
-			shadowMaterialHorizontal.defines!["VSM_SAMPLES"] = shadow.blurSamples;
-
-			shadowMaterialVertical.needsUpdate = true;
-			shadowMaterialHorizontal.needsUpdate = true;
-
-		}
+      shadowMaterialVertical.needsUpdate = true;
+      shadowMaterialHorizontal.needsUpdate = true;
+    }
 
     // vertical pass
 

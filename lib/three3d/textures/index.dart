@@ -19,3 +19,4 @@ part './ImageElement.dart';
 part './Texture.dart';
 part './VideoTexture.dart';
 part './OpenGLTexture.dart';
+part './FramebufferTexture.dart';

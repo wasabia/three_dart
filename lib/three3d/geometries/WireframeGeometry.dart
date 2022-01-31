@@ -7,7 +7,7 @@ class WireframeGeometry extends BufferGeometry {
     // buffer
 
     var vertices = [];
-    var edges = {};
+    var edges = Set();
 
     // helper variables
 
@@ -39,7 +39,7 @@ class WireframeGeometry extends BufferGeometry {
           for (var j = 0; j < 3; j++) {
             var index1 = indices!.getX(i + j);
             var index2 = indices.getX(i + (j + 1) % 3);
-
+  
             start.fromBufferAttribute(position, index1);
             end.fromBufferAttribute(position, index2);
 
@@ -86,10 +86,10 @@ isUniqueEdge(start, end, edges) {
   var hash2 =
       "${end.x},${end.y},${end.z}-${start.x},${start.y},${start.z}"; // coincident edge
 
-  if (edges.has(hash1) == true || edges.has(hash2) == true) {
+  if (edges.contains(hash1) == true || edges.contains(hash2) == true) {
     return false;
   } else {
-    edges.add(hash1, hash2);
+    edges.addAll([hash1, hash2]);
     return true;
   }
 }

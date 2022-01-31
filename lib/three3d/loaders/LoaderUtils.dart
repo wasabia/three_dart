@@ -40,18 +40,16 @@ class LoaderUtils {
     return url.substring(0, index + 1);
   }
 
-
   /* UTILITY FUNCTIONS */
-  static resolveURL( url, String path ) {
-
+  static resolveURL(url, String path) {
     // Invalid URL
     // if ( typeof url != 'string' || url == '' ) return '';
-    if ( url is! String || url == '' ) return '';
+    if (url is! String || url == '') return '';
 
     // Host Relative URL
     final _reg1 = RegExp("^https?:\/\/", caseSensitive: false);
-    if ( _reg1.hasMatch( path ) && RegExp("^\/", caseSensitive: false).hasMatch( url ) ) {
-
+    if (_reg1.hasMatch(path) &&
+        RegExp("^\/", caseSensitive: false).hasMatch(url)) {
       final _reg2 = RegExp("(^https?:\/\/[^\/]+).*", caseSensitive: false);
 
       final matches = _reg2.allMatches(path);
@@ -66,17 +64,16 @@ class LoaderUtils {
     }
 
     // Absolute URL http://,https://,//
-    if ( RegExp("^(https?:)?\/\/", caseSensitive: false).hasMatch( url ) ) return url;
+    if (RegExp("^(https?:)?\/\/", caseSensitive: false).hasMatch(url))
+      return url;
 
     // Data URI
-    if ( RegExp(r"^data:.*,.*$", caseSensitive: false).hasMatch( url ) ) return url;
+    if (RegExp(r"^data:.*,.*$", caseSensitive: false).hasMatch(url)) return url;
 
     // Blob URL
-    if ( RegExp(r"^blob:.*$", caseSensitive: false).hasMatch( url ) ) return url;
+    if (RegExp(r"^blob:.*$", caseSensitive: false).hasMatch(url)) return url;
 
     // Relative URL
     return path + url;
-
   }
-
 }

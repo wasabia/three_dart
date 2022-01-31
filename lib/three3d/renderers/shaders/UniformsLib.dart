@@ -23,7 +23,6 @@ Map<String, dynamic> UniformsLib = {
     "reflectivity": {"value": 1.0}, // basic, lambert, phong
     "ior": {"value": 1.5}, // standard, physical
     "refractionRatio": {"value": 0.98},
-    "maxMipLevel": {"value": 0}
   },
   "aomap": {
     "aoMap": {},

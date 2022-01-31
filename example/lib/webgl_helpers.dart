@@ -9,16 +9,18 @@ import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
-class webgl_animation_skinning_blending extends StatefulWidget {
+
+
+class webgl_helpers extends StatefulWidget {
   String fileName;
 
-  webgl_animation_skinning_blending({Key? key, required this.fileName})
+  webgl_helpers({Key? key, required this.fileName})
       : super(key: key);
 
   createState() => _State();
 }
 
-class _State extends State<webgl_animation_skinning_blending> {
+class _State extends State<webgl_helpers> {
   late FlutterGlPlugin three3dRender;
   THREE.WebGLRenderer? renderer;
 
@@ -33,7 +35,7 @@ class _State extends State<webgl_animation_skinning_blending> {
   late THREE.Mesh mesh;
 
   late THREE.AnimationMixer mixer;
-  late THREE.Clock clock;
+  THREE.Clock clock = new THREE.Clock();
   THREE_JSM.OrbitControls? controls;
 
   num dpr = 1.0;
@@ -47,6 +49,11 @@ class _State extends State<webgl_animation_skinning_blending> {
 
   late THREE.Texture texture;
 
+  late THREE.PointLight light;
+
+  THREE_JSM.VertexNormalsHelper? vnh;
+  THREE_JSM.VertexTangentsHelper? vth;
+
   late THREE.WebGLMultisampleRenderTarget renderTarget;
 
   dynamic? sourceTexture;
@@ -55,12 +62,12 @@ class _State extends State<webgl_animation_skinning_blending> {
 
   late THREE.Object3D model;
 
-  Map<String, List<Function>> _listeners = {};
 
   @override
   void initState() {
     super.initState();
   }
+
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
@@ -189,8 +196,7 @@ class _State extends State<webgl_animation_skinning_blending> {
     renderer = THREE.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
-    renderer!.shadowMap.enabled = true;
-    // renderer!.outputEncoding = THREE.sRGBEncoding;
+    renderer!.shadowMap.enabled = false;
 
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
@@ -208,68 +214,89 @@ class _State extends State<webgl_animation_skinning_blending> {
   }
 
   initPage() async {
-    camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    camera.position.set(-1, -4, -2);
-    camera.lookAt(THREE.Vector3(0, 1, 0));
+    camera = new THREE.PerspectiveCamera(70, width / height, 1, 1000);
+    camera.position.z = 400;
 
-    clock = new THREE.Clock();
+
+    // scene
 
     scene = new THREE.Scene();
-    scene.background = THREE.Color.fromHex(0xffffff);
-    scene.fog = new THREE.Fog(0xa0a0a0, 10, 50);
 
-    var hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
-    hemiLight.position.set(0, -4, -2);
-    scene.add(hemiLight);
+    light = new THREE.PointLight(0xffffff);
+    light.position.set( 200, 100, 150 );
+    scene.add( light );
 
-    var dirLight = new THREE.DirectionalLight(0xffffff);
-    dirLight.position.set(-0, -4, -2);
-    dirLight.castShadow = true;
-    dirLight.shadow!.camera!.top = 2;
-    dirLight.shadow!.camera!.bottom = -2;
-    dirLight.shadow!.camera!.left = -2;
-    dirLight.shadow!.camera!.right = 2;
-    dirLight.shadow!.camera!.near = 0.1;
-    dirLight.shadow!.camera!.far = 40;
-    scene.add(dirLight);
+    scene.add( new THREE.PointLightHelper( light, 15, THREE.Color(0xffffff) ) );
 
-    // scene.add( new THREE.CameraHelper( dirLight.shadow.camera ) );
+    var gridHelper = new THREE.GridHelper( 400, 40, 0x0000ff, 0x808080 );
+    gridHelper.position.y = - 150;
+    gridHelper.position.x = - 150;
+    scene.add( gridHelper );
 
-    // ground
+    var polarGridHelper = new THREE.PolarGridHelper( 200, 16, 8, 64, 0x0000ff, 0x808080 );
+    polarGridHelper.position.y = - 150;
+    polarGridHelper.position.x = 200;
+    scene.add( polarGridHelper );
 
-    var loader = new THREE_JSM.GLTFLoader(null);
-    var gltf = await loader.loadAsync('assets/models/gltf/Soldier.gltf');
+   
+    camera.lookAt(scene.position);
 
-    model = gltf["scene"];
-    scene.add(model);
+    var loader = THREE_JSM.GLTFLoader(null).setPath('assets/models/gltf/');
 
-    model.traverse((object) {
-      if (object.isMesh) object.castShadow = true;
-    });
+    var result = await loader.loadAsync('LeePerrySmith.gltf');
+    // var result = await loader.loadAsync( 'animate7.gltf', null);
+    // var result = await loader.loadAsync( 'untitled22.gltf', null);
 
-    //
+    print(result);
+    print(" load gltf success result: ${result}  ");
 
-    var skeleton = new THREE.SkeletonHelper(model);
-    skeleton.visible = true;
-    scene.add(skeleton);
+    model = result["scene"];
 
-    //
+    var mesh = model.children[ 2 ];
 
-    // createPanel();
+    print(" load gltf success mesh: ${mesh}  ");
 
-    //
+    mesh.geometry!.computeTangents(); // generates bad data due to degenerate UVs
 
-    var animations = gltf["animations"];
+    var group = new THREE.Group();
+    group.scale.multiplyScalar( 50 );
+    scene.add( group );
 
-    mixer = new THREE.AnimationMixer(model);
+    // To make sure that the matrixWorld is up to date for the boxhelpers
+    group.updateMatrixWorld( true );
 
-    var idleAction = mixer.clipAction(animations[0]);
-    var walkAction = mixer.clipAction(animations[3]);
-    var runAction = mixer.clipAction(animations[1]);
+    group.add( mesh );
 
-    // var actions = [ idleAction, walkAction, runAction ];
-    walkAction.play();
-    // activateAllActions();
+    vnh = new THREE_JSM.VertexNormalsHelper( mesh, 5 );
+    scene.add( vnh! );
+
+    vth = new THREE_JSM.VertexTangentsHelper( mesh, 5 );
+    scene.add( vth! );
+
+    scene.add( new THREE.BoxHelper( mesh ) );
+
+    var wireframe = new THREE.WireframeGeometry( mesh.geometry! );
+   
+    var line = new THREE.LineSegments( wireframe, null );
+
+    line.material.depthTest = false;
+    line.material.opacity = 0.25;
+    line.material.transparent = true;
+    line.position.x = 4;
+    group.add( line );
+    scene.add( new THREE.BoxHelper( line ) );
+
+    var edges = new THREE.EdgesGeometry( mesh.geometry!, null );
+    line = new THREE.LineSegments( edges, null );
+    line.material.depthTest = false;
+    line.material.opacity = 0.25;
+    line.material.transparent = true;
+    line.position.x = - 4;
+    group.add( line );
+    scene.add( new THREE.BoxHelper( line ) );
+
+    scene.add( new THREE.BoxHelper( group ) );
+    scene.add( new THREE.BoxHelper( scene ) );
 
     loaded = true;
 
@@ -292,9 +319,22 @@ class _State extends State<webgl_animation_skinning_blending> {
       return;
     }
 
+   
     var delta = clock.getDelta();
 
-    mixer.update(delta);
+    var time = - DateTime.now().millisecondsSinceEpoch * 0.00003;
+
+    camera.position.x = 400 * THREE.Math.cos( time );
+    camera.position.z = 400 * THREE.Math.sin( time );
+    camera.lookAt( scene.position );
+
+    light.position.x = THREE.Math.sin( time * 1.7 ) * 300;
+    light.position.y = THREE.Math.cos( time * 1.5 ) * 400;
+    light.position.z = THREE.Math.cos( time * 1.3 ) * 300;
+
+    if ( vnh != null ) vnh!.update();
+    if ( vth != null ) vth!.update();
+
 
     render();
 

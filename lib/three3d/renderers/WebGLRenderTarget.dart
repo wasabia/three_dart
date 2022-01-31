@@ -17,6 +17,13 @@ class RenderTarget with EventDispatcher {
   bool isWebGLMultisampleRenderTarget = false;
   bool isWebGLMultipleRenderTargets = false;
 
+  bool useMultisampleRenderToTexture = false;
+  bool useMultisampleRenderbuffer = false;
+  bool ignoreDepthForMultisampleCopy = false;
+  bool hasExternalTextures = false;
+  bool useRenderToTexture = false;
+  bool useRenderbuffer = false;
+
   // Texture or List<Texture> ???
   dynamic texture;
   late Vector4 scissor;
@@ -86,6 +93,11 @@ class WebGLRenderTarget extends RenderTarget {
         this.options.stencilBuffer != null ? this.options.stencilBuffer : false;
     this.depthTexture =
         this.options.depthTexture != null ? this.options.depthTexture : null;
+
+    this.ignoreDepthForMultisampleCopy = this.options.ignoreDepth != null ? this.options.ignoreDepth : true;
+		this.hasExternalTextures = false;
+		this.useMultisampleRenderToTexture = false;
+		this.useMultisampleRenderbuffer = false;
   }
 
   setTexture(texture) {
@@ -163,6 +175,10 @@ class WebGLRenderTargetOptions {
   DepthTexture? depthTexture;
   int? encoding;
 
+  bool useMultisampleRenderToTexture = false;
+  bool ignoreDepth = false;
+  bool useRenderToTexture = false;
+
   WebGLRenderTargetOptions(Map<String, dynamic> json) {
     if (json["wrapS"] != null) {
       wrapS = json["wrapS"];
@@ -200,6 +216,15 @@ class WebGLRenderTargetOptions {
     if (json["encoding"] != null) {
       encoding = json["encoding"];
     }
+    if(json["useMultisampleRenderToTexture"] != null) {
+      useMultisampleRenderToTexture = json["useMultisampleRenderToTexture"];
+    }
+    if(json["ignoreDepth"] != null) {
+      ignoreDepth = json["ignoreDepth"];
+    }
+    if(json["useRenderToTexture"] != null) {
+      useRenderToTexture = json["useRenderToTexture"];
+    }
   }
 
   toJSON() {
@@ -216,7 +241,10 @@ class WebGLRenderTargetOptions {
       "stencilBuffer": stencilBuffer,
       "generateMipmaps": generateMipmaps,
       "depthTexture": depthTexture,
-      "encoding": encoding
+      "encoding": encoding,
+      "useMultisampleRenderToTexture": useMultisampleRenderToTexture,
+      "ignoreDepth": ignoreDepth,
+      "useRenderToTexture": useRenderToTexture
     };
   }
 }

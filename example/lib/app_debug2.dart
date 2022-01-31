@@ -30,7 +30,9 @@ class webgl_debugState extends State<app_debug2> {
       print(" set element ");
       print(" set gl ");
 
-      this.gl = this.element!.getContext("webgl2", {"alpha": true, "antialias": true});
+      this.gl = this
+          .element!
+          .getContext("webgl2", {"alpha": true, "antialias": true});
       return this.element!;
     });
   }

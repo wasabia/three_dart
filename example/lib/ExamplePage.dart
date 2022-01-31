@@ -15,6 +15,7 @@ import 'package:example/webgl_geometries.dart';
 import 'package:example/webgl_geometry_colors.dart';
 import 'package:example/webgl_geometry_shapes.dart';
 import 'package:example/webgl_geometry_text.dart';
+import 'package:example/webgl_helpers.dart';
 import 'package:example/webgl_instancing_performance.dart';
 import 'package:example/webgl_loader_gltf.dart';
 import 'package:example/webgl_loader_gltf_test.dart';
@@ -108,8 +109,8 @@ class _MyAppState extends State<ExamplePage> {
       page = webgl_geometry_colors(fileName: fileName);
     } else if (fileName == "webgl_loader_svg") {
       page = webgl_loader_svg(fileName: fileName);
-
-      
+    } else if(fileName == "webgl_helpers") {
+      page = webgl_helpers(fileName: fileName);  
     } else {
       throw ("ExamplePage fileName ${fileName} is not support yet ");
     }

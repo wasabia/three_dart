@@ -95,7 +95,6 @@ class MaterialLoader extends Loader {
     if (json["side"] != null) material.side = json["side"];
     if (json["shadowSide"] != null) material.shadowSide = json["shadowSide"];
     if (json["opacity"] != null) material.opacity = json["opacity"];
-    if (json["format"] != null) material.format = json["format"];
     if (json["transparent"] != null) material.transparent = json["transparent"];
     if (json["alphaTest"] != null) material.alphaTest = json["alphaTest"];
     if (json["depthTest"] != null) material.depthTest = json["depthTest"];
@@ -319,8 +318,10 @@ class MaterialLoader extends Loader {
     if (json["thicknessMap"] != null)
       material.thicknessMap = getTexture(json["thicknessMap"]);
 
-    if ( json["sheenColorMap"] != null ) material.sheenColorMap = getTexture( json["sheenColorMap"] );
-		if ( json["sheenRoughnessMap"] != null ) material.sheenRoughnessMap = getTexture( json["sheenRoughnessMap"] );
+    if (json["sheenColorMap"] != null)
+      material.sheenColorMap = getTexture(json["sheenColorMap"]);
+    if (json["sheenRoughnessMap"] != null)
+      material.sheenRoughnessMap = getTexture(json["sheenRoughnessMap"]);
 
     return material;
   }

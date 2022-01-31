@@ -23,12 +23,65 @@ class LatheGeometry extends BufferGeometry {
     var indices = [];
     var vertices = [];
     var uvs = [];
+    var initNormals = [];
+		var normals = [];
 
     // helper variables
 
     var inverseSegments = 1.0 / segments;
     var vertex = new Vector3.init();
     var uv = new Vector2(null, null);
+    var normal = new Vector3();
+		var curNormal = new Vector3();
+		var prevNormal = new Vector3();
+		num dx = 0;
+		num dy = 0;
+
+    // pre-compute normals for initial "meridian"
+
+		for ( var j = 0; j <= ( points.length - 1 ); j ++ ) {
+      // special handling for 1st vertex on path
+			if( j == 0) {
+        dx = points[ j + 1 ].x - points[ j ].x;
+        dy = points[ j + 1 ].y - points[ j ].y;
+
+        normal.x = dy * 1.0;
+        normal.y = - dx;
+        normal.z = dy * 0.0;
+
+        prevNormal.copy( normal );
+
+        normal.normalize();
+
+        initNormals.addAll( [normal.x, normal.y, normal.z] );
+      } else if ( j == points.length - 1 ) {	// special handling for last Vertex on path
+        initNormals.addAll( [prevNormal.x, prevNormal.y, prevNormal.z] );
+      } else { // default handling for all vertices in between
+        dx = points[ j + 1 ].x - points[ j ].x;
+        dy = points[ j + 1 ].y - points[ j ].y;
+
+        normal.x = dy * 1.0;
+        normal.y = - dx;
+        normal.z = dy * 0.0;
+
+        curNormal.copy( normal );
+
+        normal.x += prevNormal.x;
+        normal.y += prevNormal.y;
+        normal.z += prevNormal.z;
+
+        normal.normalize();
+
+        initNormals.addAll( [normal.x, normal.y, normal.z] );
+
+        prevNormal.copy( curNormal );
+
+      }
+
+
+		}
+
+		// generate vertices, uvs and normals
 
     // generate vertices and uvs
 
@@ -53,6 +106,14 @@ class LatheGeometry extends BufferGeometry {
         uv.y = j / (points.length - 1);
 
         uvs.addAll([uv.x, uv.y]);
+
+        // normal
+
+				var x = initNormals[ 3 * j + 0 ] * sin;
+				var y = initNormals[ 3 * j + 1 ];
+				var z = initNormals[ 3 * j + 0 ] * cos;
+
+				normals.addAll( [x, y, z] );
       }
     }
 
@@ -70,7 +131,7 @@ class LatheGeometry extends BufferGeometry {
         // faces
 
         indices.addAll([a, b, d]);
-        indices.addAll([b, c, d]);
+        indices.addAll([c, d, b]);
       }
     }
 
@@ -80,47 +141,6 @@ class LatheGeometry extends BufferGeometry {
     this.setAttribute(
         'position', new Float32BufferAttribute(vertices, 3, false));
     this.setAttribute('uv', new Float32BufferAttribute(uvs, 2, false));
-
-    // generate normals
-
-    this.computeVertexNormals();
-
-    // if the geometry is closed, we need to average the normals along the seam.
-    // because the corresponding vertices are identical (but still have different UVs).
-
-    if (phiLength == Math.PI * 2) {
-      var normals = this.attributes["normal"].array;
-      var n1 = new Vector3.init();
-      var n2 = new Vector3.init();
-      var n = new Vector3.init();
-
-      // this is the buffer offset for the last line of vertices
-
-      var base = segments * points.length * 3;
-
-      for (var i = 0, j = 0; i < points.length; i++, j += 3) {
-        // select the normal of the vertex in the first line
-
-        n1.x = normals[j + 0];
-        n1.y = normals[j + 1];
-        n1.z = normals[j + 2];
-
-        // select the normal of the vertex in the last line
-
-        n2.x = normals[base + j + 0];
-        n2.y = normals[base + j + 1];
-        n2.z = normals[base + j + 2];
-
-        // average normals
-
-        n.addVectors(n1, n2).normalize();
-
-        // assign the new values to both normals
-
-        normals[j + 0] = normals[base + j + 0] = n.x;
-        normals[j + 1] = normals[base + j + 1] = n.y;
-        normals[j + 2] = normals[base + j + 2] = n.z;
-      }
-    }
+    this.setAttribute( 'normal', new Float32BufferAttribute( normals, 3, false ) );
   }
 }

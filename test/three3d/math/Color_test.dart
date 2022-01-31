@@ -394,7 +394,6 @@ void main() {
           expect(array[2], g);
           expect(array[3], b);
         });
-        
       });
 
       test("toJSON", () {

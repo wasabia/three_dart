@@ -26,11 +26,8 @@ class ImageLoaderLoader {
       }
 
       image = await compute(imageProcess2, DecodeParam(bytes!, flipY, null));
-     
     } else {
-      
       image = await imageDecoder(null, url);
-     
     }
 
     return image;

@@ -207,115 +207,105 @@ class _MyAppState extends State<webgl_loader_svg> {
   }
 
   initPage() async {
-    camera = new THREE.PerspectiveCamera( 50, width / height, 1, 1000 );
-    camera.position.set( 0, 0, 200 );
+    camera = new THREE.PerspectiveCamera(50, width / height, 1, 1000);
+    camera.position.set(0, 0, 200);
 
-    loadSVG( guiData["currentURL"] );
-
+    loadSVG(guiData["currentURL"]);
 
     animate();
   }
 
-  loadSVG( url ) {
-
+  loadSVG(url) {
     //
 
     scene = new THREE.Scene();
-    scene.background = new THREE.Color( 0xb0b0b0 );
+    scene.background = new THREE.Color(0xb0b0b0);
 
     //
 
-    var helper = new THREE.GridHelper( 160, 10 );
+    var helper = new THREE.GridHelper(160, 10);
     helper.rotation.x = THREE.Math.PI / 2;
-    scene.add( helper );
+    scene.add(helper);
 
     //
 
     var loader = new THREE.SVGLoader(null);
 
-    loader.load( url, ( data ) {
-
+    loader.load(url, (data) {
       var paths = data["paths"];
 
       print(" paths................ ");
       print(paths);
 
       var group = new THREE.Group();
-      group.scale.multiplyScalar( 0.25 );
-      group.position.x = - 70;
+      group.scale.multiplyScalar(0.25);
+      group.position.x = -70;
       group.position.y = 70;
-      group.scale.y *= - 1;
+      group.scale.y *= -1;
 
-      for ( var i = 0; i < paths.length; i ++ ) {
-
-        var path = paths[ i ];
+      for (var i = 0; i < paths.length; i++) {
+        var path = paths[i];
 
         var fillColor = path.userData["style"]["fill"];
-        if ( guiData["drawFillShapes"] == true && fillColor != null && fillColor != 'none' ) {
-
-          var material = new THREE.MeshBasicMaterial( {
-            "color": new THREE.Color().setStyle( fillColor ).convertSRGBToLinear(),
+        if (guiData["drawFillShapes"] == true &&
+            fillColor != null &&
+            fillColor != 'none') {
+          var material = new THREE.MeshBasicMaterial({
+            "color":
+                new THREE.Color().setStyle(fillColor).convertSRGBToLinear(),
             "opacity": path.userData["style"]["fillOpacity"],
             "transparent": true,
             "side": THREE.DoubleSide,
             "depthWrite": false,
             "wireframe": guiData["fillShapesWireframe"]
-          } );
+          });
 
-          var shapes = THREE.SVGLoader.createShapes( path );
+          var shapes = THREE.SVGLoader.createShapes(path);
 
-          for ( var j = 0; j < shapes.length; j ++ ) {
+          for (var j = 0; j < shapes.length; j++) {
+            var shape = shapes[j];
 
-            var shape = shapes[ j ];
+            var geometry = new THREE.ShapeGeometry(shape);
+            var mesh = new THREE.Mesh(geometry, material);
 
-            var geometry = new THREE.ShapeGeometry( shape );
-            var mesh = new THREE.Mesh( geometry, material );
-
-            group.add( mesh );
-
+            group.add(mesh);
           }
-
         }
 
         var strokeColor = path.userData["style"]["stroke"];
 
-        if ( guiData["drawStrokes"] == true && strokeColor != null && strokeColor != 'none' ) {
-
-          var material = new THREE.MeshBasicMaterial( {
-            "color": new THREE.Color().setStyle( strokeColor ).convertSRGBToLinear(),
+        if (guiData["drawStrokes"] == true &&
+            strokeColor != null &&
+            strokeColor != 'none') {
+          var material = new THREE.MeshBasicMaterial({
+            "color":
+                new THREE.Color().setStyle(strokeColor).convertSRGBToLinear(),
             "opacity": path.userData["style"]["strokeOpacity"],
             "transparent": true,
             "side": THREE.DoubleSide,
             "depthWrite": false,
             "wireframe": guiData["strokesWireframe"]
-          } );
+          });
 
-          for ( var j = 0, jl = path.subPaths.length; j < jl; j ++ ) {
+          for (var j = 0, jl = path.subPaths.length; j < jl; j++) {
+            var subPath = path.subPaths[j];
 
-            var subPath = path.subPaths[ j ];
+            var geometry = THREE.SVGLoader.pointsToStroke(
+                subPath.getPoints(), path.userData["style"]);
 
-            var geometry = THREE.SVGLoader.pointsToStroke( subPath.getPoints(), path.userData["style"] );
+            if (geometry != null) {
+              var mesh = new THREE.Mesh(geometry, material);
 
-            if ( geometry != null ) {
-
-              var mesh = new THREE.Mesh( geometry, material );
-
-              group.add( mesh );
-
+              group.add(mesh);
             }
-
           }
-
         }
-
       }
 
-      scene.add( group );
+      scene.add(group);
 
       render();
-
-    } );
-
+    });
   }
 
   animate() {

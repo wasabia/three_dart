@@ -22,23 +22,15 @@ class BufferGeometryLoader extends Loader {
     loader.setWithCredentials(scope.withCredentials);
     loader.load(url, (text) {
       try {
+        onLoad(scope.parse(convert.jsonDecode(text)));
+      } catch (e) {
+        if (onError != null) {
+          onError(e);
+        } else {
+          print(e);
+        }
 
-      onLoad(scope.parse(convert.jsonDecode(text)));
-
-      } catch ( e ) {
-
-      	if ( onError != null ) {
-
-      		onError( e );
-
-      	} else {
-
-      		print( e );
-
-      	}
-
-      	scope.manager.itemError( url );
-
+        scope.manager.itemError(url);
       }
     }, onProgress, onError);
   }
