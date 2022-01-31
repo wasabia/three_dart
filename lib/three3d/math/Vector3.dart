@@ -590,7 +590,12 @@ class Vector3 {
     return this;
   }
 
-  toArray(List<num?> array, [int offset = 0]) {
+  toArray(List<num> array, [int offset = 0]) {
+
+    while(array.length < offset + 3) {
+      array.add(0);
+    }
+
     array[offset] = this.x;
     array[offset + 1] = this.y;
     array[offset + 2] = this.z;

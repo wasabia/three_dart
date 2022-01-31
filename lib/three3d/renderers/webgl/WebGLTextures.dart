@@ -438,8 +438,14 @@ class WebGLTextures {
           properties.get(texture)["__currentAnisotropy"] != null) {
         // print("extension: ${extension} ... extension.TEXTURE_MAX_ANISOTROPY_EXT: ${extension.TEXTURE_MAX_ANISOTROPY_EXT} ");
 
-        gl.texParameterf(textureType, extension.TEXTURE_MAX_ANISOTROPY_EXT,
+        if(kIsWeb) {
+          gl.texParameterf(textureType, extension.TEXTURE_MAX_ANISOTROPY_EXT,
             Math.min(texture.anisotropy, capabilities.getMaxAnisotropy()));
+        } else {
+          gl.texParameterf(textureType, gl.TEXTURE_MAX_ANISOTROPY_EXT,
+            Math.min(texture.anisotropy, capabilities.getMaxAnisotropy()).toDouble());
+        }
+        
         properties.get(texture)["__currentAnisotropy"] = texture.anisotropy;
       }
     }

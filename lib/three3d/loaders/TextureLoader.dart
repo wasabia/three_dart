@@ -21,8 +21,7 @@ class TextureLoader extends Loader {
     Texture texture;
 
     // if(kIsWeb) {
-    texture =
-        Texture(null, null, null, null, null, null, null, null, null, null);
+    texture = Texture(null, null, null, null, null, null, null, null, null, null);
     // } else {
     //   texture = DataTexture(null, null, null,null, null, null,null, null, null, null, null, null);
     // }
@@ -34,16 +33,7 @@ class TextureLoader extends Loader {
     var completer = Completer<Texture>();
     loader.flipY = flipY;
     loader.load(url, (image) {
-      // JPEGs can't have an alpha channel, so memory can be saved by storing them as RGB.
-      bool isJPEG = false;
-      if (url is String) {
-        isJPEG = url.indexOf(".JPG") > 0 ||
-            url.indexOf(".JPEG") > 0 ||
-            url.indexOf(".jpg") > 0 ||
-            url.indexOf(".jpeg") > 0 ||
-            url.indexOf("data:image/jpeg") == 0;
-      }
-
+ 
       ImageElement imageElement;
 
       // Web better way ???
@@ -54,7 +44,7 @@ class TextureLoader extends Loader {
             width: image.width!,
             height: image.height!);
       } else {
-        var _pixels = image.getBytes(format: isJPEG ? Format.rgb : Format.rgba);
+        var _pixels = image.getBytes(format: Format.rgba);
         imageElement = ImageElement(
             url: url,
             data: Uint8Array.from(_pixels),

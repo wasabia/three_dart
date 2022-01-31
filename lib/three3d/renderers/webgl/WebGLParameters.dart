@@ -120,8 +120,9 @@ class WebGLParameters {
   dynamic vertexAlphas;
   late bool flipNormalScaleY;
 
-  late num morphTargetsCount;
   late bool transparent;
+
+  late int morphTargetsCount;
 
   WebGLParameters(Map<String, dynamic> json) {
     isWebGL2 = json["isWebGL2"];
@@ -190,7 +191,7 @@ class WebGLParameters {
     fog = json["fog"];
     useFog = json["useFog"];
     fogExp2 = json["fogExp2"];
-    flatShading = json["flatShading"] == 1;
+    flatShading = json["flatShading"];
 
     sizeAttenuation = json["sizeAttenuation"];
     logarithmicDepthBuffer = json["logarithmicDepthBuffer"];
@@ -246,6 +247,7 @@ class WebGLParameters {
     decodeVideoTexture = json["decodeVideoTexture"];
     morphTargetsCount = json["morphTargetsCount"];
     transparent = json["transparent"];
+
 
   }
 
