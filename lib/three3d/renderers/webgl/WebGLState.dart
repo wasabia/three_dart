@@ -123,8 +123,11 @@ class WebGLState {
     scissorParam = gl.getParameter( gl.SCISSOR_BOX );
     viewportParam = gl.getParameter( gl.VIEWPORT );
 
-    currentScissor = new Vector4.init().fromArray( scissorParam );
-    currentViewport = new Vector4.init().fromArray( viewportParam );
+    // currentScissor = new Vector4.init().fromArray( scissorParam );
+    // currentViewport = new Vector4.init().fromArray( viewportParam );
+
+    currentScissor = new Vector4.init();
+    currentViewport = new Vector4.init();
   }
 
   createTexture(int type, int target, int count) {
@@ -618,29 +621,29 @@ class WebGLState {
 
   texSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels) {
 
-		try {
+		// try {
 
 			gl.texSubImage3D( target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels );
 
-		} catch ( error ) {
+		// } catch ( error ) {
 
-			console.error( 'THREE.WebGLState:', error );
+		// 	console.error( 'THREE.WebGLState:', error );
 
-		}
+		// }
 
 	}
 
 	compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, pixels) {
 
-		try {
+		// try {
 
 			gl.compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, pixels);
 
-		} catch ( error ) {
+		// } catch ( error ) {
 
-			console.error( 'THREE.WebGLState:', error );
+		// 	console.error( 'THREE.WebGLState:', error );
 
-		}
+		// }
 
 	}
 
@@ -660,15 +663,15 @@ class WebGLState {
 
   texStorage3D(target, levels, internalformat, width, height, depth) {
 
-		try {
+		// try {
 
 			gl.texStorage3D( target, levels, internalformat, width, height, depth );
 
-		} catch ( error ) {
+		// } catch ( error ) {
 
-			console.error( 'THREE.WebGLState:', error );
+		// 	console.error( 'THREE.WebGLState:', error );
 
-		}
+		// }
 
 	}
 

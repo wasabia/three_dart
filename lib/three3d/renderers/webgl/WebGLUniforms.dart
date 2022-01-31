@@ -65,7 +65,7 @@ class WebGLUniforms with WebGLUniform {
     }
   }
 
-  setValue(gl, name, value, WebGLTextures? textures) {
+  setValue(gl, name, value, [WebGLTextures? textures]) {
     var u = this.map[name];
 
     // var _vt = value.runtimeType.toString();

@@ -6,14 +6,14 @@ var _int32View = new Int32List.view(_floatView.buffer);
 class DataUtils {
   // Converts float32 to float16 (stored as uint16 value).
 
-  static toHalfFloat(val) {
+  static toHalfFloat(num val) {
     // Source: http://gamedev.stackexchange.com/questions/17326/conversion-of-a-number-from-single-precision-floating-point-representation-to-a/17410#17410
 
     /* This method is faster than the OpenEXR implementation (very often
 		* used, eg. in Ogre), with the additional benefit of rounding, inspired
 		* by James Tursa?s half-precision code. */
 
-    _floatView[0] = val;
+    _floatView[0] = val.toDouble();
     var x = _int32View[0];
 
     var bits = (x >> 16) & 0x8000; /* Get the sign */

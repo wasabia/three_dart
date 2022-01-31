@@ -10,6 +10,9 @@ class Math {
   static double LN10 = math.ln10;
   static double SQRT1_2 = math.sqrt1_2;
 
+  // TODO
+  static int MAX_SAFE_INTEGER = 9007199254740991;
+
   static min(num x, num y) {
     return math.min(x, y);
   }

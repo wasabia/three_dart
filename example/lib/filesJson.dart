@@ -28,5 +28,6 @@ var filesJson = [
   "webgl_animation_skinning_morph",
   "webgl_geometry_colors",
   "webgl_loader_svg",
-  "webgl_helpers"
+  "webgl_helpers",
+  "webgl_morphtargets"
 ];

@@ -129,10 +129,11 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.flatShading ? '#define FLAT_SHADED' : '',
         parameters.skinning ? '#define USE_SKINNING' : '',
         parameters.useVertexTexture ? '#define BONE_TEXTURE' : '',
-        parameters.morphTargets == true ? '#define USE_MORPHTARGETS' : '',
-        parameters.morphNormals == true && parameters.flatShading == false
-            ? '#define USE_MORPHNORMALS'
-            : '',
+        parameters.morphTargets ? '#define USE_MORPHTARGETS' : '',
+        ( parameters.morphTargets && parameters.isWebGL2 ) ? '#define MORPHTARGETS_TEXTURE' : '',
+        ( parameters.morphTargets && parameters.isWebGL2 ) ? '#define MORPHTARGETS_COUNT ${parameters.morphTargetsCount}' : '',
+        parameters.morphNormals && parameters.flatShading == false
+            ? '#define USE_MORPHNORMALS' : '',
         parameters.doubleSided ? '#define DOUBLE_SIDED' : '',
         parameters.flipSided ? '#define FLIP_SIDED' : '',
         parameters.shadowMapEnabled ? '#define USE_SHADOWMAP' : '',
@@ -167,7 +168,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         '#elif defined( USE_COLOR )',
         '	attribute vec3 color;',
         '#endif',
-        '#ifdef USE_MORPHTARGETS',
+        '#if ( defined( USE_MORPHTARGETS ) && ! defined( MORPHTARGETS_TEXTURE ) )',
         '	attribute vec3 morphTarget0;',
         '	attribute vec3 morphTarget1;',
         '	attribute vec3 morphTarget2;',
@@ -337,7 +338,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
             '#define varying in',
             (parameters.glslVersion == GLSL3)
                 ? ''
-                : 'layout(location = 0) out highp vec4 pc_fragColor;',
+                : kIsWeb ? 'layout(location = 0) out highp vec4 pc_fragColor;' : 'out highp vec4 pc_fragColor;',
             (parameters.glslVersion == GLSL3)
                 ? ''
                 : '#define gl_FragColor pc_fragColor',
@@ -362,8 +363,10 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     // developer.log(" alphaTest: ${parameters.alphaTest} ");
     // developer.log(" 111 ================= VERTEX  ");
     // developer.log(vertexGlsl);
+    // print( vertexGlsl );
     // developer.log("  111 ==================== FRAGMENT ");
     // developer.log(fragmentGlsl);
+    // print( fragmentGlsl );
 
     var glVertexShader = WebGLShader(gl, gl.VERTEX_SHADER, vertexGlsl);
 
