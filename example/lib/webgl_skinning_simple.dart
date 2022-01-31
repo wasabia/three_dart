@@ -249,8 +249,8 @@ class _MyAppState extends State<webgl_skinning_simple> {
 
     var loader = THREE_JSM.GLTFLoader(null).setPath('assets/models/gltf/');
 
-    // var result = await loader.loadAsync( 'Parrot.gltf', null);
-    var result = await loader.loadAsync('SimpleSkinning.gltf', null);
+    // var result = await loader.loadAsync( 'Parrot.gltf');
+    var result = await loader.loadAsync('SimpleSkinning.gltf');
 
     print(" gltf load sucess result: ${result}  ");
 

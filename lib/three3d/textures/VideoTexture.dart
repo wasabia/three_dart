@@ -7,7 +7,7 @@ class VideoTexture extends Texture {
       anisotropy)
       : super(video, mapping, wrapS, wrapT, magFilter, minFilter, format, type,
             anisotropy, null) {
-    this.format = format ?? RGBAFormat;
+              
     this.minFilter = minFilter ?? LinearFilter;
     this.magFilter = magFilter ?? LinearFilter;
 

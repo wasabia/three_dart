@@ -15,7 +15,8 @@ class Texture with EventDispatcher {
   bool isDataTexture = false;
   bool isCompressedTexture = false;
   bool isOpenGLTexture = false;
-  bool isRenderTargetTexture = false;
+  bool isRenderTargetTexture = false;  // indicates whether a texture belongs to a render target or not
+  bool needsPMREMUpdate = false; // indicates whether this texture should be processed by PMREMGenerator or not (only relevant for render target textures)
 
   // image or List ???
   dynamic image;
@@ -55,7 +56,6 @@ class Texture with EventDispatcher {
   int encoding = LinearEncoding;
 
   Map userData = {};
-
 
   int version = 0;
 
@@ -207,7 +207,7 @@ class Texture with EventDispatcher {
       output["image"] = image.uuid;
     }
 
-    if ( this.userData.isNotEmpty ) output["userData"] = this.userData;
+    if (this.userData.isNotEmpty) output["userData"] = this.userData;
 
     if (!isRootObject) {
       meta.textures[this.uuid] = output;

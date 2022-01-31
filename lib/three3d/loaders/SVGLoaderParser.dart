@@ -148,11 +148,8 @@ class SVGLoaderParser {
 
   // from https://github.com/ppvg/svg-numbers (MIT License)
   parseFloats(input, [flags, stride]) {
-
-    if ( input is! String ) {
-
-      throw ('Invalid input: ${input.runtimeType} ' );
-
+    if (input is! String) {
+      throw ('Invalid input: ${input.runtimeType} ');
     }
 
     // Character groups
@@ -178,214 +175,159 @@ class SVGLoaderParser {
     var number = '', exponent = '';
     var result = [];
 
-    throwSyntaxError( current, i, partial ) {
-      var error = ( 'Unexpected character "' + current + '" at index ' + i + '.' );
-      throw(error);
+    throwSyntaxError(current, i, partial) {
+      var error =
+          ('Unexpected character "' + current + '" at index ' + i + '.');
+      throw (error);
     }
 
     newNumber() {
-
-      if ( number != '' ) {
-
-        if ( exponent == '' ) result.add( num.parse( number ) );
-        else result.add( num.parse( number ) * Math.pow( 10, num.parse( exponent ) ) );
-
+      if (number != '') {
+        if (exponent == '')
+          result.add(num.parse(number));
+        else
+          result.add(num.parse(number) * Math.pow(10, num.parse(exponent)));
       }
 
       number = '';
       exponent = '';
-
     }
 
     var current;
     var length = input.length;
 
-    for ( var i = 0; i < length; i ++ ) {
-
-      current = input[ i ];
+    for (var i = 0; i < length; i++) {
+      current = input[i];
 
       // check for flags
-      if ( flags is List && flags.indexOf( result.length % stride ) >= 0 && RE["FLAGS"].hasMatch( current ) ) {
-
+      if (flags is List &&
+          flags.indexOf(result.length % stride) >= 0 &&
+          RE["FLAGS"].hasMatch(current)) {
         state = INT;
         number = current;
         newNumber();
         continue;
-
       }
 
       // parse until next number
-      if ( state == SEP ) {
-
+      if (state == SEP) {
         // eat whitespace
-        if ( RE["WHITESPACE"].hasMatch( current ) ) {
-
+        if (RE["WHITESPACE"].hasMatch(current)) {
           continue;
-
         }
 
         // start new number
-        if ( RE["DIGIT"].hasMatch( current ) || RE["SIGN"].hasMatch( current ) ) {
-
+        if (RE["DIGIT"].hasMatch(current) || RE["SIGN"].hasMatch(current)) {
           state = INT;
           number = current;
           continue;
-
         }
 
-        if ( RE["POINT"].hasMatch( current ) ) {
-
+        if (RE["POINT"].hasMatch(current)) {
           state = FLOAT;
           number = current;
           continue;
-
         }
 
         // throw on double commas (e.g. "1, , 2")
-        if ( RE["COMMA"].hasMatch( current ) ) {
-
-          if ( seenComma ) {
-
-            throwSyntaxError( current, i, result );
-
+        if (RE["COMMA"].hasMatch(current)) {
+          if (seenComma) {
+            throwSyntaxError(current, i, result);
           }
 
           seenComma = true;
-
         }
-
       }
 
       // parse integer part
-      if ( state == INT ) {
-
-        if ( RE["DIGIT"].hasMatch( current ) ) {
-
+      if (state == INT) {
+        if (RE["DIGIT"].hasMatch(current)) {
           number += current;
           continue;
-
         }
 
-        if ( RE["POINT"].hasMatch( current ) ) {
-
+        if (RE["POINT"].hasMatch(current)) {
           number += current;
           state = FLOAT;
           continue;
-
         }
 
-        if ( RE["EXP"].hasMatch( current ) ) {
-
+        if (RE["EXP"].hasMatch(current)) {
           state = EXP;
           continue;
-
         }
 
         // throw on double signs ("-+1"), but not on sign as separator ("-1-2")
-        if ( RE["SIGN"].hasMatch( current )
-            && number.length == 1
-            && RE["SIGN"].hasMatch( number[ 0 ] ) ) {
-
-          throwSyntaxError( current, i, result );
-
+        if (RE["SIGN"].hasMatch(current) &&
+            number.length == 1 &&
+            RE["SIGN"].hasMatch(number[0])) {
+          throwSyntaxError(current, i, result);
         }
-
       }
 
       // parse decimal part
-      if ( state == FLOAT ) {
-
-        if ( RE["DIGIT"].hasMatch( current ) ) {
-
+      if (state == FLOAT) {
+        if (RE["DIGIT"].hasMatch(current)) {
           number += current;
           continue;
-
         }
 
-        if ( RE["EXP"].hasMatch( current ) ) {
-
+        if (RE["EXP"].hasMatch(current)) {
           state = EXP;
           continue;
-
         }
 
         // throw on double decimal points (e.g. "1..2")
-        if ( RE["POINT"].hasMatch( current ) && number[ number.length - 1 ] == '.' ) {
-
-          throwSyntaxError( current, i, result );
-
+        if (RE["POINT"].hasMatch(current) && number[number.length - 1] == '.') {
+          throwSyntaxError(current, i, result);
         }
-
       }
 
       // parse exponent part
-      if ( state == EXP ) {
-
-        if ( RE["DIGIT"].hasMatch( current ) ) {
-
+      if (state == EXP) {
+        if (RE["DIGIT"].hasMatch(current)) {
           exponent += current;
           continue;
-
         }
 
-        if ( RE["SIGN"].hasMatch( current ) ) {
-
-          if ( exponent == '' ) {
-
+        if (RE["SIGN"].hasMatch(current)) {
+          if (exponent == '') {
             exponent += current;
             continue;
-
           }
 
-          if ( exponent.length == 1 && RE["SIGN"].hasMatch( exponent ) ) {
-
-            throwSyntaxError( current, i, result );
-
+          if (exponent.length == 1 && RE["SIGN"].hasMatch(exponent)) {
+            throwSyntaxError(current, i, result);
           }
-
         }
-
       }
 
-
       // end of number
-      if ( RE["WHITESPACE"].hasMatch( current ) ) {
-
+      if (RE["WHITESPACE"].hasMatch(current)) {
         newNumber();
         state = SEP;
         seenComma = false;
-
-      } else if ( RE["COMMA"].hasMatch( current ) ) {
-
+      } else if (RE["COMMA"].hasMatch(current)) {
         newNumber();
         state = SEP;
         seenComma = true;
-
-      } else if ( RE["SIGN"].hasMatch( current ) ) {
-
+      } else if (RE["SIGN"].hasMatch(current)) {
         newNumber();
         state = INT;
         number = current;
-
-      } else if ( RE["POINT"].hasMatch( current ) ) {
-
+      } else if (RE["POINT"].hasMatch(current)) {
         newNumber();
         state = FLOAT;
         number = current;
-
       } else {
-
-        throwSyntaxError( current, i, result );
-
+        throwSyntaxError(current, i, result);
       }
-
     }
 
     // add the last number found (if any)
     newNumber();
 
     return result;
-
   }
 
   parseNodeTransform(node) {
@@ -531,7 +473,9 @@ class SVGLoaderParser {
   }
 
   parseCSSStylesheet(node) {
-    if ( node.sheet == null || node.sheet.cssRules == null || node.sheet.cssRules.length == 0) {
+    if (node.sheet == null ||
+        node.sheet.cssRules == null ||
+        node.sheet.cssRules.length == 0) {
       return;
     }
 
@@ -550,13 +494,12 @@ class SVGLoaderParser {
       // 	.map( i => i.trim() );
 
       for (var j = 0; j < selectorList.length; j++) {
-
         var _sj = selectorList[j];
 
-        if (stylesheets[ _sj ] == null) {
-          stylesheets[ _sj ] = {};
+        if (stylesheets[_sj] == null) {
+          stylesheets[_sj] = {};
         }
-        stylesheets[ _sj ].addAll(stylesheet.style);
+        stylesheets[_sj].addAll(stylesheet.style);
         // stylesheets[ selectorList[ j ] ] = Object.assign(
         // 	stylesheets[ selectorList[ j ] ] || {},
         // 	stylesheet.style
@@ -629,7 +572,7 @@ class SVGLoaderParser {
 
     addStyle('fill', 'fill');
     addStyle('fill-opacity', 'fillOpacity', clamp);
-    addStyle( 'fill-rule', 'fillRule' );
+    addStyle('fill-rule', 'fillRule');
     addStyle('opacity', 'opacity', clamp);
     addStyle('stroke', 'stroke');
     addStyle('stroke-opacity', 'strokeOpacity', clamp);
@@ -894,7 +837,7 @@ class SVGLoaderParser {
           break;
 
         case 'A':
-          var numbers = parseFloats(data, [ 3, 4 ], 7);
+          var numbers = parseFloats(data, [3, 4], 7);
 
           for (var j = 0, jl = numbers.length; j < jl; j += 7) {
             // skip command if start point == end point
@@ -1057,7 +1000,7 @@ class SVGLoaderParser {
           break;
 
         case 'a':
-          var numbers = parseFloats(data, [ 3, 4 ], 7);
+          var numbers = parseFloats(data, [3, 4], 7);
 
           for (var j = 0, jl = numbers.length; j < jl; j += 7) {
             // skip command if no displacement
@@ -1440,38 +1383,26 @@ class SVGLoaderParser {
     }
   }
 
+  static getStrokeStyle(width, color, lineJoin, lineCap, miterLimit) {
+    // Param width: Stroke width
+    // Param color: As returned by THREE.Color.getStyle()
+    // Param lineJoin: One of "round", "bevel", "miter" or "miter-limit"
+    // Param lineCap: One of "round", "square" or "butt"
+    // Param miterLimit: Maximum join length, in multiples of the "width" parameter (join is truncated if it exceeds that distance)
+    // Returns style object
 
+    width = width != null ? width : 1;
+    color = color != null ? color : '#000';
+    lineJoin = lineJoin != null ? lineJoin : 'miter';
+    lineCap = lineCap != null ? lineCap : 'butt';
+    miterLimit = miterLimit != null ? miterLimit : 4;
 
-  
-
-
-  static getStrokeStyle( width, color, lineJoin, lineCap, miterLimit ) {
-
-		// Param width: Stroke width
-		// Param color: As returned by THREE.Color.getStyle()
-		// Param lineJoin: One of "round", "bevel", "miter" or "miter-limit"
-		// Param lineCap: One of "round", "square" or "butt"
-		// Param miterLimit: Maximum join length, in multiples of the "width" parameter (join is truncated if it exceeds that distance)
-		// Returns style object
-
-		width = width != null ? width : 1;
-		color = color != null ? color : '#000';
-		lineJoin = lineJoin != null ? lineJoin : 'miter';
-		lineCap = lineCap != null ? lineCap : 'butt';
-		miterLimit = miterLimit != null ? miterLimit : 4;
-
-		return {
-			"strokeColor": color,
-			"strokeWidth": width,
-			"strokeLineJoin": lineJoin,
-			"strokeLineCap": lineCap,
-			"strokeMiterLimit": miterLimit
-		};
-
-	}
-
-
-
-  
-
+    return {
+      "strokeColor": color,
+      "strokeWidth": width,
+      "strokeLineJoin": lineJoin,
+      "strokeLineCap": lineCap,
+      "strokeMiterLimit": miterLimit
+    };
+  }
 }

@@ -3,7 +3,9 @@ part of three_webgl;
 class WebGLParameters {
   late bool isWebGL2;
 
-  late int format;
+
+  int? customVertexShaderID;
+  int? customFragmentShaderID;
 
   String? shaderID;
   late String shaderName;
@@ -24,36 +26,31 @@ class WebGLParameters {
   late bool supportsVertexTextures;
   late int outputEncoding;
   late bool map;
-  late int mapEncoding;
   late bool matcap;
-  late int matcapEncoding;
   late bool envMap;
   int? envMapMode;
-  late int envMapEncoding;
   late bool envMapCubeUV;
   late bool lightMap;
-  late int lightMapEncoding;
   late bool aoMap;
   late bool emissiveMap;
-  late int emissiveMapEncoding;
   late bool bumpMap;
   late bool normalMap;
   late bool objectSpaceNormalMap;
   late bool tangentSpaceNormalMap;
+
+  late bool clearcoat;
   late bool clearcoatMap;
   late bool clearcoatRoughnessMap;
   late bool clearcoatNormalMap;
+
   late bool displacementMap;
   late bool roughnessMap;
   late bool metalnessMap;
   late bool specularMap;
   late bool specularIntensityMap;
   late bool specularColorMap;
-  late int specularColorMapEncoding;
   late bool alphaMap;
   late bool sheenColorMap;
-
-  late int sheenColorMapEncoding;
 
   late bool gradientMap;
   late bool sheenRoughnessMap;
@@ -102,7 +99,7 @@ class WebGLParameters {
   late bool doubleSided;
   late bool flipSided;
 
-  late int depthPacking;
+  int? depthPacking;
 
   String? index0AttributeName;
 
@@ -116,15 +113,22 @@ class WebGLParameters {
   late bool rendererExtensionShaderTextureLod;
   late String customProgramCacheKey;
 
+  late bool decodeVideoTexture;
+
   Map<String, dynamic>? uniforms;
 
   dynamic vertexAlphas;
   late bool flipNormalScaleY;
 
+  late num morphTargetsCount;
+  late bool transparent;
+
   WebGLParameters(Map<String, dynamic> json) {
-    format = json["format"];
     isWebGL2 = json["isWebGL2"];
     shaderID = json["shaderID"];
+    customVertexShaderID = json["customVertexShaderID"];
+    customFragmentShaderID = json["customFragmentShaderID"];
+
     shaderName = json["shaderName"];
 
     vertexShader = json["vertexShader"];
@@ -143,40 +147,36 @@ class WebGLParameters {
     supportsVertexTextures = json["supportsVertexTextures"];
     outputEncoding = json["outputEncoding"];
     map = json["map"];
-    mapEncoding = json["mapEncoding"];
     matcap = json["matcap"];
-    matcapEncoding = json["matcapEncoding"];
     envMap = json["envMap"];
     envMapMode = json["envMapMode"];
-    envMapEncoding = json["envMapEncoding"];
     envMapCubeUV = json["envMapCubeUV"];
     lightMap = json["lightMap"];
-    lightMapEncoding = json["lightMapEncoding"];
     aoMap = json["aoMap"];
     emissiveMap = json["emissiveMap"];
 
-    emissiveMapEncoding = json["emissiveMapEncoding"];
     bumpMap = json["bumpMap"];
     normalMap = json["normalMap"];
     objectSpaceNormalMap = json["objectSpaceNormalMap"];
     tangentSpaceNormalMap = json["tangentSpaceNormalMap"];
-    clearcoatMap = json["clearcoatMap"];
 
+    clearcoat = json["clearcoat"];
+    clearcoatMap = json["clearcoatMap"];
     clearcoatRoughnessMap = json["clearcoatRoughnessMap"];
     clearcoatNormalMap = json["clearcoatNormalMap"];
+
     displacementMap = json["displacementMap"];
     roughnessMap = json["roughnessMap"];
     metalnessMap = json["metalnessMap"];
     specularMap = json["specularMap"];
     specularIntensityMap = json["specularIntensityMap"];
     specularColorMap = json["specularColorMap"];
-    specularColorMapEncoding = json["specularColorMapEncoding"];
     alphaMap = json["alphaMap"];
     gradientMap = json["gradientMap"];
     transmission = json["transmission"];
     transmissionMap = json["transmissionMap"];
     thicknessMap = json["thicknessMap"];
-    
+
     sheen = json["sheen"];
     sheenColorMap = json["sheenColorMap"];
     sheenRoughnessMap = json["sheenRoughnessMap"];
@@ -242,8 +242,11 @@ class WebGLParameters {
 
     flipNormalScaleY = json["flipNormalScaleY"];
 
-    sheenColorMapEncoding = json["sheenColorMapEncoding"];
-    sheenColorMapEncoding = json["sheenColorMapEncoding"];
+
+    decodeVideoTexture = json["decodeVideoTexture"];
+    morphTargetsCount = json["morphTargetsCount"];
+    transparent = json["transparent"];
+
   }
 
   getValue(String name) {
@@ -254,9 +257,10 @@ class WebGLParameters {
 
   toJSON() {
     Map<String, dynamic> _json = {
-      "format": format,
       "isWebGL2": isWebGL2,
       "shaderID": shaderID,
+      "customVertexShaderID": customVertexShaderID,
+      "customFragmentShaderID": customFragmentShaderID,
       "shaderName": shaderName,
       "vertexShader": vertexShader,
       "fragmentShader": fragmentShader,
@@ -269,22 +273,18 @@ class WebGLParameters {
       "supportsVertexTextures": supportsVertexTextures,
       "outputEncoding": outputEncoding,
       "map": map,
-      "mapEncoding": mapEncoding,
       "matcap": matcap,
-      "matcapEncoding": matcapEncoding,
       "envMap": envMap,
       "envMapMode": envMapMode,
-      "envMapEncoding": envMapEncoding,
       "envMapCubeUV": envMapCubeUV,
       "lightMap": lightMap,
-      "lightMapEncoding": lightMapEncoding,
       "aoMap": aoMap,
       "emissiveMap": emissiveMap,
-      "emissiveMapEncoding": emissiveMapEncoding,
       "bumpMap": bumpMap,
       "normalMap": normalMap,
       "objectSpaceNormalMap": objectSpaceNormalMap,
       "tangentSpaceNormalMap": tangentSpaceNormalMap,
+      "clearcoat": clearcoat,
       "clearcoatMap": clearcoatMap,
       "clearcoatRoughnessMap": clearcoatRoughnessMap,
       "clearcoatNormalMap": clearcoatNormalMap,
@@ -294,7 +294,6 @@ class WebGLParameters {
       "specularMap": specularMap,
       "specularIntensityMap": specularIntensityMap,
       "specularColorMap": specularColorMap,
-      "specularColorMapEncoding": specularColorMapEncoding,
       "alphaMap": alphaMap,
       "gradientMap": gradientMap,
       "sheenColorMap": sheenColorMap,
@@ -352,8 +351,9 @@ class WebGLParameters {
       "uniforms": uniforms,
       "vertexAlphas": vertexAlphas,
       "flipNormalScaleY": flipNormalScaleY,
-      "sheenColorMapEncoding": sheenColorMapEncoding,
-      "sheenColorMapEncoding": sheenColorMapEncoding
+      "decodeVideoTexture": decodeVideoTexture,
+      "morphTargetsCount": morphTargetsCount,
+      "transparent": transparent
     };
 
     return _json;

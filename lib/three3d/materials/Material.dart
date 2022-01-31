@@ -18,7 +18,6 @@ class Material with EventDispatcher {
   Vector2? clearcoatNormalScale;
 
   num opacity = 1;
-  int format = RGBAFormat;
   bool transparent = false;
   int blendSrc = SrcAlphaFactor;
   int blendDst = OneMinusSrcAlphaFactor;
@@ -29,10 +28,10 @@ class Material with EventDispatcher {
   int depthFunc = LessEqualDepth;
   bool depthTest = true;
   bool depthWrite = true;
-  num stencilWriteMask = 0xff;
+  int stencilWriteMask = 0xff;
   int stencilFunc = AlwaysStencilFunc;
-  num stencilRef = 0;
-  num stencilFuncMask = 0xff;
+  int stencilRef = 0;
+  int stencilFuncMask = 0xff;
   int stencilFail = KeepStencilOp;
   int stencilZFail = KeepStencilOp;
   int stencilZPass = KeepStencilOp;
@@ -56,13 +55,12 @@ class Material with EventDispatcher {
   num _alphaTest = 0;
   num get alphaTest => _alphaTest;
   set alphaTest(num value) {
-    if ( (this._alphaTest > 0) != (value > 0) ) {
-			this.version ++;
-		}
+    if ((this._alphaTest > 0) != (value > 0)) {
+      this.version++;
+    }
 
-		this._alphaTest = value;
+    this._alphaTest = value;
   }
-
 
   num _clearcoat = 0;
   num get clearcoat => _clearcoat;
@@ -119,17 +117,14 @@ class Material with EventDispatcher {
   num sheenRoughness = 1.0;
   Texture? sheenRoughnessMap;
 
-
   num _transmission = 0.0;
   num get transmission => _transmission;
   set transmission(num value) {
-    if ( (this._transmission > 0) != (value > 0) ) {
+    if ((this._transmission > 0) != (value > 0)) {
+      this.version++;
+    }
 
-			this.version ++;
-
-		}
-
-		this._transmission = value;
+    this._transmission = value;
   }
 
   Texture? transmissionMap;
@@ -308,6 +303,8 @@ class Material with EventDispatcher {
       } else {
         color = Color(0, 0, 0).setHex(newValue);
       }
+    } else if (key == "colorWrite") {
+      colorWrite = newValue;  
     } else if (key == "defines") {
       defines = newValue;
     } else if (key == "depthPacking") {
@@ -454,12 +451,13 @@ class Material with EventDispatcher {
 
     if (this.roughness != null) data["roughness"] = this.roughness;
     if (this.metalness != null) data["metalness"] = this.metalness;
-    
 
-    if ( this.sheen != null ) data["sheen"] = this.sheen;
-		if ( this.sheenColor != null && this.sheenColor is Color ) data["sheenColor"] = this.sheenColor!.getHex();
-		if ( this.sheenRoughness != null ) data["sheenRoughness"] = this.sheenRoughness;
-    
+    if (this.sheen != null) data["sheen"] = this.sheen;
+    if (this.sheenColor != null && this.sheenColor is Color)
+      data["sheenColor"] = this.sheenColor!.getHex();
+    if (this.sheenRoughness != null)
+      data["sheenRoughness"] = this.sheenRoughness;
+
     if (this.emissive != null && this.emissive!.isColor)
       data["emissive"] = this.emissive!.getHex();
     if (this.emissiveIntensity != null && this.emissiveIntensity != 1)
@@ -578,7 +576,6 @@ class Material with EventDispatcher {
     if (this.vertexColors) data["vertexColors"] = true;
 
     if (this.opacity < 1) data["opacity"] = this.opacity;
-    if ( this.format != RGBAFormat ) data["format"] = this.format;
     if (this.transparent == true) data["transparent"] = this.transparent;
 
     data["depthFunc"] = this.depthFunc;
@@ -671,7 +668,6 @@ class Material with EventDispatcher {
     this.vertexColors = source.vertexColors;
 
     this.opacity = source.opacity;
-    this.format = source.format;
     this.transparent = source.transparent;
 
     this.blendSrc = source.blendSrc;

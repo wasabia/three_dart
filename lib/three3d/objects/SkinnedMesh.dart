@@ -100,7 +100,7 @@ class SkinnedMesh extends Mesh {
     _skinWeight.fromBufferAttribute(
         geometry.attributes["skinWeight"], index, null);
 
-    _basePosition.copy( target ).applyMatrix4( this.bindMatrix );
+    _basePosition.copy(target).applyMatrix4(this.bindMatrix);
 
     target.set(0, 0, 0);
 

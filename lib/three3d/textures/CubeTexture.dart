@@ -9,7 +9,6 @@ class CubeTexture extends Texture {
             anisotropy, encoding) {
     images = images != null ? images : [];
     mapping = mapping != null ? mapping : CubeReflectionMapping;
-    format = format != null ? format : RGBFormat;
 
     this.flipY = false;
   }

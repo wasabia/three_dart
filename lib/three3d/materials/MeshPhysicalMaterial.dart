@@ -42,7 +42,7 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
   // null will disable sheenColor bsdf
   Color? sheenColor;
 
-  num? thickness = 0.01;
+  num? thickness = 0.0;
 
   Color? attenuationColor = new Color(1, 1, 1);
   num? attenuationDistance = 0.0;

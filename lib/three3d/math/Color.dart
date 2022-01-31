@@ -181,16 +181,14 @@ class Color {
   // need fix
   bool isTexture = false;
 
-
   // set default value
-  // var c = Color(); 
+  // var c = Color();
   // r g b is all 1.0;
   num r = 1.0;
   num g = 1.0;
   num b = 1.0;
 
   static const Map<String, int> NAMES = _colorKeywords;
-
 
   /// Color class.
   /// r g b value range (0.0 ~ 1.0)
@@ -199,36 +197,32 @@ class Color {
   /// var color = Color("#ff00ee");
   /// r is THREE.Color, hex or string
   Color([r, num? g, num? b]) {
-
-    if ( g == null && b == null ) {
-
-			// r is THREE.Color, hex or string
-			this.set( r );
-      
-		} else {
-      this.setRGB( r, g, b );
+    if (g == null && b == null) {
+      // r is THREE.Color, hex or string
+      this.set(r);
+    } else {
+      this.setRGB(r, g, b);
     }
   }
 
-  set( value ) {
+  // value Color | int | String
+  set(value) {
+    if(value == null) {
+      return this;
+    }
 
-		if ( value is Color ) {
+    if (value is Color) {
+      this.copy(value);
+    } else if (value is int) {
+      this.setHex(value);
+    } else if (value is String) {
+      this.setStyle(value);
+    } else {
+      throw(" Color set use not support type ${value.runtimeType} value: ${value} ");
+    }
 
-			this.copy( value );
-
-		} else if ( value is int ) {
-
-			this.setHex( value );
-
-		} else if ( value is String ) {
-
-			this.setStyle( value );
-
-		}
-
-		return this;
-
-	}
+    return this;
+  }
 
   //
   factory Color.setRGB255(int r, int g, int b) {
@@ -477,7 +471,7 @@ class Color {
   }
 
   convertGammaToLinear([gammaFactor]) {
-    if(gammaFactor == null) {
+    if (gammaFactor == null) {
       this.copyGammaToLinear(this);
     } else {
       this.copyGammaToLinear(this, gammaFactor);
@@ -487,7 +481,7 @@ class Color {
   }
 
   convertLinearToGamma([gammaFactor]) {
-    if(gammaFactor == null) {
+    if (gammaFactor == null) {
       this.copyLinearToGamma(this);
     } else {
       this.copyLinearToGamma(this, gammaFactor);
@@ -532,7 +526,7 @@ class Color {
 
   String getHexString() {
     String _str = ('000000' + this.getHex().toRadixString(16));
-    return _str.substring(_str.length-6);
+    return _str.substring(_str.length - 6);
   }
 
   // target map target = { "h": 0, "s": 0, "l": 0 };
@@ -685,8 +679,7 @@ class Color {
   /// dart array can not expand default
   /// so have to set array length enough first.
   toArray([array, int offset = 0]) {
-
-    if(array == null) {
+    if (array == null) {
       array = List<num>.filled(3, 0.0);
     }
 
@@ -716,5 +709,4 @@ class Color {
   toJSON() {
     return this.getHex();
   }
-
 }

@@ -25,6 +25,8 @@ class WebGLState {
 
   dynamic xrFramebuffer;
   Map currentBoundFramebuffers = {};
+  WeakMap currentDrawbuffers = new WeakMap();
+	var defaultDrawbuffers = [];
 
   dynamic currentProgram;
 
@@ -118,21 +120,14 @@ class WebGLState {
       OneMinusDstAlphaFactor: gl.ONE_MINUS_DST_ALPHA
     };
 
-    // scissorParam = gl.getParameter( gl.SCISSOR_BOX );
-    // viewportParam = gl.getParameter( gl.VIEWPORT );
+    scissorParam = gl.getParameter( gl.SCISSOR_BOX );
+    viewportParam = gl.getParameter( gl.VIEWPORT );
 
-    // currentScissor = new Vector4.init().fromArray( scissorParam );
-    // currentViewport = new Vector4.init().fromArray( viewportParam );
-
-    print(" WebGLState..................init........... ");
-    var _data = gl.getParameter(gl.SCISSOR_BOX);
-    print(" WebGLState. getParameter _data: ${_data}");
-
-    currentScissor = new Vector4.init();
-    currentViewport = new Vector4.init();
+    currentScissor = new Vector4.init().fromArray( scissorParam );
+    currentViewport = new Vector4.init().fromArray( viewportParam );
   }
 
-  createTexture(int type, int target, num count) {
+  createTexture(int type, int target, int count) {
     var data = Uint8Array(4);
     // 4 is required to match default unpack alignment of 4.
     //
@@ -149,8 +144,6 @@ class WebGLState {
 
     return texture;
   }
-
-  //
 
   enable(id) {
     if (enabledCapabilities[id] != true) {
@@ -200,6 +193,95 @@ class WebGLState {
 
     return false;
   }
+
+  drawBuffers( renderTarget, framebuffer ) {
+
+		dynamic drawBuffers = defaultDrawbuffers;
+
+		var needsUpdate = false;
+
+		if ( renderTarget != null ) {
+
+			drawBuffers = currentDrawbuffers.get( framebuffer );
+
+			if ( drawBuffers == null ) {
+
+				drawBuffers = [];
+				currentDrawbuffers.set( framebuffer, drawBuffers );
+
+			}
+
+			if ( renderTarget.isWebGLMultipleRenderTargets ) {
+
+				var textures = renderTarget.texture;
+
+				if ( drawBuffers.length != textures.length || drawBuffers[ 0 ] != gl.COLOR_ATTACHMENT0 ) {
+
+					for ( var i = 0, il = textures.length; i < il; i ++ ) {
+
+						drawBuffers[ i ] = gl.COLOR_ATTACHMENT0 + i;
+
+					}
+
+					drawBuffers.length = textures.length;
+
+					needsUpdate = true;
+
+				}
+
+			} else {
+
+				if ( drawBuffers.length == 0 || drawBuffers[ 0 ] != gl.COLOR_ATTACHMENT0 ) {
+
+          if(drawBuffers.length == 0) {
+            drawBuffers.add( gl.COLOR_ATTACHMENT0 );
+          } else {
+            drawBuffers[ 0 ] = gl.COLOR_ATTACHMENT0;
+          }
+
+					
+					drawBuffers.length = 1;
+
+					needsUpdate = true;
+
+				}
+
+			}
+
+		} else {
+
+			if ( drawBuffers.length == 0 || drawBuffers[ 0 ] != gl.BACK ) {
+        if(drawBuffers.length == 0) {
+          drawBuffers.add( gl.BACK );
+        } else {
+          drawBuffers[ 0 ] = gl.BACK;
+        }
+				
+				drawBuffers.length = 1;
+
+				needsUpdate = true;
+
+			}
+
+		}
+
+		if ( needsUpdate ) {
+
+			if ( capabilities.isWebGL2 ) {
+
+				gl.drawBuffers( List<int>.from( drawBuffers ) );
+
+			} else {
+
+				extensions.get( 'WEBGL_draw_buffers' ).drawBuffersWEBGL( List<int>.from(drawBuffers) );
+
+			}
+
+		}
+
+
+	}
+
 
   useProgram(program) {
     if (currentProgram != program) {
@@ -502,11 +584,93 @@ class WebGLState {
     }
   }
 
-  compressedTexImage2D(int target, int level, int internalformat, int width,
-      int height, int border, imageSize, data) {
-    gl.compressedTexImage2D(
-        target, level, internalformat, width, height, border, imageSize, data);
+  compressedTexImage2D(target, level, internalformat, width, height, border, pixels) {
+    gl.compressedTexImage2D(target, level, internalformat, width, height, border, pixels);
   }
+
+  texSubImage2D(target, level, x, y, width, height, glFormat, glType, data) {
+
+		// try {
+
+			gl.texSubImage2D( target, level, x, y, width, height, glFormat, glType, data );
+
+		// } catch ( error ) {
+
+		// 	print( 'THREE.WebGLState: ${error}' );
+
+		// }
+
+	}
+
+  texSubImage2D_NOSIZE(target, level, x, y, glFormat, glType, data) {
+
+		// try {
+
+			gl.texSubImage2D_NOSIZE( target, level, x, y, glFormat, glType, data );
+
+		// } catch ( error ) {
+
+		// 	print( 'THREE.WebGLState: ${error}' );
+
+		// }
+
+	}
+
+  texSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels) {
+
+		try {
+
+			gl.texSubImage3D( target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels );
+
+		} catch ( error ) {
+
+			console.error( 'THREE.WebGLState:', error );
+
+		}
+
+	}
+
+	compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, pixels) {
+
+		try {
+
+			gl.compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, pixels);
+
+		} catch ( error ) {
+
+			console.error( 'THREE.WebGLState:', error );
+
+		}
+
+	}
+
+	texStorage2D(int type, int levels, int glInternalFormat, width, height) {
+
+		// try {
+
+			gl.texStorage2D( type, levels, glInternalFormat, width.toInt(), height.toInt() );
+
+		// } catch ( error ) {
+
+		// 	print( 'THREE.WebGLState: ${error}' );
+
+		// }
+
+	}
+
+  texStorage3D(target, levels, internalformat, width, height, depth) {
+
+		try {
+
+			gl.texStorage3D( target, levels, internalformat, width, height, depth );
+
+		} catch ( error ) {
+
+			console.error( 'THREE.WebGLState:', error );
+
+		}
+
+	}
 
   texImage2D(int target, int level, int internalformat, width, height, border,
       int format, int type, data) {
@@ -604,7 +768,9 @@ class WebGLState {
 
     xrFramebuffer = null;
     currentBoundFramebuffers = {};
-
+    currentDrawbuffers = new WeakMap();
+		defaultDrawbuffers = [];
+    
     currentProgram = null;
 
     currentBlendingEnabled = false;
@@ -690,7 +856,7 @@ class DepthBuffer {
   bool? currentDepthMask = null;
 
   int? currentDepthFunc;
-  num? currentDepthClear = null;
+  int? currentDepthClear;
 
   DepthBuffer(this.gl) {}
 
@@ -760,7 +926,7 @@ class DepthBuffer {
     locked = lock;
   }
 
-  setClear(num depth) {
+  setClear(int depth) {
     if (currentDepthClear != depth) {
       gl.clearDepth(depth);
       currentDepthClear = depth;
@@ -784,14 +950,14 @@ class StencilBuffer {
   late Function enable;
   late Function disable;
 
-  num? currentStencilMask = null;
-  num? currentStencilFunc = null;
-  num? currentStencilRef = null;
-  num? currentStencilFuncMask = null;
-  num? currentStencilFail = null;
-  num? currentStencilZFail = null;
-  num? currentStencilZPass = null;
-  num? currentStencilClear = null;
+  int? currentStencilMask;
+  int? currentStencilFunc;
+  int? currentStencilRef;
+  int? currentStencilFuncMask;
+  int? currentStencilFail;
+  int? currentStencilZFail;
+  int? currentStencilZPass;
+  int? currentStencilClear;
 
   StencilBuffer(this.gl) {}
 
@@ -805,14 +971,14 @@ class StencilBuffer {
     }
   }
 
-  setMask(num stencilMask) {
+  setMask(int stencilMask) {
     if (currentStencilMask != stencilMask && !locked) {
       gl.stencilMask(stencilMask);
       currentStencilMask = stencilMask;
     }
   }
 
-  setFunc(num stencilFunc, num stencilRef, num stencilMask) {
+  setFunc(int stencilFunc, int stencilRef, int stencilMask) {
     if (currentStencilFunc != stencilFunc ||
         currentStencilRef != stencilRef ||
         currentStencilFuncMask != stencilMask) {
@@ -824,7 +990,7 @@ class StencilBuffer {
     }
   }
 
-  setOp(num stencilFail, num stencilZFail, num stencilZPass) {
+  setOp(int stencilFail, int stencilZFail, int stencilZPass) {
     if (currentStencilFail != stencilFail ||
         currentStencilZFail != stencilZFail ||
         currentStencilZPass != stencilZPass) {
@@ -840,7 +1006,7 @@ class StencilBuffer {
     locked = lock;
   }
 
-  setClear(num stencil) {
+  setClear(int stencil) {
     if (currentStencilClear != stencil) {
       gl.clearStencil(stencil);
       currentStencilClear = stencil;

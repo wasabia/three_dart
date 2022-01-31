@@ -110,12 +110,6 @@ class WebGLMaterials {
       uniforms["reflectivity"]["value"] = material.reflectivity;
       uniforms["ior"]["value"] = material.ior;
       uniforms["refractionRatio"]["value"] = material.refractionRatio;
-
-      var maxMipLevel = properties.get(envMap)["__maxMipLevel"];
-
-      if (maxMipLevel != null) {
-        uniforms["maxMipLevel"]["value"] = maxMipLevel;
-      }
     }
 
     if (material.lightMap != null) {
@@ -172,14 +166,14 @@ class WebGLMaterials {
       uvScaleMap = material.specularIntensityMap;
     } else if (material.specularColorMap != null) {
       uvScaleMap = material.specularColorMap;
-    } else if ( material.transmissionMap != null ) {
-			uvScaleMap = material.transmissionMap;
-		} else if ( material.thicknessMap != null ) {
-			uvScaleMap = material.thicknessMap;  
-    } else if ( material.sheenColorMap != null ) {
-			uvScaleMap = material.sheenColorMap;
-		} else if ( material.sheenRoughnessMap != null ) {
-			uvScaleMap = material.sheenRoughnessMap;
+    } else if (material.transmissionMap != null) {
+      uvScaleMap = material.transmissionMap;
+    } else if (material.thicknessMap != null) {
+      uvScaleMap = material.thicknessMap;
+    } else if (material.sheenColorMap != null) {
+      uvScaleMap = material.sheenColorMap;
+    } else if (material.sheenRoughnessMap != null) {
+      uvScaleMap = material.sheenRoughnessMap;
     }
 
     if (uvScaleMap != null) {
@@ -423,18 +417,13 @@ class WebGLMaterials {
 
       uniforms["sheenRoughness"]["value"] = material.sheenRoughness;
 
-      if ( material.sheenColorMap != null ) {
+      if (material.sheenColorMap != null) {
+        uniforms["sheenColorMap"]["value"] = material.sheenColorMap;
+      }
 
-				uniforms["sheenColorMap"]["value"] = material.sheenColorMap;
-
-			}
-
-			if ( material.sheenRoughnessMap != null ) {
-
-				uniforms["sheenRoughnessMap"]["value"] = material.sheenRoughnessMap;
-
-			}
-
+      if (material.sheenRoughnessMap != null) {
+        uniforms["sheenRoughnessMap"]["value"] = material.sheenRoughnessMap;
+      }
     }
 
     if (material.clearcoat > 0) {
@@ -461,31 +450,26 @@ class WebGLMaterials {
       }
     }
 
-    if ( material.transmission > 0 ) {
-
+    if (material.transmission > 0) {
       uniforms["transmission"]["value"] = material.transmission;
-      uniforms["transmissionSamplerMap"]["value"] = transmissionRenderTarget.texture;
-      uniforms["transmissionSamplerSize"]["value"].set( transmissionRenderTarget.width, transmissionRenderTarget.height );
+      uniforms["transmissionSamplerMap"]["value"] =
+          transmissionRenderTarget.texture;
+      uniforms["transmissionSamplerSize"]["value"]
+          .set(transmissionRenderTarget.width, transmissionRenderTarget.height);
 
-      if ( material.transmissionMap != null ) {
-
+      if (material.transmissionMap != null) {
         uniforms["transmissionMap"]["value"] = material.transmissionMap;
-
       }
 
       uniforms["thickness"]["value"] = material.thickness;
 
-      if ( material.thicknessMap != null ) {
-
+      if (material.thicknessMap != null) {
         uniforms["thicknessMap"]["value"] = material.thicknessMap;
-
       }
-
     }
 
     uniforms["attenuationDistance"]["value"] = material.attenuationDistance;
-    uniforms["attenuationColor"]["value"].copy( material.attenuationColor );
-
+    uniforms["attenuationColor"]["value"].copy(material.attenuationColor);
 
     uniforms["specularIntensity"]["value"] = material.specularIntensity;
     uniforms["attenuationColor"]["value"].copy(material.attenuationColor);

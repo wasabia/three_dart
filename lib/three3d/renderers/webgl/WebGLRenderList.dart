@@ -44,9 +44,8 @@ class RenderItem {
 }
 
 class WebGLRenderList {
-  WebGLProperties properties;
 
-  WebGLRenderList(this.properties) {}
+  WebGLRenderList() {}
 
   Map<int, RenderItem> renderItems = {};
   var renderItemsIndex = 0;
@@ -67,15 +66,13 @@ class WebGLRenderList {
 
   getNextRenderItem(object, geometry, material, groupOrder, z, group) {
     var renderItem = renderItems[renderItemsIndex];
-    var materialProperties = this.properties.get(material);
-
+  
     if (renderItem == null) {
       renderItem = RenderItem({
         "id": object.id,
         "object": object,
         "geometry": geometry,
         "material": material,
-        "program": materialProperties["program"] ?? defaultProgram,
         "groupOrder": groupOrder,
         "renderOrder": object.renderOrder,
         "z": z,
@@ -88,7 +85,6 @@ class WebGLRenderList {
       renderItem.object = object;
       renderItem.geometry = geometry;
       renderItem.material = material;
-      renderItem.program = materialProperties["program"] ?? defaultProgram;
       renderItem.groupOrder = groupOrder;
       renderItem.renderOrder = object.renderOrder;
       renderItem.z = z;

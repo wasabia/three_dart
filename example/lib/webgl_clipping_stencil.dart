@@ -191,6 +191,7 @@ class _State extends State<webgl_clipping_stencil> {
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = true;
     renderer!.localClippingEnabled = true;
+    renderer!.setClearColor( 0x263238 );
 
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
@@ -209,32 +210,57 @@ class _State extends State<webgl_clipping_stencil> {
 
   createPlaneStencilGroup(geometry, plane, renderOrder) {
     var group = new THREE.Group();
-    var baseMat = new THREE.MeshBasicMaterial();
-    baseMat.depthWrite = false;
-    baseMat.depthTest = false;
-    baseMat.colorWrite = false;
-    baseMat.stencilWrite = true;
-    baseMat.stencilFunc = THREE.AlwaysStencilFunc;
+    var baseMat = new THREE.MeshBasicMaterial({
+      "depthWrite": false,
+      "depthTest": false,
+      "colorWrite": false,
+      "stencilWrite": true,
+      "stencilFunc": THREE.AlwaysStencilFunc
+    });
 
     // back faces
-    var mat0 = baseMat.clone();
-    mat0.side = THREE.BackSide;
-    mat0.clippingPlanes = List<THREE.Plane>.from([plane]);
-    mat0.stencilFail = THREE.IncrementWrapStencilOp;
-    mat0.stencilZFail = THREE.IncrementWrapStencilOp;
-    mat0.stencilZPass = THREE.IncrementWrapStencilOp;
+    // var mat0 = baseMat.clone();
+    // mat0.side = THREE.BackSide;
+    // mat0.clippingPlanes = List<THREE.Plane>.from([plane]);
+    // mat0.stencilFail = THREE.IncrementWrapStencilOp;
+    // mat0.stencilZFail = THREE.IncrementWrapStencilOp;
+    // mat0.stencilZPass = THREE.IncrementWrapStencilOp;
+    var mat0 = new THREE.MeshBasicMaterial({
+      "side": THREE.BackSide,
+      "clippingPlanes": List<THREE.Plane>.from([plane]),
+      "stencilFail": THREE.IncrementWrapStencilOp,
+      "stencilZFail": THREE.IncrementWrapStencilOp,
+      "stencilZPass": THREE.IncrementWrapStencilOp,
+      "depthWrite": false,
+      "depthTest": false,
+      "colorWrite": false,
+      "stencilWrite": true,
+      "stencilFunc": THREE.AlwaysStencilFunc
+    });
 
     var mesh0 = new THREE.Mesh(geometry, mat0);
     mesh0.renderOrder = renderOrder;
     group.add(mesh0);
 
     // front faces
-    var mat1 = baseMat.clone();
-    mat1.side = THREE.FrontSide;
-    mat1.clippingPlanes = List<THREE.Plane>.from([plane]);
-    mat1.stencilFail = THREE.DecrementWrapStencilOp;
-    mat1.stencilZFail = THREE.DecrementWrapStencilOp;
-    mat1.stencilZPass = THREE.DecrementWrapStencilOp;
+    // var mat1 = baseMat.clone();
+    // mat1.side = THREE.FrontSide;
+    // mat1.clippingPlanes = List<THREE.Plane>.from([plane]);
+    // mat1.stencilFail = THREE.DecrementWrapStencilOp;
+    // mat1.stencilZFail = THREE.DecrementWrapStencilOp;
+    // mat1.stencilZPass = THREE.DecrementWrapStencilOp;
+    var mat1 = new THREE.MeshBasicMaterial({
+      "side": THREE.BackSide,
+      "clippingPlanes": List<THREE.Plane>.from([plane]),
+      "stencilFail": THREE.DecrementWrapStencilOp,
+      "stencilZFail": THREE.DecrementWrapStencilOp,
+      "stencilZPass": THREE.DecrementWrapStencilOp,
+      "depthWrite": false,
+      "depthTest": false,
+      "colorWrite": false,
+      "stencilWrite": true,
+      "stencilFunc": THREE.AlwaysStencilFunc
+    });
 
     var mesh1 = new THREE.Mesh(geometry, mat1);
     mesh1.renderOrder = renderOrder;
@@ -275,7 +301,7 @@ class _State extends State<webgl_clipping_stencil> {
     planeHelpers =
         planes.map((p) => new THREE.PlaneHelper(p, 2, 0xffffff)).toList();
     planeHelpers.forEach((ph) {
-      ph.visible = false;
+      ph.visible = true;
       scene.add(ph);
     });
 
@@ -287,19 +313,19 @@ class _State extends State<webgl_clipping_stencil> {
     planeObjects = [];
     var planeGeom = new THREE.PlaneGeometry(4, 4);
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 1; i++) {
       var poGroup = new THREE.Group();
       var plane = planes[i];
       var stencilGroup = createPlaneStencilGroup(geometry, plane, i + 1);
 
-      var _planes = planes.where((p) => p != plane).toList();
+      List<THREE.Plane> _planes = planes.where((p) => p != plane).toList();
 
       // plane is clipped by the other clipping planes
       var planeMat = new THREE.MeshStandardMaterial({
         "color": 0xff00ff,
         "metalness": 0.1,
         "roughness": 0.75,
-        "clippingPlanes": _planes,
+        "clippingPlanes": planes,
         "stencilWrite": true,
         "stencilRef": 0,
         "stencilFunc": THREE.NotEqualStencilFunc,
@@ -307,6 +333,8 @@ class _State extends State<webgl_clipping_stencil> {
         "stencilZFail": THREE.ReplaceStencilOp,
         "stencilZPass": THREE.ReplaceStencilOp,
       });
+
+
       var po = new THREE.Mesh(planeGeom, planeMat);
       // po.onAfterRender =  ( renderer ) {
 
@@ -316,7 +344,7 @@ class _State extends State<webgl_clipping_stencil> {
 
       po.renderOrder = i + 1.1;
 
-      object.add(stencilGroup);
+      // object.add(stencilGroup);
       poGroup.add(po);
       planeObjects.add(po);
       scene.add(poGroup);
@@ -332,10 +360,10 @@ class _State extends State<webgl_clipping_stencil> {
     });
 
     // add the color
-    var clippedColorFront = new THREE.Mesh(geometry, material);
-    clippedColorFront.castShadow = true;
-    clippedColorFront.renderOrder = 6;
-    object.add(clippedColorFront);
+    // var clippedColorFront = new THREE.Mesh(geometry, material);
+    // clippedColorFront.castShadow = true;
+    // clippedColorFront.renderOrder = 6;
+    // object.add(clippedColorFront);
 
     var ground = new THREE.Mesh(
         new THREE.PlaneGeometry(9, 9, 1, 1),

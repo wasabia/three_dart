@@ -56,6 +56,11 @@ class WeakMap<K, V> {
 
   V? operator [](K key) => get(key);
 
+
+  void set(key, value) {
+    add(key: key, value: value);
+  }
+
   void add({required K key, required V value}) {
     if (_allowedInExpando(key)) {
       _expando[key!] = value;

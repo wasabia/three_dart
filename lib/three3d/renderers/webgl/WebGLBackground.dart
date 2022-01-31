@@ -183,8 +183,8 @@ class WebGLBackground {
     return clearColor;
   }
 
-  setClearColor(Color color, {num alpha = 1}) {
-    clearColor.copy(color);
+  setClearColor(color, {num alpha = 1}) {
+    clearColor.set(color);
     clearAlpha = alpha;
     setClear(clearColor, clearAlpha);
   }

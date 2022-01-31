@@ -7,8 +7,7 @@ String map_particle_fragment = """
 
 #ifdef USE_MAP
 
-	vec4 mapTexel = texture2D( map, uv );
-	diffuseColor *= mapTexelToLinear( mapTexel );
+	diffuseColor *= texture2D( map, uv );
 
 #endif
 

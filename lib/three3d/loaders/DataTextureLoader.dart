@@ -9,7 +9,7 @@ part of three_loaders;
 class DataTextureLoader extends Loader {
   DataTextureLoader(manager) : super(manager) {}
 
-  load(url, onLoad, [onProgress, onError]) {
+  load(url, Function onLoad, [Function? onProgress, Function? onError]) {
     var scope = this;
 
     var texture = new DataTexture(

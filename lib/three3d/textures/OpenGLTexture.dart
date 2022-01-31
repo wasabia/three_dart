@@ -10,7 +10,7 @@ class OpenGLTexture extends Texture {
             anisotropy, null) {
     this.openGLTexture = openGLTexture;
 
-    this.format = format ?? RGBFormat;
+    this.format = format ?? RGBAFormat;
 
     this.minFilter = minFilter ?? LinearFilter;
     this.magFilter = magFilter ?? LinearFilter;

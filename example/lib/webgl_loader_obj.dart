@@ -220,8 +220,7 @@ class _MyAppState extends State<webgl_loader_obj> {
     texture.flipY = true;
 
     var loader = THREE_JSM.OBJLoader(null);
-    object =
-        await loader.loadAsync('assets/models/obj/male02/male02.obj');
+    object = await loader.loadAsync('assets/models/obj/male02/male02.obj');
 
     object.traverse((child) {
       if (child.isMesh) {

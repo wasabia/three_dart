@@ -65,7 +65,6 @@ class TextureLoader extends Loader {
       // print(" image.width: ${image.width} image.height: ${image.height} isJPEG: ${isJPEG} ");
 
       texture.image = imageElement;
-      texture.format = isJPEG ? RGBFormat : RGBAFormat;
       texture.needsUpdate = true;
 
       if (onLoad != null) {

@@ -9,8 +9,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('list test', () {
-    test('list test 0', () {
-      
-    });
+    test('list test 0', () {});
   });
 }

@@ -136,7 +136,8 @@ class Skeleton {
     var boneTexture = new DataTexture(_boneMatrices, size.toInt(), size.toInt(),
         RGBAFormat, FloatType, null, null, null, null, null, null, null);
     boneTexture.name = "DataTexture from Skeleton.computeBoneTexture";
-
+    boneTexture.needsUpdate = true;
+    
     this.boneMatrices.dispose();
 
     this.boneMatrices = _boneMatrices;

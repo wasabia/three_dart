@@ -27,8 +27,6 @@ class WebGLProgramExtra {
         return ['RGBD', '( value, 256.0 )'];
       case GammaEncoding:
         return ['Gamma', '( value, float( GAMMA_FACTOR ) )'];
-      case LogLuvEncoding:
-        return ['LogLuv', '( value )'];
       default:
         print('THREE.WebGLProgram: Unsupported encoding: ${encoding}');
         return ['Linear', '( value )'];
@@ -51,17 +49,6 @@ class WebGLProgramExtra {
         '\n' +
         log +
         addLineNumbers(source);
-  }
-
-  getTexelDecodingFunction(functionName, encoding) {
-    var components = getEncodingComponents(encoding);
-    return 'vec4 ' +
-        functionName +
-        '( vec4 value ) { return ' +
-        components[0] +
-        'ToLinear' +
-        components[1] +
-        '; }';
   }
 
   getTexelEncodingFunction(functionName, encoding) {

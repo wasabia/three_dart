@@ -16,7 +16,7 @@ class WebGLUtils {
     if (p == UnsignedByteType) return gl.UNSIGNED_BYTE;
     if (p == UnsignedShort4444Type) return gl.UNSIGNED_SHORT_4_4_4_4;
     if (p == UnsignedShort5551Type) return gl.UNSIGNED_SHORT_5_5_5_1;
-    if (p == UnsignedShort565Type) return gl.UNSIGNED_SHORT_5_6_5;
+   
 
     if (p == ByteType) return gl.BYTE;
     if (p == ShortType) return gl.SHORT;
@@ -38,7 +38,6 @@ class WebGLUtils {
     }
 
     if (p == AlphaFormat) return gl.ALPHA;
-    if (p == RGBFormat) return gl.RGB;
     if (p == RGBAFormat) return gl.RGBA;
     if (p == LuminanceFormat) return gl.LUMINANCE;
     if (p == LuminanceAlphaFormat) return gl.LUMINANCE_ALPHA;
@@ -46,12 +45,35 @@ class WebGLUtils {
     if (p == DepthStencilFormat) return gl.DEPTH_STENCIL;
     if (p == RedFormat) return gl.RED;
 
+    if ( p == RGBFormat ) {
+
+			console.warn( 'THREE.WebGLRenderer: THREE.RGBFormat has been removed. Use THREE.RGBAFormat instead. https://github.com/mrdoob/three.js/pull/23228' );
+			return gl.RGBA;
+
+		}
+
+    // WebGL 1 sRGB fallback
+		if ( p == gl.SRGBAFormat ) {
+
+			extension = extensions.get( 'EXT_sRGB' );
+
+			if ( extension != null ) {
+
+				return extension.SRGB_ALPHA_EXT;
+
+			} else {
+
+				return null;
+
+			}
+
+		}
+
     // WebGL2 formats.
 
     if (p == RedIntegerFormat) return gl.RED_INTEGER;
     if (p == RGFormat) return gl.RG;
     if (p == RGIntegerFormat) return gl.RG_INTEGER;
-    if (p == RGBIntegerFormat) return gl.RGB_INTEGER;
     if (p == RGBAIntegerFormat) return gl.RGBA_INTEGER;
 
     if (p == RGB_S3TC_DXT1_Format ||

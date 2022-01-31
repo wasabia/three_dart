@@ -45,9 +45,6 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     var envMapModeDefine = generateEnvMapModeDefine(parameters);
     var envMapBlendingDefine = generateEnvMapBlendingDefine(parameters);
 
-    num gammaFactorDefine =
-        (renderer.gammaFactor > 0) ? renderer.gammaFactor : 1.0;
-
     var customExtensions =
         parameters.isWebGL2 ? '' : generateExtensions(parameters);
 
@@ -85,7 +82,6 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.instancing ? '#define USE_INSTANCING' : '',
         parameters.instancingColor ? '#define USE_INSTANCING_COLOR' : '',
         parameters.supportsVertexTextures ? '#define VERTEX_TEXTURES' : '',
-        '#define GAMMA_FACTOR ${gammaFactorDefine}',
         '#define MAX_BONES ${parameters.maxBones}',
         (parameters.useFog && parameters.fog) ? '#define USE_FOG' : '',
         (parameters.useFog && parameters.fogExp2) ? '#define FOG_EXP2' : '',
@@ -123,7 +119,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.transmissionMap ? '#define USE_TRANSMISSIONMAP' : '',
         parameters.thicknessMap ? '#define USE_THICKNESSMAP' : '',
         parameters.sheenColorMap ? '#define USE_SHEENCOLORMAP' : '',
-			  parameters.sheenRoughnessMap ? '#define USE_SHEENROUGHNESSMAP' : '',
+        parameters.sheenRoughnessMap ? '#define USE_SHEENROUGHNESSMAP' : '',
         parameters.vertexTangents ? '#define USE_TANGENT' : '',
         parameters.vertexColors ? '#define USE_COLOR' : '',
         parameters.vertexAlphas ? '#define USE_COLOR_ALPHA' : '',
@@ -204,8 +200,6 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
         customDefines,
 
-        '#define GAMMA_FACTOR ${gammaFactorDefine}',
-
         (parameters.useFog && parameters.fog) ? '#define USE_FOG' : '',
         (parameters.useFog && parameters.fogExp2) ? '#define FOG_EXP2' : '',
 
@@ -242,11 +236,11 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.alphaTest ? '#define USE_ALPHATEST' : '',
         parameters.sheen ? '#define USE_SHEEN' : '',
         parameters.sheenColorMap ? '#define USE_SHEENCOLORMAP' : '',
-			  parameters.sheenRoughnessMap ? '#define USE_SHEENROUGHNESSMAP' : '',
+        parameters.sheenRoughnessMap ? '#define USE_SHEENROUGHNESSMAP' : '',
         parameters.transmission ? '#define USE_TRANSMISSION' : '',
         parameters.transmissionMap ? '#define USE_TRANSMISSIONMAP' : '',
         parameters.thicknessMap ? '#define USE_THICKNESSMAP' : '',
-
+        parameters.decodeVideoTexture ? '#define DECODE_VIDEO_TEXTURE' : '',
         parameters.vertexTangents ? '#define USE_TANGENT' : '',
         parameters.vertexColors || parameters.instancingColor
             ? '#define USE_COLOR'
@@ -297,35 +291,11 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
             : '',
 
         parameters.dithering ? '#define DITHERING' : '',
-        parameters.format == RGBFormat ? '#define OPAQUE' : '',
+        parameters.transparent ? '' : '#define OPAQUE',
 
         ShaderChunk[
             'encodings_pars_fragment'], // this code is required here because it is used by the various encoding/decoding defined below
-        parameters.map
-            ? getTexelDecodingFunction(
-                'mapTexelToLinear', parameters.mapEncoding)
-            : '',
-        parameters.matcap
-            ? getTexelDecodingFunction(
-                'matcapTexelToLinear', parameters.matcapEncoding)
-            : '',
-        parameters.envMap
-            ? getTexelDecodingFunction(
-                'envMapTexelToLinear', parameters.envMapEncoding)
-            : '',
-        parameters.emissiveMap
-            ? getTexelDecodingFunction(
-                'emissiveMapTexelToLinear', parameters.emissiveMapEncoding)
-            : '',
-        parameters.specularColorMap
-            ? getTexelDecodingFunction('specularColorMapTexelToLinear',
-                parameters.specularColorMapEncoding)
-            : '',
-        parameters.sheenColorMap ? getTexelDecodingFunction( 'sheenColorMapTexelToLinear', parameters.sheenColorMapEncoding ) : '', 
-        parameters.lightMap
-            ? getTexelDecodingFunction(
-                'lightMapTexelToLinear', parameters.lightMapEncoding)
-            : '',
+        
         getTexelEncodingFunction(
             'linearToOutputTexel', parameters.outputEncoding),
 
@@ -355,6 +325,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
           : "#version 300 es\n";
 
       prefixVertex = [
+            'precision mediump sampler2DArray;',
             '#define attribute in',
             '#define varying out',
             '#define texture2D texture'
@@ -366,7 +337,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
             '#define varying in',
             (parameters.glslVersion == GLSL3)
                 ? ''
-                : 'out highp vec4 pc_fragColor;',
+                : 'layout(location = 0) out highp vec4 pc_fragColor;',
             (parameters.glslVersion == GLSL3)
                 ? ''
                 : '#define gl_FragColor pc_fragColor',

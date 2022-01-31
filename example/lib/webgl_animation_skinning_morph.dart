@@ -242,8 +242,8 @@ class _State extends State<webgl_animation_skinning_morph> {
     scene.add(grid);
 
     var loader = new THREE_JSM.GLTFLoader(null);
-    var gltf = await loader.loadAsync(
-        'assets/models/gltf/RobotExpressive/RobotExpressive2.gltf');
+    var gltf = await loader
+        .loadAsync('assets/models/gltf/RobotExpressive/RobotExpressive2.gltf');
 
     model = gltf["scene"];
     scene.add(model);

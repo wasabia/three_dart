@@ -6,7 +6,7 @@ class Layers {
   Layers() {}
 
   set(channel) {
-    this.mask = (1 << channel | 0) >> 0 ;
+    this.mask = (1 << channel | 0) >> 0;
   }
 
   enable(channel) {
@@ -32,4 +32,10 @@ class Layers {
   bool test(layers) {
     return (this.mask & layers.mask) != 0;
   }
+
+  isEnabled( channel ) {
+
+		return ( this.mask & ( 1 << channel | 0 ) ) != 0;
+
+	}
 }
