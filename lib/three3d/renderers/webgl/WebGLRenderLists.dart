@@ -1,7 +1,6 @@
 part of three_webgl;
 
 class WebGLRenderLists {
-
   WebGLRenderLists() {}
 
   var lists = new WeakMap();

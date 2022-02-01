@@ -18,7 +18,6 @@ class DataTexture3D extends Texture {
     this.generateMipmaps = false;
     this.flipY = false;
     this.unpackAlignment = 1;
-
   }
 
   // We're going to add .setXXX() methods for setting properties later.

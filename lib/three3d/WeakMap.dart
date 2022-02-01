@@ -56,7 +56,6 @@ class WeakMap<K, V> {
 
   V? operator [](K key) => get(key);
 
-
   void set(key, value) {
     add(key: key, value: value);
   }

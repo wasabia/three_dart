@@ -21,7 +21,8 @@ class TextureLoader extends Loader {
     Texture texture;
 
     // if(kIsWeb) {
-    texture = Texture(null, null, null, null, null, null, null, null, null, null);
+    texture =
+        Texture(null, null, null, null, null, null, null, null, null, null);
     // } else {
     //   texture = DataTexture(null, null, null,null, null, null,null, null, null, null, null, null);
     // }
@@ -33,7 +34,6 @@ class TextureLoader extends Loader {
     var completer = Completer<Texture>();
     loader.flipY = flipY;
     loader.load(url, (image) {
- 
       ImageElement imageElement;
 
       // Web better way ???
@@ -45,6 +45,9 @@ class TextureLoader extends Loader {
             height: image.height!);
       } else {
         var _pixels = image.getBytes(format: Format.rgba);
+
+        print(" _pixels : ${_pixels.length} ");
+        print(" ------------------------------------------- ");
         imageElement = ImageElement(
             url: url,
             data: Uint8Array.from(_pixels),

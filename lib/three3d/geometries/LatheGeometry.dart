@@ -24,7 +24,7 @@ class LatheGeometry extends BufferGeometry {
     var vertices = [];
     var uvs = [];
     var initNormals = [];
-		var normals = [];
+    var normals = [];
 
     // helper variables
 
@@ -32,39 +32,41 @@ class LatheGeometry extends BufferGeometry {
     var vertex = new Vector3.init();
     var uv = new Vector2(null, null);
     var normal = new Vector3();
-		var curNormal = new Vector3();
-		var prevNormal = new Vector3();
-		num dx = 0;
-		num dy = 0;
+    var curNormal = new Vector3();
+    var prevNormal = new Vector3();
+    num dx = 0;
+    num dy = 0;
 
     // pre-compute normals for initial "meridian"
 
-		for ( var j = 0; j <= ( points.length - 1 ); j ++ ) {
+    for (var j = 0; j <= (points.length - 1); j++) {
       // special handling for 1st vertex on path
-			if( j == 0) {
-        dx = points[ j + 1 ].x - points[ j ].x;
-        dy = points[ j + 1 ].y - points[ j ].y;
+      if (j == 0) {
+        dx = points[j + 1].x - points[j].x;
+        dy = points[j + 1].y - points[j].y;
 
         normal.x = dy * 1.0;
-        normal.y = - dx;
+        normal.y = -dx;
         normal.z = dy * 0.0;
 
-        prevNormal.copy( normal );
+        prevNormal.copy(normal);
 
         normal.normalize();
 
-        initNormals.addAll( [normal.x, normal.y, normal.z] );
-      } else if ( j == points.length - 1 ) {	// special handling for last Vertex on path
-        initNormals.addAll( [prevNormal.x, prevNormal.y, prevNormal.z] );
-      } else { // default handling for all vertices in between
-        dx = points[ j + 1 ].x - points[ j ].x;
-        dy = points[ j + 1 ].y - points[ j ].y;
+        initNormals.addAll([normal.x, normal.y, normal.z]);
+      } else if (j == points.length - 1) {
+        // special handling for last Vertex on path
+        initNormals.addAll([prevNormal.x, prevNormal.y, prevNormal.z]);
+      } else {
+        // default handling for all vertices in between
+        dx = points[j + 1].x - points[j].x;
+        dy = points[j + 1].y - points[j].y;
 
         normal.x = dy * 1.0;
-        normal.y = - dx;
+        normal.y = -dx;
         normal.z = dy * 0.0;
 
-        curNormal.copy( normal );
+        curNormal.copy(normal);
 
         normal.x += prevNormal.x;
         normal.y += prevNormal.y;
@@ -72,16 +74,13 @@ class LatheGeometry extends BufferGeometry {
 
         normal.normalize();
 
-        initNormals.addAll( [normal.x, normal.y, normal.z] );
+        initNormals.addAll([normal.x, normal.y, normal.z]);
 
-        prevNormal.copy( curNormal );
-
+        prevNormal.copy(curNormal);
       }
+    }
 
-
-		}
-
-		// generate vertices, uvs and normals
+    // generate vertices, uvs and normals
 
     // generate vertices and uvs
 
@@ -109,11 +108,11 @@ class LatheGeometry extends BufferGeometry {
 
         // normal
 
-				var x = initNormals[ 3 * j + 0 ] * sin;
-				var y = initNormals[ 3 * j + 1 ];
-				var z = initNormals[ 3 * j + 0 ] * cos;
+        var x = initNormals[3 * j + 0] * sin;
+        var y = initNormals[3 * j + 1];
+        var z = initNormals[3 * j + 0] * cos;
 
-				normals.addAll( [x, y, z] );
+        normals.addAll([x, y, z]);
       }
     }
 
@@ -141,6 +140,6 @@ class LatheGeometry extends BufferGeometry {
     this.setAttribute(
         'position', new Float32BufferAttribute(vertices, 3, false));
     this.setAttribute('uv', new Float32BufferAttribute(uvs, 2, false));
-    this.setAttribute( 'normal', new Float32BufferAttribute( normals, 3, false ) );
+    this.setAttribute('normal', new Float32BufferAttribute(normals, 3, false));
   }
 }

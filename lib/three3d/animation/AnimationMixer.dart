@@ -45,7 +45,7 @@ class AnimationMixer with EventDispatcher {
       var binding = bindingsByName[trackName];
 
       if (binding != null) {
-        ++ binding.referenceCount;
+        ++binding.referenceCount;
         bindings[i] = binding;
       } else {
         binding = bindings[i];

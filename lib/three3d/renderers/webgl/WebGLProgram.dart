@@ -53,7 +53,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     String prefixVertex, prefixFragment;
 
     String defaultVersionString =
-        (!kIsWeb && Platform.isMacOS) ? "#version 140\n" : "";
+        (!kIsWeb && Platform.isMacOS) ? "#version 330\n" : "";
 
     var versionString = parameters.glslVersion != null
         ? '#version ${parameters.glslVersion}\n'
@@ -130,10 +130,15 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.skinning ? '#define USE_SKINNING' : '',
         parameters.useVertexTexture ? '#define BONE_TEXTURE' : '',
         parameters.morphTargets ? '#define USE_MORPHTARGETS' : '',
-        ( parameters.morphTargets && parameters.isWebGL2 ) ? '#define MORPHTARGETS_TEXTURE' : '',
-        ( parameters.morphTargets && parameters.isWebGL2 ) ? '#define MORPHTARGETS_COUNT ${parameters.morphTargetsCount}' : '',
+        (parameters.morphTargets && parameters.isWebGL2)
+            ? '#define MORPHTARGETS_TEXTURE'
+            : '',
+        (parameters.morphTargets && parameters.isWebGL2)
+            ? '#define MORPHTARGETS_COUNT ${parameters.morphTargetsCount}'
+            : '',
         parameters.morphNormals && parameters.flatShading == false
-            ? '#define USE_MORPHNORMALS' : '',
+            ? '#define USE_MORPHNORMALS'
+            : '',
         parameters.doubleSided ? '#define DOUBLE_SIDED' : '',
         parameters.flipSided ? '#define FLIP_SIDED' : '',
         parameters.shadowMapEnabled ? '#define USE_SHADOWMAP' : '',
@@ -296,7 +301,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
         ShaderChunk[
             'encodings_pars_fragment'], // this code is required here because it is used by the various encoding/decoding defined below
-        
+
         getTexelEncodingFunction(
             'linearToOutputTexel', parameters.outputEncoding),
 
@@ -322,7 +327,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     if (parameters.isWebGL2 && parameters.isRawShaderMaterial != true) {
       // GLSL 3.0 conversion for built-in materials and ShaderMaterial
       versionString = (!kIsWeb && Platform.isMacOS)
-          ? "#version 140\n"
+          ? "#version 330\n"
           : "#version 300 es\n";
 
       prefixVertex = [
@@ -338,7 +343,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
             '#define varying in',
             (parameters.glslVersion == GLSL3)
                 ? ''
-                : kIsWeb ? 'layout(location = 0) out highp vec4 pc_fragColor;' : 'out highp vec4 pc_fragColor;',
+                : 'layout(location = 0) out highp vec4 pc_fragColor;',
             (parameters.glslVersion == GLSL3)
                 ? ''
                 : '#define gl_FragColor pc_fragColor',

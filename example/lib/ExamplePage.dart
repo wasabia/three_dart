@@ -110,11 +110,10 @@ class _MyAppState extends State<ExamplePage> {
       page = webgl_geometry_colors(fileName: fileName);
     } else if (fileName == "webgl_loader_svg") {
       page = webgl_loader_svg(fileName: fileName);
-    } else if(fileName == "webgl_helpers") {
+    } else if (fileName == "webgl_helpers") {
       page = webgl_helpers(fileName: fileName);
-    } else if(fileName == "webgl_morphtargets") {
+    } else if (fileName == "webgl_morphtargets") {
       page = webgl_morphtargets(fileName: fileName);
-      
     } else {
       throw ("ExamplePage fileName ${fileName} is not support yet ");
     }

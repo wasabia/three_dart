@@ -7,7 +7,10 @@ class BaseBufferAttribute {
   InterleavedBuffer? data;
 
   late String type;
-  String name = "";
+
+  // 保持可空
+  // 在 Mesh.updateMorphTargets 里当name是null时使用index替换
+  String? name;
 
   int count = 0;
   bool normalized = false;

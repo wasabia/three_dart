@@ -591,8 +591,7 @@ class Vector3 {
   }
 
   toArray(List<num> array, [int offset = 0]) {
-
-    while(array.length < offset + 3) {
+    while (array.length < offset + 3) {
       array.add(0);
     }
 

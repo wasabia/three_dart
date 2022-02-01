@@ -8,7 +8,8 @@ class DataTexture2DArray extends Texture {
       : super(null, null, null, null, null, null, null, null, null, null) {
     // this.image = ImageDataInfo(data, width, height, depth);
 
-    this.image = ImageElement(data: data, width: width, height: height, depth: depth);
+    this.image =
+        ImageElement(data: data, width: width, height: height, depth: depth);
 
     this.magFilter = LinearFilter;
     this.minFilter = LinearFilter;

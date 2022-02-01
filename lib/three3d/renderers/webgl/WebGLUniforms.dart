@@ -69,7 +69,7 @@ class WebGLUniforms with WebGLUniform {
     var u = this.map[name];
 
     // var _vt = value.runtimeType.toString();
-    // print("WebGLUniforms.setValue name: ${name}  value: ${_vt} ");
+    // print("WebGLUniforms.setValue name: ${name}  value: ${_vt} u: ${u} ");
     // if(_vt == "Matrix4" || _vt == "Matrix3" || _vt == "Color") {
     //   print(value.toJSON());
     // } else {
