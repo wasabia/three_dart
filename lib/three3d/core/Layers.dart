@@ -33,9 +33,7 @@ class Layers {
     return (this.mask & layers.mask) != 0;
   }
 
-  isEnabled( channel ) {
-
-		return ( this.mask & ( 1 << channel | 0 ) ) != 0;
-
-	}
+  isEnabled(channel) {
+    return (this.mask & (1 << channel | 0)) != 0;
+  }
 }

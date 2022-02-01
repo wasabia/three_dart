@@ -189,7 +189,8 @@ class WebGLShadowMap {
 
     scope.needsUpdate = false;
 
-    _renderer.setRenderTarget(currentRenderTarget, activeCubeFace, activeMipmapLevel);
+    _renderer.setRenderTarget(
+        currentRenderTarget, activeCubeFace, activeMipmapLevel);
   }
 
   VSMPass(shadow, camera) {

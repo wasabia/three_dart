@@ -1,84 +1,78 @@
 part of three_helpers;
 
 class PolarGridHelper extends LineSegments {
+  PolarGridHelper.create(geomertey, material) : super(geomertey, material) {}
 
-  PolarGridHelper.create(geomertey, material) : super(geomertey, material) {
+  factory PolarGridHelper(
+      [radius = 10,
+      radials = 16,
+      circles = 8,
+      divisions = 64,
+      color1 = 0x444444,
+      color2 = 0x888888]) {
+    color1 = new Color(color1);
+    color2 = new Color(color2);
 
-  }
+    var vertices = [];
+    var colors = [];
 
+    // create the radials
 
-	factory PolarGridHelper( [radius = 10, radials = 16, circles = 8, divisions = 64, color1 = 0x444444, color2 = 0x888888] ) {
+    for (var i = 0; i <= radials; i++) {
+      var v = (i / radials) * (Math.PI * 2);
 
-		color1 = new Color( color1 );
-		color2 = new Color( color2 );
+      var x = Math.sin(v) * radius;
+      var z = Math.cos(v) * radius;
 
-		var vertices = [];
-		var colors = [];
+      vertices.addAll([0, 0, 0]);
+      vertices.addAll([x, 0, z]);
 
-		// create the radials
+      var color = ((i & 1) != 0) ? color1 : color2;
 
-		for ( var i = 0; i <= radials; i ++ ) {
+      colors.addAll([color.r, color.g, color.b]);
+      colors.addAll([color.r, color.g, color.b]);
+    }
 
-			var v = ( i / radials ) * ( Math.PI * 2 );
+    // create the circles
 
-			var x = Math.sin( v ) * radius;
-			var z = Math.cos( v ) * radius;
+    for (var i = 0; i <= circles; i++) {
+      var color = ((i & 1) != 0) ? color1 : color2;
 
-			vertices.addAll( [0, 0, 0] );
-			vertices.addAll( [x, 0, z] );
+      var r = radius - (radius / circles * i);
 
-			var color = (( i & 1 ) != 0) ? color1 : color2;
+      for (var j = 0; j < divisions; j++) {
+        // first vertex
 
-			colors.addAll( [color.r, color.g, color.b] );
-			colors.addAll( [color.r, color.g, color.b] );
+        var v = (j / divisions) * (Math.PI * 2);
 
-		}
+        var x = Math.sin(v) * r;
+        var z = Math.cos(v) * r;
 
-		// create the circles
+        vertices.addAll([x, 0, z]);
+        colors.addAll([color.r, color.g, color.b]);
 
-		for ( var i = 0; i <= circles; i ++ ) {
+        // second vertex
 
-			var color = (( i & 1 ) != 0) ? color1 : color2;
+        v = ((j + 1) / divisions) * (Math.PI * 2);
 
-			var r = radius - ( radius / circles * i );
+        x = Math.sin(v) * r;
+        z = Math.cos(v) * r;
 
-			for ( var j = 0; j < divisions; j ++ ) {
+        vertices.addAll([x, 0, z]);
+        colors.addAll([color.r, color.g, color.b]);
+      }
+    }
 
-				// first vertex
+    var geometry = new BufferGeometry();
+    geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
+    geometry.setAttribute('color', new Float32BufferAttribute(colors, 3));
 
-				var v = ( j / divisions ) * ( Math.PI * 2 );
+    var material =
+        new LineBasicMaterial({"vertexColors": true, "toneMapped": false});
 
-				var x = Math.sin( v ) * r;
-				var z = Math.cos( v ) * r;
+    var pgh = PolarGridHelper.create(geometry, material);
 
-				vertices.addAll( [x, 0, z] );
-				colors.addAll( [color.r, color.g, color.b] );
-
-				// second vertex
-
-				v = ( ( j + 1 ) / divisions ) * ( Math.PI * 2 );
-
-				x = Math.sin( v ) * r;
-				z = Math.cos( v ) * r;
-
-				vertices.addAll( [x, 0, z] );
-				colors.addAll( [color.r, color.g, color.b] );
-
-			}
-
-		}
-
-		var geometry = new BufferGeometry();
-		geometry.setAttribute( 'position', new Float32BufferAttribute( vertices, 3 ) );
-		geometry.setAttribute( 'color', new Float32BufferAttribute( colors, 3 ) );
-
-		var material = new LineBasicMaterial( { "vertexColors": true, "toneMapped": false } );
-
-		var pgh = PolarGridHelper.create( geometry, material );
-
-		pgh.type = 'PolarGridHelper';
+    pgh.type = 'PolarGridHelper';
     return pgh;
-	}
-
+  }
 }
-

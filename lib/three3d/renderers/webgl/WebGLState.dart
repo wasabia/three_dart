@@ -26,7 +26,7 @@ class WebGLState {
   dynamic xrFramebuffer;
   Map currentBoundFramebuffers = {};
   WeakMap currentDrawbuffers = new WeakMap();
-	var defaultDrawbuffers = [];
+  var defaultDrawbuffers = [];
 
   dynamic currentProgram;
 
@@ -120,8 +120,8 @@ class WebGLState {
       OneMinusDstAlphaFactor: gl.ONE_MINUS_DST_ALPHA
     };
 
-    scissorParam = gl.getParameter( gl.SCISSOR_BOX );
-    viewportParam = gl.getParameter( gl.VIEWPORT );
+    scissorParam = gl.getParameter(gl.SCISSOR_BOX);
+    viewportParam = gl.getParameter(gl.VIEWPORT);
 
     // currentScissor = new Vector4.init().fromArray( scissorParam );
     // currentViewport = new Vector4.init().fromArray( viewportParam );
@@ -197,94 +197,69 @@ class WebGLState {
     return false;
   }
 
-  drawBuffers( renderTarget, framebuffer ) {
+  drawBuffers(renderTarget, framebuffer) {
+    dynamic drawBuffers = defaultDrawbuffers;
 
-		dynamic drawBuffers = defaultDrawbuffers;
+    var needsUpdate = false;
 
-		var needsUpdate = false;
+    if (renderTarget != null) {
+      drawBuffers = currentDrawbuffers.get(framebuffer);
 
-		if ( renderTarget != null ) {
+      if (drawBuffers == null) {
+        drawBuffers = [];
+        currentDrawbuffers.set(framebuffer, drawBuffers);
+      }
 
-			drawBuffers = currentDrawbuffers.get( framebuffer );
+      if (renderTarget.isWebGLMultipleRenderTargets) {
+        var textures = renderTarget.texture;
 
-			if ( drawBuffers == null ) {
-
-				drawBuffers = [];
-				currentDrawbuffers.set( framebuffer, drawBuffers );
-
-			}
-
-			if ( renderTarget.isWebGLMultipleRenderTargets ) {
-
-				var textures = renderTarget.texture;
-
-				if ( drawBuffers.length != textures.length || drawBuffers[ 0 ] != gl.COLOR_ATTACHMENT0 ) {
-
-					for ( var i = 0, il = textures.length; i < il; i ++ ) {
-
-						drawBuffers[ i ] = gl.COLOR_ATTACHMENT0 + i;
-
-					}
-
-					drawBuffers.length = textures.length;
-
-					needsUpdate = true;
-
-				}
-
-			} else {
-
-				if ( drawBuffers.length == 0 || drawBuffers[ 0 ] != gl.COLOR_ATTACHMENT0 ) {
-
-          if(drawBuffers.length == 0) {
-            drawBuffers.add( gl.COLOR_ATTACHMENT0 );
-          } else {
-            drawBuffers[ 0 ] = gl.COLOR_ATTACHMENT0;
+        if (drawBuffers.length != textures.length ||
+            drawBuffers[0] != gl.COLOR_ATTACHMENT0) {
+          for (var i = 0, il = textures.length; i < il; i++) {
+            drawBuffers[i] = gl.COLOR_ATTACHMENT0 + i;
           }
 
-					
-					drawBuffers.length = 1;
+          drawBuffers.length = textures.length;
 
-					needsUpdate = true;
-
-				}
-
-			}
-
-		} else {
-
-			if ( drawBuffers.length == 0 || drawBuffers[ 0 ] != gl.BACK ) {
-        if(drawBuffers.length == 0) {
-          drawBuffers.add( gl.BACK );
-        } else {
-          drawBuffers[ 0 ] = gl.BACK;
+          needsUpdate = true;
         }
-				
-				drawBuffers.length = 1;
+      } else {
+        if (drawBuffers.length == 0 || drawBuffers[0] != gl.COLOR_ATTACHMENT0) {
+          if (drawBuffers.length == 0) {
+            drawBuffers.add(gl.COLOR_ATTACHMENT0);
+          } else {
+            drawBuffers[0] = gl.COLOR_ATTACHMENT0;
+          }
 
-				needsUpdate = true;
+          drawBuffers.length = 1;
 
-			}
+          needsUpdate = true;
+        }
+      }
+    } else {
+      if (drawBuffers.length == 0 || drawBuffers[0] != gl.BACK) {
+        if (drawBuffers.length == 0) {
+          drawBuffers.add(gl.BACK);
+        } else {
+          drawBuffers[0] = gl.BACK;
+        }
 
-		}
+        drawBuffers.length = 1;
 
-		if ( needsUpdate ) {
+        needsUpdate = true;
+      }
+    }
 
-			if ( capabilities.isWebGL2 ) {
-
-				gl.drawBuffers( List<int>.from( drawBuffers ) );
-
-			} else {
-
-				extensions.get( 'WEBGL_draw_buffers' ).drawBuffersWEBGL( List<int>.from(drawBuffers) );
-
-			}
-
-		}
-
-
-	}
-
+    if (needsUpdate) {
+      if (capabilities.isWebGL2) {
+        gl.drawBuffers(List<int>.from(drawBuffers));
+      } else {
+        extensions
+            .get('WEBGL_draw_buffers')
+            .drawBuffersWEBGL(List<int>.from(drawBuffers));
+      }
+    }
+  }
 
   useProgram(program) {
     if (currentProgram != program) {
@@ -342,8 +317,8 @@ class WebGLState {
               break;
 
             case SubtractiveBlending:
-              gl.blendFuncSeparate(gl.ZERO, gl.ZERO, gl.ONE_MINUS_SRC_COLOR,
-                  gl.ONE_MINUS_SRC_ALPHA);
+              gl.blendFuncSeparate(
+                  gl.ZERO, gl.ONE_MINUS_SRC_COLOR, gl.ZERO, gl.ONE);
               break;
 
             case MultiplyBlending:
@@ -367,7 +342,8 @@ class WebGLState {
               break;
 
             case SubtractiveBlending:
-              gl.blendFunc(gl.ZERO, gl.ONE_MINUS_SRC_COLOR);
+              gl.blendFuncSeparate(
+                  gl.ZERO, gl.ONE_MINUS_SRC_COLOR, gl.ZERO, gl.ONE);
               break;
 
             case MultiplyBlending:
@@ -587,93 +563,89 @@ class WebGLState {
     }
   }
 
-  compressedTexImage2D(target, level, internalformat, width, height, border, pixels) {
-    gl.compressedTexImage2D(target, level, internalformat, width, height, border, pixels);
+  compressedTexImage2D(
+      target, level, internalformat, width, height, border, pixels) {
+    gl.compressedTexImage2D(
+        target, level, internalformat, width, height, border, pixels);
   }
 
   texSubImage2D(target, level, x, y, width, height, glFormat, glType, data) {
+    // try {
 
-		// try {
+    gl.texSubImage2D(
+        target, level, x, y, width, height, glFormat, glType, data);
 
-			gl.texSubImage2D( target, level, x, y, width, height, glFormat, glType, data );
+    // } catch ( error ) {
 
-		// } catch ( error ) {
+    // 	print( 'THREE.WebGLState: ${error}' );
 
-		// 	print( 'THREE.WebGLState: ${error}' );
-
-		// }
-
-	}
+    // }
+  }
 
   texSubImage2D_NOSIZE(target, level, x, y, glFormat, glType, data) {
+    // try {
 
-		// try {
+    gl.texSubImage2D_NOSIZE(target, level, x, y, glFormat, glType, data);
 
-			gl.texSubImage2D_NOSIZE( target, level, x, y, glFormat, glType, data );
+    // } catch ( error ) {
 
-		// } catch ( error ) {
+    // 	print( 'THREE.WebGLState: ${error}' );
 
-		// 	print( 'THREE.WebGLState: ${error}' );
+    // }
+  }
 
-		// }
+  texSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth,
+      format, type, pixels) {
+    // try {
 
-	}
+    gl.texSubImage3D(target, level, xoffset, yoffset, zoffset, width, height,
+        depth, format, type, pixels);
 
-  texSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels) {
+    // } catch ( error ) {
 
-		// try {
+    // 	console.error( 'THREE.WebGLState:', error );
 
-			gl.texSubImage3D( target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels );
+    // }
+  }
 
-		// } catch ( error ) {
+  compressedTexSubImage2D(
+      target, level, xoffset, yoffset, width, height, format, pixels) {
+    // try {
 
-		// 	console.error( 'THREE.WebGLState:', error );
+    gl.compressedTexSubImage2D(
+        target, level, xoffset, yoffset, width, height, format, pixels);
 
-		// }
+    // } catch ( error ) {
 
-	}
+    // 	console.error( 'THREE.WebGLState:', error );
 
-	compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, pixels) {
+    // }
+  }
 
-		// try {
+  texStorage2D(int type, int levels, int glInternalFormat, width, height) {
+    // try {
 
-			gl.compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, pixels);
+    gl.texStorage2D(
+        type, levels, glInternalFormat, width.toInt(), height.toInt());
 
-		// } catch ( error ) {
+    // } catch ( error ) {
 
-		// 	console.error( 'THREE.WebGLState:', error );
+    // 	print( 'THREE.WebGLState: ${error}' );
 
-		// }
-
-	}
-
-	texStorage2D(int type, int levels, int glInternalFormat, width, height) {
-
-		// try {
-
-			gl.texStorage2D( type, levels, glInternalFormat, width.toInt(), height.toInt() );
-
-		// } catch ( error ) {
-
-		// 	print( 'THREE.WebGLState: ${error}' );
-
-		// }
-
-	}
+    // }
+  }
 
   texStorage3D(target, levels, internalformat, width, height, depth) {
+    // try {
 
-		// try {
+    gl.texStorage3D(target, levels, internalformat, width, height, depth);
 
-			gl.texStorage3D( target, levels, internalformat, width, height, depth );
+    // } catch ( error ) {
 
-		// } catch ( error ) {
+    // 	console.error( 'THREE.WebGLState:', error );
 
-		// 	console.error( 'THREE.WebGLState:', error );
-
-		// }
-
-	}
+    // }
+  }
 
   texImage2D(int target, int level, int internalformat, width, height, border,
       int format, int type, data) {
@@ -772,8 +744,8 @@ class WebGLState {
     xrFramebuffer = null;
     currentBoundFramebuffers = {};
     currentDrawbuffers = new WeakMap();
-		defaultDrawbuffers = [];
-    
+    defaultDrawbuffers = [];
+
     currentProgram = null;
 
     currentBlendingEnabled = false;

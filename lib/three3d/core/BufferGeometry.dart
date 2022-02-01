@@ -417,169 +417,150 @@ class BufferGeometry with EventDispatcher {
   }
 
   computeTangents() {
+    var index = this.index;
+    var attributes = this.attributes;
 
-		var index = this.index;
-		var attributes = this.attributes;
+    // based on http://www.terathon.com/code/tangent.html
+    // (per vertex tangents)
 
-		// based on http://www.terathon.com/code/tangent.html
-		// (per vertex tangents)
+    if (index == null ||
+        attributes["position"] == undefined ||
+        attributes["normal"] == undefined ||
+        attributes["uv"] == undefined) {
+      console.error(
+          'THREE.BufferGeometry: .computeTangents() failed. Missing required attributes (index, position, normal or uv)');
+      return;
+    }
 
-		if ( index == null ||
-			 attributes["position"] == undefined ||
-			 attributes["normal"] == undefined ||
-			 attributes["uv"] == undefined ) {
+    var indices = index.array;
+    var positions = attributes["position"].array;
+    var normals = attributes["normal"].array;
+    var uvs = attributes["uv"].array;
 
-			console.error( 'THREE.BufferGeometry: .computeTangents() failed. Missing required attributes (index, position, normal or uv)' );
-			return;
+    int nVertices = positions.length ~/ 3;
 
-		}
+    if (attributes["tangent"] == undefined) {
+      this.setAttribute(
+          'tangent', new BufferAttribute(new Float32Array(4 * nVertices), 4));
+    }
 
-		var indices = index.array;
-		var positions = attributes["position"].array;
-		var normals = attributes["normal"].array;
-		var uvs = attributes["uv"].array;
+    var tangents = attributes["tangent"].array;
 
-		var nVertices = positions.length / 3;
+    var tan1 = [], tan2 = [];
 
-		if ( attributes["tangent"] == undefined ) {
+    for (var i = 0; i < nVertices; i++) {
+      tan1.add(new Vector3());
+      tan2.add(new Vector3());
+    }
 
-			this.setAttribute( 'tangent', new BufferAttribute( new Float32Array( 4 * nVertices ), 4 ) );
+    var vA = new Vector3(),
+        vB = new Vector3(),
+        vC = new Vector3(),
+        uvA = new Vector2(),
+        uvB = new Vector2(),
+        uvC = new Vector2(),
+        sdir = new Vector3(),
+        tdir = new Vector3();
 
-		}
+    handleTriangle(a, b, c) {
+      vA.fromArray(positions, a * 3);
+      vB.fromArray(positions, b * 3);
+      vC.fromArray(positions, c * 3);
 
-		var tangents = attributes["tangent"].array;
+      uvA.fromArray(uvs, a * 2);
+      uvB.fromArray(uvs, b * 2);
+      uvC.fromArray(uvs, c * 2);
 
-		var tan1 = [], tan2 = [];
+      vB.sub(vA);
+      vC.sub(vA);
 
-		for ( var i = 0; i < nVertices; i ++ ) {
+      uvB.sub(uvA);
+      uvC.sub(uvA);
 
-			tan1.add( new Vector3() );
-			tan2.add( new Vector3() );
+      num r = 1.0 / (uvB.x * uvC.y - uvC.x * uvB.y);
 
-		}
+      // silently ignore degenerate uv triangles having coincident or colinear vertices
 
-		var vA = new Vector3(),
-			vB = new Vector3(),
-			vC = new Vector3(),
+      if (!r.isFinite) return;
 
-			uvA = new Vector2(),
-			uvB = new Vector2(),
-			uvC = new Vector2(),
+      sdir
+          .copy(vB)
+          .multiplyScalar(uvC.y)
+          .addScaledVector(vC, -uvB.y)
+          .multiplyScalar(r);
+      tdir
+          .copy(vC)
+          .multiplyScalar(uvB.x)
+          .addScaledVector(vB, -uvC.x)
+          .multiplyScalar(r);
 
-			sdir = new Vector3(),
-			tdir = new Vector3();
+      tan1[a].add(sdir);
+      tan1[b].add(sdir);
+      tan1[c].add(sdir);
 
-		handleTriangle( a, b, c ) {
+      tan2[a].add(tdir);
+      tan2[b].add(tdir);
+      tan2[c].add(tdir);
+    }
 
-			vA.fromArray( positions, a * 3 );
-			vB.fromArray( positions, b * 3 );
-			vC.fromArray( positions, c * 3 );
+    var groups = this.groups;
 
-			uvA.fromArray( uvs, a * 2 );
-			uvB.fromArray( uvs, b * 2 );
-			uvC.fromArray( uvs, c * 2 );
+    if (groups.length == 0) {
+      groups = [
+        {"start": 0, "count": indices.length}
+      ];
+    }
 
-			vB.sub( vA );
-			vC.sub( vA );
+    for (var i = 0, il = groups.length; i < il; ++i) {
+      var group = groups[i];
 
-			uvB.sub( uvA );
-			uvC.sub( uvA );
+      var start = group["start"];
+      var count = group["count"];
 
-			num r = 1.0 / ( uvB.x * uvC.y - uvC.x * uvB.y );
+      for (var j = start, jl = start + count; j < jl; j += 3) {
+        handleTriangle(indices[j + 0], indices[j + 1], indices[j + 2]);
+      }
+    }
 
-			// silently ignore degenerate uv triangles having coincident or colinear vertices
+    var tmp = new Vector3(), tmp2 = new Vector3();
+    var n = new Vector3(), n2 = new Vector3();
 
-			if ( ! r.isFinite ) return;
+    handleVertex(v) {
+      n.fromArray(normals, v * 3);
+      n2.copy(n);
 
-			sdir.copy( vB ).multiplyScalar( uvC.y ).addScaledVector( vC, - uvB.y ).multiplyScalar( r );
-			tdir.copy( vC ).multiplyScalar( uvB.x ).addScaledVector( vB, - uvC.x ).multiplyScalar( r );
+      var t = tan1[v];
 
-			tan1[ a ].add( sdir );
-			tan1[ b ].add( sdir );
-			tan1[ c ].add( sdir );
+      // Gram-Schmidt orthogonalize
 
-			tan2[ a ].add( tdir );
-			tan2[ b ].add( tdir );
-			tan2[ c ].add( tdir );
+      tmp.copy(t);
+      tmp.sub(n.multiplyScalar(n.dot(t))).normalize();
 
-		}
+      // Calculate handedness
 
-		var groups = this.groups;
+      tmp2.crossVectors(n2, t);
+      var test = tmp2.dot(tan2[v]);
+      var w = (test < 0.0) ? -1.0 : 1.0;
 
-		if ( groups.length == 0 ) {
+      tangents[v * 4] = tmp.x;
+      tangents[v * 4 + 1] = tmp.y;
+      tangents[v * 4 + 2] = tmp.z;
+      tangents[v * 4 + 3] = w;
+    }
 
-			groups = [ {
-				"start": 0,
-				"count": indices.length
-			} ];
+    for (var i = 0, il = groups.length; i < il; ++i) {
+      var group = groups[i];
 
-		}
+      var start = group["start"];
+      var count = group["count"];
 
-		for ( var i = 0, il = groups.length; i < il; ++ i ) {
-
-			var group = groups[ i ];
-
-			var start = group["start"];
-			var count = group["count"];
-
-			for ( var j = start, jl = start + count; j < jl; j += 3 ) {
-
-				handleTriangle(
-					indices[ j + 0 ],
-					indices[ j + 1 ],
-					indices[ j + 2 ]
-				);
-
-			}
-
-		}
-
-		var tmp = new Vector3(), tmp2 = new Vector3();
-		var n = new Vector3(), n2 = new Vector3();
-
-		handleVertex( v ) {
-
-			n.fromArray( normals, v * 3 );
-			n2.copy( n );
-
-			var t = tan1[ v ];
-
-			// Gram-Schmidt orthogonalize
-
-			tmp.copy( t );
-			tmp.sub( n.multiplyScalar( n.dot( t ) ) ).normalize();
-
-			// Calculate handedness
-
-			tmp2.crossVectors( n2, t );
-			var test = tmp2.dot( tan2[ v ] );
-			var w = ( test < 0.0 ) ? - 1.0 : 1.0;
-
-			tangents[ v * 4 ] = tmp.x;
-			tangents[ v * 4 + 1 ] = tmp.y;
-			tangents[ v * 4 + 2 ] = tmp.z;
-			tangents[ v * 4 + 3 ] = w;
-
-		}
-
-		for ( var i = 0, il = groups.length; i < il; ++ i ) {
-
-			var group = groups[ i ];
-
-			var start = group["start"];
-			var count = group["count"];
-
-			for ( var j = start, jl = start + count; j < jl; j += 3 ) {
-
-				handleVertex( indices[ j + 0 ] );
-				handleVertex( indices[ j + 1 ] );
-				handleVertex( indices[ j + 2 ] );
-
-			}
-
-		}
-
-	}
+      for (var j = start, jl = start + count; j < jl; j += 3) {
+        handleVertex(indices[j + 0]);
+        handleVertex(indices[j + 1]);
+        handleVertex(indices[j + 2]);
+      }
+    }
+  }
 
   computeVertexNormals() {
     var index = this.index;

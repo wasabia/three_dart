@@ -5,7 +5,6 @@ class BufferAttribute extends BaseBufferAttribute {
   var _vector = new Vector3.init();
   var _vector2 = new Vector2(null, null);
 
-  String name = '';
   bool isBufferAttribute = true;
 
   BufferAttribute(arrayList, itemSize, [bool normalized = false]) {
@@ -331,7 +330,7 @@ class BufferAttribute extends BaseBufferAttribute {
       "normalized": this.normalized
     };
 
-    if (this.name != '') data["name"] = this.name;
+    if (this.name != null) data["name"] = this.name;
     if (this.usage != StaticDrawUsage) data["usage"] = this.usage;
     if (this.updateRange?["offset"] != 0 || this.updateRange?["count"] != -1)
       data["updateRange"] = this.updateRange;

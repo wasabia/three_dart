@@ -3,7 +3,6 @@ part of three_webgl;
 class WebGLParameters {
   late bool isWebGL2;
 
-
   int? customVertexShaderID;
   int? customFragmentShaderID;
 
@@ -243,12 +242,9 @@ class WebGLParameters {
 
     flipNormalScaleY = json["flipNormalScaleY"];
 
-
     decodeVideoTexture = json["decodeVideoTexture"];
     morphTargetsCount = json["morphTargetsCount"];
     transparent = json["transparent"];
-
-
   }
 
   getValue(String name) {

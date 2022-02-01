@@ -3,7 +3,6 @@ part of three_core;
 var _vector = new Vector3.init();
 
 class InterleavedBufferAttribute extends BaseBufferAttribute {
-  String name = "";
   InterleavedBuffer? data;
   int itemSize;
   int offset;

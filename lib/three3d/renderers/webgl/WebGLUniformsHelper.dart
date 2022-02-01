@@ -104,19 +104,15 @@ class PureArrayUniform with WebGLUniformsHelper {
 
   // this.path = activeInfo.name; // DEBUG
 
-  // updateCache( data ) {
+  updateCache(data) {
+    var cache = this.cache;
 
-  //   var cache = this.cache;
+    // if ( data is Float32Array && cache.length != data.length ) {
+    //   this.cache = Float32Array( data.length );
+    // }
 
-  //   if ( data instanceof Float32Array && cache.length != data.length ) {
-
-  //     this.cache = new Float32Array( data.length );
-
-  //   }
-
-  //   copyArray( cache, data );
-
-  // }
+    copyArray(cache, data);
+  }
 }
 
 class WebGLUniform {
@@ -857,20 +853,16 @@ class WebGLUniformsHelper {
     }
   }
 
-  setValueT3DArray( gl, v, textures ) {
-
+  setValueT3DArray(gl, v, textures) {
     var n = v.length;
 
-    var units = allocTexUnits( textures, n );
+    var units = allocTexUnits(textures, n);
 
-    gl.uniform1iv( this.addr, units );
+    gl.uniform1iv(this.addr, units);
 
-    for ( var i = 0; i != n; ++ i ) {
-
-      textures.setTexture3D( v[ i ] ?? emptyTexture3d, units[ i ] );
-
+    for (var i = 0; i != n; ++i) {
+      textures.setTexture3D(v[i] ?? emptyTexture3d, units[i]);
     }
-
   }
 
   setValueT6Array(gl, v, textures) {
@@ -885,22 +877,17 @@ class WebGLUniformsHelper {
     }
   }
 
-  setValueT2DArrayArray( gl, v, textures ) {
-
+  setValueT2DArrayArray(gl, v, textures) {
     var n = v.length;
 
-    var units = allocTexUnits( textures, n );
+    var units = allocTexUnits(textures, n);
 
-    gl.uniform1iv( this.addr, units );
+    gl.uniform1iv(this.addr, units);
 
-    for ( var i = 0; i != n; ++ i ) {
-
-      textures.setTexture2DArray( v[ i ] ?? emptyTexture2dArray, units[ i ] );
-
+    for (var i = 0; i != n; ++i) {
+      textures.setTexture2DArray(v[i] ?? emptyTexture2dArray, units[i]);
     }
-
   }
-
 
   // Helper to pick the right setter for a pure (bottom-level) array
 
@@ -958,7 +945,7 @@ class WebGLUniformsHelper {
       case 0x8b5f: // SAMPLER_3D
       case 0x8dcb: // INT_SAMPLER_3D
       case 0x8dd3: // UNSIGNED_INT_SAMPLER_3D
-			return setValueT3DArray;  
+        return setValueT3DArray;
 
       case 0x8b60: // SAMPLER_CUBE
       case 0x8dcc: // INT_SAMPLER_CUBE

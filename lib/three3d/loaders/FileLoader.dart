@@ -138,7 +138,8 @@ class FileLoader extends Loader {
 
     loading[url] = [];
 
-    loading[url].add({"onLoad": onLoad, "onProgress": onProgress, "onError": onError});
+    loading[url]
+        .add({"onLoad": onLoad, "onProgress": onProgress, "onError": onError});
 
     var callbacks = loading[url];
 

@@ -9,7 +9,7 @@ class console {
   }
 
   static _print(String message, [dynamic variables]) {
-    print(message + ( variables == null ? "" : variables.toString() ));
+    print(message + (variables == null ? "" : variables.toString()));
   }
 }
 

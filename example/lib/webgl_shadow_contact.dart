@@ -100,7 +100,7 @@ class _MyAppState extends State<webgl_shadow_contact> {
 
     Map<String, dynamic> _options = {
       "antialias": true,
-      "alpha": false,
+      "alpha": true,
       "width": width.toInt(),
       "height": height.toInt(),
       "dpr": dpr
@@ -197,8 +197,6 @@ class _MyAppState extends State<webgl_shadow_contact> {
       mesh.rotation.y += 0.02;
     });
 
-    //
-
     // remove the background
     var initialBackground = scene.background;
     scene.background = null;
@@ -275,7 +273,8 @@ class _MyAppState extends State<webgl_shadow_contact> {
       "height": height,
       "gl": three3dRender.gl,
       "antialias": true,
-      "canvas": three3dRender.element
+      "canvas": three3dRender.element,
+      "alpha": true // 设置透明
     };
     renderer = THREE.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);

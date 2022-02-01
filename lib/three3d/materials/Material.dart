@@ -304,7 +304,7 @@ class Material with EventDispatcher {
         color = Color(0, 0, 0).setHex(newValue);
       }
     } else if (key == "colorWrite") {
-      colorWrite = newValue;  
+      colorWrite = newValue;
     } else if (key == "defines") {
       defines = newValue;
     } else if (key == "depthPacking") {

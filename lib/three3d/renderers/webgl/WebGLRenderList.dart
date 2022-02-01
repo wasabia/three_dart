@@ -44,7 +44,6 @@ class RenderItem {
 }
 
 class WebGLRenderList {
-
   WebGLRenderList() {}
 
   Map<int, RenderItem> renderItems = {};
@@ -66,7 +65,7 @@ class WebGLRenderList {
 
   getNextRenderItem(object, geometry, material, groupOrder, z, group) {
     var renderItem = renderItems[renderItemsIndex];
-  
+
     if (renderItem == null) {
       renderItem = RenderItem({
         "id": object.id,

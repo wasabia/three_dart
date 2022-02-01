@@ -211,31 +211,26 @@ class Box3 {
     var geometry = object.geometry;
 
     if (geometry != null) {
-  
-      if ( precise && geometry.attributes != null && geometry.attributes.position != null ) {
+      if (precise &&
+          geometry.attributes != null &&
+          geometry.attributes.position != null) {
+        var position = geometry.attributes.position;
+        for (var i = 0, l = position.count; i < l; i++) {
+          _vectorBox3
+              .fromBufferAttribute(position, i)
+              .applyMatrix4(object.matrixWorld);
+          this.expandByPoint(_vectorBox3);
+        }
+      } else {
+        if (geometry.boundingBox == null) {
+          geometry.computeBoundingBox();
+        }
 
-				var position = geometry.attributes.position;
-				for ( var i = 0, l = position.count; i < l; i ++ ) {
+        _box3box.copy(geometry.boundingBox);
+        _box3box.applyMatrix4(object.matrixWorld);
 
-					_vectorBox3.fromBufferAttribute( position, i ).applyMatrix4( object.matrixWorld );
-					this.expandByPoint( _vectorBox3 );
-
-				}
-
-			} else {
-
-				if ( geometry.boundingBox == null ) {
-
-					geometry.computeBoundingBox();
-
-				}
-
-				_box3box.copy( geometry.boundingBox );
-				_box3box.applyMatrix4( object.matrixWorld );
-
-				this.union( _box3box );
-
-			}
+        this.union(_box3box);
+      }
     }
 
     var children = object.children;

@@ -101,7 +101,7 @@ class Points extends Object3D {
           this.morphTargetDictionary = {};
 
           for (var m = 0, ml = morphAttribute.length; m < ml; m++) {
-            var name = morphAttribute[m].name;
+            var name = morphAttribute[m].name ?? m.toString();
 
             this.morphTargetInfluences!.add(0);
             this.morphTargetDictionary![name] = m;

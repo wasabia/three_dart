@@ -207,7 +207,7 @@ class Color {
 
   // value Color | int | String
   set(value) {
-    if(value == null) {
+    if (value == null) {
       return this;
     }
 
@@ -218,7 +218,7 @@ class Color {
     } else if (value is String) {
       this.setStyle(value);
     } else {
-      throw(" Color set use not support type ${value.runtimeType} value: ${value} ");
+      throw (" Color set use not support type ${value.runtimeType} value: ${value} ");
     }
 
     return this;

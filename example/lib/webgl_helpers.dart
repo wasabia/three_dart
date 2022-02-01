@@ -9,13 +9,10 @@ import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
-
-
 class webgl_helpers extends StatefulWidget {
   String fileName;
 
-  webgl_helpers({Key? key, required this.fileName})
-      : super(key: key);
+  webgl_helpers({Key? key, required this.fileName}) : super(key: key);
 
   createState() => _State();
 }
@@ -62,12 +59,10 @@ class _State extends State<webgl_helpers> {
 
   late THREE.Object3D model;
 
-
   @override
   void initState() {
     super.initState();
   }
-
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
@@ -217,28 +212,27 @@ class _State extends State<webgl_helpers> {
     camera = new THREE.PerspectiveCamera(70, width / height, 1, 1000);
     camera.position.z = 400;
 
-
     // scene
 
     scene = new THREE.Scene();
 
     light = new THREE.PointLight(0xffffff);
-    light.position.set( 200, 100, 150 );
-    scene.add( light );
+    light.position.set(200, 100, 150);
+    scene.add(light);
 
-    scene.add( new THREE.PointLightHelper( light, 15, THREE.Color(0xffffff) ) );
+    scene.add(new THREE.PointLightHelper(light, 15, THREE.Color(0xffffff)));
 
-    var gridHelper = new THREE.GridHelper( 400, 40, 0x0000ff, 0x808080 );
-    gridHelper.position.y = - 150;
-    gridHelper.position.x = - 150;
-    scene.add( gridHelper );
+    var gridHelper = new THREE.GridHelper(400, 40, 0x0000ff, 0x808080);
+    gridHelper.position.y = -150;
+    gridHelper.position.x = -150;
+    scene.add(gridHelper);
 
-    var polarGridHelper = new THREE.PolarGridHelper( 200, 16, 8, 64, 0x0000ff, 0x808080 );
-    polarGridHelper.position.y = - 150;
+    var polarGridHelper =
+        new THREE.PolarGridHelper(200, 16, 8, 64, 0x0000ff, 0x808080);
+    polarGridHelper.position.y = -150;
     polarGridHelper.position.x = 200;
-    scene.add( polarGridHelper );
+    scene.add(polarGridHelper);
 
-   
     camera.lookAt(scene.position);
 
     var loader = THREE_JSM.GLTFLoader(null).setPath('assets/models/gltf/');
@@ -252,51 +246,52 @@ class _State extends State<webgl_helpers> {
 
     model = result["scene"];
 
-    var mesh = model.children[ 2 ];
+    var mesh = model.children[2];
 
     print(" load gltf success mesh: ${mesh}  ");
 
-    mesh.geometry!.computeTangents(); // generates bad data due to degenerate UVs
+    mesh.geometry!
+        .computeTangents(); // generates bad data due to degenerate UVs
 
     var group = new THREE.Group();
-    group.scale.multiplyScalar( 50 );
-    scene.add( group );
+    group.scale.multiplyScalar(50);
+    scene.add(group);
 
     // To make sure that the matrixWorld is up to date for the boxhelpers
-    group.updateMatrixWorld( true );
+    group.updateMatrixWorld(true);
 
-    group.add( mesh );
+    group.add(mesh);
 
-    vnh = new THREE_JSM.VertexNormalsHelper( mesh, 5 );
-    scene.add( vnh! );
+    vnh = new THREE_JSM.VertexNormalsHelper(mesh, 5);
+    scene.add(vnh!);
 
-    vth = new THREE_JSM.VertexTangentsHelper( mesh, 5 );
-    scene.add( vth! );
+    vth = new THREE_JSM.VertexTangentsHelper(mesh, 5);
+    scene.add(vth!);
 
-    scene.add( new THREE.BoxHelper( mesh ) );
+    scene.add(new THREE.BoxHelper(mesh));
 
-    var wireframe = new THREE.WireframeGeometry( mesh.geometry! );
-   
-    var line = new THREE.LineSegments( wireframe, null );
+    var wireframe = new THREE.WireframeGeometry(mesh.geometry!);
+
+    var line = new THREE.LineSegments(wireframe, null);
 
     line.material.depthTest = false;
     line.material.opacity = 0.25;
     line.material.transparent = true;
     line.position.x = 4;
-    group.add( line );
-    scene.add( new THREE.BoxHelper( line ) );
+    group.add(line);
+    scene.add(new THREE.BoxHelper(line));
 
-    var edges = new THREE.EdgesGeometry( mesh.geometry!, null );
-    line = new THREE.LineSegments( edges, null );
+    var edges = new THREE.EdgesGeometry(mesh.geometry!, null);
+    line = new THREE.LineSegments(edges, null);
     line.material.depthTest = false;
     line.material.opacity = 0.25;
     line.material.transparent = true;
-    line.position.x = - 4;
-    group.add( line );
-    scene.add( new THREE.BoxHelper( line ) );
+    line.position.x = -4;
+    group.add(line);
+    scene.add(new THREE.BoxHelper(line));
 
-    scene.add( new THREE.BoxHelper( group ) );
-    scene.add( new THREE.BoxHelper( scene ) );
+    scene.add(new THREE.BoxHelper(group));
+    scene.add(new THREE.BoxHelper(scene));
 
     loaded = true;
 
@@ -319,22 +314,20 @@ class _State extends State<webgl_helpers> {
       return;
     }
 
-   
     var delta = clock.getDelta();
 
-    var time = - DateTime.now().millisecondsSinceEpoch * 0.00003;
+    var time = -DateTime.now().millisecondsSinceEpoch * 0.00003;
 
-    camera.position.x = 400 * THREE.Math.cos( time );
-    camera.position.z = 400 * THREE.Math.sin( time );
-    camera.lookAt( scene.position );
+    camera.position.x = 400 * THREE.Math.cos(time);
+    camera.position.z = 400 * THREE.Math.sin(time);
+    camera.lookAt(scene.position);
 
-    light.position.x = THREE.Math.sin( time * 1.7 ) * 300;
-    light.position.y = THREE.Math.cos( time * 1.5 ) * 400;
-    light.position.z = THREE.Math.cos( time * 1.3 ) * 300;
+    light.position.x = THREE.Math.sin(time * 1.7) * 300;
+    light.position.y = THREE.Math.cos(time * 1.5) * 400;
+    light.position.z = THREE.Math.cos(time * 1.3) * 300;
 
-    if ( vnh != null ) vnh!.update();
-    if ( vth != null ) vth!.update();
-
+    if (vnh != null) vnh!.update();
+    if (vth != null) vth!.update();
 
     render();
 

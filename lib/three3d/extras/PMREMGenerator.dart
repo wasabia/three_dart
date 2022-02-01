@@ -155,7 +155,8 @@ class PMREMGenerator {
   dispose() {
     this._blurMaterial.dispose();
 
-    if ( this._pingPongRenderTarget != null ) this._pingPongRenderTarget.dispose();
+    if (this._pingPongRenderTarget != null)
+      this._pingPongRenderTarget.dispose();
 
     if (this._cubemapShader != null) this._cubemapShader.dispose();
     if (this._equirectShader != null) this._equirectShader.dispose();
@@ -198,12 +199,10 @@ class PMREMGenerator {
 
     var cubeUVRenderTarget = _createRenderTarget(params);
     cubeUVRenderTarget.depthBuffer = texture == null ? false : true;
-    
-    if ( this._pingPongRenderTarget == null ) {
 
-			this._pingPongRenderTarget = _createRenderTarget( params );
-
-		}
+    if (this._pingPongRenderTarget == null) {
+      this._pingPongRenderTarget = _createRenderTarget(params);
+    }
 
     return cubeUVRenderTarget;
   }
@@ -227,51 +226,51 @@ class PMREMGenerator {
 
     renderer.toneMapping = NoToneMapping;
     renderer.autoClear = false;
-    var backgroundMaterial = new MeshBasicMaterial( {
-			"name": 'PMREM.Background',
-			"side": BackSide,
-			"depthWrite": false,
-			"depthTest": false,
-		} );
-		var backgroundBox = new Mesh( new BoxGeometry(), backgroundMaterial );
-		var useSolidColor = false;
-		var background = scene.background;
-		if ( background != null ) {
-			if ( background is Color ) {
-				backgroundMaterial.color!.copy( background );
-				scene.background = null;
-				useSolidColor = true;
-			}
-		} else {
-			backgroundMaterial.color!.copy( _clearColor );
-			useSolidColor = true;
-		}
-		for ( var i = 0; i < 6; i ++ ) {
-			var col = i % 3;
-			if ( col == 0 ) {
-				cubeCamera.up.set( 0, upSign[ i ], 0 );
-				cubeCamera.lookAt( Vector3(forwardSign[ i ], 0, 0) );
-			} else if ( col == 1 ) {
-				cubeCamera.up.set( 0, 0, upSign[ i ] );
-				cubeCamera.lookAt( Vector3(0, forwardSign[ i ], 0) );
-			} else {
-				cubeCamera.up.set( 0, upSign[ i ], 0 );
-				cubeCamera.lookAt( Vector3(0, 0, forwardSign[ i ]) );
-			}
-			_setViewport( cubeUVRenderTarget,
-				col * SIZE_MAX, i > 2 ? SIZE_MAX : 0, SIZE_MAX, SIZE_MAX );
-			renderer.setRenderTarget( cubeUVRenderTarget );
-			if ( useSolidColor ) {
-				renderer.render( backgroundBox, cubeCamera );
-			}
-			renderer.render( scene, cubeCamera );
-		}
-		backgroundBox.geometry?.dispose();
-		backgroundBox.material.dispose();
+    var backgroundMaterial = new MeshBasicMaterial({
+      "name": 'PMREM.Background',
+      "side": BackSide,
+      "depthWrite": false,
+      "depthTest": false,
+    });
+    var backgroundBox = new Mesh(new BoxGeometry(), backgroundMaterial);
+    var useSolidColor = false;
+    var background = scene.background;
+    if (background != null) {
+      if (background is Color) {
+        backgroundMaterial.color!.copy(background);
+        scene.background = null;
+        useSolidColor = true;
+      }
+    } else {
+      backgroundMaterial.color!.copy(_clearColor);
+      useSolidColor = true;
+    }
+    for (var i = 0; i < 6; i++) {
+      var col = i % 3;
+      if (col == 0) {
+        cubeCamera.up.set(0, upSign[i], 0);
+        cubeCamera.lookAt(Vector3(forwardSign[i], 0, 0));
+      } else if (col == 1) {
+        cubeCamera.up.set(0, 0, upSign[i]);
+        cubeCamera.lookAt(Vector3(0, forwardSign[i], 0));
+      } else {
+        cubeCamera.up.set(0, upSign[i], 0);
+        cubeCamera.lookAt(Vector3(0, 0, forwardSign[i]));
+      }
+      _setViewport(cubeUVRenderTarget, col * SIZE_MAX, i > 2 ? SIZE_MAX : 0,
+          SIZE_MAX, SIZE_MAX);
+      renderer.setRenderTarget(cubeUVRenderTarget);
+      if (useSolidColor) {
+        renderer.render(backgroundBox, cubeCamera);
+      }
+      renderer.render(scene, cubeCamera);
+    }
+    backgroundBox.geometry?.dispose();
+    backgroundBox.material.dispose();
 
-		renderer.toneMapping = toneMapping;
-		renderer.autoClear = originalAutoClear;
-		scene.background = background;
+    renderer.toneMapping = toneMapping;
+    renderer.autoClear = originalAutoClear;
+    scene.background = background;
   }
 
   _textureToCubeUV(texture, cubeUVRenderTarget) {
@@ -285,7 +284,8 @@ class PMREMGenerator {
         this._cubemapShader = _getCubemapShader();
       }
 
-      this._cubemapShader.uniforms["flipEnvMap"]["value"] = ( texture.isRenderTargetTexture == false ) ? - 1 : 1;
+      this._cubemapShader.uniforms["flipEnvMap"]["value"] =
+          (texture.isRenderTargetTexture == false) ? -1 : 1;
     } else {
       if (this._equirectShader == null) {
         this._equirectShader = _getEquirectShader();
@@ -689,7 +689,7 @@ class PMREMGenerator {
       "name": 'CubemapToCubeUV',
       "uniforms": {
         'envMap': {},
-        'flipEnvMap': { "value": - 1 }
+        'flipEnvMap': {"value": -1}
       },
       "vertexShader": _getCommonVertexShader(),
       "fragmentShader": """
@@ -797,6 +797,4 @@ class PMREMGenerator {
       }
     """;
   }
-
-  
 }

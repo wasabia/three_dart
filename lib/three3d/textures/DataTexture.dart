@@ -16,6 +16,5 @@ class DataTexture extends Texture {
     this.generateMipmaps = false;
     this.flipY = false;
     this.unpackAlignment = 1;
-
   }
 }

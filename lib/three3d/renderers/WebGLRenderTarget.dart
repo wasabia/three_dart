@@ -16,6 +16,7 @@ class RenderTarget with EventDispatcher {
   bool isWebGLCubeRenderTarget = false;
   bool isWebGLMultisampleRenderTarget = false;
   bool isWebGLMultipleRenderTargets = false;
+  bool isXRRenderTarget = false;
 
   bool useMultisampleRenderToTexture = false;
   bool useMultisampleRenderbuffer = false;
@@ -94,10 +95,11 @@ class WebGLRenderTarget extends RenderTarget {
     this.depthTexture =
         this.options.depthTexture != null ? this.options.depthTexture : null;
 
-    this.ignoreDepthForMultisampleCopy = this.options.ignoreDepth != null ? this.options.ignoreDepth : true;
-		this.hasExternalTextures = false;
-		this.useMultisampleRenderToTexture = false;
-		this.useMultisampleRenderbuffer = false;
+    this.ignoreDepthForMultisampleCopy =
+        this.options.ignoreDepth != null ? this.options.ignoreDepth : true;
+    this.hasExternalTextures = false;
+    this.useMultisampleRenderToTexture = false;
+    this.useMultisampleRenderbuffer = false;
   }
 
   setTexture(texture) {
@@ -216,13 +218,13 @@ class WebGLRenderTargetOptions {
     if (json["encoding"] != null) {
       encoding = json["encoding"];
     }
-    if(json["useMultisampleRenderToTexture"] != null) {
+    if (json["useMultisampleRenderToTexture"] != null) {
       useMultisampleRenderToTexture = json["useMultisampleRenderToTexture"];
     }
-    if(json["ignoreDepth"] != null) {
+    if (json["ignoreDepth"] != null) {
       ignoreDepth = json["ignoreDepth"];
     }
-    if(json["useRenderToTexture"] != null) {
+    if (json["useRenderToTexture"] != null) {
       useRenderToTexture = json["useRenderToTexture"];
     }
   }

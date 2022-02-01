@@ -35,17 +35,17 @@ class ConvexHull {
   ConvexHull() {}
 
   setFromPoints(List<Vector3> points) {
-    if (points.length < 4) {
-      print('THREE.ConvexHull: The algorithm needs at least four points.');
+    // The algorithm needs at least four points.
+
+    if (points.length >= 4) {
+      this.makeEmpty();
+
+      for (var i = 0, l = points.length; i < l; i++) {
+        this.vertices.add(new VertexNode(points[i]));
+      }
+
+      this.compute();
     }
-
-    this.makeEmpty();
-
-    for (var i = 0, l = points.length; i < l; i++) {
-      this.vertices.add(VertexNode(points[i]));
-    }
-
-    this.compute();
 
     return this;
   }

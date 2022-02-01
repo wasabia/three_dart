@@ -31,7 +31,6 @@ class WebGLCubeMaps {
           var image = texture.image;
 
           if (image != null && image.height > 0) {
-  
             var renderTarget =
                 WebGLCubeRenderTarget(image.height ~/ 2, null, null);
             renderTarget.fromEquirectangularTexture(renderer, texture);

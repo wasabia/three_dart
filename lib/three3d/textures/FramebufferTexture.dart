@@ -1,19 +1,15 @@
 part of three_textures;
 
-
 class FramebufferTexture extends Texture {
+  FramebufferTexture(width, height, format)
+      : super(null, null, null, null, null, null, format, null, null, null) {
+    this.format = format;
 
-	FramebufferTexture( width, height, format ) : super(null, null, null, null, null, null, format, null, null, null) {
+    this.magFilter = NearestFilter;
+    this.minFilter = NearestFilter;
 
-		this.format = format;
+    this.generateMipmaps = false;
 
-		this.magFilter = NearestFilter;
-		this.minFilter = NearestFilter;
-
-		this.generateMipmaps = false;
-
-		this.needsUpdate = true;
-
-	}
-
+    this.needsUpdate = true;
+  }
 }

@@ -1,297 +1,265 @@
 part of three_webgl;
 
-
-
-
-int numericalSort( a, b ) {
-
-	return a[ 0 ] - b[ 0 ];
-
+int numericalSort(a, b) {
+  return a[0] - b[0];
 }
 
-absNumericalSort( a, b ) {
-
-	return Math.abs( b[ 1 ] ) - Math.abs( a[ 1 ] );
-
+absNumericalSort(a, b) {
+  return Math.abs(b[1]) - Math.abs(a[1]);
 }
 
-denormalize( morph, attribute ) {
+denormalize(morph, attribute) {
+  var denominator = 1;
+  var array = attribute.isInterleavedBufferAttribute
+      ? attribute.data.array
+      : attribute.array;
 
-	var denominator = 1;
-	var array = attribute.isInterleavedBufferAttribute ? attribute.data.array : attribute.array;
+  if (array is Int8Array)
+    denominator = 127;
+  else if (array is Int16Array)
+    denominator = 32767;
+  else if (array is Int32Array)
+    denominator = 2147483647;
+  else
+    console.error(
+        'THREE.WebGLMorphtargets: Unsupported morph attribute data type: ',
+        array);
 
-	if ( array is Int8Array ) denominator = 127;
-	else if ( array is Int16Array ) denominator = 32767;
-	else if ( array is Int32Array ) denominator = 2147483647;
-	else console.error( 'THREE.WebGLMorphtargets: Unsupported morph attribute data type: ', array );
-
-	morph.divideScalar( denominator );
-
+  morph.divideScalar(denominator);
 }
 
 class WebGLMorphtargets {
+  var influencesList = {};
+  var morphInfluences = new Float32Array(8);
+  var morphTextures = new WeakMap();
+  var morph = new Vector3();
 
-	var influencesList = {};
-	var morphInfluences = new Float32Array( 8 );
-	var morphTextures = new WeakMap();
-	var morph = new Vector3();
-
-	List<List<int>> workInfluences = [];
+  List<List<int>> workInfluences = [];
 
   dynamic gl;
   WebGLCapabilities capabilities;
   WebGLTextures textures;
 
-  WebGLMorphtargets( this.gl, this.capabilities, this.textures ) {
-    for ( var i = 0; i < 8; i ++ ) {
-
-      workInfluences.add( [ i, 0 ] );
-
+  WebGLMorphtargets(this.gl, this.capabilities, this.textures) {
+    for (var i = 0; i < 8; i++) {
+      workInfluences.add([i, 0]);
     }
   }
 
+  update(Object3D object, geometry, material, program) {
+    List<num>? objectInfluences = object.morphTargetInfluences;
 
-	
-	update( Object3D object, geometry, material, program ) {
+    if (capabilities.isWebGL2 == true) {
+      // instead of using attributes, the WebGL 2 code path encodes morph targets
+      // into an array of data textures. Each layer represents a single morph target.
 
-		List<num>? objectInfluences = object.morphTargetInfluences;
+      int numberOfMorphTargets = geometry.morphAttributes["position"].length;
 
-		if ( capabilities.isWebGL2 == true ) {
+      Map? entry = morphTextures.get(geometry);
 
-			// instead of using attributes, the WebGL 2 code path encodes morph targets
-			// into an array of data textures. Each layer represents a single morph target.
+      if (entry == undefined || entry!["count"] != numberOfMorphTargets) {
+        if (entry != undefined) entry!["texture"].dispose();
 
-			int numberOfMorphTargets = geometry.morphAttributes["position"].length;
+        var hasMorphNormals = geometry.morphAttributes["normal"] != undefined;
 
-			Map? entry = morphTextures.get( geometry );
+        var morphTargets = geometry.morphAttributes["position"];
+        var morphNormals = geometry.morphAttributes["normal"] ?? [];
 
-			if ( entry == undefined || entry!["count"] != numberOfMorphTargets ) {
+        var numberOfVertices = geometry.attributes["position"].count;
+        var numberOfVertexData =
+            (hasMorphNormals == true) ? 2 : 1; // (v,n) vs. (v)
 
-				if ( entry != undefined ) entry!["texture"].dispose();
+        var width = numberOfVertices * numberOfVertexData;
+        var height = 1;
 
-				var hasMorphNormals = geometry.morphAttributes["normal"] != undefined;
+        if (width > capabilities.maxTextureSize) {
+          height = Math.ceil(width / capabilities.maxTextureSize);
+          width = capabilities.maxTextureSize;
+        }
 
-				var morphTargets = geometry.morphAttributes["position"];
-				var morphNormals = geometry.morphAttributes["normal"] ?? [];
+        var buffer =
+            new Float32Array(width * height * 4 * numberOfMorphTargets);
 
-				var numberOfVertices = geometry.attributes["position"].count;
-				var numberOfVertexData = ( hasMorphNormals == true ) ? 2 : 1; // (v,n) vs. (v)
+        var texture =
+            new DataTexture2DArray(buffer, width, height, numberOfMorphTargets);
+        texture.format =
+            RGBAFormat; // using RGBA since RGB might be emulated (and is thus slower)
+        texture.type = FloatType;
+        texture.needsUpdate = true;
 
-				var width = numberOfVertices * numberOfVertexData;
-				var height = 1;
+        // fill buffer
 
-				if ( width > capabilities.maxTextureSize ) {
+        int vertexDataStride = numberOfVertexData * 4;
 
-					height = Math.ceil( width / capabilities.maxTextureSize );
-					width = capabilities.maxTextureSize;
+        for (var i = 0; i < numberOfMorphTargets; i++) {
+          var morphTarget = morphTargets[i];
 
-				}
+          var offset = width * height * 4 * i;
 
-				var buffer = new Float32Array( width * height * 4 * numberOfMorphTargets );
+          for (var j = 0; j < morphTarget.count; j++) {
+            morph.fromBufferAttribute(morphTarget, j);
 
-				var texture = new DataTexture2DArray( buffer, width, height, numberOfMorphTargets );
-				texture.format = RGBAFormat; // using RGBA since RGB might be emulated (and is thus slower)
-				texture.type = FloatType;
-				texture.needsUpdate = true;
+            if (morphTarget.normalized == true) denormalize(morph, morphTarget);
 
-				// fill buffer
+            var stride = j * vertexDataStride;
 
-				int vertexDataStride = numberOfVertexData * 4;
+            buffer[offset + stride + 0] = morph.x;
+            buffer[offset + stride + 1] = morph.y;
+            buffer[offset + stride + 2] = morph.z;
+            buffer[offset + stride + 3] = 0;
 
-				for ( var i = 0; i < numberOfMorphTargets; i ++ ) {
+            if (hasMorphNormals == true) {
+              var morphNormal = morphNormals[i];
 
-					var morphTarget = morphTargets[ i ];
-					
+              morph.fromBufferAttribute(morphNormal, j);
 
-					var offset = width * height * 4 * i;
+              if (morphNormal.normalized == true)
+                denormalize(morph, morphNormal);
 
-					for ( var j = 0; j < morphTarget.count; j ++ ) {
+              buffer[offset + stride + 4] = morph.x;
+              buffer[offset + stride + 5] = morph.y;
+              buffer[offset + stride + 6] = morph.z;
+              buffer[offset + stride + 7] = 0;
+            }
+          }
+        }
 
-						morph.fromBufferAttribute( morphTarget, j );
+        entry = {
+          "count": numberOfMorphTargets,
+          "texture": texture,
+          "size": new Vector2(width, height)
+        };
 
-						if ( morphTarget.normalized == true ) denormalize( morph, morphTarget );
+        morphTextures.set(geometry, entry);
 
-						var stride = j * vertexDataStride;
+        disposeTexture() {
+          texture.dispose();
 
-						buffer[ offset + stride + 0 ] = morph.x;
-						buffer[ offset + stride + 1 ] = morph.y;
-						buffer[ offset + stride + 2 ] = morph.z;
-						buffer[ offset + stride + 3 ] = 0;
+          morphTextures.delete(geometry);
 
-						if ( hasMorphNormals == true ) {
+          geometry.removeEventListener('dispose', disposeTexture);
+        }
 
-              var morphNormal = morphNormals[ i ];
+        geometry.addEventListener('dispose', disposeTexture);
+      }
 
-							morph.fromBufferAttribute( morphNormal, j );
+      //
 
-							if ( morphNormal.normalized == true ) denormalize( morph, morphNormal );
+      num morphInfluencesSum = 0;
 
-							buffer[ offset + stride + 4 ] = morph.x;
-							buffer[ offset + stride + 5 ] = morph.y;
-							buffer[ offset + stride + 6 ] = morph.z;
-							buffer[ offset + stride + 7 ] = 0;
-
-						}
-
-					}
-
-				}
-
-				entry = {
-					"count": numberOfMorphTargets,
-					"texture": texture,
-					"size": new Vector2( width, height )
-				};
-
-				morphTextures.set( geometry, entry );
-
-				disposeTexture() {
-
-					texture.dispose();
-
-					morphTextures.delete( geometry );
-
-					geometry.removeEventListener( 'dispose', disposeTexture );
-
-				}
-
-				geometry.addEventListener( 'dispose', disposeTexture );
-
-			}
-
-			//
-
-			num morphInfluencesSum = 0;
-
-			for ( var i = 0; i < objectInfluences!.length; i ++ ) {
-
-				morphInfluencesSum += objectInfluences[ i ];
-
-			}
-
-			var morphBaseInfluence = geometry.morphTargetsRelative ? 1 : 1 - morphInfluencesSum;
-
-			program.getUniforms().setValue( gl, 'morphTargetBaseInfluence', morphBaseInfluence );
-			program.getUniforms().setValue( gl, 'morphTargetInfluences', objectInfluences );
-
-			program.getUniforms().setValue( gl, 'morphTargetsTexture', entry["texture"], textures );
-			program.getUniforms().setValue( gl, 'morphTargetsTextureSize', entry["size"] );
-
-
-		} else {
-
-			// When object doesn't have morph target influences defined, we treat it as a 0-length array
-			// This is important to make sure we set up morphTargetBaseInfluence / morphTargetInfluences
-
-			var length = objectInfluences == undefined ? 0 : objectInfluences!.length;
-
-			var influences = influencesList[ geometry.id ];
-
-			if ( influences == undefined || influences.length != length ) {
-
-				// initialise list
-
-				influences = [];
-
-				for ( var i = 0; i < length; i ++ ) {
-
-					influences[ i ] = [ i, 0 ];
-
-				}
-
-				influencesList[ geometry.id ] = influences;
-
-			}
-
-			// Collect influences
-
-			for ( var i = 0; i < length; i ++ ) {
-
-				var influence = influences[ i ];
-
-				influence[ 0 ] = i;
-				influence[ 1 ] = objectInfluences![ i ];
-
-			}
-
-			influences.sort( absNumericalSort );
-
-			for ( var i = 0; i < 8; i ++ ) {
-
-				if ( i < length && influences[ i ][ 1 ] ) {
-
-					workInfluences[ i ][ 0 ] = influences[ i ][ 0 ];
-					workInfluences[ i ][ 1 ] = influences[ i ][ 1 ];
-
-				} else {
-
-					workInfluences[ i ][ 0 ] = Math.MAX_SAFE_INTEGER;
-					workInfluences[ i ][ 1 ] = 0;
-
-				}
-
-			}
-
-			workInfluences.sort( numericalSort );
-
-			var morphTargets = geometry.morphAttributes["position"];
-			var morphNormals = geometry.morphAttributes["normal"];
-
-			var morphInfluencesSum = 0;
-
-			for ( var i = 0; i < 8; i ++ ) {
-
-				var influence = workInfluences[ i ];
-				var index = influence[ 0 ];
-				var value = influence[ 1 ];
-
-				if ( index != Math.MAX_SAFE_INTEGER && value != 0 ) {
-
-					if ( morphTargets && geometry.getAttribute( 'morphTarget${i}' ) != morphTargets[ index ] ) {
-
-						geometry.setAttribute( 'morphTarget${i}', morphTargets[ index ] );
-
-					}
-
-					if ( morphNormals && geometry.getAttribute( 'morphNormal${i}' ) != morphNormals[ index ] ) {
-
-						geometry.setAttribute( 'morphNormal${i}', morphNormals[ index ] );
-
-					}
-
-					morphInfluences[ i ] = value;
-					morphInfluencesSum += value;
-
-				} else {
-
-					if ( morphTargets && geometry.hasAttribute( 'morphTarget${i}' ) == true ) {
-
-						geometry.deleteAttribute( 'morphTarget${i}' );
-
-					}
-
-					if ( morphNormals && geometry.hasAttribute( 'morphNormal${i}' ) == true ) {
-
-						geometry.deleteAttribute( 'morphNormal${i}' );
-
-					}
-
-					morphInfluences[ i ] = 0;
-
-				}
-
-			}
-
-			// GLSL shader uses formula baseinfluence * base + sum(target * influence)
-			// This allows us to switch between absolute morphs and relative morphs without changing shader code
-			// When baseinfluence = 1 - sum(influence), the above is equivalent to sum((target - base) * influence)
-			var morphBaseInfluence = geometry.morphTargetsRelative ? 1 : 1 - morphInfluencesSum;
-
-			program.getUniforms().setValue( gl, 'morphTargetBaseInfluence', morphBaseInfluence );
-			program.getUniforms().setValue( gl, 'morphTargetInfluences', morphInfluences );
-
-		}
-
-	}
-
+      for (var i = 0; i < objectInfluences!.length; i++) {
+        morphInfluencesSum += objectInfluences[i];
+      }
+
+      var morphBaseInfluence =
+          geometry.morphTargetsRelative ? 1 : 1 - morphInfluencesSum;
+
+      program
+          .getUniforms()
+          .setValue(gl, 'morphTargetBaseInfluence', morphBaseInfluence);
+      program
+          .getUniforms()
+          .setValue(gl, 'morphTargetInfluences', objectInfluences);
+
+      program
+          .getUniforms()
+          .setValue(gl, 'morphTargetsTexture', entry["texture"], textures);
+      program
+          .getUniforms()
+          .setValue(gl, 'morphTargetsTextureSize', entry["size"]);
+    } else {
+      // When object doesn't have morph target influences defined, we treat it as a 0-length array
+      // This is important to make sure we set up morphTargetBaseInfluence / morphTargetInfluences
+
+      var length = objectInfluences == undefined ? 0 : objectInfluences!.length;
+
+      var influences = influencesList[geometry.id];
+
+      if (influences == undefined || influences.length != length) {
+        // initialise list
+
+        influences = [];
+
+        for (var i = 0; i < length; i++) {
+          influences[i] = [i, 0];
+        }
+
+        influencesList[geometry.id] = influences;
+      }
+
+      // Collect influences
+
+      for (var i = 0; i < length; i++) {
+        var influence = influences[i];
+
+        influence[0] = i;
+        influence[1] = objectInfluences![i];
+      }
+
+      influences.sort(absNumericalSort);
+
+      for (var i = 0; i < 8; i++) {
+        if (i < length && influences[i][1]) {
+          workInfluences[i][0] = influences[i][0];
+          workInfluences[i][1] = influences[i][1];
+        } else {
+          workInfluences[i][0] = Math.MAX_SAFE_INTEGER;
+          workInfluences[i][1] = 0;
+        }
+      }
+
+      workInfluences.sort(numericalSort);
+
+      var morphTargets = geometry.morphAttributes["position"];
+      var morphNormals = geometry.morphAttributes["normal"];
+
+      var morphInfluencesSum = 0;
+
+      for (var i = 0; i < 8; i++) {
+        var influence = workInfluences[i];
+        var index = influence[0];
+        var value = influence[1];
+
+        if (index != Math.MAX_SAFE_INTEGER && value != 0) {
+          if (morphTargets &&
+              geometry.getAttribute('morphTarget${i}') != morphTargets[index]) {
+            geometry.setAttribute('morphTarget${i}', morphTargets[index]);
+          }
+
+          if (morphNormals &&
+              geometry.getAttribute('morphNormal${i}') != morphNormals[index]) {
+            geometry.setAttribute('morphNormal${i}', morphNormals[index]);
+          }
+
+          morphInfluences[i] = value;
+          morphInfluencesSum += value;
+        } else {
+          if (morphTargets &&
+              geometry.hasAttribute('morphTarget${i}') == true) {
+            geometry.deleteAttribute('morphTarget${i}');
+          }
+
+          if (morphNormals &&
+              geometry.hasAttribute('morphNormal${i}') == true) {
+            geometry.deleteAttribute('morphNormal${i}');
+          }
+
+          morphInfluences[i] = 0;
+        }
+      }
+
+      // GLSL shader uses formula baseinfluence * base + sum(target * influence)
+      // This allows us to switch between absolute morphs and relative morphs without changing shader code
+      // When baseinfluence = 1 - sum(influence), the above is equivalent to sum((target - base) * influence)
+      var morphBaseInfluence =
+          geometry.morphTargetsRelative ? 1 : 1 - morphInfluencesSum;
+
+      program
+          .getUniforms()
+          .setValue(gl, 'morphTargetBaseInfluence', morphBaseInfluence);
+      program
+          .getUniforms()
+          .setValue(gl, 'morphTargetInfluences', morphInfluences);
+    }
+  }
 }

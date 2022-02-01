@@ -102,23 +102,21 @@ class _State extends State<misc_animation_keys> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.fileName),
-        ),
-        body: Builder(
-          builder: (BuildContext context) {
-            initSize(context);
-            return SingleChildScrollView(child: _build(context));
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Text("render"),
-          onPressed: () {
-            clickRender();
-          },
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.fileName),
+      ),
+      body: Builder(
+        builder: (BuildContext context) {
+          initSize(context);
+          return SingleChildScrollView(child: _build(context));
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Text("render"),
+        onPressed: () {
+          clickRender();
+        },
       ),
     );
   }

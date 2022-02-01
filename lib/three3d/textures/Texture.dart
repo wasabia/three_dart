@@ -15,8 +15,10 @@ class Texture with EventDispatcher {
   bool isDataTexture = false;
   bool isCompressedTexture = false;
   bool isOpenGLTexture = false;
-  bool isRenderTargetTexture = false;  // indicates whether a texture belongs to a render target or not
-  bool needsPMREMUpdate = false; // indicates whether this texture should be processed by PMREMGenerator or not (only relevant for render target textures)
+  bool isRenderTargetTexture =
+      false; // indicates whether a texture belongs to a render target or not
+  bool needsPMREMUpdate =
+      false; // indicates whether this texture should be processed by PMREMGenerator or not (only relevant for render target textures)
 
   // image or List ???
   dynamic image;
