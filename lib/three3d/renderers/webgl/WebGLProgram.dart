@@ -53,7 +53,9 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     String prefixVertex, prefixFragment;
 
     String defaultVersionString =
-        (!kIsWeb && Platform.isMacOS) ? "#version 410\n" : "";
+        (!kIsWeb && (Platform.isMacOS || Platform.isWindows))
+            ? "#version 410\n"
+            : "";
 
     var versionString = parameters.glslVersion != null
         ? '#version ${parameters.glslVersion}\n'
@@ -166,7 +168,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         // 'attribute vec3 position;',
         'attribute vec3 normal;',
         'attribute vec2 uv;',
-        
+
         '#ifdef USE_TANGENT',
         '	attribute vec4 tangent;',
         '#endif',
@@ -328,7 +330,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
     if (parameters.isWebGL2 && parameters.isRawShaderMaterial != true) {
       // GLSL 3.0 conversion for built-in materials and ShaderMaterial
-      versionString = (!kIsWeb && Platform.isMacOS)
+      versionString = (!kIsWeb && (Platform.isMacOS || Platform.isWindows))
           ? "#version 410\n"
           : "#version 300 es\n";
 
@@ -368,9 +370,9 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     var fragmentGlsl = versionString + prefixFragment + fragmentShader;
 
     // developer.log(" alphaTest: ${parameters.alphaTest} ");
-    // developer.log(" 111 ================= VERTEX  ");
+    developer.log(" 111 ================= VERTEX  ");
     // developer.log(vertexGlsl);
-    // print( vertexGlsl );
+    print(vertexGlsl);
     // developer.log("  111 ==================== FRAGMENT ");
     // developer.log(fragmentGlsl);
     // print( fragmentGlsl );

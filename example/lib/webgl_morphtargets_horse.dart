@@ -12,7 +12,8 @@ import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 class webgl_morphtargets_horse extends StatefulWidget {
   String fileName;
 
-  webgl_morphtargets_horse({Key? key, required this.fileName}) : super(key: key);
+  webgl_morphtargets_horse({Key? key, required this.fileName})
+      : super(key: key);
 
   createState() => _State();
 }
@@ -211,38 +212,32 @@ class _State extends State<webgl_morphtargets_horse> {
   }
 
   initPage() async {
-    
-
-    camera = new THREE.PerspectiveCamera( 50, width / height, 1, 10000 );
+    camera = new THREE.PerspectiveCamera(50, width / height, 1, 10000);
     camera.position.y = 300;
 
     scene = new THREE.Scene();
-    scene.background = new THREE.Color( 0xf0f0f0 );
+    scene.background = new THREE.Color(0xf0f0f0);
 
     //
 
-    var light1 = new THREE.DirectionalLight( 0xefefff, 1.5 );
-    light1.position.set( 1, 1, 1 ).normalize();
-    scene.add( light1 );
+    var light1 = new THREE.DirectionalLight(0xefefff, 1.5);
+    light1.position.set(1, 1, 1).normalize();
+    scene.add(light1);
 
-    var light2 = new THREE.DirectionalLight( 0xffefef, 1.5 );
-    light2.position.set( - 1, - 1, - 1 ).normalize();
-    scene.add( light2 );
+    var light2 = new THREE.DirectionalLight(0xffefef, 1.5);
+    light2.position.set(-1, -1, -1).normalize();
+    scene.add(light2);
 
-    var loader = new THREE_JSM.GLTFLoader();
-    var gltf = await loader.loadAsync( 'assets/models/gltf/Horse.gltf');
-  
-    mesh = gltf["scene"].children[ 0 ];
-    mesh.scale.set( 1.5, 1.5, 1.5 );
-    scene.add( mesh );
+    var loader = new THREE_JSM.GLTFLoader(null);
+    var gltf = await loader.loadAsync('assets/models/gltf/Horse.gltf');
 
-    mixer = new THREE.AnimationMixer( mesh );
+    mesh = gltf["scene"].children[0];
+    mesh.scale.set(1.5, 1.5, 1.5);
+    scene.add(mesh);
 
-    mixer!.clipAction( gltf["animations"][ 0 ] ).setDuration( 1 ).play();
+    mixer = new THREE.AnimationMixer(mesh);
 
-
-
-
+    mixer!.clipAction(gltf["animations"][0]).setDuration(1).play();
 
     loaded = true;
 
@@ -251,7 +246,6 @@ class _State extends State<webgl_morphtargets_horse> {
     // scene.overrideMaterial = new THREE.MeshBasicMaterial();
   }
 
-  
   clickRender() {
     print("clickRender..... ");
     animate();
@@ -266,25 +260,22 @@ class _State extends State<webgl_morphtargets_horse> {
       return;
     }
 
-
     theta += 0.1;
 
-    camera.position.x = radius * THREE.Math.sin( THREE.MathUtils.degToRad( theta ) );
-    camera.position.z = radius * THREE.Math.cos( THREE.MathUtils.degToRad( theta ) );
+    camera.position.x =
+        radius * THREE.Math.sin(THREE.MathUtils.degToRad(theta));
+    camera.position.z =
+        radius * THREE.Math.cos(THREE.MathUtils.degToRad(theta));
 
-    camera.lookAt( THREE.Vector3(0, 150, 0) );
+    camera.lookAt(THREE.Vector3(0, 150, 0));
 
-    if ( mixer != null ) {
-
+    if (mixer != null) {
       var time = DateTime.now().millisecondsSinceEpoch;
 
-      mixer!.update( ( time - prevTime ) * 0.001 );
+      mixer!.update((time - prevTime) * 0.001);
 
       prevTime = time;
-
     }
-
-
 
     render();
 
