@@ -29,5 +29,7 @@ var filesJson = [
   "webgl_geometry_colors",
   "webgl_loader_svg",
   "webgl_helpers",
-  "webgl_morphtargets"
+  "webgl_morphtargets",
+  "webgl_morphtargets_sphere",
+  "webgl_morphtargets_horse"
 ];

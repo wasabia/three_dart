@@ -111,7 +111,7 @@ class WebGLAttributes {
 
     gl.bufferData(
         bufferType,
-        (array is NativeArray) ? array.bytesLength : array.lengthInBytes,
+        array.lengthInBytes,
         array,
         usage);
 
@@ -179,8 +179,7 @@ class WebGLAttributes {
 
     if (updateRange["count"] == -1) {
       // Not using update ranges
-      gl.bufferSubData(bufferType, 0, array, 0,
-          (array is NativeArray) ? array.bytesLength : array.lengthInBytes);
+      gl.bufferSubData(bufferType, 0, array, 0, array.lengthInBytes);
     } else {
       print(" WebGLAttributes.dart gl.bufferSubData need debug confirm.... ");
       gl.bufferSubData(bufferType, updateRange["offset"] * attribute.itemSize,
@@ -220,7 +219,7 @@ class WebGLAttributes {
   }
 
   update(attribute, bufferType, {String? name}) {
-    // print(" WebGLAttributes.update attribute: ${attribute.runtimeType} name: ${name} ");
+    // print(" WebGLAttributes.update attribute: ${attribute.type} ${attribute.runtimeType} name: ${name} ");
 
     if (attribute.type == "GLBufferAttribute") {
       var cached = buffers.get(attribute);
@@ -256,6 +255,7 @@ class WebGLAttributes {
         updateBuffer(data["buffer"], attribute, bufferType);
         data["version"] = attribute.version;
       }
+
     }
   }
 }

@@ -87,8 +87,6 @@ class WebGLRenderer {
   var _currentScissor = Vector4.init();
   var _currentScissorTest = null;
 
-  //
-
   double _pixelRatio = 1;
   Function? _opaqueSort = null;
   Function? _transparentSort = null;
@@ -519,6 +517,7 @@ class WebGLRenderer {
         geometry.morphAttributes["normal"] != null) {
       morphtargets.update(object, geometry, material, program);
     }
+
 
     bindingStates.setup(object, material, program, geometry, index);
 

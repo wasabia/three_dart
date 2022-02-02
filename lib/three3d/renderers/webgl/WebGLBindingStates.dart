@@ -7,8 +7,9 @@ class WebGLBindingStates {
   WebGLCapabilities capabilities;
 
   late int maxVertexAttributes;
-  var extension = null;
-  bool vaoAvailable = true;
+
+  dynamic extension;
+  late bool vaoAvailable;
 
   late Map<String, dynamic> defaultState;
   late Map<String, dynamic> currentState;
@@ -19,6 +20,9 @@ class WebGLBindingStates {
     maxVertexAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
 
     bindingStates = Map<int, dynamic>();
+
+    extension = capabilities.isWebGL2 ? null : extensions.get( 'OES_vertex_array_object' );
+	  vaoAvailable = capabilities.isWebGL2 || extension != null;
 
     this.defaultState = createBindingState(null);
     this.currentState = defaultState;
@@ -36,7 +40,6 @@ class WebGLBindingStates {
       }
 
       updateBuffers = needsUpdate(geometry, index);
-
       // print("WebGLBindingStates.dart setup object: ${object}  updateBuffers: ${updateBuffers}  ");
 
       if (updateBuffers) saveCache(geometry, index);

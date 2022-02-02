@@ -10,7 +10,7 @@ abstract class Loader {
   String responseType = "text";
   late String mimeType;
 
-  Loader(manager) {
+  Loader([manager]) {
     this.manager = (manager != null) ? manager : DefaultLoadingManager;
 
     this.crossOrigin = 'anonymous';

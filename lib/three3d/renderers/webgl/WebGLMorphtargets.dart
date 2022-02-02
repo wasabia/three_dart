@@ -4,8 +4,8 @@ int numericalSort(a, b) {
   return a[0] - b[0];
 }
 
-absNumericalSort(a, b) {
-  return Math.abs(b[1]) - Math.abs(a[1]);
+int absNumericalSort(a, b) {
+  return Math.abs(b[1]) >= Math.abs(a[1]) ? 1 : -1;
 }
 
 denormalize(morph, attribute) {
@@ -30,11 +30,11 @@ denormalize(morph, attribute) {
 
 class WebGLMorphtargets {
   var influencesList = {};
-  var morphInfluences = new Float32Array(8);
+  var morphInfluences = new Float32List(8);
   var morphTextures = new WeakMap();
   var morph = new Vector3();
 
-  List<List<int>> workInfluences = [];
+  List<List<num>> workInfluences = [];
 
   dynamic gl;
   WebGLCapabilities capabilities;
@@ -77,13 +77,10 @@ class WebGLMorphtargets {
           width = capabilities.maxTextureSize;
         }
 
-        var buffer =
-            new Float32Array(width * height * 4 * numberOfMorphTargets);
+        var buffer = new Float32List(width * height * 4 * numberOfMorphTargets);
 
-        var texture =
-            new DataTexture2DArray(buffer, width, height, numberOfMorphTargets);
-        texture.format =
-            RGBAFormat; // using RGBA since RGB might be emulated (and is thus slower)
+        var texture = new DataTexture2DArray(buffer, width, height, numberOfMorphTargets);
+        texture.format = RGBAFormat; // using RGBA since RGB might be emulated (and is thus slower)
         texture.type = FloatType;
         texture.needsUpdate = true;
 
@@ -103,9 +100,9 @@ class WebGLMorphtargets {
 
             var stride = j * vertexDataStride;
 
-            buffer[offset + stride + 0] = morph.x;
-            buffer[offset + stride + 1] = morph.y;
-            buffer[offset + stride + 2] = morph.z;
+            buffer[offset + stride + 0] = morph.x.toDouble();
+            buffer[offset + stride + 1] = morph.y.toDouble();
+            buffer[offset + stride + 2] = morph.z.toDouble();
             buffer[offset + stride + 3] = 0;
 
             if (hasMorphNormals == true) {
@@ -116,9 +113,9 @@ class WebGLMorphtargets {
               if (morphNormal.normalized == true)
                 denormalize(morph, morphNormal);
 
-              buffer[offset + stride + 4] = morph.x;
-              buffer[offset + stride + 5] = morph.y;
-              buffer[offset + stride + 6] = morph.z;
+              buffer[offset + stride + 4] = morph.x.toDouble();
+              buffer[offset + stride + 5] = morph.y.toDouble();
+              buffer[offset + stride + 6] = morph.z.toDouble();
               buffer[offset + stride + 7] = 0;
             }
           }
@@ -154,6 +151,13 @@ class WebGLMorphtargets {
       var morphBaseInfluence =
           geometry.morphTargetsRelative ? 1 : 1 - morphInfluencesSum;
 
+
+      // print("morphTargetBaseInfluence: ${morphBaseInfluence} ");
+      // print("morphTargetInfluences: ${objectInfluences} ");
+      // print("morphTargetsTexture: ${entry["texture"].image.data} ");
+      // print("morphTargetsTextureSize: ${entry["size"].toJSON()} ");
+
+
       program
           .getUniforms()
           .setValue(gl, 'morphTargetBaseInfluence', morphBaseInfluence);
@@ -173,15 +177,15 @@ class WebGLMorphtargets {
 
       var length = objectInfluences == undefined ? 0 : objectInfluences!.length;
 
-      var influences = influencesList[geometry.id];
+      List<List<num>>? influences = influencesList[geometry.id];
 
-      if (influences == undefined || influences.length != length) {
+      if (influences == undefined || influences!.length != length) {
         // initialise list
 
         influences = [];
 
         for (var i = 0; i < length; i++) {
-          influences[i] = [i, 0];
+          influences.add( [i, 0.0] );
         }
 
         influencesList[geometry.id] = influences;
@@ -199,7 +203,7 @@ class WebGLMorphtargets {
       influences.sort(absNumericalSort);
 
       for (var i = 0; i < 8; i++) {
-        if (i < length && influences[i][1]) {
+        if (i < length && influences[i][1] != 0) {
           workInfluences[i][0] = influences[i][0];
           workInfluences[i][1] = influences[i][1];
         } else {
@@ -213,7 +217,7 @@ class WebGLMorphtargets {
       var morphTargets = geometry.morphAttributes["position"];
       var morphNormals = geometry.morphAttributes["normal"];
 
-      var morphInfluencesSum = 0;
+      num morphInfluencesSum = 0;
 
       for (var i = 0; i < 8; i++) {
         var influence = workInfluences[i];
@@ -221,25 +225,25 @@ class WebGLMorphtargets {
         var value = influence[1];
 
         if (index != Math.MAX_SAFE_INTEGER && value != 0) {
-          if (morphTargets &&
+          if (morphTargets != null &&
               geometry.getAttribute('morphTarget${i}') != morphTargets[index]) {
             geometry.setAttribute('morphTarget${i}', morphTargets[index]);
           }
 
-          if (morphNormals &&
+          if (morphNormals != null &&
               geometry.getAttribute('morphNormal${i}') != morphNormals[index]) {
             geometry.setAttribute('morphNormal${i}', morphNormals[index]);
           }
 
-          morphInfluences[i] = value;
+          morphInfluences[i] = value.toDouble();
           morphInfluencesSum += value;
         } else {
-          if (morphTargets &&
+          if (morphTargets != null &&
               geometry.hasAttribute('morphTarget${i}') == true) {
             geometry.deleteAttribute('morphTarget${i}');
           }
 
-          if (morphNormals &&
+          if (morphNormals != null &&
               geometry.hasAttribute('morphNormal${i}') == true) {
             geometry.deleteAttribute('morphNormal${i}');
           }

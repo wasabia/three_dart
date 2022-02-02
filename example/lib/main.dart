@@ -3,6 +3,6 @@ import 'package:flutter/material.dart';
 import 'ExampleApp.dart';
 
 void main() {
-  runApp(ExampleApp());
-  // runApp( MaterialApp(home: webgl_morphtargets(fileName: "webgl_morphtargets"),) );
+  // runApp(ExampleApp());
+  runApp( MaterialApp(home: webgl_morphtargets(fileName: "webgl_morphtargets"),) );
 }
