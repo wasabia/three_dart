@@ -209,7 +209,6 @@ class _State extends State<webgl_morphtargets> {
   }
 
   initPage() async {
-
     String vertexShader = """
 precision mediump sampler2DArray;
 #define attribute in
@@ -229,19 +228,6 @@ uniform float morphTargetBaseInfluence;
 uniform float morphTargetInfluences[MORPHTARGETS_COUNT];
 uniform sampler2DArray morphTargetsTexture;
 uniform vec2 morphTargetsTextureSize;
-
-vec3 getMorph(const in int vertexIndex, const in int morphTargetIndex,
-              const in int offset, const in int stride) {
-
-  float texelIndex = float(vertexIndex * stride + offset);
-  float y = floor(texelIndex / morphTargetsTextureSize.x);
-  float x = texelIndex - y * morphTargetsTextureSize.x;
-
-  vec3 morphUV = vec3((x + 0.5) / morphTargetsTextureSize.x, y / morphTargetsTextureSize.y, morphTargetIndex);
-  
-  return texture(morphTargetsTexture, morphUV).xyz;
-}
-
 
 
 void main() {
@@ -296,16 +282,11 @@ void main() {
 
     var geometry = createGeometry();
 
-    // var material =
-    //     new THREE.MeshPhongMaterial({"color": 0xff0000, "flatShading": true});
+    var material =
+        new THREE.MeshPhongMaterial({"color": 0xff0000, "flatShading": true});
 
-    var material = new THREE.ShaderMaterial({
-      "vertexShader": vertexShader,
-      "fragmentShader": fragmentShader
-    });
-
-
-
+    // var material = new THREE.ShaderMaterial(
+    //     {"vertexShader": vertexShader, "fragmentShader": fragmentShader});
 
     mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
@@ -391,13 +372,10 @@ void main() {
 
     // print(" _v0: ${_v0} _v1: ${_v1} ");
 
-    // mesh.morphTargetInfluences![ 0 ] = _v0;
-    // mesh.morphTargetInfluences![1] = _v1;
+    mesh.morphTargetInfluences![0] = _v0;
+    mesh.morphTargetInfluences![1] = _v1;
 
-    mesh.geometry!.index!.usage = THREE.StreamDrawUsage;
-    mesh.geometry!.index!.needsUpdate = true;
-
-    mesh.morphTargetInfluences![ 0 ] = 0.2;
+    // mesh.morphTargetInfluences![0] = 0.2;
 
     render();
 
