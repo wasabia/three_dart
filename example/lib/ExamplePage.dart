@@ -25,6 +25,8 @@ import 'package:example/webgl_loader_texture_basis.dart';
 import 'package:example/webgl_materials.dart';
 import 'package:example/webgl_materials_browser.dart';
 import 'package:example/webgl_morphtargets.dart';
+import 'package:example/webgl_morphtargets_horse.dart';
+import 'package:example/webgl_morphtargets_sphere.dart';
 import 'package:example/webgl_shadow_contact.dart';
 import 'package:example/webgl_shadowmap_viewer.dart';
 import 'package:example/webgl_skinning_simple.dart';
@@ -114,6 +116,11 @@ class _MyAppState extends State<ExamplePage> {
       page = webgl_helpers(fileName: fileName);
     } else if (fileName == "webgl_morphtargets") {
       page = webgl_morphtargets(fileName: fileName);
+    } else if (fileName == "webgl_morphtargets_sphere") {
+      page = webgl_morphtargets_sphere(fileName: fileName);
+    } else if (fileName == "webgl_morphtargets_horse") {
+      page = webgl_morphtargets_horse(fileName: fileName);
+      
     } else {
       throw ("ExamplePage fileName ${fileName} is not support yet ");
     }

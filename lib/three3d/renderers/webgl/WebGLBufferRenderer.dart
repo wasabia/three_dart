@@ -35,7 +35,7 @@ class WebGLBufferRenderer extends BaseWebGLBufferRenderer {
   }
 
   render(start, count) {
-    // print("WebGLBufferRenderer.render mode: ${mode} start: ${start} count: ${count}  ");
+    print("WebGLBufferRenderer.render mode: ${mode} start: ${start} count: ${count}  ");
 
     gl.drawArrays(mode, start, count);
 
@@ -43,7 +43,7 @@ class WebGLBufferRenderer extends BaseWebGLBufferRenderer {
   }
 
   renderInstances(start, count, primcount) {
-    // print(" WebGLBufferRenderer.renderInstances mode: ${mode}  start: ${start} count: ${count} primcount: ${primcount} ");
+    print(" WebGLBufferRenderer.renderInstances mode: ${mode}  start: ${start} count: ${count} primcount: ${primcount} ");
 
     if (primcount == 0) return;
 

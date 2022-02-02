@@ -733,11 +733,6 @@ class WebGLTextures {
         for (var i = 0, il = mipmaps.length; i < il; i++) {
           mipmap = mipmaps[i];
 
-          // TODO texImage2D
-
-          // state.texImage2D(gl.TEXTURE_2D, i, glInternalFormat, image.width,
-          //     image.height, 0, glFormat, glType, mipmap);
-
           if (useTexStorage) {
             state.texSubImage2D(gl.TEXTURE_2D, i, 0, 0, mipmap.width,
                 mipmap.height, glFormat, glType, mipmap.data);
@@ -749,17 +744,6 @@ class WebGLTextures {
 
         texture.generateMipmaps = false;
       } else {
-        // print(" WebGLTextures.uploadTexture..... ");
-
-        // TODO
-        // if (kIsWeb) {
-        // state.texImage2D_NOSIZE(
-        //     gl.TEXTURE_2D, 0, glInternalFormat, glFormat, glType, image.data);
-        // } else {
-        //   state.texImage2D(gl.TEXTURE_2D, 0, glInternalFormat, image.width,
-        //       image.height, 0, glFormat, glType, image.data);
-        // }
-
         if (useTexStorage) {
           if (allocateMemory) {
             state.texStorage2D(gl.TEXTURE_2D, levels, glInternalFormat,

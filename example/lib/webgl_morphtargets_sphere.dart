@@ -9,15 +9,15 @@ import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
-class webgl_morphtargets extends StatefulWidget {
+class webgl_morphtargets_sphere extends StatefulWidget {
   String fileName;
 
-  webgl_morphtargets({Key? key, required this.fileName}) : super(key: key);
+  webgl_morphtargets_sphere({Key? key, required this.fileName}) : super(key: key);
 
   createState() => _State();
 }
 
-class _State extends State<webgl_morphtargets> {
+class _State extends State<webgl_morphtargets_sphere> {
   late FlutterGlPlugin three3dRender;
   THREE.WebGLRenderer? renderer;
 
@@ -38,6 +38,9 @@ class _State extends State<webgl_morphtargets> {
   num dpr = 1.0;
 
   var AMOUNT = 4;
+
+  var sign = 1;
+  var speed = 0.5;
 
   bool verbose = true;
   bool disposed = false;
@@ -209,106 +212,53 @@ class _State extends State<webgl_morphtargets> {
   }
 
   initPage() async {
+    
 
-    String vertexShader = """
-precision mediump sampler2DArray;
-#define attribute in
-#define varying out
-#define texture2D texture
-precision highp float;
-precision highp int;
-#define MORPHTARGETS_COUNT 2
-
-varying vec2 vUv;
-varying vec3 vViewPosition;
-varying vec3 vNormal;
-
-
-uniform float morphTargetBaseInfluence;
-
-uniform float morphTargetInfluences[MORPHTARGETS_COUNT];
-uniform sampler2DArray morphTargetsTexture;
-uniform vec2 morphTargetsTextureSize;
-
-vec3 getMorph(const in int vertexIndex, const in int morphTargetIndex,
-              const in int offset, const in int stride) {
-
-  float texelIndex = float(vertexIndex * stride + offset);
-  float y = floor(texelIndex / morphTargetsTextureSize.x);
-  float x = texelIndex - y * morphTargetsTextureSize.x;
-
-  vec3 morphUV = vec3((x + 0.5) / morphTargetsTextureSize.x, y / morphTargetsTextureSize.y, morphTargetIndex);
-  
-  return texture(morphTargetsTexture, morphUV).xyz;
-}
-
-
-
-void main() {
-
-  vec3 objectNormal = vec3(normal);
-
-  vec3 transformedNormal = objectNormal;
-
-  transformedNormal = normalMatrix * transformedNormal;
-
-  vNormal = normalize(transformedNormal);
-
-
-  vec3 transformed = vec3(position);
-
-  transformed *= morphTargetBaseInfluence;
-
-
-  vec4 mvPosition = vec4(transformed, 1.0);
-
-  mvPosition = modelViewMatrix * mvPosition;
-
-  gl_Position = projectionMatrix * mvPosition;
-
-  vUv = vec2(gl_VertexID / 36864.0);
-
-  vViewPosition = -mvPosition.xyz;
-}
-    """;
-
-    String fragmentShader = """
-varying vec2 vUv;
-
-void main() {
-  gl_FragColor = vec4(vUv.x, 0, 0, 1.0).rgba;
-}
-    """;
+    camera = new THREE.PerspectiveCamera( 45, width / height, 0.2, 100 );
+    camera.position.set( 0, 5, 5 );
 
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x8FBCD4);
-
-    camera = new THREE.PerspectiveCamera(45, width / height, 1, 20);
-    camera.position.z = 10;
-    scene.add(camera);
 
     camera.lookAt(scene.position);
 
-    scene.add(new THREE.AmbientLight(0x8FBCD4, 0.4));
+    clock = new THREE.Clock();
 
-    var pointLight = new THREE.PointLight(0xffffff, 1);
-    camera.add(pointLight);
+    var light1 = new THREE.PointLight( 0xff2200, 0.7 );
+    light1.position.set( 100, 100, 100 );
+    scene.add( light1 );
 
-    var geometry = createGeometry();
+    var light2 = new THREE.PointLight( 0x22ff00, 0.7 );
+    light2.position.set( - 100, - 100, - 100 );
+    scene.add( light2 );
 
-    // var material =
-    //     new THREE.MeshPhongMaterial({"color": 0xff0000, "flatShading": true});
+    scene.add( new THREE.AmbientLight( 0x111111, 1 ) );
 
-    var material = new THREE.ShaderMaterial({
-      "vertexShader": vertexShader,
-      "fragmentShader": fragmentShader
-    });
+    var loader = new THREE_JSM.GLTFLoader(null);
+
+    var gltf = await loader.loadAsync( 'assets/models/gltf/AnimatedMorphSphere/glTF/AnimatedMorphSphere.gltf');
+
+    mesh = gltf["scene"].getObjectByName( 'AnimatedMorphSphere' );
+    mesh.rotation.z = THREE.Math.PI / 2;
+    scene.add( mesh );
+
+    print(" load sucess mesh: ${mesh}  ");
+    print( mesh.geometry!.morphAttributes );
+
+    var _texture = await new THREE.TextureLoader(null).loadAsync( 'assets/textures/sprites/disc.png' );
+
+    var pointsMaterial = new THREE.PointsMaterial( {
+      "size": 10,
+      "sizeAttenuation": false,
+      "map": _texture,
+      "alphaTest": 0.5
+    } );
+
+    var points = new THREE.Points( mesh.geometry!, pointsMaterial );
+    points.morphTargetInfluences = mesh.morphTargetInfluences;
+    points.morphTargetDictionary = mesh.morphTargetDictionary;
+    mesh.add( points );
 
 
-
-
-    mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
 
     loaded = true;
 
@@ -317,59 +267,7 @@ void main() {
     // scene.overrideMaterial = new THREE.MeshBasicMaterial();
   }
 
-  createGeometry() {
-    var geometry = new THREE.BoxGeometry(2, 2, 2, 32, 32, 32);
-
-    // create an empty array to  hold targets for the attribute we want to morph
-    // morphing positions and normals is supported
-    geometry.morphAttributes["position"] = [];
-
-    // the original positions of the cube's vertices
-    var positionAttribute = geometry.attributes["position"];
-
-    // for the first morph target we'll move the cube's vertices onto the surface of a sphere
-    List<num> spherePositions = [];
-
-    // for the second morph target, we'll twist the cubes vertices
-    List<num> twistPositions = [];
-    var direction = new THREE.Vector3(1, 0, 0);
-    var vertex = new THREE.Vector3();
-
-    for (var i = 0; i < positionAttribute.count; i++) {
-      var x = positionAttribute.getX(i);
-      var y = positionAttribute.getY(i);
-      var z = positionAttribute.getZ(i);
-
-      spherePositions.addAll([
-        x *
-            THREE.Math.sqrt(
-                1 - (y * y / 2) - (z * z / 2) + (y * y * z * z / 3)),
-        y *
-            THREE.Math.sqrt(
-                1 - (z * z / 2) - (x * x / 2) + (z * z * x * x / 3)),
-        z * THREE.Math.sqrt(1 - (x * x / 2) - (y * y / 2) + (x * x * y * y / 3))
-      ]);
-
-      // stretch along the x-axis so we can see the twist better
-      vertex.set(x * 2, y, z);
-
-      vertex
-          .applyAxisAngle(direction, THREE.Math.PI * x / 2)
-          .toArray(twistPositions, twistPositions.length);
-    }
-
-    // add the spherical positions as the first morph target
-    // geometry.morphAttributes["position"][ 0 ] = new THREE.Float32BufferAttribute( spherePositions, 3 );
-    geometry.morphAttributes["position"]!
-        .add(new THREE.Float32BufferAttribute(spherePositions, 3));
-
-    // add the twisted positions as the second morph target
-    geometry.morphAttributes["position"]!
-        .add(new THREE.Float32BufferAttribute(twistPositions, 3));
-
-    return geometry;
-  }
-
+  
   clickRender() {
     print("clickRender..... ");
     animate();
@@ -384,26 +282,32 @@ void main() {
       return;
     }
 
-    num _t = (DateTime.now().millisecondsSinceEpoch * 0.0005);
+    var delta = clock.getDelta();
 
-    var _v0 = (THREE.Math.sin(_t) + 1.0) / 2.0;
-    var _v1 = (THREE.Math.sin(_t + 0.3) + 1.0) / 2.0;
+    if ( mesh != null ) {
 
-    // print(" _v0: ${_v0} _v1: ${_v1} ");
+      var step = delta * speed;
 
-    // mesh.morphTargetInfluences![ 0 ] = _v0;
-    // mesh.morphTargetInfluences![1] = _v1;
+      mesh.rotation.y += step;
 
-    mesh.geometry!.index!.usage = THREE.StreamDrawUsage;
-    mesh.geometry!.index!.needsUpdate = true;
+      print(" mesh.morphTargetInfluences: ${mesh.morphTargetInfluences} ");
 
-    mesh.morphTargetInfluences![ 0 ] = 0.2;
+      mesh.morphTargetInfluences![ 1 ] = mesh.morphTargetInfluences![ 1 ] + step * sign;
+
+      if ( mesh.morphTargetInfluences![ 1 ] <= 0 || mesh.morphTargetInfluences![ 1 ] >= 1 ) {
+
+        sign *= - 1;
+
+      }
+
+    }
+
 
     render();
 
-    // Future.delayed(Duration(milliseconds: 40), () {
-    //   animate();
-    // });
+    Future.delayed(Duration(milliseconds: 40), () {
+      animate();
+    });
   }
 
   @override

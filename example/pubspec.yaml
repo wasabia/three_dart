@@ -77,11 +77,13 @@ flutter:
     - assets/models/gltf/test/
     - assets/models/gltf/RobotExpressive/
     - assets/models/gltf/DamagedHelmet/glTF/
+    - assets/models/gltf/AnimatedMorphSphere/glTF/
     - assets/models/svg/
     - assets/textures/
     - assets/textures/equirectangular/
     - assets/textures/terrain/
     - assets/textures/patterns/
+    - assets/textures/sprites/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

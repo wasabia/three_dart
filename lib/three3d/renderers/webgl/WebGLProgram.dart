@@ -53,7 +53,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     String prefixVertex, prefixFragment;
 
     String defaultVersionString =
-        (!kIsWeb && Platform.isMacOS) ? "#version 330\n" : "";
+        (!kIsWeb && Platform.isMacOS) ? "#version 410\n" : "";
 
     var versionString = parameters.glslVersion != null
         ? '#version ${parameters.glslVersion}\n'
@@ -156,15 +156,17 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         'uniform mat3 normalMatrix;',
         'uniform vec3 cameraPosition;',
         'uniform bool isOrthographic;',
+        'layout (location = 0) in vec3 position;',
         '#ifdef USE_INSTANCING',
         '	attribute mat4 instanceMatrix;',
         '#endif',
         '#ifdef USE_INSTANCING_COLOR',
         '	attribute vec3 instanceColor;',
         '#endif',
-        'attribute vec3 position;',
+        // 'attribute vec3 position;',
         'attribute vec3 normal;',
         'attribute vec2 uv;',
+        
         '#ifdef USE_TANGENT',
         '	attribute vec4 tangent;',
         '#endif',
@@ -327,7 +329,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     if (parameters.isWebGL2 && parameters.isRawShaderMaterial != true) {
       // GLSL 3.0 conversion for built-in materials and ShaderMaterial
       versionString = (!kIsWeb && Platform.isMacOS)
-          ? "#version 330\n"
+          ? "#version 410\n"
           : "#version 300 es\n";
 
       prefixVertex = [

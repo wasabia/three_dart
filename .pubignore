@@ -2,3 +2,4 @@ build/
 example/build
 example/ios/pods
 example/assets/
+example/macos/pods
