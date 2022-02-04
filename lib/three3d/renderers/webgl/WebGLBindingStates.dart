@@ -21,8 +21,10 @@ class WebGLBindingStates {
 
     bindingStates = Map<int, dynamic>();
 
-    extension = capabilities.isWebGL2 ? null : extensions.get( 'OES_vertex_array_object' );
-	  vaoAvailable = capabilities.isWebGL2 || extension != null;
+    extension = capabilities.isWebGL2
+        ? null
+        : extensions.get('OES_vertex_array_object');
+    vaoAvailable = capabilities.isWebGL2 || extension != null;
 
     this.defaultState = createBindingState(null);
     this.currentState = defaultState;

@@ -70,9 +70,7 @@ class Mesh extends Object3D {
       var keys = morphAttributes.keys.toList();
 
       if (keys.length > 0) {
-
         print("updateMorphTargets keys[0] ${keys[0]} keys: ${keys} ");
-
 
         List<BufferAttribute>? morphAttribute = morphAttributes[keys[0]];
 

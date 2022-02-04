@@ -518,7 +518,6 @@ class WebGLRenderer {
       morphtargets.update(object, geometry, material, program);
     }
 
-
     bindingStates.setup(object, material, program, geometry, index);
 
     Map<String, dynamic> attribute;

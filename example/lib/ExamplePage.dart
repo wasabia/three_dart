@@ -120,7 +120,6 @@ class _MyAppState extends State<ExamplePage> {
       page = webgl_morphtargets_sphere(fileName: fileName);
     } else if (fileName == "webgl_morphtargets_horse") {
       page = webgl_morphtargets_horse(fileName: fileName);
-      
     } else {
       throw ("ExamplePage fileName ${fileName} is not support yet ");
     }
