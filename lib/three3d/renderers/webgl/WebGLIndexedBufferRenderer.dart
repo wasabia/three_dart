@@ -25,7 +25,8 @@ class WebGLIndexedBufferRenderer extends BaseWebGLBufferRenderer {
   }
 
   render(start, count) {
-    print(" WebGLIndexedBufferRenderer render mode: ${mode} start: ${start} count: ${count} type: ${type} v3: ${start * bytesPerElement} ");
+    print(
+        " WebGLIndexedBufferRenderer render mode: ${mode} start: ${start} count: ${count} type: ${type} v3: ${start * bytesPerElement} ");
 
     gl.drawElements(mode, count, type, start * bytesPerElement);
 
@@ -33,7 +34,8 @@ class WebGLIndexedBufferRenderer extends BaseWebGLBufferRenderer {
   }
 
   renderInstances(start, count, primcount) {
-    print(" WebGLIndexedBufferRenderer.renderInstances mode: ${mode} start: ${start} count: ${count} primcount: ${primcount} bytesPerElement: ${bytesPerElement} ");
+    print(
+        " WebGLIndexedBufferRenderer.renderInstances mode: ${mode} start: ${start} count: ${count} primcount: ${primcount} bytesPerElement: ${bytesPerElement} ");
 
     if (primcount == 0) return;
 

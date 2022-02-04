@@ -209,63 +209,6 @@ class _State extends State<webgl_morphtargets> {
   }
 
   initPage() async {
-    String vertexShader = """
-precision mediump sampler2DArray;
-#define attribute in
-#define varying out
-#define texture2D texture
-precision highp float;
-precision highp int;
-#define MORPHTARGETS_COUNT 2
-
-varying vec2 vUv;
-varying vec3 vViewPosition;
-varying vec3 vNormal;
-
-
-uniform float morphTargetBaseInfluence;
-
-uniform float morphTargetInfluences[MORPHTARGETS_COUNT];
-uniform sampler2DArray morphTargetsTexture;
-uniform vec2 morphTargetsTextureSize;
-
-
-void main() {
-
-  vec3 objectNormal = vec3(normal);
-
-  vec3 transformedNormal = objectNormal;
-
-  transformedNormal = normalMatrix * transformedNormal;
-
-  vNormal = normalize(transformedNormal);
-
-
-  vec3 transformed = vec3(position);
-
-  transformed *= morphTargetBaseInfluence;
-
-
-  vec4 mvPosition = vec4(transformed, 1.0);
-
-  mvPosition = modelViewMatrix * mvPosition;
-
-  gl_Position = projectionMatrix * mvPosition;
-
-  vUv = vec2(gl_VertexID / 36864.0);
-
-  vViewPosition = -mvPosition.xyz;
-}
-    """;
-
-    String fragmentShader = """
-varying vec2 vUv;
-
-void main() {
-  gl_FragColor = vec4(vUv.x, 0, 0, 1.0).rgba;
-}
-    """;
-
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x8FBCD4);
 
@@ -284,9 +227,6 @@ void main() {
 
     var material =
         new THREE.MeshPhongMaterial({"color": 0xff0000, "flatShading": true});
-
-    // var material = new THREE.ShaderMaterial(
-    //     {"vertexShader": vertexShader, "fragmentShader": fragmentShader});
 
     mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
@@ -379,9 +319,9 @@ void main() {
 
     render();
 
-    // Future.delayed(Duration(milliseconds: 40), () {
-    //   animate();
-    // });
+    Future.delayed(Duration(milliseconds: 40), () {
+      animate();
+    });
   }
 
   @override

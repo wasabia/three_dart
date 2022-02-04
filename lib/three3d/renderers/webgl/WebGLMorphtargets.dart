@@ -79,8 +79,10 @@ class WebGLMorphtargets {
 
         var buffer = new Float32List(width * height * 4 * numberOfMorphTargets);
 
-        var texture = new DataTexture2DArray(buffer, width, height, numberOfMorphTargets);
-        texture.format = RGBAFormat; // using RGBA since RGB might be emulated (and is thus slower)
+        var texture =
+            new DataTexture2DArray(buffer, width, height, numberOfMorphTargets);
+        texture.format =
+            RGBAFormat; // using RGBA since RGB might be emulated (and is thus slower)
         texture.type = FloatType;
         texture.needsUpdate = true;
 
@@ -151,13 +153,6 @@ class WebGLMorphtargets {
       var morphBaseInfluence =
           geometry.morphTargetsRelative ? 1 : 1 - morphInfluencesSum;
 
-
-      // print("morphTargetBaseInfluence: ${morphBaseInfluence} ");
-      // print("morphTargetInfluences: ${objectInfluences} ");
-      // print("morphTargetsTexture: ${entry["texture"].image.data} ");
-      // print("morphTargetsTextureSize: ${entry["size"].toJSON()} ");
-
-
       program
           .getUniforms()
           .setValue(gl, 'morphTargetBaseInfluence', morphBaseInfluence);
@@ -185,7 +180,7 @@ class WebGLMorphtargets {
         influences = [];
 
         for (var i = 0; i < length; i++) {
-          influences.add( [i, 0.0] );
+          influences.add([i, 0.0]);
         }
 
         influencesList[geometry.id] = influences;

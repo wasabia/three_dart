@@ -109,11 +109,7 @@ class WebGLAttributes {
 
     gl.bindBuffer(bufferType, buffer);
 
-    gl.bufferData(
-        bufferType,
-        array.lengthInBytes,
-        array,
-        usage);
+    gl.bufferData(bufferType, array.lengthInBytes, array, usage);
 
     if (attribute.onUploadCallback != null) {
       attribute.onUploadCallback();
@@ -255,7 +251,6 @@ class WebGLAttributes {
         updateBuffer(data["buffer"], attribute, bufferType);
         data["version"] = attribute.version;
       }
-
     }
   }
 }

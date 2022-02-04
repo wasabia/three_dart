@@ -86,10 +86,10 @@ packages:
   flutter_gl:
     dependency: "direct main"
     description:
-      path: "../flutter_gl/flutter_gl"
-      relative: true
-    source: path
-    version: "0.0.10"
+      name: flutter_gl
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.12"
   flutter_gl_macos:
     dependency: transitive
     description:
@@ -117,7 +117,7 @@ packages:
       name: flutter_gl_windows
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.2"
+    version: "0.0.3"
   flutter_test:
     dependency: "direct dev"
     description: flutter

@@ -6,7 +6,8 @@ class DataTexture2DArray extends Texture {
 
   DataTexture2DArray(data, [int width = 1, int height = 1, int depth = 1])
       : super(null, null, null, null, null, null, null, null, null, null) {
-    this.image = ImageElement(data: data, width: width, height: height, depth: depth);
+    this.image =
+        ImageElement(data: data, width: width, height: height, depth: depth);
 
     this.magFilter = NearestFilter;
     this.minFilter = NearestFilter;
