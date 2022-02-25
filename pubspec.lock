@@ -86,9 +86,9 @@ packages:
   flutter_gl:
     dependency: "direct main"
     description:
-      name: flutter_gl
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "../flutter_gl/flutter_gl"
+      relative: true
+    source: path
     version: "0.0.12"
   flutter_gl_macos:
     dependency: transitive
@@ -128,6 +128,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_webgpu:
+    dependency: "direct main"
+    description:
+      path: "../flutter_webgpu"
+      relative: true
+    source: path
+    version: "0.0.1"
   html:
     dependency: transitive
     description:
@@ -288,5 +295,5 @@ packages:
     source: hosted
     version: "5.3.1"
 sdks:
-  dart: ">=2.14.0 <3.0.0"
+  dart: ">=2.15.1 <3.0.0"
   flutter: ">=2.5.0"

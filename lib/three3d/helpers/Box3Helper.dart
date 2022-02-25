@@ -79,7 +79,7 @@ class Box3Helper extends LineSegments {
     return box3Helper;
   }
 
-  updateMatrixWorld(force) {
+  updateMatrixWorld([bool force = false]) {
     var box = this.box!;
 
     if (box.isEmpty()) return;

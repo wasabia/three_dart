@@ -65,8 +65,8 @@ class Texture with EventDispatcher {
 
   List mipmaps = [];
 
-  Texture(this.image, int? mapping, int? wrapS, int? wrapT, int? magFilter,
-      int? minFilter, int? format, int? type, int? anisotropy, int? encoding) {
+  Texture(this.image, [int? mapping, int? wrapS, int? wrapT, int? magFilter,
+      int? minFilter, int? format, int? type, int? anisotropy, int? encoding]) {
     this.mapping = mapping ?? Texture.DEFAULT_MAPPING;
 
     this.wrapS = wrapS ?? ClampToEdgeWrapping;

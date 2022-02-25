@@ -22,11 +22,12 @@ dependencies:
   # bidi_dart:
   #   # path: ../bidi_dart
   #   git: git@github.com:wasabia/bidi_dart.git
+  flutter_webgpu:
+    path: ../flutter_webgpu
 
-
-# dependency_overrides:
-#   flutter_gl:
-#     path: ../flutter_gl/flutter_gl
+dependency_overrides:
+  flutter_gl:
+    path: ../flutter_gl/flutter_gl
 
 dev_dependencies:
   flutter_test:

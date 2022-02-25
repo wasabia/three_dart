@@ -79,7 +79,7 @@ class SkinnedMesh extends Mesh {
     }
   }
 
-  updateMatrixWorld(force) {
+  updateMatrixWorld([bool force = false]) {
     super.updateMatrixWorld(force);
 
     if (this.bindMode == 'attached') {

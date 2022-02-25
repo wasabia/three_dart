@@ -4,7 +4,7 @@ export './animation/index.dart';
 
 export './cameras/index.dart';
 export './core/index.dart';
-export './extras/index.dart';
+export './extras/index.dart' hide Node;
 export './geometries/index.dart';
 export './helpers/index.dart';
 
@@ -24,3 +24,6 @@ export './WeakMap.dart';
 
 export './ThreeHelper.dart';
 export './dartHelpers.dart';
+
+
+export './renderers/webgpu/index.dart' hide sign;

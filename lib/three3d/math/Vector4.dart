@@ -7,11 +7,11 @@ class Vector4 {
   late num z;
   late num w;
 
-  Vector4(num x, num y, num z, num w) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.w = w;
+  Vector4([num? x, num? y, num? z, num? w]) {
+    this.x = x ?? 0;
+    this.y = y ?? 0;
+    this.z = z ?? 0;
+    this.w = w ?? 0;
   }
 
   Vector4.init({num x = 0, num y = 0, num z = 0, num w = 1}) {

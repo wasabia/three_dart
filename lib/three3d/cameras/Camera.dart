@@ -62,7 +62,7 @@ class Camera extends Object3D {
     return target.set(-e[8], -e[9], -e[10]).normalize();
   }
 
-  updateMatrixWorld(bool force) {
+  updateMatrixWorld([bool force = false]) {
     super.updateMatrixWorld(force);
 
     this.matrixWorldInverse.copy(this.matrixWorld).invert();

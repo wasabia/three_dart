@@ -29,17 +29,19 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_gl: ^0.0.12
-  three_dart: ^0.0.3
-  three_dart_jsm: ^0.0.4
+  three_dart: ^0.0.6
+  three_dart_jsm: ^0.0.3
   universal_ui: ^0.0.8
 
 dependency_overrides:
   three_dart:
     path: ../
-#   three_dart_jsm:
-#     path: ../../three_dart_plugins/three_dart_jsm/
-#   flutter_gl:
-#     path: ../../flutter_gl/flutter_gl
+  three_dart_jsm:
+    path: ../../three_dart_plugins/three_dart_jsm/
+  flutter_gl:
+    path: ../../flutter_gl/flutter_gl
+  flutter_webgpu:
+    path: ../../flutter_webgpu
 
 dev_dependencies:
   flutter_test:
