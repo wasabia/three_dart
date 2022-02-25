@@ -58,7 +58,7 @@ class SkeletonHelper extends LineSegments {
     return keletonHelper;
   }
 
-  updateMatrixWorld(force) {
+  updateMatrixWorld([bool force = false]) {
     var bones = this.bones;
 
     var geometry = this.geometry!;

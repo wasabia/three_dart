@@ -541,7 +541,7 @@ class Object3D with EventDispatcher {
     this.matrixWorldNeedsUpdate = true;
   }
 
-  updateMatrixWorld(bool force) {
+  updateMatrixWorld([bool force = false]) {
     if (this.matrixAutoUpdate) this.updateMatrix();
 
     if (this.matrixWorldNeedsUpdate || force) {

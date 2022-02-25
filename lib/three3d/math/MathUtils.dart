@@ -7,7 +7,7 @@ class MathUtils {
   static num RAD2DEG = 180.0 / Math.PI;
 
   static String generateUUID() {
-    var uuid = Uuid.generate();
+    var uuid = Uuid().v4();
     // .toUpperCase() here flattens concatenated strings to save heap memory space.
     return uuid.toUpperCase();
   }

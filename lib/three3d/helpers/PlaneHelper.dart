@@ -94,7 +94,7 @@ class PlaneHelper extends Line {
     return planeHelper;
   }
 
-  updateMatrixWorld(force) {
+  updateMatrixWorld([bool force = false]) {
     var scale = -this.plane!.constant;
 
     if (Math.abs(scale) < 1e-8) scale = 1e-8; // sign does not matter

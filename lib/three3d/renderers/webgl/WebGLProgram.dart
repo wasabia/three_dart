@@ -370,9 +370,9 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     var fragmentGlsl = versionString + prefixFragment + fragmentShader;
 
     // developer.log(" alphaTest: ${parameters.alphaTest} ");
-    developer.log(" 111 ================= VERTEX  ");
+    // developer.log(" 111 ================= VERTEX  ");
     // developer.log(vertexGlsl);
-    print(vertexGlsl);
+    // print(vertexGlsl);
     // developer.log("  111 ==================== FRAGMENT ");
     // developer.log(fragmentGlsl);
     // print( fragmentGlsl );
