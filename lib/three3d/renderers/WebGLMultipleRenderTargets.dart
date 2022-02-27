@@ -3,8 +3,8 @@ part of three_renderers;
 class WebGLMultipleRenderTargets extends WebGLRenderTarget {
   bool isWebGLMultipleRenderTargets = true;
 
-  WebGLMultipleRenderTargets(width, height, count)
-      : super(width, height, null) {
+  WebGLMultipleRenderTargets(width, height, count, [options])
+      : super(width, height, options ?? {}) {
     var texture = this.texture;
 
     this.texture = [];

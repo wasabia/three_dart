@@ -4,15 +4,6 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
   bool isWebGLCubeRenderTarget = true;
 
   WebGLCubeRenderTarget(int size, options, dummy) : super(size, size, options) {
-    if (options is num) {
-      print(
-          'THREE.WebGLCubeRenderTarget: constructor signature is now WebGLCubeRenderTarget( size, options )');
-
-      options = dummy;
-    }
-
-    options = options ?? {};
-
     // By convention -- likely based on the RenderMan spec from the 1990's -- cube maps are specified by WebGL (and three.js)
     // in a coordinate system in which positive-x is to the right when looking up the positive-z axis -- in other words,
     // in a left-handed coordinate system. By continuing this convention, preexisting cube maps continued to render correctly.
@@ -20,22 +11,25 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
     // three.js uses a right-handed coordinate system. So environment maps used in three.js appear to have px and nx swapped
     // and the flag isRenderTargetTexture controls this conversion. The flip is not required when using WebGLCubeRenderTarget.texture
     // as a cube texture (this is detected when isRenderTargetTexture is set to true for cube textures).
+    var image = ImageElement(width: size, height: size, depth: 1);
+		var images = [ image, image, image, image, image, image ];
 
+    options = options ?? WebGLRenderTargetOptions({});
     this.texture = CubeTexture(
-        null,
-        options["mapping"],
-        options["wrapS"],
-        options["wrapT"],
-        options["magFilter"],
-        options["minFilter"],
-        options["format"],
-        options["type"],
-        options["anisotropy"],
-        options["encoding"]);
+        images,
+        options.mapping,
+        options.wrapS,
+        options.wrapT,
+        options.magFilter,
+        options.minFilter,
+        options.format,
+        options.type,
+        options.anisotropy,
+        options.encoding);
     this.texture.isRenderTargetTexture = true;
 
-    this.texture.generateMipmaps = options["generateMipmaps"] ?? false;
-    this.texture.minFilter = options["minFilter"] ?? LinearFilter;
+    this.texture.generateMipmaps = options.generateMipmaps ?? false;
+    this.texture.minFilter = options.minFilter ?? LinearFilter;
   }
 
   fromEquirectangularTexture(renderer, texture) {
@@ -101,7 +95,7 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
       "blending": NoBlending
     });
 
-    material.uniforms!["tEquirect"]["value"] = texture;
+    material.uniforms["tEquirect"]["value"] = texture;
 
     var mesh = Mesh(geometry, material);
 

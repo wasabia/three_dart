@@ -264,7 +264,7 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
     var pmremGenerator = new THREE.PMREMGenerator(renderer);
     scene.background = THREE.Color.fromHex(0xbfe3dd);
     scene.environment = pmremGenerator
-        .fromScene(new THREE_JSM.RoomEnvironment(), sigma: 0.04)
+        .fromScene(new THREE_JSM.RoomEnvironment(), 0.04)
         .texture;
 
     // var ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 );

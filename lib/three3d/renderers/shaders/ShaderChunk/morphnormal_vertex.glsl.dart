@@ -10,7 +10,7 @@ String morphnormal_vertex = """
 
 		for ( int i = 0; i < MORPHTARGETS_COUNT; i ++ ) {
 
-		  if ( morphTargetInfluences[ i ] != 0.0 ) objectNormal += getMorph( gl_VertexID, i, 1, 2 ) * morphTargetInfluences[ i ];
+		  if ( morphTargetInfluences[ i ] != 0.0 ) objectNormal += getMorph( gl_VertexID, i, 1 ).xyz * morphTargetInfluences[ i ];
 
 		}
 

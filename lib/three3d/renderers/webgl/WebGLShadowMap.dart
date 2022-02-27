@@ -206,9 +206,9 @@ class WebGLShadowMap {
 
     // vertical pass
 
-    shadowMaterialVertical.uniforms!["shadow_pass"].value = shadow.map.texture;
-    shadowMaterialVertical.uniforms!["resolution"].value = shadow.mapSize;
-    shadowMaterialVertical.uniforms!["radius"].value = shadow.radius;
+    shadowMaterialVertical.uniforms["shadow_pass"].value = shadow.map.texture;
+    shadowMaterialVertical.uniforms["resolution"].value = shadow.mapSize;
+    shadowMaterialVertical.uniforms["radius"].value = shadow.radius;
 
     _renderer.setRenderTarget(shadow.mapPass);
     _renderer.clear(null, null, null);
@@ -217,10 +217,10 @@ class WebGLShadowMap {
 
     // horizontal pass
 
-    shadowMaterialHorizontal.uniforms!["shadow_pass"].value =
+    shadowMaterialHorizontal.uniforms["shadow_pass"].value =
         shadow.mapPass.texture;
-    shadowMaterialHorizontal.uniforms!["resolution"].value = shadow.mapSize;
-    shadowMaterialHorizontal.uniforms!["radius"].value = shadow.radius;
+    shadowMaterialHorizontal.uniforms["resolution"].value = shadow.mapSize;
+    shadowMaterialHorizontal.uniforms["radius"].value = shadow.radius;
 
     _renderer.setRenderTarget(shadow.map);
     _renderer.clear(null, null, null);
@@ -228,7 +228,7 @@ class WebGLShadowMap {
         camera, null, geometry, shadowMaterialHorizontal, fullScreenMesh, null);
   }
 
-  getDepthMaterial(object, geometry, material, light, shadowCameraNear,
+  getDepthMaterial(object, material, light, shadowCameraNear,
       shadowCameraFar, type) {
     Material? result;
 
@@ -325,7 +325,6 @@ class WebGLShadowMap {
             if (groupMaterial != null && groupMaterial.visible) {
               var depthMaterial = getDepthMaterial(
                   object,
-                  geometry,
                   groupMaterial,
                   light,
                   shadowCamera.near,
@@ -337,7 +336,7 @@ class WebGLShadowMap {
             }
           }
         } else if (material.visible) {
-          var depthMaterial = getDepthMaterial(object, geometry, material,
+          var depthMaterial = getDepthMaterial(object, material,
               light, shadowCamera.near, shadowCamera.far, type);
 
           // print("WebGLShadowMap object: ${object} light: ${light} depthMaterial: ${depthMaterial} ");

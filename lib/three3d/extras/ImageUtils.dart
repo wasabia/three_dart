@@ -3,62 +3,62 @@ part of three_extra;
 var _canvas;
 
 class ImageUtils {
-  // static getDataURL( image ) {
+  static getDataURL( image ) {
 
-  // 	if ( /^data:/i.test( image.src ) ) {
+  	if ( RegExp(r"^data:").hasMatch( image.src ) ) {
 
-  // 		return image.src;
+  		return image.src;
 
-  // 	}
+  	}
 
-  // 	if ( typeof HTMLCanvasElement == 'undefined' ) {
+  	// if ( typeof HTMLCanvasElement == 'undefined' ) {
 
-  // 		return image.src;
+  	// 	return image.src;
 
-  // 	}
+  	// }
 
-  // 	var canvas;
+  	// var canvas;
 
-  // 	if ( image instanceof HTMLCanvasElement ) {
+  	// if ( image instanceof HTMLCanvasElement ) {
 
-  // 		canvas = image;
+  	// 	canvas = image;
 
-  // 	} else {
+  	// } else {
 
-  // 		if ( _canvas == undefined ) _canvas = document.createElementNS( 'http://www.w3.org/1999/xhtml', 'canvas' );
+  	// 	if ( _canvas == undefined ) _canvas = document.createElementNS( 'http://www.w3.org/1999/xhtml', 'canvas' );
 
-  // 		_canvas.width = image.width;
-  // 		_canvas.height = image.height;
+  	// 	_canvas.width = image.width;
+  	// 	_canvas.height = image.height;
 
-  // 		const context = _canvas.getContext( '2d' );
+  	// 	const context = _canvas.getContext( '2d' );
 
-  // 		if ( image instanceof ImageData ) {
+  	// 	if ( image instanceof ImageData ) {
 
-  // 			context.putImageData( image, 0, 0 );
+  	// 		context.putImageData( image, 0, 0 );
 
-  // 		} else {
+  	// 	} else {
 
-  // 			context.drawImage( image, 0, 0, image.width, image.height );
+  	// 		context.drawImage( image, 0, 0, image.width, image.height );
 
-  // 		}
+  	// 	}
 
-  // 		canvas = _canvas;
+  	// 	canvas = _canvas;
 
-  // 	}
+  	// }
 
-  // 	if ( canvas.width > 2048 || canvas.height > 2048 ) {
+  	// if ( canvas.width > 2048 || canvas.height > 2048 ) {
 
-  // 		console.warn( 'THREE.ImageUtils.getDataURL: Image converted to jpg for performance reasons', image );
+  	// 	console.warn( 'THREE.ImageUtils.getDataURL: Image converted to jpg for performance reasons', image );
 
-  // 		return canvas.toDataURL( 'image/jpeg', 0.6 );
+  	// 	return canvas.toDataURL( 'image/jpeg', 0.6 );
 
-  // 	} else {
+  	// } else {
 
-  // 		return canvas.toDataURL( 'image/png' );
+  	// 	return canvas.toDataURL( 'image/png' );
 
-  // 	}
+  	// }
 
-  // }
+  }
 
   static sRGBToLinear(image) {
     // TODO

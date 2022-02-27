@@ -62,6 +62,7 @@ Map<String, String> ShaderChunk = {
   "map_particle_pars_fragment": map_particle_pars_fragment,
   "metalnessmap_fragment": metalnessmap_fragment,
   "metalnessmap_pars_fragment": metalnessmap_pars_fragment,
+  "morphcolor_vertex": morphcolor_vertex,
   "morphnormal_vertex": morphnormal_vertex,
   "morphtarget_pars_vertex": morphtarget_pars_vertex,
   "morphtarget_vertex": morphtarget_vertex,

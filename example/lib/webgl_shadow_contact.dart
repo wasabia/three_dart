@@ -251,7 +251,7 @@ class _MyAppState extends State<webgl_shadow_contact> {
     // blur horizontally and draw in the renderTargetBlur
     blurPlane.material = horizontalBlurMaterial;
     blurPlane.material.uniforms["tDiffuse"]["value"] = renderTarget2.texture;
-    horizontalBlurMaterial.uniforms!["h"]["value"] = amount * 1 / 256;
+    horizontalBlurMaterial.uniforms["h"]["value"] = amount * 1 / 256;
 
     renderer!.setRenderTarget(renderTargetBlur);
     renderer!.render(blurPlane, shadowCamera);
@@ -259,7 +259,7 @@ class _MyAppState extends State<webgl_shadow_contact> {
     // blur vertically and draw in the main renderTarget
     blurPlane.material = verticalBlurMaterial;
     blurPlane.material.uniforms["tDiffuse"]["value"] = renderTargetBlur.texture;
-    verticalBlurMaterial.uniforms!["v"]["value"] = amount * 1 / 256;
+    verticalBlurMaterial.uniforms["v"]["value"] = amount * 1 / 256;
 
     renderer!.setRenderTarget(renderTarget2);
     renderer!.render(blurPlane, shadowCamera);

@@ -9,8 +9,6 @@ class Texture with EventDispatcher {
   bool isTexture = true;
   bool isWebGLRenderTarget = false;
   bool isVideoTexture = false;
-  bool isDataTexture2DArray = false;
-  bool isDataTexture3D = false;
   bool isDepthTexture = false;
   bool isDataTexture = false;
   bool isCompressedTexture = false;
@@ -20,8 +18,8 @@ class Texture with EventDispatcher {
   bool needsPMREMUpdate =
       false; // indicates whether this texture should be processed by PMREMGenerator or not (only relevant for render target textures)
 
-  // image or List ???
-  dynamic image;
+
+  late Source source;
 
   int id = textureId++;
   String uuid = MathUtils.generateUUID();
@@ -65,8 +63,9 @@ class Texture with EventDispatcher {
 
   List mipmaps = [];
 
-  Texture(this.image, [int? mapping, int? wrapS, int? wrapT, int? magFilter,
+  Texture([image, int? mapping, int? wrapS, int? wrapT, int? magFilter,
       int? minFilter, int? format, int? type, int? anisotropy, int? encoding]) {
+    this.source = Source(image);
     this.mapping = mapping ?? Texture.DEFAULT_MAPPING;
 
     this.wrapS = wrapS ?? ClampToEdgeWrapping;
@@ -83,9 +82,22 @@ class Texture with EventDispatcher {
     this.encoding = encoding ?? LinearEncoding;
   }
 
+  get image {
+
+		return this.source.data;
+
+	}
+
+	set image( value ) {
+
+		this.source.data = value;
+
+	}
+
   set needsUpdate(bool value) {
     if (value) {
       this.version++;
+      this.source.needsUpdate = true;
     }
   }
 
@@ -95,15 +107,13 @@ class Texture with EventDispatcher {
   }
 
   Texture clone() {
-    return Texture(null, null, null, null, null, null, null, null, null, null)
-        .copy(this);
+    return Texture().copy(this);
   }
 
   copy(source) {
     this.name = source.name;
 
-    this.image = source.image;
-    // this.mipmaps = source.mipmaps.slice( 0 );
+    this.source = source.source;
 
     this.mapping = source.mapping;
 
@@ -153,6 +163,7 @@ class Texture with EventDispatcher {
       },
       "uuid": this.uuid,
       "name": this.name,
+      "image": this.source.toJSON( meta ).uuid,
       "mapping": this.mapping,
       "repeat": [this.repeat.x, this.repeat.y],
       "offset": [this.offset.x, this.offset.y],
@@ -169,45 +180,6 @@ class Texture with EventDispatcher {
       "premultiplyAlpha": this.premultiplyAlpha,
       "unpackAlignment": this.unpackAlignment
     };
-
-    if (this.image != null) {
-      // TODO: Move to THREE.Image
-
-      var image = this.image;
-
-      if (image!.uuid == null) {
-        image.uuid = MathUtils.generateUUID(); // UGH
-
-      }
-
-      if (!isRootObject && meta.images[image.uuid] == null) {
-        var url;
-
-        if (image is List) {
-          // process array of images e.g. CubeTexture
-
-          url = [];
-
-          for (var i = 0, l = image.length; i < l; i++) {
-            // check cube texture with data textures
-
-            if (image[i].isDataTexture) {
-              url.add(serializeImage(image[i].image));
-            } else {
-              url.add(serializeImage(image[i]));
-            }
-          }
-        } else {
-          // process single image
-
-          url = serializeImage(image);
-        }
-
-        meta.images[image.uuid] = {"uuid": image.uuid, "url": url};
-      }
-
-      output["image"] = image.uuid;
-    }
 
     if (this.userData.isNotEmpty) output["userData"] = this.userData;
 
@@ -293,33 +265,3 @@ class ImageDataInfo {
   ImageDataInfo(this.data, this.width, this.height, this.depth) {}
 }
 
-serializeImage(image) {
-  // if ( ( typeof HTMLImageElement !== 'undefined' && image instanceof HTMLImageElement ) ||
-  // 	( typeof HTMLCanvasElement !== 'undefined' && image instanceof HTMLCanvasElement ) ||
-  // 	( typeof ImageBitmap !== 'undefined' && image instanceof ImageBitmap ) ) {
-
-  // 	// default images
-
-  // 	return ImageUtils.getDataURL( image );
-
-  if (image is ImageElement) {
-    // default images
-
-    // return ImageUtils.getDataURL( image );
-    return image.url;
-  } else {
-    if (image.data != null) {
-      // images of DataTexture
-
-      return {
-        "data": image.data.clone(),
-        "width": image.width,
-        "height": image.height,
-        "type": image.data.runtimeType.toString()
-      };
-    } else {
-      print('THREE.Texture: Unable to serialize Texture.');
-      return {};
-    }
-  }
-}

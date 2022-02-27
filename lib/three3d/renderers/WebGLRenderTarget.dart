@@ -34,6 +34,8 @@ class RenderTarget with EventDispatcher {
   late bool stencilBuffer;
   DepthTexture? depthTexture;
 
+  late int samples;
+
   clone() {
     throw ("RenderTarget clone need implemnt ");
   }
@@ -55,7 +57,7 @@ class WebGLRenderTarget extends RenderTarget {
   bool isWebGLRenderTarget = true;
   late WebGLRenderTargetOptions options;
 
-  WebGLRenderTarget(int width, int height, WebGLRenderTargetOptions? options) {
+  WebGLRenderTarget(int width, int height, [WebGLRenderTargetOptions? options]) {
     this.width = width;
     this.height = height;
     this.scissor = Vector4(0, 0, width, height);
@@ -65,8 +67,10 @@ class WebGLRenderTarget extends RenderTarget {
 
     this.options = options ?? WebGLRenderTargetOptions({});
 
+    var image = ImageElement( width: width, height: height, depth: 1 );
+
     this.texture = Texture(
-        null,
+        image,
         this.options.mapping,
         this.options.wrapS,
         this.options.wrapT,
@@ -78,9 +82,6 @@ class WebGLRenderTarget extends RenderTarget {
         this.options.encoding);
     this.texture.isRenderTargetTexture = true;
 
-    ImageElement image = ImageElement(width: width, height: height);
-
-    this.texture.image = image;
 
     this.texture.generateMipmaps = this.options.generateMipmaps != null
         ? this.options.generateMipmaps
@@ -100,14 +101,8 @@ class WebGLRenderTarget extends RenderTarget {
     this.hasExternalTextures = false;
     this.useMultisampleRenderToTexture = false;
     this.useMultisampleRenderbuffer = false;
-  }
 
-  setTexture(texture) {
-    texture.image!.width = this.width;
-    texture.image!.height = this.height;
-    texture.image!.depth = this.depth;
-
-    this.texture = texture;
+    this.samples = (options != null && options.samples != null) ? options.samples! : 0;
   }
 
   setSize(width, height, {depth = 1}) {
@@ -146,7 +141,9 @@ class WebGLRenderTarget extends RenderTarget {
 
     this.depthBuffer = source.depthBuffer;
     this.stencilBuffer = source.stencilBuffer;
-    this.depthTexture = source.depthTexture;
+    if ( source.depthTexture != null ) this.depthTexture = source.depthTexture.clone();
+
+    this.samples = source.samples;
 
     return this;
   }
@@ -180,6 +177,8 @@ class WebGLRenderTargetOptions {
   bool useMultisampleRenderToTexture = false;
   bool ignoreDepth = false;
   bool useRenderToTexture = false;
+
+  int? samples;
 
   WebGLRenderTargetOptions(Map<String, dynamic> json) {
     if (json["wrapS"] != null) {
@@ -227,6 +226,8 @@ class WebGLRenderTargetOptions {
     if (json["useRenderToTexture"] != null) {
       useRenderToTexture = json["useRenderToTexture"];
     }
+
+    samples = json["samples"];
   }
 
   toJSON() {
@@ -246,7 +247,8 @@ class WebGLRenderTargetOptions {
       "encoding": encoding,
       "useMultisampleRenderToTexture": useMultisampleRenderToTexture,
       "ignoreDepth": ignoreDepth,
-      "useRenderToTexture": useRenderToTexture
+      "useRenderToTexture": useRenderToTexture,
+      "samples": samples
     };
   }
 }

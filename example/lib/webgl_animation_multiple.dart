@@ -335,7 +335,6 @@ class _State extends State<webgl_animation_multiple> {
 
     loaded = true;
 
-    animate();
 
     // scene.overrideMaterial = new THREE.MeshBasicMaterial();
   }
@@ -454,6 +453,9 @@ class _State extends State<webgl_animation_multiple> {
     }
 
     print(" Successfully instantiated ${numSuccess} units ");
+
+
+    animate();
   }
 
   /**

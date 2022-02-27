@@ -44,6 +44,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     var envMapTypeDefine = generateEnvMapTypeDefine(parameters);
     var envMapModeDefine = generateEnvMapModeDefine(parameters);
     var envMapBlendingDefine = generateEnvMapBlendingDefine(parameters);
+    var cubeUVSize = generateCubeUVSize( parameters );
 
     var customExtensions =
         parameters.isWebGL2 ? '' : generateExtensions(parameters);
@@ -141,6 +142,10 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.morphNormals && parameters.flatShading == false
             ? '#define USE_MORPHNORMALS'
             : '',
+        ( parameters.morphColors && parameters.isWebGL2 ) ? '#define USE_MORPHCOLORS' : '',
+        ( parameters.morphTargetsCount > 0 && parameters.isWebGL2 ) ? '#define MORPHTARGETS_TEXTURE' : '',
+        ( parameters.morphTargetsCount > 0 && parameters.isWebGL2 ) ? '#define MORPHTARGETS_TEXTURE_STRIDE ${parameters.morphTextureStride}' : '',
+        ( parameters.morphTargetsCount > 0 && parameters.isWebGL2 ) ? '#define MORPHTARGETS_COUNT ${parameters.morphTargetsCount}' : '',
         parameters.doubleSided ? '#define DOUBLE_SIDED' : '',
         parameters.flipSided ? '#define FLIP_SIDED' : '',
         parameters.shadowMapEnabled ? '#define USE_SHADOWMAP' : '',
@@ -209,7 +214,6 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         '#define SHADER_NAME ' + parameters.shaderName,
 
         customDefines,
-
         (parameters.useFog && parameters.fog) ? '#define USE_FOG' : '',
         (parameters.useFog && parameters.fogExp2) ? '#define FOG_EXP2' : '',
 
@@ -219,6 +223,10 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.envMap ? '#define ' + envMapTypeDefine : '',
         parameters.envMap ? '#define ' + envMapModeDefine : '',
         parameters.envMap ? '#define ' + envMapBlendingDefine : '',
+        cubeUVSize != null ? '#define CUBEUV_TEXEL_WIDTH ${cubeUVSize["texelWidth"]}' : '',
+        cubeUVSize != null ? '#define CUBEUV_TEXEL_HEIGHT ${cubeUVSize["texelHeight"]}' : '',
+        cubeUVSize != null ? '#define CUBEUV_MAX_MIP ' + cubeUVSize["maxMip"].toString() + '.0' : '',
+        
         parameters.lightMap ? '#define USE_LIGHTMAP' : '',
         parameters.aoMap ? '#define USE_AOMAP' : '',
         parameters.emissiveMap ? '#define USE_EMISSIVEMAP' : '',
@@ -281,13 +289,6 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
             ? '#define USE_LOGDEPTHBUF_EXT'
             : '',
 
-        ((parameters.extensionShaderTextureLOD ||
-                    parameters.envMap ||
-                    parameters.transmission) &&
-                parameters.rendererExtensionShaderTextureLod)
-            ? '#define TEXTURE_LOD_EXT'
-            : '',
-
         'uniform mat4 viewMatrix;',
         'uniform vec3 cameraPosition;',
         'uniform bool isOrthographic;',
@@ -301,7 +302,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
             : '',
 
         parameters.dithering ? '#define DITHERING' : '',
-        parameters.transparent ? '' : '#define OPAQUE',
+        parameters.opaque ? '' : '#define OPAQUE',
 
         ShaderChunk[
             'encodings_pars_fragment'], // this code is required here because it is used by the various encoding/decoding defined below
@@ -371,10 +372,10 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
     // developer.log(" alphaTest: ${parameters.alphaTest} ");
     // developer.log(" 111 ================= VERTEX  ");
-    // developer.log(vertexGlsl);
+    // // developer.log(vertexGlsl);
     // print(vertexGlsl);
     // developer.log("  111 ==================== FRAGMENT ");
-    // developer.log(fragmentGlsl);
+    // // developer.log(fragmentGlsl);
     // print( fragmentGlsl );
 
     var glVertexShader = WebGLShader(gl, gl.VERTEX_SHADER, vertexGlsl);

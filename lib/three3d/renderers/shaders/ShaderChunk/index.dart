@@ -64,6 +64,7 @@ export './map_particle_fragment.glsl.dart';
 export './map_particle_pars_fragment.glsl.dart';
 export './metalnessmap_fragment.glsl.dart';
 export './metalnessmap_pars_fragment.glsl.dart';
+export './morphcolor_vertex.glsl.dart';
 export './morphnormal_vertex.glsl.dart';
 export './morphtarget_pars_vertex.glsl.dart';
 export './morphtarget_vertex.glsl.dart';

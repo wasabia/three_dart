@@ -2,8 +2,8 @@ part of three_webgl;
 
 var emptyTexture =
     new Texture(null, null, null, null, null, null, null, null, null, null);
-var emptyTexture2dArray = new DataTexture2DArray(null);
-var emptyTexture3d = new DataTexture3D();
+var emptyArrayTexture = new DataArrayTexture(null);
+var empty3dTexture = new Data3DTexture();
 var emptyCubeTexture =
     new CubeTexture(null, null, null, null, null, null, null, null, null, null);
 
@@ -552,7 +552,7 @@ class WebGLUniformsHelper {
       cache[0] = unit;
     }
 
-    textures.safeSetTexture2D(v ?? emptyTexture, unit);
+    textures.setTexture2D(v ?? emptyTexture, unit);
   }
 
   setValueT2DArray1(gl, v, textures) {
@@ -564,7 +564,7 @@ class WebGLUniformsHelper {
       cache[0] = unit;
     }
 
-    textures.setTexture2DArray(v ?? emptyTexture2dArray, unit);
+    textures.setTexture2DArray(v ?? emptyArrayTexture, unit);
   }
 
   setValueT3D1(gl, v, textures) {
@@ -576,7 +576,7 @@ class WebGLUniformsHelper {
       cache[0] = unit;
     }
 
-    textures.setTexture3D(v ?? emptyTexture3d, unit);
+    textures.setTexture3D(v ?? empty3dTexture, unit);
   }
 
   setValueT6(gl, v, textures) {
@@ -588,7 +588,7 @@ class WebGLUniformsHelper {
       cache[0] = unit;
     }
 
-    textures.safeSetTextureCube(v ?? emptyCubeTexture, unit);
+    textures.setTextureCube(v ?? emptyCubeTexture, unit);
   }
 
   // Integer / Boolean vectors or arrays thereof (always flat arrays)
@@ -849,7 +849,7 @@ class WebGLUniformsHelper {
     gl.uniform1iv(this.addr, units);
 
     for (var i = 0; i != n; ++i) {
-      textures.safeSetTexture2D(v[i] ?? emptyTexture, units[i]);
+      textures.setTexture2D(v[i] ?? emptyTexture, units[i]);
     }
   }
 
@@ -861,7 +861,7 @@ class WebGLUniformsHelper {
     gl.uniform1iv(this.addr, units);
 
     for (var i = 0; i != n; ++i) {
-      textures.setTexture3D(v[i] ?? emptyTexture3d, units[i]);
+      textures.setTexture3D(v[i] ?? empty3dTexture, units[i]);
     }
   }
 
@@ -873,7 +873,7 @@ class WebGLUniformsHelper {
     gl.uniform1iv(this.addr, units);
 
     for (var i = 0; i != n; ++i) {
-      textures.safeSetTextureCube(v[i] ?? emptyCubeTexture, units[i]);
+      textures.setTextureCube(v[i] ?? emptyCubeTexture, units[i]);
     }
   }
 
@@ -885,7 +885,7 @@ class WebGLUniformsHelper {
     gl.uniform1iv(this.addr, units);
 
     for (var i = 0; i != n; ++i) {
-      textures.setTexture2DArray(v[i] ?? emptyTexture2dArray, units[i]);
+      textures.setTexture2DArray(v[i] ?? emptyArrayTexture, units[i]);
     }
   }
 

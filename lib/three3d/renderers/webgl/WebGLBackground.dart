@@ -77,7 +77,7 @@ class WebGLBackground {
         boxMesh.geometry.deleteAttribute('normal');
         boxMesh.geometry.deleteAttribute('uv');
 
-        boxMesh.onBeforeRender = (renderer, scene, camera) {
+        boxMesh.onBeforeRender = ({renderer, scene, camera, renderTarget, mesh, geometry, material, group}) {
           boxMesh.matrixWorld.copyPosition(camera.matrixWorld);
         };
 
@@ -95,8 +95,8 @@ class WebGLBackground {
         objects.update(boxMesh);
       }
 
-      boxMesh.material.uniforms.envMap.value = background;
-      boxMesh.material.uniforms.flipEnvMap.value = (background.isCubeTexture &&
+      boxMesh.material.uniforms["envMap"]["value"] = background;
+      boxMesh.material.uniforms["flipEnvMap"]["value"] = (background.isCubeTexture &&
               background.isRenderTargetTexture == false)
           ? -1
           : 1;

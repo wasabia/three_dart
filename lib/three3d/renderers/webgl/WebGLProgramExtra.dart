@@ -100,7 +100,7 @@ class WebGLProgramExtra {
   generateExtensions(parameters) {
     var chunks = [
       (parameters.extensionDerivatives ||
-              parameters.envMapCubeUV ||
+              parameters.cubeUVHeight ||
               parameters.bumpMap ||
               parameters.tangentSpaceNormalMap ||
               parameters.clearcoatNormalMap ||
@@ -427,5 +427,21 @@ class WebGLProgramExtra {
     }
 
     return envMapBlendingDefine;
+  }
+
+  generateCubeUVSize( parameters ) {
+
+    var imageHeight = parameters.cubeUVHeight;
+
+    if ( imageHeight == null ) return null;
+
+    var maxMip = Math.log2( imageHeight / 32 + 1 ) + 3;
+
+    var texelHeight = 1.0 / imageHeight;
+
+    var texelWidth = 1.0 / ( 3 * Math.max( Math.pow( 2, maxMip ), 7 * 16 ) );
+
+    return { "texelWidth": texelWidth, "texelHeight": texelHeight, "maxMip": maxMip };
+
   }
 }

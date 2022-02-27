@@ -561,16 +561,11 @@ class Vector4 {
     return array;
   }
 
-  fromBufferAttribute(attribute, index, offset) {
-    if (offset != null) {
-      print(
-          'THREE.Vector4: offset has been removed from .fromBufferAttribute().');
-    }
-
+  fromBufferAttribute(attribute, index) {
     this.x = attribute.getX(index);
     this.y = attribute.getY(index);
     this.z = attribute.getZ(index);
-    this.w = attribute.getW(index);
+    this.w = attribute.getW(index) ?? 0;
 
     return this;
   }

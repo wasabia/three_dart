@@ -40,8 +40,7 @@ dependency_overrides:
     path: ../../three_dart_plugins/three_dart_jsm/
   flutter_gl:
     path: ../../flutter_gl/flutter_gl
-  flutter_webgpu:
-    path: ../../flutter_webgpu
+
 
 dev_dependencies:
   flutter_test:

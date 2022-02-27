@@ -151,7 +151,11 @@ class Material with EventDispatcher {
 
   Texture? normalMap;
   Texture? bumpMap;
-  Texture? envMap;
+  Texture? get envMap => (uniforms["envMap"] == null ? null : uniforms["envMap"]["value"]);
+  set envMap(value) {
+    this.uniforms["envMap"] = {"value": value};
+  }
+
   int? combine;
 
   num? refractionRatio;
@@ -192,7 +196,7 @@ class Material with EventDispatcher {
   bool instanced = false;
 
   Map<String, dynamic>? defines;
-  Map<String, dynamic>? uniforms;
+  Map<String, dynamic> uniforms = {};
 
   String? vertexShader;
   String? fragmentShader;

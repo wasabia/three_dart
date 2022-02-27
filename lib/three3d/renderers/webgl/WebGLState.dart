@@ -582,6 +582,15 @@ class WebGLState {
     // }
   }
 
+
+  texSubImage2D_IF(target, level, x, y, glFormat, glType, image) {
+    if (kIsWeb) {
+      texSubImage2D_NOSIZE(gl.TEXTURE_2D, 0, 0, 0, glFormat, glType, image.data);
+    } else {
+      texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, image.width, image.height, glFormat, glType, image.data);
+    }
+  }
+
   texSubImage2D_NOSIZE(target, level, x, y, glFormat, glType, data) {
     // try {
 
@@ -645,6 +654,15 @@ class WebGLState {
     // 	console.error( 'THREE.WebGLState:', error );
 
     // }
+  }
+
+  texImage2D_IF(int target, int level, int internalformat, int format, int type, image) {
+    if(kIsWeb) {
+      texImage2D_NOSIZE(target, level, internalformat, format, type, image.data);
+    } else {
+      texImage2D(target, level, internalformat, image.width, image.height, 0, format,
+        type, image.data);
+    }
   }
 
   texImage2D(int target, int level, int internalformat, width, height, border,

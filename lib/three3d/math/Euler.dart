@@ -252,6 +252,7 @@ class Euler {
   }
 
   toVector3(optionalResult) {
+    print(" THREE.Euler: .toVector3() has been removed. Use Vector3.setFromEuler() instead ");
     if (optionalResult) {
       return optionalResult.set(this._x, this._y, this._z);
     } else {
