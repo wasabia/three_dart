@@ -57,7 +57,7 @@ String transmission_pars_fragment = """
 
 		float framebufferLod = log2( transmissionSamplerSize.x ) * applyIorToRoughness( roughness, ior );
 
-		#ifdef TEXTURE_LOD_EXT
+		#ifdef texture2DGradEXT
 
 			return texture2DLodEXT( transmissionSamplerMap, fragCoord.xy, framebufferLod );
 

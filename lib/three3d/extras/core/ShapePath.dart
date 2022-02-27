@@ -176,7 +176,7 @@ class ShapePath {
 
     if (newShapes.length > 1) {
       var ambiguous = false;
-      var toChange = [];
+      var toChange = 0;
 
       for (var sIdx = 0, sLen = newShapes.length; sIdx < sLen; sIdx++) {
         // betterShapeHoles[ sIdx ] = [];
@@ -192,8 +192,7 @@ class ShapePath {
 
           for (var s2Idx = 0; s2Idx < newShapes.length; s2Idx++) {
             if (isPointInsidePolygon(ho["p"], newShapes[s2Idx]["p"])) {
-              if (sIdx != s2Idx)
-                toChange.add({"froms": sIdx, "tos": s2Idx, "hole": hIdx});
+              if ( sIdx != s2Idx ) toChange ++;
               if (hole_unassigned) {
                 hole_unassigned = false;
                 betterShapeHoles[s2Idx].add(ho);
@@ -208,11 +207,8 @@ class ShapePath {
           }
         }
       }
-      // console.log("ambiguous: ", ambiguous);
-
-      if (toChange.length > 0) {
-        // console.log("to change: ", toChange);
-        if (!ambiguous) newShapeHoles = betterShapeHoles;
+      if ( toChange > 0 && ambiguous == false ) {
+				newShapeHoles = betterShapeHoles;
       }
     }
 

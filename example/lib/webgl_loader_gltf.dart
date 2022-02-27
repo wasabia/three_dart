@@ -177,6 +177,10 @@ class _MyAppState extends State<webgl_loader_gltf> {
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
 
+    renderer!.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer!.toneMappingExposure = 1;
+    renderer!.outputEncoding = THREE.sRGBEncoding;
+
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(

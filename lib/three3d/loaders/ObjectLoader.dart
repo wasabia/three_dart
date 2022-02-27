@@ -307,7 +307,7 @@ class ObjectLoader extends Loader {
         if (url is List) {
           // load array of images e.g CubeTexture
 
-          images[image["uuid"]] = [];
+          List imageArray = [];
 
           for (var j = 0, jl = url.length; j < jl; j++) {
             var currentUrl = url[j];
@@ -315,29 +315,31 @@ class ObjectLoader extends Loader {
             var deserializedImage = await deserializeImage(currentUrl);
 
             if (deserializedImage != null) {
-              images[image["uuid"]].add(deserializedImage);
+              imageArray.add(deserializedImage);
 
               // if ( deserializedImage is HTMLImageElement ) {
 
-              // 	images[ image.uuid ].push( deserializedImage );
+              // 	imageArray.push( deserializedImage );
 
               // } else {
 
               // 	// special case: handle array of data textures for cube textures
 
-              // 	images[ image.uuid ].push( new DataTexture( deserializedImage.data, deserializedImage.width, deserializedImage.height ) );
+              // 	imageArray.push( new DataTexture( deserializedImage.data, deserializedImage.width, deserializedImage.height ) );
 
               // }
 
             }
           }
+
+          images[ image["uuid"] ] = new Source( imageArray );
         } else {
           // load single image
 
           var deserializedImage = await deserializeImage(image["url"]);
 
           if (deserializedImage != null) {
-            images[image["uuid"]] = deserializedImage;
+            images[image["uuid"]] = Source( deserializedImage );
           }
         }
       }
@@ -371,26 +373,20 @@ class ObjectLoader extends Loader {
         }
 
         var texture;
-        var image = images[data["image"]];
 
-        print("parseTextures uuid: ${data["image"]} image1 : ${image} ");
-        print(
-            "parseTextures uuid: ${data["image"]} image1 url : ${image.url} ");
+        var source = images[ data["image"] ];
+				var image = source.data;
 
+   
         if (image is List) {
-          texture = new CubeTexture(
-              image, null, null, null, null, null, null, null, null, null);
+          texture = new CubeTexture();
 
           if (image.length == 6) texture.needsUpdate = true;
         } else {
-          print("parseTextures image: ${image.url} ");
-
           if (image != null && image.data != null && image.url == null) {
-            texture = new DataTexture(image.data, image.width, image.height,
-                null, null, null, null, null, null, null, null, null);
+            texture = new DataTexture();
           } else {
-            texture = new Texture(
-                image, null, null, null, null, null, null, null, null, null);
+            texture = new Texture();
           }
 
           if (image != null)
@@ -398,6 +394,7 @@ class ObjectLoader extends Loader {
 
         }
 
+        texture.source = source;
         texture.uuid = data["uuid"];
 
         if (data["name"] != null) texture.name = data["name"];

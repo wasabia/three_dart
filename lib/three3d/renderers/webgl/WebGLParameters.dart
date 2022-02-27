@@ -28,7 +28,6 @@ class WebGLParameters {
   late bool matcap;
   late bool envMap;
   int? envMapMode;
-  late bool envMapCubeUV;
   late bool lightMap;
   late bool aoMap;
   late bool emissiveMap;
@@ -75,6 +74,8 @@ class WebGLParameters {
 
   late bool morphTargets;
   late bool morphNormals;
+  late bool morphColors;
+
   late num numDirLights;
   late num numPointLights;
   late num numSpotLights;
@@ -119,9 +120,14 @@ class WebGLParameters {
   dynamic vertexAlphas;
   late bool flipNormalScaleY;
 
-  late bool transparent;
+  late bool opaque;
 
   late int morphTargetsCount;
+
+  num? cubeUVHeight;
+
+  late int morphTextureStride;
+
 
   WebGLParameters(Map<String, dynamic> json) {
     isWebGL2 = json["isWebGL2"];
@@ -150,7 +156,6 @@ class WebGLParameters {
     matcap = json["matcap"];
     envMap = json["envMap"];
     envMapMode = json["envMapMode"];
-    envMapCubeUV = json["envMapCubeUV"];
     lightMap = json["lightMap"];
     aoMap = json["aoMap"];
     emissiveMap = json["emissiveMap"];
@@ -200,6 +205,7 @@ class WebGLParameters {
     morphTargets = json["morphTargets"];
 
     morphNormals = json["morphNormals"];
+    morphColors = json["morphColors"];
     numDirLights = json["numDirLights"];
     numPointLights = json["numPointLights"];
     numSpotLights = json["numSpotLights"];
@@ -244,7 +250,10 @@ class WebGLParameters {
 
     decodeVideoTexture = json["decodeVideoTexture"];
     morphTargetsCount = json["morphTargetsCount"];
-    transparent = json["transparent"];
+    opaque = json["opaque"];
+
+    cubeUVHeight = json["cubeUVHeight"];
+    morphTextureStride = json["morphTextureStride"];
   }
 
   getValue(String name) {
@@ -274,7 +283,6 @@ class WebGLParameters {
       "matcap": matcap,
       "envMap": envMap,
       "envMapMode": envMapMode,
-      "envMapCubeUV": envMapCubeUV,
       "lightMap": lightMap,
       "aoMap": aoMap,
       "emissiveMap": emissiveMap,
@@ -317,6 +325,7 @@ class WebGLParameters {
       "useVertexTexture": useVertexTexture,
       "morphTargets": morphTargets,
       "morphNormals": morphNormals,
+      "morphColors": morphColors,
       "numDirLights": numDirLights,
       "numPointLights": numPointLights,
       "numSpotLights": numSpotLights,
@@ -351,7 +360,9 @@ class WebGLParameters {
       "flipNormalScaleY": flipNormalScaleY,
       "decodeVideoTexture": decodeVideoTexture,
       "morphTargetsCount": morphTargetsCount,
-      "transparent": transparent
+      "opaque": opaque,
+      "cubeUVHeight": cubeUVHeight,
+      "morphTextureStride": morphTextureStride
     };
 
     return _json;

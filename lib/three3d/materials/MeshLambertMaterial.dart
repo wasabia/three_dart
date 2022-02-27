@@ -55,7 +55,7 @@ class MeshLambertMaterial extends Material {
 
     this.alphaMap = null;
 
-    this.envMap = null;
+    // this.envMap = null;
     this.combine = MultiplyOperation;
     this.reflectivity = 1;
     this.refractionRatio = 0.98;

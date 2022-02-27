@@ -96,9 +96,9 @@ class SkinnedMesh extends Mesh {
     var geometry = this.geometry!;
 
     _skinIndex.fromBufferAttribute(
-        geometry.attributes["skinIndex"], index, null);
+        geometry.attributes["skinIndex"], index);
     _skinWeight.fromBufferAttribute(
-        geometry.attributes["skinWeight"], index, null);
+        geometry.attributes["skinWeight"], index);
 
     _basePosition.copy(target).applyMatrix4(this.bindMatrix);
 

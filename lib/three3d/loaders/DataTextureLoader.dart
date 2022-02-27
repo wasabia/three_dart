@@ -12,8 +12,7 @@ class DataTextureLoader extends Loader {
   load(url, Function onLoad, [Function? onProgress, Function? onError]) {
     var scope = this;
 
-    var texture = new DataTexture(
-        null, null, null, null, null, null, null, null, null, null, null, null);
+    var texture = new DataTexture();
 
     var loader = new FileLoader(this.manager);
     loader.setResponseType('arraybuffer');

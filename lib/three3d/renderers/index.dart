@@ -23,4 +23,5 @@ part './WebGLRenderTarget.dart';
 part './WebGLMultisampleRenderTarget.dart';
 part './WebGLMultipleRenderTargets.dart';
 part './webxr/WebXRManager.dart';
-
+part './WebGL3DRenderTarget.dart';
+part './WebGLArrayRenderTarget.dart';

@@ -28,8 +28,8 @@ class Mesh extends Object3D {
   bool isMesh = true;
   String? tag;
 
-  Mesh(BufferGeometry geometry, material) : super() {
-    this.geometry = geometry;
+  Mesh(BufferGeometry? geometry, material) : super() {
+    this.geometry = geometry ?? BufferGeometry();
     this.material = material;
 
     this.updateMorphTargets();
@@ -70,8 +70,6 @@ class Mesh extends Object3D {
       var keys = morphAttributes.keys.toList();
 
       if (keys.length > 0) {
-        print("updateMorphTargets keys[0] ${keys[0]} keys: ${keys} ");
-
         List<BufferAttribute>? morphAttribute = morphAttributes[keys[0]];
 
         if (morphAttribute != null) {

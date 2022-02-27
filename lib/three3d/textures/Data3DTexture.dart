@@ -1,11 +1,11 @@
 part of three_textures;
 
-class DataTexture3D extends Texture {
+class Data3DTexture extends Texture {
   bool isDataTexture3D = true;
   late int wrapR;
 
-  DataTexture3D(
-      {NativeArray? data, int width = 1, int height = 1, int depth = 1})
+  Data3DTexture(
+      [NativeArray? data, int width = 1, int height = 1, int depth = 1])
       : super(null, null, null, null, null, null, null, null, null, null) {
     this.image =
         ImageElement(data: data, width: width, height: height, depth: depth);

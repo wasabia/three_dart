@@ -18,8 +18,6 @@ class WebGLAttributes {
 
     dynamic arrayType = attribute.runtimeType;
 
-    // dynamic arrayList;
-
     // print(" WebGLAttributes.createBuffer attribute: ${attribute.runtimeType} arrayType: ${arrayType} array: ${array.length} ${array.runtimeType} name: ${name} ");
 
     var type = gl.FLOAT;

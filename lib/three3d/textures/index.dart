@@ -12,11 +12,13 @@ part './CanvasTexture.dart';
 part './CompressedTexture.dart';
 part './CubeTexture.dart';
 part './DataTexture.dart';
-part './DataTexture2DArray.dart';
-part './DataTexture3D.dart';
+part 'DataArrayTexture.dart';
+part 'Data3DTexture.dart';
 part './DepthTexture.dart';
 part './ImageElement.dart';
 part './Texture.dart';
 part './VideoTexture.dart';
 part './OpenGLTexture.dart';
 part './FramebufferTexture.dart';
+part './Source.dart';
+

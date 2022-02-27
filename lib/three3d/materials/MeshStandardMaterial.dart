@@ -96,7 +96,7 @@ class MeshStandardMaterial extends Material {
 
     this.alphaMap = null;
 
-    this.envMap = null;
+    // this.envMap = null;
     this.envMapIntensity = 1.0;
 
     this.refractionRatio = 0.98;

@@ -225,7 +225,7 @@ class BufferAttribute extends BaseBufferAttribute {
   }
 
   getX(int index) {
-    return this.array[index * this.itemSize];
+    return getAt(index * this.itemSize);
   }
 
   setX(int index, x) {
@@ -235,7 +235,7 @@ class BufferAttribute extends BaseBufferAttribute {
   }
 
   getY(int index) {
-    return this.array[index * this.itemSize + 1];
+    return getAt(index * this.itemSize + 1);
   }
 
   setY(int index, y) {
@@ -245,7 +245,7 @@ class BufferAttribute extends BaseBufferAttribute {
   }
 
   getZ(int index) {
-    return this.array[index * this.itemSize + 2];
+    return getAt(index * this.itemSize + 2);
   }
 
   setZ(int index, z) {
@@ -255,7 +255,15 @@ class BufferAttribute extends BaseBufferAttribute {
   }
 
   getW(int index) {
-    return this.array[index * this.itemSize + 3];
+    return getAt(index * this.itemSize + 3);
+  }
+
+  getAt(int index) {
+    if(index < this.array.length) {
+      return this.array[index];
+    } else {
+      return null;
+    }
   }
 
   setW(int index, w) {
