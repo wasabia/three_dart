@@ -2,14 +2,11 @@ PODS:
   - flutter_gl_macos (0.0.1):
     - FlutterMacOS
     - three3d_egl_osx (~> 0.1.1)
-  - flutter_webgpu (0.0.1):
-    - FlutterMacOS
   - FlutterMacOS (1.0.0)
   - three3d_egl_osx (0.1.1)
 
 DEPENDENCIES:
   - flutter_gl_macos (from `Flutter/ephemeral/.symlinks/plugins/flutter_gl_macos/macos`)
-  - flutter_webgpu (from `Flutter/ephemeral/.symlinks/plugins/flutter_webgpu/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
 
 SPEC REPOS:
@@ -19,14 +16,11 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   flutter_gl_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/flutter_gl_macos/macos
-  flutter_webgpu:
-    :path: Flutter/ephemeral/.symlinks/plugins/flutter_webgpu/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
 
 SPEC CHECKSUMS:
   flutter_gl_macos: fd42c918a2cfe97e202cc51f2347a15644b763e5
-  flutter_webgpu: aad4ca5e7dded292a49e75f2755c5b72a2922214
   FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424
   three3d_egl_osx: 5f0b1c41e6d687ac778b3d9900afd569c7f36424
 

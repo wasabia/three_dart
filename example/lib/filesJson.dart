@@ -31,5 +31,9 @@ var filesJson = [
   "webgl_helpers",
   "webgl_morphtargets",
   "webgl_morphtargets_sphere",
-  "webgl_morphtargets_horse"
+  "webgl_morphtargets_horse",
+  "misc_controls_orbit",
+  "misc_controls_trackball",
+  "misc_controls_arcball",
+  "misc_controls_map"
 ];

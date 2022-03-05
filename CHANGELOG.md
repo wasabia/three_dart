@@ -1,3 +1,3 @@
-## 0.0.7
+## 0.0.8
 
 * TODO: Describe initial release.

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:example/TouchListener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -64,17 +63,6 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
     super.initState();
   }
 
-  addEventListener(String name, Function callback, [bool flag = false]) {
-    var _cls = _listeners[name] ?? [];
-    _cls.add(callback);
-    _listeners[name] = _cls;
-  }
-
-  removeEventListener(String name, Function callback, [bool flag = false]) {
-    var _cls = _listeners[name] ?? [];
-    _cls.remove(callback);
-    _listeners[name] = _cls;
-  }
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
@@ -137,45 +125,14 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
     );
   }
 
-  emit(String name, event) {
-    var _callbacks = _listeners[name];
-    if (_callbacks != null && _callbacks.length > 0) {
-      var _len = _callbacks.length;
-      for (int i = 0; i < _len; i++) {
-        var _cb = _callbacks[i];
-        _cb(event);
-      }
-    }
-  }
-
   Widget _build(BuildContext context) {
     return Column(
       children: [
         Container(
           child: Stack(
             children: [
-              TouchListener(
-                  touchstart: (event) {
-                    emit("touchstart", event);
-                  },
-                  touchmove: (event) {
-                    emit("touchmove", event);
-                  },
-                  touchend: (event) {
-                    emit("touchend", event);
-                  },
-                  pointerdown: (event) {
-                    emit("pointerdown", event);
-                  },
-                  pointermove: (event) {
-                    emit("pointermove", event);
-                  },
-                  pointerup: (event) {
-                    emit("pointerup", event);
-                  },
-                  wheel: (event) {
-                    emit("wheel", event);
-                  },
+              Container(
+                  
                   child: Container(
                       width: width,
                       height: height,

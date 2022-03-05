@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:example/TouchListener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -66,23 +65,12 @@ class _State extends State<webgl_animation_multiple> {
 
   late THREE.Object3D model;
 
-  Map<String, List<Function>> _listeners = {};
+  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey =
+      GlobalKey<THREE_JSM.DomLikeListenableState>();
 
   @override
   void initState() {
     super.initState();
-  }
-
-  addEventListener(String name, Function callback, [bool flag = false]) {
-    var _cls = _listeners[name] ?? [];
-    _cls.add(callback);
-    _listeners[name] = _cls;
-  }
-
-  removeEventListener(String name, Function callback, [bool flag = false]) {
-    var _cls = _listeners[name] ?? [];
-    _cls.remove(callback);
-    _listeners[name] = _cls;
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -146,46 +134,16 @@ class _State extends State<webgl_animation_multiple> {
     );
   }
 
-  emit(String name, event) {
-    var _callbacks = _listeners[name];
-    if (_callbacks != null && _callbacks.length > 0) {
-      var _len = _callbacks.length;
-      for (int i = 0; i < _len; i++) {
-        var _cb = _callbacks[i];
-        _cb(event);
-      }
-    }
-  }
-
   Widget _build(BuildContext context) {
     return Column(
       children: [
         Container(
           child: Stack(
             children: [
-              TouchListener(
-                  touchstart: (event) {
-                    emit("touchstart", event);
-                  },
-                  touchmove: (event) {
-                    emit("touchmove", event);
-                  },
-                  touchend: (event) {
-                    emit("touchend", event);
-                  },
-                  pointerdown: (event) {
-                    emit("pointerdown", event);
-                  },
-                  pointermove: (event) {
-                    emit("pointermove", event);
-                  },
-                  pointerup: (event) {
-                    emit("pointerup", event);
-                  },
-                  wheel: (event) {
-                    emit("wheel", event);
-                  },
-                  child: Container(
+              THREE_JSM.DomLikeListenable(
+                key: _globalKey,
+                builder: (BuildContext context) {
+                  return Container(
                       width: width,
                       height: height,
                       color: Colors.black,
@@ -200,7 +158,8 @@ class _State extends State<webgl_animation_multiple> {
                               ? Texture(textureId: three3dRender.textureId!)
                               : Container();
                         }
-                      }))),
+                      }));
+                },)
             ],
           ),
         ),
@@ -364,6 +323,8 @@ class _State extends State<webgl_animation_multiple> {
     dirLight.shadow!.camera!.near = 0.1;
     dirLight.shadow!.camera!.far = 40;
     worldScene.add(dirLight);
+
+    var controls = new THREE_JSM.OrbitControls(camera, _globalKey);
 
     // ground
     var groundMesh = new THREE.Mesh(new THREE.PlaneGeometry(40, 40),

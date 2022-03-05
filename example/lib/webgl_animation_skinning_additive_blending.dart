@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:example/TouchListener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -54,8 +53,6 @@ class _State extends State<webgl_animation_skinning_additive_blending> {
   bool loaded = false;
 
   late THREE.Object3D model;
-
-  Map<String, List<Function>> _listeners = {};
 
   @override
   void initState() {

@@ -1,23 +1,26 @@
 import 'dart:async';
 
+import 'dart:typed_data';
+
+import 'dart:ui' as ui;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
+
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
-class webgl_morphtargets_horse extends StatefulWidget {
+class misc_controls_arcball extends StatefulWidget {
   String fileName;
+  misc_controls_arcball({Key? key, required this.fileName}) : super(key: key);
 
-  webgl_morphtargets_horse({Key? key, required this.fileName})
-      : super(key: key);
-
-  createState() => _State();
+  _MyAppState createState() => _MyAppState();
 }
 
-class _State extends State<webgl_morphtargets_horse> {
+class _MyAppState extends State<misc_controls_arcball> {
   late FlutterGlPlugin three3dRender;
   THREE.WebGLRenderer? renderer;
 
@@ -31,35 +34,21 @@ class _State extends State<webgl_morphtargets_horse> {
   late THREE.Camera camera;
   late THREE.Mesh mesh;
 
-  THREE.AnimationMixer? mixer;
-  THREE.Clock clock = new THREE.Clock();
-  THREE_JSM.OrbitControls? controls;
-
   num dpr = 1.0;
+
+  var AMOUNT = 4;
 
   bool verbose = true;
   bool disposed = false;
 
-  var radius = 600;
-  num theta = 0;
-  var prevTime = DateTime.now().millisecondsSinceEpoch;
-
-  late THREE.Object3D object;
-
-  late THREE.Texture texture;
-
-  late THREE.PointLight light;
-
-  THREE_JSM.VertexNormalsHelper? vnh;
-  THREE_JSM.VertexTangentsHelper? vth;
-
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late THREE.WebGLRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
-  bool loaded = false;
+  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey =
+      GlobalKey<THREE_JSM.DomLikeListenableState>();
 
-  late THREE.Object3D model;
+  late THREE_JSM.ArcballControls controls;
 
   @override
   void initState() {
@@ -69,7 +58,7 @@ class _State extends State<webgl_morphtargets_horse> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     width = screenSize!.width;
-    height = screenSize!.height;
+    height = screenSize!.height - 60;
 
     three3dRender = FlutterGlPlugin();
 
@@ -121,7 +110,7 @@ class _State extends State<webgl_morphtargets_horse> {
       floatingActionButton: FloatingActionButton(
         child: Text("render"),
         onPressed: () {
-          clickRender();
+          render();
         },
       ),
     );
@@ -133,23 +122,27 @@ class _State extends State<webgl_morphtargets_horse> {
         Container(
           child: Stack(
             children: [
-              Container(
-                  child: Container(
-                      width: width,
-                      height: height,
-                      color: Colors.black,
-                      child: Builder(builder: (BuildContext context) {
-                        if (kIsWeb) {
-                          return three3dRender.isInitialized
-                              ? HtmlElementView(
-                                  viewType: three3dRender.textureId!.toString())
-                              : Container();
-                        } else {
-                          return three3dRender.isInitialized
-                              ? Texture(textureId: three3dRender.textureId!)
-                              : Container();
-                        }
-                      }))),
+              THREE_JSM.DomLikeListenable(
+                  key: _globalKey,
+                  builder: (BuildContext context) {
+                    return Container(
+                        width: width,
+                        height: height,
+                        color: Colors.black,
+                        child: Builder(builder: (BuildContext context) {
+                          if (kIsWeb) {
+                            return three3dRender.isInitialized
+                                ? HtmlElementView(
+                                    viewType:
+                                        three3dRender.textureId!.toString())
+                                : Container();
+                          } else {
+                            return three3dRender.isInitialized
+                                ? Texture(textureId: three3dRender.textureId!)
+                                : Container();
+                          }
+                        }));
+                  }),
             ],
           ),
         ),
@@ -159,8 +152,9 @@ class _State extends State<webgl_morphtargets_horse> {
 
   render() {
     int _t = DateTime.now().millisecondsSinceEpoch;
-
     final _gl = three3dRender.gl;
+
+    controls.update();
 
     renderer!.render(scene, camera);
 
@@ -174,6 +168,10 @@ class _State extends State<webgl_morphtargets_horse> {
 
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
+
+    // var pixels = _gl.readCurrentPixels(0, 0, 10, 10);
+    // print(" --------------pixels............. ");
+    // print(pixels);
 
     if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
 
@@ -196,8 +194,12 @@ class _State extends State<webgl_morphtargets_horse> {
     renderer!.shadowMap.enabled = false;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
+      var pars = THREE.WebGLRenderTargetOptions({
+        "minFilter": THREE.LinearFilter,
+        "magFilter": THREE.LinearFilter,
+        "format": THREE.RGBAFormat
+      });
+      renderTarget = THREE.WebGLRenderTarget(
           (width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
@@ -210,70 +212,56 @@ class _State extends State<webgl_morphtargets_horse> {
     initPage();
   }
 
-  initPage() async {
-    camera = new THREE.PerspectiveCamera(50, width / height, 1, 10000);
-    camera.position.y = 300;
+  initPage() {
+    var ASPECT_RATIO = width / height;
+
+    var WIDTH = (width / AMOUNT) * dpr;
+    var HEIGHT = (height / AMOUNT) * dpr;
 
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf0f0f0);
+    scene.background = new THREE.Color(0xcccccc);
+    scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
 
-    //
+    camera = new THREE.PerspectiveCamera(45, width / height, 1, 2000);
+    camera.position.set(0, 0, 200);
+    camera.lookAt(scene.position);
 
-    var light1 = new THREE.DirectionalLight(0xefefff, 1.5);
-    light1.position.set(1, 1, 1).normalize();
-    scene.add(light1);
+    // controls
 
-    var light2 = new THREE.DirectionalLight(0xffefef, 1.5);
-    light2.position.set(-1, -1, -1).normalize();
-    scene.add(light2);
+    controls = new THREE_JSM.ArcballControls(camera, _globalKey, scene, 1);
+    controls.addEventListener('change', (event) {
+      render();
+    });
 
-    var loader = new THREE_JSM.GLTFLoader(null);
-    var gltf = await loader.loadAsync('assets/models/gltf/Horse.gltf');
+    // world
 
-    mesh = gltf["scene"].children[0];
-    mesh.scale.set(1.5, 1.5, 1.5);
+    var geometry = new THREE.BoxGeometry(30, 30, 30);
+    var material =
+        new THREE.MeshPhongMaterial({"color": 0xffff00, "flatShading": true});
+
+    var mesh = new THREE.Mesh(geometry, material);
+
     scene.add(mesh);
 
-    mixer = new THREE.AnimationMixer(mesh);
+    // lights
 
-    mixer!.clipAction(gltf["animations"][0]).setDuration(1).play();
+    var dirLight1 = new THREE.DirectionalLight(0xffffff);
+    dirLight1.position.set(1, 1, 1);
+    scene.add(dirLight1);
 
-    loaded = true;
+    var dirLight2 = new THREE.DirectionalLight(0x002288);
+    dirLight2.position.set(-1, -1, -1);
+    scene.add(dirLight2);
 
-    animate();
+    var ambientLight = new THREE.AmbientLight(0x222222);
+    scene.add(ambientLight);
 
-    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
-  }
-
-  clickRender() {
-    print("clickRender..... ");
     animate();
   }
 
   animate() {
     if (!mounted || disposed) {
       return;
-    }
-
-    if (!loaded) {
-      return;
-    }
-
-    theta += 0.1;
-
-    camera.position.x =
-        radius * THREE.Math.sin(THREE.MathUtils.degToRad(theta));
-    camera.position.z =
-        radius * THREE.Math.cos(THREE.MathUtils.degToRad(theta));
-
-    camera.lookAt(THREE.Vector3(0, 150, 0));
-
-    if (mixer != null) {
-      var time = DateTime.now().millisecondsSinceEpoch;
-
-      mixer!.update((time - prevTime) * 0.001);
-
-      prevTime = time;
     }
 
     render();
@@ -286,6 +274,7 @@ class _State extends State<webgl_morphtargets_horse> {
   @override
   void dispose() {
     print(" dispose ............. ");
+
     disposed = true;
     three3dRender.dispose();
 

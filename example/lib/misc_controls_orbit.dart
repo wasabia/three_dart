@@ -1,25 +1,26 @@
 import 'dart:async';
 
+import 'dart:typed_data';
+
+import 'dart:ui' as ui;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
+
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
-GlobalKey<webgl_debugState> webgl_animation_keyframesGlobalKey =
-    GlobalKey<webgl_debugState>();
-
-class webgl_debug extends StatefulWidget {
+class misc_controls_orbit extends StatefulWidget {
   String fileName;
+  misc_controls_orbit({Key? key, required this.fileName}) : super(key: key);
 
-  webgl_debug({Key? key, required this.fileName}) : super(key: key);
-
-  createState() => webgl_debugState();
+  _MyAppState createState() => _MyAppState();
 }
 
-class webgl_debugState extends State<webgl_debug> {
+class _MyAppState extends State<misc_controls_orbit> {
   late FlutterGlPlugin three3dRender;
   THREE.WebGLRenderer? renderer;
 
@@ -33,10 +34,6 @@ class webgl_debugState extends State<webgl_debug> {
   late THREE.Camera camera;
   late THREE.Mesh mesh;
 
-  late THREE.AnimationMixer mixer;
-  THREE.Clock clock = new THREE.Clock();
-  THREE_JSM.OrbitControls? controls;
-
   num dpr = 1.0;
 
   var AMOUNT = 4;
@@ -44,28 +41,24 @@ class webgl_debugState extends State<webgl_debug> {
   bool verbose = true;
   bool disposed = false;
 
-  late THREE.Object3D object;
-
-  late THREE.Texture texture;
-
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late THREE.WebGLRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
-  bool loaded = false;
+  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey =
+      GlobalKey<THREE_JSM.DomLikeListenableState>();
 
-  late THREE.Object3D model;
+  late THREE_JSM.OrbitControls controls;
 
   @override
   void initState() {
     super.initState();
   }
 
-
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     width = screenSize!.width;
-    height = screenSize!.height;
+    height = screenSize!.height - 60;
 
     three3dRender = FlutterGlPlugin();
 
@@ -117,12 +110,11 @@ class webgl_debugState extends State<webgl_debug> {
       floatingActionButton: FloatingActionButton(
         child: Text("render"),
         onPressed: () {
-          clickRender();
+          render();
         },
       ),
     );
   }
-
 
   Widget _build(BuildContext context) {
     return Column(
@@ -130,24 +122,27 @@ class webgl_debugState extends State<webgl_debug> {
         Container(
           child: Stack(
             children: [
-              Container(
-                 
-                  child: Container(
-                      width: width,
-                      height: height,
-                      color: Colors.black,
-                      child: Builder(builder: (BuildContext context) {
-                        if (kIsWeb) {
-                          return three3dRender.isInitialized
-                              ? HtmlElementView(
-                                  viewType: three3dRender.textureId!.toString())
-                              : Container();
-                        } else {
-                          return three3dRender.isInitialized
-                              ? Texture(textureId: three3dRender.textureId!)
-                              : Container();
-                        }
-                      }))),
+              THREE_JSM.DomLikeListenable(
+                  key: _globalKey,
+                  builder: (BuildContext context) {
+                    return Container(
+                        width: width,
+                        height: height,
+                        color: Colors.black,
+                        child: Builder(builder: (BuildContext context) {
+                          if (kIsWeb) {
+                            return three3dRender.isInitialized
+                                ? HtmlElementView(
+                                    viewType:
+                                        three3dRender.textureId!.toString())
+                                : Container();
+                          } else {
+                            return three3dRender.isInitialized
+                                ? Texture(textureId: three3dRender.textureId!)
+                                : Container();
+                          }
+                        }));
+                  }),
             ],
           ),
         ),
@@ -157,7 +152,6 @@ class webgl_debugState extends State<webgl_debug> {
 
   render() {
     int _t = DateTime.now().millisecondsSinceEpoch;
-
     final _gl = three3dRender.gl;
 
     renderer!.render(scene, camera);
@@ -172,6 +166,10 @@ class webgl_debugState extends State<webgl_debug> {
 
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
+
+    // var pixels = _gl.readCurrentPixels(0, 0, 10, 10);
+    // print(" --------------pixels............. ");
+    // print(pixels);
 
     if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
 
@@ -194,8 +192,12 @@ class webgl_debugState extends State<webgl_debug> {
     renderer!.shadowMap.enabled = false;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
+      var pars = THREE.WebGLRenderTargetOptions({
+        "minFilter": THREE.LinearFilter,
+        "magFilter": THREE.LinearFilter,
+        "format": THREE.RGBAFormat
+      });
+      renderTarget = THREE.WebGLRenderTarget(
           (width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
@@ -208,55 +210,66 @@ class webgl_debugState extends State<webgl_debug> {
     initPage();
   }
 
-  initPage() async {
-    camera = new THREE.PerspectiveCamera(40, 1, 1, 100);
-    camera.position.set(0, 0, 100);
+  initPage() {
+    var ASPECT_RATIO = width / height;
 
-    // scene
+    var WIDTH = (width / AMOUNT) * dpr;
+    var HEIGHT = (height / AMOUNT) * dpr;
 
     scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xcccccc);
+    scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
 
-    var ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
+    camera = new THREE.PerspectiveCamera(60, width / height, 1, 1000);
+    camera.position.set(400, 200, 0);
+
+    // controls
+
+    controls = new THREE_JSM.OrbitControls(camera, _globalKey);
+    // controls.listenToKeyEvents( window );
+
+    //controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
+
+    controls.enableDamping =
+        true; // an animation loop is required when either damping or auto-rotation are enabled
+    controls.dampingFactor = 0.05;
+
+    controls.screenSpacePanning = false;
+
+    controls.minDistance = 100;
+    controls.maxDistance = 500;
+
+    controls.maxPolarAngle = THREE.Math.PI / 2;
+
+    // world
+
+    var geometry = new THREE.CylinderGeometry(0, 10, 30, 4, 1);
+    var material =
+        new THREE.MeshPhongMaterial({"color": 0xffffff, "flatShading": true});
+
+    for (var i = 0; i < 500; i++) {
+      var mesh = new THREE.Mesh(geometry, material);
+      mesh.position.x = THREE.Math.random() * 1600 - 800;
+      mesh.position.y = 0;
+      mesh.position.z = THREE.Math.random() * 1600 - 800;
+      mesh.updateMatrix();
+      mesh.matrixAutoUpdate = false;
+      scene.add(mesh);
+    }
+
+    // lights
+
+    var dirLight1 = new THREE.DirectionalLight(0xffffff);
+    dirLight1.position.set(1, 1, 1);
+    scene.add(dirLight1);
+
+    var dirLight2 = new THREE.DirectionalLight(0x002288);
+    dirLight2.position.set(-1, -1, -1);
+    scene.add(dirLight2);
+
+    var ambientLight = new THREE.AmbientLight(0x222222);
     scene.add(ambientLight);
 
-    scene.add(camera);
-
-    camera.lookAt(scene.position);
-
-    var loader = THREE_JSM.GLTFLoader(null).setPath('assets/models/gltf/test/');
-
-    // var result = await loader.loadAsync( 'tokyo.gltf', null );
-    var result = await loader.loadAsync('animate7.gltf', null);
-    // var result = await loader.loadAsync( 'untitled22.gltf', null );
-
-    print(result);
-
-    print(" load gltf success result: ${result}  ");
-
-    model = result["scene"];
-
-    print(" load gltf success model: ${model}  ");
-
-    // model.position.set( 1, 1, 0 );
-    // model.scale.set( 0.01, 0.01, 0.01 );
-    scene.add(model);
-
-    mixer = new THREE.AnimationMixer(model);
-    mixer.clipAction(result["animations"][0], null, null).play();
-
-    // console.log(model);
-
-    camera = result["cameras"][0];
-
-    loaded = true;
-
-    animate();
-
-    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
-  }
-
-  clickRender() {
-    print("clickRender..... ");
     animate();
   }
 
@@ -264,18 +277,6 @@ class webgl_debugState extends State<webgl_debug> {
     if (!mounted || disposed) {
       return;
     }
-
-    if (!loaded) {
-      return;
-    }
-
-    var delta = clock.getDelta();
-
-    print(" delat: ${delta} ");
-
-    mixer.update(delta);
-
-    controls?.update();
 
     render();
 
@@ -287,6 +288,7 @@ class webgl_debugState extends State<webgl_debug> {
   @override
   void dispose() {
     print(" dispose ............. ");
+
     disposed = true;
     three3dRender.dispose();
 
