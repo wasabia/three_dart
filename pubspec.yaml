@@ -14,6 +14,7 @@ dependencies:
   ffi: ^1.1.2
   image: ^3.1.1
   flutter_gl: ^0.0.12
+  crypto: ^3.0.1
   
   # opentype:
   #   git: git@github.com:wasabia/opentype.git
