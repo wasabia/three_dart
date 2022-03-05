@@ -8,7 +8,7 @@ class Raycaster {
   late Layers layers;
   late Map<String, dynamic> params;
 
-  Raycaster(origin, direction, near, far) {
+  Raycaster([origin, direction, near, far]) {
     this.ray = Ray(origin, direction);
     // direction is assumed to be normalized (for accurate distance calculations)
 
@@ -84,7 +84,7 @@ class Raycaster {
     return _intersects;
   }
 
-  intersectObjects(objects, recursive, {List<Intersection>? intersects}) {
+  intersectObjects(objects, recursive, [List<Intersection>? intersects]) {
     intersects = intersects ?? List<Intersection>.from([]);
 
     for (var i = 0, l = objects.length; i < l; i++) {

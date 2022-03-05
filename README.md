@@ -9,7 +9,7 @@ support Web, iOS, Android, macOS, Windows
 
 Linux TODO, need flutter_gl support
 
-three.js r137
+three.js r138
 
 
 Example Demo on flutter web [https://wasabia.github.io/three_dart_example/#/](https://wasabia.github.io/three_dart_example/#/)

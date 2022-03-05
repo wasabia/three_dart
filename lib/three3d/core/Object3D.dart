@@ -76,8 +76,8 @@ class Object3D with EventDispatcher {
 
   Vector3 up = Object3D.DefaultUp.clone();
 
-  Vector3 position = Vector3.init();
-  Euler rotation = Euler.init();
+  Vector3 position = Vector3(0,0,0);
+  Euler rotation = Euler(0,0,0);
   Quaternion quaternion = Quaternion();
   Vector3 scale = Vector3(1, 1, 1);
   Matrix4 modelViewMatrix = Matrix4();

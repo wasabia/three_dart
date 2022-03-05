@@ -116,3 +116,8 @@ class Math {
     return range * (0.5 - Math.random());
   }
 }
+
+
+bool isFinite(v) {
+  return v != Math.Infinity || v != -Math.Infinity;
+}

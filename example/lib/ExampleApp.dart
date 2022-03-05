@@ -38,8 +38,6 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
       return AppRoutePath.home();
     }
 
-    print(" uri.pathSegments: ${uri.pathSegments} ");
-
     // Handle '/examples/:id'
     if (uri.pathSegments.length == 2) {
       if (uri.pathSegments[0] != 'examples') return AppRoutePath.unknown();
@@ -104,7 +102,6 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
               key: ValueKey('ExamplePage'),
               child: Builder(
                 builder: (BuildContext context) {
-                  print(" Builder ExamplePage.... ");
                   return ExamplePage(id: _selectedExample);
                 },
               ))

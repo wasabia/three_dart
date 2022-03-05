@@ -100,7 +100,7 @@ class Curve {
 
   // Get sequence of points using getPoint( t )
 
-  getPoints({num divisions = 5}) {
+  getPoints([num divisions = 5]) {
     var points = [];
 
     for (var d = 0; d <= divisions; d++) {

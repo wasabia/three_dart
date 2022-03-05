@@ -469,7 +469,7 @@ class Matrix4 {
   setPosition(x, y, z) {
     var te = this.elements;
 
-    if (x.isVector3) {
+    if (x is Vector3) {
       return setPositionFromVector3(x);
     } else {
       te[12] = x;

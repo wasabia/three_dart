@@ -16,7 +16,7 @@ class EllipseCurve extends Curve {
   bool isEllipseCurve = true;
 
   EllipseCurve(
-      aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise, aRotation) {
+      aX, aY, xRadius, yRadius, [aStartAngle, aEndAngle, aClockwise, aRotation]) {
     this.type = 'EllipseCurve';
 
     this.aX = aX ?? 0;

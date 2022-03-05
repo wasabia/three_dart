@@ -183,7 +183,7 @@ class Quaternion {
     return this;
   }
 
-  setFromEuler(Euler euler, bool update) {
+  setFromEuler(Euler euler, [bool update = false]) {
     var x = euler.x;
     var y = euler.y;
     var z = euler.z;

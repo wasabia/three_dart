@@ -134,7 +134,7 @@ class CurvePath extends Curve {
     return points;
   }
 
-  List getPoints({num divisions = 12}) {
+  List getPoints([num divisions = 12]) {
     var points = [];
     var last;
 
@@ -148,7 +148,7 @@ class CurvePath extends Curve {
                   ? divisions * curve.points.length
                   : divisions;
 
-      var pts = curve.getPoints(divisions: resolution);
+      var pts = curve.getPoints(resolution);
 
       for (var j = 0; j < pts.length; j++) {
         var point = pts[j];

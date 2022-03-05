@@ -24,7 +24,7 @@ class Shape extends Path {
     var holesPts = List<dynamic>.filled(this.holes.length, null);
 
     for (var i = 0, l = this.holes.length; i < l; i++) {
-      holesPts[i] = this.holes[i].getPoints(divisions: divisions);
+      holesPts[i] = this.holes[i].getPoints(divisions);
     }
 
     return holesPts;
@@ -34,7 +34,7 @@ class Shape extends Path {
 
   Map<String, dynamic> extractPoints(divisions) {
     return {
-      "shape": this.getPoints(divisions: divisions),
+      "shape": this.getPoints(divisions),
       "holes": this.getPointsHoles(divisions)
     };
   }

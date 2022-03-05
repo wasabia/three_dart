@@ -9,7 +9,7 @@ class Sphere {
   var _toFarthestPoint = /*@__PURE__*/ new Vector3.init();
   var _toPoint = /*@__PURE__*/ new Vector3.init();
 
-  Sphere(center, radius) {
+  Sphere([center, radius]) {
     this.center = center ?? new Vector3.init();
     this.radius = radius ?? -1;
   }
