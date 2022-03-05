@@ -32,6 +32,10 @@ import 'package:example/webgl_shadowmap_viewer.dart';
 import 'package:example/webgl_skinning_simple.dart';
 import 'package:flutter/material.dart';
 
+import 'misc_controls_arcball.dart';
+import 'misc_controls_map.dart';
+import 'misc_controls_orbit.dart';
+import 'misc_controls_trackball.dart';
 import 'webgl_loader_svg.dart';
 
 class ExamplePage extends StatefulWidget {
@@ -76,8 +80,7 @@ class _MyAppState extends State<ExamplePage> {
     } else if (fileName == "webgl_loader_obj_mtl") {
       page = webgl_loader_obj_mtl(fileName: fileName);
     } else if (fileName == "webgl_animation_keyframes") {
-      page = webgl_animation_keyframes(
-          key: webgl_animation_keyframesGlobalKey, fileName: fileName);
+      page = webgl_animation_keyframes(fileName: fileName);
     } else if (fileName == "webgl_loader_texture_basis") {
       page = webgl_loader_texture_basis(fileName: fileName);
     } else if (fileName == "webgl_animation_multiple") {
@@ -120,6 +123,14 @@ class _MyAppState extends State<ExamplePage> {
       page = webgl_morphtargets_sphere(fileName: fileName);
     } else if (fileName == "webgl_morphtargets_horse") {
       page = webgl_morphtargets_horse(fileName: fileName);
+    } else if (fileName == "misc_controls_orbit") {
+      page = misc_controls_orbit(fileName: fileName);
+    } else if (fileName == "misc_controls_trackball") {
+      page = misc_controls_trackball(fileName: fileName);
+    } else if (fileName == "misc_controls_arcball") {
+      page = misc_controls_arcball(fileName: fileName);
+    } else if (fileName == "misc_controls_map") {
+      page = misc_controls_map(fileName: fileName);
     } else {
       throw ("ExamplePage fileName ${fileName} is not support yet ");
     }

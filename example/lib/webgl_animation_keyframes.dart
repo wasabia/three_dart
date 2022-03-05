@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:example/TouchListener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -9,8 +8,6 @@ import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
-GlobalKey<webgl_animation_keyframesState> webgl_animation_keyframesGlobalKey =
-    GlobalKey<webgl_animation_keyframesState>();
 
 class webgl_animation_keyframes extends StatefulWidget {
   String fileName;
@@ -59,6 +56,9 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
   late THREE.Object3D model;
 
   Map<String, List<Function>> _listeners = {};
+
+  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey =
+      GlobalKey<THREE_JSM.DomLikeListenableState>();
 
   @override
   void initState() {
@@ -155,44 +155,26 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
         Container(
           child: Stack(
             children: [
-              TouchListener(
-                  touchstart: (event) {
-                    emit("touchstart", event);
-                  },
-                  touchmove: (event) {
-                    emit("touchmove", event);
-                  },
-                  touchend: (event) {
-                    emit("touchend", event);
-                  },
-                  pointerdown: (event) {
-                    emit("pointerdown", event);
-                  },
-                  pointermove: (event) {
-                    emit("pointermove", event);
-                  },
-                  pointerup: (event) {
-                    emit("pointerup", event);
-                  },
-                  wheel: (event) {
-                    emit("wheel", event);
-                  },
-                  child: Container(
-                      width: width,
-                      height: height,
-                      color: Colors.black,
-                      child: Builder(builder: (BuildContext context) {
-                        if (kIsWeb) {
-                          return three3dRender.isInitialized
-                              ? HtmlElementView(
-                                  viewType: three3dRender.textureId!.toString())
-                              : Container();
-                        } else {
-                          return three3dRender.isInitialized
-                              ? Texture(textureId: three3dRender.textureId!)
-                              : Container();
-                        }
-                      }))),
+              THREE_JSM.DomLikeListenable(
+                key: _globalKey,
+                builder: (BuildContext conetxt) {
+                  return Container(
+                    width: width,
+                    height: height,
+                    color: Colors.black,
+                    child: Builder(builder: (BuildContext context) {
+                      if (kIsWeb) {
+                        return three3dRender.isInitialized
+                            ? HtmlElementView(
+                                viewType: three3dRender.textureId!.toString())
+                            : Container();
+                      } else {
+                        return three3dRender.isInitialized
+                            ? Texture(textureId: three3dRender.textureId!)
+                            : Container();
+                      }
+                    }));
+                }),
             ],
           ),
         ),
@@ -319,15 +301,6 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
       return;
     }
 
-    if (controls == null) {
-      // possible compatible with three.js OrbitControls, wait on progress...
-      controls = new THREE_JSM.OrbitControls(
-          camera, webgl_animation_keyframesGlobalKey.currentState);
-      controls!.target.set(0, 0.5, 0);
-      controls!.update();
-      controls!.enablePan = false;
-      controls!.enableDamping = true;
-    }
 
     var delta = clock.getDelta();
 
