@@ -20,7 +20,7 @@ class Euler {
 
   Function onChangeCallback = () {};
 
-  Euler(num x, num y, num z, {String? order = null}) {
+  Euler(num x, num y, num z, [String? order = null]) {
     this._x = x;
     this._y = y;
     this._z = z;
@@ -83,7 +83,7 @@ class Euler {
   }
 
   clone() {
-    return new Euler(this._x, this._y, this._z, order: this._order);
+    return new Euler(this._x, this._y, this._z, this._order);
   }
 
   copy(euler) {
@@ -97,7 +97,7 @@ class Euler {
     return this;
   }
 
-  setFromRotationMatrix(m, order, update) {
+  setFromRotationMatrix(m, [order, update]) {
     var clamp = MathUtils.clamp;
 
     // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
@@ -201,7 +201,7 @@ class Euler {
     return this;
   }
 
-  setFromQuaternion(Quaternion q, String? order, bool update) {
+  setFromQuaternion(Quaternion q, [String? order, bool update = false]) {
     _matrix.makeRotationFromQuaternion(q);
 
     return this.setFromRotationMatrix(_matrix, order, update);

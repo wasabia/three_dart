@@ -40,7 +40,7 @@ class Box3 {
 
   static num Infinity = Math.Infinity;
 
-  Box3(min, max) {
+  Box3([min, max]) {
     this.min = min ?? new Vector3(Infinity, Infinity, Infinity);
     this.max = max ?? new Vector3(-Infinity, -Infinity, -Infinity);
   }

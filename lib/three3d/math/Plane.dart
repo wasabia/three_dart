@@ -10,7 +10,7 @@ class Plane {
   late Vector3 normal;
   num constant = 0;
 
-  Plane(normal, constant) {
+  Plane([normal, constant]) {
     // normal is assumed to be normalized
 
     this.normal = (normal != null) ? normal : new Vector3(1, 0, 0);

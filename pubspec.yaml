@@ -1,6 +1,6 @@
 name: three_dart
 description: three.js implement by Dart. Dart 3D library. an easy to use, lightweight, cross-platform, general purpose 3D library. 
-version: 0.0.6
+version: 0.0.7
 homepage: https://github.com/wasabia/three_dart
 
 environment:
@@ -14,6 +14,7 @@ dependencies:
   ffi: ^1.1.2
   image: ^3.1.1
   flutter_gl: ^0.0.12
+  
   # opentype:
   #   git: git@github.com:wasabia/opentype.git
   # typr_dart:
@@ -22,12 +23,12 @@ dependencies:
   # bidi_dart:
   #   # path: ../bidi_dart
   #   git: git@github.com:wasabia/bidi_dart.git
-  flutter_webgpu:
-    path: ../flutter_webgpu
+  # flutter_webgpu:
+  #   path: ../flutter_webgpu
 
-dependency_overrides:
-  flutter_gl:
-    path: ../flutter_gl/flutter_gl
+# dependency_overrides:
+#   flutter_gl:
+#     path: ../flutter_gl/flutter_gl
 
 dev_dependencies:
   flutter_test:
