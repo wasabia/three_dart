@@ -93,9 +93,9 @@ packages:
   flutter_gl:
     dependency: "direct main"
     description:
-      path: "../../flutter_gl/flutter_gl"
-      relative: true
-    source: path
+      name: flutter_gl
+      url: "https://pub.flutter-io.cn"
+    source: hosted
     version: "0.0.12"
   flutter_gl_macos:
     dependency: transitive
@@ -276,17 +276,17 @@ packages:
   three_dart:
     dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
-    version: "0.0.7"
+      name: three_dart
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.6"
   three_dart_jsm:
     dependency: "direct main"
     description:
-      path: "../../three_dart_plugins/three_dart_jsm"
-      relative: true
-    source: path
-    version: "0.0.4"
+      name: three_dart_jsm
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.3"
   typed_data:
     dependency: transitive
     description:
