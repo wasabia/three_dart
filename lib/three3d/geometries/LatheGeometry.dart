@@ -3,7 +3,8 @@ part of three_geometries;
 class LatheGeometry extends BufferGeometry {
   String type = 'LatheGeometry';
 
-  LatheGeometry(points, {segments = 12, phiStart = 0, phiLength = Math.PI * 2})
+  LatheGeometry(points,
+      {segments = 12, phiStart = 0, double phiLength = Math.PI * 2})
       : super() {
     this.parameters = {
       "points": points,

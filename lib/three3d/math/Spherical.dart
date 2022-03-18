@@ -1,4 +1,4 @@
-/**
+/*
  * Ref: https://en.wikipedia.org/wiki/Spherical_coordinate_system
  *
  * The polar angle (phi) is measured from the positive y-axis. The positive y-axis is up.
@@ -26,39 +26,39 @@ class Spherical {
     return this;
   }
 
-  clone() {
-    return new Spherical().copy(this);
+  Spherical clone() {
+    return Spherical().copy(this);
   }
 
-  copy(other) {
-    this.radius = other.radius;
-    this.phi = other.phi;
-    this.theta = other.theta;
+  Spherical copy(Spherical other) {
+    radius = other.radius;
+    phi = other.phi;
+    theta = other.theta;
 
     return this;
   }
 
   // restrict phi to be betwee EPS and PI-EPS
-  makeSafe() {
+  Spherical makeSafe() {
     const EPS = 0.000001;
-    this.phi = Math.max(EPS, Math.min(Math.PI - EPS, this.phi)).toDouble();
+    phi = Math.max(EPS, Math.min(Math.PI - EPS, phi)).toDouble();
 
     return this;
   }
 
-  setFromVector3(v) {
-    return this.setFromCartesianCoords(v.x, v.y, v.z);
+  Spherical setFromVector3(v) {
+    return setFromCartesianCoords(v.x, v.y, v.z);
   }
 
-  setFromCartesianCoords(x, y, z) {
-    this.radius = Math.sqrt(x * x + y * y + z * z);
+  Spherical setFromCartesianCoords(num x, num y, num z) {
+    radius = Math.sqrt(x * x + y * y + z * z);
 
-    if (this.radius == 0) {
-      this.theta = 0;
-      this.phi = 0;
+    if (radius == 0) {
+      theta = 0;
+      phi = 0;
     } else {
-      this.theta = Math.atan2(x, z);
-      this.phi = Math.acos(MathUtils.clamp(y / this.radius, -1, 1));
+      theta = Math.atan2(x, z);
+      phi = Math.acos(MathUtils.clamp(y / radius, -1, 1));
     }
 
     return this;

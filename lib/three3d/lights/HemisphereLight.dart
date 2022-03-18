@@ -24,7 +24,7 @@ class HemisphereLight extends Light {
 
     HemisphereLight source1 = source as HemisphereLight;
 
-    this.groundColor!.copy(source1.groundColor);
+    this.groundColor!.copy(source1.groundColor!);
 
     return this;
   }
