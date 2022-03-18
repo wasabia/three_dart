@@ -6,12 +6,12 @@ class Matrix3 {
   late Float32Array elements;
 
   Matrix3() {
-    this.elements = Float32Array.from([1, 0, 0, 0, 1, 0, 0, 0, 1]);
+    elements = Float32Array.from([1, 0, 0, 0, 1, 0, 0, 0, 1]);
   }
 
   Matrix3 set(double n11, double n12, double n13, double n21, double n22,
       double n23, double n31, double n32, double n33) {
-    var te = this.elements;
+    var te = elements;
 
     te[0] = n11;
     te[1] = n21;
@@ -27,17 +27,17 @@ class Matrix3 {
   }
 
   Matrix3 identity() {
-    this.set(1, 0, 0, 0, 1, 0, 0, 0, 1);
+    set(1, 0, 0, 0, 1, 0, 0, 0, 1);
 
     return this;
   }
 
   Matrix3 clone() {
-    return Matrix3().fromArray(this.elements);
+    return Matrix3().fromArray(elements);
   }
 
-  Matrix3 copy(Matrix3 m) {
-    var te = this.elements;
+  Matrix3 copy(m) {
+    var te = elements;
     var me = m.elements;
 
     te[0] = me[0];
@@ -53,7 +53,7 @@ class Matrix3 {
     return this;
   }
 
-  Matrix3 extractBasis(xAxis, yAxis, zAxis) {
+  Matrix3 extractBasis(Vector3 xAxis, Vector3 yAxis, Vector3 zAxis) {
     xAxis.setFromMatrix3Column(this, 0);
     yAxis.setFromMatrix3Column(this, 1);
     zAxis.setFromMatrix3Column(this, 2);
@@ -61,26 +61,26 @@ class Matrix3 {
     return this;
   }
 
-  Matrix3 setFromMatrix4(m) {
+  Matrix3 setFromMatrix4(Matrix4 m) {
     var me = m.elements;
 
-    this.set(me[0], me[4], me[8], me[1], me[5], me[9], me[2], me[6], me[10]);
+    set(me[0], me[4], me[8], me[1], me[5], me[9], me[2], me[6], me[10]);
 
     return this;
   }
 
   Matrix3 multiply(m) {
-    return this.multiplyMatrices(this, m);
+    return multiplyMatrices(this, m);
   }
 
   Matrix3 premultiply(m) {
-    return this.multiplyMatrices(m, this);
+    return multiplyMatrices(m, this);
   }
 
   Matrix3 multiplyMatrices(a, b) {
     var ae = a.elements;
     var be = b.elements;
-    var te = this.elements;
+    var te = elements;
 
     var a11 = ae[0], a12 = ae[3], a13 = ae[6];
     var a21 = ae[1], a22 = ae[4], a23 = ae[7];
@@ -105,8 +105,8 @@ class Matrix3 {
     return this;
   }
 
-  Matrix3 multiplyScalar(s) {
-    var te = this.elements;
+  Matrix3 multiplyScalar(num s) {
+    var te = elements;
 
     te[0] *= s;
     te[3] *= s;
@@ -122,7 +122,7 @@ class Matrix3 {
   }
 
   num determinant() {
-    var te = this.elements;
+    var te = elements;
 
     var a = te[0],
         b = te[1],
@@ -143,7 +143,7 @@ class Matrix3 {
   }
 
   Matrix3 invert() {
-    var te = this.elements,
+    var te = elements,
         n11 = te[0],
         n21 = te[1],
         n31 = te[2],
@@ -158,9 +158,9 @@ class Matrix3 {
         t13 = n23 * n12 - n22 * n13,
         det = n11 * t11 + n21 * t12 + n31 * t13;
 
-    if (det == 0) return this.set(0, 0, 0, 0, 0, 0, 0, 0, 0);
+    if (det == 0) return set(0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-    var detInv = 1 / det;
+    final detInv = 1 / det;
 
     te[0] = t11 * detInv;
     te[1] = (n31 * n23 - n33 * n21) * detInv;
@@ -179,7 +179,7 @@ class Matrix3 {
 
   Matrix3 transpose() {
     num tmp;
-    var m = this.elements;
+    final m = elements;
 
     tmp = m[1];
     m[1] = m[3];
@@ -195,11 +195,11 @@ class Matrix3 {
   }
 
   Matrix3 getNormalMatrix(Matrix4 matrix4) {
-    return this.setFromMatrix4(matrix4).invert().transpose();
+    return setFromMatrix4(matrix4).invert().transpose();
   }
 
   Matrix3 transposeIntoArray(List<num> r) {
-    var m = this.elements;
+    final m = elements;
 
     r[0] = m[0];
     r[1] = m[3];
@@ -216,17 +216,17 @@ class Matrix3 {
 
   Matrix3 setUvTransform(
       num tx, num ty, num sx, num sy, num rotation, num cx, num cy) {
-    var c = Math.cos(rotation);
-    var s = Math.sin(rotation);
+    final c = Math.cos(rotation);
+    final s = Math.sin(rotation);
 
-    this.set(sx * c, sx * s, -sx * (c * cx + s * cy) + cx + tx, -sy * s, sy * c,
+    set(sx * c, sx * s, -sx * (c * cx + s * cy) + cx + tx, -sy * s, sy * c,
         -sy * (-s * cx + c * cy) + cy + ty, 0, 0, 1);
 
     return this;
   }
 
   Matrix3 scale(double sx, double sy) {
-    var te = this.elements;
+    final te = elements;
 
     te[0] *= sx;
     te[3] *= sx;
@@ -239,13 +239,13 @@ class Matrix3 {
   }
 
   Matrix3 rotate(double theta) {
-    var c = Math.cos(theta);
-    var s = Math.sin(theta);
+    final c = Math.cos(theta);
+    final s = Math.sin(theta);
 
-    var te = this.elements;
+    final te = elements;
 
-    var a11 = te[0], a12 = te[3], a13 = te[6];
-    var a21 = te[1], a22 = te[4], a23 = te[7];
+    final a11 = te[0], a12 = te[3], a13 = te[6];
+    final a21 = te[1], a22 = te[4], a23 = te[7];
 
     te[0] = c * a11 + s * a21;
     te[3] = c * a12 + s * a22;
@@ -258,8 +258,8 @@ class Matrix3 {
     return this;
   }
 
-  Matrix3 translate(tx, ty) {
-    var te = this.elements;
+  Matrix3 translate(num tx, num ty) {
+    final te = elements;
 
     te[0] += tx * te[2];
     te[3] += tx * te[5];
@@ -272,7 +272,7 @@ class Matrix3 {
   }
 
   bool equals(Matrix3 matrix) {
-    var te = this.elements;
+    var te = elements;
     var me = matrix.elements;
 
     for (var i = 0; i < 9; i++) {
@@ -282,16 +282,16 @@ class Matrix3 {
     return true;
   }
 
-  Matrix3 fromArray(array, {int offset = 0}) {
+  Matrix3 fromArray(Float32Array array, {int offset = 0}) {
     for (var i = 0; i < 9; i++) {
-      this.elements[i] = array[i + offset];
+      elements[i] = array[i + offset];
     }
 
     return this;
   }
 
   List<num> toArray(List<num> array, {int offset = 0}) {
-    var te = this.elements;
+    var te = elements;
 
     array[offset] = te[0];
     array[offset + 1] = te[1];
@@ -309,7 +309,7 @@ class Matrix3 {
   }
 
   toJSON() {
-    return this.elements.sublist(0);
+    return elements.sublist(0);
   }
 
   Matrix3.fromJson(Map<String, dynamic> json) {

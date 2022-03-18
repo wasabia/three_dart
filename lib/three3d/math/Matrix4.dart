@@ -1,19 +1,19 @@
 part of three_math;
 
-var _matrix4v1 = new Vector3.init();
-var _matrix4m1 = new Matrix4();
-var _matrix4zero = new Vector3(0, 0, 0);
-var _matrix4one = new Vector3(1, 1, 1);
-var _matrix4x = new Vector3.init();
-var _matrix4y = new Vector3.init();
-var _matrix4z = new Vector3.init();
+var _matrix4v1 = Vector3.init();
+var _matrix4m1 = Matrix4();
+var _matrix4zero = Vector3(0, 0, 0);
+var _matrix4one = Vector3(1, 1, 1);
+var _matrix4x = Vector3.init();
+var _matrix4y = Vector3.init();
+var _matrix4z = Vector3.init();
 
 class Matrix4 {
   String type = "Matrix4";
   late Float32Array elements;
 
   Matrix4() {
-    this.elements = Float32Array.from([
+    elements = Float32Array.from([
       1.0,
       0.0,
       0.0,
@@ -33,9 +33,24 @@ class Matrix4 {
     ]);
   }
 
-  set(num n11, num n12, num n13, num n14, num n21, num n22, num n23, num n24,
-      num n31, num n32, num n33, num n34, num n41, num n42, num n43, num n44) {
-    var te = this.elements;
+  Matrix4 set(
+      num n11,
+      num n12,
+      num n13,
+      num n14,
+      num n21,
+      num n22,
+      num n23,
+      num n24,
+      num n31,
+      num n32,
+      num n33,
+      num n34,
+      num n41,
+      num n42,
+      num n43,
+      num n44) {
+    var te = elements;
 
     te[0] = n11.toDouble();
     te[4] = n12.toDouble();
@@ -58,18 +73,18 @@ class Matrix4 {
   }
 
   Matrix4 identity() {
-    this.set(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0);
+    set(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0);
 
     return this;
   }
 
   Matrix4 clone() {
-    return Matrix4().fromArray(this.elements);
+    return Matrix4().fromArray(elements);
   }
 
-  Matrix4 copy(m) {
-    var te = this.elements;
+  Matrix4 copy(Matrix4 m) {
+    var te = elements;
     var me = m.elements;
 
     te[0] = me[0];
@@ -92,8 +107,8 @@ class Matrix4 {
     return this;
   }
 
-  Matrix4 copyPosition(m) {
-    var te = this.elements, me = m.elements;
+  Matrix4 copyPosition(Matrix4 m) {
+    var te = elements, me = m.elements;
 
     te[12] = me[12];
     te[13] = me[13];
@@ -105,13 +120,13 @@ class Matrix4 {
   Matrix4 setFromMatrix3(Matrix3 m) {
     var me = m.elements;
 
-    this.set(me[0], me[3], me[6], 0, me[1], me[4], me[7], 0, me[2], me[5],
-        me[8], 0, 0, 0, 0, 1);
+    set(me[0], me[3], me[6], 0, me[1], me[4], me[7], 0, me[2], me[5], me[8], 0,
+        0, 0, 0, 1);
 
     return this;
   }
 
-  Matrix4 extractBasis(xAxis, yAxis, zAxis) {
+  Matrix4 extractBasis(Vector3 xAxis, Vector3 yAxis, Vector3 zAxis) {
     xAxis.setFromMatrixColumn(this, 0);
     yAxis.setFromMatrixColumn(this, 1);
     zAxis.setFromMatrixColumn(this, 2);
@@ -119,17 +134,17 @@ class Matrix4 {
     return this;
   }
 
-  Matrix4 makeBasis(xAxis, yAxis, zAxis) {
-    this.set(xAxis.x, yAxis.x, zAxis.x, 0, xAxis.y, yAxis.y, zAxis.y, 0,
-        xAxis.z, yAxis.z, zAxis.z, 0, 0, 0, 0, 1);
+  Matrix4 makeBasis(Vector3 xAxis, Vector3 yAxis, Vector3 zAxis) {
+    set(xAxis.x, yAxis.x, zAxis.x, 0, xAxis.y, yAxis.y, zAxis.y, 0, xAxis.z,
+        yAxis.z, zAxis.z, 0, 0, 0, 0, 1);
 
     return this;
   }
 
-  extractRotation(m) {
+  Matrix4 extractRotation(Matrix4 m) {
     // this method does not support reflection matrices
 
-    var te = this.elements;
+    var te = elements;
     var me = m.elements;
 
     var scaleX = 1 / _matrix4v1.setFromMatrixColumn(m, 0).length();
@@ -159,8 +174,8 @@ class Matrix4 {
     return this;
   }
 
-  makeRotationFromEuler(euler) {
-    var te = this.elements;
+  Matrix4 makeRotationFromEuler(Euler euler) {
+    var te = elements;
 
     var x = euler.x, y = euler.y, z = euler.z;
     var a = Math.cos(x).toDouble(), b = Math.sin(x).toDouble();
@@ -267,12 +282,12 @@ class Matrix4 {
     return this;
   }
 
-  makeRotationFromQuaternion(q) {
-    return this.compose(_matrix4zero, q, _matrix4one);
+  Matrix4 makeRotationFromQuaternion(Quaternion q) {
+    return compose(_matrix4zero, q, _matrix4one);
   }
 
-  lookAt(Vector3 eye, Vector3 target, Vector3 up) {
-    var te = this.elements;
+  Matrix4 lookAt(Vector3 eye, Vector3 target, Vector3 up) {
+    var te = elements;
 
     _matrix4z.subVectors(eye, target);
 
@@ -318,20 +333,20 @@ class Matrix4 {
     if (n != null) {
       print(
           'THREE.Matrix4: .multiply() now only accepts one argument. Use .multiplyMatrices( a, b ) instead.');
-      return this.multiplyMatrices(m, n);
+      return multiplyMatrices(m, n);
     }
 
-    return this.multiplyMatrices(this, m);
+    return multiplyMatrices(this, m);
   }
 
-  premultiply(m) {
-    return this.multiplyMatrices(m, this);
+  Matrix4 premultiply(Matrix4 m) {
+    return multiplyMatrices(m, this);
   }
 
   Matrix4 multiplyMatrices(Matrix4 a, Matrix4 b) {
     var ae = a.elements;
     var be = b.elements;
-    var te = this.elements;
+    var te = elements;
 
     var a11 = ae[0], a12 = ae[4], a13 = ae[8], a14 = ae[12];
     var a21 = ae[1], a22 = ae[5], a23 = ae[9], a24 = ae[13];
@@ -367,7 +382,7 @@ class Matrix4 {
   }
 
   Matrix4 multiplyScalar(num s) {
-    var te = this.elements;
+    var te = elements;
 
     te[0] *= s;
     te[4] *= s;
@@ -389,18 +404,18 @@ class Matrix4 {
     return this;
   }
 
-  determinant() {
-    var te = this.elements;
+  double determinant() {
+    var te = elements;
 
-    var n11 = te[0], n12 = te[4], n13 = te[8], n14 = te[12];
-    var n21 = te[1], n22 = te[5], n23 = te[9], n24 = te[13];
-    var n31 = te[2], n32 = te[6], n33 = te[10], n34 = te[14];
-    var n41 = te[3], n42 = te[7], n43 = te[11], n44 = te[15];
+    double n11 = te[0], n12 = te[4], n13 = te[8], n14 = te[12];
+    double n21 = te[1], n22 = te[5], n23 = te[9], n24 = te[13];
+    double n31 = te[2], n32 = te[6], n33 = te[10], n34 = te[14];
+    double n41 = te[3], n42 = te[7], n43 = te[11], n44 = te[15];
 
     //TODO: make this more efficient
     //( based on http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm )
 
-    var v1 = n41 *
+    double v1 = n41 *
         (n14 * n23 * n32 -
             n13 * n24 * n32 -
             n14 * n22 * n33 +
@@ -408,7 +423,7 @@ class Matrix4 {
             n13 * n22 * n34 -
             n12 * n23 * n34);
 
-    var v2 = n42 *
+    double v2 = n42 *
         (n11 * n23 * n34 -
             n11 * n24 * n33 +
             n14 * n21 * n33 -
@@ -416,7 +431,7 @@ class Matrix4 {
             n13 * n24 * n31 -
             n14 * n23 * n31);
 
-    var v3 = n43 *
+    double v3 = n43 *
         (n11 * n24 * n32 -
             n11 * n22 * n34 -
             n14 * n21 * n32 +
@@ -424,7 +439,7 @@ class Matrix4 {
             n14 * n22 * n31 -
             n12 * n24 * n31);
 
-    var v4 = n44 *
+    double v4 = n44 *
         (-n13 * n22 * n31 -
             n11 * n23 * n32 +
             n11 * n22 * n33 +
@@ -432,18 +447,16 @@ class Matrix4 {
             n12 * n21 * n33 +
             n12 * n23 * n31);
 
-    var result = (v1 + v2 + v3 + v4);
+    final result = (v1 + v2 + v3 + v4);
 
     // print(" v1: ${v1} v2: ${v2} v3: ${v3} v4: ${v4}  result: ${result} ");
 
     return result;
   }
 
-  transpose() {
-    var te = this.elements;
-    var tmp;
-
-    tmp = te[1];
+  Matrix4 transpose() {
+    var te = elements;
+    var tmp = te[1];
     te[1] = te[4];
     te[4] = tmp;
     tmp = te[2];
@@ -466,8 +479,8 @@ class Matrix4 {
     return this;
   }
 
-  setPosition(x, y, z) {
-    var te = this.elements;
+  Matrix4 setPosition(x, y, z) {
+    var te = elements;
 
     if (x is Vector3) {
       return setPositionFromVector3(x);
@@ -480,8 +493,8 @@ class Matrix4 {
     return this;
   }
 
-  setPositionFromVector3(Vector3 x) {
-    var te = this.elements;
+  Matrix4 setPositionFromVector3(Vector3 x) {
+    var te = elements;
 
     te[12] = x.x;
     te[13] = x.y;
@@ -490,10 +503,10 @@ class Matrix4 {
     return this;
   }
 
-  invert() {
+  Matrix4 invert() {
     // based on http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm
-    var te = this.elements,
-        n11 = te[0],
+    var te = elements;
+    final double n11 = te[0],
         n21 = te[1],
         n31 = te[2],
         n41 = te[3],
@@ -534,10 +547,9 @@ class Matrix4 {
             n13 * n22 * n34 -
             n12 * n23 * n34;
 
-    var det = n11 * t11 + n21 * t12 + n31 * t13 + n41 * t14;
+    final det = n11 * t11 + n21 * t12 + n31 * t13 + n41 * t14;
 
-    if (det == 0)
-      return this.set(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    if (det == 0) return set(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
     var detInv = 1 / det;
 
@@ -636,8 +648,8 @@ class Matrix4 {
     return this;
   }
 
-  scale(v) {
-    var te = this.elements;
+  Matrix4 scale(Vector3 v) {
+    var te = elements;
     var x = v.x, y = v.y, z = v.z;
 
     te[0] *= x;
@@ -656,47 +668,47 @@ class Matrix4 {
     return this;
   }
 
-  getMaxScaleOnAxis() {
-    var te = this.elements;
+  double getMaxScaleOnAxis() {
+    var te = elements;
 
-    var scaleXSq = te[0] * te[0] + te[1] * te[1] + te[2] * te[2];
-    var scaleYSq = te[4] * te[4] + te[5] * te[5] + te[6] * te[6];
-    var scaleZSq = te[8] * te[8] + te[9] * te[9] + te[10] * te[10];
+    double scaleXSq = te[0] * te[0] + te[1] * te[1] + te[2] * te[2];
+    double scaleYSq = te[4] * te[4] + te[5] * te[5] + te[6] * te[6];
+    double scaleZSq = te[8] * te[8] + te[9] * te[9] + te[10] * te[10];
 
     return Math.sqrt(Math.max(Math.max(scaleXSq, scaleYSq), scaleZSq));
   }
 
-  makeTranslation(x, y, z) {
-    this.set(1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z, 0, 0, 0, 1);
+  Matrix4 makeTranslation(num x, num y, num z) {
+    set(1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z, 0, 0, 0, 1);
 
     return this;
   }
 
-  makeRotationX(theta) {
+  Matrix4 makeRotationX(num theta) {
     var c = Math.cos(theta).toDouble(), s = Math.sin(theta).toDouble();
 
-    this.set(1, 0, 0, 0, 0, c, -s, 0, 0, s, c, 0, 0, 0, 0, 1);
+    set(1, 0, 0, 0, 0, c, -s, 0, 0, s, c, 0, 0, 0, 0, 1);
 
     return this;
   }
 
-  makeRotationY(theta) {
+  Matrix4 makeRotationY(num theta) {
     var c = Math.cos(theta).toDouble(), s = Math.sin(theta).toDouble();
 
-    this.set(c, 0, s, 0, 0, 1, 0, 0, -s, 0, c, 0, 0, 0, 0, 1);
+    set(c, 0, s, 0, 0, 1, 0, 0, -s, 0, c, 0, 0, 0, 0, 1);
 
     return this;
   }
 
-  makeRotationZ(theta) {
+  Matrix4 makeRotationZ(num theta) {
     var c = Math.cos(theta).toDouble(), s = Math.sin(theta).toDouble();
 
-    this.set(c, -s, 0, 0, s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    set(c, -s, 0, 0, s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 
     return this;
   }
 
-  makeRotationAxis(axis, angle) {
+  Matrix4 makeRotationAxis(axis, num angle) {
     // Based on http://www.gamedev.net/reference/articles/article1199.asp
 
     var c = Math.cos(angle).toDouble();
@@ -705,7 +717,7 @@ class Matrix4 {
     var x = axis.x, y = axis.y, z = axis.z;
     var tx = t * x, ty = t * y;
 
-    this.set(
+    set(
         tx * x + c,
         tx * y - s * z,
         tx * z + s * y,
@@ -726,20 +738,20 @@ class Matrix4 {
     return this;
   }
 
-  makeScale(x, y, z) {
-    this.set(x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, 0, 0, 0, 1);
+  Matrix4 makeScale(x, y, z) {
+    set(x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, 0, 0, 0, 1);
 
     return this;
   }
 
-  makeShear(xy, xz, yx, yz, zx, zy) {
-    this.set(1, yx, zx, 0, xy, 1, zy, 0, xz, yz, 1, 0, 0, 0, 0, 1);
+  Matrix4 makeShear(xy, xz, yx, yz, zx, zy) {
+    set(1, yx, zx, 0, xy, 1, zy, 0, xz, yz, 1, 0, 0, 0, 0, 1);
 
     return this;
   }
 
-  compose(Vector3 position, Quaternion quaternion, Vector3 scale) {
-    var te = this.elements;
+  Matrix4 compose(Vector3 position, Quaternion quaternion, Vector3 scale) {
+    var te = elements;
 
     var x = quaternion.x.toDouble();
     var y = quaternion.y.toDouble();
@@ -775,15 +787,15 @@ class Matrix4 {
     return this;
   }
 
-  decompose(Vector3 position, Quaternion quaternion, Vector3 scale) {
-    var te = this.elements;
+  Matrix4 decompose(Vector3 position, Quaternion quaternion, Vector3 scale) {
+    var te = elements;
 
     var sx = _matrix4v1.set(te[0], te[1], te[2]).length();
     var sy = _matrix4v1.set(te[4], te[5], te[6]).length();
     var sz = _matrix4v1.set(te[8], te[9], te[10]).length();
 
     // if determine is negative, we need to invert one scale
-    var det = this.determinant();
+    var det = determinant();
     if (det < 0) sx = -sx;
 
     position.x = te[12];
@@ -818,13 +830,13 @@ class Matrix4 {
     return this;
   }
 
-  makePerspective(left, right, top, bottom, near, far) {
+  Matrix4 makePerspective(left, right, top, bottom, near, far) {
     if (far == null) {
       print(
           'THREE.Matrix4: .makePerspective() has been redefined and has a new signature. Please check the docs.');
     }
 
-    var te = this.elements;
+    var te = elements;
     var x = 2 * near / (right - left);
     var y = 2 * near / (top - bottom);
 
@@ -853,8 +865,9 @@ class Matrix4 {
     return this;
   }
 
-  makeOrthographic(left, right, top, bottom, near, far) {
-    var te = this.elements;
+  Matrix4 makeOrthographic(
+      num left, num right, num top, num bottom, num near, num far) {
+    var te = elements;
     var w = 1.0 / (right - left);
     var h = 1.0 / (top - bottom);
     var p = 1.0 / (far - near);
@@ -883,8 +896,8 @@ class Matrix4 {
     return this;
   }
 
-  equals(matrix) {
-    var te = this.elements;
+  bool equals(Matrix4 matrix) {
+    var te = elements;
     var me = matrix.elements;
 
     for (var i = 0; i < 16; i++) {
@@ -894,16 +907,16 @@ class Matrix4 {
     return true;
   }
 
-  fromArray(array, [int offset = 0]) {
+  Matrix4 fromArray(array, [int offset = 0]) {
     for (var i = 0; i < 16; i++) {
-      this.elements[i] = array[i + offset];
+      elements[i] = array[i + offset];
     }
 
     return this;
   }
 
   toArray(array, [int offset = 0]) {
-    var te = this.elements;
+    var te = elements;
 
     array[offset] = te[0];
     array[offset + 1] = te[1];
@@ -929,12 +942,12 @@ class Matrix4 {
   }
 
   toJSON() {
-    return this.elements.sublist(0);
+    return elements.sublist(0);
   }
 
-  getInverse(matrix) {
+  Matrix4 getInverse(Matrix4 matrix) {
     print(
         'THREE.Matrix4: .getInverse() has been removed. Use matrixInv.copy( matrix ).invert(); instead.');
-    return this.copy(matrix).invert();
+    return copy(matrix).invert();
   }
 }

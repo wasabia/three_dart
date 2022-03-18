@@ -17,11 +17,11 @@ class SphericalHarmonics3 {
 
   SphericalHarmonics3() {
     for (var i = 0; i < 9; i++) {
-      this.coefficients.add(new Vector3.init());
+      coefficients.add(Vector3.init());
     }
   }
 
-  set(coefficients) {
+  SphericalHarmonics3 set(coefficients) {
     for (var i = 0; i < 9; i++) {
       this.coefficients[i].copy(coefficients[i]);
     }
@@ -29,9 +29,9 @@ class SphericalHarmonics3 {
     return this;
   }
 
-  zero() {
+  SphericalHarmonics3 zero() {
     for (var i = 0; i < 9; i++) {
-      this.coefficients[i].set(0, 0, 0);
+      coefficients[i].set(0, 0, 0);
     }
 
     return this;
@@ -44,7 +44,7 @@ class SphericalHarmonics3 {
 
     var x = normal.x, y = normal.y, z = normal.z;
 
-    var coeff = this.coefficients;
+    var coeff = coefficients;
 
     // band 0
     target.copy(coeff[0]).multiplyScalar(0.282095);
@@ -72,7 +72,7 @@ class SphericalHarmonics3 {
 
     var x = normal.x, y = normal.y, z = normal.z;
 
-    var coeff = this.coefficients;
+    var coeff = coefficients;
 
     // band 0
     target.copy(coeff[0]).multiplyScalar(0.886227); // π * 0.282095
@@ -96,41 +96,41 @@ class SphericalHarmonics3 {
     return target;
   }
 
-  add(SphericalHarmonics3 sh) {
+  SphericalHarmonics3 add(SphericalHarmonics3 sh) {
     for (var i = 0; i < 9; i++) {
-      this.coefficients[i].add(sh.coefficients[i]);
+      coefficients[i].add(sh.coefficients[i]);
     }
 
     return this;
   }
 
-  addScaledSH(sh, s) {
+  SphericalHarmonics3 addScaledSH(sh, s) {
     for (var i = 0; i < 9; i++) {
-      this.coefficients[i].addScaledVector(sh.coefficients[i], s);
+      coefficients[i].addScaledVector(sh.coefficients[i], s);
     }
 
     return this;
   }
 
-  scale(s) {
+  SphericalHarmonics3 scale(s) {
     for (var i = 0; i < 9; i++) {
-      this.coefficients[i].multiplyScalar(s);
+      coefficients[i].multiplyScalar(s);
     }
 
     return this;
   }
 
-  lerp(sh, alpha) {
+  SphericalHarmonics3 lerp(sh, alpha) {
     for (var i = 0; i < 9; i++) {
-      this.coefficients[i].lerp(sh.coefficients[i], alpha);
+      coefficients[i].lerp(sh.coefficients[i], alpha);
     }
 
     return this;
   }
 
-  equals(sh) {
+  bool equals(sh) {
     for (var i = 0; i < 9; i++) {
-      if (!this.coefficients[i].equals(sh.coefficients[i])) {
+      if (!coefficients[i].equals(sh.coefficients[i])) {
         return false;
       }
     }
@@ -138,15 +138,15 @@ class SphericalHarmonics3 {
     return true;
   }
 
-  copy(sh) {
-    return this.set(sh.coefficients);
+  SphericalHarmonics3 copy(sh) {
+    return set(sh.coefficients);
   }
 
-  clone() {
-    return new SphericalHarmonics3().copy(this);
+  SphericalHarmonics3 clone() {
+    return SphericalHarmonics3().copy(this);
   }
 
-  fromArray(List<double> array, [int offset = 0]) {
+  SphericalHarmonics3 fromArray(List<double> array, [int offset = 0]) {
     var coefficients = this.coefficients;
 
     for (var i = 0; i < 9; i++) {
@@ -156,7 +156,7 @@ class SphericalHarmonics3 {
     return this;
   }
 
-  toArray(List<double> array, [int offset = 0]) {
+  List<double> toArray(List<double> array, [int offset = 0]) {
     var coefficients = this.coefficients;
 
     for (var i = 0; i < 9; i++) {

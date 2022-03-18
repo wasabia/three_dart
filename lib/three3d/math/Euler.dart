@@ -20,170 +20,158 @@ class Euler {
 
   Function onChangeCallback = () {};
 
-  Euler(num x, num y, num z, [String? order = null]) {
-    this._x = x;
-    this._y = y;
-    this._z = z;
-    this._order = order ?? DefaultOrder;
+  Euler(num x, num y, num z, [String? order]) {
+    _x = x;
+    _y = y;
+    _z = z;
+    _order = order ?? DefaultOrder;
   }
 
   Euler.init(
       {num x = 0, num y = 0, num z = 0, String order = Euler.DefaultOrder}) {
-    this._x = x;
-    this._y = y;
-    this._z = z;
-    this._order = order;
+    _x = x;
+    _y = y;
+    _z = z;
+    _order = order;
   }
 
-  get x {
-    return this._x;
+  num get x => _x;
+  set x(num value) {
+    _x = value;
+    onChangeCallback();
   }
 
-  set x(value) {
-    this._x = value;
-    this.onChangeCallback();
+  num get y => _y;
+  set y(num value) {
+    _y = value;
+    onChangeCallback();
   }
 
-  get y {
-    return this._y;
+  num get z => _z;
+  set z(num value) {
+    _z = value;
+    onChangeCallback();
   }
 
-  set y(value) {
-    this._y = value;
-    this.onChangeCallback();
+  String get order => _order;
+  set order(String value) {
+    _order = value;
+    onChangeCallback();
   }
 
-  get z {
-    return this._z;
-  }
+  Euler set(num x, num y, num z, {String? order}) {
+    _x = x;
+    _y = y;
+    _z = z;
+    _order = order ?? _order;
 
-  set z(value) {
-    this._z = value;
-    this.onChangeCallback();
-  }
-
-  get order {
-    return this._order;
-  }
-
-  set order(value) {
-    this._order = value;
-    this.onChangeCallback();
-  }
-
-  set(x, y, z, {String? order}) {
-    this._x = x;
-    this._y = y;
-    this._z = z;
-    this._order = order ?? this._order;
-
-    this.onChangeCallback();
+    onChangeCallback();
 
     return this;
   }
 
-  clone() {
-    return new Euler(this._x, this._y, this._z, this._order);
+  Euler clone() {
+    return Euler(_x, _y, _z, _order);
   }
 
-  copy(euler) {
-    this._x = euler._x;
-    this._y = euler._y;
-    this._z = euler._z;
-    this._order = euler._order;
+  Euler copy(Euler euler) {
+    _x = euler._x;
+    _y = euler._y;
+    _z = euler._z;
+    _order = euler._order;
 
-    this.onChangeCallback();
+    onChangeCallback();
 
     return this;
   }
 
-  setFromRotationMatrix(m, [order, update]) {
-    var clamp = MathUtils.clamp;
+  Euler setFromRotationMatrix(m, [String? order, bool? update]) {
+    //var clamp = MathUtils.clamp;
 
     // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 
-    var te = m.elements;
-    var m11 = te[0], m12 = te[4], m13 = te[8];
-    var m21 = te[1], m22 = te[5], m23 = te[9];
-    var m31 = te[2], m32 = te[6], m33 = te[10];
+    final te = m.elements;
+    double m11 = te[0], m12 = te[4], m13 = te[8];
+    double m21 = te[1], m22 = te[5], m23 = te[9];
+    double m31 = te[2], m32 = te[6], m33 = te[10];
 
-    order = order ?? this._order;
+    order = order ?? _order;
 
     switch (order) {
       case 'XYZ':
-        this._y = Math.asin(clamp(m13, -1, 1));
+        _y = Math.asin(MathUtils.clamp(m13, -1, 1));
 
         if (Math.abs(m13) < 0.9999999) {
-          this._x = Math.atan2(-m23, m33);
-          this._z = Math.atan2(-m12, m11);
+          _x = Math.atan2(-m23, m33);
+          _z = Math.atan2(-m12, m11);
         } else {
-          this._x = Math.atan2(m32, m22);
-          this._z = 0;
+          _x = Math.atan2(m32, m22);
+          _z = 0;
         }
 
         break;
 
       case 'YXZ':
-        this._x = Math.asin(-clamp(m23, -1, 1));
+        _x = Math.asin(-MathUtils.clamp(m23, -1, 1));
 
         if (Math.abs(m23) < 0.9999999) {
-          this._y = Math.atan2(m13, m33);
-          this._z = Math.atan2(m21, m22);
+          _y = Math.atan2(m13, m33);
+          _z = Math.atan2(m21, m22);
         } else {
-          this._y = Math.atan2(-m31, m11);
-          this._z = 0;
+          _y = Math.atan2(-m31, m11);
+          _z = 0;
         }
 
         break;
 
       case 'ZXY':
-        this._x = Math.asin(clamp(m32, -1, 1));
+        _x = Math.asin(MathUtils.clamp(m32, -1, 1));
 
         if (Math.abs(m32) < 0.9999999) {
-          this._y = Math.atan2(-m31, m33);
-          this._z = Math.atan2(-m12, m22);
+          _y = Math.atan2(-m31, m33);
+          _z = Math.atan2(-m12, m22);
         } else {
-          this._y = 0;
-          this._z = Math.atan2(m21, m11);
+          _y = 0;
+          _z = Math.atan2(m21, m11);
         }
 
         break;
 
       case 'ZYX':
-        this._y = Math.asin(-clamp(m31, -1, 1));
+        _y = Math.asin(-MathUtils.clamp(m31, -1, 1));
 
         if (Math.abs(m31) < 0.9999999) {
-          this._x = Math.atan2(m32, m33);
-          this._z = Math.atan2(m21, m11);
+          _x = Math.atan2(m32, m33);
+          _z = Math.atan2(m21, m11);
         } else {
-          this._x = 0;
-          this._z = Math.atan2(-m12, m22);
+          _x = 0;
+          _z = Math.atan2(-m12, m22);
         }
 
         break;
 
       case 'YZX':
-        this._z = Math.asin(clamp(m21, -1, 1));
+        _z = Math.asin(MathUtils.clamp(m21, -1, 1));
 
         if (Math.abs(m21) < 0.9999999) {
-          this._x = Math.atan2(-m23, m22);
-          this._y = Math.atan2(-m31, m11);
+          _x = Math.atan2(-m23, m22);
+          _y = Math.atan2(-m31, m11);
         } else {
-          this._x = 0;
-          this._y = Math.atan2(m13, m33);
+          _x = 0;
+          _y = Math.atan2(m13, m33);
         }
 
         break;
 
       case 'XZY':
-        this._z = Math.asin(-clamp(m12, -1, 1));
+        _z = Math.asin(-MathUtils.clamp(m12, -1, 1));
 
         if (Math.abs(m12) < 0.9999999) {
-          this._x = Math.atan2(m32, m22);
-          this._y = Math.atan2(m13, m11);
+          _x = Math.atan2(m32, m22);
+          _y = Math.atan2(m13, m11);
         } else {
-          this._x = Math.atan2(-m23, m33);
-          this._y = 0;
+          _x = Math.atan2(-m23, m33);
+          _y = 0;
         }
 
         break;
@@ -194,76 +182,77 @@ class Euler {
                 order);
     }
 
-    this._order = order;
+    _order = order;
 
-    if (update != false) this.onChangeCallback();
+    if (update != false) onChangeCallback();
 
     return this;
   }
 
-  setFromQuaternion(Quaternion q, [String? order, bool update = false]) {
+  Euler setFromQuaternion(Quaternion q, [String? order, bool update = false]) {
     _matrix.makeRotationFromQuaternion(q);
 
-    return this.setFromRotationMatrix(_matrix, order, update);
+    return setFromRotationMatrix(_matrix, order, update);
   }
 
-  setFromVector3(v, order) {
-    return this.set(v.x, v.y, v.z, order: order ?? this._order);
+  Euler setFromVector3(Vector3 v, [String? order]) {
+    return set(v.x, v.y, v.z, order: order ?? _order);
   }
 
-  reorder(newOrder) {
+  Euler reorder(String newOrder) {
     // WARNING: this discards revolution information -bhouston
 
     _quaternion.setFromEuler(this, false);
 
-    return this.setFromQuaternion(_quaternion, newOrder, false);
+    return setFromQuaternion(_quaternion, newOrder, false);
   }
 
-  equals(euler) {
-    return (euler._x == this._x) &&
-        (euler._y == this._y) &&
-        (euler._z == this._z) &&
-        (euler._order == this._order);
+  bool equals(Euler euler) {
+    return (euler._x == _x) &&
+        (euler._y == _y) &&
+        (euler._z == _z) &&
+        (euler._order == _order);
   }
 
-  fromArray(List<double> array) {
-    this._x = array[0];
-    this._y = array[1];
-    this._z = array[2];
-    if (array[3] != null) this._order = RotationOrders[array[3].toInt()];
+  Euler fromArray(List<num> array) {
+    _x = array[0];
+    _y = array[1];
+    _z = array[2];
+    if (array.length > 3) _order = RotationOrders[array[3].toInt()];
 
-    this.onChangeCallback();
+    onChangeCallback();
 
     return this;
   }
 
   List<num> toJSON() {
-    int orderNo = RotationOrders.indexOf(this._order);
-    return [this._x, this._y, this._z, orderNo];
+    int orderNo = RotationOrders.indexOf(_order);
+    return [_x, _y, _z, orderNo];
   }
 
-  toArray(List<num> array, {int offset = 0}) {
-    array[offset] = this._x;
-    array[offset + 1] = this._y;
-    array[offset + 2] = this._z;
-    array[offset + 3] = RotationOrders.indexOf(this._order);
+  List<num> toArray(List<num> array, {int offset = 0}) {
+    array[offset] = _x;
+    array[offset + 1] = _y;
+    array[offset + 2] = _z;
+    array[offset + 3] = RotationOrders.indexOf(_order);
 
     return array;
   }
 
-  toVector3(optionalResult) {
-    print(" THREE.Euler: .toVector3() has been removed. Use Vector3.setFromEuler() instead ");
-    if (optionalResult) {
-      return optionalResult.set(this._x, this._y, this._z);
+  Vector3 toVector3([Vector3? optionalResult]) {
+    print(
+        " THREE.Euler: .toVector3() has been removed. Use Vector3.setFromEuler() instead ");
+    if (optionalResult != null) {
+      return optionalResult.set(_x, _y, _z);
     } else {
-      return new Vector3(this._x, this._y, this._z);
+      return Vector3(_x, _y, _z);
     }
   }
 
-  onChange(Function callback) {
-    this.onChangeCallback = callback;
+  void onChange(Function callback) {
+    onChangeCallback = callback;
   }
 }
 
-var _matrix = new Matrix4();
-var _quaternion = new Quaternion();
+var _matrix = Matrix4();
+var _quaternion = Quaternion();

@@ -73,7 +73,7 @@ class Math {
     return math.Random().nextDouble();
   }
 
-  static double randomFromA2B(a, b) {
+  static double randomFromA2B(num a, num b) {
     var result = random() * (b - a) + a;
     return result;
   }
@@ -107,17 +107,17 @@ class Math {
   }
 
   // Random float from <low, high> interval
-  static randFloat(low, high) {
+  static double randFloat(num low, num high) {
     return low + Math.random() * (high - low);
   }
 
   // Random float from <-range/2, range/2> interval
-  static randFloatSpread(range) {
+  static double randFloatSpread(num range) {
     return range * (0.5 - Math.random());
   }
 }
 
 
-bool isFinite(v) {
+bool isFinite(num v) {
   return v != Math.Infinity || v != -Math.Infinity;
 }

@@ -28,7 +28,7 @@ class SkinnedMesh extends Mesh {
     SkinnedMesh source1 = source as SkinnedMesh;
 
     this.bindMode = source1.bindMode;
-    this.bindMatrix!.copy(source1.bindMatrix);
+    this.bindMatrix!.copy(source1.bindMatrix!);
     this.bindMatrixInverse.copy(source1.bindMatrixInverse);
 
     this.skeleton = source1.skeleton;
@@ -85,7 +85,7 @@ class SkinnedMesh extends Mesh {
     if (this.bindMode == 'attached') {
       this.bindMatrixInverse.copy(this.matrixWorld).invert();
     } else if (this.bindMode == 'detached') {
-      this.bindMatrixInverse.copy(this.bindMatrix).invert();
+      this.bindMatrixInverse.copy(this.bindMatrix!).invert();
     } else {
       print('THREE.SkinnedMesh: Unrecognized bindMode: ${this.bindMode}');
     }
@@ -100,7 +100,7 @@ class SkinnedMesh extends Mesh {
     _skinWeight.fromBufferAttribute(
         geometry.attributes["skinWeight"], index);
 
-    _basePosition.copy(target).applyMatrix4(this.bindMatrix);
+    _basePosition.copy(target).applyMatrix4(this.bindMatrix!);
 
     target.set(0, 0, 0);
 
@@ -108,7 +108,7 @@ class SkinnedMesh extends Mesh {
       var weight = _skinWeight.getComponent(i);
 
       if (weight != 0) {
-        var boneIndex = _skinIndex.getComponent(i);
+        var boneIndex = _skinIndex.getComponent(i).toInt();
 
         _matrix.multiplyMatrices(skeleton!.bones[boneIndex].matrixWorld,
             skeleton.boneInverses[boneIndex]);

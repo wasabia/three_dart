@@ -1,11 +1,10 @@
-import 'dart:math' as Math;
 import 'dart:math';
 import 'package:crypto/crypto.dart' as crypto;
 import 'dart:typed_data';
 
 class UuidUtil {
-  static final _random = Random();
-  static final _secureRandom = Random.secure();
+  static final Random _random = Random();
+  static final Random _secureRandom = Random.secure();
 
   /// Math.Random()-based RNG. All platforms, fast, not cryptographically
   /// strong. Optional Seed passable.
