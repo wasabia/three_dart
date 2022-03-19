@@ -1,17 +1,17 @@
 part of three_math;
 
 class Triangle {
-  static var _v0 = /*@__PURE__*/ new Vector3.init();
-  static var _v1 = /*@__PURE__*/ new Vector3.init();
-  static var _v2 = /*@__PURE__*/ new Vector3.init();
-  static var _v3 = /*@__PURE__*/ new Vector3.init();
+  static final _v0 = /*@__PURE__*/ Vector3.init();
+  static final _v1 = /*@__PURE__*/ Vector3.init();
+  static final _v2 = /*@__PURE__*/ Vector3.init();
+  static final _v3 = /*@__PURE__*/ Vector3.init();
 
-  static var _vab = /*@__PURE__*/ new Vector3.init();
-  static var _vac = /*@__PURE__*/ new Vector3.init();
-  static var _vbc = /*@__PURE__*/ new Vector3.init();
-  static var _vap = /*@__PURE__*/ new Vector3.init();
-  static var _vbp = /*@__PURE__*/ new Vector3.init();
-  static var _vcp = /*@__PURE__*/ new Vector3.init();
+  static final _vab = /*@__PURE__*/ Vector3.init();
+  static final _vac = /*@__PURE__*/ Vector3.init();
+  static final _vbc = /*@__PURE__*/ Vector3.init();
+  static final _vap = /*@__PURE__*/ Vector3.init();
+  static final _vbp = /*@__PURE__*/ Vector3.init();
+  static final _vcp = /*@__PURE__*/ Vector3.init();
 
   String type = "Triangle";
 
@@ -19,23 +19,23 @@ class Triangle {
   late Vector3 b;
   late Vector3 c;
 
-  Triangle(a, b, c) {
-    this.a = (a != null) ? a : new Vector3.init();
-    this.b = (b != null) ? b : new Vector3.init();
-    this.c = (c != null) ? c : new Vector3.init();
+  Triangle([Vector3? a, Vector3? b, Vector3? c]) {
+    this.a = (a != null) ? a : Vector3.init();
+    this.b = (b != null) ? b : Vector3.init();
+    this.c = (c != null) ? c : Vector3.init();
   }
 
   Triangle.init({Vector3? a, Vector3? b, Vector3? c}) {
-    this.a = (a != null) ? a : new Vector3.init();
-    this.b = (b != null) ? b : new Vector3.init();
-    this.c = (c != null) ? c : new Vector3.init();
+    this.a = (a != null) ? a : Vector3.init();
+    this.b = (b != null) ? b : Vector3.init();
+    this.c = (c != null) ? c : Vector3.init();
   }
 
-  operator [](Object? key) {
+  Vector3 operator [](Object? key) {
     return getValue(key);
   }
 
-  getValue(Object? key) {
+  Vector3 getValue(Object? key) {
     if (key == "a") {
       return a;
     } else if (key == "b") {
@@ -43,11 +43,12 @@ class Triangle {
     } else if (key == "c") {
       return c;
     } else {
-      throw ("Triangle getValue key: ${key} not support .....");
+      throw ("Triangle getValue key: $key not support .....");
     }
   }
 
-  static static_getNormal(a, b, c, Vector3 target) {
+  static Vector3 static_getNormal(
+      Vector3 a, Vector3 b, Vector3 c, Vector3 target) {
     target.subVectors(c, b);
     _v0.subVectors(a, b);
     target.cross(_v0);
@@ -64,7 +65,8 @@ class Triangle {
 
   // static/instance method to calculate barycentric coordinates
   // based on: http://www.blackpawn.com/texts/pointinpoly/default.html
-  static static_getBarycoord(point, a, b, c, Vector3 target) {
+  static Vector3 static_getBarycoord(
+      point, Vector3 a, Vector3 b, Vector3 c, Vector3 target) {
     _v0.subVectors(c, a);
     _v1.subVectors(b, a);
     _v2.subVectors(point, a);
@@ -92,7 +94,7 @@ class Triangle {
     return target.set(1 - u - v, v, u);
   }
 
-  static static_containsPoint(point, a, b, c) {
+  static bool static_containsPoint(point, Vector3 a, Vector3 b, Vector3 c) {
     static_getBarycoord(point, a, b, c, _v3);
 
     return (_v3.x >= 0) && (_v3.y >= 0) && ((_v3.x + _v3.y) <= 1);
@@ -109,7 +111,7 @@ class Triangle {
     return target;
   }
 
-  static static_isFrontFacing(a, b, c, direction) {
+  static bool static_isFrontFacing(a, b, c, direction) {
     _v0.subVectors(c, b);
     _v1.subVectors(a, b);
 
@@ -117,7 +119,7 @@ class Triangle {
     return (_v0.cross(_v1).dot(direction) < 0) ? true : false;
   }
 
-  set(a, b, c) {
+  Triangle set(a, b, c) {
     this.a.copy(a);
     this.b.copy(b);
     this.c.copy(c);
@@ -125,67 +127,66 @@ class Triangle {
     return this;
   }
 
-  setFromPointsAndIndices(points, i0, i1, i2) {
-    this.a.copy(points[i0]);
-    this.b.copy(points[i1]);
-    this.c.copy(points[i2]);
+  Triangle setFromPointsAndIndices(points, i0, i1, i2) {
+    a.copy(points[i0]);
+    b.copy(points[i1]);
+    c.copy(points[i2]);
 
     return this;
   }
 
-  clone() {
-    return new Triangle.init().copy(this);
+  Triangle clone() {
+    return Triangle.init().copy(this);
   }
 
-  copy(triangle) {
-    this.a.copy(triangle.a);
-    this.b.copy(triangle.b);
-    this.c.copy(triangle.c);
+  Triangle copy(Triangle triangle) {
+    a.copy(triangle.a);
+    b.copy(triangle.b);
+    c.copy(triangle.c);
 
     return this;
   }
 
-  getArea() {
-    _v0.subVectors(this.c, this.b);
-    _v1.subVectors(this.a, this.b);
+  double getArea() {
+    _v0.subVectors(c, b);
+    _v1.subVectors(a, b);
 
     return _v0.cross(_v1).length() * 0.5;
   }
 
-  getMidpoint(Vector3 target) {
-    return target.addVectors(this.a, this.b).add(this.c).multiplyScalar(1 / 3);
+  Vector3 getMidpoint(Vector3 target) {
+    return target.addVectors(a, b).add(c).multiplyScalar(1 / 3);
   }
 
-  getNormal(target) {
-    return Triangle.static_getNormal(this.a, this.b, this.c, target);
+  Vector3 getNormal(target) {
+    return Triangle.static_getNormal(a, b, c, target);
   }
 
   getPlane(Plane target) {
-    return target.setFromCoplanarPoints(this.a, this.b, this.c);
+    return target.setFromCoplanarPoints(a, b, c);
   }
 
-  getBarycoord(point, target) {
-    return Triangle.static_getBarycoord(point, this.a, this.b, this.c, target);
+  Vector3 getBarycoord(point, target) {
+    return Triangle.static_getBarycoord(point, a, b, c, target);
   }
 
   getUV(point, uv1, uv2, uv3, target) {
-    return Triangle.static_getUV(
-        point, this.a, this.b, this.c, uv1, uv2, uv3, target);
+    return Triangle.static_getUV(point, a, b, c, uv1, uv2, uv3, target);
   }
 
-  containsPoint(point) {
-    return Triangle.static_containsPoint(point, this.a, this.b, this.c);
+  bool containsPoint(point) {
+    return Triangle.static_containsPoint(point, a, b, c);
   }
 
-  isFrontFacing(direction) {
-    return Triangle.static_isFrontFacing(this.a, this.b, this.c, direction);
+  bool isFrontFacing(direction) {
+    return Triangle.static_isFrontFacing(a, b, c, direction);
   }
 
   intersectsBox(box) {
     return box.intersectsTriangle(this);
   }
 
-  closestPointToPoint(p, Vector3 target) {
+  Vector3 closestPointToPoint(p, Vector3 target) {
     var a = this.a, b = this.b, c = this.c;
     var v, w;
 
@@ -253,9 +254,7 @@ class Triangle {
     return target.copy(a).addScaledVector(_vab, v).addScaledVector(_vac, w);
   }
 
-  equals(triangle) {
-    return triangle.a.equals(this.a) &&
-        triangle.b.equals(this.b) &&
-        triangle.c.equals(this.c);
+  bool equals(Triangle triangle) {
+    return triangle.a.equals(a) && triangle.b.equals(b) && triangle.c.equals(c);
   }
 }

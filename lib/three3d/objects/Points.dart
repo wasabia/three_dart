@@ -40,7 +40,7 @@ class Points extends Object3D {
 
     if (geometry.boundingSphere == null) geometry.computeBoundingSphere();
 
-    _pointssphere.copy(geometry.boundingSphere);
+    _pointssphere.copy(geometry.boundingSphere!);
     _pointssphere.applyMatrix4(matrixWorld);
     _pointssphere.radius += threshold;
 

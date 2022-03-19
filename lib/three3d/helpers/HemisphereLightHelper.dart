@@ -48,8 +48,8 @@ class HemisphereLightHelper extends Object3D {
     } else {
       var colors = mesh.geometry!.getAttribute('color');
 
-      _color1.copy(this.light.color);
-      _color2.copy(this.light.groundColor);
+      _color1.copy(this.light.color!);
+      _color2.copy(this.light.groundColor!);
 
       for (var i = 0, l = colors.count; i < l; i++) {
         var color = (i < (l / 2)) ? _color1 : _color2;

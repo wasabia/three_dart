@@ -54,7 +54,7 @@ class Light extends Object3D {
 
     Light source1 = source as Light;
 
-    this.color!.copy(source1.color);
+    this.color!.copy(source1.color!);
     this.intensity = source1.intensity;
 
     return this;

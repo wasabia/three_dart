@@ -1,6 +1,6 @@
 part of three_math;
 
-const _colorKeywords = {
+const Map<String, int> _colorKeywords = {
   'aliceblue': 0xF0F8FF,
   'antiquewhite': 0xFAEBD7,
   'aqua': 0x00FFFF,
@@ -152,9 +152,9 @@ const _colorKeywords = {
 };
 
 Map<String, num> _hslA = {"h": 0, "s": 0, "l": 0};
-var _hslB = {"h": 0, "s": 0, "l": 0};
+Map<String, int> _hslB = {"h": 0, "s": 0, "l": 0};
 
-hue2rgb(p, q, t) {
+num hue2rgb(num p, num q, num t) {
   if (t < 0) t += 1;
   if (t > 1) t -= 1;
   if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -163,13 +163,13 @@ hue2rgb(p, q, t) {
   return p;
 }
 
-SRGBToLinear(c) {
+num SRGBToLinear<T extends num>(T c) {
   return (c < 0.04045)
       ? c * 0.0773993808
       : Math.pow(c * 0.9478672986 + 0.0521327014, 2.4);
 }
 
-LinearToSRGB(c) {
+num LinearToSRGB<T extends num>(T c) {
   return (c < 0.0031308) ? c * 12.92 : 1.055 * (Math.pow(c, 0.41666)) - 0.055;
 }
 
@@ -199,26 +199,26 @@ class Color {
   Color([r, num? g, num? b]) {
     if (g == null && b == null) {
       // r is THREE.Color, hex or string
-      this.set(r);
+      set(r);
     } else {
-      this.setRGB(r, g, b);
+      setRGB(r, g, b);
     }
   }
 
   // value Color | int | String
-  set(value) {
+  Color set<T>(T? value) {
     if (value == null) {
       return this;
     }
 
     if (value is Color) {
-      this.copy(value);
+      copy(value);
     } else if (value is int) {
-      this.setHex(value);
+      setHex(value);
     } else if (value is String) {
-      this.setStyle(value);
+      setStyle(value);
     } else {
-      throw (" Color set use not support type ${value.runtimeType} value: ${value} ");
+      throw (" Color set use not support type ${value.runtimeType} value: $value ");
     }
 
     return this;
@@ -244,33 +244,33 @@ class Color {
     return _color;
   }
 
-  static Color fromHex(hex) {
+  static Color fromHex(int hex) {
     return Color(0.0, 0.0, 0.0).setHex(hex);
   }
 
-  equal(color) {
+  bool equal(Color color) {
     return r == color.r && g == color.g && b == color.b;
   }
 
-  setScalar(scalar) {
-    this.r = scalar;
-    this.g = scalar;
-    this.b = scalar;
+  Color setScalar(num scalar) {
+    r = scalar;
+    g = scalar;
+    b = scalar;
 
     return this;
   }
 
-  setHex(hex) {
+  Color setHex(int hex) {
     hex = Math.floor(hex);
 
-    this.r = (hex >> 16 & 255) / 255;
-    this.g = (hex >> 8 & 255) / 255;
-    this.b = (hex & 255) / 255;
+    r = (hex >> 16 & 255) / 255;
+    g = (hex >> 8 & 255) / 255;
+    b = (hex & 255) / 255;
 
     return this;
   }
 
-  setRGB([num? r, num? g, num? b]) {
+  Color setRGB([num? r, num? g, num? b]) {
     this.r = r ?? 1.0;
     this.g = g ?? 1.0;
     this.b = b ?? 1.0;
@@ -278,33 +278,33 @@ class Color {
     return this;
   }
 
-  setHSL(h, s, l) {
+  Color setHSL(num h, num s, num l) {
     // h,s,l ranges are in 0.0 - 1.0
-    h = MathUtils.euclideanModulo(h, 1);
+    h = MathUtils.euclideanModulo(h, 1).toDouble();
     s = MathUtils.clamp(s, 0, 1);
     l = MathUtils.clamp(l, 0, 1);
 
     if (s == 0) {
-      this.r = this.g = this.b = l;
+      r = g = b = l;
     } else {
       var p = l <= 0.5 ? l * (1 + s) : l + s - (l * s);
       var q = (2 * l) - p;
 
-      this.r = hue2rgb(q, p, h + 1 / 3);
-      this.g = hue2rgb(q, p, h);
-      this.b = hue2rgb(q, p, h - 1 / 3);
+      r = hue2rgb(q, p, h + 1 / 3);
+      g = hue2rgb(q, p, h);
+      b = hue2rgb(q, p, h - 1 / 3);
     }
 
     return this;
   }
 
-  setStyle(String style) {
-    Function handleAlpha = (string) {
+  Color setStyle([String style = '']) {
+    void handleAlpha(String? string) {
       if (string == null) return;
       if (double.parse(string) < 1) {
-        print('THREE.Color: Alpha component of ${style} will be ignored.');
+        print('THREE.Color: Alpha component of $style will be ignored.');
       }
-    };
+    }
 
     var _reg1 = RegExp(r"^\#([A-Fa-f\d]+)$");
 
@@ -315,16 +315,16 @@ class Color {
 
       if (size == 3) {
         // #ff0
-        this.r = int.parse(charAt(hex, 0) + charAt(hex, 0), radix: 16) / 255;
-        this.g = int.parse(charAt(hex, 1) + charAt(hex, 1), radix: 16) / 255;
-        this.b = int.parse(charAt(hex, 2) + charAt(hex, 2), radix: 16) / 255;
+        r = int.parse(charAt(hex, 0) + charAt(hex, 0), radix: 16) / 255;
+        g = int.parse(charAt(hex, 1) + charAt(hex, 1), radix: 16) / 255;
+        b = int.parse(charAt(hex, 2) + charAt(hex, 2), radix: 16) / 255;
 
         return this;
       } else if (size == 6) {
         // #ff0000
-        this.r = int.parse(charAt(hex, 0) + charAt(hex, 1), radix: 16) / 255;
-        this.g = int.parse(charAt(hex, 2) + charAt(hex, 3), radix: 16) / 255;
-        this.b = int.parse(charAt(hex, 4) + charAt(hex, 5), radix: 16) / 255;
+        r = int.parse(charAt(hex, 0) + charAt(hex, 1), radix: 16) / 255;
+        g = int.parse(charAt(hex, 2) + charAt(hex, 3), radix: 16) / 255;
+        b = int.parse(charAt(hex, 4) + charAt(hex, 5), radix: 16) / 255;
 
         return this;
       }
@@ -352,9 +352,9 @@ class Color {
               var c3 = match1.group(3)!;
               var c4 = match1.group(4);
               // rgb(255,0,0) rgba(255,0,0,0.5)
-              this.r = Math.min(255, int.parse(c1, radix: 10)) / 255;
-              this.g = Math.min(255, int.parse(c2, radix: 10)) / 255;
-              this.b = Math.min(255, int.parse(c3, radix: 10)) / 255;
+              r = Math.min(255, int.parse(c1, radix: 10)) / 255;
+              g = Math.min(255, int.parse(c2, radix: 10)) / 255;
+              b = Math.min(255, int.parse(c3, radix: 10)) / 255;
 
               handleAlpha(c4);
 
@@ -371,9 +371,9 @@ class Color {
                 var c4 = match2.group(4);
 
                 // rgb(100%,0%,0%) rgba(100%,0%,0%,0.5)
-                this.r = Math.min(100, int.parse(c1, radix: 10)) / 100;
-                this.g = Math.min(100, int.parse(c2, radix: 10)) / 100;
-                this.b = Math.min(100, int.parse(c3, radix: 10)) / 100;
+                r = Math.min(100, int.parse(c1, radix: 10)) / 100;
+                g = Math.min(100, int.parse(c2, radix: 10)) / 100;
+                b = Math.min(100, int.parse(c3, radix: 10)) / 100;
 
                 handleAlpha(c4);
 
@@ -402,14 +402,14 @@ class Color {
 
               handleAlpha(c4);
 
-              return this.setHSL(h, s, l);
+              return setHSL(h, s, l);
             }
 
             break;
         }
       } else {
-        if (style != null && style.length > 0) {
-          return this.setColorName(style);
+        if (style.isNotEmpty) {
+          return setColorName(style);
         }
       }
     }
@@ -425,13 +425,13 @@ class Color {
     return this;
   }
 
-  setColorName(String style) {
+  Color setColorName(String style) {
     // color keywords
     var hex = _colorKeywords[style.toLowerCase()];
 
     if (hex != null) {
       // red
-      this.setHex(hex);
+      setHex(hex);
     } else {
       // unknown color
       print('THREE.Color: Unknown color ' + style);
@@ -440,97 +440,97 @@ class Color {
     return this;
   }
 
-  clone() {
-    return Color(this.r, this.g, this.b);
+  Color clone() {
+    return Color(r, g, b);
   }
 
-  copy(color) {
-    this.r = color.r;
-    this.g = color.g;
-    this.b = color.b;
+  Color copy(Color color) {
+    r = color.r;
+    g = color.g;
+    b = color.b;
 
     return this;
   }
 
-  copyGammaToLinear(color, [double gammaFactor = 2.0]) {
-    this.r = Math.pow(color.r, gammaFactor).toDouble();
-    this.g = Math.pow(color.g, gammaFactor).toDouble();
-    this.b = Math.pow(color.b, gammaFactor).toDouble();
+  Color copyGammaToLinear(Color color, [double gammaFactor = 2.0]) {
+    r = Math.pow(color.r, gammaFactor).toDouble();
+    g = Math.pow(color.g, gammaFactor).toDouble();
+    b = Math.pow(color.b, gammaFactor).toDouble();
 
     return this;
   }
 
-  copyLinearToGamma(color, [double gammaFactor = 2.0]) {
+  Color copyLinearToGamma(Color color, [double gammaFactor = 2.0]) {
     var safeInverse = (gammaFactor > 0) ? (1.0 / gammaFactor) : 1.0;
 
-    this.r = Math.pow(color.r, safeInverse).toDouble();
-    this.g = Math.pow(color.g, safeInverse).toDouble();
-    this.b = Math.pow(color.b, safeInverse).toDouble();
+    r = Math.pow(color.r, safeInverse).toDouble();
+    g = Math.pow(color.g, safeInverse).toDouble();
+    b = Math.pow(color.b, safeInverse).toDouble();
 
     return this;
   }
 
-  convertGammaToLinear([gammaFactor]) {
+  Color convertGammaToLinear([double? gammaFactor]) {
     if (gammaFactor == null) {
-      this.copyGammaToLinear(this);
+      copyGammaToLinear(this);
     } else {
-      this.copyGammaToLinear(this, gammaFactor);
+      copyGammaToLinear(this, gammaFactor);
     }
 
     return this;
   }
 
-  convertLinearToGamma([gammaFactor]) {
+  Color convertLinearToGamma([double? gammaFactor]) {
     if (gammaFactor == null) {
-      this.copyLinearToGamma(this);
+      copyLinearToGamma(this);
     } else {
-      this.copyLinearToGamma(this, gammaFactor);
+      copyLinearToGamma(this, gammaFactor);
     }
 
     return this;
   }
 
-  copySRGBToLinear(color) {
-    this.r = SRGBToLinear(color.r);
-    this.g = SRGBToLinear(color.g);
-    this.b = SRGBToLinear(color.b);
+  Color copySRGBToLinear(Color color) {
+    r = SRGBToLinear(color.r);
+    g = SRGBToLinear(color.g);
+    b = SRGBToLinear(color.b);
 
     return this;
   }
 
-  copyLinearToSRGB(color) {
-    this.r = LinearToSRGB(color.r);
-    this.g = LinearToSRGB(color.g);
-    this.b = LinearToSRGB(color.b);
+  Color copyLinearToSRGB(Color color) {
+    r = LinearToSRGB(color.r);
+    g = LinearToSRGB(color.g);
+    b = LinearToSRGB(color.b);
 
     return this;
   }
 
-  convertSRGBToLinear() {
-    this.copySRGBToLinear(this);
+  Color convertSRGBToLinear() {
+    copySRGBToLinear(this);
 
     return this;
   }
 
-  convertLinearToSRGB() {
-    this.copyLinearToSRGB(this);
+  Color convertLinearToSRGB() {
+    copyLinearToSRGB(this);
 
     return this;
   }
 
   int getHex() {
-    return (this.r * 255).toInt() << 16 ^
-        (this.g * 255).toInt() << 8 ^
-        (this.b * 255).toInt() << 0;
+    return (r * 255).toInt() << 16 ^
+        (g * 255).toInt() << 8 ^
+        (b * 255).toInt() << 0;
   }
 
   String getHexString() {
-    String _str = ('000000' + this.getHex().toRadixString(16));
+    String _str = ('000000' + getHex().toRadixString(16));
     return _str.substring(_str.length - 6);
   }
 
   // target map target = { "h": 0, "s": 0, "l": 0 };
-  getHSL(target) {
+  Map<String, dynamic> getHSL(Map<String, dynamic> target) {
     // h,s,l ranges are in 0.0 - 1.0
     var r = this.r, g = this.g, b = this.b;
 
@@ -567,146 +567,144 @@ class Color {
     return target;
   }
 
-  getStyle() {
-    return 'rgb(${((this.r * 255).toInt() | 0)},${((this.g * 255).toInt() | 0)},${((this.b * 255).toInt() | 0)})';
+  String getStyle() {
+    return 'rgb(${((r * 255).toInt() | 0)},${((g * 255).toInt() | 0)},${((b * 255).toInt() | 0)})';
   }
 
-  offsetHSL(h, s, l) {
-    this.getHSL(_hslA);
+  Color offsetHSL(num h, num s, num l) {
+    getHSL(_hslA);
 
     _hslA["h"] = _hslA["h"]! + h;
     _hslA["s"] = _hslA["s"]! + s;
     _hslA["l"] = _hslA["l"]! + l;
 
-    this.setHSL(_hslA["h"], _hslA["s"], _hslA["l"]);
+    setHSL(_hslA["h"]!, _hslA["s"]!, _hslA["l"]!);
 
     return this;
   }
 
-  add(color) {
-    this.r += color.r;
-    this.g += color.g;
-    this.b += color.b;
+  Color add(Color color) {
+    r += color.r;
+    g += color.g;
+    b += color.b;
 
     return this;
   }
 
-  addColors(color1, color2) {
-    this.r = color1.r + color2.r;
-    this.g = color1.g + color2.g;
-    this.b = color1.b + color2.b;
+  Color addColors(Color color1, Color color2) {
+    r = color1.r + color2.r;
+    g = color1.g + color2.g;
+    b = color1.b + color2.b;
 
     return this;
   }
 
-  addScalar(s) {
-    this.r += s;
-    this.g += s;
-    this.b += s;
+  Color addScalar(num s) {
+    r += s;
+    g += s;
+    b += s;
 
     return this;
   }
 
-  sub(color) {
-    this.r = Math.max(0, this.r - color.r);
-    this.g = Math.max(0, this.g - color.g);
-    this.b = Math.max(0, this.b - color.b);
+  Color sub(Color color) {
+    r = Math.max(0, r - color.r);
+    g = Math.max(0, g - color.g);
+    b = Math.max(0, b - color.b);
 
     return this;
   }
 
-  multiply(color) {
-    this.r *= color.r;
-    this.g *= color.g;
-    this.b *= color.b;
+  Color multiply(Color color) {
+    r *= color.r;
+    g *= color.g;
+    b *= color.b;
 
     return this;
   }
 
-  multiplyScalar(s) {
-    this.r *= s;
-    this.g *= s;
-    this.b *= s;
+  Color multiplyScalar(num s) {
+    r *= s;
+    g *= s;
+    b *= s;
 
     return this;
   }
 
-  lerp(color, alpha) {
-    this.r += (color.r - this.r) * alpha;
-    this.g += (color.g - this.g) * alpha;
-    this.b += (color.b - this.b) * alpha;
+  Color lerp(Color color, num alpha) {
+    r += (color.r - r) * alpha;
+    g += (color.g - g) * alpha;
+    b += (color.b - b) * alpha;
 
     return this;
   }
 
-  lerpColors(Color color1, Color color2, num alpha) {
-    this.r = color1.r + (color2.r - color1.r) * alpha;
-    this.g = color1.g + (color2.g - color1.g) * alpha;
-    this.b = color1.b + (color2.b - color1.b) * alpha;
+  Color lerpColors(Color color1, Color color2, num alpha) {
+    r = color1.r + (color2.r - color1.r) * alpha;
+    g = color1.g + (color2.g - color1.g) * alpha;
+    b = color1.b + (color2.b - color1.b) * alpha;
 
     return this;
   }
 
-  lerpHSL(color, alpha) {
-    this.getHSL(_hslA);
+  Color lerpHSL(Color color, num alpha) {
+    getHSL(_hslA);
     color.getHSL(_hslB);
 
-    var h = MathUtils.lerp(_hslA["h"], _hslB["h"], alpha);
-    var s = MathUtils.lerp(_hslA["s"], _hslB["s"], alpha);
-    var l = MathUtils.lerp(_hslA["l"], _hslB["l"], alpha);
+    var h = MathUtils.lerp(_hslA["h"]!, _hslB["h"]!, alpha);
+    var s = MathUtils.lerp(_hslA["s"]!, _hslB["s"]!, alpha);
+    var l = MathUtils.lerp(_hslA["l"]!, _hslB["l"]!, alpha);
 
-    this.setHSL(h, s, l);
+    setHSL(h, s, l);
 
     return this;
   }
 
-  equals(c) {
-    return (c.r == this.r) && (c.g == this.g) && (c.b == this.b);
+  bool equals(Color c) {
+    return (c.r == r) && (c.g == g) && (c.b == b);
   }
 
-  isBlack() {
-    return (this.r == 0) && (this.g == 0) && (this.b == 0);
+  bool isBlack() {
+    return (r == 0) && (g == 0) && (b == 0);
   }
 
-  fromArray(array, [int offset = 0]) {
-    this.r = array[offset];
-    this.g = array[offset + 1];
-    this.b = array[offset + 2];
+  Color fromArray(List<num> array, [int offset = 0]) {
+    r = array[offset];
+    g = array[offset + 1];
+    b = array[offset + 2];
 
     return this;
   }
 
   /// dart array can not expand default
   /// so have to set array length enough first.
-  toArray([array, int offset = 0]) {
-    if (array == null) {
-      array = List<num>.filled(3, 0.0);
-    }
+  List<num> toArray([List<num>? array, int offset = 0]) {
+    array ??= List<num>.filled(3, 0.0);
 
-    array[offset] = this.r;
-    array[offset + 1] = this.g;
-    array[offset + 2] = this.b;
+    array[offset] = r;
+    array[offset + 1] = g;
+    array[offset + 2] = b;
 
     return array;
   }
 
-  fromBufferAttribute(attribute, index) {
-    this.r = attribute.getX(index);
-    this.g = attribute.getY(index);
-    this.b = attribute.getZ(index);
+  Color fromBufferAttribute(BufferAttribute attribute, int index) {
+    r = attribute.getX(index);
+    g = attribute.getY(index);
+    b = attribute.getZ(index);
 
     if (attribute.normalized == true) {
       // assuming Uint8Array
 
-      this.r /= 255;
-      this.g /= 255;
-      this.b /= 255;
+      r /= 255;
+      g /= 255;
+      b /= 255;
     }
 
     return this;
   }
 
-  toJSON() {
-    return this.getHex();
+  int toJSON() {
+    return getHex();
   }
 }

@@ -14,43 +14,28 @@ class Vector4 {
     this.w = w ?? 0;
   }
 
-  Vector4.init({num x = 0, num y = 0, num z = 0, num w = 1}) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.w = w;
-  }
+  Vector4.init({this.x = 0, this.y = 0, this.z = 0, this.w = 1});
 
-  Vector4.fromJSON(List<num> json) {
+  Vector4.fromJSON(List<num>? json) {
     if (json != null) {
-      this.x = json[0];
-      this.y = json[1];
-      this.z = json[2];
-      this.w = json[3];
+      x = json[0];
+      y = json[1];
+      z = json[2];
+      w = json[3];
     }
   }
 
   List<num> toJSON() {
-    return [this.x, this.y, this.z, this.w];
+    return [x, y, z, w];
   }
 
-  get width {
-    return this.z;
-  }
+  get width => z;
+  set width(value) => z = value;
 
-  set width(value) {
-    this.z = value;
-  }
+  get height => w;
+  set height(value) => w = value;
 
-  get height {
-    return this.w;
-  }
-
-  set height(value) {
-    this.w = value;
-  }
-
-  set(x, y, z, w) {
+  Vector4 set(num x, num y, num z, num w) {
     this.x = x;
     this.y = y;
     this.z = z;
@@ -59,175 +44,175 @@ class Vector4 {
     return this;
   }
 
-  setScalar(scalar) {
-    this.x = scalar;
-    this.y = scalar;
-    this.z = scalar;
-    this.w = scalar;
+  Vector4 setScalar(num scalar) {
+    x = scalar;
+    y = scalar;
+    z = scalar;
+    w = scalar;
 
     return this;
   }
 
-  setX(x) {
+  Vector4 setX(num x) {
     this.x = x;
 
     return this;
   }
 
-  setY(y) {
+  Vector4 setY(num y) {
     this.y = y;
 
     return this;
   }
 
-  setZ(z) {
+  Vector4 setZ(num z) {
     this.z = z;
 
     return this;
   }
 
-  setW(w) {
+  Vector4 setW(num w) {
     this.w = w;
 
     return this;
   }
 
-  setComponent(index, value) {
+  Vector4 setComponent(int index, num value) {
     switch (index) {
       case 0:
-        this.x = value;
+        x = value;
         break;
       case 1:
-        this.y = value;
+        y = value;
         break;
       case 2:
-        this.z = value;
+        z = value;
         break;
       case 3:
-        this.w = value;
+        w = value;
         break;
       default:
-        throw ('index is out of range: ' + index);
+        throw ('index is out of range: $index');
     }
 
     return this;
   }
 
-  getComponent(index) {
+  num getComponent(int index) {
     switch (index) {
       case 0:
-        return this.x;
+        return x;
       case 1:
-        return this.y;
+        return y;
       case 2:
-        return this.z;
+        return z;
       case 3:
-        return this.w;
+        return w;
       default:
-        throw ('index is out of range: ' + index);
+        throw ('index is out of range: $index');
     }
   }
 
-  clone() {
-    return Vector4(this.x, this.y, this.z, this.w);
+  Vector4 clone() {
+    return Vector4(x, y, z, w);
   }
 
-  copy(v) {
-    this.x = v.x;
-    this.y = v.y;
-    this.z = v.z;
-    this.w = (v.w != null) ? v.w : 1;
+  Vector4 copy(v) {
+    x = v.x;
+    y = v.y;
+    z = v.z;
+    w = (v.w != null) ? v.w : 1;
 
     return this;
   }
 
-  add(v, w) {
+  Vector4 add(v, w) {
     if (w != null) {
       print(
           'THREE.Vector4: .add() now only accepts one argument. Use .addVectors( a, b ) instead.');
-      return this.addVectors(v, w);
+      return addVectors(v, w);
     }
 
-    this.x += v.x;
-    this.y += v.y;
-    this.z += v.z;
+    x += v.x;
+    y += v.y;
+    z += v.z;
     this.w += v.w;
 
     return this;
   }
 
-  addScalar(s) {
-    this.x += s;
-    this.y += s;
-    this.z += s;
-    this.w += s;
+  Vector4 addScalar(num s) {
+    x += s;
+    y += s;
+    z += s;
+    w += s;
 
     return this;
   }
 
-  addVectors(a, b) {
-    this.x = a.x + b.x;
-    this.y = a.y + b.y;
-    this.z = a.z + b.z;
-    this.w = a.w + b.w;
+  Vector4 addVectors(Vector4 a, Vector4 b) {
+    x = a.x + b.x;
+    y = a.y + b.y;
+    z = a.z + b.z;
+    w = a.w + b.w;
 
     return this;
   }
 
-  addScaledVector(v, s) {
-    this.x += v.x * s;
-    this.y += v.y * s;
-    this.z += v.z * s;
-    this.w += v.w * s;
+  Vector4 addScaledVector(Vector4 v, num s) {
+    x += v.x * s;
+    y += v.y * s;
+    z += v.z * s;
+    w += v.w * s;
 
     return this;
   }
 
-  sub(v, w) {
+  Vector4 sub(Vector4 v, w) {
     if (w != null) {
       print(
           'THREE.Vector4: .sub() now only accepts one argument. Use .subVectors( a, b ) instead.');
-      return this.subVectors(v, w);
+      return subVectors(v, w);
     }
 
-    this.x -= v.x;
-    this.y -= v.y;
-    this.z -= v.z;
+    x -= v.x;
+    y -= v.y;
+    z -= v.z;
     this.w -= v.w;
 
     return this;
   }
 
-  subScalar(s) {
-    this.x -= s;
-    this.y -= s;
-    this.z -= s;
-    this.w -= s;
+  Vector4 subScalar(s) {
+    x -= s;
+    y -= s;
+    z -= s;
+    w -= s;
 
     return this;
   }
 
-  subVectors(a, b) {
-    this.x = a.x - b.x;
-    this.y = a.y - b.y;
-    this.z = a.z - b.z;
-    this.w = a.w - b.w;
+  Vector4 subVectors(Vector4 a, Vector4 b) {
+    x = a.x - b.x;
+    y = a.y - b.y;
+    z = a.z - b.z;
+    w = a.w - b.w;
 
     return this;
   }
 
   // multiply( v, w ) {
 
-  multiply(v) {
+  Vector4 multiply(Vector4 v) {
     // if ( w != null ) {
     // 	print( 'THREE.Vector4: .multiply() now only accepts one argument. Use .multiplyVectors( a, b ) instead.' );
     // 	return this.multiplyVectors( v, w );
     // }
 
-    this.x *= v.x;
-    this.y *= v.y;
-    this.z *= v.z;
-    this.w *= v.w;
+    x *= v.x;
+    y *= v.y;
+    z *= v.z;
+    w *= v.w;
 
     return this;
   }
@@ -236,16 +221,16 @@ class Vector4 {
 
   // }
 
-  multiplyScalar(scalar) {
-    this.x *= scalar;
-    this.y *= scalar;
-    this.z *= scalar;
-    this.w *= scalar;
+  Vector4 multiplyScalar(num scalar) {
+    x *= scalar;
+    y *= scalar;
+    z *= scalar;
+    w *= scalar;
 
     return this;
   }
 
-  applyMatrix4(m) {
+  Vector4 applyMatrix4(m) {
     var x = this.x, y = this.y, z = this.z, w = this.w;
     var e = m.elements;
 
@@ -257,51 +242,51 @@ class Vector4 {
     return this;
   }
 
-  divideScalar(scalar) {
-    return this.multiplyScalar(1 / scalar);
+  Vector4 divideScalar(num scalar) {
+    return multiplyScalar(1 / scalar);
   }
 
-  setAxisAngleFromQuaternion(Quaternion q) {
+  Vector4 setAxisAngleFromQuaternion(Quaternion q) {
     // http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle/index.htm
 
     // q is assumed to be normalized
 
-    this.w = 2 * Math.acos(q.w);
+    w = 2 * Math.acos(q.w);
 
     var s = Math.sqrt(1 - q.w * q.w);
 
     if (s < 0.0001) {
-      this.x = 1;
-      this.y = 0;
-      this.z = 0;
+      x = 1;
+      y = 0;
+      z = 0;
     } else {
-      this.x = q.x / s;
-      this.y = q.y / s;
-      this.z = q.z / s;
+      x = q.x / s;
+      y = q.y / s;
+      z = q.z / s;
     }
 
     return this;
   }
 
-  setAxisAngleFromRotationMatrix(m) {
+  Vector4 setAxisAngleFromRotationMatrix(Matrix3 m) {
     // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/index.htm
 
     // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 
-    var angle, x, y, z; // variables for result
-    var epsilon = 0.01, // margin to allow for rounding errors
-        epsilon2 = 0.1, // margin to distinguish between 0 and 180 degrees
+    double angle, x, y, z; // variables for result
+    double epsilon = 0.01, // margin to allow for rounding errors
+        epsilon2 = 0.1; // margin to distinguish between 0 and 180 degrees
 
-        te = m.elements,
-        m11 = te[0],
-        m12 = te[4],
-        m13 = te[8],
-        m21 = te[1],
-        m22 = te[5],
-        m23 = te[9],
-        m31 = te[2],
-        m32 = te[6],
-        m33 = te[10];
+    final te = m.elements;
+    double m11 = te[0];
+    double m12 = te[4];
+    double m13 = te[8];
+    double m21 = te[1];
+    double m22 = te[5];
+    double m23 = te[9];
+    double m31 = te[2];
+    double m32 = te[6];
+    double m33 = te[10];
 
     if ((Math.abs(m12 - m21) < epsilon) &&
         (Math.abs(m13 - m31) < epsilon) &&
@@ -316,7 +301,7 @@ class Vector4 {
           (Math.abs(m11 + m22 + m33 - 3) < epsilon2)) {
         // this singularity is identity matrix so angle = 0
 
-        this.set(1, 0, 0, 0);
+        set(1, 0, 0, 0);
 
         return this; // zero angle, arbitrary axis
 
@@ -371,7 +356,7 @@ class Vector4 {
         }
       }
 
-      this.set(x, y, z, angle);
+      set(x, y, z, angle);
 
       return this; // return 180 deg rotation
 
@@ -391,190 +376,179 @@ class Vector4 {
     this.x = (m32 - m23) / s;
     this.y = (m13 - m31) / s;
     this.z = (m21 - m12) / s;
-    this.w = Math.acos((m11 + m22 + m33 - 1) / 2);
+    w = Math.acos((m11 + m22 + m33 - 1) / 2);
 
     return this;
   }
 
-  min(v) {
-    this.x = Math.min(this.x, v.x);
-    this.y = Math.min(this.y, v.y);
-    this.z = Math.min(this.z, v.z);
-    this.w = Math.min(this.w, v.w);
+  Vector4 min(Vector4 v) {
+    x = Math.min(x, v.x);
+    y = Math.min(y, v.y);
+    z = Math.min(z, v.z);
+    w = Math.min(w, v.w);
 
     return this;
   }
 
-  max(v) {
-    this.x = Math.max(this.x, v.x);
-    this.y = Math.max(this.y, v.y);
-    this.z = Math.max(this.z, v.z);
-    this.w = Math.max(this.w, v.w);
+  Vector4 max(Vector4 v) {
+    x = Math.max(x, v.x);
+    y = Math.max(y, v.y);
+    z = Math.max(z, v.z);
+    w = Math.max(w, v.w);
 
     return this;
   }
 
-  clamp(min, max) {
+  Vector4 clamp(Vector4 min, Vector4 max) {
     // assumes min < max, componentwise
 
-    this.x = Math.max(min.x, Math.min(max.x, this.x));
-    this.y = Math.max(min.y, Math.min(max.y, this.y));
-    this.z = Math.max(min.z, Math.min(max.z, this.z));
-    this.w = Math.max(min.w, Math.min(max.w, this.w));
+    x = Math.max(min.x, Math.min(max.x, x));
+    y = Math.max(min.y, Math.min(max.y, y));
+    z = Math.max(min.z, Math.min(max.z, z));
+    w = Math.max(min.w, Math.min(max.w, w));
 
     return this;
   }
 
-  clampScalar(minVal, maxVal) {
-    this.x = Math.max(minVal, Math.min(maxVal, this.x));
-    this.y = Math.max(minVal, Math.min(maxVal, this.y));
-    this.z = Math.max(minVal, Math.min(maxVal, this.z));
-    this.w = Math.max(minVal, Math.min(maxVal, this.w));
+  Vector4 clampScalar(num minVal, num maxVal) {
+    x = Math.max(minVal, Math.min(maxVal, x));
+    y = Math.max(minVal, Math.min(maxVal, y));
+    z = Math.max(minVal, Math.min(maxVal, z));
+    w = Math.max(minVal, Math.min(maxVal, w));
 
     return this;
   }
 
-  clampLength(min, max) {
+  Vector4 clampLength(num min, num max) {
     var length = this.length();
 
-    return this
-        .divideScalar(length ?? 1)
+    return divideScalar(length)
         .multiplyScalar(Math.max(min, Math.min(max, length)));
   }
 
-  floor() {
-    this.x = Math.floor(this.x);
-    this.y = Math.floor(this.y);
-    this.z = Math.floor(this.z);
-    this.w = Math.floor(this.w);
+  Vector4 floor() {
+    x = Math.floor(x);
+    y = Math.floor(y);
+    z = Math.floor(z);
+    w = Math.floor(w);
 
     return this;
   }
 
-  ceil() {
-    this.x = Math.ceil(this.x);
-    this.y = Math.ceil(this.y);
-    this.z = Math.ceil(this.z);
-    this.w = Math.ceil(this.w);
+  Vector4 ceil() {
+    x = Math.ceil(x);
+    y = Math.ceil(y);
+    z = Math.ceil(z);
+    w = Math.ceil(w);
 
     return this;
   }
 
-  round() {
-    this.x = Math.round(this.x);
-    this.y = Math.round(this.y);
-    this.z = Math.round(this.z);
-    this.w = Math.round(this.w);
+  Vector4 round() {
+    x = Math.round(x);
+    y = Math.round(y);
+    z = Math.round(z);
+    w = Math.round(w);
 
     return this;
   }
 
-  roundToZero() {
-    this.x = (this.x < 0) ? Math.ceil(this.x) : Math.floor(this.x);
-    this.y = (this.y < 0) ? Math.ceil(this.y) : Math.floor(this.y);
-    this.z = (this.z < 0) ? Math.ceil(this.z) : Math.floor(this.z);
-    this.w = (this.w < 0) ? Math.ceil(this.w) : Math.floor(this.w);
+  Vector4 roundToZero() {
+    x = (x < 0) ? Math.ceil(x) : Math.floor(x);
+    y = (y < 0) ? Math.ceil(y) : Math.floor(y);
+    z = (z < 0) ? Math.ceil(z) : Math.floor(z);
+    w = (w < 0) ? Math.ceil(w) : Math.floor(w);
 
     return this;
   }
 
-  negate() {
-    this.x = -this.x;
-    this.y = -this.y;
-    this.z = -this.z;
-    this.w = -this.w;
+  Vector4 negate() {
+    x = -x;
+    y = -y;
+    z = -z;
+    w = -w;
 
     return this;
   }
 
-  dot(v) {
-    return this.x * v.x + this.y * v.y + this.z * v.z + this.w * v.w;
+  num dot(Vector4 v) {
+    return x * v.x + y * v.y + z * v.z + w * v.w;
   }
 
-  lengthSq() {
-    return this.x * this.x +
-        this.y * this.y +
-        this.z * this.z +
-        this.w * this.w;
+  num lengthSq() {
+    return x * x + y * y + z * z + w * w;
   }
 
-  length() {
-    return Math.sqrt(
-        this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+  double length() {
+    return Math.sqrt(x * x + y * y + z * z + w * w);
   }
 
-  manhattanLength() {
-    return Math.abs(this.x) +
-        Math.abs(this.y) +
-        Math.abs(this.z) +
-        Math.abs(this.w);
+  num manhattanLength() {
+    return Math.abs(x) + Math.abs(y) + Math.abs(z) + Math.abs(w);
   }
 
-  normalize() {
-    return this.divideScalar(this.length() ?? 1);
+  Vector4 normalize() {
+    return divideScalar(length());
   }
 
-  setLength(length) {
-    return this.normalize().multiplyScalar(length);
+  Vector4 setLength(num length) {
+    return normalize().multiplyScalar(length);
   }
 
-  lerp(v, alpha) {
-    this.x += (v.x - this.x) * alpha;
-    this.y += (v.y - this.y) * alpha;
-    this.z += (v.z - this.z) * alpha;
-    this.w += (v.w - this.w) * alpha;
+  Vector4 lerp(Vector4 v, num alpha) {
+    x += (v.x - x) * alpha;
+    y += (v.y - y) * alpha;
+    z += (v.z - z) * alpha;
+    w += (v.w - w) * alpha;
 
     return this;
   }
 
-  lerpVectors(v1, v2, alpha) {
-    this.x = v1.x + (v2.x - v1.x) * alpha;
-    this.y = v1.y + (v2.y - v1.y) * alpha;
-    this.z = v1.z + (v2.z - v1.z) * alpha;
-    this.w = v1.w + (v2.w - v1.w) * alpha;
+  Vector4 lerpVectors(Vector4 v1, Vector4 v2, num alpha) {
+    x = v1.x + (v2.x - v1.x) * alpha;
+    y = v1.y + (v2.y - v1.y) * alpha;
+    z = v1.z + (v2.z - v1.z) * alpha;
+    w = v1.w + (v2.w - v1.w) * alpha;
 
     return this;
   }
 
-  bool equals(v) {
-    return ((v.x == this.x) &&
-        (v.y == this.y) &&
-        (v.z == this.z) &&
-        (v.w == this.w));
+  bool equals(Vector4 v) {
+    return ((v.x == x) && (v.y == y) && (v.z == z) && (v.w == w));
   }
 
-  fromArray(array, {int offset = 0}) {
-    this.x = array[offset];
-    this.y = array[offset + 1];
-    this.z = array[offset + 2];
-    this.w = array[offset + 3];
+  Vector4 fromArray(List<num> array, {int offset = 0}) {
+    x = array[offset];
+    y = array[offset + 1];
+    z = array[offset + 2];
+    w = array[offset + 3];
 
     return this;
   }
 
-  toArray(List<num> array, {int offset = 0}) {
-    array[offset] = this.x;
-    array[offset + 1] = this.y;
-    array[offset + 2] = this.z;
-    array[offset + 3] = this.w;
+  List<num> toArray(List<num> array, {int offset = 0}) {
+    array[offset] = x;
+    array[offset + 1] = y;
+    array[offset + 2] = z;
+    array[offset + 3] = w;
 
     return array;
   }
 
-  fromBufferAttribute(attribute, index) {
-    this.x = attribute.getX(index);
-    this.y = attribute.getY(index);
-    this.z = attribute.getZ(index);
-    this.w = attribute.getW(index) ?? 0;
+  Vector4 fromBufferAttribute(attribute, int index) {
+    x = attribute.getX(index);
+    y = attribute.getY(index);
+    z = attribute.getZ(index);
+    w = attribute.getW(index) ?? 0;
 
     return this;
   }
 
-  random() {
-    this.x = Math.random();
-    this.y = Math.random();
-    this.z = Math.random();
-    this.w = Math.random();
+  Vector4 random() {
+    x = Math.random();
+    y = Math.random();
+    z = Math.random();
+    w = Math.random();
 
     return this;
   }
