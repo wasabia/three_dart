@@ -13,44 +13,44 @@ class Event {
   String? mode;
 
   Event(Map<String, dynamic> json) {
-    this.type = json["type"];
-    this.target = json["target"];
-    this.attachment = json["attachment"];
-    this.action = json["action"];
-    this.direction = json["direction"];
-    this.mode = json["mode"];
+    type = json["type"];
+    target = json["target"];
+    attachment = json["attachment"];
+    action = json["action"];
+    direction = json["direction"];
+    mode = json["mode"];
   }
 }
 
 mixin EventDispatcher {
-  Map<String, List<Function>> _listeners = {};
+  Map<String, List<Function>>? _listeners = {};
 
   addEventListener(String type, Function listener) {
-    if (this._listeners == null) this._listeners = {};
+    _listeners ??= {};
 
-    var listeners = this._listeners;
+    Map<String, List<Function>> listeners = _listeners!;
 
     if (listeners[type] == null) {
       listeners[type] = [];
     }
 
-    if (listeners[type]!.indexOf(listener) == -1) {
+    if (!listeners[type]!.contains(listener)) {
       listeners[type]!.add(listener);
     }
   }
 
   hasEventListener(String type, Function listener) {
-    if (this._listeners == null) return false;
+    if (_listeners == null) return false;
 
-    var listeners = this._listeners;
+    var listeners = _listeners!;
 
-    return listeners[type] != null && listeners[type]!.indexOf(listener) != -1;
+    return listeners[type] != null && listeners[type]!.contains(listener);
   }
 
   removeEventListener(String type, Function listener) {
-    if (this._listeners == null) return;
+    if (_listeners == null) return;
 
-    var listeners = this._listeners;
+    var listeners = _listeners!;
     var listenerArray = listeners[type];
 
     if (listenerArray != null) {
@@ -63,9 +63,9 @@ mixin EventDispatcher {
   }
 
   dispatchEvent(Event event) {
-    if (this._listeners.keys.length == 0) return;
+    if (_listeners == null || _listeners!.isEmpty) return;
 
-    var listeners = this._listeners;
+    var listeners = _listeners!;
     var listenerArray = listeners[event.type];
 
     // print("dispatchEvent event: ${event.type} ");
@@ -87,6 +87,6 @@ mixin EventDispatcher {
   }
 
   clearListeners() {
-    _listeners.clear();
+    _listeners?.clear();
   }
 }

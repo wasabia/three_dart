@@ -60,7 +60,7 @@ class Light extends Object3D {
     return this;
   }
 
-  toJSON({Object3dMeta? meta}) {
+  Map<String, dynamic> toJSON({Object3dMeta? meta}) {
     var data = super.toJSON(meta: meta);
 
     data["object"]["color"] = this.color!.getHex();

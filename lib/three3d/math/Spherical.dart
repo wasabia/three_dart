@@ -12,13 +12,9 @@ class Spherical {
   late num phi;
   late num theta;
 
-  Spherical({num radius = 1, num phi = 0, num theta = 0}) {
-    this.radius = radius;
-    this.phi = phi; // polar angle
-    this.theta = theta; // azimuthal angle
-  }
+  Spherical({this.radius = 1, this.phi = 0, this.theta = 0});
 
-  set(radius, phi, theta) {
+  Spherical set(num radius, num phi, num theta) {
     this.radius = radius;
     this.phi = phi;
     this.theta = theta;

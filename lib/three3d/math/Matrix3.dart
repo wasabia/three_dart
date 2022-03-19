@@ -3,10 +3,10 @@ part of three_math;
 class Matrix3 {
   String type = "Matrix3";
 
-  late Float32Array elements;
+  late Float32List elements;
 
   Matrix3() {
-    elements = Float32Array.from([1, 0, 0, 0, 1, 0, 0, 0, 1]);
+    elements = Float32List.fromList([1, 0, 0, 0, 1, 0, 0, 0, 1]);
   }
 
   Matrix3 set(double n11, double n12, double n13, double n21, double n22,
@@ -69,15 +69,15 @@ class Matrix3 {
     return this;
   }
 
-  Matrix3 multiply(m) {
+  Matrix3 multiply(Matrix3 m) {
     return multiplyMatrices(this, m);
   }
 
-  Matrix3 premultiply(m) {
+  Matrix3 premultiply(Matrix3 m) {
     return multiplyMatrices(m, this);
   }
 
-  Matrix3 multiplyMatrices(a, b) {
+  Matrix3 multiplyMatrices(Matrix3 a, Matrix3 b) {
     var ae = a.elements;
     var be = b.elements;
     var te = elements;
@@ -178,7 +178,7 @@ class Matrix3 {
   }
 
   Matrix3 transpose() {
-    num tmp;
+    double tmp;
     final m = elements;
 
     tmp = m[1];
@@ -282,7 +282,7 @@ class Matrix3 {
     return true;
   }
 
-  Matrix3 fromArray(Float32Array array, {int offset = 0}) {
+  Matrix3 fromArray(Float32List array, {int offset = 0}) {
     for (var i = 0; i < 9; i++) {
       elements[i] = array[i + offset];
     }
