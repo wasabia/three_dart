@@ -30,9 +30,9 @@ class PMREMGenerator {
   dynamic _sizeLods;
   dynamic _sigmas;
 
-  var _flatCamera = /*@__PURE__*/ new OrthographicCamera();
+  final _flatCamera = /*@__PURE__*/ OrthographicCamera();
 
-  var _clearColor = /*@__PURE__*/ new Color(1, 1, 1);
+  final _clearColor = /*@__PURE__*/ Color(1, 1, 1);
   var _oldTarget = null;
 
   dynamic PHI;
@@ -56,34 +56,34 @@ class PMREMGenerator {
     // Vertices of a dodecahedron (except the opposites, which represent the
     // same axis), used as axis directions evenly spread on a sphere.
     _axisDirections = [
-      /*@__PURE__*/ new Vector3(1, 1, 1),
-      /*@__PURE__*/ new Vector3(-1, 1, 1),
-      /*@__PURE__*/ new Vector3(1, 1, -1),
-      /*@__PURE__*/ new Vector3(-1, 1, -1),
-      /*@__PURE__*/ new Vector3(0, PHI, INV_PHI),
-      /*@__PURE__*/ new Vector3(0, PHI, -INV_PHI),
-      /*@__PURE__*/ new Vector3(INV_PHI, 0, PHI),
-      /*@__PURE__*/ new Vector3(-INV_PHI, 0, PHI),
-      /*@__PURE__*/ new Vector3(PHI, INV_PHI, 0),
-      /*@__PURE__*/ new Vector3(-PHI, INV_PHI, 0)
+      /*@__PURE__*/ Vector3(1, 1, 1),
+      /*@__PURE__*/ Vector3(-1, 1, 1),
+      /*@__PURE__*/ Vector3(1, 1, -1),
+      /*@__PURE__*/ Vector3(-1, 1, -1),
+      /*@__PURE__*/ Vector3(0, PHI, INV_PHI),
+      /*@__PURE__*/ Vector3(0, PHI, -INV_PHI),
+      /*@__PURE__*/ Vector3(INV_PHI, 0, PHI),
+      /*@__PURE__*/ Vector3(-INV_PHI, 0, PHI),
+      /*@__PURE__*/ Vector3(PHI, INV_PHI, 0),
+      /*@__PURE__*/ Vector3(-PHI, INV_PHI, 0)
     ];
 
-    this._renderer = renderer;
-    this._pingPongRenderTarget = null;
+    _renderer = renderer;
+    _pingPongRenderTarget = null;
 
-    this._lodMax = 0;
-		this._cubeSize = 0;
-		this._lodPlanes = [];
-		this._sizeLods = [];
-		this._sigmas = [];
+    _lodMax = 0;
+    _cubeSize = 0;
+    _lodPlanes = [];
+    _sizeLods = [];
+    _sigmas = [];
 
-		this._blurMaterial = null;
+    _blurMaterial = null;
 
     // this._blurMaterial = _getBlurShader(MAX_SAMPLES);
-    this._equirectMaterial = null;
-    this._cubemapMaterial = null;
+    _equirectMaterial = null;
+    _cubemapMaterial = null;
 
-    this._compileMaterial(this._blurMaterial);
+    _compileMaterial(_blurMaterial);
   }
 
   /**
@@ -94,19 +94,19 @@ class PMREMGenerator {
 	 * is placed at the origin).
 	 */
   fromScene(scene, [sigma = 0, near = 0.1, far = 100]) {
-    _oldTarget = this._renderer.getRenderTarget();
+    _oldTarget = _renderer.getRenderTarget();
 
-    this._setSize( 256 );
-    var cubeUVRenderTarget = this._allocateTargets();
+    _setSize(256);
+    var cubeUVRenderTarget = _allocateTargets();
     cubeUVRenderTarget.depthBuffer = true;
 
-    this._sceneToCubeUV(scene, near, far, cubeUVRenderTarget);
+    _sceneToCubeUV(scene, near, far, cubeUVRenderTarget);
     if (sigma > 0) {
-      this._blur(cubeUVRenderTarget, 0, 0, sigma, null);
+      _blur(cubeUVRenderTarget, 0, 0, sigma, null);
     }
 
-    this._applyPMREM(cubeUVRenderTarget);
-    this._cleanup(cubeUVRenderTarget);
+    _applyPMREM(cubeUVRenderTarget);
+    _cleanup(cubeUVRenderTarget);
 
     return cubeUVRenderTarget;
   }
@@ -117,7 +117,7 @@ class PMREMGenerator {
 	 * as this matches best with the 256 x 256 cubemap output.
 	 */
   fromEquirectangular(equirectangular, [renderTarget = null]) {
-    return this._fromTexture(equirectangular, renderTarget);
+    return _fromTexture(equirectangular, renderTarget);
   }
 
   /**
@@ -126,7 +126,7 @@ class PMREMGenerator {
 	 * as this matches best with the 256 x 256 cubemap output.
 	 */
   fromCubemap(cubemap, [renderTarget = null]) {
-    return this._fromTexture(cubemap, renderTarget);
+    return _fromTexture(cubemap, renderTarget);
   }
 
   /**
@@ -134,9 +134,9 @@ class PMREMGenerator {
 	 * your texture's network fetch for increased concurrency.
 	 */
   compileCubemapShader() {
-    if (this._cubemapMaterial == null) {
-      this._cubemapMaterial = _getCubemapShader();
-      this._compileMaterial(this._cubemapMaterial);
+    if (_cubemapMaterial == null) {
+      _cubemapMaterial = _getCubemapShader();
+      _compileMaterial(_cubemapMaterial);
     }
   }
 
@@ -145,9 +145,9 @@ class PMREMGenerator {
 	 * your texture's network fetch for increased concurrency.
 	 */
   compileEquirectangularShader() {
-    if (this._equirectMaterial == null) {
-      this._equirectMaterial = _getEquirectMaterial();
-      this._compileMaterial(this._equirectMaterial);
+    if (_equirectMaterial == null) {
+      _equirectMaterial = _getEquirectMaterial();
+      _compileMaterial(_equirectMaterial);
     }
   }
 
@@ -157,68 +157,60 @@ class PMREMGenerator {
 	 * one of them will cause any others to also become unusable.
 	 */
   dispose() {
-    this._dispose();
+    _dispose();
 
-
-    if (this._cubemapMaterial != null) this._cubemapMaterial.dispose();
-    if (this._equirectMaterial != null) this._equirectMaterial.dispose();
-
+    if (_cubemapMaterial != null) _cubemapMaterial.dispose();
+    if (_equirectMaterial != null) _equirectMaterial.dispose();
   }
 
   // private interface
 
-  _setSize( cubeSize ) {
-
-		this._lodMax = Math.floor( Math.log2( cubeSize ) );
-		this._cubeSize = Math.pow( 2, this._lodMax );
-
-	}
+  _setSize(cubeSize) {
+    _lodMax = Math.floor(Math.log2(cubeSize));
+    _cubeSize = Math.pow(2, _lodMax);
+  }
 
   _dispose() {
+    _blurMaterial.dispose();
 
-		this._blurMaterial.dispose();
+    if (_pingPongRenderTarget != null) _pingPongRenderTarget.dispose();
 
-		if ( this._pingPongRenderTarget != null ) this._pingPongRenderTarget.dispose();
-
-		for ( var i = 0; i < this._lodPlanes.length; i ++ ) {
-
-			this._lodPlanes[ i ].dispose();
-
-		}
-
-	}
+    for (var i = 0; i < _lodPlanes.length; i++) {
+      _lodPlanes[i].dispose();
+    }
+  }
 
   _cleanup(outputTarget) {
-    this._renderer.setRenderTarget(_oldTarget);
+    _renderer.setRenderTarget(_oldTarget);
     outputTarget.scissorTest = false;
     _setViewport(outputTarget, 0, 0, outputTarget.width, outputTarget.height);
   }
 
   _fromTexture(texture, [renderTarget = null]) {
-    if ( texture.mapping == CubeReflectionMapping || texture.mapping == CubeRefractionMapping ) {
+    if (texture.mapping == CubeReflectionMapping ||
+        texture.mapping == CubeRefractionMapping) {
+      _setSize(texture.image.length == 0
+          ? 16
+          : (texture.image[0].width ?? texture.image[0].image.width));
+    } else {
+      // Equirectangular
 
-			this._setSize( texture.image.length == 0 ? 16 : (texture.image[ 0 ].width ?? texture.image[ 0 ].image.width) );
+      _setSize(texture.image.width / 4 ?? 256);
+    }
 
-		} else { // Equirectangular
+    _oldTarget = _renderer.getRenderTarget();
 
-			this._setSize( texture.image.width / 4 ?? 256 );
-
-		}
-
-    _oldTarget = this._renderer.getRenderTarget();
-
-    var cubeUVRenderTarget = renderTarget ?? this._allocateTargets();
-    this._textureToCubeUV(texture, cubeUVRenderTarget);
-    this._applyPMREM(cubeUVRenderTarget);
-    this._cleanup(cubeUVRenderTarget);
+    var cubeUVRenderTarget = renderTarget ?? _allocateTargets();
+    _textureToCubeUV(texture, cubeUVRenderTarget);
+    _applyPMREM(cubeUVRenderTarget);
+    _cleanup(cubeUVRenderTarget);
 
     return cubeUVRenderTarget;
   }
 
   _allocateTargets() {
-
-		var width = 3 * Math.max( this._cubeSize, 16 * 7 );
-		var height = 4 * this._cubeSize - 32;
+    var width = 3 * Math.max(_cubeSize, 16 * 7);
+    var height = 4 * _cubeSize - 32;
 
     var params = {
       "magFilter": LinearFilter,
@@ -230,28 +222,22 @@ class PMREMGenerator {
       "depthBuffer": false
     };
 
+    var cubeUVRenderTarget = _createRenderTarget(width, height, params);
 
-    var cubeUVRenderTarget = _createRenderTarget( width, height, params );
+    if (_pingPongRenderTarget == null || _pingPongRenderTarget.width != width) {
+      if (_pingPongRenderTarget != null) {
+        _dispose();
+      }
 
-		if ( this._pingPongRenderTarget == null || this._pingPongRenderTarget.width != width ) {
+      _pingPongRenderTarget = _createRenderTarget(width, height, params);
 
-			if ( this._pingPongRenderTarget != null ) {
+      var result = _createPlanes(_lodMax);
 
-				this._dispose();
+      _sizeLods = result["sizeLods"];
+      _lodPlanes = result["lodPlanes"];
+      _sigmas = result["sigmas"];
 
-			}
-
-			this._pingPongRenderTarget = _createRenderTarget( width, height, params );
-
-
-      var result = _createPlanes( _lodMax );
-
-      this._sizeLods = result["sizeLods"];
-      this._lodPlanes = result["lodPlanes"];
-      this._sigmas = result["sigmas"];
-
-			this._blurMaterial = _getBlurShader( _lodMax, width, height );
-
+      _blurMaterial = _getBlurShader(_lodMax, width, height);
     }
 
     return cubeUVRenderTarget;
@@ -259,21 +245,21 @@ class PMREMGenerator {
 
   _compileMaterial(material) {
     BufferGeometry? geometry = null;
-    if(_lodPlanes.length >= 1) {
+    if (_lodPlanes.length >= 1) {
       geometry = _lodPlanes[0];
     }
 
-    var tmpMesh = new Mesh(geometry, material);
-    this._renderer.compile(tmpMesh, _flatCamera);
+    var tmpMesh = Mesh(geometry, material);
+    _renderer.compile(tmpMesh, _flatCamera);
   }
 
   _sceneToCubeUV(scene, near, far, cubeUVRenderTarget) {
     var fov = 90;
     var aspect = 1;
-    var cubeCamera = new PerspectiveCamera(fov, aspect, near, far);
+    var cubeCamera = PerspectiveCamera(fov, aspect, near, far);
     var upSign = [1, -1, 1, 1, 1, 1];
     var forwardSign = [1, 1, 1, -1, -1, -1];
-    var renderer = this._renderer;
+    var renderer = _renderer;
 
     var originalAutoClear = renderer.autoClear;
     var toneMapping = renderer.toneMapping;
@@ -281,13 +267,13 @@ class PMREMGenerator {
 
     renderer.toneMapping = NoToneMapping;
     renderer.autoClear = false;
-    var backgroundMaterial = new MeshBasicMaterial({
+    var backgroundMaterial = MeshBasicMaterial({
       "name": 'PMREM.Background',
       "side": BackSide,
       "depthWrite": false,
       "depthTest": false,
     });
-    var backgroundBox = new Mesh(new BoxGeometry(), backgroundMaterial);
+    var backgroundBox = Mesh(BoxGeometry(), backgroundMaterial);
     var useSolidColor = false;
     var background = scene.background;
     if (background != null) {
@@ -312,8 +298,9 @@ class PMREMGenerator {
         cubeCamera.up.set(0, upSign[i], 0);
         cubeCamera.lookAt(Vector3(0, 0, forwardSign[i]));
       }
-      var size = this._cubeSize;
-			_setViewport( cubeUVRenderTarget, col * size, i > 2 ? size : 0, size, size );
+      var size = _cubeSize;
+      _setViewport(
+          cubeUVRenderTarget, col * size, i > 2 ? size : 0, size, size);
       renderer.setRenderTarget(cubeUVRenderTarget);
       if (useSolidColor) {
         renderer.render(backgroundBox, cubeCamera);
@@ -321,7 +308,7 @@ class PMREMGenerator {
       renderer.render(scene, cubeCamera);
     }
     backgroundBox.geometry?.dispose();
-    backgroundBox.material.dispose();
+    backgroundBox.material?.dispose();
 
     renderer.toneMapping = toneMapping;
     renderer.autoClear = originalAutoClear;
@@ -329,54 +316,51 @@ class PMREMGenerator {
   }
 
   _textureToCubeUV(texture, cubeUVRenderTarget) {
-    var renderer = this._renderer;
+    var renderer = _renderer;
 
     bool isCubeTexture = (texture.mapping == CubeReflectionMapping ||
         texture.mapping == CubeRefractionMapping);
 
     if (isCubeTexture) {
-      if (this._cubemapMaterial == null) {
-        this._cubemapMaterial = _getCubemapShader();
-      }
+      _cubemapMaterial ??= _getCubemapShader();
 
-      this._cubemapMaterial.uniforms["flipEnvMap"]["value"] =
+      _cubemapMaterial.uniforms["flipEnvMap"]["value"] =
           (texture.isRenderTargetTexture == false) ? -1 : 1;
     } else {
-      if (this._equirectMaterial == null) {
-        this._equirectMaterial = _getEquirectMaterial();
-      }
+      _equirectMaterial ??= _getEquirectMaterial();
     }
 
-    var material = isCubeTexture ? this._cubemapMaterial : this._equirectMaterial;
+    var material = isCubeTexture ? _cubemapMaterial : _equirectMaterial;
 
     BufferGeometry? geometry = null;
-    if(_lodPlanes.length >= 1) {
+    if (_lodPlanes.length >= 1) {
       geometry = _lodPlanes[0];
     }
-    var mesh = new Mesh(geometry, material);
+    var mesh = Mesh(geometry, material);
 
     var uniforms = material.uniforms;
 
     uniforms['envMap']["value"] = texture;
 
-    var size = this._cubeSize;
-		_setViewport( cubeUVRenderTarget, 0, 0, 3 * size, 2 * size );
+    var size = _cubeSize;
+    _setViewport(cubeUVRenderTarget, 0, 0, 3 * size, 2 * size);
 
     renderer.setRenderTarget(cubeUVRenderTarget);
     renderer.render(mesh, _flatCamera);
   }
 
   _applyPMREM(cubeUVRenderTarget) {
-    var renderer = this._renderer;
+    var renderer = _renderer;
     var autoClear = renderer.autoClear;
     renderer.autoClear = false;
 
-    for (var i = 1; i < this._lodPlanes.length; i++) {
-      var sigma = Math.sqrt( this._sigmas[ i ] * this._sigmas[ i ] - this._sigmas[ i - 1 ] * this._sigmas[ i - 1 ] );
+    for (var i = 1; i < _lodPlanes.length; i++) {
+      var sigma =
+          Math.sqrt(_sigmas[i] * _sigmas[i] - _sigmas[i - 1] * _sigmas[i - 1]);
 
       var poleAxis = _axisDirections[(i - 1) % _axisDirections.length];
 
-      this._blur(cubeUVRenderTarget, i - 1, i, sigma, poleAxis);
+      _blur(cubeUVRenderTarget, i - 1, i, sigma, poleAxis);
     }
 
     renderer.autoClear = autoClear;
@@ -390,19 +374,19 @@ class PMREMGenerator {
 	 * accurate at the poles, but still does a decent job.
 	 */
   _blur(cubeUVRenderTarget, lodIn, lodOut, sigma, poleAxis) {
-    var pingPongRenderTarget = this._pingPongRenderTarget;
+    var pingPongRenderTarget = _pingPongRenderTarget;
 
-    this._halfBlur(cubeUVRenderTarget, pingPongRenderTarget, lodIn, lodOut,
-        sigma, 'latitudinal', poleAxis);
+    _halfBlur(cubeUVRenderTarget, pingPongRenderTarget, lodIn, lodOut, sigma,
+        'latitudinal', poleAxis);
 
-    this._halfBlur(pingPongRenderTarget, cubeUVRenderTarget, lodOut, lodOut,
-        sigma, 'longitudinal', poleAxis);
+    _halfBlur(pingPongRenderTarget, cubeUVRenderTarget, lodOut, lodOut, sigma,
+        'longitudinal', poleAxis);
   }
 
   _halfBlur(
       targetIn, targetOut, lodIn, lodOut, sigmaRadians, direction, poleAxis) {
-    var renderer = this._renderer;
-    var blurMaterial = this._blurMaterial;
+    var renderer = _renderer;
+    var blurMaterial = _blurMaterial;
 
     if (direction != 'latitudinal' && direction != 'longitudinal') {
       print('blur direction must be either latitudinal or longitudinal!');
@@ -413,12 +397,11 @@ class PMREMGenerator {
 
     BufferGeometry? _geometry;
 
-    if(lodOut < _lodPlanes.length) {
+    if (lodOut < _lodPlanes.length) {
       _geometry = _lodPlanes[lodOut];
     }
 
-
-    var blurMesh = new Mesh(_geometry, blurMaterial);
+    var blurMesh = Mesh(_geometry, blurMaterial);
     var blurUniforms = blurMaterial.uniforms;
 
     var pixels = _sizeLods[lodIn] - 1;
@@ -432,10 +415,10 @@ class PMREMGenerator {
 
     if (samples > MAX_SAMPLES) {
       print(
-          "sigmaRadians, ${sigmaRadians}, is too large and will clip, as it requested ${samples} samples when the maximum is set to ${MAX_SAMPLES}");
+          "sigmaRadians, $sigmaRadians, is too large and will clip, as it requested $samples samples when the maximum is set to $MAX_SAMPLES");
     }
 
-    List<num> weights = [];
+    List<double> weights = [];
     num sum = 0;
 
     for (var i = 0; i < MAX_SAMPLES; ++i) {
@@ -456,7 +439,7 @@ class PMREMGenerator {
 
     blurUniforms['envMap']["value"] = targetIn.texture;
     blurUniforms['samples']["value"] = samples;
-    blurUniforms['weights']["value"] = Float32Array.from( weights );
+    blurUniforms['weights']["value"] = Float32List.fromList(weights);
     blurUniforms['latitudinal']["value"] = direction == 'latitudinal';
 
     if (poleAxis != null) {
@@ -467,8 +450,10 @@ class PMREMGenerator {
     blurUniforms['mipInt']["value"] = _lodMax - lodIn;
 
     var outputSize = _sizeLods[lodOut];
-    var x = 3 * outputSize * ( lodOut > _lodMax - LOD_MIN ? lodOut - _lodMax + LOD_MIN : 0 );
-		var y = 4 * ( this._cubeSize - outputSize );
+    var x = 3 *
+        outputSize *
+        (lodOut > _lodMax - LOD_MIN ? lodOut - _lodMax + LOD_MIN : 0);
+    var y = 4 * (_cubeSize - outputSize);
 
     _setViewport(targetOut, x, y, 3 * outputSize, 2 * outputSize);
     renderer.setRenderTarget(targetOut);
@@ -488,8 +473,7 @@ class PMREMGenerator {
 
     var totalLods = lodMax - LOD_MIN + 1 + EXTRA_LOD_SIGMA.length;
 
-    for ( var i = 0; i < totalLods; i ++ ) {
-      
+    for (var i = 0; i < totalLods; i++) {
       var sizeLod = Math.pow(2, lod);
       sizeLods.add(sizeLod);
       var sigma = 1.0 / sizeLod;
@@ -513,14 +497,14 @@ class PMREMGenerator {
       var uvSize = 2;
       var faceIndexSize = 1;
 
-      var position = new Float32Array(positionSize * vertices * cubeFaces);
-      var uv = new Float32Array(uvSize * vertices * cubeFaces);
-      var faceIndex = new Float32Array(faceIndexSize * vertices * cubeFaces);
+      var position = Float32List(positionSize * vertices * cubeFaces);
+      var uv = Float32List(uvSize * vertices * cubeFaces);
+      var faceIndex = Int32List(faceIndexSize * vertices * cubeFaces);
 
       for (var face = 0; face < cubeFaces; face++) {
-        var x = (face % 3) * 2 / 3 - 1;
-        var y = face > 2 ? 0 : -1;
-        var coordinates = [
+        double x = (face % 3) * 2 / 3 - 1;
+        double y = face > 2 ? 0 : -1;
+        List<double> coordinates = [
           x,
           y,
           0,
@@ -540,18 +524,18 @@ class PMREMGenerator {
           y + 1,
           0
         ];
-        position.setAt(coordinates, positionSize * vertices * face);
-        uv.setAt(uv1, uvSize * vertices * face);
-        var fill = [face, face, face, face, face, face];
-        faceIndex.setAt(fill, faceIndexSize * vertices * face);
+        position.setAll(positionSize * vertices * face, coordinates);
+        uv.setAll(uvSize * vertices * face, uv1);
+        final faces = [face, face, face, face, face, face];
+        faceIndex.setAll(faceIndexSize * vertices * face, faces);
       }
 
-      var planes = new BufferGeometry();
-      planes.setAttribute('position',
-          new Float32BufferAttribute(position, positionSize, false));
-      planes.setAttribute('uv', new Float32BufferAttribute(uv, uvSize, false));
-      planes.setAttribute('faceIndex',
-          new Float32BufferAttribute(faceIndex, faceIndexSize, false));
+      var planes = BufferGeometry();
+      planes.setAttribute(
+          'position', Float32BufferAttribute(position, positionSize, false));
+      planes.setAttribute('uv', Float32BufferAttribute(uv, uvSize, false));
+      planes.setAttribute(
+          'faceIndex', Int32BufferAttribute(faceIndex, faceIndexSize, false));
       lodPlanes.add(planes);
 
       if (lod > LOD_MIN) {
@@ -559,16 +543,12 @@ class PMREMGenerator {
       }
     }
 
-    return {
-      "lodPlanes": lodPlanes,
-      "sizeLods": sizeLods,
-      "sigmas": sigmas
-    };
+    return {"lodPlanes": lodPlanes, "sizeLods": sizeLods, "sigmas": sigmas};
   }
 
   _createRenderTarget(width, height, params) {
-    var cubeUVRenderTarget = new WebGLRenderTarget(
-        width, height, WebGLRenderTargetOptions(params));
+    var cubeUVRenderTarget =
+        WebGLRenderTarget(width, height, WebGLRenderTargetOptions(params));
     cubeUVRenderTarget.texture.mapping = CubeUVReflectionMapping;
     cubeUVRenderTarget.texture.name = 'PMREM.cubeUv';
     cubeUVRenderTarget.scissorTest = true;
@@ -608,15 +588,15 @@ class PMREMGenerator {
   }
 
   _getBlurShader(lodMax, width, height) {
-    var weights = Float32Array(MAX_SAMPLES);
-    var poleAxis = new Vector3(0, 1, 0);
-    var shaderMaterial = new ShaderMaterial({
+    var weights = Float32List(MAX_SAMPLES);
+    var poleAxis = Vector3(0, 1, 0);
+    var shaderMaterial = ShaderMaterial({
       "name": 'SphericalGaussianBlur',
       "defines": {
         'n': MAX_SAMPLES,
         'CUBEUV_TEXEL_WIDTH': 1.0 / width,
         'CUBEUV_TEXEL_HEIGHT': 1.0 / height,
-        'CUBEUV_MAX_MIP': "${lodMax}.0",
+        'CUBEUV_MAX_MIP': "$lodMax.0",
       },
       "uniforms": {
         'envMap': {},
@@ -699,11 +679,9 @@ class PMREMGenerator {
   }
 
   _getEquirectMaterial() {
-    var shaderMaterial = new ShaderMaterial({
+    var shaderMaterial = ShaderMaterial({
       "name": 'EquirectangularToCubeUV',
-      "uniforms": {
-        'envMap': { }
-      },
+      "uniforms": {'envMap': {}},
       "vertexShader": _getCommonVertexShader(),
       "fragmentShader": """
         ${_getPlatformHelper()}
@@ -732,7 +710,7 @@ class PMREMGenerator {
   }
 
   _getCubemapShader() {
-    var shaderMaterial = new ShaderMaterial({
+    var shaderMaterial = ShaderMaterial({
       "name": 'CubemapToCubeUV',
       "uniforms": {
         'envMap': {},

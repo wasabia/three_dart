@@ -100,7 +100,8 @@ class Triangle {
     return (_v3.x >= 0) && (_v3.y >= 0) && ((_v3.x + _v3.y) <= 1);
   }
 
-  static static_getUV(point, p1, p2, p3, uv1, uv2, uv3, target) {
+  static static_getUV(
+      point, Vector3 p1, Vector3 p2, Vector3 p3, uv1, uv2, uv3, target) {
     static_getBarycoord(point, p1, p2, p3, _v3);
 
     target.set(0, 0);
@@ -111,7 +112,8 @@ class Triangle {
     return target;
   }
 
-  static bool static_isFrontFacing(a, b, c, direction) {
+  static bool static_isFrontFacing(
+      Vector3 a, Vector3 b, Vector3 c, Vector3 direction) {
     _v0.subVectors(c, b);
     _v1.subVectors(a, b);
 
@@ -119,7 +121,7 @@ class Triangle {
     return (_v0.cross(_v1).dot(direction) < 0) ? true : false;
   }
 
-  Triangle set(a, b, c) {
+  Triangle set(Vector3 a, Vector3 b, Vector3 c) {
     this.a.copy(a);
     this.b.copy(b);
     this.c.copy(c);
@@ -127,7 +129,7 @@ class Triangle {
     return this;
   }
 
-  Triangle setFromPointsAndIndices(points, i0, i1, i2) {
+  Triangle setFromPointsAndIndices(points, int i0, int i1, int i2) {
     a.copy(points[i0]);
     b.copy(points[i1]);
     c.copy(points[i2]);
@@ -158,19 +160,19 @@ class Triangle {
     return target.addVectors(a, b).add(c).multiplyScalar(1 / 3);
   }
 
-  Vector3 getNormal(target) {
+  Vector3 getNormal(Vector3 target) {
     return Triangle.static_getNormal(a, b, c, target);
   }
 
-  getPlane(Plane target) {
+  Plane getPlane(Plane target) {
     return target.setFromCoplanarPoints(a, b, c);
   }
 
-  Vector3 getBarycoord(point, target) {
+  Vector3 getBarycoord(point, Vector3 target) {
     return Triangle.static_getBarycoord(point, a, b, c, target);
   }
 
-  getUV(point, uv1, uv2, uv3, target) {
+  dynamic getUV(point, uv1, uv2, uv3, target) {
     return Triangle.static_getUV(point, a, b, c, uv1, uv2, uv3, target);
   }
 
@@ -178,15 +180,15 @@ class Triangle {
     return Triangle.static_containsPoint(point, a, b, c);
   }
 
-  bool isFrontFacing(direction) {
+  bool isFrontFacing(Vector3 direction) {
     return Triangle.static_isFrontFacing(a, b, c, direction);
   }
 
-  intersectsBox(box) {
+  intersectsBox(Box3 box) {
     return box.intersectsTriangle(this);
   }
 
-  Vector3 closestPointToPoint(p, Vector3 target) {
+  Vector3 closestPointToPoint(Vector3 p, Vector3 target) {
     var a = this.a, b = this.b, c = this.c;
     var v, w;
 

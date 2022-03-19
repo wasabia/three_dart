@@ -21,7 +21,7 @@ class SphericalHarmonics3 {
     }
   }
 
-  SphericalHarmonics3 set(coefficients) {
+  SphericalHarmonics3 set(List<Vector3> coefficients) {
     for (var i = 0; i < 9; i++) {
       this.coefficients[i].copy(coefficients[i]);
     }
@@ -39,7 +39,7 @@ class SphericalHarmonics3 {
 
   // get the radiance in the direction of the normal
   // target is a Vector3
-  getAt(normal, target) {
+  Vector3 getAt(Vector3 normal, Vector3 target) {
     // normal is assumed to be unit length
 
     var x = normal.x, y = normal.y, z = normal.z;
@@ -67,7 +67,7 @@ class SphericalHarmonics3 {
   // get the irradiance (radiance convolved with cosine lobe) in the direction of the normal
   // target is a Vector3
   // https://graphics.stanford.edu/papers/envmap/envmap.pdf
-  getIrradianceAt(normal, target) {
+  Vector3 getIrradianceAt(Vector3 normal, Vector3 target) {
     // normal is assumed to be unit length
 
     var x = normal.x, y = normal.y, z = normal.z;
@@ -104,7 +104,7 @@ class SphericalHarmonics3 {
     return this;
   }
 
-  SphericalHarmonics3 addScaledSH(sh, s) {
+  SphericalHarmonics3 addScaledSH(SphericalHarmonics3 sh, num s) {
     for (var i = 0; i < 9; i++) {
       coefficients[i].addScaledVector(sh.coefficients[i], s);
     }
@@ -112,7 +112,7 @@ class SphericalHarmonics3 {
     return this;
   }
 
-  SphericalHarmonics3 scale(s) {
+  SphericalHarmonics3 scale(num s) {
     for (var i = 0; i < 9; i++) {
       coefficients[i].multiplyScalar(s);
     }
@@ -120,7 +120,7 @@ class SphericalHarmonics3 {
     return this;
   }
 
-  SphericalHarmonics3 lerp(sh, alpha) {
+  SphericalHarmonics3 lerp(SphericalHarmonics3 sh, num alpha) {
     for (var i = 0; i < 9; i++) {
       coefficients[i].lerp(sh.coefficients[i], alpha);
     }
@@ -128,7 +128,7 @@ class SphericalHarmonics3 {
     return this;
   }
 
-  bool equals(sh) {
+  bool equals(SphericalHarmonics3 sh) {
     for (var i = 0; i < 9; i++) {
       if (!coefficients[i].equals(sh.coefficients[i])) {
         return false;
@@ -138,7 +138,7 @@ class SphericalHarmonics3 {
     return true;
   }
 
-  SphericalHarmonics3 copy(sh) {
+  SphericalHarmonics3 copy(SphericalHarmonics3 sh) {
     return set(sh.coefficients);
   }
 
@@ -168,7 +168,7 @@ class SphericalHarmonics3 {
 
   // evaluate the basis functions
   // shBasis is an Array[ 9 ]
-  static getBasisAt(normal, shBasis) {
+  static getBasisAt(Vector3 normal, List<double> shBasis) {
     // normal is assumed to be unit length
 
     var x = normal.x, y = normal.y, z = normal.z;

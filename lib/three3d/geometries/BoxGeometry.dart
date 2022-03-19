@@ -14,7 +14,7 @@ class BoxGeometry extends BufferGeometry {
       heightSegments = 1,
       depthSegments = 1])
       : super() {
-    this.parameters = {
+    parameters = {
       "width": width,
       "height": height,
       "depth": depth,
@@ -32,16 +32,16 @@ class BoxGeometry extends BufferGeometry {
     // buffers
 
     List<num> indices = [];
-    List<num> vertices = [];
-    List<num> normals = [];
-    List<num> uvs = [];
+    List<double> vertices = [];
+    List<double> normals = [];
+    List<double> uvs = [];
 
     // helper variables
 
     numberOfVertices = 0;
     groupStart = 0;
 
-    Function buildPlane = (String u, String v, String w, udir, vdir, width,
+    void buildPlane(String u, String v, String w, udir, vdir, width,
         height, depth, gridX, gridY, materialIndex) {
       var segmentWidth = width / gridX;
       var segmentHeight = height / gridY;
@@ -56,7 +56,7 @@ class BoxGeometry extends BufferGeometry {
       var vertexCounter = 0;
       var groupCount = 0;
 
-      var vector = new Vector3.init();
+      var vector = Vector3.init();
 
       // generate vertices, normals and uvs
 
@@ -82,7 +82,8 @@ class BoxGeometry extends BufferGeometry {
 
           // now apply vector to vertex buffer
 
-          vertices.addAll([vector.x, vector.y, vector.z]);
+          vertices.addAll(
+              [vector.x.toDouble(), vector.y.toDouble(), vector.z.toDouble()]);
 
           // set values to correct vector component
 
@@ -96,7 +97,8 @@ class BoxGeometry extends BufferGeometry {
 
           // now apply vector to normal buffer
 
-          normals.addAll([vector.x, vector.y, vector.z]);
+          normals.addAll(
+              [vector.x.toDouble(), vector.y.toDouble(), vector.z.toDouble()]);
 
           // uvs
 
@@ -135,7 +137,7 @@ class BoxGeometry extends BufferGeometry {
 
       // add a group to the geometry. this will ensure multi material support
 
-      this.addGroup(groupStart, groupCount, materialIndex: materialIndex);
+      addGroup(groupStart, groupCount, materialIndex: materialIndex);
 
       // calculate new start value for groups
 
@@ -163,11 +165,13 @@ class BoxGeometry extends BufferGeometry {
 
     // build geometry
 
-    this.setIndex(indices);
-    this.setAttribute(
-        'position', new Float32BufferAttribute(vertices, 3, false));
-    this.setAttribute('normal', new Float32BufferAttribute(normals, 3, false));
-    this.setAttribute('uv', new Float32BufferAttribute(uvs, 2, false));
+    setIndex(indices);
+    setAttribute('position',
+        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
+    setAttribute('normal',
+        Float32BufferAttribute(Float32List.fromList(normals), 3, false));
+    setAttribute(
+        'uv', Float32BufferAttribute(Float32List.fromList(uvs), 2, false));
   }
 
   static fromJSON(data) {
