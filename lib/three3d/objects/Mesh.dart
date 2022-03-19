@@ -107,7 +107,7 @@ class Mesh extends Object3D {
 
     if (geometry.boundingSphere == null) geometry.computeBoundingSphere();
 
-    _meshsphere.copy(geometry.boundingSphere);
+    _meshsphere.copy(geometry.boundingSphere!);
     _meshsphere.applyMatrix4(matrixWorld);
 
     if (raycaster.ray.intersectsSphere(_meshsphere) == false) return;

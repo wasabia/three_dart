@@ -21,7 +21,7 @@ class ConvexGeometry extends BufferGeometry {
       // we move along a doubly-connected edge list to access all face points (see HalfEdge docs)
 
       do {
-        var point = edge.head().point;
+        var point = edge!.head().point;
 
         vertices.addAll([point.x, point.y, point.z]);
         normals.addAll([face.normal.x, face.normal.y, face.normal.z]);

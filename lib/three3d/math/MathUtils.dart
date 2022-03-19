@@ -12,25 +12,25 @@ class MathUtils {
     return uuid.toUpperCase();
   }
 
-  static clamp(value, min, max) {
+  static T clamp<T extends num>(T value, T min, T max) {
     return Math.max(min, Math.min(max, value));
   }
 
   // compute euclidian modulo of m % n
   // https://en.wikipedia.org/wiki/Modulo_operation
 
-  static euclideanModulo(n, m) {
+  static num euclideanModulo<T extends num>(T n, T m) {
     return ((n % m) + m) % m;
   }
 
   // Linear mapping from range <a1, a2> to range <b1, b2>
 
-  static mapLinear(x, a1, a2, b1, b2) {
+  static num mapLinear<T extends num>(T x, T a1, T a2, T b1, T b2) {
     return b1 + (x - a1) * (b2 - b1) / (a2 - a1);
   }
 
   // https://www.gamedev.net/tutorials/programming/general-and-gameplay-programming/inverse-lerp-a-super-useful-yet-often-overlooked-function-r5230/
-  static inverseLerp(x, y, value) {
+  static num inverseLerp<T extends num>(T x, T y, T value) {
     if (x != y) {
       return (value - x) / (y - x);
     } else {
@@ -40,23 +40,23 @@ class MathUtils {
 
   // https://en.wikipedia.org/wiki/Linear_interpolation
 
-  static lerp(x, y, t) {
+  static num lerp<T extends num>(T x, T y, T t) {
     return (1 - t) * x + t * y;
   }
 
   // https://www.desmos.com/calculator/vcsjnyz7x4
 
-  static pingPong(x, {length = 1}) {
+  static num pingPong<T extends num>(T x, {int length = 1}) {
     return length - Math.abs(x % (length * 2) - length);
   }
 
-  static damp(num x, num y, num lambda, num dt) {
+  static num damp(num x, num y, num lambda, num dt) {
     return MathUtils.lerp(x, y, 1 - Math.exp(-lambda * dt));
   }
 
   // http://en.wikipedia.org/wiki/Smoothstep
 
-  static smoothstep(x, min, max) {
+  static num smoothstep(num x, num min, num max) {
     if (x <= min) return 0;
     if (x >= max) return 1;
 
@@ -65,7 +65,7 @@ class MathUtils {
     return x * x * (3 - 2 * x);
   }
 
-  static smootherstep(x, min, max) {
+  static num smootherstep(num x, num min, num max) {
     if (x <= min) return 0;
     if (x >= max) return 1;
 
@@ -76,25 +76,25 @@ class MathUtils {
 
   // Random integer from <low, high> interval
 
-  static randInt(low, high) {
+  static int randInt(int low, int high) {
     return low + Math.floor(Math.random() * (high - low + 1));
   }
 
   // Random float from <low, high> interval
 
-  static randFloat(low, high) {
+  static double randFloat(double low, double high) {
     return low + Math.random() * (high - low);
   }
 
   // Random float from <-range/2, range/2> interval
 
-  static randFloatSpread(range) {
+  static double randFloatSpread(double range) {
     return range * (0.5 - Math.random());
   }
 
   // Deterministic pseudo-random float in the interval [ 0, 1 ]
 
-  static seededRandom(s) {
+  static double seededRandom([int? s]) {
     if (s != null) _seed = s % 2147483647;
 
     // Park-Miller algorithm
@@ -104,27 +104,28 @@ class MathUtils {
     return (_seed - 1) / 2147483646;
   }
 
-  static degToRad(degrees) {
+  static num degToRad(num degrees) {
     return degrees * MathUtils.DEG2RAD;
   }
 
-  static radToDeg(radians) {
+  static num radToDeg(num radians) {
     return radians * MathUtils.RAD2DEG;
   }
 
-  static isPowerOfTwo(value) {
+  static bool isPowerOfTwo(int value) {
     return (value & (value - 1)) == 0 && value != 0;
   }
 
-  static ceilPowerOfTwo(value) {
+  static num ceilPowerOfTwo<T extends num>(T value) {
     return Math.pow(2, Math.ceil(Math.log(value) / Math.LN2).toDouble());
   }
 
-  static floorPowerOfTwo(value) {
+  static num floorPowerOfTwo<T extends num>(T value) {
     return Math.pow(2, Math.floor(Math.log(value) / Math.LN2).toDouble());
   }
 
-  static setQuaternionFromProperEuler(q, a, b, c, order) {
+  static void setQuaternionFromProperEuler(
+      q, num a, num b, num c, String order) {
     // Intrinsic Proper Euler Angles - see https://en.wikipedia.org/wiki/Euler_angles
 
     // rotations are applied to the axes in the order specified by 'order'

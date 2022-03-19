@@ -7,21 +7,21 @@ class Frustum {
   late List<Plane> planes;
 
   Frustum([p0, p1, p2, p3, p4, p5]) {
-    this.planes = [
-      (p0 != null) ? p0 : new Plane(null, null),
-      (p1 != null) ? p1 : new Plane(null, null),
-      (p2 != null) ? p2 : new Plane(null, null),
-      (p3 != null) ? p3 : new Plane(null, null),
-      (p4 != null) ? p4 : new Plane(null, null),
-      (p5 != null) ? p5 : new Plane(null, null)
+    planes = [
+      (p0 != null) ? p0 : Plane(null, null),
+      (p1 != null) ? p1 : Plane(null, null),
+      (p2 != null) ? p2 : Plane(null, null),
+      (p3 != null) ? p3 : Plane(null, null),
+      (p4 != null) ? p4 : Plane(null, null),
+      (p5 != null) ? p5 : Plane(null, null)
     ];
   }
 
-  toJSON() {
+  List<List<num>> toJSON() {
     return planes.map((e) => e.toJSON()).toList();
   }
 
-  set(p0, p1, p2, p3, p4, p5) {
+  Frustum set(Plane p0, Plane p1, Plane p2, Plane p3, Plane p4, Plane p5) {
     var planes = this.planes;
 
     planes[0].copy(p0);
@@ -34,11 +34,11 @@ class Frustum {
     return this;
   }
 
-  clone() {
-    return new Frustum(null, null, null, null, null, null).copy(this);
+  Frustum clone() {
+    return Frustum(null, null, null, null, null, null).copy(this);
   }
 
-  copy(frustum) {
+  Frustum copy(Frustum frustum) {
     var planes = this.planes;
 
     for (var i = 0; i < 6; i++) {
@@ -48,7 +48,7 @@ class Frustum {
     return this;
   }
 
-  setFromProjectionMatrix(Matrix4 m) {
+  Frustum setFromProjectionMatrix(Matrix4 m) {
     var planes = this.planes;
     var me = m.elements;
     var me0 = me[0], me1 = me[1], me2 = me[2], me3 = me[3];
@@ -78,27 +78,28 @@ class Frustum {
     return this;
   }
 
-  bool intersectsObject(object) {
-    var geometry = object.geometry;
+  bool intersectsObject(Object3D object) {
+    final geometry = object.geometry;
+    if (geometry == null) return false;
 
     if (geometry.boundingSphere == null) geometry.computeBoundingSphere();
 
-    _sphere.copy(geometry.boundingSphere);
+    _sphere.copy(geometry.boundingSphere!);
 
     _sphere.applyMatrix4(object.matrixWorld);
 
-    return this.intersectsSphere(_sphere);
+    return intersectsSphere(_sphere);
   }
 
-  intersectsSprite(sprite) {
+  bool intersectsSprite(Object3D sprite) {
     _sphere.center.set(0, 0, 0);
     _sphere.radius = 0.7071067811865476;
     _sphere.applyMatrix4(sprite.matrixWorld);
 
-    return this.intersectsSphere(_sphere);
+    return intersectsSphere(_sphere);
   }
 
-  bool intersectsSphere(sphere) {
+  bool intersectsSphere(Sphere sphere) {
     var planes = this.planes;
     var center = sphere.center;
     var negRadius = -sphere.radius;
@@ -116,7 +117,7 @@ class Frustum {
     return true;
   }
 
-  intersectsBox(box) {
+  bool intersectsBox(Box3 box) {
     var planes = this.planes;
 
     for (var i = 0; i < 6; i++) {
@@ -136,7 +137,7 @@ class Frustum {
     return true;
   }
 
-  containsPoint(point) {
+  bool containsPoint(Vector3 point) {
     var planes = this.planes;
 
     for (var i = 0; i < 6; i++) {

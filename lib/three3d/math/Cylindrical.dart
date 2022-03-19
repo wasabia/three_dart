@@ -1,4 +1,4 @@
-/**
+/*
  * Ref: https://en.wikipedia.org/wiki/Cylindrical_coordinate_system
  */
 
@@ -9,7 +9,7 @@ class Cylindrical {
   late num theta;
   late num y;
 
-  Cylindrical(radius, theta, y) {
+  Cylindrical([num? radius, num? theta, num? y]) {
     this.radius = (radius != null)
         ? radius
         : 1.0; // distance from the origin to a point in the x-z plane
@@ -19,7 +19,7 @@ class Cylindrical {
     this.y = (y != null) ? y : 0; // height above the x-z plane
   }
 
-  set(radius, theta, y) {
+  Cylindrical set(num radius, num theta, num y) {
     this.radius = radius;
     this.theta = theta;
     this.y = y;
@@ -27,25 +27,25 @@ class Cylindrical {
     return this;
   }
 
-  clone() {
-    return new Cylindrical(null, null, null).copy(this);
+  Cylindrical clone() {
+    return Cylindrical(null, null, null).copy(this);
   }
 
-  copy(other) {
-    this.radius = other.radius;
-    this.theta = other.theta;
-    this.y = other.y;
+  Cylindrical copy(Cylindrical other) {
+    radius = other.radius;
+    theta = other.theta;
+    y = other.y;
 
     return this;
   }
 
-  setFromVector3(v) {
-    return this.setFromCartesianCoords(v.x, v.y, v.z);
+  Cylindrical setFromVector3(Vector3 v) {
+    return setFromCartesianCoords(v.x, v.y, v.z);
   }
 
-  setFromCartesianCoords(x, y, z) {
-    this.radius = Math.sqrt(x * x + z * z);
-    this.theta = Math.atan2(x, z);
+  Cylindrical setFromCartesianCoords(num x, num y, num z) {
+    radius = Math.sqrt(x * x + z * z);
+    theta = Math.atan2(x, z);
     this.y = y;
 
     return this;
