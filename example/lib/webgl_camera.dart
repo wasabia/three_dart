@@ -159,8 +159,6 @@ class _MyAppState extends State<webgl_camera> {
 
     final _gl = three3dRender.gl;
 
-    // renderer!.render(scene, camera);
-
     var r = DateTime.now().millisecondsSinceEpoch * 0.0005;
 
     mesh.position.x = 700 * THREE.Math.cos(r);
@@ -237,18 +235,19 @@ class _MyAppState extends State<webgl_camera> {
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
-    renderer!.autoClear = true;
+    renderer!.autoClear = false;
 
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({
         "minFilter": THREE.LinearFilter,
         "magFilter": THREE.LinearFilter,
-        "format": THREE.RGBAFormat
+        "format": THREE.RGBAFormat,
+        "samples": 4
       });
       renderTarget = THREE.WebGLRenderTarget(
           (width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderer!.setRenderTarget(renderTarget);
-      renderTarget.samples = 4;
+      
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }
   }

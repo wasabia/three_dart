@@ -196,8 +196,9 @@ class _MyAppState extends State<webgl_shadowmap_viewer> {
         "magFilter": THREE.LinearFilter,
         "format": THREE.RGBAFormat
       });
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
+      renderTarget = THREE.WebGLRenderTarget(
           (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      renderTarget.samples = 4;   
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }

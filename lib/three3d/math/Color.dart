@@ -152,7 +152,7 @@ const Map<String, int> _colorKeywords = {
 };
 
 Map<String, num> _hslA = {"h": 0, "s": 0, "l": 0};
-Map<String, int> _hslB = {"h": 0, "s": 0, "l": 0};
+Map<String, num> _hslB = {"h": 0, "s": 0, "l": 0};
 
 num hue2rgb(num p, num q, num t) {
   if (t < 0) t += 1;
