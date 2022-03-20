@@ -1,6 +1,6 @@
 part of three_helpers;
 
-var _box = /*@__PURE__*/ Box3(null, null);
+var _box = /*@__PURE__*/ new Box3(null, null);
 
 class BoxHelper extends LineSegments {
   Object3D? object;
@@ -8,7 +8,7 @@ class BoxHelper extends LineSegments {
   BoxHelper.create(geometry, material) : super(geometry, material) {}
 
   factory BoxHelper(object, {color = 0xffff00}) {
-    var indices = Uint16List.fromList([
+    var indices = new Uint16Array.from([
       0,
       1,
       1,
@@ -34,15 +34,15 @@ class BoxHelper extends LineSegments {
       3,
       7
     ]);
-    var positions = Float32List(8 * 3);
+    var positions = new Float32Array(8 * 3);
 
-    var geometry = BufferGeometry();
-    geometry.setIndex(Uint16BufferAttribute(indices, 1, false));
+    var geometry = new BufferGeometry();
+    geometry.setIndex(new Uint16BufferAttribute(indices, 1, false));
     geometry.setAttribute(
-        'position', Float32BufferAttribute(positions, 3, false));
+        'position', new Float32BufferAttribute(positions, 3, false));
 
     var _boxHelper = BoxHelper.create(
-        geometry, LineBasicMaterial({"color": color, "toneMapped": false}));
+        geometry, new LineBasicMaterial({"color": color, "toneMapped": false}));
 
     _boxHelper.object = object;
     _boxHelper.type = 'BoxHelper';
@@ -55,8 +55,8 @@ class BoxHelper extends LineSegments {
   }
 
   update() {
-    if (object != null) {
-      _box.setFromObject(object!);
+    if (this.object != null) {
+      _box.setFromObject(this.object);
     }
 
     if (_box.isEmpty()) return;
@@ -80,7 +80,7 @@ class BoxHelper extends LineSegments {
 		7: max.x, min.y, min.z
 		*/
 
-    var position = geometry!.attributes["position"];
+    var position = this.geometry!.attributes["position"];
     var array = position.array;
 
     array[0] = max.x;
@@ -110,12 +110,12 @@ class BoxHelper extends LineSegments {
 
     position.needsUpdate = true;
 
-    geometry!.computeBoundingSphere();
+    this.geometry!.computeBoundingSphere();
   }
 
   setFromObject(object) {
     this.object = object;
-    update();
+    this.update();
 
     return this;
   }

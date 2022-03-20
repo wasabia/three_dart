@@ -4,7 +4,7 @@ class ShapeGeometry extends BufferGeometry {
   String type = 'ShapeGeometry';
 
   ShapeGeometry(shapes, {num curveSegments = 12}) : super() {
-    parameters = {};
+    this.parameters = {};
     this.curveSegments = curveSegments;
     if (shapes is List) {
       this.shapes = List<Shape>.from(shapes);
@@ -35,15 +35,15 @@ class ShapeGeometry extends BufferGeometry {
   }
 
   init() {
-    parameters!["shapes"] = shapes;
-    parameters!["curveSegments"] = curveSegments;
+    this.parameters!["shapes"] = shapes;
+    this.parameters!["curveSegments"] = curveSegments;
 
     // buffers
 
     var indices = [];
-    List<double> vertices = [];
-    List<double> normals = [];
-    List<double> uvs = [];
+    var vertices = [];
+    var normals = [];
+    var uvs = [];
 
     // helper variables
 
@@ -52,7 +52,7 @@ class ShapeGeometry extends BufferGeometry {
 
     // allow single and array values for "shapes" parameter
 
-    addShape(shape) {
+    Function addShape = (shape) {
       var indexOffset = vertices.length / 3;
       var points = shape.extractPoints(curveSegments);
 
@@ -109,7 +109,7 @@ class ShapeGeometry extends BufferGeometry {
 
     for (var i = 0; i < shapes.length; i++) {
       addShape(shapes[i]);
-      addGroup(groupStart, groupCount,
+      this.addGroup(groupStart, groupCount,
           materialIndex: i); // enables MultiMaterial support
       groupStart += groupCount;
       groupCount = 0;
@@ -132,13 +132,13 @@ class ShapeGeometry extends BufferGeometry {
 
     // build geometry
 
-    setIndex(indices);
-    setAttribute('position',
-        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
-    setAttribute('normal',
-        Float32BufferAttribute(Float32List.fromList(normals), 3, false));
-    setAttribute(
-        'uv', Float32BufferAttribute(Float32List.fromList(uvs), 2, false));
+    this.setIndex(indices);
+    this.setAttribute('position',
+        new Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    this.setAttribute('normal',
+        new Float32BufferAttribute(Float32Array.from(normals), 3, false));
+    this.setAttribute(
+        'uv', new Float32BufferAttribute(Float32Array.from(uvs), 2, false));
 
     // helper functions
   }
@@ -214,7 +214,7 @@ class ShapeGeometry extends BufferGeometry {
   toJSON({Object3dMeta? meta}) {
     var data = super.toJSON(meta: meta);
 
-    var shapes = parameters!["shapes"];
+    var shapes = this.parameters!["shapes"];
 
     return toJSON2(shapes, data);
   }

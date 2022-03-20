@@ -11,7 +11,7 @@ class TorusKnotGeometry extends BufferGeometry {
       p = 2,
       q = 3])
       : super() {
-    parameters = {
+    this.parameters = {
       "radius": radius,
       "tube": tube,
       "tubularSegments": tubularSegments,
@@ -26,23 +26,23 @@ class TorusKnotGeometry extends BufferGeometry {
     // buffers
 
     List<num> indices = [];
-    List<double> vertices = [];
-    List<double> normals = [];
-    List<double> uvs = [];
+    List<num> vertices = [];
+    List<num> normals = [];
+    List<num> uvs = [];
 
     // helper variables
 
-    var vertex = Vector3.init();
-    var normal = Vector3.init();
+    var vertex = new Vector3.init();
+    var normal = new Vector3.init();
 
-    var P1 = Vector3.init();
-    var P2 = Vector3.init();
+    var P1 = new Vector3.init();
+    var P2 = new Vector3.init();
 
-    var B = Vector3.init();
-    var T = Vector3.init();
-    var N = Vector3.init();
+    var B = new Vector3.init();
+    var T = new Vector3.init();
+    var N = new Vector3.init();
 
-    calculatePositionOnCurve(u, p, q, radius, position) {
+    Function calculatePositionOnCurve = (u, p, q, radius, position) {
       var cu = Math.cos(u);
       var su = Math.sin(u);
       var quOverP = q / p * u;
@@ -93,15 +93,13 @@ class TorusKnotGeometry extends BufferGeometry {
         vertex.y = P1.y + (cx * N.y + cy * B.y);
         vertex.z = P1.z + (cx * N.z + cy * B.z);
 
-        vertices.addAll(
-            [vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
+        vertices.addAll([vertex.x, vertex.y, vertex.z]);
 
         // normal (P1 is always the center/origin of the extrusion, thus we can use it to calculate the normal)
 
         normal.subVectors(vertex, P1).normalize();
 
-        normals.addAll(
-            [normal.x.toDouble(), normal.y.toDouble(), normal.z.toDouble()]);
+        normals.addAll([normal.x, normal.y, normal.z]);
 
         // uv
 
@@ -130,13 +128,11 @@ class TorusKnotGeometry extends BufferGeometry {
 
     // build geometry
 
-    setIndex(indices);
-    setAttribute('position',
-        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
-    setAttribute('normal',
-        Float32BufferAttribute(Float32List.fromList(normals), 3, false));
-    setAttribute(
-        'uv', Float32BufferAttribute(Float32List.fromList(uvs), 2, false));
+    this.setIndex(indices);
+    this.setAttribute(
+        'position', new Float32BufferAttribute(vertices, 3, false));
+    this.setAttribute('normal', new Float32BufferAttribute(normals, 3, false));
+    this.setAttribute('uv', new Float32BufferAttribute(uvs, 2, false));
 
     // this function calculates the current position on the torus curve
   }

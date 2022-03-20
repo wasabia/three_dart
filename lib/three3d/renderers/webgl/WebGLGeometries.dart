@@ -114,9 +114,9 @@ class WebGLGeometries {
     BufferAttribute attribute;
 
     if (arrayMax(indices) > 65535) {
-      attribute = Uint32BufferAttribute(Uint32List.fromList(indices), 1, false);
+      attribute = Uint32BufferAttribute(Uint32Array.from(indices), 1, false);
     } else {
-      attribute = Uint16BufferAttribute(Uint16List.fromList(indices), 1, false);
+      attribute = Uint16BufferAttribute(Uint16Array.from(indices), 1, false);
     }
 
     attribute.version = version;

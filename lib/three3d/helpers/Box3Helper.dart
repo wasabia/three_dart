@@ -6,7 +6,7 @@ class Box3Helper extends LineSegments {
   Box3Helper.create(geometry, material) : super(geometry, material) {}
 
   factory Box3Helper(box, [color = 0xffff00]) {
-    var indices = Uint16List.fromList([
+    var indices = Uint16Array.from([
       0,
       1,
       1,
@@ -33,7 +33,7 @@ class Box3Helper extends LineSegments {
       7
     ]);
 
-    List<double> positions = [
+    var positions = [
       1,
       1,
       1,
@@ -60,16 +60,15 @@ class Box3Helper extends LineSegments {
       -1
     ];
 
-    var geometry = BufferGeometry();
+    var geometry = new BufferGeometry();
 
-    geometry.setIndex(BufferAttribute(indices, 1, false));
+    geometry.setIndex(new BufferAttribute(indices, 1, false));
 
     geometry.setAttribute(
-        'position',
-        Float32BufferAttribute(Float32List.fromList(positions), 3, false));
+        'position', new Float32BufferAttribute(positions, 3, false));
 
     var box3Helper = Box3Helper.create(
-        geometry, LineBasicMaterial({"color": color, "toneMapped": false}));
+        geometry, new LineBasicMaterial({"color": color, "toneMapped": false}));
 
     box3Helper.box = box;
 

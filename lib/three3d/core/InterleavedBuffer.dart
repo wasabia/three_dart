@@ -15,44 +15,43 @@ class InterleavedBuffer {
   String type = "InterleavedBuffer";
 
   InterleavedBuffer(this.array, this.stride) {
-    count = array != null ? (array.length / stride).toInt() : 0;
+    this.count = array != null ? (array.length / stride).toInt() : 0;
 
-    usage = StaticDrawUsage;
-    updateRange = {"offset": 0, "count": -1};
+    this.usage = StaticDrawUsage;
+    this.updateRange = {"offset": 0, "count": -1};
 
-    version = 0;
+    this.version = 0;
 
-    uuid = MathUtils.generateUUID();
+    this.uuid = MathUtils.generateUUID();
   }
 
   set needsUpdate(bool value) {
     if (value == true) {
-      version++;
+      this.version++;
     }
   }
 
-  InterleavedBuffer setUsage(int value) {
-    usage = value;
+  setUsage(value) {
+    this.usage = value;
 
     return this;
   }
 
-  InterleavedBuffer copy(InterleavedBuffer source) {
-    array = source.array.clone();
-    count = source.count;
-    stride = source.stride;
-    usage = source.usage;
+  copy(InterleavedBuffer source) {
+    this.array = source.array.clone();
+    this.count = source.count;
+    this.stride = source.stride;
+    this.usage = source.usage;
 
     return this;
   }
 
-  InterleavedBuffer copyAt(
-      int index1, InterleavedBuffer attribute, int index2) {
-    index1 *= stride;
+  copyAt(index1, attribute, index2) {
+    index1 *= this.stride;
     index2 *= attribute.stride;
 
-    for (var i = 0, l = stride; i < l; i++) {
-      array[index1 + i] = attribute.array[index2 + i];
+    for (var i = 0, l = this.stride; i < l; i++) {
+      this.array[index1 + i] = attribute.array[index2 + i];
     }
 
     return this;
@@ -67,7 +66,9 @@ class InterleavedBuffer {
   // }
 
   clone(data) {
-    data.arrayBuffers ??= {};
+    if (data.arrayBuffers == null) {
+      data.arrayBuffers = {};
+    }
 
     print("InterleavedBuffer clone todo  ");
 
@@ -91,14 +92,16 @@ class InterleavedBuffer {
     // return ib;
   }
 
-  InterleavedBuffer onUpload(Function callback) {
-    onUploadCallback = callback;
+  onUpload(callback) {
+    this.onUploadCallback = callback;
 
     return this;
   }
 
-  Map<String, dynamic> toJSON(data) {
-    data.arrayBuffers ??= {};
+  toJSON(data) {
+    if (data.arrayBuffers == null) {
+      data.arrayBuffers = {};
+    }
 
     // generate UUID for array buffer if necessary
 
@@ -117,12 +120,12 @@ class InterleavedBuffer {
     //
 
     return {
-      "uuid": uuid,
+      "uuid": this.uuid,
       // "buffer": this.array.buffer._uuid,
       // "type": this.array.constructor.name,
-      "buffer": array,
+      "buffer": this.array,
       "type": "List",
-      "stride": stride
+      "stride": this.stride
     };
   }
 }

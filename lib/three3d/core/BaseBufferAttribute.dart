@@ -1,7 +1,7 @@
 part of three_core;
 
-abstract class BaseBufferAttribute {
-  late List<num> array;
+class BaseBufferAttribute {
+  dynamic array;
   late int itemSize;
 
   InterleavedBuffer? data;
@@ -28,5 +28,5 @@ abstract class BaseBufferAttribute {
   bool isInstancedBufferAttribute = false;
   bool isFloat16BufferAttribute = false;
 
-  BaseBufferAttribute();
+  BaseBufferAttribute() {}
 }
