@@ -115,7 +115,7 @@ class WebGLParameters {
 
   late bool decodeVideoTexture;
 
-  Map<String, dynamic>? uniforms;
+  Map<String, dynamic> uniforms = {};
 
   dynamic vertexAlphas;
   late bool flipNormalScaleY;
@@ -242,7 +242,7 @@ class WebGLParameters {
         json["rendererExtensionShaderTextureLod"];
     customProgramCacheKey = json["customProgramCacheKey"] ?? "";
 
-    uniforms = json["uniforms"];
+    uniforms = json["uniforms"] ?? {};
 
     vertexAlphas = json["vertexAlphas"];
 

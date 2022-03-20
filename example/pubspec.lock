@@ -93,10 +93,10 @@ packages:
   flutter_gl:
     dependency: "direct main"
     description:
-      path: "../../flutter_gl/flutter_gl"
-      relative: true
-    source: path
-    version: "0.0.12"
+      name: flutter_gl
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.13"
   flutter_gl_macos:
     dependency: transitive
     description:
@@ -142,6 +142,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_webgpu:
+    dependency: transitive
+    description:
+      path: "../../flutter_webgpu"
+      relative: true
+    source: path
+    version: "0.0.1"
   html:
     dependency: transitive
     description:
@@ -191,6 +198,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.12.11"
+  material_color_utilities:
+    dependency: transitive
+    description:
+      name: material_color_utilities
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.3"
   meta:
     dependency: transitive
     description:
@@ -272,20 +286,20 @@ packages:
       name: test_api
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.3"
+    version: "0.4.8"
   three_dart:
     dependency: "direct main"
     description:
-      name: three_dart
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.0.7"
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.9"
   three_dart_jsm:
     dependency: "direct main"
     description:
-      name: three_dart_jsm
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "../../three_dart_plugins/three_dart_jsm"
+      relative: true
+    source: path
     version: "0.0.4"
   typed_data:
     dependency: transitive
@@ -337,5 +351,5 @@ packages:
     source: hosted
     version: "5.3.1"
 sdks:
-  dart: ">=2.14.0 <3.0.0"
+  dart: ">=2.15.1 <3.0.0"
   flutter: ">=2.5.0"

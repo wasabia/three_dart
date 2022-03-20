@@ -384,12 +384,12 @@ class WebGLRenderer {
     background.setClearAlpha(alpha);
   }
 
-  clear(color, depth, stencil) {
+  clear([bool color = true, bool depth = true, bool stencil = true]) {
     int bits = 0;
 
-    if (color == null || color) bits |= _gl.COLOR_BUFFER_BIT;
-    if (depth == null || depth) bits |= _gl.DEPTH_BUFFER_BIT;
-    if (stencil == null || stencil) bits |= _gl.STENCIL_BUFFER_BIT;
+    if (color) bits |= _gl.COLOR_BUFFER_BIT;
+    if (depth) bits |= _gl.DEPTH_BUFFER_BIT;
+    if (stencil) bits |= _gl.STENCIL_BUFFER_BIT;
 
     _gl.clear(bits);
   }

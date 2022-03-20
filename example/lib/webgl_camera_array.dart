@@ -187,9 +187,10 @@ class _MyAppState extends State<webgl_camera_array> {
         "magFilter": THREE.LinearFilter,
         "format": THREE.RGBAFormat
       });
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
+      renderTarget = THREE.WebGLRenderTarget(
           (width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderer!.setRenderTarget(renderTarget);
+      renderTarget.samples = 4;
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }
   }

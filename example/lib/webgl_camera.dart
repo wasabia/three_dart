@@ -191,7 +191,7 @@ class _MyAppState extends State<webgl_camera> {
 
     cameraRig.lookAt(mesh.position);
 
-    renderer!.clear(null, null, null);
+    renderer!.clear();
 
     activeHelper.visible = false;
 
@@ -237,7 +237,7 @@ class _MyAppState extends State<webgl_camera> {
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
-    renderer!.autoClear = false;
+    renderer!.autoClear = true;
 
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({
@@ -245,9 +245,10 @@ class _MyAppState extends State<webgl_camera> {
         "magFilter": THREE.LinearFilter,
         "format": THREE.RGBAFormat
       });
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
+      renderTarget = THREE.WebGLRenderTarget(
           (width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderer!.setRenderTarget(renderTarget);
+      renderTarget.samples = 4;
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }
   }
@@ -321,7 +322,7 @@ class _MyAppState extends State<webgl_camera> {
     //
 
     var geometry = new THREE.BufferGeometry();
-    var vertices = [];
+    List<double> vertices = [];
 
     for (var i = 0; i < 10000; i++) {
       vertices.add(THREE.MathUtils.randFloatSpread(2000)); // x
@@ -331,7 +332,7 @@ class _MyAppState extends State<webgl_camera> {
     }
 
     geometry.setAttribute(
-        'position', new THREE.Float32BufferAttribute(vertices, 3));
+        'position', new THREE.Float32BufferAttribute(Float32List.fromList(vertices), 3));
 
     var particles = new THREE.Points(
         geometry, new THREE.PointsMaterial({"color": 0x888888}));

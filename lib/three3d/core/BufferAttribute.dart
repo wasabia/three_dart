@@ -8,17 +8,7 @@ class BufferAttribute<TData extends TypedData> extends BaseBufferAttribute {
 
   BufferAttribute(TData arrayList, int itemSize, [bool normalized = false]) {
     type = "BufferAttribute";
-    if (arrayList is Uint8List) {
-      array = arrayList;
-    } else if (arrayList is Uint16List) {
-      array = arrayList;
-    } else if (arrayList is Uint32List) {
-      array = arrayList;
-    } else if (arrayList is Float32List) {
-      array = arrayList;
-    } else {
-      throw ("BufferAttribute  arrayList: ${arrayList.runtimeType} is need support ....  ");
-    }
+    
     // if (arrayList is NativeArray) {
     //   array = arrayList;
     // } else if (arrayList is Uint8List) {
@@ -348,21 +338,21 @@ class BufferAttribute<TData extends TypedData> extends BaseBufferAttribute {
 }
 
 class Int8BufferAttribute extends BufferAttribute<Int8List> {
-  Int8BufferAttribute(Int8List array, int itemSize, [bool normalized = false])
+  Int8BufferAttribute(array, int itemSize, [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Int8BufferAttribute";
   }
 }
 
 class Uint8BufferAttribute extends BufferAttribute<Uint8List> {
-  Uint8BufferAttribute(Uint8List array, int itemSize, [bool normalized = false])
+  Uint8BufferAttribute(array, int itemSize, [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Uint8BufferAttribute";
   }
 }
 
 class Uint8ClampedBufferAttribute extends BufferAttribute<Uint8List> {
-  Uint8ClampedBufferAttribute(Uint8List array, int itemSize,
+  Uint8ClampedBufferAttribute(array, int itemSize,
       [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Uint8ClampedBufferAttribute";
@@ -370,7 +360,7 @@ class Uint8ClampedBufferAttribute extends BufferAttribute<Uint8List> {
 }
 
 class Int16BufferAttribute extends BufferAttribute<Int16List> {
-  Int16BufferAttribute(Int16List array, int itemSize, [bool normalized = false])
+  Int16BufferAttribute(array, int itemSize, [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Int16BufferAttribute";
   }
@@ -380,7 +370,7 @@ class Int16BufferAttribute extends BufferAttribute<Int16List> {
 // Int16BufferAttribute.prototype.constructor = Int16BufferAttribute;
 
 class Uint16BufferAttribute extends BufferAttribute<Uint16List> {
-  Uint16BufferAttribute(Uint16List array, int itemSize,
+  Uint16BufferAttribute(array, int itemSize,
       [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Uint16BufferAttribute";
@@ -410,7 +400,7 @@ class Float16BufferAttribute extends BufferAttribute {
 }
 
 class Float32BufferAttribute extends BufferAttribute<Float32List> {
-  Float32BufferAttribute(Float32List array, int itemSize,
+  Float32BufferAttribute(array, int itemSize,
       [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Float32BufferAttribute";
@@ -418,7 +408,7 @@ class Float32BufferAttribute extends BufferAttribute<Float32List> {
 }
 
 class Float64BufferAttribute extends BufferAttribute<Float64List> {
-  Float64BufferAttribute(Float64List array, int itemSize,
+  Float64BufferAttribute(array, int itemSize,
       [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Float64BufferAttribute";
