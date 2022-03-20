@@ -6,13 +6,13 @@ class WireframeGeometry extends BufferGeometry {
   WireframeGeometry(BufferGeometry geometry) : super() {
     // buffer
 
-    List<double> vertices = [];
+    var vertices = [];
     var edges = Set();
 
     // helper variables
 
-    var start = Vector3.init();
-    var end = Vector3.init();
+    var start = new Vector3.init();
+    var end = new Vector3.init();
 
     if (geometry.index != null) {
       // indexed BufferGeometry
@@ -21,7 +21,7 @@ class WireframeGeometry extends BufferGeometry {
       var indices = geometry.index;
       var groups = geometry.groups;
 
-      if (groups.isEmpty) {
+      if (groups.length == 0) {
         groups = [
           {"start": 0, "count": indices!.count, "materialIndex": 0}
         ];
@@ -37,17 +37,15 @@ class WireframeGeometry extends BufferGeometry {
 
         for (var i = groupStart, l = (groupStart + groupCount); i < l; i += 3) {
           for (var j = 0; j < 3; j++) {
-            int index1 = indices!.getX(i + j)!.toInt();
-            int index2 = indices.getX(i + (j + 1) % 3)!.toInt();
+            var index1 = indices!.getX(i + j);
+            var index2 = indices.getX(i + (j + 1) % 3);
 
             start.fromBufferAttribute(position, index1);
             end.fromBufferAttribute(position, index2);
 
             if (isUniqueEdge(start, end, edges) == true) {
-              vertices.addAll(
-                  [start.x.toDouble(), start.y.toDouble(), start.z.toDouble()]);
-              vertices.addAll(
-                  [end.x.toDouble(), end.y.toDouble(), end.z.toDouble()]);
+              vertices.addAll([start.x, start.y, start.z]);
+              vertices.addAll([end.x, end.y, end.z]);
             }
           }
         }
@@ -69,10 +67,8 @@ class WireframeGeometry extends BufferGeometry {
           end.fromBufferAttribute(position, index2);
 
           if (isUniqueEdge(start, end, edges) == true) {
-            vertices.addAll(
-                [start.x.toDouble(), start.y.toDouble(), start.z.toDouble()]);
-            vertices
-                .addAll([end.x.toDouble(), end.y.toDouble(), end.z.toDouble()]);
+            vertices.addAll([start.x, start.y, start.z]);
+            vertices.addAll([end.x, end.y, end.z]);
           }
         }
       }
@@ -80,8 +76,8 @@ class WireframeGeometry extends BufferGeometry {
 
     // build geometry
 
-    setAttribute('position',
-        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
+    this.setAttribute(
+        'position', new Float32BufferAttribute(vertices, 3, false));
   }
 }
 

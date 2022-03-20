@@ -6,7 +6,7 @@ class LatheGeometry extends BufferGeometry {
   LatheGeometry(points,
       {segments = 12, phiStart = 0, double phiLength = Math.PI * 2})
       : super() {
-    parameters = {
+    this.parameters = {
       "points": points,
       "segments": segments,
       "phiStart": phiStart,
@@ -22,19 +22,19 @@ class LatheGeometry extends BufferGeometry {
     // buffers
 
     var indices = [];
-    List<double> vertices = [];
-    List<double> uvs = [];
+    var vertices = [];
+    var uvs = [];
     var initNormals = [];
-    List<double> normals = [];
+    var normals = [];
 
     // helper variables
 
     var inverseSegments = 1.0 / segments;
-    var vertex = Vector3.init();
-    var uv = Vector2(null, null);
-    var normal = Vector3();
-    var curNormal = Vector3();
-    var prevNormal = Vector3();
+    var vertex = new Vector3.init();
+    var uv = new Vector2(null, null);
+    var normal = new Vector3();
+    var curNormal = new Vector3();
+    var prevNormal = new Vector3();
     num dx = 0;
     num dy = 0;
 
@@ -98,15 +98,14 @@ class LatheGeometry extends BufferGeometry {
         vertex.y = points[j].y;
         vertex.z = points[j].x * cos;
 
-        vertices.addAll(
-            [vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
+        vertices.addAll([vertex.x, vertex.y, vertex.z]);
 
         // uv
 
         uv.x = i / segments;
         uv.y = j / (points.length - 1);
 
-        uvs.addAll([uv.x.toDouble(), uv.y.toDouble()]);
+        uvs.addAll([uv.x, uv.y]);
 
         // normal
 
@@ -138,12 +137,10 @@ class LatheGeometry extends BufferGeometry {
 
     // build geometry
 
-    setIndex(indices);
-    setAttribute('position',
-        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
-    setAttribute(
-        'uv', Float32BufferAttribute(Float32List.fromList(uvs), 2, false));
-    setAttribute('normal',
-        Float32BufferAttribute(Float32List.fromList(normals), 3, false));
+    this.setIndex(indices);
+    this.setAttribute(
+        'position', new Float32BufferAttribute(vertices, 3, false));
+    this.setAttribute('uv', new Float32BufferAttribute(uvs, 2, false));
+    this.setAttribute('normal', new Float32BufferAttribute(normals, 3, false));
   }
 }

@@ -1,8 +1,8 @@
 part of three_helpers;
 
-var _shvector = /*@__PURE__*/ Vector3.init();
-var _boneMatrix = /*@__PURE__*/ Matrix4();
-var _matrixWorldInv = /*@__PURE__*/ Matrix4();
+var _shvector = /*@__PURE__*/ new Vector3.init();
+var _boneMatrix = /*@__PURE__*/ new Matrix4();
+var _matrixWorldInv = /*@__PURE__*/ new Matrix4();
 
 class SkeletonHelper extends LineSegments {
   String type = 'SkeletonHelper';
@@ -16,35 +16,31 @@ class SkeletonHelper extends LineSegments {
   factory SkeletonHelper(object) {
     var bones = getBoneList(object);
 
-    var geometry = BufferGeometry();
+    var geometry = new BufferGeometry();
 
-    List<double> vertices = [];
-    List<double> colors = [];
+    List<num> vertices = [];
+    List<num> colors = [];
 
-    var color1 = Color(0, 0, 1);
-    var color2 = Color(0, 1, 0);
+    var color1 = new Color(0, 0, 1);
+    var color2 = new Color(0, 1, 0);
 
     for (var i = 0; i < bones.length; i++) {
       var bone = bones[i];
 
-      if (bone.parent != null && bone.parent!.type == "Bone") {
+      if (bone.parent != null && bone.parent.type == "Bone") {
         vertices.addAll([0, 0, 0]);
         vertices.addAll([0, 0, 0]);
-        colors.addAll(
-            [color1.r.toDouble(), color1.g.toDouble(), color1.b.toDouble()]);
-        colors.addAll(
-            [color2.r.toDouble(), color2.g.toDouble(), color2.b.toDouble()]);
+        colors.addAll([color1.r, color1.g, color1.b]);
+        colors.addAll([color2.r, color2.g, color2.b]);
       }
     }
 
     geometry.setAttribute(
-        'position',
-        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
+        'position', new Float32BufferAttribute(vertices, 3, false));
     geometry.setAttribute(
-        'color',
-        Float32BufferAttribute(Float32List.fromList(colors), 3, false));
+        'color', new Float32BufferAttribute(colors, 3, false));
 
-    var material = LineBasicMaterial({
+    var material = new LineBasicMaterial({
       "vertexColors": true,
       "depthTest": false,
       "depthWrite": false,
@@ -92,7 +88,7 @@ class SkeletonHelper extends LineSegments {
   }
 }
 
-List<Bone> getBoneList(object) {
+Function getBoneList = (object) {
   List<Bone> boneList = [];
 
   if (object != null && object.type == "Bone") {
@@ -104,4 +100,4 @@ List<Bone> getBoneList(object) {
   }
 
   return boneList;
-}
+};

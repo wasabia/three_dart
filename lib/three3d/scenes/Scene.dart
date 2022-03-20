@@ -45,7 +45,7 @@ class Scene extends Object3D {
     rootJSON["materials"] = _materials;
     rootJSON["geometries"] = _geometries;
 
-    return Object3D.castJSON(json["object"], rootJSON) as Scene;
+    return Object3D.castJSON(json["object"], rootJSON);
   }
 
   copy(Object3D source, [bool? recursive]) {

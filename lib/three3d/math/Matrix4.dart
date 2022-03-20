@@ -10,10 +10,10 @@ var _matrix4z = Vector3.init();
 
 class Matrix4 {
   String type = "Matrix4";
-  late Float32List elements;
+  late Float32Array elements;
 
   Matrix4() {
-    elements = Float32List.fromList([
+    elements = Float32Array.from([
       1.0,
       0.0,
       0.0,
@@ -496,9 +496,9 @@ class Matrix4 {
   Matrix4 setPositionFromVector3(Vector3 x) {
     var te = elements;
 
-    te[12] = x.x.toDouble();
-    te[13] = x.y.toDouble();
-    te[14] = x.z.toDouble();
+    te[12] = x.x;
+    te[13] = x.y;
+    te[14] = x.z;
 
     return this;
   }
@@ -708,7 +708,7 @@ class Matrix4 {
     return this;
   }
 
-  Matrix4 makeRotationAxis(Vector3 axis, num angle) {
+  Matrix4 makeRotationAxis(axis, num angle) {
     // Based on http://www.gamedev.net/reference/articles/article1199.asp
 
     var c = Math.cos(angle).toDouble();
@@ -738,13 +738,13 @@ class Matrix4 {
     return this;
   }
 
-  Matrix4 makeScale(num x, num y, num z) {
+  Matrix4 makeScale(x, y, z) {
     set(x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, 0, 0, 0, 1);
 
     return this;
   }
 
-  Matrix4 makeShear(num xy, num xz, num yx, num yz, num zx, num zy) {
+  Matrix4 makeShear(xy, xz, yx, yz, zx, zy) {
     set(1, yx, zx, 0, xy, 1, zy, 0, xz, yz, 1, 0, 0, 0, 0, 1);
 
     return this;
@@ -830,9 +830,12 @@ class Matrix4 {
     return this;
   }
 
-  Matrix4 makePerspective(
-      num left, num right, num top, num bottom, num near, num far) {
-    
+  Matrix4 makePerspective(left, right, top, bottom, near, far) {
+    if (far == null) {
+      print(
+          'THREE.Matrix4: .makePerspective() has been redefined and has a new signature. Please check the docs.');
+    }
+
     var te = elements;
     var x = 2 * near / (right - left);
     var y = 2 * near / (top - bottom);
