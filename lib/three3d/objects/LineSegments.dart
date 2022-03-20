@@ -4,12 +4,14 @@ var _lsstart = Vector3.init();
 var _lsend = Vector3.init();
 
 class LineSegments extends Line {
-  String type = 'LineSegments';
-  bool isLineSegments = true;
+  LineSegments(BufferGeometry? geometry, Material? material)
+      : super(geometry, material) {
+    type = 'LineSegments';
+    isLineSegments = true;
+  }
 
-  LineSegments(geometry, material) : super(geometry, material) {}
-
-  computeLineDistances() {
+  @override
+  LineSegments computeLineDistances() {
     var geometry = this.geometry!;
 
     if (geometry.isBufferGeometry) {
@@ -17,7 +19,7 @@ class LineSegments extends Line {
 
       if (geometry.index == null) {
         var positionAttribute = geometry.attributes["position"];
-        var lineDistances = new Float32Array(positionAttribute.count);
+        var lineDistances = Float32List(positionAttribute.count);
 
         for (var i = 0, l = positionAttribute.count; i < l; i += 2) {
           _lsstart.fromBufferAttribute(positionAttribute, i);
@@ -28,7 +30,7 @@ class LineSegments extends Line {
         }
 
         geometry.setAttribute('lineDistance',
-            new Float32BufferAttribute(lineDistances, 1, false));
+            Float32BufferAttribute(lineDistances, 1, false));
       } else {
         print(
             'THREE.LineSegments.computeLineDistances(): Computation only possible with non-indexed BufferGeometry.');

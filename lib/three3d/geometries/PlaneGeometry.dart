@@ -7,9 +7,9 @@ class PlaneGeometry extends BufferGeometry {
       num widthSegments = 1,
       num heightSegments = 1])
       : super() {
-    this.type = 'PlaneGeometry';
+    type = 'PlaneGeometry';
 
-    this.parameters = {
+    parameters = {
       "width": width,
       "height": height,
       "widthSegments": widthSegments,
@@ -62,17 +62,17 @@ class PlaneGeometry extends BufferGeometry {
       }
     }
 
-    this.setIndex(indices);
-    this.setAttribute('position',
-        new Float32BufferAttribute(Float32Array.from(vertices), 3, false));
-    this.setAttribute('normal',
-        new Float32BufferAttribute(Float32Array.from(normals), 3, false));
-    this.setAttribute(
-        'uv', new Float32BufferAttribute(Float32Array.from(uvs), 2, false));
+    setIndex(indices);
+    setAttribute('position',
+        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
+    setAttribute('normal',
+        Float32BufferAttribute(Float32List.fromList(normals), 3, false));
+    setAttribute(
+        'uv', Float32BufferAttribute(Float32List.fromList(uvs), 2, false));
   }
 
   static fromJSON(data) {
-    return new PlaneGeometry(data["width"], data["height"],
+    return PlaneGeometry(data["width"], data["height"],
         data["widthSegments"], data["heightSegments"]);
   }
 }

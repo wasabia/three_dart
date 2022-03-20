@@ -10,11 +10,11 @@ class PolarGridHelper extends LineSegments {
       divisions = 64,
       color1 = 0x444444,
       color2 = 0x888888]) {
-    color1 = new Color(color1);
-    color2 = new Color(color2);
+    color1 = Color(color1);
+    color2 = Color(color2);
 
-    var vertices = [];
-    var colors = [];
+    List<double> vertices = [];
+    List<double> colors = [];
 
     // create the radials
 
@@ -63,12 +63,14 @@ class PolarGridHelper extends LineSegments {
       }
     }
 
-    var geometry = new BufferGeometry();
-    geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
-    geometry.setAttribute('color', new Float32BufferAttribute(colors, 3));
+    var geometry = BufferGeometry();
+    geometry.setAttribute(
+        'position', Float32BufferAttribute(Float32List.fromList(vertices), 3));
+    geometry.setAttribute(
+        'color', Float32BufferAttribute(Float32List.fromList(colors), 3));
 
     var material =
-        new LineBasicMaterial({"vertexColors": true, "toneMapped": false});
+        LineBasicMaterial({"vertexColors": true, "toneMapped": false});
 
     var pgh = PolarGridHelper.create(geometry, material);
 
