@@ -117,16 +117,16 @@ class Vector4 {
     return Vector4(x, y, z, w);
   }
 
-  Vector4 copy(Vector4 v) {
+  Vector4 copy(v) {
     x = v.x;
     y = v.y;
     z = v.z;
-    w = v.w;
+    w = (v.w != null) ? v.w : 1;
 
     return this;
   }
 
-  Vector4 add(Vector4 v, Vector4? w) {
+  Vector4 add(v, w) {
     if (w != null) {
       print(
           'THREE.Vector4: .add() now only accepts one argument. Use .addVectors( a, b ) instead.');
@@ -168,7 +168,7 @@ class Vector4 {
     return this;
   }
 
-  Vector4 sub(Vector4 v, Vector4? w) {
+  Vector4 sub(Vector4 v, w) {
     if (w != null) {
       print(
           'THREE.Vector4: .sub() now only accepts one argument. Use .subVectors( a, b ) instead.');
@@ -183,7 +183,7 @@ class Vector4 {
     return this;
   }
 
-  Vector4 subScalar(num s) {
+  Vector4 subScalar(s) {
     x -= s;
     y -= s;
     z -= s;
@@ -230,7 +230,7 @@ class Vector4 {
     return this;
   }
 
-  Vector4 applyMatrix4(Matrix4 m) {
+  Vector4 applyMatrix4(m) {
     var x = this.x, y = this.y, z = this.z, w = this.w;
     var e = m.elements;
 
@@ -535,10 +535,10 @@ class Vector4 {
     return array;
   }
 
-  Vector4 fromBufferAttribute(BufferAttribute attribute, int index) {
-    x = attribute.getX(index)!;
-    y = attribute.getY(index)!;
-    z = attribute.getZ(index)!;
+  Vector4 fromBufferAttribute(attribute, int index) {
+    x = attribute.getX(index);
+    y = attribute.getY(index);
+    z = attribute.getZ(index);
     w = attribute.getW(index) ?? 0;
 
     return this;

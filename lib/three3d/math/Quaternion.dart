@@ -28,15 +28,14 @@ class Quaternion {
     return [_x, _y, _z, _w];
   }
 
-  static Quaternion static_slerp(
-      Quaternion qa, Quaternion qb, Quaternion qm, num t) {
+  static dynamic static_slerp(qa, qb, qm, t) {
     print(
         'THREE.Quaternion: Static .slerp() has been deprecated. Use is now qm.slerpQuaternions( qa, qb, t ) instead.');
     return qm.slerpQuaternions(qa, qb, t);
   }
 
   static void slerpFlat(
-      dst, num dstOffset, src0, num srcOffset0, src1, num srcOffset1, num t) {
+      dst, dstOffset, src0, srcOffset0, src1, srcOffset1, num t) {
     // fuzz-free, array-based Quaternion SLERP operation
 
     double x0 = src0[srcOffset0 + 0],
@@ -103,7 +102,7 @@ class Quaternion {
   }
 
   static multiplyQuaternionsFlat(
-      dst, num dstOffset, src0, num srcOffset0, src1, num srcOffset1) {
+      dst, dstOffset, src0, srcOffset0, src1, srcOffset1) {
     var x0 = src0[srcOffset0];
     var y0 = src0[srcOffset0 + 1];
     var z0 = src0[srcOffset0 + 2];
@@ -318,7 +317,7 @@ class Quaternion {
     return this;
   }
 
-  Quaternion setFromUnitVectors(Vector3 vFrom, Vector3 vTo) {
+  setFromUnitVectors(Vector3 vFrom, vTo) {
     // assumes direction vectors vFrom and vTo are normalized
 
     var r = vFrom.dot(vTo) + 1;
@@ -369,7 +368,7 @@ class Quaternion {
     return set(0, 0, 0, 1);
   }
 
-  Quaternion invert() {
+  invert() {
     // quaternion is assumed to have unit length
 
     return conjugate();
@@ -419,7 +418,7 @@ class Quaternion {
     return this;
   }
 
-  Quaternion multiply(Quaternion q, {Quaternion? p}) {
+  multiply(q, {Quaternion? p}) {
     if (p != null) {
       print(
           'THREE.Quaternion: .multiply() now only accepts one argument. Use .multiplyQuaternions( a, b ) instead.');
@@ -429,11 +428,11 @@ class Quaternion {
     return multiplyQuaternions(this, q);
   }
 
-  Quaternion premultiply(Quaternion q) {
+  premultiply(q) {
     return multiplyQuaternions(q, this);
   }
 
-  Quaternion multiplyQuaternions(Quaternion a, Quaternion b) {
+  Quaternion multiplyQuaternions(a, b) {
     // from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/index.htm
 
     var qax = a._x, qay = a._y, qaz = a._z, qaw = a._w;
@@ -509,7 +508,7 @@ class Quaternion {
     return this;
   }
 
-  Quaternion slerpQuaternions(Quaternion qa, Quaternion qb, num t) {
+  slerpQuaternions(qa, qb, t) {
     return copy(qa).slerp(qb, t);
   }
 
@@ -534,14 +533,14 @@ class Quaternion {
     );
   }
 
-  bool equals(Quaternion quaternion) {
+  bool equals(quaternion) {
     return (quaternion._x == _x) &&
         (quaternion._y == _y) &&
         (quaternion._z == _z) &&
         (quaternion._w == _w);
   }
 
-  Quaternion fromArray(List<num> array, [int offset = 0]) {
+  Quaternion fromArray(array, [int offset = 0]) {
     _x = array[offset];
     _y = array[offset + 1];
     _z = array[offset + 2];
@@ -552,7 +551,7 @@ class Quaternion {
     return this;
   }
 
-  List<num> toArray(List<num> array, [int offset = 0]) {
+  List<num?> toArray(List<num?> array, [int offset = 0]) {
     array[offset] = _x;
     array[offset + 1] = _y;
     array[offset + 2] = _z;
@@ -561,11 +560,11 @@ class Quaternion {
     return array;
   }
 
-  Quaternion fromBufferAttribute(BufferAttribute attribute, int index) {
-    _x = attribute.getX(index)!;
-    _y = attribute.getY(index)!;
-    _z = attribute.getZ(index)!;
-    _w = attribute.getW(index)!;
+  Quaternion fromBufferAttribute(attribute, index) {
+    _x = attribute.getX(index);
+    _y = attribute.getY(index);
+    _z = attribute.getZ(index);
+    _w = attribute.getW(index);
 
     return this;
   }

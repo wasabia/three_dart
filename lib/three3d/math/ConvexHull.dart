@@ -91,7 +91,7 @@ class ConvexHull {
     return setFromPoints(points);
   }
 
-  bool containsPoint(Vector3 point) {
+  bool containsPoint(point) {
     var faces = this.faces;
 
     for (var i = 0, l = faces.length; i < l; i++) {
@@ -105,7 +105,7 @@ class ConvexHull {
     return true;
   }
 
-  Vector3? intersectRay(Ray ray, Vector3 target) {
+  intersectRay(Ray ray, target) {
     // based on "Fast Ray-Convex Polyhedron Intersection"  by Eric Haines, GRAPHICS GEMS II
 
     var faces = this.faces;
@@ -167,7 +167,7 @@ class ConvexHull {
     return target;
   }
 
-  bool intersectsRay(Ray ray) {
+  intersectsRay(Ray ray) {
     return intersectRay(ray, v1) != null;
   }
 
@@ -243,7 +243,7 @@ class ConvexHull {
 
   // Removes all the visible vertices that 'face' is able to see
 
-  ConvexHull deleteFace2Vertices(Face2 face, [Face2? absorbingFace2]) {
+  ConvexHull deleteFace2Vertices(face, absorbingFace2) {
     var faceVertices = removeAllVerticesFromFace2(face);
 
     if (faceVertices != null) {
@@ -597,7 +597,7 @@ class ConvexHull {
   // For an edge to be part of the horizon it must join a face that can see
   // 'eyePoint' and a face that cannot see 'eyePoint'.
 
-  ConvexHull computeHorizon(eyePoint, crossEdge, Face2 face, horizon) {
+  ConvexHull computeHorizon(eyePoint, crossEdge, face, horizon) {
     // moves face's vertices to the 'unassigned' vertex list
 
     deleteFace2Vertices(face, null);
@@ -648,7 +648,7 @@ class ConvexHull {
 
     // join face.getEdge( - 1 ) with the horizon's opposite edge face.getEdge( - 1 ) = face.getEdge( 2 )
 
-    face.getEdge(-1)!.setTwin(horizonEdge.twin);
+    face.getEdge(-1).setTwin(horizonEdge.twin);
 
     return face.getEdge(0); // the half edge whose vertex is the eyeVertex
   }
@@ -690,16 +690,16 @@ class ConvexHull {
 
   // Adds a vertex to the hull
 
-  ConvexHull addVertexToHull(VertexNode eyeVertex) {
+  ConvexHull addVertexToHull(eyeVertex) {
     var horizon = [];
 
     unassigned.clear();
 
     // remove 'eyeVertex' from 'eyeVertex.face' so that it can't be added to the 'unassigned' vertex list
 
-    removeVertexFromFace2(eyeVertex, eyeVertex.face!);
+    removeVertexFromFace2(eyeVertex, eyeVertex.face);
 
-    computeHorizon(eyeVertex.point, null, eyeVertex.face!, horizon);
+    computeHorizon(eyeVertex.point, null, eyeVertex.face, horizon);
 
     addNewFace2s(eyeVertex, horizon);
 
@@ -748,7 +748,7 @@ class Face2 {
   num mark = Visible;
   HalfEdge? edge;
 
-  static Face2 create(VertexNode a, VertexNode b, VertexNode c) {
+  static create(a, b, c) {
     var face = Face2();
 
     var e0 = HalfEdge(a, face);
@@ -768,7 +768,7 @@ class Face2 {
     return face.compute();
   }
 
-  HalfEdge? getEdge(num i) {
+  HalfEdge? getEdge(i) {
     var edge = this.edge;
 
     while (i > 0) {

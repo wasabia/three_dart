@@ -8,32 +8,31 @@ int absNumericalSort(a, b) {
   return Math.abs(b[1]) >= Math.abs(a[1]) ? 1 : -1;
 }
 
-denormalize(morph, BufferAttribute attribute) {
+denormalize(morph, attribute) {
   var denominator = 1;
   var array = attribute.isInterleavedBufferAttribute
-      ? attribute.data!.array
+      ? attribute.data.array
       : attribute.array;
 
-  if (array is Int8List) {
+  if (array is Int8Array)
     denominator = 127;
-  } else if (array is Int16List) {
+  else if (array is Int16Array)
     denominator = 32767;
-  } else if (array is Int32List) {
+  else if (array is Int32Array)
     denominator = 2147483647;
-  } else {
+  else
     console.error(
         'THREE.WebGLMorphtargets: Unsupported morph attribute data type: ',
         array);
-  }
 
   morph.divideScalar(denominator);
 }
 
 class WebGLMorphtargets {
   var influencesList = {};
-  var morphInfluences = Float32List(8);
-  var morphTextures = WeakMap();
-  var morph = Vector4();
+  var morphInfluences = new Float32List(8);
+  var morphTextures = new WeakMap();
+  var morph = new Vector4();
 
   List<List<num>> workInfluences = [];
 
@@ -83,10 +82,10 @@ class WebGLMorphtargets {
           width = capabilities.maxTextureSize;
         }
 
-        var buffer = Float32List(width * height * 4 * morphTargetsCount);
+        var buffer = new Float32List(width * height * 4 * morphTargetsCount);
 
         var texture =
-            DataArrayTexture(buffer, width, height, morphTargetsCount);
+            new DataArrayTexture(buffer, width, height, morphTargetsCount);
         texture.format =
             RGBAFormat; // using RGBA since RGB might be emulated (and is thus slower)
         texture.type = FloatType;
@@ -122,9 +121,8 @@ class WebGLMorphtargets {
               var morphNormal = morphNormals[ i ];
               morph.fromBufferAttribute(morphNormal, j);
 
-              if (morphNormal.normalized == true) {
+              if (morphNormal.normalized == true)
                 denormalize(morph, morphNormal);
-              }
 
               buffer[offset + stride + 4] = morph.x.toDouble();
               buffer[offset + stride + 5] = morph.y.toDouble();
@@ -153,7 +151,7 @@ class WebGLMorphtargets {
         entry = {
           "count": morphTargetsCount,
           "texture": texture,
-          "size": Vector2(width, height)
+          "size": new Vector2(width, height)
         };
 
         morphTextures.set(geometry, entry);

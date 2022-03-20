@@ -1,5 +1,3 @@
-// ignore_for_file: constant_identifier_names
-
 const REVISION = '124';
 
 class MOUSE {

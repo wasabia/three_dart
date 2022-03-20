@@ -16,10 +16,10 @@ class CubicInterpolant extends Interpolant {
 
   CubicInterpolant(parameterPositions, sampleValues, sampleSize, resultBuffer)
       : super(parameterPositions, sampleValues, sampleSize, resultBuffer) {
-    _weightPrev = -0;
-    _offsetPrev = -0;
-    _weightNext = -0;
-    _offsetNext = -0;
+    this._weightPrev = -0;
+    this._offsetPrev = -0;
+    this._weightNext = -0;
+    this._offsetNext = -0;
 
     DefaultSettings = {
       "endingStart": ZeroCurvatureEnding,
@@ -28,11 +28,11 @@ class CubicInterpolant extends Interpolant {
   }
 
   intervalChanged(i1, t0, t1) {
-    var pp = parameterPositions;
+    var pp = this.parameterPositions;
     var iPrev = i1 - 2, iNext = i1 + 1, tPrev = pp[iPrev], tNext = pp[iNext];
 
     if (tPrev == null) {
-      switch (getSettings().endingStart) {
+      switch (this.getSettings().endingStart) {
         case ZeroSlopeEnding:
 
           // f'(t0) = 0
@@ -58,7 +58,7 @@ class CubicInterpolant extends Interpolant {
     }
 
     if (tNext == null) {
-      switch (getSettings().endingEnd) {
+      switch (this.getSettings().endingEnd) {
         case ZeroSlopeEnding:
 
           // f'(tN) = 0
@@ -83,24 +83,24 @@ class CubicInterpolant extends Interpolant {
       }
     }
 
-    var halfDt = (t1 - t0) * 0.5, stride = valueSize;
+    var halfDt = (t1 - t0) * 0.5, stride = this.valueSize;
 
-    _weightPrev = halfDt / (t0 - tPrev);
-    _weightNext = halfDt / (tNext - t1);
-    _offsetPrev = iPrev * stride;
-    _offsetNext = iNext * stride;
+    this._weightPrev = halfDt / (t0 - tPrev);
+    this._weightNext = halfDt / (tNext - t1);
+    this._offsetPrev = iPrev * stride;
+    this._offsetNext = iNext * stride;
   }
 
   interpolate(i1, t0, t, t1) {
-    var result = resultBuffer,
-        values = sampleValues,
-        stride = valueSize,
+    var result = this.resultBuffer,
+        values = this.sampleValues,
+        stride = this.valueSize,
         o1 = i1 * stride,
         o0 = o1 - stride,
-        oP = _offsetPrev,
-        oN = _offsetNext,
-        wP = _weightPrev,
-        wN = _weightNext,
+        oP = this._offsetPrev,
+        oN = this._offsetNext,
+        wP = this._weightPrev,
+        wN = this._weightNext,
         p = (t - t0) / (t1 - t0),
         pp = p * p,
         ppp = pp * p;

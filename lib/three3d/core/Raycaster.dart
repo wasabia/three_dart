@@ -8,15 +8,15 @@ class Raycaster {
   late Layers layers;
   late Map<String, dynamic> params;
 
-  Raycaster([Vector3? origin, Vector3? direction, num? near, num? far]) {
-    ray = Ray(origin, direction);
+  Raycaster([origin, direction, near, far]) {
+    this.ray = Ray(origin, direction);
     // direction is assumed to be normalized (for accurate distance calculations)
 
     this.near = near ?? 0;
     this.far = far ?? double.infinity;
-    layers = Layers();
+    this.layers = new Layers();
 
-    params = {
+    this.params = {
       "Mesh": {},
       "Line": {"threshold": 1},
       "LOD": {},
@@ -25,12 +25,11 @@ class Raycaster {
     };
   }
 
-  int ascSort(Intersection a, Intersection b) {
+  int ascSort(a, b) {
     return a.distance - b.distance >= 0 ? 1 : -1;
   }
 
-  void intersectObject4(Object3D object, Raycaster raycaster,
-      List<Intersection> intersects, bool recursive) {
+  intersectObject4(object, raycaster, intersects, recursive) {
     if (object.layers.test(raycaster.layers)) {
       object.raycast(raycaster, intersects);
     }
@@ -44,37 +43,38 @@ class Raycaster {
     }
   }
 
-  void set(Vector3 origin, Vector3 direction) {
+  set(origin, direction) {
     // direction is assumed to be normalized (for accurate distance calculations)
 
-    ray.set(origin, direction);
+    this.ray.set(origin, direction);
   }
 
-  void setFromCamera(Vector2 coords, Camera camera) {
-    if (camera.isPerspectiveCamera) {
-      ray.origin.setFromMatrixPosition(camera.matrixWorld);
-      ray
+  setFromCamera(coords, camera) {
+    if (camera != null && camera.isPerspectiveCamera) {
+      this.ray.origin.setFromMatrixPosition(camera.matrixWorld);
+      this
+          .ray
           .direction
           .set(coords.x, coords.y, 0.5)
           .unproject(camera)
-          .sub(ray.origin)
+          .sub(this.ray.origin)
           .normalize();
       this.camera = camera;
-    } else if (camera.isOrthographicCamera) {
-      ray
+    } else if (camera != null && camera.isOrthographicCamera) {
+      this
+          .ray
           .origin
           .set(coords.x, coords.y,
               (camera.near + camera.far) / (camera.near - camera.far))
           .unproject(camera); // set origin in plane of camera
-      ray.direction.set(0, 0, -1).transformDirection(camera.matrixWorld);
+      this.ray.direction.set(0, 0, -1).transformDirection(camera.matrixWorld);
       this.camera = camera;
     } else {
       print('THREE.Raycaster: Unsupported camera type: ' + camera.type);
     }
   }
 
-  List<Intersection> intersectObject(Object3D object, bool recursive,
-      [List<Intersection>? intersects]) {
+  intersectObject(object, recursive, intersects) {
     List<Intersection> _intersects = intersects ?? [];
 
     intersectObject4(object, this, _intersects, recursive);
@@ -84,8 +84,7 @@ class Raycaster {
     return _intersects;
   }
 
-  List<Intersection> intersectObjects(List<Object3D> objects, bool recursive,
-      [List<Intersection>? intersects]) {
+  intersectObjects(objects, recursive, [List<Intersection>? intersects]) {
     intersects = intersects ?? List<Intersection>.from([]);
 
     for (var i = 0, l = objects.length; i < l; i++) {
@@ -160,15 +159,10 @@ class Face {
   late Vector3 normal;
   late num materialIndex;
 
-  Face(this.a, this.b, this.c, this.normal, this.materialIndex);
+  Face(this.a, this.b, this.c, this.normal, this.materialIndex) {}
 
-  factory Face.fromJSON(Map<String, dynamic> json) {
+  factory Face.fromJSON(json) {
     return Face(
-      json["a"],
-      json["b"],
-      json["c"],
-      json["normal"],
-      json["materialIndex"],
-    );
+        json["a"], json["b"], json["c"], json["normal"], json["materialIndex"]);
   }
 }
