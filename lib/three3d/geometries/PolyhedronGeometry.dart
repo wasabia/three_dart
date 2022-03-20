@@ -5,15 +5,15 @@ class PolyhedronGeometry extends BufferGeometry {
 
   PolyhedronGeometry(vertices, indices, [radius = 1, detail = 0]) : super() {
     // default buffer data
-    List<double> vertexBuffer = [];
-    List<double> uvBuffer = [];
+    List<num> vertexBuffer = [];
+    List<num> uvBuffer = [];
 
     // helper functions ----------------- start
-    void pushVertex(vertex) {
+    Function pushVertex = (vertex) {
       vertexBuffer.addAll([vertex.x, vertex.y, vertex.z]);
-    }
+    };
 
-    void subdivideFace(Vector3 a, Vector3 b, Vector3 c, detail) {
+    Function subdivideFace = (Vector3 a, Vector3 b, Vector3 c, detail) {
       var cols = detail + 1;
 
       // we use this multidimensional array as a data structure for creating the subdivision
@@ -56,20 +56,20 @@ class PolyhedronGeometry extends BufferGeometry {
           }
         }
       }
-    }
+    };
 
-    void getVertexByIndex(index, vertex) {
+    Function getVertexByIndex = (index, vertex) {
       var stride = index * 3;
 
       vertex.x = vertices[stride + 0];
       vertex.y = vertices[stride + 1];
       vertex.z = vertices[stride + 2];
-    }
+    };
 
-    void subdivide(detail) {
-      var a = Vector3.init();
-      var b = Vector3.init();
-      var c = Vector3.init();
+    Function subdivide = (detail) {
+      var a = new Vector3.init();
+      var b = new Vector3.init();
+      var c = new Vector3.init();
 
       // iterate over all faces and apply a subdivison with the given detail value
 
@@ -84,10 +84,10 @@ class PolyhedronGeometry extends BufferGeometry {
 
         subdivideFace(a, b, c, detail);
       }
-    }
+    };
 
-    void applyRadius(radius) {
-      var vertex = Vector3.init();
+    Function applyRadius = (radius) {
+      var vertex = new Vector3.init();
 
       // iterate over the entire buffer and apply the radius to each vertex
 
@@ -98,13 +98,13 @@ class PolyhedronGeometry extends BufferGeometry {
 
         vertex.normalize().multiplyScalar(radius);
 
-        vertexBuffer[i + 0] = vertex.x.toDouble();
-        vertexBuffer[i + 1] = vertex.y.toDouble();
-        vertexBuffer[i + 2] = vertex.z.toDouble();
+        vertexBuffer[i + 0] = vertex.x;
+        vertexBuffer[i + 1] = vertex.y;
+        vertexBuffer[i + 2] = vertex.z;
       }
-    }
+    };
 
-    void correctUV(uv, stride, vector, azimuth) {
+    Function correctUV = (uv, stride, vector, azimuth) {
       if ((azimuth < 0) && (uv.x == 1)) {
         uvBuffer[stride] = uv.x - 1;
       }
@@ -112,31 +112,31 @@ class PolyhedronGeometry extends BufferGeometry {
       if ((vector.x == 0) && (vector.z == 0)) {
         uvBuffer[stride] = azimuth / 2 / Math.PI + 0.5;
       }
-    }
+    };
 
     // Angle around the Y axis, counter-clockwise when looking from above.
 
-    azimuth(vector) {
+    Function azimuth = (vector) {
       return Math.atan2(vector.z, -vector.x);
-    }
+    };
 
     // Angle above the XZ plane.
 
-    inclination(vector) {
+    Function inclination = (vector) {
       return Math.atan2(
           -vector.y, Math.sqrt((vector.x * vector.x) + (vector.z * vector.z)));
-    }
+    };
 
-    correctUVs() {
+    Function correctUVs = () {
       var a = Vector3.init();
-      var b = Vector3.init();
-      var c = Vector3.init();
+      var b = new Vector3.init();
+      var c = new Vector3.init();
 
-      var centroid = Vector3.init();
+      var centroid = new Vector3.init();
 
-      var uvA = Vector2(null, null);
-      var uvB = Vector2(null, null);
-      var uvC = Vector2(null, null);
+      var uvA = new Vector2(null, null);
+      var uvB = new Vector2(null, null);
+      var uvC = new Vector2(null, null);
 
       for (var i = 0, j = 0; i < vertexBuffer.length; i += 9, j += 6) {
         a.set(vertexBuffer[i + 0], vertexBuffer[i + 1], vertexBuffer[i + 2]);
@@ -155,9 +155,9 @@ class PolyhedronGeometry extends BufferGeometry {
         correctUV(uvB, j + 2, b, azi);
         correctUV(uvC, j + 4, c, azi);
       }
-    }
+    };
 
-    correctSeam() {
+    Function correctSeam = () {
       // handle case when face straddles the seam, see #3269
 
       for (var i = 0; i < uvBuffer.length; i += 6) {
@@ -178,10 +178,10 @@ class PolyhedronGeometry extends BufferGeometry {
           if (x2 < 0.2) uvBuffer[i + 4] += 1;
         }
       }
-    }
+    };
 
-    generateUVs() {
-      var vertex = Vector3.init();
+    Function generateUVs = () {
+      var vertex = new Vector3.init();
 
       for (var i = 0; i < vertexBuffer.length; i += 3) {
         vertex.x = vertexBuffer[i + 0];
@@ -196,11 +196,11 @@ class PolyhedronGeometry extends BufferGeometry {
       correctUVs();
 
       correctSeam();
-    }
+    };
 
     // helper functions ----------------- end
 
-    parameters = {
+    this.parameters = {
       "vertices": vertices,
       "indices": indices,
       "radius": radius,
@@ -221,20 +221,17 @@ class PolyhedronGeometry extends BufferGeometry {
 
     // build non-indexed geometry
 
-    setAttribute('position',
-        Float32BufferAttribute(Float32List.fromList(vertexBuffer), 3, false));
-    setAttribute(
-        'normal',
-        Float32BufferAttribute(
-            Float32List.fromList(slice(vertexBuffer, 0)), 3, false));
-    setAttribute(
-        'uv', Float32BufferAttribute(Float32List.fromList(uvBuffer), 2, false));
+    this.setAttribute(
+        'position', new Float32BufferAttribute(vertexBuffer, 3, false));
+    this.setAttribute(
+        'normal', new Float32BufferAttribute(slice(vertexBuffer, 0), 3, false));
+    this.setAttribute('uv', new Float32BufferAttribute(uvBuffer, 2, false));
 
     if (detail == 0) {
-      computeVertexNormals(); // flat normals
+      this.computeVertexNormals(); // flat normals
 
     } else {
-      normalizeNormals(); // smooth normals
+      this.normalizeNormals(); // smooth normals
 
     }
   }

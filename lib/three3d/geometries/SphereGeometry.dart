@@ -12,7 +12,7 @@ class SphereGeometry extends BufferGeometry {
       thetaStart = 0,
       thetaLength = Math.PI])
       : super() {
-    parameters = {
+    this.parameters = {
       "radius": radius,
       "widthSegments": widthSegments,
       "heightSegments": heightSegments,
@@ -36,9 +36,9 @@ class SphereGeometry extends BufferGeometry {
     // buffers
 
     List<num> indices = [];
-    List<double> vertices = [];
-    List<double> normals = [];
-    List<double> uvs = [];
+    List<num> vertices = [];
+    List<num> normals = [];
+    List<num> uvs = [];
 
     // generate vertices, normals and uvs
 
@@ -70,14 +70,12 @@ class SphereGeometry extends BufferGeometry {
             Math.sin(phiStart + u * phiLength) *
             Math.sin(thetaStart + v * thetaLength);
 
-        vertices.addAll(
-            [vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
+        vertices.addAll([vertex.x, vertex.y, vertex.z]);
 
         // normal
 
         normal.copy(vertex).normalize();
-        normals.addAll(
-            [normal.x.toDouble(), normal.y.toDouble(), normal.z.toDouble()]);
+        normals.addAll([normal.x, normal.y, normal.z]);
 
         // uv
 
@@ -106,17 +104,15 @@ class SphereGeometry extends BufferGeometry {
 
     // build geometry
 
-    setIndex(indices);
-    setAttribute('position',
-        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
-    setAttribute('normal',
-        Float32BufferAttribute(Float32List.fromList(normals), 3, false));
-    setAttribute(
-        'uv', Float32BufferAttribute(Float32List.fromList(uvs), 2, false));
+    this.setIndex(indices);
+    this.setAttribute(
+        'position', new Float32BufferAttribute(vertices, 3, false));
+    this.setAttribute('normal', new Float32BufferAttribute(normals, 3, false));
+    this.setAttribute('uv', new Float32BufferAttribute(uvs, 2, false));
   }
 
   static fromJSON(data) {
-    return SphereGeometry(
+    return new SphereGeometry(
         data["radius"],
         data["widthSegments"],
         data["heightSegments"],

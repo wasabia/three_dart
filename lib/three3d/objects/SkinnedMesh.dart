@@ -1,66 +1,64 @@
 part of three_objects;
 
-var _basePosition = Vector3.init();
+var _basePosition = new Vector3.init();
 
-var _skinIndex = Vector4.init();
-var _skinWeight = Vector4.init();
+var _skinIndex = new Vector4.init();
+var _skinWeight = new Vector4.init();
 
-var _vector = Vector3.init();
-var _matrix = Matrix4();
+var _vector = new Vector3.init();
+var _matrix = new Matrix4();
 
-class SkinnedMesh extends Mesh { 
-  String bindMode = "attached"; 
-  Matrix4 bindMatrixInverse = Matrix4();
- 
-  SkinnedMesh(geometry, material) : super(geometry, material) {
-    type = "SkinnedMesh";
-    isSkinnedMesh = true;
-    bindMatrix = Matrix4();
+class SkinnedMesh extends Mesh {
+  bool isSkinnedMesh = true;
+  String bindMode = "attached";
+  Matrix4? bindMatrix = new Matrix4();
+  Matrix4 bindMatrixInverse = new Matrix4();
+  Skeleton? skeleton;
+  String type = "SkinnedMesh";
+
+  SkinnedMesh(geometry, material) : super(geometry, material) {}
+
+  clone([bool? recursive]) {
+    return SkinnedMesh(this.geometry!, this.material).copy(this, recursive);
   }
 
-  @override
-  SkinnedMesh clone([bool? recursive]) {
-    return SkinnedMesh(geometry!, material).copy(this, recursive);
-  }
-
-  @override
-  SkinnedMesh copy(Object3D source, [bool? recursive]) {
+  copy(Object3D source, [bool? recursive]) {
     super.copy(source);
 
     SkinnedMesh source1 = source as SkinnedMesh;
 
-    bindMode = source1.bindMode;
-    bindMatrix!.copy(source1.bindMatrix!);
-    bindMatrixInverse.copy(source1.bindMatrixInverse);
+    this.bindMode = source1.bindMode;
+    this.bindMatrix!.copy(source1.bindMatrix!);
+    this.bindMatrixInverse.copy(source1.bindMatrixInverse);
 
-    skeleton = source1.skeleton;
+    this.skeleton = source1.skeleton;
 
     return this;
   }
 
-  void bind(Skeleton skeleton, Matrix4? bindMatrix) {
+  bind(skeleton, Matrix4? bindMatrix) {
     this.skeleton = skeleton;
 
     if (bindMatrix == null) {
-      updateMatrixWorld(true);
+      this.updateMatrixWorld(true);
 
       this.skeleton!.calculateInverses();
 
-      bindMatrix = matrixWorld;
+      bindMatrix = this.matrixWorld;
     }
 
     this.bindMatrix!.copy(bindMatrix);
-    bindMatrixInverse.copy(bindMatrix).invert();
+    this.bindMatrixInverse.copy(bindMatrix).invert();
   }
 
-  void pose() {
-    skeleton!.pose();
+  pose() {
+    this.skeleton!.pose();
   }
 
-  void normalizeSkinWeights() {
-    var vector = Vector4.init();
+  normalizeSkinWeights() {
+    var vector = new Vector4.init();
 
-    var skinWeight = geometry!.attributes["skinWeight"];
+    var skinWeight = this.geometry!.attributes["skinWeight"];
 
     for (var i = 0, l = skinWeight.count; i < l; i++) {
       vector.x = skinWeight.getX(i);
@@ -81,20 +79,19 @@ class SkinnedMesh extends Mesh {
     }
   }
 
-  @override
-  void updateMatrixWorld([bool force = false]) {
+  updateMatrixWorld([bool force = false]) {
     super.updateMatrixWorld(force);
 
-    if (bindMode == 'attached') {
-      bindMatrixInverse.copy(matrixWorld).invert();
-    } else if (bindMode == 'detached') {
-      bindMatrixInverse.copy(bindMatrix!).invert();
+    if (this.bindMode == 'attached') {
+      this.bindMatrixInverse.copy(this.matrixWorld).invert();
+    } else if (this.bindMode == 'detached') {
+      this.bindMatrixInverse.copy(this.bindMatrix!).invert();
     } else {
-      print('THREE.SkinnedMesh: Unrecognized bindMode: ${bindMode}');
+      print('THREE.SkinnedMesh: Unrecognized bindMode: ${this.bindMode}');
     }
   }
 
-  Vector3 boneTransform(int index, Vector3 target) {
+  boneTransform(index, target) {
     var skeleton = this.skeleton;
     var geometry = this.geometry!;
 
@@ -103,7 +100,7 @@ class SkinnedMesh extends Mesh {
     _skinWeight.fromBufferAttribute(
         geometry.attributes["skinWeight"], index);
 
-    _basePosition.copy(target).applyMatrix4(bindMatrix!);
+    _basePosition.copy(target).applyMatrix4(this.bindMatrix!);
 
     target.set(0, 0, 0);
 
@@ -121,15 +118,14 @@ class SkinnedMesh extends Mesh {
       }
     }
 
-    return target.applyMatrix4(bindMatrixInverse);
+    return target.applyMatrix4(this.bindMatrixInverse);
   }
 
-  @override
-  Matrix4? getValue(String name) {
+  getValue(name) {
     if (name == "bindMatrix") {
-      return bindMatrix;
+      return this.bindMatrix;
     } else if (name == "bindMatrixInverse") {
-      return bindMatrixInverse;
+      return this.bindMatrixInverse;
     } else {
       return super.getValue(name);
     }

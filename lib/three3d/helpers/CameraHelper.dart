@@ -1,7 +1,7 @@
 part of three_helpers;
 
-var _vector = /*@__PURE__*/ Vector3.init();
-var _camera = /*@__PURE__*/ Camera();
+var _vector = /*@__PURE__*/ new Vector3.init();
+var _camera = /*@__PURE__*/ new Camera();
 
 /**
  *	- shows frustum, line of sight and up of the camera
@@ -18,12 +18,12 @@ class CameraHelper extends LineSegments {
   CameraHelper.create(geometry, material) : super(geometry, material) {}
 
   factory CameraHelper(camera) {
-    var geometry = BufferGeometry();
-    var material = LineBasicMaterial(
+    var geometry = new BufferGeometry();
+    var material = new LineBasicMaterial(
         {"color": 0xffffff, "vertexColors": true, "toneMapped": false});
 
-    List<double> vertices = [];
-    List<double> colors = [];
+    List<num> vertices = [];
+    List<num> colors = [];
 
     Map<String, dynamic> pointMap = {};
 
@@ -35,7 +35,7 @@ class CameraHelper extends LineSegments {
     var colorTarget = Color.fromHex(0xffffff);
     var colorCross = Color.fromHex(0x333333);
 
-    addPoint(id, color) {
+    Function addPoint = (id, color) {
       vertices.addAll([0, 0, 0]);
       colors.addAll([color.r, color.g, color.b]);
 
@@ -43,13 +43,13 @@ class CameraHelper extends LineSegments {
         pointMap[id] = [];
       }
 
-      pointMap[id].add(vertices.length ~/ 3.0 - 1);
-    }
+      pointMap[id].add((vertices.length / 3.0).toInt() - 1);
+    };
 
-    addLine(a, b, color) {
+    Function addLine = (a, b, color) {
       addPoint(a, color);
       addPoint(b, color);
-    }
+    };
 
     // near
 
@@ -99,11 +99,9 @@ class CameraHelper extends LineSegments {
     addLine('cf3', 'cf4', colorCross);
 
     geometry.setAttribute(
-        'position',
-        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
+        'position', new Float32BufferAttribute(vertices, 3, false));
     geometry.setAttribute(
-        'color',
-        Float32BufferAttribute(Float32List.fromList(colors), 3, false));
+        'color', new Float32BufferAttribute(colors, 3, false));
 
     CameraHelper cameraHelper = CameraHelper.create(geometry, material);
     cameraHelper.camera = camera;

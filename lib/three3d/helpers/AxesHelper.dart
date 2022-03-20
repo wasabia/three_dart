@@ -7,66 +7,45 @@ class AxesHelper extends LineSegments {
       : super(geometry, material) {}
 
   factory AxesHelper([num size = 1]) {
-    List<double> vertices = [
+    var vertices = [
       0,
       0,
       0,
-      size.toDouble(),
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      size.toDouble(),
+      size,
       0,
       0,
       0,
       0,
       0,
       0,
-      size.toDouble()
+      size,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      size
     ];
 
-    List<double> colors = [
-      1,
-      0,
-      0,
-      1,
-      0.6,
-      0,
-      0,
-      1,
-      0,
-      0.6,
-      1,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0.6,
-      1
-    ];
+    var colors = [1, 0, 0, 1, 0.6, 0, 0, 1, 0, 0.6, 1, 0, 0, 0, 1, 0, 0.6, 1];
 
-    var geometry = BufferGeometry();
+    var geometry = new BufferGeometry();
     geometry.setAttribute(
-        'position',
-        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
+        'position', new Float32BufferAttribute(vertices, 3, false));
     geometry.setAttribute(
-        'color',
-        Float32BufferAttribute(Float32List.fromList(colors), 3, false));
+        'color', new Float32BufferAttribute(colors, 3, false));
 
     var material =
-        LineBasicMaterial({"vertexColors": true, "toneMapped": false});
+        new LineBasicMaterial({"vertexColors": true, "toneMapped": false});
 
     return AxesHelper.create(
         size: size, geometry: geometry, material: material);
   }
 
   setColors(Color xAxisColor, Color yAxisColor, Color zAxisColor) {
-    var color = Color(1, 1, 1);
-    var array = geometry!.attributes["color"].array;
+    var color = new Color(1, 1, 1);
+    var array = this.geometry!.attributes["color"].array;
 
     color.copy(xAxisColor);
     color.toArray(array, 0);
@@ -80,13 +59,13 @@ class AxesHelper extends LineSegments {
     color.toArray(array, 12);
     color.toArray(array, 15);
 
-    geometry!.attributes["color"].needsUpdate = true;
+    this.geometry!.attributes["color"].needsUpdate = true;
 
     return this;
   }
 
-  void dispose() {
-    geometry!.dispose();
-    material.dispose();
+  dispose() {
+    this.geometry!.dispose();
+    this.material.dispose();
   }
 }

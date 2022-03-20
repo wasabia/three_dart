@@ -22,7 +22,7 @@ class SVGLoader extends Loader {
   load(url, onLoad, [onProgress, onError]) {
     var scope = this;
 
-    var loader = FileLoader(scope.manager);
+    var loader = new FileLoader(scope.manager);
     loader.setPath(scope.path);
     loader.setRequestHeader(scope.requestHeader);
     loader.setWithCredentials(scope.withCredentials);
@@ -101,15 +101,12 @@ class SVGLoader extends Loader {
       return null;
     }
 
-    var geometry = BufferGeometry();
+    var geometry = new BufferGeometry();
     geometry.setAttribute(
-        'position',
-        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
+        'position', new Float32BufferAttribute(vertices, 3, false));
     geometry.setAttribute(
-        'normal',
-        Float32BufferAttribute(Float32List.fromList(normals), 3, false));
-    geometry.setAttribute(
-        'uv', Float32BufferAttribute(Float32List.fromList(uvs), 2, false));
+        'normal', new Float32BufferAttribute(normals, 3, false));
+    geometry.setAttribute('uv', new Float32BufferAttribute(uvs, 2, false));
 
     return geometry;
   }
@@ -277,7 +274,7 @@ class SVGLoader extends Loader {
                   0) {
             intersectionsRaw.add(intersection);
             intersections
-                .add(Vector2(intersection["x"], intersection["y"]));
+                .add(new Vector2(intersection["x"], intersection["y"]));
           }
         }
       }
@@ -286,7 +283,7 @@ class SVGLoader extends Loader {
     }
 
     getScanlineIntersections(scanline, boundingBox, paths) {
-      var center = Vector2();
+      var center = new Vector2();
       boundingBox.getCenter(center);
 
       var allIntersections = [];
@@ -320,12 +317,12 @@ class SVGLoader extends Loader {
         _fillRule = 'nonzero';
       }
 
-      var centerBoundingBox = Vector2();
+      var centerBoundingBox = new Vector2();
       simplePath["boundingBox"].getCenter(centerBoundingBox);
 
       var scanline = [
-        Vector2(scanlineMinX, centerBoundingBox.y),
-        Vector2(scanlineMaxX, centerBoundingBox.y)
+        new Vector2(scanlineMinX, centerBoundingBox.y),
+        new Vector2(scanlineMaxX, centerBoundingBox.y)
       ];
 
       var scanlineIntersections = getScanlineIntersections(
@@ -459,7 +456,7 @@ class SVGLoader extends Loader {
         "isCW": ShapeUtils.isClockWise(points),
         "identifier": identifier++,
         "boundingBox":
-            Box2(Vector2(minX, minY), Vector2(maxX, maxY))
+            new Box2(new Vector2(minX, minY), new Vector2(maxX, maxY))
       };
     }).toList();
 
@@ -478,14 +475,14 @@ class SVGLoader extends Loader {
       var amIAHole = isAHole[p["identifier"]]!;
 
       if (!amIAHole["isHole"]) {
-        var shape = Shape(null);
+        var shape = new Shape(null);
         shape.curves = p["curves"];
         var holes = isAHole
             .where((h) => h!["isHole"] && h["for"] == p["identifier"])
             .toList();
         holes.forEach((h) {
           var hole = simplePaths[h!["identifier"]];
-          var path = Path(null);
+          var path = new Path(null);
           path.curves = hole["curves"];
           shape.holes.add(path);
         });

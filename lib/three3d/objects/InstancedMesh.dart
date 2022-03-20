@@ -1,7 +1,7 @@
 part of three_objects;
 
-var _instanceLocalMatrix = Matrix4();
-var _instanceWorldMatrix = Matrix4();
+var _instanceLocalMatrix = new Matrix4();
+var _instanceWorldMatrix = new Matrix4();
 
 List<Intersection> _instanceIntersects = [];
 
@@ -11,54 +11,56 @@ class InstancedMesh extends Mesh {
   late InstancedBufferAttribute instanceMatrix;
   late BufferAttribute? instanceColor;
 
-  InstancedMesh(geometry, material, count) : super(geometry, material) {
-    type = "InstancedMesh";
-    isInstancedMesh = true;
+  String type = "InstancedMesh";
 
-    var dl = Float32List(count * 16);
-    instanceMatrix = InstancedBufferAttribute(dl, 16, false);
-    instanceColor = null;
+  bool isInstancedMesh = true;
+
+  InstancedMesh(geometry, material, count) : super(geometry, material) {
+    var dl = Float32Array(count * 16);
+    this.instanceMatrix = new InstancedBufferAttribute(dl, 16, false);
+    this.instanceColor = null;
 
     this.count = count;
 
-    frustumCulled = false;
+    this.frustumCulled = false;
   }
 
-  @override
-  InstancedMesh copy(Object3D source, [bool? recursive]) {
+  copy(Object3D source, [bool? recursive]) {
     super.copy(source);
-    if (source is InstancedMesh) {
-      instanceMatrix.copy(source.instanceMatrix);
-      if (source.instanceColor != null) {
-        instanceColor = source.instanceColor!.clone();
-      }
-      count = source.count;
-    }
+
+    InstancedMesh source1 = source as InstancedMesh;
+
+    this.instanceMatrix.copy(source1.instanceMatrix);
+
+    if (source.instanceColor != null)
+      this.instanceColor = source.instanceColor!.clone();
+
+    this.count = source1.count;
+
     return this;
   }
 
-  Color getColorAt(int index, Color color) {
-    return color.fromArray(instanceColor!.array, index * 3);
+  getColorAt(index, color) {
+    color.fromArray(this.instanceColor!.array, index * 3);
   }
 
-  getMatrixAt(int index, matrix) {
-    return matrix.fromArray(instanceMatrix.array, index * 16);
+  getMatrixAt(index, matrix) {
+    matrix.fromArray(this.instanceMatrix.array, index * 16);
   }
 
-  @override
-  void raycast(Raycaster raycaster, List<Intersection> intersects) {
+  raycast(raycaster, intersects) {
     var matrixWorld = this.matrixWorld;
-    var raycastTimes = count;
+    var raycastTimes = this.count;
 
-    _mesh.geometry = geometry;
-    _mesh.material = material;
+    _mesh.geometry = this.geometry;
+    _mesh.material = this.material;
 
     if (_mesh.material == null) return;
 
     for (var instanceId = 0; instanceId < raycastTimes!; instanceId++) {
       // calculate the world matrix for each instance
 
-      getMatrixAt(instanceId, _instanceLocalMatrix);
+      this.getMatrixAt(instanceId, _instanceLocalMatrix);
 
       _instanceWorldMatrix.multiplyMatrices(matrixWorld, _instanceLocalMatrix);
 
@@ -81,22 +83,22 @@ class InstancedMesh extends Mesh {
     }
   }
 
-  List<num> setColorAt(int index, Color color) {
-    instanceColor ??= BufferAttribute(
-        Float32List((instanceMatrix.count * 3).toInt()), 3, false);
+  setColorAt(index, color) {
+    if (this.instanceColor == null) {
+      this.instanceColor = new BufferAttribute(
+          Float32Array((this.instanceMatrix.count * 3).toInt()), 3, false);
+    }
 
-    return color.toArray(instanceColor!.array, index * 3);
+    color.toArray(this.instanceColor!.array, index * 3);
   }
 
-  setMatrixAt(int index, Matrix4 matrix) {
-    matrix.toArray(instanceMatrix.array, index * 16);
+  setMatrixAt(index, Matrix4 matrix) {
+    matrix.toArray(this.instanceMatrix.array, index * 16);
   }
 
-  @override
-  void updateMorphTargets() {}
+  updateMorphTargets() {}
 
-  @override
-  void dispose() {
-    dispatchEvent(Event({"type": "dispose"}));
+  dispose() {
+    this.dispatchEvent(Event({"type": "dispose"}));
   }
 }
