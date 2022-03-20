@@ -10,7 +10,7 @@ class PlaneHelper extends Line {
   factory PlaneHelper(plane, [size = 1, hex = 0xffff00]) {
     var color = hex;
 
-    var positions = [
+    List<double> positions = [
       1,
       -1,
       1,
@@ -43,19 +43,20 @@ class PlaneHelper extends Line {
       0
     ];
 
-    var geometry = new BufferGeometry();
+    var geometry = BufferGeometry();
     geometry.setAttribute(
-        'position', new Float32BufferAttribute(positions, 3, false));
+        'position',
+        Float32BufferAttribute(Float32List.fromList(positions), 3, false));
     geometry.computeBoundingSphere();
 
     var planeHelper = PlaneHelper.create(
-        geometry, new LineBasicMaterial({"color": color, "toneMapped": false}));
+        geometry, LineBasicMaterial({"color": color, "toneMapped": false}));
 
     planeHelper.plane = plane;
 
     planeHelper.size = size;
 
-    var positions2 = [
+    List<double> positions2 = [
       1,
       1,
       1,
@@ -76,9 +77,10 @@ class PlaneHelper extends Line {
       1
     ];
 
-    var geometry2 = new BufferGeometry();
+    var geometry2 = BufferGeometry();
     geometry2.setAttribute(
-        'position', new Float32BufferAttribute(positions2, 3, false));
+        'position',
+        Float32BufferAttribute(Float32List.fromList(positions2), 3, false));
     geometry2.computeBoundingSphere();
 
     planeHelper.add(Mesh(
@@ -95,17 +97,17 @@ class PlaneHelper extends Line {
   }
 
   updateMatrixWorld([bool force = false]) {
-    var scale = -this.plane!.constant;
+    var scale = -plane!.constant;
 
     if (Math.abs(scale) < 1e-8) scale = 1e-8; // sign does not matter
 
-    this.scale.set(0.5 * this.size, 0.5 * this.size, scale);
+    this.scale.set(0.5 * size, 0.5 * size, scale);
 
-    this.children[0].material.side = (scale < 0)
+    children[0].material.side = (scale < 0)
         ? BackSide
         : FrontSide; // renderer flips side when determinant < 0; flipping not wanted here
 
-    this.lookAt(this.plane!.normal);
+    lookAt(plane!.normal);
 
     super.updateMatrixWorld(force);
   }

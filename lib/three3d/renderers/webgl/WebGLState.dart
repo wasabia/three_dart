@@ -131,7 +131,7 @@ class WebGLState {
   }
 
   createTexture(int type, int target, int count) {
-    var data = Uint8Array(4);
+    var data = Uint8List(4);
     // 4 is required to match default unpack alignment of 4.
     //
     var texture = gl.createTexture();

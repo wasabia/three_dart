@@ -1,11 +1,11 @@
 part of three_webgl;
 
 var emptyTexture =
-    new Texture(null, null, null, null, null, null, null, null, null, null);
-var emptyArrayTexture = new DataArrayTexture(null);
-var empty3dTexture = new Data3DTexture();
+    Texture(null, null, null, null, null, null, null, null, null, null);
+var emptyArrayTexture = DataArrayTexture(null);
+var empty3dTexture = Data3DTexture();
 var emptyCubeTexture =
-    new CubeTexture(null, null, null, null, null, null, null, null, null, null);
+    CubeTexture(null, null, null, null, null, null, null, null, null, null);
 
 // --- Utilities ---
 
@@ -14,11 +14,11 @@ var emptyCubeTexture =
 var arrayCacheF32 = {};
 var arrayCacheI32 = {};
 
-// Float32Array caches used for uploading Matrix uniforms
+// Float32List caches used for uploading Matrix uniforms
 
-var mat4array = new Float32Array(16);
-var mat3array = new Float32Array(9);
-var mat2array = new Float32Array(4);
+var mat4array = Float32List(16);
+var mat3array = Float32List(9);
+var mat2array = Float32List(4);
 
 // --- Uniform Classes ---
 
@@ -187,8 +187,8 @@ parseUniform(activeInfo, addr, WebGLUniform container) {
       addUniform(
           container,
           subscript == null
-              ? new SingleUniform(id, activeInfo, addr)
-              : new PureArrayUniform(id, activeInfo, addr));
+              ? SingleUniform(id, activeInfo, addr)
+              : PureArrayUniform(id, activeInfo, addr));
 
       break;
     } else {
@@ -198,7 +198,7 @@ parseUniform(activeInfo, addr, WebGLUniform container) {
       var next = map[id];
 
       if (next == null) {
-        next = new StructuredUniform(id);
+        next = StructuredUniform(id);
         addUniform(container, next);
       }
 
@@ -485,7 +485,7 @@ class WebGLUniformsHelper {
     } else {
       if (arraysEqual(cache, elements)) return;
 
-      mat2array.set(elements);
+      mat2array.setAll(0, List<double>.from(elements.map((e) => e.toDouble())));
 
       gl.uniformMatrix2fv(this.addr, false, mat2array);
 

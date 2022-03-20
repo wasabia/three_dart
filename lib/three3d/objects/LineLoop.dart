@@ -1,9 +1,9 @@
 part of three_objects;
 
 class LineLoop extends Line {
-  bool isLineLoop = true;
-
-  String type = 'LineLoop';
-
-  LineLoop(geometry, material) : super(geometry, material) {}
+  LineLoop(BufferGeometry? geometry, Material? material)
+      : super(geometry, material) {
+    type = 'LineLoop';
+    isLineLoop = true;
+  }
 }
