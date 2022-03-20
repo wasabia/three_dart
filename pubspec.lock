@@ -89,7 +89,7 @@ packages:
       name: flutter_gl
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.12"
+    version: "0.0.13"
   flutter_gl_macos:
     dependency: transitive
     description:
@@ -177,6 +177,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.12.11"
+  material_color_utilities:
+    dependency: transitive
+    description:
+      name: material_color_utilities
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.3"
   meta:
     dependency: transitive
     description:
@@ -251,7 +258,7 @@ packages:
       name: test_api
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.3"
+    version: "0.4.8"
   typed_data:
     dependency: transitive
     description:

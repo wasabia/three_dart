@@ -261,7 +261,7 @@ class _MyAppState extends State<webgl_geometry_colors> {
 
     var count = geometry1.attributes["position"].count;
     geometry1.setAttribute('color',
-        new THREE.Float32BufferAttribute(new Float32Array(count * 3), 3));
+        new THREE.Float32BufferAttribute( Float32Array(count * 3), 3));
 
     var geometry2 = geometry1.clone();
     var geometry3 = geometry1.clone();
