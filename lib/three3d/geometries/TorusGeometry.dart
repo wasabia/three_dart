@@ -10,7 +10,7 @@ class TorusGeometry extends BufferGeometry {
       tubularSegments = 6,
       arc = Math.PI * 2])
       : super() {
-    parameters = {
+    this.parameters = {
       "radius": radius,
       "tube": tube,
       "radialSegments": radialSegments,
@@ -24,15 +24,15 @@ class TorusGeometry extends BufferGeometry {
     // buffers
 
     List<num> indices = [];
-    List<double> vertices = [];
-    List<double> normals = [];
-    List<double> uvs = [];
+    List<num> vertices = [];
+    List<num> normals = [];
+    List<num> uvs = [];
 
     // helper variables
 
-    var center = Vector3();
-    var vertex = Vector3();
-    var normal = Vector3();
+    var center = new Vector3();
+    var vertex = new Vector3();
+    var normal = new Vector3();
 
     // generate vertices, normals and uvs
 
@@ -47,8 +47,7 @@ class TorusGeometry extends BufferGeometry {
         vertex.y = (radius + tube * Math.cos(v)) * Math.sin(u);
         vertex.z = tube * Math.sin(v);
 
-        vertices.addAll(
-            [vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
+        vertices.addAll([vertex.x, vertex.y, vertex.z]);
 
         // normal
 
@@ -56,8 +55,7 @@ class TorusGeometry extends BufferGeometry {
         center.y = radius * Math.sin(u);
         normal.subVectors(vertex, center).normalize();
 
-        normals.addAll(
-            [normal.x.toDouble(), normal.y.toDouble(), normal.z.toDouble()]);
+        normals.addAll([normal.x, normal.y, normal.z]);
 
         // uv
 
@@ -86,16 +84,14 @@ class TorusGeometry extends BufferGeometry {
 
     // build geometry
 
-    setIndex(indices);
-    setAttribute(
-        'position', Float32BufferAttribute(Float32List.fromList(vertices), 3));
-    setAttribute(
-        'normal', Float32BufferAttribute(Float32List.fromList(normals), 3));
-    setAttribute('uv', Float32BufferAttribute(Float32List.fromList(uvs), 2));
+    this.setIndex(indices);
+    this.setAttribute('position', new Float32BufferAttribute(vertices, 3));
+    this.setAttribute('normal', new Float32BufferAttribute(normals, 3));
+    this.setAttribute('uv', new Float32BufferAttribute(uvs, 2));
   }
 
   static fromJSON(data) {
-    return TorusGeometry(data.radius, data.tube, data.radialSegments,
+    return new TorusGeometry(data.radius, data.tube, data.radialSegments,
         data.tubularSegments, data.arc);
   }
 }

@@ -1,52 +1,55 @@
 part of three_helpers;
 
-var _vectorHemisphereLightHelper = /*@__PURE__*/ Vector3.init();
-var _color1 = /*@__PURE__*/ Color(0, 0, 0);
-var _color2 = /*@__PURE__*/ Color(0, 0, 0);
+var _vectorHemisphereLightHelper = /*@__PURE__*/ new Vector3.init();
+var _color1 = /*@__PURE__*/ new Color(0, 0, 0);
+var _color2 = /*@__PURE__*/ new Color(0, 0, 0);
 
 class HemisphereLightHelper extends Object3D {
   Color? color;
   late Light light;
 
-  HemisphereLightHelper(this.light, size, this.color) : super() {
-    light.updateMatrixWorld(false);
+  HemisphereLightHelper(light, size, color) : super() {
+    this.light = light;
+    this.light.updateMatrixWorld(false);
 
-    matrix = light.matrixWorld;
-    matrixAutoUpdate = false;
+    this.matrix = light.matrixWorld;
+    this.matrixAutoUpdate = false;
 
-    var geometry = OctahedronGeometry(size);
+    this.color = color;
+
+    var geometry = new OctahedronGeometry(size);
     geometry.rotateY(Math.PI * 0.5);
 
-    material = MeshBasicMaterial(
+    this.material = new MeshBasicMaterial(
         {"wireframe": true, "fog": false, "toneMapped": false});
-    if (color == null) material.vertexColors = true;
+    if (this.color == null) this.material.vertexColors = true;
 
     var position = geometry.getAttribute('position');
-    var colors = Float32List(position.count * 3);
+    var colors = new Float32Array(position.count * 3);
 
     geometry.setAttribute(
-        'color', Float32BufferAttribute(colors, 3, false));
+        'color', new Float32BufferAttribute(colors, 3, false));
 
-    add(Mesh(geometry, material));
+    this.add(new Mesh(geometry, this.material));
 
-    update();
+    this.update();
   }
 
   dispose() {
-    children[0].geometry!.dispose();
-    children[0].material.dispose();
+    this.children[0].geometry!.dispose();
+    this.children[0].material.dispose();
   }
 
   update() {
-    var mesh = children[0];
+    var mesh = this.children[0];
 
-    if (color != null) {
-      material.color.copy(color);
+    if (this.color != null) {
+      this.material.color.copy(this.color);
     } else {
       var colors = mesh.geometry!.getAttribute('color');
 
-      _color1.copy(light.color!);
-      _color2.copy(light.groundColor!);
+      _color1.copy(this.light.color!);
+      _color2.copy(this.light.groundColor!);
 
       for (var i = 0, l = colors.count; i < l; i++) {
         var color = (i < (l / 2)) ? _color1 : _color2;
@@ -58,7 +61,7 @@ class HemisphereLightHelper extends Object3D {
     }
 
     mesh.lookAt(_vectorHemisphereLightHelper
-        .setFromMatrixPosition(light.matrixWorld)
+        .setFromMatrixPosition(this.light.matrixWorld)
         .negate());
   }
 }

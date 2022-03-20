@@ -9,21 +9,21 @@ class ParametricGeometry extends BufferGeometry {
   String type = "ParametricGeometry";
 
   ParametricGeometry(func, slices, stacks) : super() {
-    parameters = {"func": func, "slices": slices, "stacks": stacks};
+    this.parameters = {"func": func, "slices": slices, "stacks": stacks};
 
     // buffers
 
     List<num> indices = [];
-    List<double> vertices = [];
-    List<double> normals = [];
-    List<double> uvs = [];
+    List<num> vertices = [];
+    List<num> normals = [];
+    List<num> uvs = [];
 
     var EPS = 0.00001;
 
-    var normal = Vector3();
+    var normal = new Vector3();
 
-    var p0 = Vector3(), p1 = Vector3();
-    var pu = Vector3(), pv = Vector3();
+    var p0 = new Vector3(), p1 = new Vector3();
+    var pu = new Vector3(), pv = new Vector3();
 
     // if ( func.length < 3 ) {
 
@@ -44,7 +44,7 @@ class ParametricGeometry extends BufferGeometry {
         // vertex
 
         func(u, v, p0);
-        vertices.addAll([p0.x.toDouble(), p0.y.toDouble(), p0.z.toDouble()]);
+        vertices.addAll([p0.x, p0.y, p0.z]);
 
         // normal
 
@@ -69,8 +69,7 @@ class ParametricGeometry extends BufferGeometry {
         // cross product of tangent vectors returns surface normal
 
         normal.crossVectors(pu, pv).normalize();
-        normals.addAll(
-            [normal.x.toDouble(), normal.y.toDouble(), normal.z.toDouble()]);
+        normals.addAll([normal.x, normal.y, normal.z]);
 
         // uv
 
@@ -96,11 +95,9 @@ class ParametricGeometry extends BufferGeometry {
 
     // build geometry
 
-    setIndex(indices);
-    setAttribute(
-        'position', Float32BufferAttribute(Float32List.fromList(vertices), 3));
-    setAttribute(
-        'normal', Float32BufferAttribute(Float32List.fromList(normals), 3));
-    setAttribute('uv', Float32BufferAttribute(Float32List.fromList(uvs), 2));
+    this.setIndex(indices);
+    this.setAttribute('position', new Float32BufferAttribute(vertices, 3));
+    this.setAttribute('normal', new Float32BufferAttribute(normals, 3));
+    this.setAttribute('uv', new Float32BufferAttribute(uvs, 2));
   }
 }

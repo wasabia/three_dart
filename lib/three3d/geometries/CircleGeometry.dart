@@ -4,9 +4,9 @@ class CircleGeometry extends BufferGeometry {
   CircleGeometry(
       {radius = 1, segments = 8, thetaStart = 0, thetaLength = Math.PI * 2})
       : super() {
-    type = 'CircleGeometry';
+    this.type = 'CircleGeometry';
 
-    parameters = {
+    this.parameters = {
       "radius": radius,
       "segments": segments,
       "thetaStart": thetaStart,
@@ -24,8 +24,8 @@ class CircleGeometry extends BufferGeometry {
 
     // helper variables
 
-    var vertex = Vector3.init();
-    var uv = Vector2(null, null);
+    var vertex = new Vector3.init();
+    var uv = new Vector2(null, null);
 
     // center point
 
@@ -64,12 +64,12 @@ class CircleGeometry extends BufferGeometry {
 
     // build geometry
 
-    setIndex(indices);
-    setAttribute('position',
-        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
-    setAttribute('normal',
-        Float32BufferAttribute(Float32List.fromList(normals), 3, false));
-    setAttribute(
-        'uv', Float32BufferAttribute(Float32List.fromList(uvs), 2, false));
+    this.setIndex(indices);
+    this.setAttribute('position',
+        new Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    this.setAttribute('normal',
+        new Float32BufferAttribute(Float32Array.from(normals), 3, false));
+    this.setAttribute(
+        'uv', new Float32BufferAttribute(Float32Array.from(uvs), 2, false));
   }
 }

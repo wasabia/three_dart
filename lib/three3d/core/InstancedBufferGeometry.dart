@@ -1,29 +1,31 @@
 part of three_core;
 
 class InstancedBufferGeometry extends BufferGeometry {
-  InstancedBufferGeometry() : super() {
-    type = 'InstancedBufferGeometry';
-    instanceCount = Math.Infinity.toInt();
-    isInstancedBufferGeometry = true;
-  }
+  String type = 'InstancedBufferGeometry';
+  int? instanceCount = Math.Infinity.toInt();
+  bool isInstancedBufferGeometry = true;
 
-  @override
-  InstancedBufferGeometry copy(BufferGeometry source) {
+  InstancedBufferGeometry() : super() {}
+
+  copy(source) {
     super.copy(source);
-    instanceCount = source.instanceCount;
+
+    this.instanceCount = source.instanceCount;
+
     return this;
   }
 
-  @override
-  BufferGeometry clone() {
+  clone() {
     return InstancedBufferGeometry().copy(this);
   }
 
-  @override
-  Map<String, dynamic> toJSON({Object3dMeta? meta}) {
+  toJSON({Object3dMeta? meta}) {
     var data = super.toJSON(meta: meta);
-    data['instanceCount'] = instanceCount;
-    data['isInstancedBufferGeometry'] = true;
+
+    data.instanceCount = this.instanceCount;
+
+    data.isInstancedBufferGeometry = true;
+
     return data;
   }
 }

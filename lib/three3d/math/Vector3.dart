@@ -17,7 +17,11 @@ class Vector3 {
     this.z = z ?? 0;
   }
 
-  Vector3.init({this.x = 0, this.y = 0, this.z = 0});
+  Vector3.init({num x = 0, num y = 0, num z = 0}) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
 
   Vector3.fromJSON(List<num>? json) {
     if (json != null) {
@@ -27,7 +31,7 @@ class Vector3 {
     }
   }
 
-  Vector3 set(num x, num y, [num? z]) {
+  Vector3 set(num x, num y, num? z) {
     z ??= this.z; // sprite.scale.set(x,y)
 
     this.x = x;
@@ -410,11 +414,11 @@ class Vector3 {
     return divideScalar(length());
   }
 
-  Vector3 setLength(num length) {
+  Vector3 setLength(length) {
     return normalize().multiplyScalar(length);
   }
 
-  Vector3 lerp(Vector3 v, num alpha) {
+  Vector3 lerp(v, alpha) {
     x += (v.x - x) * alpha;
     y += (v.y - y) * alpha;
     z += (v.z - z) * alpha;
@@ -422,7 +426,7 @@ class Vector3 {
     return this;
   }
 
-  Vector3 lerpVectors(Vector3 v1, Vector3 v2, num alpha) {
+  Vector3 lerpVectors(v1, v2, alpha) {
     x = v1.x + (v2.x - v1.x) * alpha;
     y = v1.y + (v2.y - v1.y) * alpha;
     z = v1.z + (v2.z - v1.z) * alpha;
@@ -430,7 +434,7 @@ class Vector3 {
     return this;
   }
 
-  Vector3 cross(Vector3 v, {Vector3? w}) {
+  Vector3 cross(v, {Vector3? w}) {
     if (w != null) {
       print(
           'THREE.Vector3: .cross() now only accepts one argument. Use .crossVectors( a, b ) instead.');
@@ -440,7 +444,7 @@ class Vector3 {
     return crossVectors(this, v);
   }
 
-  Vector3 crossVectors(Vector3 a, Vector3 b) {
+  Vector3 crossVectors(a, b) {
     var ax = a.x, ay = a.y, az = a.z;
     var bx = b.x, by = b.y, bz = b.z;
 
@@ -588,10 +592,10 @@ class Vector3 {
     return array;
   }
 
-  Vector3 fromBufferAttribute(BufferAttribute attribute, int index) {
-    x = attribute.getX(index)!;
-    y = attribute.getY(index)!;
-    z = attribute.getZ(index)!;
+  Vector3 fromBufferAttribute(attribute, int index) {
+    x = attribute.getX(index);
+    y = attribute.getY(index);
+    z = attribute.getZ(index);
 
     return this;
   }

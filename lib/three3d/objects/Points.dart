@@ -1,39 +1,36 @@
 part of three_objects;
 
-var _pointsinverseMatrix = Matrix4();
-var _pointsray = Ray(null, null);
-var _pointssphere = Sphere(null, null);
-var _position = Vector3.init();
+var _pointsinverseMatrix = new Matrix4();
+var _pointsray = new Ray(null, null);
+var _pointssphere = new Sphere(null, null);
+var _position = new Vector3.init();
 
 class Points extends Object3D {
   Points(BufferGeometry geometry, material) {
-    type = 'Points';
-    isPoints = true;
+    this.type = 'Points';
+    this.isPoints = true;
 
     this.geometry = geometry;
     this.material = material;
 
-    updateMorphTargets();
+    this.updateMorphTargets();
   }
 
   Points.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON) {
-    type = 'Points';
-    isPoints = true;
-  }
+      : super.fromJSON(json, rootJSON) {}
 
-  @override
-  Points copy(Object3D source, [bool? recursive]) {
+  copy(Object3D source, [bool? recursive]) {
     super.copy(source);
-    if (source is Points) {
-      material = source.material;
-      geometry = source.geometry;
-    }
+
+    Points source1 = source as Points;
+
+    this.material = source1.material;
+    this.geometry = source1.geometry;
+
     return this;
   }
 
-  @override
-  void raycast(Raycaster raycaster, List<Intersection> intersects) {
+  raycast(raycaster, intersects) {
     var geometry = this.geometry!;
     var matrixWorld = this.matrixWorld;
     var threshold = raycaster.params["Points"].threshold;
@@ -54,7 +51,8 @@ class Points extends Object3D {
     _pointsinverseMatrix.copy(matrixWorld).invert();
     _pointsray.copy(raycaster.ray).applyMatrix4(_pointsinverseMatrix);
 
-    var localThreshold = threshold / ((scale.x + scale.y + scale.z) / 3);
+    var localThreshold =
+        threshold / ((this.scale.x + this.scale.y + this.scale.z) / 3);
     var localThresholdSq = localThreshold * localThreshold;
 
     var index = geometry.index;
@@ -67,7 +65,7 @@ class Points extends Object3D {
           Math.min(index.count, (drawRange["start"]! + drawRange["count"]!));
 
       for (var i = start, il = end; i < il; i++) {
-        var a = index.getX(i)!;
+        var a = index.getX(i);
 
         _position.fromBufferAttribute(positionAttribute, a.toInt());
 
@@ -88,25 +86,25 @@ class Points extends Object3D {
     }
   }
 
-  void updateMorphTargets() {
+  updateMorphTargets() {
     var geometry = this.geometry!;
 
     if (geometry.isBufferGeometry) {
       var morphAttributes = geometry.morphAttributes;
       var keys = morphAttributes.keys.toList();
 
-      if (keys.isNotEmpty) {
+      if (keys.length > 0) {
         var morphAttribute = morphAttributes[keys[0]];
 
         if (morphAttribute != null) {
-          morphTargetInfluences = [];
-          morphTargetDictionary = {};
+          this.morphTargetInfluences = [];
+          this.morphTargetDictionary = {};
 
           for (var m = 0, ml = morphAttribute.length; m < ml; m++) {
             var name = morphAttribute[m].name ?? m.toString();
 
-            morphTargetInfluences!.add(0);
-            morphTargetDictionary![name] = m;
+            this.morphTargetInfluences!.add(0);
+            this.morphTargetDictionary![name] = m;
           }
         }
       }
@@ -121,18 +119,12 @@ class Points extends Object3D {
   }
 }
 
-void testPoint(
-    Vector3 point,
-    num index,
-    num localThresholdSq,
-    Matrix4 matrixWorld,
-    Raycaster raycaster,
-    List<Intersection> intersects,
-    Object3D object) {
+testPoint(point, index, localThresholdSq, matrixWorld, raycaster, intersects,
+    object) {
   var rayPointDistanceSq = _pointsray.distanceSqToPoint(point);
 
   if (rayPointDistanceSq < localThresholdSq) {
-    var intersectPoint = Vector3.init();
+    var intersectPoint = new Vector3.init();
 
     _pointsray.closestPointToPoint(point, intersectPoint);
     intersectPoint.applyMatrix4(matrixWorld);
@@ -141,13 +133,13 @@ void testPoint(
 
     if (distance < raycaster.near || distance > raycaster.far) return;
 
-    intersects.add(Intersection({
+    intersects.add({
       "distance": distance,
       "distanceToRay": Math.sqrt(rayPointDistanceSq),
       "point": intersectPoint,
       "index": index,
       "face": null,
       "object": object
-    }));
+    });
   }
 }

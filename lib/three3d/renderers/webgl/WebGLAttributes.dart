@@ -12,12 +12,11 @@ class WebGLAttributes {
     isWebGL2 = capabilities.isWebGL2;
   }
 
-  Map<String, dynamic> createBuffer(BufferAttribute attribute, int bufferType,
-      {String? name}) {
-    final array = attribute.array as TypedData;
+  createBuffer(attribute, int bufferType, {String? name}) {
+    final array = attribute.array;
     var usage = attribute.usage;
 
-    //dynamic arrayType = attribute.runtimeType;
+    dynamic arrayType = attribute.runtimeType;
 
     // print(" WebGLAttributes.createBuffer attribute: ${attribute.runtimeType} arrayType: ${arrayType} array: ${array.length} ${array.runtimeType} name: ${name} ");
 
@@ -25,76 +24,76 @@ class WebGLAttributes {
     int bytesPerElement = 4;
 
     // TODO 优化判断？？？
-    if (attribute is Float32BufferAttribute) {
+    if (arrayType == Float32BufferAttribute) {
       // arrayList = Float32List.fromList(array.map((e) => e.toDouble()).toList());
-    } else if (attribute is Uint16BufferAttribute) {
+    } else if (arrayType == Uint16BufferAttribute) {
       // arrayList = Uint16List.fromList(array.map((e) => e.toInt()).toList());
-    } else if (attribute is Uint32BufferAttribute) {
+    } else if (arrayType == Uint32BufferAttribute) {
       // arrayList = Uint32List.fromList(array.map((e) => e.toInt()).toList());
-    } else if (attribute is InterleavedBufferAttribute ||
-        attribute.runtimeType == BufferAttribute) {
+    } else if (arrayType == InterleavedBufferAttribute ||
+        arrayType == BufferAttribute) {
       // arrayList = array;
       // String arrayType = array.runtimeType.toString();
-      if (array is Uint8List) {
+      if (array is Uint8Array) {
         type = gl.UNSIGNED_BYTE;
         bytesPerElement = Uint8List.bytesPerElement;
-      } else if (array is Float32List) {
+      } else if (array is Float32Array) {
         type = gl.FLOAT;
         bytesPerElement = Float32List.bytesPerElement;
-      } else if (array is Uint32List) {
+      } else if (array is Uint32Array) {
         type = gl.UNSIGNED_INT;
         bytesPerElement = Uint32List.bytesPerElement;
-      } else if (array is Uint16List) {
+      } else if (array is Uint16Array) {
         type = gl.UNSIGNED_SHORT;
         bytesPerElement = Uint16List.bytesPerElement;
       } else {
         // 保持抛出异常 及时发现异常情况
         throw ("WebGLAttributes.createBuffer InterleavedBufferAttribute arrayType: ${array.runtimeType} is not support  ");
       }
-    } else if (attribute is InstancedBufferAttribute) {
+    } else if (arrayType == InstancedBufferAttribute) {
       type = gl.UNSIGNED_BYTE;
       bytesPerElement = Uint8List.bytesPerElement;
       // arrayList = array;
 
-      //String _arrayType = array.runtimeType.toString();
+      String _arrayType = array.runtimeType.toString();
 
-      if (array is Uint8List) {
+      if (_arrayType == "Uint8Array") {
         type = gl.UNSIGNED_BYTE;
         bytesPerElement = Uint8List.bytesPerElement;
-      } else if (array is Float32List) {
+      } else if (_arrayType == "Float32Array") {
         type = gl.FLOAT;
         bytesPerElement = Float32List.bytesPerElement;
-      } else if (array is Uint32List) {
+      } else if (_arrayType == "Uint32Array") {
         type = gl.UNSIGNED_INT;
         bytesPerElement = Uint32List.bytesPerElement;
       } else {
         // 保持抛出异常 及时发现异常情况
         throw ("WebGLAttributes.createBuffer InstancedBufferAttribute arrayType: ${array.runtimeType} is not support  ");
       }
-    } else if (attribute is InstancedInterleavedBuffer) {
+    } else if (arrayType == InstancedInterleavedBuffer) {
       type = gl.UNSIGNED_BYTE;
       bytesPerElement = Uint8List.bytesPerElement;
 
-      if (array is Uint8List) {
+      if (array is Uint8Array) {
         type = gl.UNSIGNED_BYTE;
         bytesPerElement = Uint8List.bytesPerElement;
-      } else if (array is Float32List) {
+      } else if (array is Float32Array) {
         type = gl.FLOAT;
         bytesPerElement = Float32List.bytesPerElement;
-      } else if (array is Uint32List) {
+      } else if (array is Uint32Array) {
         type = gl.UNSIGNED_INT;
         bytesPerElement = Uint32List.bytesPerElement;
       } else {
         // 保持抛出异常 及时发现异常情况
         throw ("WebGLAttributes.createBuffer InstancedInterleavedBuffer arrayType: ${array.runtimeType} is not support  ");
       }
-    } else if (array is Float32List) {
+    } else if (array.runtimeType == Float32Array) {
       type = gl.FLOAT;
       bytesPerElement = Float32List.bytesPerElement;
-    } else if (array is Uint32List) {
+    } else if (array.runtimeType == Uint32Array) {
       type = gl.UNSIGNED_INT;
       bytesPerElement = Uint32List.bytesPerElement;
-    } else if (array is Uint8List) {
+    } else if (array.runtimeType == Uint8Array) {
       type = gl.UNSIGNED_BYTE;
       bytesPerElement = Uint8List.bytesPerElement;
     } else {
@@ -111,16 +110,16 @@ class WebGLAttributes {
     gl.bufferData(bufferType, array.lengthInBytes, array, usage);
 
     if (attribute.onUploadCallback != null) {
-      attribute.onUploadCallback!();
+      attribute.onUploadCallback();
     }
 
-    if (attribute is Float32BufferAttribute) {
+    if (arrayType == Float32BufferAttribute) {
       type = gl.FLOAT;
       bytesPerElement = Float32List.bytesPerElement;
-    } else if (attribute is Float64BufferAttribute) {
+    } else if (arrayType == Float64BufferAttribute) {
       print(
           'THREE.WebGLAttributes: Unsupported data buffer format: Float64Array.');
-    } else if (attribute is Uint16BufferAttribute) {
+    } else if (arrayType == Uint16BufferAttribute) {
       bytesPerElement = Uint16List.bytesPerElement;
 
       if (attribute.isFloat16BufferAttribute) {
@@ -133,23 +132,23 @@ class WebGLAttributes {
       } else {
         type = gl.UNSIGNED_SHORT;
       }
-    } else if (attribute is Int16BufferAttribute) {
+    } else if (arrayType == Int16BufferAttribute) {
       bytesPerElement = Int16List.bytesPerElement;
 
       type = gl.SHORT;
-    } else if (attribute is Uint32BufferAttribute) {
+    } else if (arrayType == Uint32BufferAttribute) {
       bytesPerElement = Uint32List.bytesPerElement;
 
       type = gl.UNSIGNED_INT;
-    } else if (attribute is Int32BufferAttribute) {
+    } else if (arrayType == Int32BufferAttribute) {
       bytesPerElement = Int32List.bytesPerElement;
 
       type = gl.INT;
-    } else if (attribute is Int8BufferAttribute) {
+    } else if (arrayType == Int8BufferAttribute) {
       bytesPerElement = Int8List.bytesPerElement;
 
       type = gl.BYTE;
-    } else if (attribute is Uint8BufferAttribute) {
+    } else if (arrayType == Uint8BufferAttribute) {
       bytesPerElement = Uint8List.bytesPerElement;
 
       type = gl.UNSIGNED_BYTE;
