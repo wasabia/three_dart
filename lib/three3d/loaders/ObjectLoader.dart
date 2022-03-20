@@ -7,12 +7,12 @@ class ObjectLoader extends Loader {
     var scope = this;
 
     var path = (this.path == '') ? LoaderUtils.extractUrlBase(url) : this.path;
-    resourcePath = resourcePath ?? path;
+    this.resourcePath = this.resourcePath ?? path;
 
-    var loader = FileLoader(manager);
+    var loader = new FileLoader(this.manager);
     loader.setPath(this.path);
-    loader.setRequestHeader(requestHeader);
-    loader.setWithCredentials(withCredentials);
+    loader.setRequestHeader(this.requestHeader);
+    loader.setWithCredentials(this.withCredentials);
     loader.load(url, (text) {
       var json = null;
 
@@ -43,12 +43,12 @@ class ObjectLoader extends Loader {
     var scope = this;
 
     var path = (this.path == '') ? LoaderUtils.extractUrlBase(url) : this.path;
-    resourcePath = resourcePath ?? path;
+    this.resourcePath = this.resourcePath ?? path;
 
-    var loader = FileLoader(manager);
+    var loader = new FileLoader(this.manager);
     loader.setPath(this.path);
-    loader.setRequestHeader(requestHeader);
-    loader.setWithCredentials(withCredentials);
+    loader.setRequestHeader(this.requestHeader);
+    loader.setWithCredentials(this.withCredentials);
 
     var text = await loader.loadAsync(url);
 
@@ -66,32 +66,32 @@ class ObjectLoader extends Loader {
   }
 
   parse(json, [String? path, Function? onLoad, Function? onError]) async {
-    var animations = parseAnimations(json.animations);
-    var shapes = parseShapes(json.shapes);
-    var geometries = parseGeometries(json.geometries, shapes);
+    var animations = this.parseAnimations(json.animations);
+    var shapes = this.parseShapes(json.shapes);
+    var geometries = this.parseGeometries(json.geometries, shapes);
 
-    var images = await parseImages(json.images, null);
+    var images = await this.parseImages(json.images, null);
 
-    var textures = parseTextures(json.textures, images);
-    var materials = parseMaterials(json.materials, textures);
+    var textures = this.parseTextures(json.textures, images);
+    var materials = this.parseMaterials(json.materials, textures);
 
-    var object =
-        parseObject(json.object, geometries, materials, textures, animations);
-    var skeletons = parseSkeletons(json.skeletons, object);
+    var object = this
+        .parseObject(json.object, geometries, materials, textures, animations);
+    var skeletons = this.parseSkeletons(json.skeletons, object);
 
-    bindSkeletons(object, skeletons);
+    this.bindSkeletons(object, skeletons);
 
     return object;
   }
 
   parseAsync(Map<String, dynamic> json) async {
-    var animations = parseAnimations(json["animations"]);
-    var shapes = parseShapes(json["shapes"]);
-    var geometries = parseGeometries(json["geometries"], shapes);
+    var animations = this.parseAnimations(json["animations"]);
+    var shapes = this.parseShapes(json["shapes"]);
+    var geometries = this.parseGeometries(json["geometries"], shapes);
 
     // print(" ObjectLoader.parseAsync images1: ${json["images"]} ");
 
-    var images = await parseImages(json["images"], null);
+    var images = await this.parseImages(json["images"], null);
 
     // print(" ObjectLoader.parseAsync images2: ${images} ");
 
@@ -102,10 +102,10 @@ class ObjectLoader extends Loader {
       });
     }
 
-    var textures = parseTextures(json["textures"], images);
-    var materials = parseMaterials(json["materials"], textures);
+    var textures = this.parseTextures(json["textures"], images);
+    var materials = this.parseMaterials(json["materials"], textures);
 
-    var object = parseObject(
+    var object = this.parseObject(
         json["object"], geometries, materials, textures, animations);
 
     // var skeletons = this.parseSkeletons( json.skeletons, object );
@@ -119,7 +119,7 @@ class ObjectLoader extends Loader {
 
     if (json != null) {
       for (var i = 0, l = json.length; i < l; i++) {
-        var shape = Shape(null).fromJSON(json[i]);
+        var shape = new Shape(null).fromJSON(json[i]);
 
         shapes[shape.uuid] = shape;
       }
@@ -142,7 +142,7 @@ class ObjectLoader extends Loader {
 
     if (json != null) {
       for (var i = 0, l = json.length; i < l; i++) {
-        var skeleton = Skeleton().fromJSON(json[i], bones);
+        var skeleton = new Skeleton().fromJSON(json[i], bones);
 
         skeletons[skeleton.uuid] = skeleton;
       }
@@ -155,7 +155,7 @@ class ObjectLoader extends Loader {
     var geometries = {};
 
     if (json != null) {
-      var bufferGeometryLoader = BufferGeometryLoader(null);
+      var bufferGeometryLoader = new BufferGeometryLoader(null);
 
       for (var i = 0, l = json.length; i < l; i++) {
         var geometry;
@@ -191,9 +191,8 @@ class ObjectLoader extends Loader {
         geometry.uuid = data["uuid"];
 
         if (data["name"] != null) geometry.name = data["name"];
-        if (geometry.isBufferGeometry == true && data["userData"] != null) {
+        if (geometry.isBufferGeometry == true && data["userData"] != null)
           geometry.userData = data["userData"];
-        }
 
         geometries[data["uuid"]] = geometry;
       }
@@ -207,7 +206,7 @@ class ObjectLoader extends Loader {
     var materials = {};
 
     if (json != null) {
-      var loader = MaterialLoader(null);
+      var loader = new MaterialLoader(null);
       loader.setTextures(textures);
 
       for (var i = 0, l = json.length; i < l; i++) {
@@ -296,10 +295,10 @@ class ObjectLoader extends Loader {
     };
 
     if (json != null && json.length > 0) {
-      var manager = LoadingManager(onLoad, null, null);
+      var manager = new LoadingManager(onLoad, null, null);
 
-      loader = ImageLoader(manager);
-      loader.setCrossOrigin(crossOrigin);
+      loader = new ImageLoader(manager);
+      loader.setCrossOrigin(this.crossOrigin);
 
       for (var i = 0, il = json.length; i < il; i++) {
         Map<String, dynamic> image = json[i];
@@ -333,7 +332,7 @@ class ObjectLoader extends Loader {
             }
           }
 
-          images[image["uuid"]] = Source(imageArray);
+          images[ image["uuid"] ] = new Source( imageArray );
         } else {
           // load single image
 
@@ -380,19 +379,18 @@ class ObjectLoader extends Loader {
 
    
         if (image is List) {
-          texture = CubeTexture();
+          texture = new CubeTexture();
 
           if (image.length == 6) texture.needsUpdate = true;
         } else {
           if (image != null && image.data != null && image.url == null) {
-            texture = DataTexture();
+            texture = new DataTexture();
           } else {
-            texture = Texture();
+            texture = new Texture();
           }
 
-          if (image != null) {
-            texture.needsUpdate = true;
-          } // textures can have null image data
+          if (image != null)
+            texture.needsUpdate = true; // textures can have null image data
 
         }
 
@@ -401,9 +399,8 @@ class ObjectLoader extends Loader {
 
         if (data["name"] != null) texture.name = data["name"];
 
-        if (data["mapping"] != null) {
+        if (data["mapping"] != null)
           texture.mapping = parseConstant(data["mapping"], TEXTURE_MAPPING);
-        }
 
         if (data["offset"] != null) texture.offset.fromArray(data["offset"]);
         if (data["repeat"] != null) texture.repeat.fromArray(data["repeat"]);
@@ -419,22 +416,18 @@ class ObjectLoader extends Loader {
         if (data["type"] != null) texture.type = data["type"];
         if (data["encoding"] != null) texture.encoding = data["encoding"];
 
-        if (data["minFilter"] != null) {
+        if (data["minFilter"] != null)
           texture.minFilter = parseConstant(data["minFilter"], TEXTURE_FILTER);
-        }
-        if (data["magFilter"] != null) {
+        if (data["magFilter"] != null)
           texture.magFilter = parseConstant(data["magFilter"], TEXTURE_FILTER);
-        }
         if (data["anisotropy"] != null) texture.anisotropy = data["anisotropy"];
 
         if (data["flipY"] != null) texture.flipY = data["flipY"];
 
-        if (data["premultiplyAlpha"] != null) {
+        if (data["premultiplyAlpha"] != null)
           texture.premultiplyAlpha = data["premultiplyAlpha"];
-        }
-        if (data["unpackAlignment"] != null) {
+        if (data["unpackAlignment"] != null)
           texture.unpackAlignment = data["unpackAlignment"];
-        }
         if (data["userData"] != null) texture.userData = data["userData"];
 
         textures[data["uuid"]] = texture;
@@ -494,7 +487,7 @@ class ObjectLoader extends Loader {
 
     switch (data["type"]) {
       case 'Scene':
-        object = Scene();
+        object = new Scene();
 
         if (data["background"] != null) {
           if (data["background"] is int) {
@@ -510,77 +503,75 @@ class ObjectLoader extends Loader {
 
         if (data["fog"] != null) {
           if (data["fog"]["type"] == 'Fog') {
-            object.fog = Fog(
+            object.fog = new Fog(
                 data["fog"]["color"], data["fog"]["near"], data["fog"]["far"]);
           } else if (data["fog"]["type"] == 'FogExp2') {
             object.fog =
-                FogExp2(data["fog"]["color"], data["fog"]["density"]);
+                new FogExp2(data["fog"]["color"], data["fog"]["density"]);
           }
         }
 
         break;
 
       case 'PerspectiveCamera':
-        object = PerspectiveCamera(
+        object = new PerspectiveCamera(
             data["fov"], data["aspect"], data["near"], data["far"]);
 
         if (data["focus"] != null) object.focus = data["focus"];
         if (data["zoom"] != null) object.zoom = data["zoom"];
         if (data["filmGauge"] != null) object.filmGauge = data["filmGauge"];
         if (data["filmOffset"] != null) object.filmOffset = data["filmOffset"];
-        if (data["view"] != null) {
+        if (data["view"] != null)
           object.view = convert.jsonDecode(convert.jsonEncode(data["view"]));
-        }
 
         break;
 
       case 'OrthographicCamera':
-        object = OrthographicCamera(data["left"], data["right"],
+        object = new OrthographicCamera(data["left"], data["right"],
             data["top"], data["bottom"], data["near"], data["far"]);
 
         if (data["zoom"] != null) object.zoom = data["zoom"];
-        if (data["view"] != null) {
+        if (data["view"] != null)
           object.view = convert.jsonDecode(convert.jsonEncode(data["view"]));
-        }
 
         break;
 
       case 'AmbientLight':
-        object = AmbientLight(data["color"], data["intensity"]);
+        object = new AmbientLight(data["color"], data["intensity"]);
 
         break;
 
       case 'DirectionalLight':
-        object = DirectionalLight(data["color"], data["intensity"]);
+        object = new DirectionalLight(data["color"], data["intensity"]);
 
         break;
 
       case 'PointLight':
-        object = PointLight(
+        object = new PointLight(
             data["color"], data["intensity"], data["distance"], data["decay"]);
 
         break;
 
       case 'RectAreaLight':
-        object = RectAreaLight(
+        object = new RectAreaLight(
             data["color"], data["intensity"], data["width"], data["height"]);
 
         break;
 
       case 'SpotLight':
-        object = SpotLight(data["color"], data["intensity"],
+        object = new SpotLight(data["color"], data["intensity"],
             data["distance"], data["angle"], data["penumbra"], data["decay"]);
 
         break;
 
       case 'HemisphereLight':
-        object = HemisphereLight(
+        object = new HemisphereLight(
             data["color"], data["groundColor"], data["intensity"]);
 
         break;
 
       case 'LightProbe':
-        object = LightProbe(null, null).fromJSON(data);
+        object = new LightProbe(null, null).fromJSON(data);
 
         break;
 
@@ -588,12 +579,11 @@ class ObjectLoader extends Loader {
         geometry = getGeometry(data["geometry"]);
         material = getMaterial(data["material"]);
 
-        object = SkinnedMesh(geometry, material);
+        object = new SkinnedMesh(geometry, material);
 
         if (data["bindMode"] != null) object.bindMode = data["bindMode"];
-        if (data["bindMatrix"] != null) {
+        if (data["bindMatrix"] != null)
           object.bindMatrix.fromArray(data["bindMatrix"]);
-        }
         if (data["skeleton"] != null) object.skeleton = data["skeleton"];
 
         break;
@@ -602,7 +592,7 @@ class ObjectLoader extends Loader {
         geometry = getGeometry(data["geometry"]);
         material = getMaterial(data["material"]);
 
-        object = Mesh(geometry, material);
+        object = new Mesh(geometry, material);
 
         break;
 
@@ -613,15 +603,14 @@ class ObjectLoader extends Loader {
         var instanceMatrix = data["instanceMatrix"];
         var instanceColor = data["instanceColor"];
 
-        object = InstancedMesh(geometry, material, count);
-        object.instanceMatrix = InstancedBufferAttribute(
-            Float32List(instanceMatrix.array), 16, false);
-        if (instanceColor != null) {
-          object.instanceColor = InstancedBufferAttribute(
-              Float32List(instanceColor.array),
+        object = new InstancedMesh(geometry, material, count);
+        object.instanceMatrix = new InstancedBufferAttribute(
+            new Float32Array(instanceMatrix.array), 16, false);
+        if (instanceColor != null)
+          object.instanceColor = new InstancedBufferAttribute(
+              new Float32Array(instanceColor.array),
               instanceColor.itemSize,
               false);
-        }
 
         break;
 
@@ -632,48 +621,47 @@ class ObjectLoader extends Loader {
       // 	break;
 
       case 'Line':
-        object =
-            Line(
+        object = new Line(
             getGeometry(data["geometry"]), getMaterial(data["material"]));
 
         break;
 
       case 'LineLoop':
-        object = LineLoop(
+        object = new LineLoop(
             getGeometry(data["geometry"]), getMaterial(data["material"]));
 
         break;
 
       case 'LineSegments':
-        object = LineSegments(
+        object = new LineSegments(
             getGeometry(data["geometry"]), getMaterial(data["material"]));
 
         break;
 
       case 'PointCloud':
       case 'Points':
-        object = Points(
+        object = new Points(
             getGeometry(data["geometry"]), getMaterial(data["material"]));
 
         break;
 
       case 'Sprite':
-        object = Sprite(getMaterial(data["material"]));
+        object = new Sprite(getMaterial(data["material"]));
 
         break;
 
       case 'Group':
-        object = Group();
+        object = new Group();
 
         break;
 
       case 'Bone':
-        object = Bone();
+        object = new Bone();
 
         break;
 
       default:
-        object = Object3D();
+        object = new Object3D();
     }
 
     object.uuid = data["uuid"];
@@ -683,50 +671,40 @@ class ObjectLoader extends Loader {
     if (data["matrix"] != null) {
       object.matrix.fromArray(data["matrix"]);
 
-      if (data["matrixAutoUpdate"] != null) {
+      if (data["matrixAutoUpdate"] != null)
         object.matrixAutoUpdate = data["matrixAutoUpdate"];
-      }
-      if (object.matrixAutoUpdate) {
+      if (object.matrixAutoUpdate)
         object.matrix
             .decompose(object.position, object.quaternion, object.scale);
-      }
     } else {
       if (data["position"] != null) object.position.fromArray(data["position"]);
       if (data["rotation"] != null) object.rotation.fromArray(data["rotation"]);
-      if (data["quaternion"] != null) {
+      if (data["quaternion"] != null)
         object.quaternion.fromArray(data["quaternion"]);
-      }
       if (data["scale"] != null) object.scale.fromArray(data["scale"]);
     }
 
     if (data["castShadow"] != null) object.castShadow = data["castShadow"];
-    if (data["receiveShadow"] != null) {
+    if (data["receiveShadow"] != null)
       object.receiveShadow = data["receiveShadow"];
-    }
 
     if (data["shadow"] != null) {
-      if (data["shadow"]["bias"] != null) {
+      if (data["shadow"]["bias"] != null)
         object.shadow.bias = data["shadow"]["bias"];
-      }
-      if (data["shadow"]["normalBias"] != null) {
+      if (data["shadow"]["normalBias"] != null)
         object.shadow.normalBias = data["shadow"]["normalBias"];
-      }
-      if (data["shadow"]["radius"] != null) {
+      if (data["shadow"]["radius"] != null)
         object.shadow.radius = data["shadow"]["radius"];
-      }
-      if (data["shadow"]["mapSize"] != null) {
+      if (data["shadow"]["mapSize"] != null)
         object.shadow.mapSize.fromArray(data["shadow"]["mapSize"]);
-      }
-      if (data["shadow"]["camera"] != null) {
+      if (data["shadow"]["camera"] != null)
         object.shadow.camera =
-            parseObject(data["shadow"]["camera"], null, null, null, null);
-      }
+            this.parseObject(data["shadow"]["camera"], null, null, null, null);
     }
 
     if (data["visible"] != null) object.visible = data["visible"];
-    if (data["frustumCulled"] != null) {
+    if (data["frustumCulled"] != null)
       object.frustumCulled = data["frustumCulled"];
-    }
     if (data["renderOrder"] != null) object.renderOrder = data["renderOrder"];
     if (data["userData"] != null) object.userData = data["userData"];
     if (data["layers"] != null) object.layers.mask = data["layers"];
@@ -735,7 +713,7 @@ class ObjectLoader extends Loader {
       var children = data["children"];
 
       for (var i = 0; i < children.length; i++) {
-        object.add(parseObject(
+        object.add(this.parseObject(
             children[i], geometries, materials, textures, animations));
       }
     }
@@ -790,7 +768,7 @@ class ObjectLoader extends Loader {
   setTexturePath(value) {
     print(
         'THREE.ObjectLoader: .setTexturePath() has been renamed to .setResourcePath().');
-    return setResourcePath(value);
+    return this.setResourcePath(value);
   }
 }
 

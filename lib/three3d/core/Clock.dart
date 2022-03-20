@@ -7,56 +7,56 @@ class Clock {
   late num elapsedTime;
   late bool running;
 
-  Clock([bool? autoStart]) {
+  Clock([autoStart]) {
     this.autoStart = (autoStart != null) ? autoStart : true;
 
-    startTime = 0;
-    oldTime = 0;
-    elapsedTime = 0;
+    this.startTime = 0;
+    this.oldTime = 0;
+    this.elapsedTime = 0;
 
-    running = false;
+    this.running = false;
   }
 
-  void start() {
-    startTime = now();
+  start() {
+    this.startTime = now();
 
-    oldTime = startTime;
-    elapsedTime = 0;
-    running = true;
+    this.oldTime = this.startTime;
+    this.elapsedTime = 0;
+    this.running = true;
   }
 
-  void stop() {
-    getElapsedTime();
-    running = false;
-    autoStart = false;
+  stop() {
+    this.getElapsedTime();
+    this.running = false;
+    this.autoStart = false;
   }
 
-  num getElapsedTime() {
-    getDelta();
-    return elapsedTime;
+  getElapsedTime() {
+    this.getDelta();
+    return this.elapsedTime;
   }
 
-  num getDelta() {
+  getDelta() {
     num diff = 0;
 
-    if (autoStart && !running) {
-      start();
+    if (this.autoStart && !this.running) {
+      this.start();
       return 0;
     }
 
-    if (running) {
+    if (this.running) {
       var newTime = now();
 
-      diff = (newTime - oldTime) / 1000;
-      oldTime = newTime;
+      diff = (newTime - this.oldTime) / 1000;
+      this.oldTime = newTime;
 
-      elapsedTime += diff;
+      this.elapsedTime += diff;
     }
 
     return diff;
   }
 }
 
-int now() {
+now() {
   return DateTime.now().millisecondsSinceEpoch; // see #10732
 }

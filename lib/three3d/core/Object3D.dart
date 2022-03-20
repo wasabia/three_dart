@@ -2,18 +2,18 @@ part of three_core;
 
 int _object3DId = 0;
 
-Vector3 _v1 = Vector3.init();
-Quaternion _q1 = Quaternion();
-Matrix4 _m1 = Matrix4();
-Vector3 _target = Vector3.init();
+Vector3 _v1 = new Vector3.init();
+Quaternion _q1 = new Quaternion();
+Matrix4 _m1 = new Matrix4();
+Vector3 _target = new Vector3.init();
 
-Vector3 _position = Vector3.init();
-Vector3 _scale = Vector3.init();
-Quaternion _quaternion = Quaternion();
+Vector3 _position = new Vector3.init();
+Vector3 _scale = new Vector3.init();
+Quaternion _quaternion = new Quaternion();
 
-Vector3 _xAxis = Vector3(1, 0, 0);
-Vector3 _yAxis = Vector3(0, 1, 0);
-Vector3 _zAxis = Vector3(0, 0, 1);
+Vector3 _xAxis = new Vector3(1, 0, 0);
+Vector3 _yAxis = new Vector3(0, 1, 0);
+Vector3 _zAxis = new Vector3(0, 0, 1);
 
 Event _addedEvent = Event({"type": "added"});
 Event _removedEvent = Event({"type": "removed"});
@@ -76,8 +76,8 @@ class Object3D with EventDispatcher {
 
   Vector3 up = Object3D.DefaultUp.clone();
 
-  Vector3 position = Vector3(0, 0, 0);
-  Euler rotation = Euler(0, 0, 0);
+  Vector3 position = Vector3(0,0,0);
+  Euler rotation = Euler(0,0,0);
   Quaternion quaternion = Quaternion();
   Vector3 scale = Vector3(1, 1, 1);
   Matrix4 modelViewMatrix = Matrix4();
@@ -125,27 +125,27 @@ class Object3D with EventDispatcher {
     type = json["type"];
     layers.mask = json["layers"];
 
-    position = Vector3.fromJSON(json["position"]);
-    quaternion = Quaternion.fromJSON(json["quaternion"]);
-    scale = Vector3.fromJSON(json["scale"]);
+    this.position = Vector3.fromJSON(json["position"]);
+    this.quaternion = Quaternion.fromJSON(json["quaternion"]);
+    this.scale = Vector3.fromJSON(json["scale"]);
 
     if (json["geometry"] != null) {
-      List<BufferGeometry>? geometries = rootJSON["geometries"];
+      List<BufferGeometry> geometries = rootJSON["geometries"];
 
       if (geometries != null) {
         BufferGeometry _geometry = geometries
             .firstWhere((element) => element.uuid == json["geometry"]);
-        geometry = _geometry;
+        this.geometry = _geometry;
       }
     }
 
     if (json["material"] != null) {
-      List<Material>? materials = rootJSON["materials"];
+      List<Material> materials = rootJSON["materials"];
 
       if (materials != null) {
         Material _material =
             materials.firstWhere((element) => element.uuid == json["material"]);
-        material = _material;
+        this.material = _material;
       }
     }
 
@@ -153,29 +153,27 @@ class Object3D with EventDispatcher {
 
     if (json["children"] != null) {
       List<Map<String, dynamic>> _children = json["children"];
-      for (var _child in _children) {
-        final obj = Object3D.castJSON(_child, rootJSON);
-        if (obj is Object3D) children.add(obj);
-      }
+      _children.forEach((_child) {
+        this.children.add(Object3D.castJSON(_child, rootJSON));
+      });
     }
   }
 
-  void init() {
+  init() {
     // TODO
     rotation.onChange(onRotationChange);
     quaternion.onChange(onQuaternionChange);
   }
 
-  static EventDispatcher castJSON(
-      Map<String, dynamic> json, Map<String, dynamic> rootJSON) {
-    String? _type = json["type"];
+  static castJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) {
+    String _type = json["type"];
 
     if (_type == null) {
-      Map<String, dynamic>? _object = json["object"];
+      Map<String, dynamic> _object = json["object"];
       if (_object != null) {
         _type = _object["type"];
         json = _object;
-        print(" object is not null use object as json type: $_type ");
+        print(" object is not null use object as json type: ${_type} ");
       }
     }
 
@@ -204,159 +202,159 @@ class Object3D with EventDispatcher {
     } else if (_type == "ShapeGeometry") {
       return ShapeGeometry.fromJSON(json, rootJSON);
     } else {
-      throw " type: $_type Object3D.castJSON is not support yet... ";
+      throw " type: ${_type} Object3D.castJSON is not support yet... ";
     }
   }
 
-  void onRotationChange() {
+  onRotationChange() {
     quaternion.setFromEuler(rotation, false);
   }
 
-  void onQuaternionChange() {
+  onQuaternionChange() {
     rotation.setFromQuaternion(quaternion, null, false);
   }
 
-  void applyMatrix4(Matrix4 matrix) {
-    if (matrixAutoUpdate) updateMatrix();
+  applyMatrix4(matrix) {
+    if (this.matrixAutoUpdate) this.updateMatrix();
 
     this.matrix.premultiply(matrix);
 
-    this.matrix.decompose(position, quaternion, scale);
+    this.matrix.decompose(this.position, this.quaternion, this.scale);
   }
 
-  Object3D applyQuaternion(Quaternion q) {
-    quaternion.premultiply(q);
+  applyQuaternion(q) {
+    this.quaternion.premultiply(q);
 
     return this;
   }
 
-  void setRotationFromAxisAngle(axis, num angle) {
+  setRotationFromAxisAngle(axis, angle) {
     // assumes axis is normalized
 
-    quaternion.setFromAxisAngle(axis, angle);
+    this.quaternion.setFromAxisAngle(axis, angle);
   }
 
-  void setRotationFromEuler(Euler euler) {
-    quaternion.setFromEuler(euler, true);
+  setRotationFromEuler(euler) {
+    this.quaternion.setFromEuler(euler, true);
   }
 
-  void setRotationFromMatrix(m) {
+  setRotationFromMatrix(m) {
     // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 
-    quaternion.setFromRotationMatrix(m);
+    this.quaternion.setFromRotationMatrix(m);
   }
 
-  void setRotationFromQuaternion(Quaternion q) {
+  setRotationFromQuaternion(q) {
     // assumes q is normalized
 
-    quaternion.copy(q);
+    this.quaternion.copy(q);
   }
 
-  Object3D rotateOnAxis(axis, num angle) {
+  rotateOnAxis(axis, angle) {
     // rotate object on axis in object space
     // axis is assumed to be normalized
 
     _q1.setFromAxisAngle(axis, angle);
 
-    quaternion.multiply(_q1);
+    this.quaternion.multiply(_q1);
 
     return this;
   }
 
-  Object3D rotateOnWorldAxis(axis, num angle) {
+  rotateOnWorldAxis(axis, angle) {
     // rotate object on axis in world space
     // axis is assumed to be normalized
     // method assumes no rotated parent
 
     _q1.setFromAxisAngle(axis, angle);
 
-    quaternion.premultiply(_q1);
+    this.quaternion.premultiply(_q1);
 
     return this;
   }
 
-  Object3D rotateX(num angle) {
-    return rotateOnAxis(_xAxis, angle);
+  rotateX(angle) {
+    return this.rotateOnAxis(_xAxis, angle);
   }
 
-  Object3D rotateY(num angle) {
-    return rotateOnAxis(_yAxis, angle);
+  rotateY(angle) {
+    return this.rotateOnAxis(_yAxis, angle);
   }
 
-  Object3D rotateZ(num angle) {
-    return rotateOnAxis(_zAxis, angle);
+  rotateZ(angle) {
+    return this.rotateOnAxis(_zAxis, angle);
   }
 
-  Object3D translateOnAxis(axis, num distance) {
+  translateOnAxis(axis, distance) {
     // translate object by distance along axis in object space
     // axis is assumed to be normalized
 
-    _v1.copy(axis).applyQuaternion(quaternion);
+    _v1.copy(axis).applyQuaternion(this.quaternion);
 
-    position.add(_v1.multiplyScalar(distance));
+    this.position.add(_v1.multiplyScalar(distance));
 
     return this;
   }
 
-  Object3D translateX(distance) {
-    return translateOnAxis(_xAxis, distance);
+  translateX(distance) {
+    return this.translateOnAxis(_xAxis, distance);
   }
 
-  Object3D translateY(distance) {
-    return translateOnAxis(_yAxis, distance);
+  translateY(distance) {
+    return this.translateOnAxis(_yAxis, distance);
   }
 
-  Object3D translateZ(distance) {
-    return translateOnAxis(_zAxis, distance);
+  translateZ(distance) {
+    return this.translateOnAxis(_zAxis, distance);
   }
 
   localToWorld(vector) {
-    return vector.applyMatrix4(matrixWorld);
+    return vector.applyMatrix4(this.matrixWorld);
   }
 
   worldToLocal(vector) {
-    return vector.applyMatrix4(_m1.copy(matrixWorld).invert());
+    return vector.applyMatrix4(_m1.copy(this.matrixWorld).invert());
   }
 
-  void lookAt(Vector3 position) {
+  lookAt(Vector3 position) {
     // This method does not support objects having non-uniformly-scaled parent(s)
 
     _target.copy(position);
 
     var parent = this.parent;
 
-    updateWorldMatrix(true, false);
+    this.updateWorldMatrix(true, false);
 
-    _position.setFromMatrixPosition(matrixWorld);
+    _position.setFromMatrixPosition(this.matrixWorld);
 
     // TODO
-    if (isCamera || isLight) {
-      _m1.lookAt(_position, _target, up);
+    if (this.isCamera || this.isLight) {
+      _m1.lookAt(_position, _target, this.up);
     } else {
-      _m1.lookAt(_target, _position, up);
+      _m1.lookAt(_target, _position, this.up);
     }
 
-    quaternion.setFromRotationMatrix(_m1);
+    this.quaternion.setFromRotationMatrix(_m1);
 
     if (parent != null) {
       _m1.extractRotation(parent.matrixWorld);
       _q1.setFromRotationMatrix(_m1);
-      quaternion.premultiply(_q1.invert());
+      this.quaternion.premultiply(_q1.invert());
     }
   }
 
-  Object3D addAll(List<Object3D> objects) {
+  addAll(List<Object3D> objects) {
     for (var i = 0; i < objects.length; i++) {
-      add(objects[i]);
+      this.add(objects[i]);
     }
 
     return this;
   }
 
-  Object3D add(Object3D? object) {
+  add(Object3D object) {
     if (object == this) {
       print(
-          'THREE.Object3D.add: object can\'t be added as a child of itself. $object');
+          'THREE.Object3D.add: object can\'t be added as a child of itself. ${object}');
       return this;
     }
 
@@ -366,31 +364,31 @@ class Object3D with EventDispatcher {
       }
 
       object.parent = this;
-      children.add(object);
+      this.children.add(object);
 
       object.dispatchEvent(_addedEvent);
     } else {
       print(
-          'THREE.Object3D.add: object not an instance of THREE.Object3D. $object');
+          'THREE.Object3D.add: object not an instance of THREE.Object3D. ${object}');
     }
 
     return this;
   }
 
-  Object3D removeList(List<Object3D> objects) {
+  removeList(List<Object3D> objects) {
     for (var i = 0; i < objects.length; i++) {
-      remove(objects[i]);
+      this.remove(objects[i]);
     }
 
     return this;
   }
 
-  Object3D remove(Object3D object) {
-    var index = children.indexOf(object);
+  remove(Object3D object) {
+    var index = this.children.indexOf(object);
 
     if (index != -1) {
       object.parent = null;
-      children.removeAt(index);
+      this.children.removeAt(index);
 
       object.dispatchEvent(_removedEvent);
     }
@@ -398,7 +396,7 @@ class Object3D with EventDispatcher {
     return this;
   }
 
-  Object3D removeFromParent() {
+  removeFromParent() {
     var parent = this.parent;
 
     if (parent != null) {
@@ -408,26 +406,26 @@ class Object3D with EventDispatcher {
     return this;
   }
 
-  Object3D clear() {
-    for (var i = 0; i < children.length; i++) {
-      var object = children[i];
+  clear() {
+    for (var i = 0; i < this.children.length; i++) {
+      var object = this.children[i];
 
       object.parent = null;
 
       object.dispatchEvent(_removedEvent);
     }
 
-    children.length = 0;
+    this.children.length = 0;
 
     return this;
   }
 
-  Object3D attach(Object3D object) {
+  attach(Object3D object) {
     // adds object as a child of this, while maintaining the object's world transform
 
-    updateWorldMatrix(true, false);
+    this.updateWorldMatrix(true, false);
 
-    _m1.copy(matrixWorld).invert();
+    _m1.copy(this.matrixWorld).invert();
 
     if (object.parent != null) {
       object.parent!.updateWorldMatrix(true, false);
@@ -437,26 +435,26 @@ class Object3D with EventDispatcher {
 
     object.applyMatrix4(_m1);
 
-    add(object);
+    this.add(object);
     object.updateWorldMatrix(false, false);
 
     return this;
   }
 
-  Object3D? getObjectById(String id) {
-    return getObjectByProperty('id', id);
+  getObjectById(id) {
+    return this.getObjectByProperty('id', id);
   }
 
-  Object3D? getObjectByName(String name) {
-    return getObjectByProperty('name', name);
+  getObjectByName(name) {
+    return this.getObjectByProperty('name', name);
   }
 
   // TODO
-  Object3D? getObjectByProperty(String name, String value) {
-    if (getProperty(name) == value) return this;
+  getObjectByProperty(String name, String value) {
+    if (this.getProperty(name) == value) return this;
 
-    for (var i = 0, l = children.length; i < l; i++) {
-      var child = children[i];
+    for (var i = 0, l = this.children.length; i < l; i++) {
+      var child = this.children[i];
       var object = child.getObjectByProperty(name, value);
 
       if (object != null) {
@@ -467,46 +465,46 @@ class Object3D with EventDispatcher {
     return null;
   }
 
-  Vector3 getWorldPosition(Vector3? target) {
+  getWorldPosition(Vector3 target) {
     if (target == null) {
       print('THREE.Object3D: .getWorldPosition() target is now required');
-      target = Vector3.init();
+      target = new Vector3.init();
     }
 
-    updateWorldMatrix(true, false);
+    this.updateWorldMatrix(true, false);
 
-    return target.setFromMatrixPosition(matrixWorld);
+    return target.setFromMatrixPosition(this.matrixWorld);
   }
 
-  Quaternion getWorldQuaternion(Quaternion target) {
-    updateWorldMatrix(true, false);
+  getWorldQuaternion(Quaternion target) {
+    this.updateWorldMatrix(true, false);
 
-    matrixWorld.decompose(_position, target, _scale);
+    this.matrixWorld.decompose(_position, target, _scale);
 
     return target;
   }
 
-  Vector3 getWorldScale(Vector3 target) {
-    updateWorldMatrix(true, false);
+  getWorldScale(Vector3 target) {
+    this.updateWorldMatrix(true, false);
 
-    matrixWorld.decompose(_position, _quaternion, target);
+    this.matrixWorld.decompose(_position, _quaternion, target);
 
     return target;
   }
 
-  Vector3 getWorldDirection(Vector3 target) {
-    updateWorldMatrix(true, false);
+  getWorldDirection(Vector3 target) {
+    this.updateWorldMatrix(true, false);
 
-    var e = matrixWorld.elements;
+    var e = this.matrixWorld.elements;
 
     return target.set(e[8], e[9], e[10]).normalize();
   }
 
-  void raycast(Raycaster raycaster, List<Intersection> intersects) {
+  raycast(Raycaster raycaster, List<Intersection> intersects) {
     print("Object3D raycast todo ");
   }
 
-  void traverse(callback) {
+  traverse(callback) {
     callback(this);
 
     var children = this.children;
@@ -516,8 +514,8 @@ class Object3D with EventDispatcher {
     }
   }
 
-  void traverseVisible(callback) {
-    if (visible == false) return;
+  traverseVisible(callback) {
+    if (this.visible == false) return;
 
     callback(this);
 
@@ -528,7 +526,7 @@ class Object3D with EventDispatcher {
     }
   }
 
-  void traverseAncestors(callback) {
+  traverseAncestors(callback) {
     var parent = this.parent;
 
     if (parent != null) {
@@ -538,22 +536,24 @@ class Object3D with EventDispatcher {
     }
   }
 
-  void updateMatrix() {
-    matrix.compose(position, quaternion, scale);
-    matrixWorldNeedsUpdate = true;
+  updateMatrix() {
+    this.matrix.compose(this.position, this.quaternion, this.scale);
+    this.matrixWorldNeedsUpdate = true;
   }
 
-  void updateMatrixWorld([bool force = false]) {
-    if (matrixAutoUpdate) updateMatrix();
+  updateMatrixWorld([bool force = false]) {
+    if (this.matrixAutoUpdate) this.updateMatrix();
 
-    if (matrixWorldNeedsUpdate || force) {
-      if (parent == null) {
-        matrixWorld.copy(matrix);
+    if (this.matrixWorldNeedsUpdate || force) {
+      if (this.parent == null) {
+        this.matrixWorld.copy(this.matrix);
       } else {
-        matrixWorld.multiplyMatrices(parent!.matrixWorld, matrix);
+        this
+            .matrixWorld
+            .multiplyMatrices(this.parent!.matrixWorld, this.matrix);
       }
 
-      matrixWorldNeedsUpdate = false;
+      this.matrixWorldNeedsUpdate = false;
 
       force = true;
     }
@@ -567,19 +567,19 @@ class Object3D with EventDispatcher {
     }
   }
 
-  void updateWorldMatrix(bool updateParents, bool updateChildren) {
+  updateWorldMatrix(bool updateParents, bool updateChildren) {
     var parent = this.parent;
 
     if (updateParents == true && parent != null) {
       parent.updateWorldMatrix(true, false);
     }
 
-    if (matrixAutoUpdate) updateMatrix();
+    if (this.matrixAutoUpdate) this.updateMatrix();
 
     if (this.parent == null) {
-      matrixWorld.copy(matrix);
+      this.matrixWorld.copy(this.matrix);
     } else {
-      matrixWorld.multiplyMatrices(this.parent!.matrixWorld, matrix);
+      this.matrixWorld.multiplyMatrices(this.parent!.matrixWorld, this.matrix);
     }
 
     // update children
@@ -593,11 +593,11 @@ class Object3D with EventDispatcher {
     }
   }
 
-  Map<String, dynamic> toJSON({Object3dMeta? meta}) {
+  toJSON({Object3dMeta? meta}) {
     // meta is a string when called from JSON.stringify
     var isRootObject = (meta == null || meta is String);
 
-    Map<String, dynamic> output = <String, dynamic>{};
+    Map<String, dynamic> output = Map<String, dynamic>();
 
     // meta is a hash used to collect geometries, materials.
     // not providing it implies that this is the root object
@@ -615,7 +615,7 @@ class Object3D with EventDispatcher {
 
     // standard Object3D serialization
 
-    Map<String, dynamic> object = <String, dynamic>{};
+    Map<String, dynamic> object = Map<String, dynamic>();
 
     object["uuid"] = uuid;
     object["type"] = type;
@@ -624,45 +624,44 @@ class Object3D with EventDispatcher {
     if (castShadow == true) object["castShadow"] = true;
     if (receiveShadow == true) object["receiveShadow"] = true;
     if (visible == false) object["visible"] = false;
-    if (frustumCulled == false) object["frustumCulled"] = false;
-    if (renderOrder != 0) object["renderOrder"] = renderOrder;
-    if (userData.isNotEmpty) object["userData"] = userData;
+    if (this.frustumCulled == false) object["frustumCulled"] = false;
+    if (this.renderOrder != 0) object["renderOrder"] = this.renderOrder;
+    if (this.userData.keys.length > 0) object["userData"] = this.userData;
 
     object["layers"] = layers.mask;
-    object["matrix"] = matrix.toArray(List<num>.filled(16, 0.0));
+    object["matrix"] = this.matrix.toArray(List<num>.filled(16, 0.0));
 
-    if (matrixAutoUpdate == false) object["matrixAutoUpdate"] = false;
+    if (this.matrixAutoUpdate == false) object["matrixAutoUpdate"] = false;
 
     // object specific properties
 
-    if (type == "InstancedMesh") {
+    if (this.type == "InstancedMesh") {
       InstancedMesh _instanceMesh = this as InstancedMesh;
 
       object["type"] = 'InstancedMesh';
       object["count"] = _instanceMesh.count;
       object["instanceMatrix"] = _instanceMesh.instanceMatrix.toJSON();
 
-      if (_instanceMesh.instanceColor != null) {
+      if (_instanceMesh.instanceColor != null)
         object["instanceColor"] = _instanceMesh.instanceColor!.toJSON();
-      }
     }
 
-    if (isScene) {
-      if (background != null) {
-        if (background.isColor) {
-          object["background"] = background!.getHex();
-        } else if (background.isTexture) {
-          object["background"] = background.toJSON(meta).uuid;
+    if (this.isScene) {
+      if (this.background != null) {
+        if (this.background.isColor) {
+          object["background"] = this.background!.getHex();
+        } else if (this.background.isTexture) {
+          object["background"] = this.background.toJSON(meta).uuid;
         }
       }
 
-      if (environment != null && environment!.isTexture) {
-        object["environment"] = environment!.toJSON(meta).uuid;
+      if (this.environment != null && this.environment!.isTexture) {
+        object["environment"] = this.environment!.toJSON(meta).uuid;
       }
-    } else if (isMesh || isLine || isPoints) {
-      object["geometry"] = serialize(meta!.geometries, geometry, meta);
+    } else if (this.isMesh || this.isLine || this.isPoints) {
+      object["geometry"] = serialize(meta!.geometries, this.geometry, meta);
 
-      var parameters = geometry!.parameters;
+      var parameters = this.geometry!.parameters;
 
       if (parameters != null && parameters["shapes"] != null) {
         var shapes = parameters["shapes"];
@@ -697,25 +696,25 @@ class Object3D with EventDispatcher {
 
     // }
 
-    if (material != null) {
+    if (this.material != null) {
       List<String> uuids = [];
 
-      if (material is List) {
-        for (var i = 0, l = material.length; i < l; i++) {
-          uuids.add(serialize(meta!.materials, material[i], meta));
+      if (this.material is List) {
+        for (var i = 0, l = this.material.length; i < l; i++) {
+          uuids.add(serialize(meta!.materials, this.material[i], meta));
         }
 
         object["material"] = uuids;
       } else {
-        object["material"] = serialize(meta!.materials, material, meta);
+        object["material"] = serialize(meta!.materials, this.material, meta);
       }
     }
 
-    if (children.isNotEmpty) {
+    if (this.children.length > 0) {
       List<Map<String, dynamic>> _childrenJSON = [];
 
-      for (var i = 0; i < children.length; i++) {
-        _childrenJSON.add(children[i].toJSON(meta: meta)["object"]);
+      for (var i = 0; i < this.children.length; i++) {
+        _childrenJSON.add(this.children[i].toJSON(meta: meta)["object"]);
       }
 
       object["children"] = _childrenJSON;
@@ -749,15 +748,15 @@ class Object3D with EventDispatcher {
       var animations = extractFromCache(meta.animations);
 
       print(textures);
-      print(" isRootObject: $isRootObject ");
+      print(" isRootObject: ${isRootObject} ");
 
-      if (geometries.isNotEmpty) output["geometries"] = geometries;
-      if (materials.isNotEmpty) output["materials"] = materials;
-      if (textures.isNotEmpty) output["textures"] = textures;
-      if (images.isNotEmpty) output["images"] = images;
-      if (shapes.isNotEmpty) output["shapes"] = shapes;
-      if (skeletons.isNotEmpty) output["skeletons"] = skeletons;
-      if (animations.isNotEmpty) output["animations"] = animations;
+      if (geometries.length > 0) output["geometries"] = geometries;
+      if (materials.length > 0) output["materials"] = materials;
+      if (textures.length > 0) output["textures"] = textures;
+      if (images.length > 0) output["images"] = images;
+      if (shapes.length > 0) output["shapes"] = shapes;
+      if (skeletons.length > 0) output["skeletons"] = skeletons;
+      if (animations.length > 0) output["animations"] = animations;
     }
 
     output["object"] = object;
@@ -788,50 +787,50 @@ class Object3D with EventDispatcher {
     return values;
   }
 
-  Object3D clone([bool? recursive]) {
+  clone([bool? recursive]) {
     return Object3D().copy(this, recursive);
   }
 
-  Object3D copy(Object3D source, [bool? recursive = true]) {
+  copy(Object3D source, [bool? recursive = true]) {
     recursive = recursive ?? true;
 
-    name = source.name;
+    this.name = source.name;
 
-    up.copy(source.up);
+    this.up.copy(source.up);
 
-    position.copy(source.position);
-    rotation.order = source.rotation.order;
-    quaternion.copy(source.quaternion);
-    scale.copy(source.scale);
+    this.position.copy(source.position);
+    this.rotation.order = source.rotation.order;
+    this.quaternion.copy(source.quaternion);
+    this.scale.copy(source.scale);
 
-    matrix.copy(source.matrix);
-    matrixWorld.copy(source.matrixWorld);
+    this.matrix.copy(source.matrix);
+    this.matrixWorld.copy(source.matrixWorld);
 
-    matrixAutoUpdate = source.matrixAutoUpdate;
-    matrixWorldNeedsUpdate = source.matrixWorldNeedsUpdate;
+    this.matrixAutoUpdate = source.matrixAutoUpdate;
+    this.matrixWorldNeedsUpdate = source.matrixWorldNeedsUpdate;
 
-    layers.mask = source.layers.mask;
-    visible = source.visible;
+    this.layers.mask = source.layers.mask;
+    this.visible = source.visible;
 
-    castShadow = source.castShadow;
-    receiveShadow = source.receiveShadow;
+    this.castShadow = source.castShadow;
+    this.receiveShadow = source.receiveShadow;
 
-    frustumCulled = source.frustumCulled;
-    renderOrder = source.renderOrder;
+    this.frustumCulled = source.frustumCulled;
+    this.renderOrder = source.renderOrder;
 
-    userData = json.decode(json.encode(source.userData));
+    this.userData = json.decode(json.encode(source.userData));
 
     if (recursive == true) {
       for (var i = 0; i < source.children.length; i++) {
         var child = source.children[i];
-        add(child.clone());
+        this.add(child.clone());
       }
     }
 
     return this;
   }
 
-  void onAfterRender(
+  onAfterRender(
       {WebGLRenderer? renderer,
       scene,
       Camera? camera,
@@ -842,72 +841,72 @@ class Object3D with EventDispatcher {
   }
 
   // 用于WebGLUniforms setOptional
-  Matrix4? getValue(String name) {
+  getValue(name) {
     if (name == "bindMatrix") {
-      return bindMatrix;
+      return this.bindMatrix;
     } else {
-      throw ("Object3D.getValue type: $type name: $name is not support .... ");
+      throw ("Object3D.getValue type: ${this.type} name: ${name} is not support .... ");
     }
   }
 
-  dynamic getProperty(String propertyName) {
+  getProperty(propertyName) {
     if (propertyName == "id") {
-      return id;
+      return this.id;
     } else if (propertyName == "name") {
-      return name;
+      return this.name;
     } else if (propertyName == "scale") {
-      return scale;
+      return this.scale;
     } else if (propertyName == "position") {
-      return position;
+      return this.position;
     } else if (propertyName == "quaternion") {
-      return quaternion;
+      return this.quaternion;
     } else if (propertyName == "material") {
-      return material;
+      return this.material;
     } else if (propertyName == "opacity") {
       // opacity 是别的对象的属性 Object3d 直接返回null
       return null;
     } else if (propertyName == "morphTargetInfluences") {
-      return morphTargetInfluences;
+      return this.morphTargetInfluences;
     } else if (propertyName == "castShadow") {
-      return castShadow;
+      return this.castShadow;
     } else if (propertyName == "receiveShadow") {
-      return receiveShadow;
+      return this.receiveShadow;
     } else if (propertyName == "visible") {
-      return visible;
+      return this.visible;
     } else {
-      throw ("Object3D.getProperty type: $type propertyName: $propertyName is not support ");
+      throw ("Object3D.getProperty type: ${type} propertyName: ${propertyName} is not support ");
     }
   }
 
-  Object3D setProperty(String propertyName, value) {
+  setProperty(String propertyName, value) {
     if (propertyName == "id") {
-      id = value;
+      this.id = value;
     } else if (propertyName == "castShadow") {
-      castShadow = value;
+      this.castShadow = value;
     } else if (propertyName == "receiveShadow") {
-      receiveShadow = value;
+      this.receiveShadow = value;
     } else if (propertyName == "visible") {
-      visible = value;
+      this.visible = value;
     } else if (propertyName == "name") {
-      name = value;
+      this.name = value;
     } else if (propertyName == "quaternion") {
-      quaternion.copy(value);
+      this.quaternion.copy(value);
     } else {
-      throw ("Object3D.setProperty type: $type propertyName: $propertyName is not support ");
+      throw ("Object3D.setProperty type: ${type} propertyName: ${propertyName} is not support ");
     }
 
     return this;
   }
 
-  void dispose() {}
+  dispose() {}
 }
 
 class Object3dMeta {
-  Map<String, dynamic> geometries = <String, dynamic>{};
-  Map<String, dynamic> materials = <String, dynamic>{};
-  Map<String, dynamic> textures = <String, dynamic>{};
-  Map<String, dynamic> images = <String, dynamic>{};
-  Map<String, dynamic> shapes = <String, dynamic>{};
-  Map<String, dynamic> skeletons = <String, dynamic>{};
-  Map<String, dynamic> animations = <String, dynamic>{};
+  Map<String, dynamic> geometries = Map<String, dynamic>();
+  Map<String, dynamic> materials = Map<String, dynamic>();
+  Map<String, dynamic> textures = Map<String, dynamic>();
+  Map<String, dynamic> images = Map<String, dynamic>();
+  Map<String, dynamic> shapes = Map<String, dynamic>();
+  Map<String, dynamic> skeletons = Map<String, dynamic>();
+  Map<String, dynamic> animations = Map<String, dynamic>();
 }

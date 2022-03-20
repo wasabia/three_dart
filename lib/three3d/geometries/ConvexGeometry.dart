@@ -3,12 +3,12 @@ part of three_geometries;
 
 class ConvexGeometry extends BufferGeometry {
   ConvexGeometry(points) : super() {
-    List<double> vertices = [];
-    List<double> normals = [];
+    var vertices = [];
+    var normals = [];
 
     // buffers
 
-    var convexHull = ConvexHull().setFromPoints(points);
+    var convexHull = new ConvexHull().setFromPoints(points);
 
     // generate vertices and normals
 
@@ -23,13 +23,8 @@ class ConvexGeometry extends BufferGeometry {
       do {
         var point = edge!.head().point;
 
-        vertices.addAll(
-            [point.x.toDouble(), point.y.toDouble(), point.z.toDouble()]);
-        normals.addAll([
-          face.normal.x.toDouble(),
-          face.normal.y.toDouble(),
-          face.normal.z.toDouble()
-        ]);
+        vertices.addAll([point.x, point.y, point.z]);
+        normals.addAll([face.normal.x, face.normal.y, face.normal.z]);
 
         edge = edge.next;
       } while (edge != face.edge);
@@ -37,9 +32,8 @@ class ConvexGeometry extends BufferGeometry {
 
     // build geometry
 
-    setAttribute('position',
-        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
-    setAttribute('normal',
-        Float32BufferAttribute(Float32List.fromList(normals), 3, false));
+    this.setAttribute(
+        'position', new Float32BufferAttribute(vertices, 3, false));
+    this.setAttribute('normal', new Float32BufferAttribute(normals, 3, false));
   }
 }

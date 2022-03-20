@@ -33,12 +33,20 @@ class Interpolant {
 
   dynamic DefaultSettings = {};
 
-  Interpolant(this.parameterPositions, this.sampleValues, this.valueSize,
-      this.resultBuffer);
+  Interpolant(parameterPositions, sampleValues, sampleSize, resultBuffer) {
+    // print(" parameterPositions sampleSize: ${sampleSize} ");
+    // print(parameterPositions);
+
+    this.parameterPositions = parameterPositions;
+
+    this.resultBuffer = resultBuffer != null ? resultBuffer : null;
+    this.sampleValues = sampleValues;
+    this.valueSize = sampleSize;
+  }
 
   evaluate(double t) {
-    var pp = parameterPositions;
-    int i1 = _cachedIndex;
+    var pp = this.parameterPositions;
+    int i1 = this._cachedIndex;
 
     num? t1;
     num? t0;
@@ -71,8 +79,8 @@ class Interpolant {
                 // after end
 
                 i1 = pp.length;
-                _cachedIndex = i1;
-                return afterEnd(i1 - 1, t, t0);
+                this._cachedIndex = i1;
+                return this.afterEnd(i1 - 1, t, t0);
               }
 
               if (i1 == giveUpAt) break; // this loop
@@ -116,8 +124,8 @@ class Interpolant {
               if (t0 == null) {
                 // before start
 
-                _cachedIndex = 0;
-                return beforeStart(0, t, t1);
+                this._cachedIndex = 0;
+                return this.beforeStart(0, t, t1);
               }
 
               if (i1 == giveUpAt) break; // this loop
@@ -175,35 +183,35 @@ class Interpolant {
         // check boundary cases, again
 
         if (t0 == null) {
-          _cachedIndex = 0;
-          return beforeStart(0, t, t1);
+          this._cachedIndex = 0;
+          return this.beforeStart(0, t, t1);
         }
 
         if (t1 == null) {
           i1 = pp.length;
-          _cachedIndex = i1;
-          return afterEnd(i1 - 1, t0, t);
+          this._cachedIndex = i1;
+          return this.afterEnd(i1 - 1, t0, t);
         }
       } // seek
 
-      _cachedIndex = i1;
+      this._cachedIndex = i1;
 
-      intervalChanged(i1, t0, t1);
+      this.intervalChanged(i1, t0, t1);
     } // validate_interval
 
-    return interpolate(i1, t0, t, t1!);
+    return this.interpolate(i1, t0, t, t1!);
   }
 
   getSettings() {
-    return settings ?? DefaultSettings;
+    return this.settings ?? this.DefaultSettings;
   }
 
-  copySampleValue(num index) {
+  copySampleValue(index) {
     // copies a sample value to the result buffer
 
-    var result = resultBuffer,
-        values = sampleValues,
-        stride = valueSize,
+    var result = this.resultBuffer,
+        values = this.sampleValues,
+        stride = this.valueSize,
         offset = index * stride;
 
     for (var i = 0; i != stride; ++i) {
