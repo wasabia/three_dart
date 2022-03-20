@@ -36,7 +36,13 @@ class Ray {
     return this;
   }
 
-  Vector3 at(double t, Vector3 target) {
+  // for three_dart_jsm/lib/three_dart_jsm/lines/LineSegments2.dart
+  // raycast(Raycaster raycaster, intersects) {}
+  // have a call ray.at(1, ssOrigin); 
+  // ssOrigin is Vector4
+  // for three.js allow Vector4 copy from Vector3 ...
+  // so the args target can be Vector4 | Vector3
+  at(double t, target) {
     return target.copy(direction).multiplyScalar(t).add(origin);
   }
 

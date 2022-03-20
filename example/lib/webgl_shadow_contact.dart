@@ -51,7 +51,7 @@ class _MyAppState extends State<webgl_shadow_contact> {
 
   late THREE.Texture texture;
 
-  THREE.WebGLMultisampleRenderTarget? renderTarget;
+  THREE.WebGLRenderTarget? renderTarget;
 
   late THREE.WebGLRenderTarget renderTarget2;
   late THREE.WebGLRenderTarget renderTargetBlur;
@@ -283,7 +283,7 @@ class _MyAppState extends State<webgl_shadow_contact> {
 
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
+      renderTarget = THREE.WebGLRenderTarget(
           (width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget!.samples = 4;
       renderer!.setRenderTarget(renderTarget!);
