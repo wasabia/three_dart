@@ -485,82 +485,82 @@ class Material with EventDispatcher {
       data["clearcoatRoughness"] = clearcoatRoughness;
     }
 
-    if (clearcoatMap != null && clearcoatMap!.isTexture) {
+    if (clearcoatMap != null && clearcoatMap is Texture) {
       data["clearcoatMap"] = clearcoatMap!.toJSON(meta)['uuid'];
     }
 
-    if (clearcoatRoughnessMap != null && clearcoatRoughnessMap!.isTexture) {
+    if (clearcoatRoughnessMap != null && clearcoatRoughnessMap is Texture) {
       data["clearcoatRoughnessMap"] =
           clearcoatRoughnessMap!.toJSON(meta)['uuid'];
     }
 
-    if (clearcoatNormalMap != null && clearcoatNormalMap!.isTexture) {
+    if (clearcoatNormalMap != null && clearcoatNormalMap is Texture) {
       data["clearcoatNormalMap"] = clearcoatNormalMap!.toJSON(meta)['uuid'];
       data["clearcoatNormalScale"] = clearcoatNormalScale!.toArray();
     }
 
-    if (map != null && map!.isTexture) {
+    if (map != null && map is Texture) {
       data["map"] = map!.toJSON(meta)["uuid"];
     }
-    if (matcap != null && matcap!.isTexture) {
+    if (matcap != null && matcap is Texture) {
       data["matcap"] = matcap!.toJSON(meta)["uuid"];
     }
-    if (alphaMap != null && alphaMap!.isTexture) {
+    if (alphaMap != null && alphaMap is Texture) {
       data["alphaMap"] = alphaMap!.toJSON(meta)["uuid"];
     }
-    if (lightMap != null && lightMap!.isTexture) {
+    if (lightMap != null && lightMap is Texture) {
       data["lightMap"] = lightMap!.toJSON(meta)["uuid"];
     }
 
-    if (lightMap != null && lightMap!.isTexture) {
+    if (lightMap != null && lightMap is Texture) {
       data["lightMap"] = lightMap!.toJSON(meta)['uuid'];
       data["lightMapIntensity"] = lightMapIntensity;
     }
 
-    if (aoMap != null && aoMap!.isTexture) {
+    if (aoMap != null && aoMap is Texture) {
       data["aoMap"] = aoMap!.toJSON(meta)['uuid'];
       data["aoMapIntensity"] = aoMapIntensity;
     }
 
-    if (bumpMap != null && bumpMap!.isTexture) {
+    if (bumpMap != null && bumpMap is Texture) {
       data["bumpMap"] = bumpMap!.toJSON(meta)['uuid'];
       data["bumpScale"] = bumpScale;
     }
 
-    if (normalMap != null && normalMap!.isTexture) {
+    if (normalMap != null && normalMap is Texture) {
       data["normalMap"] = normalMap!.toJSON(meta)['uuid'];
       data["normalMapType"] = normalMapType;
       data["normalScale"] = normalScale!.toArray();
     }
 
-    if (displacementMap != null && displacementMap!.isTexture) {
+    if (displacementMap != null && displacementMap is Texture) {
       data["displacementMap"] = displacementMap!.toJSON(meta)['uuid'];
       data["displacementScale"] = displacementScale;
       data["displacementBias"] = displacementBias;
     }
 
-    if (roughnessMap != null && roughnessMap!.isTexture) {
+    if (roughnessMap != null && roughnessMap is Texture) {
       data["roughnessMap"] = roughnessMap!.toJSON(meta)['uuid'];
     }
-    if (metalnessMap != null && metalnessMap!.isTexture) {
+    if (metalnessMap != null && metalnessMap is Texture) {
       data["metalnessMap"] = metalnessMap!.toJSON(meta)['uuid'];
     }
 
-    if (emissiveMap != null && emissiveMap!.isTexture) {
+    if (emissiveMap != null && emissiveMap is Texture) {
       data["emissiveMap"] = emissiveMap!.toJSON(meta)['uuid'];
     }
-    if (specularMap != null && specularMap!.isTexture) {
+    if (specularMap != null && specularMap is Texture) {
       data["specularMap"] = specularMap!.toJSON(meta)['uuid'];
     }
-    if (specularIntensityMap != null && specularIntensityMap!.isTexture) {
+    if (specularIntensityMap != null && specularIntensityMap is Texture) {
       data["specularIntensityMap"] =
           specularIntensityMap!.toJSON(meta)['uuid'];
     }
-    if (specularColorMap != null && specularColorMap!.isTexture) {
+    if (specularColorMap != null && specularColorMap is Texture) {
       data["specularColorMap"] = specularColorMap!.toJSON(meta)['uuid'];
     }
 
-    if (envMap != null && envMap!.isTexture) {
+    if (envMap != null && envMap is Texture) {
       data["envMap"] = envMap!.toJSON(meta)['uuid'];
 
       data["refractionRatio"] = refractionRatio;
@@ -571,16 +571,16 @@ class Material with EventDispatcher {
       }
     }
 
-    if (gradientMap != null && gradientMap!.isTexture) {
+    if (gradientMap != null && gradientMap is Texture) {
       data["gradientMap"] = gradientMap!.toJSON(meta)['uuid'];
     }
 
     data["transmission"] = transmission;
-    if (transmissionMap != null && transmissionMap!.isTexture) {
+    if (transmissionMap != null && transmissionMap is Texture) {
       data["transmissionMap"] = transmissionMap!.toJSON(meta)['uuid'];
     }
     if (thickness != null) data["thickness"] = thickness;
-    if (thicknessMap != null && thicknessMap!.isTexture) {
+    if (thicknessMap != null && thicknessMap is Texture) {
       data["thicknessMap"] = thicknessMap!.toJSON(meta)['uuid'];
     }
     if (attenuationColor != null) {

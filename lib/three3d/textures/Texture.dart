@@ -82,17 +82,8 @@ class Texture with EventDispatcher {
     this.encoding = encoding ?? LinearEncoding;
   }
 
-  get image {
-
-    return source.data;
-
-	}
-
-	set image( value ) {
-
-    source.data = value;
-
-	}
+  get image => source.data;
+  set image(value) => source.data = value;
 
   set needsUpdate(bool value) {
     if (value) {

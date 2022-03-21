@@ -126,7 +126,7 @@ class ConvexHull {
 
       // compute the distance from the ray’s origin to the intersection with the plane
 
-      num t = (vD != 0) ? (-vN / vD) : 0;
+      double t = (vD != 0) ? (-vN / vD) : 0;
 
       // only proceed if the distance is positive. a negative distance means the intersection point
       // lies "behind" the origin
@@ -374,7 +374,7 @@ class ConvexHull {
 
     tolerance = 3 *
         Math.EPSILON *
-        (Math.max(Math.abs(min.x), Math.abs(max.x)) +
+        (Math.max<num>(Math.abs(min.x), Math.abs(max.x)) +
             Math.max(Math.abs(min.y), Math.abs(max.y)) +
             Math.max(Math.abs(min.z), Math.abs(max.z)));
 

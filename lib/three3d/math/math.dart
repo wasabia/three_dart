@@ -13,19 +13,19 @@ class Math {
   // TODO
   static int MAX_SAFE_INTEGER = 9007199254740991;
 
-  static min(num x, num y) {
+  static T min<T extends num>(T x, T y) {
     return math.min(x, y);
   }
 
-  static min3(num x, num y, num z) {
+  static num min3(num x, num y, num z) {
     return min(min(x, y), z);
   }
 
-  static max(num x, num y) {
+  static T max<T extends num>(T x, T y) {
     return math.max(x, y);
   }
 
-  static max3(num x, num y, num z) {
+  static num max3(num x, num y, num z) {
     return max(max(x, y), z);
   }
 

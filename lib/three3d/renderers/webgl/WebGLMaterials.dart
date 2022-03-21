@@ -310,7 +310,7 @@ class WebGLMaterials {
   refreshUniformsPhong(uniforms, material) {
     uniforms["specular"]["value"].copy(material.specular);
     uniforms["shininess"]["value"] =
-        Math.max(material.shininess, 1e-4); // to prevent pow( 0.0, 0.0 )
+        Math.max<num>(material.shininess, 1e-4); // to prevent pow( 0.0, 0.0 )
 
     if (material.emissiveMap != null) {
       uniforms["emissiveMap"]["value"] = material.emissiveMap;

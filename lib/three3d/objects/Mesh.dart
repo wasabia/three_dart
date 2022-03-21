@@ -140,8 +140,8 @@ class Mesh extends Object3D {
             var group = groups[i];
             var groupMaterial = material[group["materialIndex"]];
 
-            var start = Math.max(group["start"], drawRange["start"]!);
-            var end = Math.min((group["start"] + group["count"]),
+            var start = Math.max<int>(group["start"], drawRange["start"]!);
+            var end = Math.min<int>((group["start"] + group["count"]),
                 (drawRange["start"]! + drawRange["count"]!));
 
             for (var j = start, jl = end; j < jl; j += 3) {
@@ -210,8 +210,8 @@ class Mesh extends Object3D {
             var group = groups[i];
             var groupMaterial = material[group["materialIndex"]];
 
-            var start = Math.max(group["start"], drawRange["start"]!);
-            var end = Math.min((group["start"] + group["count"]),
+            var start = Math.max<int>(group["start"], drawRange["start"]!);
+            var end = Math.min<int>((group["start"] + group["count"]),
                 (drawRange["start"]! + drawRange["count"]!));
 
             for (var j = start, jl = end; j < jl; j += 3) {
@@ -243,7 +243,7 @@ class Mesh extends Object3D {
           }
         } else {
           var start = Math.max(0, drawRange["start"]!);
-          var end = Math.min(
+          var end = Math.min<int>(
               position.count, (drawRange["start"]! + drawRange["count"]!));
 
           for (var i = start, il = end; i < il; i += 3) {

@@ -28,7 +28,7 @@ class WebGLExtensions {
     getExtension('EXT_color_buffer_half_float');
   }
 
-  has(name) {
+  has(String name) {
     if (kIsWeb) {
       return hasForWeb(name);
     } else {
@@ -36,7 +36,7 @@ class WebGLExtensions {
     }
   }
 
-  hasForWeb(name) {
+  hasForWeb(String name) {
     if (extensions[name] != null) {
       return extensions[name];
     }
@@ -76,7 +76,7 @@ class WebGLExtensions {
     return extension;
   }
 
-  hasForApp(name) {
+  bool hasForApp(name) {
     if (extensions.keys.isEmpty) {
       List<String> _extensions = gl.getExtension(name);
 

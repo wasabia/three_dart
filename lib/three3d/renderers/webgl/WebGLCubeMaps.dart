@@ -17,7 +17,6 @@ class WebGLCubeMaps {
 
   Texture? get(Texture? texture) {
     if (texture != null &&
-        texture.isTexture &&
         texture.isRenderTargetTexture == false) {
       var mapping = texture.mapping;
 
