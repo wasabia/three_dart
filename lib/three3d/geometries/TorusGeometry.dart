@@ -88,10 +88,10 @@ class TorusGeometry extends BufferGeometry {
 
     setIndex(indices);
     setAttribute(
-        'position', Float32BufferAttribute(Float32List.fromList(vertices), 3));
+        'position', Float32BufferAttribute(Float32Array.from(vertices), 3));
     setAttribute(
-        'normal', Float32BufferAttribute(Float32List.fromList(normals), 3));
-    setAttribute('uv', Float32BufferAttribute(Float32List.fromList(uvs), 2));
+        'normal', Float32BufferAttribute(Float32Array.from(normals), 3));
+    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvs), 2));
   }
 
   static fromJSON(data) {

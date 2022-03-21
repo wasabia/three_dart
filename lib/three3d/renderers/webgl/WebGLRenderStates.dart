@@ -49,7 +49,7 @@ class WebGLRenderStates {
     var renderState;
 
     if (renderStates.has(scene) == false) {
-      renderState = new WebGLRenderState(extensions, capabilities);
+      renderState = WebGLRenderState(extensions, capabilities);
       renderStates.add(key: scene, value: [renderState]);
     } else {
       if (renderCallDepth >= renderStates.get(scene).length) {
@@ -64,7 +64,7 @@ class WebGLRenderStates {
   }
 
   dispose() {
-    renderStates = new WeakMap();
+    renderStates = WeakMap();
   }
 }
 

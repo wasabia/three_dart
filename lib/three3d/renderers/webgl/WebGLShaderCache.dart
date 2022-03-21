@@ -3,19 +3,19 @@ part of three_webgl;
 int _id = 0;
 
 class WebGLShaderCache {
-  var shaderCache = new Map();
-  var materialCache = new Map();
+  var shaderCache = Map();
+  var materialCache = Map();
 
   WebGLShaderCache() {}
 
-  update(material) {
+  WebGLShaderCache update(Material material) {
     var vertexShader = material.vertexShader;
     var fragmentShader = material.fragmentShader;
 
-    var vertexShaderStage = this._getShaderStage(vertexShader);
-    var fragmentShaderStage = this._getShaderStage(fragmentShader);
+    var vertexShaderStage = _getShaderStage(vertexShader);
+    var fragmentShaderStage = _getShaderStage(fragmentShader);
 
-    var materialShaders = this._getShaderCacheForMaterial(material);
+    var materialShaders = _getShaderCacheForMaterial(material);
 
     if (materialShaders.contains(vertexShaderStage) == false) {
       materialShaders.add(vertexShaderStage);
@@ -30,35 +30,35 @@ class WebGLShaderCache {
     return this;
   }
 
-  remove(material) {
-    var materialShaders = this.materialCache[material];
+  WebGLShaderCache remove(Material material) {
+    var materialShaders = materialCache[material];
 
     for (var shaderStage in materialShaders) {
       shaderStage.usedTimes--;
 
-      if (shaderStage.usedTimes == 0) this.shaderCache.remove(shaderStage);
+      if (shaderStage.usedTimes == 0) shaderCache.remove(shaderStage);
     }
 
-    this.materialCache.remove(material);
+    materialCache.remove(material);
 
     return this;
   }
 
-  getVertexShaderID(material) {
-    return this._getShaderStage(material.vertexShader).id;
+  getVertexShaderID(Material material) {
+    return _getShaderStage(material.vertexShader).id;
   }
 
   getFragmentShaderID(material) {
-    return this._getShaderStage(material.fragmentShader).id;
+    return _getShaderStage(material.fragmentShader).id;
   }
 
-  dispose() {
-    this.shaderCache.clear();
-    this.materialCache.clear();
+  void dispose() {
+    shaderCache.clear();
+    materialCache.clear();
   }
 
   _getShaderCacheForMaterial(material) {
-    var cache = this.materialCache;
+    var cache = materialCache;
 
     if (cache.containsKey(material) == false) {
       cache[material] = [];
@@ -68,10 +68,10 @@ class WebGLShaderCache {
   }
 
   _getShaderStage(code) {
-    var cache = this.shaderCache;
+    var cache = shaderCache;
 
     if (cache.containsKey(code) == false) {
-      var stage = new WebGLShaderStage();
+      var stage = WebGLShaderStage();
       cache[code] = stage;
     }
 
@@ -83,8 +83,8 @@ class WebGLShaderStage {
   late int id;
   late int usedTimes;
   WebGLShaderStage() {
-    this.id = _id++;
+    id = _id++;
 
-    this.usedTimes = 0;
+    usedTimes = 0;
   }
 }

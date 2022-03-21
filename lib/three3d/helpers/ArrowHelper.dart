@@ -24,7 +24,7 @@ class ArrowHelper extends Object3D {
       _lineGeometry.setAttribute(
           'position',
           Float32BufferAttribute(
-              Float32List.fromList([0, 0, 0, 0, 1, 0]), 3, false));
+              Float32Array.from([0, 0, 0, 0, 1, 0]), 3, false));
 
       _coneGeometry = CylinderGeometry(0, 0.5, 1, 5, 1);
       _coneGeometry.translate(0, -0.5, 0);

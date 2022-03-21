@@ -497,9 +497,9 @@ class PMREMGenerator {
       var uvSize = 2;
       var faceIndexSize = 1;
 
-      var position = Float32List(positionSize * vertices * cubeFaces);
-      var uv = Float32List(uvSize * vertices * cubeFaces);
-      var faceIndex = Int32List(faceIndexSize * vertices * cubeFaces);
+      var position = Float32Array(positionSize * vertices * cubeFaces);
+      var uv = Float32Array(uvSize * vertices * cubeFaces);
+      var faceIndex = Int32Array(faceIndexSize * vertices * cubeFaces);
 
       for (var face = 0; face < cubeFaces; face++) {
         double x = (face % 3) * 2 / 3 - 1;
@@ -524,10 +524,10 @@ class PMREMGenerator {
           y + 1,
           0
         ];
-        position.setAll(positionSize * vertices * face, coordinates);
-        uv.setAll(uvSize * vertices * face, uv1);
+        position.set(coordinates, positionSize * vertices * face);
+        uv.set(uv1, uvSize * vertices * face);
         final faces = [face, face, face, face, face, face];
-        faceIndex.setAll(faceIndexSize * vertices * face, faces);
+        faceIndex.set(faces, faceIndexSize * vertices * face);
       }
 
       var planes = BufferGeometry();

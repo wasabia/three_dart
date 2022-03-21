@@ -5,7 +5,7 @@ class Scene extends Object3D {
 
   bool isScene = true;
 
-  dynamic fog;
+  Fog? fog;
 
   bool autoUpdate = true; // checked by the renderer
 

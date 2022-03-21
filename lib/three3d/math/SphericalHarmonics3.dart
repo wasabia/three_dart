@@ -120,7 +120,7 @@ class SphericalHarmonics3 {
     return this;
   }
 
-  SphericalHarmonics3 lerp(SphericalHarmonics3 sh, num alpha) {
+  SphericalHarmonics3 lerp(SphericalHarmonics3 sh, double alpha) {
     for (var i = 0; i < 9; i++) {
       coefficients[i].lerp(sh.coefficients[i], alpha);
     }

@@ -31,12 +31,12 @@ class WebGLCapabilities {
   bool get drawBuffers => isWebGL2 || extensions.has('WEBGL_draw_buffers');
 
   WebGLCapabilities(this.gl, this.extensions, this.parameters) {
-    this.precision = parameters["precision"] ?? "highp";
+    precision = parameters["precision"] ?? "highp";
 
     maxPrecision = getMaxPrecision(precision);
     if (maxPrecision != precision) {
       print(
-          'THREE.WebGLRenderer: ${precision} not supported, using ${maxPrecision} instead.');
+          'THREE.WebGLRenderer: $precision not supported, using $maxPrecision instead.');
       precision = maxPrecision;
     }
 

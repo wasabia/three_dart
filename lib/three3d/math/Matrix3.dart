@@ -3,10 +3,10 @@ part of three_math;
 class Matrix3 {
   String type = "Matrix3";
 
-  late Float32List elements;
+  late Float32Array elements;
 
   Matrix3() {
-    elements = Float32List.fromList([1, 0, 0, 0, 1, 0, 0, 0, 1]);
+    elements = Float32Array.from([1, 0, 0, 0, 1, 0, 0, 0, 1]);
   }
 
   Matrix3 set(double n11, double n12, double n13, double n21, double n22,
@@ -282,7 +282,7 @@ class Matrix3 {
     return true;
   }
 
-  Matrix3 fromArray(Float32List array, {int offset = 0}) {
+  Matrix3 fromArray(Float32Array array, {int offset = 0}) {
     for (var i = 0; i < 9; i++) {
       elements[i] = array[i + offset];
     }

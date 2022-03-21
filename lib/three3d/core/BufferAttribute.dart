@@ -1,6 +1,7 @@
 part of three_core;
 
-class BufferAttribute<TData extends TypedData> extends BaseBufferAttribute {
+abstract class BufferAttribute<TData extends NativeArray>
+    extends BaseBufferAttribute<TData> {
   final _vector = Vector3.init();
   final _vector2 = Vector2(null, null);
 
@@ -8,35 +9,7 @@ class BufferAttribute<TData extends TypedData> extends BaseBufferAttribute {
 
   BufferAttribute(TData arrayList, int itemSize, [bool normalized = false]) {
     type = "BufferAttribute";
-    if (arrayList is Uint8List) {
-      array = arrayList;
-    } else if (arrayList is Uint16List) {
-      array = arrayList;
-    } else if (arrayList is Uint32List) {
-      array = arrayList;
-    } else if (arrayList is Float32List) {
-      array = arrayList;
-    } else {
-      throw ("BufferAttribute  arrayList: ${arrayList.runtimeType} is need support ....  ");
-    }
-    // if (arrayList is NativeArray) {
-    //   array = arrayList;
-    // } else if (arrayList is Uint8List) {
-    //   array = Uint8Array.from(arrayList);
-    // } else if (arrayList is Uint16List) {
-    //   array = Uint16Array.from(arrayList);
-    // } else if (arrayList is Uint32List) {
-    //   array = Uint32Array.from(arrayList);
-    // } else if (arrayList is Float32List) {
-    //   array = Float32Array.from(arrayList);
-    // } else if (arrayList is List) {
-    //   // 确认 正确的BufferAttribute 使用了正确的List 类型 默认 Float32
-    //   print(
-    //       " BufferAttribute type: $type ${this} arrayList is ${arrayList.runtimeType} need confirm ? ");
-    //   array = Float32Array.from(arrayList);
-    // } else {
-    //   throw ("BufferAttribute  arrayList: ${arrayList.runtimeType} is need support ....  ");
-    // }
+    array = arrayList;
     this.itemSize = itemSize;
     count = array.length ~/ itemSize;
     this.normalized = normalized == true;
@@ -66,19 +39,7 @@ class BufferAttribute<TData extends TypedData> extends BaseBufferAttribute {
     normalized = source.normalized;
     type = source.type;
     usage = source.usage;
-
-    if (source.array is Uint8List) {
-      array = Uint8List.fromList(source.array.cast());
-    } else if (source.array is Uint16List) {
-      array = Uint16List.fromList(source.array.cast());
-    } else if (source.array is Uint32List) {
-      array = Uint32List.fromList(source.array.cast());
-    } else if (source.array is Float32List) {
-      array = Float32List.fromList(source.array.cast());
-    } else {
-      throw ("BufferAttribute  arrayList: ${source.array.runtimeType} is need support ....  ");
-    }
-
+    array = source.array.clone() as TData;
     return this;
   }
 
@@ -93,9 +54,8 @@ class BufferAttribute<TData extends TypedData> extends BaseBufferAttribute {
     return this;
   }
 
-  BufferAttribute copyArray(array) {
+  BufferAttribute copyArray(TData array) {
     this.array = array;
-
     return this;
   }
 
@@ -304,17 +264,17 @@ class BufferAttribute<TData extends TypedData> extends BaseBufferAttribute {
   }
 
   BufferAttribute clone() {
-    if (type == "BufferAttribute") {
-      final typed = array as TData;
-      return BufferAttribute(typed, itemSize, false).copy(this);
-    } else if (type == "Float32BufferAttribute") {
-      final typed = array as Float32List;
+    // if (type == "BufferAttribute") {
+    //   return BufferAttribute(array, itemSize, false).copy(this);
+    // } else
+    if (type == "Float32BufferAttribute") {
+      final typed = array as Float32Array;
       return Float32BufferAttribute(typed, itemSize, false).copy(this);
     } else if (type == "Uint8BufferAttribute") {
-      final typed = array as Uint8List;
+      final typed = array as Uint8Array;
       return Uint8BufferAttribute(typed, itemSize, false).copy(this);
     } else if (type == "Uint16BufferAttribute") {
-      final typed = array as Uint16List;
+      final typed = array as Uint16Array;
       return Uint16BufferAttribute(typed, itemSize, false).copy(this);
     } else {
       throw ("BufferAttribute type: $type clone need support ....  ");
@@ -347,30 +307,32 @@ class BufferAttribute<TData extends TypedData> extends BaseBufferAttribute {
   }
 }
 
-class Int8BufferAttribute extends BufferAttribute<Int8List> {
-  Int8BufferAttribute(Int8List array, int itemSize, [bool normalized = false])
+class Int8BufferAttribute extends BufferAttribute<Int8Array> {
+  Int8BufferAttribute(Int8Array array, int itemSize, [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Int8BufferAttribute";
   }
 }
 
-class Uint8BufferAttribute extends BufferAttribute<Uint8List> {
-  Uint8BufferAttribute(Uint8List array, int itemSize, [bool normalized = false])
+class Uint8BufferAttribute extends BufferAttribute<Uint8Array> {
+  Uint8BufferAttribute(Uint8Array array, int itemSize,
+      [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Uint8BufferAttribute";
   }
 }
 
-class Uint8ClampedBufferAttribute extends BufferAttribute<Uint8List> {
-  Uint8ClampedBufferAttribute(Uint8List array, int itemSize,
+class Uint8ClampedBufferAttribute extends BufferAttribute<Uint8Array> {
+  Uint8ClampedBufferAttribute(Uint8Array array, int itemSize,
       [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Uint8ClampedBufferAttribute";
   }
 }
 
-class Int16BufferAttribute extends BufferAttribute<Int16List> {
-  Int16BufferAttribute(Int16List array, int itemSize, [bool normalized = false])
+class Int16BufferAttribute extends BufferAttribute<Int16Array> {
+  Int16BufferAttribute(Int16Array array, int itemSize,
+      [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Int16BufferAttribute";
   }
@@ -379,46 +341,47 @@ class Int16BufferAttribute extends BufferAttribute<Int16List> {
 // Int16BufferAttribute.prototype = Object.create( BufferAttribute.prototype );
 // Int16BufferAttribute.prototype.constructor = Int16BufferAttribute;
 
-class Uint16BufferAttribute extends BufferAttribute<Uint16List> {
-  Uint16BufferAttribute(Uint16List array, int itemSize,
+class Uint16BufferAttribute extends BufferAttribute<Uint16Array> {
+  Uint16BufferAttribute(Uint16Array array, int itemSize,
       [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Uint16BufferAttribute";
   }
 }
 
-class Int32BufferAttribute extends BufferAttribute<Int32List> {
-  Int32BufferAttribute(Int32List array, int itemSize, [bool normalized = false])
+class Int32BufferAttribute extends BufferAttribute<Int32Array> {
+  Int32BufferAttribute(Int32Array array, int itemSize,
+      [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Int32BufferAttribute";
   }
 }
 
-class Uint32BufferAttribute extends BufferAttribute<Uint32List> {
-  Uint32BufferAttribute(Uint32List array, int itemSize,
+class Uint32BufferAttribute extends BufferAttribute<Uint32Array> {
+  Uint32BufferAttribute(Uint32Array array, int itemSize,
       [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Uint32BufferAttribute";
   }
 }
 
-class Float16BufferAttribute extends BufferAttribute {
-  Float16BufferAttribute(array, int itemSize, [bool normalized = false])
-      : super(array, itemSize, normalized) {
-    type = "Float16BufferAttribute";
-  }
-}
+// class Float16BufferAttribute extends BufferAttribute {
+//   Float16BufferAttribute(array, int itemSize, [bool normalized = false])
+//       : super(array, itemSize, normalized) {
+//     type = "Float16BufferAttribute";
+//   }
+// }
 
-class Float32BufferAttribute extends BufferAttribute<Float32List> {
-  Float32BufferAttribute(Float32List array, int itemSize,
+class Float32BufferAttribute extends BufferAttribute<Float32Array> {
+  Float32BufferAttribute(Float32Array array, int itemSize,
       [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Float32BufferAttribute";
   }
 }
 
-class Float64BufferAttribute extends BufferAttribute<Float64List> {
-  Float64BufferAttribute(Float64List array, int itemSize,
+class Float64BufferAttribute extends BufferAttribute<Float64Array> {
+  Float64BufferAttribute(Float64Array array, int itemSize,
       [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Float64BufferAttribute";

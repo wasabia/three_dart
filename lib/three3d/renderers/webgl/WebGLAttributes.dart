@@ -14,7 +14,7 @@ class WebGLAttributes {
 
   Map<String, dynamic> createBuffer(BufferAttribute attribute, int bufferType,
       {String? name}) {
-    final array = attribute.array as TypedData;
+    final array = attribute.array;
     var usage = attribute.usage;
 
     //dynamic arrayType = attribute.runtimeType;
@@ -26,25 +26,24 @@ class WebGLAttributes {
 
     // TODO 优化判断？？？
     if (attribute is Float32BufferAttribute) {
-      // arrayList = Float32List.fromList(array.map((e) => e.toDouble()).toList());
+      // arrayList = Float32Array.fromList(array.map((e) => e.toDouble()).toList());
     } else if (attribute is Uint16BufferAttribute) {
-      // arrayList = Uint16List.fromList(array.map((e) => e.toInt()).toList());
+      // arrayList = Uint16Array.fromList(array.map((e) => e.toInt()).toList());
     } else if (attribute is Uint32BufferAttribute) {
-      // arrayList = Uint32List.fromList(array.map((e) => e.toInt()).toList());
-    } else if (attribute is InterleavedBufferAttribute ||
-        attribute.runtimeType == BufferAttribute) {
+      // arrayList = Uint32Array.fromList(array.map((e) => e.toInt()).toList());
+    } else if (attribute is InterleavedBufferAttribute) {
       // arrayList = array;
       // String arrayType = array.runtimeType.toString();
-      if (array is Uint8List) {
+      if (array is Uint8Array) {
         type = gl.UNSIGNED_BYTE;
         bytesPerElement = Uint8List.bytesPerElement;
-      } else if (array is Float32List) {
+      } else if (array is Float32Array) {
         type = gl.FLOAT;
         bytesPerElement = Float32List.bytesPerElement;
-      } else if (array is Uint32List) {
+      } else if (array is Uint32Array) {
         type = gl.UNSIGNED_INT;
         bytesPerElement = Uint32List.bytesPerElement;
-      } else if (array is Uint16List) {
+      } else if (array is Uint16Array) {
         type = gl.UNSIGNED_SHORT;
         bytesPerElement = Uint16List.bytesPerElement;
       } else {
@@ -58,13 +57,13 @@ class WebGLAttributes {
 
       //String _arrayType = array.runtimeType.toString();
 
-      if (array is Uint8List) {
+      if (array is Uint8Array) {
         type = gl.UNSIGNED_BYTE;
         bytesPerElement = Uint8List.bytesPerElement;
-      } else if (array is Float32List) {
+      } else if (array is Float32Array) {
         type = gl.FLOAT;
         bytesPerElement = Float32List.bytesPerElement;
-      } else if (array is Uint32List) {
+      } else if (array is Uint32Array) {
         type = gl.UNSIGNED_INT;
         bytesPerElement = Uint32List.bytesPerElement;
       } else {
@@ -75,31 +74,31 @@ class WebGLAttributes {
       type = gl.UNSIGNED_BYTE;
       bytesPerElement = Uint8List.bytesPerElement;
 
-      if (array is Uint8List) {
+      if (array is Uint8Array) {
         type = gl.UNSIGNED_BYTE;
         bytesPerElement = Uint8List.bytesPerElement;
-      } else if (array is Float32List) {
+      } else if (array is Float32Array) {
         type = gl.FLOAT;
         bytesPerElement = Float32List.bytesPerElement;
-      } else if (array is Uint32List) {
+      } else if (array is Uint32Array) {
         type = gl.UNSIGNED_INT;
         bytesPerElement = Uint32List.bytesPerElement;
       } else {
         // 保持抛出异常 及时发现异常情况
         throw ("WebGLAttributes.createBuffer InstancedInterleavedBuffer arrayType: ${array.runtimeType} is not support  ");
       }
-    } else if (array is Float32List) {
+    } else if (array is Float32Array) {
       type = gl.FLOAT;
       bytesPerElement = Float32List.bytesPerElement;
-    } else if (array is Uint32List) {
+    } else if (array is Uint32Array) {
       type = gl.UNSIGNED_INT;
       bytesPerElement = Uint32List.bytesPerElement;
-    } else if (array is Uint8List) {
+    } else if (array is Uint8Array) {
       type = gl.UNSIGNED_BYTE;
       bytesPerElement = Uint8List.bytesPerElement;
     } else {
       print("createBuffer array: ${array.runtimeType} ");
-      // arrayList = Float32List.fromList(array.map((e) => e.toDouble()).toList());
+      // arrayList = Float32Array.fromList(array.map((e) => e.toDouble()).toList());
       // 保持抛出异常 及时发现异常情况
       throw ("1 WebGLAttributes.createBuffer BufferAttribute arrayType: ${array.runtimeType} is not support  ");
     }

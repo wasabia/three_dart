@@ -81,7 +81,7 @@ class WireframeGeometry extends BufferGeometry {
     // build geometry
 
     setAttribute('position',
-        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
+        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
   }
 }
 

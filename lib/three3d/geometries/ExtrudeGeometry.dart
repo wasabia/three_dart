@@ -582,9 +582,9 @@ class ExtrudeGeometry extends BufferGeometry {
     // build geometry
 
     setAttribute('position',
-        Float32BufferAttribute(Float32List.fromList(verticesArray), 3, false));
+        Float32BufferAttribute(Float32Array.from(verticesArray), 3, false));
     setAttribute(
-        'uv', Float32BufferAttribute(Float32List.fromList(uvArray), 2, false));
+        'uv', Float32BufferAttribute(Float32Array.from(uvArray), 2, false));
 
     computeVertexNormals();
 

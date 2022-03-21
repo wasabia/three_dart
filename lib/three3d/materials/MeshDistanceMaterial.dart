@@ -1,6 +1,6 @@
 part of three_materials;
 
-/**
+/*
  * parameters = {
  *
  *  referencePosition: <float>,
@@ -19,46 +19,48 @@ part of three_materials;
  */
 
 class MeshDistanceMaterial extends Material {
-  bool isMeshDistanceMaterial = true;
-
   late Vector3 referencePosition;
   late num nearDistance;
   late num farDistance;
 
-  MeshDistanceMaterial(parameters) : super() {
-    this.type = 'MeshDistanceMaterial';
+  MeshDistanceMaterial(Map<String, dynamic>? parameters) : super() {
+    isMeshDistanceMaterial = true;
+    type = 'MeshDistanceMaterial';
 
-    this.referencePosition = new Vector3.init();
-    this.nearDistance = 1;
-    this.farDistance = 1000;
+    referencePosition = Vector3.init();
+    nearDistance = 1;
+    farDistance = 1000;
 
-    this.map = null;
+    map = null;
 
-    this.alphaMap = null;
+    alphaMap = null;
 
-    this.displacementMap = null;
-    this.displacementScale = 1;
-    this.displacementBias = 0;
+    displacementMap = null;
+    displacementScale = 1;
+    displacementBias = 0;
 
-    this.fog = false;
+    fog = false;
 
-    this.setValues(parameters);
+    setValues(parameters);
   }
 
-  copy(source) {
+  @override
+  MeshDistanceMaterial copy(Material source) {
     super.copy(source);
+    
+    if (source is MeshDistanceMaterial) {
+      referencePosition.copy(source.referencePosition);
+      nearDistance = source.nearDistance;
+      farDistance = source.farDistance;
+    }
 
-    this.referencePosition.copy(source.referencePosition);
-    this.nearDistance = source.nearDistance;
-    this.farDistance = source.farDistance;
+    map = source.map;
 
-    this.map = source.map;
+    alphaMap = source.alphaMap;
 
-    this.alphaMap = source.alphaMap;
-
-    this.displacementMap = source.displacementMap;
-    this.displacementScale = source.displacementScale;
-    this.displacementBias = source.displacementBias;
+    displacementMap = source.displacementMap;
+    displacementScale = source.displacementScale;
+    displacementBias = source.displacementBias;
 
     return this;
   }
