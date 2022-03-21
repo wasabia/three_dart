@@ -1,18 +1,17 @@
 part of three_math;
 
-/**
- * Spherical linear unit quaternion interpolant.
- */
+/// Spherical linear unit quaternion interpolant.
 
 class QuaternionLinearInterpolant extends Interpolant {
   QuaternionLinearInterpolant(
       parameterPositions, sampleValues, sampleSize, resultBuffer)
-      : super(parameterPositions, sampleValues, sampleSize, resultBuffer) {}
+      : super(parameterPositions, sampleValues, sampleSize, resultBuffer);
 
+  @override
   interpolate(int i1, num x0, num t, num t1) {
-    var result = this.resultBuffer;
-    var values = this.sampleValues;
-    var stride = this.valueSize;
+    var result = resultBuffer;
+    var values = sampleValues;
+    var stride = valueSize;
 
     double _v0 = t + (x0 * -1);
     double _v1 = t1 + (x0 * -1);

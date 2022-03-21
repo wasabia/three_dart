@@ -5,7 +5,6 @@ import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 import 'package:three_dart/three3d/objects/index.dart';
 import '../constants.dart';
-import '../dartHelpers.dart';
 
 part './tracks/NumberKeyframeTrack.dart';
 part './tracks/VectorKeyframeTrack.dart';

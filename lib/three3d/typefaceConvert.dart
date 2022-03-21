@@ -73,7 +73,6 @@ class TypefaceConvert {
           result["glyphs"][String.fromCharCode(glyph.unicode)] = token;
         }
       }
-      ;
     });
     result["familyName"] = font.familyName;
     result["ascender"] = Math.round(font.ascender * scale);
@@ -95,21 +94,19 @@ class TypefaceConvert {
     } else {
       result["cssFontWeight"] = "normal";
     }
-    ;
 
     if (font.styleName.toLowerCase().indexOf("italic") > -1) {
       result["cssFontStyle"] = "italic";
     } else {
       result["cssFontStyle"] = "normal";
     }
-    ;
 
     return convert.jsonEncode(result);
   }
 
   static reverseCommands(commands) {
     var paths = [];
-    var path;
+    List path = [];
 
     commands.forEach((c) {
       if (c.type.toLowerCase() == "m") {

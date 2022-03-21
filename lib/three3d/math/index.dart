@@ -1,7 +1,6 @@
 library three_math;
 
 import 'dart:math' as math;
-import 'dart:typed_data';
 
 import 'package:flutter_gl/flutter_gl.dart';
 
