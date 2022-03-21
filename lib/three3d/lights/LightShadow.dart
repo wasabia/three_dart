@@ -18,11 +18,11 @@ class LightShadow {
   bool needsUpdate = false;
 
   final Frustum _frustum = Frustum(null, null, null, null, null, null);
-  final Vector2 _frameExtents = Vector2(1, 1);
+  Vector2 _frameExtents = Vector2(1, 1);
 
-  final num _viewportCount = 1;
+  num _viewportCount = 1;
 
-  final List<Vector4> _viewports = [Vector4(0, 0, 1, 1)];
+  List<Vector4> _viewports = [Vector4(0, 0, 1, 1)];
 
   final Matrix4 _projScreenMatrix = Matrix4();
   final Vector3 _lightPositionWorld = Vector3.init();
