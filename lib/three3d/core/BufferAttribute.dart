@@ -281,7 +281,7 @@ abstract class BufferAttribute<TData extends NativeArray>
     }
   }
 
-  toJSON() {
+  toJSON([data]) {
     // print(" BufferAttribute to JSON todo  ${this.array.runtimeType} ");
 
     // return {
@@ -290,20 +290,20 @@ abstract class BufferAttribute<TData extends NativeArray>
     // 	"array": this.array.sublist(0),
     // 	"normalized": this.normalized
     // };
-    Map<String, dynamic> data = {
+    Map<String, dynamic> result = {
       "itemSize": itemSize,
       "type": array.runtimeType.toString(), //.replaceAll('List', 'Array'),
       "array": array.sublist(0),
       "normalized": normalized
     };
 
-    if (name != null) data["name"] = name;
-    if (usage != StaticDrawUsage) data["usage"] = usage;
+    if (name != null) result["name"] = name;
+    if (usage != StaticDrawUsage) result["usage"] = usage;
     if (updateRange?["offset"] != 0 || updateRange?["count"] != -1) {
-      data["updateRange"] = updateRange;
+      result["updateRange"] = updateRange;
     }
 
-    return data;
+    return result;
   }
 }
 

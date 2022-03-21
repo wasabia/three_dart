@@ -14,7 +14,7 @@ class WebGLShader {
     final _status = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
     if (_status != 1 && _status != true) {
       print(gl.getShaderInfoLog(shader));
-      throw (" WebGLShader comile error.... _status: ${_status} ${gl.getShaderInfoLog(shader)} ");
+      throw (" WebGLShader comile error.... _status: $_status ${gl.getShaderInfoLog(shader)} ");
     }
   }
 }

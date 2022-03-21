@@ -3,28 +3,30 @@ part of three_loaders;
 // loader font from typeface json
 
 class FontLoader extends Loader {
-  FontLoader(manager) : super(manager) {}
+  FontLoader(manager) : super(manager);
 
+  @override
   loadAsync(url, [Function? onProgress]) async {
-    var loader = new FileLoader(this.manager);
-    loader.setPath(this.path);
-    loader.responseType = this.responseType;
-    loader.setRequestHeader(this.requestHeader);
-    loader.setWithCredentials(this.withCredentials);
+    var loader = FileLoader(manager);
+    loader.setPath(path);
+    loader.responseType = responseType;
+    loader.setRequestHeader(requestHeader);
+    loader.setWithCredentials(withCredentials);
     var text = await loader.loadAsync(url);
 
     var jsonData = convert.jsonDecode(text);
 
-    return this.parse(jsonData);
+    return parse(jsonData);
   }
 
+  @override
   load(url, onLoad, [onProgress, onError]) {
     var scope = this;
 
-    var loader = FileLoader(this.manager);
-    loader.responseType = this.responseType;
-    loader.setPath(this.path);
-    loader.setRequestHeader(this.requestHeader);
+    var loader = FileLoader(manager);
+    loader.responseType = responseType;
+    loader.setPath(path);
+    loader.setRequestHeader(requestHeader);
     loader.setWithCredentials(scope.withCredentials);
     loader.load(url, (text) {
       var jsonData;
@@ -40,10 +42,11 @@ class FontLoader extends Loader {
 
       var font = scope.parse(jsonData);
 
-      if (onLoad != null) onLoad(font);
+ onLoad(font);
     }, onProgress, onError);
   }
 
+  @override
   parse(json, [String? path, Function? onLoad, Function? onError]) {
     return TTFFont(json);
   }

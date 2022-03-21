@@ -7,33 +7,33 @@ class ShapePath {
   late Path currentPath;
   Map<String, dynamic>? userData;
 
-  ShapePath() {}
+  ShapePath();
 
   moveTo(num x, num y) {
-    this.currentPath = Path(null);
-    this.subPaths.add(this.currentPath);
-    this.currentPath.moveTo(x, y);
+    currentPath = Path(null);
+    subPaths.add(currentPath);
+    currentPath.moveTo(x, y);
     return this;
   }
 
   lineTo(x, y) {
-    this.currentPath.lineTo(x, y);
+    currentPath.lineTo(x, y);
     return this;
   }
 
   quadraticCurveTo(aCPx, aCPy, aX, aY) {
-    this.currentPath.quadraticCurveTo(aCPx, aCPy, aX, aY);
+    currentPath.quadraticCurveTo(aCPx, aCPy, aX, aY);
     return this;
   }
 
   bezierCurveTo(aCP1x, aCP1y, aCP2x, aCP2y, aX, aY) {
-    this.currentPath.bezierCurveTo(aCP1x, aCP1y, aCP2x, aCP2y, aX, aY);
+    currentPath.bezierCurveTo(aCP1x, aCP1y, aCP2x, aCP2y, aX, aY);
 
     return this;
   }
 
   splineThru(pts) {
-    this.currentPath.splineThru(pts);
+    currentPath.splineThru(pts);
 
     return this;
   }
@@ -97,8 +97,9 @@ class ShapePath {
           if (inPt.y != edgeLowPt.y) continue; // parallel
           // edge lies on the same horizontal line as inPt
           if (((edgeHighPt.x <= inPt.x) && (inPt.x <= edgeLowPt.x)) ||
-              ((edgeLowPt.x <= inPt.x) && (inPt.x <= edgeHighPt.x)))
-            return true; // inPt: Point on contour !
+              ((edgeLowPt.x <= inPt.x) && (inPt.x <= edgeHighPt.x))) {
+            return true;
+          } // inPt: Point on contour !
           // continue;
 
         }
@@ -110,7 +111,7 @@ class ShapePath {
     var isClockWise = ShapeUtils.isClockWise;
 
     var subPaths = this.subPaths;
-    if (subPaths.length == 0) return [];
+    if (subPaths.isEmpty) return [];
 
     if (noHoles == true) return toShapesNoHoles(subPaths);
 
@@ -171,8 +172,9 @@ class ShapePath {
     }
 
     // only Holes? -> probably all Shapes with wrong orientation
-    if (newShapes.length == 0 || newShapes[0] == null)
+    if (newShapes.isEmpty || newShapes[0] == null) {
       return toShapesNoHoles(subPaths);
+    }
 
     if (newShapes.length > 1) {
       var ambiguous = false;
@@ -188,13 +190,13 @@ class ShapePath {
 
         for (var hIdx = 0; hIdx < sho.length; hIdx++) {
           var ho = sho[hIdx];
-          var hole_unassigned = true;
+          var holeUnassigned = true;
 
           for (var s2Idx = 0; s2Idx < newShapes.length; s2Idx++) {
             if (isPointInsidePolygon(ho["p"], newShapes[s2Idx]["p"])) {
               if ( sIdx != s2Idx ) toChange ++;
-              if (hole_unassigned) {
-                hole_unassigned = false;
+              if (holeUnassigned) {
+                holeUnassigned = false;
                 betterShapeHoles[s2Idx].add(ho);
               } else {
                 ambiguous = true;
@@ -202,7 +204,7 @@ class ShapePath {
             }
           }
 
-          if (hole_unassigned) {
+          if (holeUnassigned) {
             betterShapeHoles[sIdx].add(ho);
           }
         }

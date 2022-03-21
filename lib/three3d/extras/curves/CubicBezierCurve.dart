@@ -1,15 +1,19 @@
 part of three_extra;
 
 class CubicBezierCurve extends Curve {
+  @override
   late Vector2 v0;
+  @override
   late Vector2 v1;
+  @override
   late Vector2 v2;
   late Vector2 v3;
 
+  @override
   bool isCubicBezierCurve = true;
 
   CubicBezierCurve(Vector2? v0, Vector2? v1, Vector2? v2, Vector2? v3) {
-    this.type = 'CubicBezierCurve';
+    type = 'CubicBezierCurve';
 
     this.v0 = v0 ?? Vector2(null, null);
     this.v1 = v1 ?? Vector2(null, null);
@@ -18,12 +22,13 @@ class CubicBezierCurve extends Curve {
   }
 
   CubicBezierCurve.fromJSON(Map<String, dynamic> json) : super.fromJSON(json) {
-    this.v0.fromArray(json["v0"]);
-    this.v1.fromArray(json["v1"]);
-    this.v2.fromArray(json["v2"]);
-    this.v3.fromArray(json["v3"]);
+    v0.fromArray(json["v0"]);
+    v1.fromArray(json["v1"]);
+    v2.fromArray(json["v2"]);
+    v3.fromArray(json["v3"]);
   }
 
+  @override
   getPoint(t, optionalTarget) {
     var point = optionalTarget ?? Vector2(null, null);
 
@@ -35,24 +40,26 @@ class CubicBezierCurve extends Curve {
     return point;
   }
 
+  @override
   copy(source) {
     super.copy(source);
 
-    this.v0.copy(source.v0);
-    this.v1.copy(source.v1);
-    this.v2.copy(source.v2);
-    this.v3.copy(source.v3);
+    v0.copy(source.v0);
+    v1.copy(source.v1);
+    v2.copy(source.v2);
+    v3.copy(source.v3);
 
     return this;
   }
 
+  @override
   toJSON() {
     var data = super.toJSON();
 
-    data["v0"] = this.v0.toArray();
-    data["v1"] = this.v1.toArray();
-    data["v2"] = this.v2.toArray();
-    data["v3"] = this.v3.toArray();
+    data["v0"] = v0.toArray();
+    data["v1"] = v1.toArray();
+    data["v2"] = v2.toArray();
+    data["v3"] = v3.toArray();
 
     return data;
   }

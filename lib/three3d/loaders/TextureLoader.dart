@@ -5,8 +5,9 @@ class TextureLoader extends Loader {
   // https://github.com/wasabia/three_dart/issues/10
   bool flipY = true;
 
-  TextureLoader(manager) : super(manager) {}
+  TextureLoader(manager) : super(manager);
 
+  @override
   Future<Texture> loadAsync(url, [Function? onProgress]) async {
     var completer = Completer<Texture>();
 
@@ -17,6 +18,7 @@ class TextureLoader extends Loader {
     return completer.future;
   }
 
+  @override
   load(url, Function onLoad, [Function? onProgress, Function? onError]) {
     Texture texture;
 
@@ -27,9 +29,9 @@ class TextureLoader extends Loader {
     //   texture = DataTexture(null, null, null,null, null, null,null, null, null, null, null, null);
     // }
 
-    var loader = new ImageLoader(this.manager);
-    loader.setCrossOrigin(this.crossOrigin);
-    loader.setPath(this.path);
+    var loader = ImageLoader(manager);
+    loader.setCrossOrigin(crossOrigin);
+    loader.setPath(path);
 
     var completer = Completer<Texture>();
     loader.flipY = flipY;
@@ -60,9 +62,7 @@ class TextureLoader extends Loader {
       texture.image = imageElement;
       texture.needsUpdate = true;
 
-      if (onLoad != null) {
-        onLoad(texture);
-      }
+      onLoad(texture);
 
       completer.complete(texture);
     }, onProgress, onError);

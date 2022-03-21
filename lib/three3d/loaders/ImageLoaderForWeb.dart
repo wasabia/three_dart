@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:three_dart/extra/Blob.dart';
-import 'package:three_dart/three3d/textures/index.dart';
 import 'dart:html' as html;
 
 class ImageLoaderLoader {
@@ -15,7 +14,7 @@ class ImageLoaderLoader {
     });
 
     if (url is Blob) {
-      var blob = new html.Blob([url.data.buffer], url.options["type"]);
+      var blob = html.Blob([url.data.buffer], url.options["type"]);
       imageDom.src = html.Url.createObjectUrl(blob);
     } else {
       // flutter web for assets need add assets TODO

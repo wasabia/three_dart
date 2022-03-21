@@ -12,8 +12,8 @@ class CubeCamera extends Object3D {
 
   var fov = 90, aspect = 1;
 
-  CubeCamera(num near, num far, WebGLCubeRenderTarget renderTarget) {
-    this.type = 'CubeCamera';
+  CubeCamera(num near, num far, this.renderTarget) {
+    type = 'CubeCamera';
 
     if (renderTarget.isWebGLCubeRenderTarget != true) {
       print(
@@ -21,47 +21,45 @@ class CubeCamera extends Object3D {
       return;
     }
 
-    this.renderTarget = renderTarget;
-
-    cameraPX = new PerspectiveCamera(fov, aspect, near, far);
-    cameraPX.layers = this.layers;
+    cameraPX = PerspectiveCamera(fov, aspect, near, far);
+    cameraPX.layers = layers;
     cameraPX.up.set(0, -1, 0);
     cameraPX.lookAt(Vector3(1, 0, 0));
-    this.add(cameraPX);
+    add(cameraPX);
 
-    cameraNX = new PerspectiveCamera(fov, aspect, near, far);
-    cameraNX.layers = this.layers;
+    cameraNX = PerspectiveCamera(fov, aspect, near, far);
+    cameraNX.layers = layers;
     cameraNX.up.set(0, -1, 0);
     cameraNX.lookAt(Vector3(-1, 0, 0));
-    this.add(cameraNX);
+    add(cameraNX);
 
-    cameraPY = new PerspectiveCamera(fov, aspect, near, far);
-    cameraPY.layers = this.layers;
+    cameraPY = PerspectiveCamera(fov, aspect, near, far);
+    cameraPY.layers = layers;
     cameraPY.up.set(0, 0, 1);
     cameraPY.lookAt(Vector3(0, 1, 0));
-    this.add(cameraPY);
+    add(cameraPY);
 
-    cameraNY = new PerspectiveCamera(fov, aspect, near, far);
-    cameraNY.layers = this.layers;
+    cameraNY = PerspectiveCamera(fov, aspect, near, far);
+    cameraNY.layers = layers;
     cameraNY.up.set(0, 0, -1);
     cameraNY.lookAt(Vector3(0, -1, 0));
-    this.add(cameraNY);
+    add(cameraNY);
 
-    cameraPZ = new PerspectiveCamera(fov, aspect, near, far);
-    cameraPZ.layers = this.layers;
+    cameraPZ = PerspectiveCamera(fov, aspect, near, far);
+    cameraPZ.layers = layers;
     cameraPZ.up.set(0, -1, 0);
     cameraPZ.lookAt(Vector3(0, 0, 1));
-    this.add(cameraPZ);
+    add(cameraPZ);
 
-    cameraNZ = new PerspectiveCamera(fov, aspect, near, far);
-    cameraNZ.layers = this.layers;
+    cameraNZ = PerspectiveCamera(fov, aspect, near, far);
+    cameraNZ.layers = layers;
     cameraNZ.up.set(0, -1, 0);
     cameraNZ.lookAt(Vector3(0, 0, -1));
-    this.add(cameraNZ);
+    add(cameraNZ);
   }
 
   update(renderer, scene) {
-    if (this.parent == null) this.updateMatrixWorld(false);
+    if (parent == null) updateMatrixWorld(false);
 
     var currentXrEnabled = renderer.xr.enabled;
     var currentRenderTarget = renderer.getRenderTarget();

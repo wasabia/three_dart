@@ -1,10 +1,8 @@
 part of three_geometries;
 
 class ShapeGeometry extends BufferGeometry {
-  @override
-  String type = 'ShapeGeometry';
-
   ShapeGeometry(shapes, {num curveSegments = 12}) : super() {
+    type = 'ShapeGeometry';
     parameters = {};
     this.curveSegments = curveSegments;
     if (shapes is List) {
@@ -21,7 +19,7 @@ class ShapeGeometry extends BufferGeometry {
       : super.fromJSON(json, rootJSON) {
     curveSegments = json["curveSegments"];
 
-    var _shapes;
+    Shape? _shapes;
 
     if (json["shapes"] != null) {
       List<Shape> rootShapes = rootJSON["shapes"];
@@ -30,7 +28,7 @@ class ShapeGeometry extends BufferGeometry {
       _shapes = rootShapes.firstWhere((element) => element.uuid == shapeUuid);
     }
 
-    shapes = _shapes;
+    shapes = _shapes != null ? [_shapes] : [];
 
     init();
   }
@@ -108,7 +106,6 @@ class ShapeGeometry extends BufferGeometry {
       }
     }
 
-    ;
 
     for (var i = 0; i < shapes.length; i++) {
       addShape(shapes[i]);
@@ -213,6 +210,7 @@ class ShapeGeometry extends BufferGeometry {
 
   // }
 
+  @override
   toJSON({Object3dMeta? meta}) {
     var data = super.toJSON(meta: meta);
 

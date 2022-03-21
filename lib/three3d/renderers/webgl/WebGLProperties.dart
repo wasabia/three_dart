@@ -7,7 +7,7 @@ class WebGLProperties {
     Map<String, dynamic> map;
 
     if (!properties.contains(object)) {
-      map = Map<String, dynamic>();
+      map = <String, dynamic>{};
       properties[object] = map;
     } else {
       map = properties[object]!;

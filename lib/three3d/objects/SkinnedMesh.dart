@@ -90,7 +90,7 @@ class SkinnedMesh extends Mesh {
     } else if (bindMode == 'detached') {
       bindMatrixInverse.copy(bindMatrix!).invert();
     } else {
-      print('THREE.SkinnedMesh: Unrecognized bindMode: ${bindMode}');
+      print('THREE.SkinnedMesh: Unrecognized bindMode: $bindMode');
     }
   }
 

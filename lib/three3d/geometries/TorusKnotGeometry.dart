@@ -1,6 +1,7 @@
 part of three_geometries;
 
 class TorusKnotGeometry extends BufferGeometry {
+  @override
   String type = "TorusKnotGeometry";
 
   TorusKnotGeometry(
@@ -51,7 +52,7 @@ class TorusKnotGeometry extends BufferGeometry {
       position.x = radius * (2 + cs) * 0.5 * cu;
       position.y = radius * (2 + cs) * su * 0.5;
       position.z = radius * Math.sin(quOverP) * 0.5;
-    };
+    }
 
     // generate vertices, normals and uvs
 

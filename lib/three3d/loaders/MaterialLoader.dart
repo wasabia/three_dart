@@ -4,13 +4,14 @@ class MaterialLoader extends Loader {
   late Map textures;
 
   MaterialLoader(manager) : super(manager) {
-    this.textures = {};
+    textures = {};
   }
 
+  @override
   load(url, onLoad, [onProgress, onError]) {
     var scope = this;
 
-    var loader = new FileLoader(scope.manager);
+    var loader = FileLoader(scope.manager);
     loader.setPath(scope.path);
     loader.setRequestHeader(scope.requestHeader);
     loader.setWithCredentials(scope.withCredentials);
@@ -29,18 +30,18 @@ class MaterialLoader extends Loader {
     }, onProgress, onError);
   }
 
+  @override
   parse(json, [String? path, Function? onLoad, Function? onError]) {
     var textures = this.textures;
 
-    Function getTexture = (name) {
+    getTexture(name) {
       if (textures[name] == null) {
-        print('THREE.MaterialLoader: Undefined texture ${name}');
+        print('THREE.MaterialLoader: Undefined texture $name');
       }
-
       return textures[name];
-    };
+    }
 
-    var material;
+    Material material;
 
     if (json["type"] == "MeshBasicMaterial") {
       material = MeshBasicMaterial();
@@ -60,34 +61,45 @@ class MaterialLoader extends Loader {
 
     if (json["uuid"] != null) material.uuid = json["uuid"];
     if (json["name"] != null) material.name = json["name"];
-    if (json["color"] != null && material.color != null)
+    if (json["color"] != null) {
       material.color.setHex(json["color"]);
+    }
     if (json["roughness"] != null) material.roughness = json["roughness"];
     if (json["metalness"] != null) material.metalness = json["metalness"];
     if (json["sheen"] != null) material.sheen = json["sheen"];
-    if (json["sheenColor"] != null)
-      material.sheenColor = new Color(0, 0, 0).setHex(json["sheenColor"]);
-    if (json["sheenRoughness"] != null)
+    if (json["sheenColor"] != null) {
+      material.sheenColor = Color(0, 0, 0).setHex(json["sheenColor"]);
+    }
+    if (json["sheenRoughness"] != null) {
       material.sheenRoughness = json["sheenRoughness"];
-    if (json["emissive"] != null && material.emissive != null)
-      material.emissive.setHex(json["emissive"]);
-    if (json["specular"] != null && material.specular != null)
-      material.specular.setHex(json["specular"]);
-    if (json["specularIntensity"] != null)
+    }
+    if (json["emissive"] != null && material.emissive != null) {
+      material.emissive!.setHex(json["emissive"]);
+    }
+    if (json["specular"] != null && material.specular != null) {
+      material.specular!.setHex(json["specular"]);
+    }
+    if (json["specularIntensity"] != null) {
       material.specularIntensity = json["specularIntensity"];
-    if (json["specularColor"] != null && material.specularColor != null)
-      material.specularColor.setHex(json["specularColor"]);
+    }
+    if (json["specularColor"] != null && material.specularColor != null) {
+      material.specularColor!.setHex(json["specularColor"]);
+    }
     if (json["shininess"] != null) material.shininess = json["shininess"];
     if (json["clearcoat"] != null) material.clearcoat = json["clearcoat"];
-    if (json["clearcoatRoughness"] != null)
+    if (json["clearcoatRoughness"] != null) {
       material.clearcoatRoughness = json["clearcoatRoughness"];
-    if (json["transmission"] != null)
+    }
+    if (json["transmission"] != null) {
       material.transmission = json["transmission"];
+    }
     if (json["thickness"] != null) material.thickness = json["thickness"];
-    if (json["attenuationDistance"] != null)
+    if (json["attenuationDistance"] != null) {
       material.attenuationDistance = json["attenuationDistance"];
-    if (json["attenuationColor"] != null && material.attenuationColor != null)
-      material.attenuationColor.setHex(json["attenuationColor"]);
+    }
+    if (json["attenuationColor"] != null && material.attenuationColor != null) {
+      material.attenuationColor!.setHex(json["attenuationColor"]);
+    }
     if (json["fog"] != null) material.fog = json["fog"];
     if (json["flatShading"] != null) material.flatShading = json["flatShading"];
     if (json["blending"] != null) material.blending = json["blending"];
@@ -101,27 +113,35 @@ class MaterialLoader extends Loader {
     if (json["depthWrite"] != null) material.depthWrite = json["depthWrite"];
     if (json["colorWrite"] != null) material.colorWrite = json["colorWrite"];
 
-    if (json["stencilWrite"] != null)
+    if (json["stencilWrite"] != null) {
       material.stencilWrite = json["stencilWrite"];
-    if (json["stencilWriteMask"] != null)
+    }
+    if (json["stencilWriteMask"] != null) {
       material.stencilWriteMask = json["stencilWriteMask"];
+    }
     if (json["stencilFunc"] != null) material.stencilFunc = json["stencilFunc"];
     if (json["stencilRef"] != null) material.stencilRef = json["stencilRef"];
-    if (json["stencilFuncMask"] != null)
+    if (json["stencilFuncMask"] != null) {
       material.stencilFuncMask = json["stencilFuncMask"];
+    }
     if (json["stencilFail"] != null) material.stencilFail = json["stencilFail"];
-    if (json["stencilZFail"] != null)
+    if (json["stencilZFail"] != null) {
       material.stencilZFail = json["stencilZFail"];
-    if (json["stencilZPass"] != null)
+    }
+    if (json["stencilZPass"] != null) {
       material.stencilZPass = json["stencilZPass"];
+    }
 
     if (json["wireframe"] != null) material.wireframe = json["wireframe"];
-    if (json["wireframeLinewidth"] != null)
+    if (json["wireframeLinewidth"] != null) {
       material.wireframeLinewidth = json["wireframeLinewidth"];
-    if (json["wireframeLinecap"] != null)
+    }
+    if (json["wireframeLinecap"] != null) {
       material.wireframeLinecap = json["wireframeLinecap"];
-    if (json["wireframeLinejoin"] != null)
+    }
+    if (json["wireframeLinejoin"] != null) {
       material.wireframeLinejoin = json["wireframeLinejoin"];
+    }
 
     if (json["rotation"] != null) material.rotation = json["rotation"];
 
@@ -130,19 +150,24 @@ class MaterialLoader extends Loader {
     if (json["gapSize"] != null) material.gapSize = json["gapSize"];
     if (json["scale"] != null) material.scale = json["scale"];
 
-    if (json["polygonOffset"] != null)
+    if (json["polygonOffset"] != null) {
       material.polygonOffset = json["polygonOffset"];
-    if (json["polygonOffsetFactor"] != null)
+    }
+    if (json["polygonOffsetFactor"] != null) {
       material.polygonOffsetFactor = json["polygonOffsetFactor"];
-    if (json["polygonOffsetUnits"] != null)
+    }
+    if (json["polygonOffsetUnits"] != null) {
       material.polygonOffsetUnits = json["polygonOffsetUnits"];
+    }
 
     if (json["dithering"] != null) material.dithering = json["dithering"];
 
-    if (json["alphaToCoverage"] != null)
+    if (json["alphaToCoverage"] != null) {
       material.alphaToCoverage = json["alphaToCoverage"];
-    if (json["premultipliedAlpha"] != null)
+    }
+    if (json["premultipliedAlpha"] != null) {
       material.premultipliedAlpha = json["premultipliedAlpha"];
+    }
 
     if (json["visible"] != null) material.visible = json["visible"];
 
@@ -173,32 +198,32 @@ class MaterialLoader extends Loader {
 
           case 'c':
             material.uniforms[name].value =
-                new Color(0, 0, 0).setHex(uniform.value);
+                Color(0, 0, 0).setHex(uniform.value);
             break;
 
           case 'v2':
             material.uniforms[name].value =
-                new Vector2(0, 0).fromArray(uniform.value);
+                Vector2(0, 0).fromArray(uniform.value);
             break;
 
           case 'v3':
             material.uniforms[name].value =
-                new Vector3(0, 0, 0).fromArray(uniform.value);
+                Vector3(0, 0, 0).fromArray(uniform.value);
             break;
 
           case 'v4':
             material.uniforms[name].value =
-                new Vector4(0, 0, 0, 0).fromArray(uniform.value);
+                Vector4(0, 0, 0, 0).fromArray(uniform.value);
             break;
 
           case 'm3':
             material.uniforms[name].value =
-                new Matrix3().fromArray(uniform.value);
+                Matrix3().fromArray(uniform.value);
             break;
 
           case 'm4':
             material.uniforms[name].value =
-                new Matrix4().fromArray(uniform.value);
+                Matrix4().fromArray(uniform.value);
             break;
 
           default:
@@ -208,126 +233,158 @@ class MaterialLoader extends Loader {
     }
 
     if (json["defines"] != null) material.defines = json["defines"];
-    if (json["vertexShader"] != null)
+    if (json["vertexShader"] != null) {
       material.vertexShader = json["vertexShader"];
-    if (json["fragmentShader"] != null)
+    }
+    if (json["fragmentShader"] != null) {
       material.fragmentShader = json["fragmentShader"];
+    }
 
     if (json["extensions"] != null) {
       for (var key in json["extensions"]) {
-        material.extensions[key] = json["extensions"][key];
+        material.extensions?[key] = json["extensions"][key];
       }
     }
 
     // Deprecated
 
-    if (json["shading"] != null)
-      material.flatShading = json["shading"] == 1; // THREE.FlatShading
+    if (json["shading"] != null) {
+      material.flatShading = json["shading"] == 1;
+    } // THREE.FlatShading
 
     // for PointsMaterial
 
     if (json["size"] != null) material.size = json["size"];
-    if (json["sizeAttenuation"] != null)
+    if (json["sizeAttenuation"] != null) {
       material.sizeAttenuation = json["sizeAttenuation"];
+    }
 
     // maps
 
     if (json["map"] != null) material.map = getTexture(json["map"]);
     if (json["matcap"] != null) material.matcap = getTexture(json["matcap"]);
 
-    if (json["alphaMap"] != null)
+    if (json["alphaMap"] != null) {
       material.alphaMap = getTexture(json["alphaMap"]);
+    }
 
     if (json["bumpMap"] != null) material.bumpMap = getTexture(json["bumpMap"]);
     if (json["bumpScale"] != null) material.bumpScale = json["bumpScale"];
 
-    if (json["normalMap"] != null)
+    if (json["normalMap"] != null) {
       material.normalMap = getTexture(json["normalMap"]);
-    if (json["normalMapType"] != null)
+    }
+    if (json["normalMapType"] != null) {
       material.normalMapType = json["normalMapType"];
+    }
     if (json["normalScale"] != null) {
       var normalScale = json["normalScale"];
 
-      if (!(normalScale is List)) {
+      if (normalScale is! List) {
         // Blender exporter used to export a scalar. See #7459
 
         normalScale = [normalScale, normalScale];
       }
 
-      material.normalScale = new Vector2(0, 0).fromArray(normalScale);
+      material.normalScale = Vector2(0, 0).fromArray(normalScale);
     }
 
-    if (json["displacementMap"] != null)
+    if (json["displacementMap"] != null) {
       material.displacementMap = getTexture(json["displacementMap"]);
-    if (json["displacementScale"] != null)
+    }
+    if (json["displacementScale"] != null) {
       material.displacementScale = json["displacementScale"];
-    if (json["displacementBias"] != null)
+    }
+    if (json["displacementBias"] != null) {
       material.displacementBias = json["displacementBias"];
+    }
 
-    if (json["roughnessMap"] != null)
+    if (json["roughnessMap"] != null) {
       material.roughnessMap = getTexture(json["roughnessMap"]);
-    if (json["metalnessMap"] != null)
+    }
+    if (json["metalnessMap"] != null) {
       material.metalnessMap = getTexture(json["metalnessMap"]);
+    }
 
-    if (json["emissiveMap"] != null)
+    if (json["emissiveMap"] != null) {
       material.emissiveMap = getTexture(json["emissiveMap"]);
-    if (json["emissiveIntensity"] != null)
+    }
+    if (json["emissiveIntensity"] != null) {
       material.emissiveIntensity = json["emissiveIntensity"];
+    }
 
-    if (json["specularMap"] != null)
+    if (json["specularMap"] != null) {
       material.specularMap = getTexture(json["specularMap"]);
-    if (json["specularIntensityMap"] != null)
+    }
+    if (json["specularIntensityMap"] != null) {
       material.specularIntensityMap = getTexture(json["specularIntensityMap"]);
-    if (json["specularColorMap"] != null)
+    }
+    if (json["specularColorMap"] != null) {
       material.specularColorMap = getTexture(json["specularColorMap"]);
+    }
 
     if (json["envMap"] != null) material.envMap = getTexture(json["envMap"]);
-    if (json["envMapIntensity"] != null)
+    if (json["envMapIntensity"] != null) {
       material.envMapIntensity = json["envMapIntensity"];
+    }
 
-    if (json["reflectivity"] != null)
+    if (json["reflectivity"] != null) {
       material.reflectivity = json["reflectivity"];
-    if (json["refractionRatio"] != null)
+    }
+    if (json["refractionRatio"] != null) {
       material.refractionRatio = json["refractionRatio"];
+    }
 
-    if (json["lightMap"] != null)
+    if (json["lightMap"] != null) {
       material.lightMap = getTexture(json["lightMap"]);
-    if (json["lightMapIntensity"] != null)
+    }
+    if (json["lightMapIntensity"] != null) {
       material.lightMapIntensity = json["lightMapIntensity"];
+    }
 
     if (json["aoMap"] != null) material.aoMap = getTexture(json["aoMap"]);
-    if (json["aoMapIntensity"] != null)
+    if (json["aoMapIntensity"] != null) {
       material.aoMapIntensity = json["aoMapIntensity"];
+    }
 
-    if (json["gradientMap"] != null)
+    if (json["gradientMap"] != null) {
       material.gradientMap = getTexture(json["gradientMap"]);
+    }
 
-    if (json["clearcoatMap"] != null)
+    if (json["clearcoatMap"] != null) {
       material.clearcoatMap = getTexture(json["clearcoatMap"]);
-    if (json["clearcoatRoughnessMap"] != null)
+    }
+    if (json["clearcoatRoughnessMap"] != null) {
       material.clearcoatRoughnessMap =
           getTexture(json["clearcoatRoughnessMap"]);
-    if (json["clearcoatNormalMap"] != null)
+    }
+    if (json["clearcoatNormalMap"] != null) {
       material.clearcoatNormalMap = getTexture(json["clearcoatNormalMap"]);
-    if (json["clearcoatNormalScale"] != null)
+    }
+    if (json["clearcoatNormalScale"] != null) {
       material.clearcoatNormalScale =
-          new Vector2(0, 0).fromArray(json["clearcoatNormalScale"]);
+          Vector2(0, 0).fromArray(json["clearcoatNormalScale"]);
+    }
 
-    if (json["transmissionMap"] != null)
+    if (json["transmissionMap"] != null) {
       material.transmissionMap = getTexture(json["transmissionMap"]);
-    if (json["thicknessMap"] != null)
+    }
+    if (json["thicknessMap"] != null) {
       material.thicknessMap = getTexture(json["thicknessMap"]);
+    }
 
-    if (json["sheenColorMap"] != null)
+    if (json["sheenColorMap"] != null) {
       material.sheenColorMap = getTexture(json["sheenColorMap"]);
-    if (json["sheenRoughnessMap"] != null)
+    }
+    if (json["sheenRoughnessMap"] != null) {
       material.sheenRoughnessMap = getTexture(json["sheenRoughnessMap"]);
+    }
 
     return material;
   }
 
   setTextures(value) {
-    this.textures = value;
+    textures = value;
     return this;
   }
 }

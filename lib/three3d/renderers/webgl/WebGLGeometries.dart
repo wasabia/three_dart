@@ -7,9 +7,9 @@ class WebGLGeometries {
   WebGLBindingStates bindingStates;
 
   Map<int, bool> geometries = {};
-  var wireframeAttributes = new WeakMap();
+  var wireframeAttributes = WeakMap();
 
-  WebGLGeometries(this.gl, this.attributes, this.info, this.bindingStates) {}
+  WebGLGeometries(this.gl, this.attributes, this.info, this.bindingStates);
 
   onGeometryDispose(event) {
     var geometry = event.target;
@@ -75,7 +75,7 @@ class WebGLGeometries {
 
       for (var i = 0, l = array.length; i < l; i++) {
         attributes.update(array[i], gl.ARRAY_BUFFER,
-            name: "${name} - morphAttributes i: ${i}");
+            name: "$name - morphAttributes i: $i");
       }
     });
   }

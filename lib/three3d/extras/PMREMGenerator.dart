@@ -1,16 +1,14 @@
 part of three_extra;
 
-/**
- * This class generates a Prefiltered, Mipmapped Radiance Environment Map
- * (PMREM) from a cubeMap environment texture. This allows different levels of
- * blur to be quickly accessed based on material roughness. It is packed into a
- * special CubeUV format that allows us to perform custom interpolation so that
- * we can support nonlinear formats such as RGBE. Unlike a traditional mipmap
- * chain, it only goes down to the LOD_MIN level (above), and then creates extra
- * even more filtered 'mips' at the same LOD_MIN resolution, associated with
- * higher roughness levels. In this way we maintain resolution to smoothly
- * interpolate diffuse lighting while limiting sampling computation.
- */
+/// This class generates a Prefiltered, Mipmapped Radiance Environment Map
+/// (PMREM) from a cubeMap environment texture. This allows different levels of
+/// blur to be quickly accessed based on material roughness. It is packed into a
+/// special CubeUV format that allows us to perform custom interpolation so that
+/// we can support nonlinear formats such as RGBE. Unlike a traditional mipmap
+/// chain, it only goes down to the LOD_MIN level (above), and then creates extra
+/// even more filtered 'mips' at the same LOD_MIN resolution, associated with
+/// higher roughness levels. In this way we maintain resolution to smoothly
+/// interpolate diffuse lighting while limiting sampling computation.
 int LOD_MIN = 4;
 
 // The standard deviations (radians) associated with the extra mips. These are
@@ -33,7 +31,7 @@ class PMREMGenerator {
   final _flatCamera = /*@__PURE__*/ OrthographicCamera();
 
   final _clearColor = /*@__PURE__*/ Color(1, 1, 1);
-  var _oldTarget = null;
+  var _oldTarget;
 
   dynamic PHI;
   dynamic INV_PHI;
@@ -116,7 +114,7 @@ class PMREMGenerator {
 	 * or HDR. The ideal input image size is 1k (1024 x 512),
 	 * as this matches best with the 256 x 256 cubemap output.
 	 */
-  fromEquirectangular(equirectangular, [renderTarget = null]) {
+  fromEquirectangular(equirectangular, [renderTarget]) {
     return _fromTexture(equirectangular, renderTarget);
   }
 
@@ -125,7 +123,7 @@ class PMREMGenerator {
 	 * or HDR. The ideal input cube size is 256 x 256,
 	 * as this matches best with the 256 x 256 cubemap output.
 	 */
-  fromCubemap(cubemap, [renderTarget = null]) {
+  fromCubemap(cubemap, [renderTarget]) {
     return _fromTexture(cubemap, renderTarget);
   }
 
@@ -186,7 +184,7 @@ class PMREMGenerator {
     _setViewport(outputTarget, 0, 0, outputTarget.width, outputTarget.height);
   }
 
-  _fromTexture(texture, [renderTarget = null]) {
+  _fromTexture(texture, [renderTarget]) {
     if (texture.mapping == CubeReflectionMapping ||
         texture.mapping == CubeRefractionMapping) {
       _setSize(texture.image.length == 0
@@ -244,7 +242,7 @@ class PMREMGenerator {
   }
 
   _compileMaterial(material) {
-    BufferGeometry? geometry = null;
+    BufferGeometry? geometry;
     if (_lodPlanes.length >= 1) {
       geometry = _lodPlanes[0];
     }
@@ -332,7 +330,7 @@ class PMREMGenerator {
 
     var material = isCubeTexture ? _cubemapMaterial : _equirectMaterial;
 
-    BufferGeometry? geometry = null;
+    BufferGeometry? geometry;
     if (_lodPlanes.length >= 1) {
       geometry = _lodPlanes[0];
     }
@@ -393,7 +391,7 @@ class PMREMGenerator {
     }
 
     // Number of standard deviations at which to cut off the discrete approximation.
-    var STANDARD_DEVIATIONS = 3;
+    var STANDARDDEVIATIONS = 3;
 
     BufferGeometry? _geometry;
 
@@ -410,7 +408,7 @@ class PMREMGenerator {
         : 2 * Math.PI / (2 * MAX_SAMPLES - 1);
     var sigmaPixels = sigmaRadians / radiansPerPixel;
     var samples = isFinite(sigmaRadians)
-        ? 1 + Math.floor(STANDARD_DEVIATIONS * sigmaPixels)
+        ? 1 + Math.floor(STANDARDDEVIATIONS * sigmaPixels)
         : MAX_SAMPLES;
 
     if (samples > MAX_SAMPLES) {

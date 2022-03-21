@@ -5,12 +5,12 @@ class PointLightShadow extends LightShadow {
   late List<Vector3> _cubeUps;
 
   PointLightShadow() : super(PerspectiveCamera(90, 1, 0.5, 500)) {
-    this.isPointLightShadow = true;
-    this._frameExtents = new Vector2(4, 2);
+    isPointLightShadow = true;
+    _frameExtents = Vector2(4, 2);
 
-    this._viewportCount = 6;
+    _viewportCount = 6;
 
-    this._viewports = [
+    _viewports = [
       // These viewports map a cube-map onto a 2D texture with the
       // following orientation:
       //
@@ -25,35 +25,35 @@ class PointLightShadow extends LightShadow {
       // z - Negative z direction
 
       // positive X
-      new Vector4(2, 1, 1, 1),
+      Vector4(2, 1, 1, 1),
       // negative X
-      new Vector4(0, 1, 1, 1),
+      Vector4(0, 1, 1, 1),
       // positive Z
-      new Vector4(3, 1, 1, 1),
+      Vector4(3, 1, 1, 1),
       // negative Z
-      new Vector4(1, 1, 1, 1),
+      Vector4(1, 1, 1, 1),
       // positive Y
-      new Vector4(3, 0, 1, 1),
+      Vector4(3, 0, 1, 1),
       // negative Y
-      new Vector4(1, 0, 1, 1)
+      Vector4(1, 0, 1, 1)
     ];
 
-    this._cubeDirections = [
-      new Vector3(1, 0, 0),
-      new Vector3(-1, 0, 0),
-      new Vector3(0, 0, 1),
-      new Vector3(0, 0, -1),
-      new Vector3(0, 1, 0),
-      new Vector3(0, -1, 0)
+    _cubeDirections = [
+      Vector3(1, 0, 0),
+      Vector3(-1, 0, 0),
+      Vector3(0, 0, 1),
+      Vector3(0, 0, -1),
+      Vector3(0, 1, 0),
+      Vector3(0, -1, 0)
     ];
 
-    this._cubeUps = [
-      new Vector3(0, 1, 0),
-      new Vector3(0, 1, 0),
-      new Vector3(0, 1, 0),
-      new Vector3(0, 1, 0),
-      new Vector3(0, 0, 1),
-      new Vector3(0, 0, -1)
+    _cubeUps = [
+      Vector3(0, 1, 0),
+      Vector3(0, 1, 0),
+      Vector3(0, 1, 0),
+      Vector3(0, 1, 0),
+      Vector3(0, 0, 1),
+      Vector3(0, 0, -1)
     ];
   }
 
@@ -63,9 +63,10 @@ class PointLightShadow extends LightShadow {
     camera = Object3D.castJSON(json["camera"], rootJSON) as Camera;
   }
 
+  @override
   updateMatrices(light, {viewportIndex = 0}) {
     var camera = this.camera;
-    var shadowMatrix = this.matrix;
+    var shadowMatrix = matrix;
 
     var far = light.distance ?? camera!.far;
 
@@ -78,8 +79,8 @@ class PointLightShadow extends LightShadow {
     camera.position.copy(_lightPositionWorld);
 
     _lookTarget.copy(camera.position);
-    _lookTarget.add(this._cubeDirections[viewportIndex]);
-    camera.up.copy(this._cubeUps[viewportIndex]);
+    _lookTarget.add(_cubeDirections[viewportIndex]);
+    camera.up.copy(_cubeUps[viewportIndex]);
     camera.lookAt(_lookTarget);
     camera.updateMatrixWorld(false);
 
@@ -88,6 +89,6 @@ class PointLightShadow extends LightShadow {
 
     _projScreenMatrix.multiplyMatrices(
         camera.projectionMatrix, camera.matrixWorldInverse);
-    this._frustum.setFromProjectionMatrix(_projScreenMatrix);
+    _frustum.setFromProjectionMatrix(_projScreenMatrix);
   }
 }

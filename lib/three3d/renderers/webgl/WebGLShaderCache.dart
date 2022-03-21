@@ -3,10 +3,10 @@ part of three_webgl;
 int _id = 0;
 
 class WebGLShaderCache {
-  var shaderCache = Map();
-  var materialCache = Map();
+  var shaderCache = {};
+  var materialCache = {};
 
-  WebGLShaderCache() {}
+  WebGLShaderCache();
 
   WebGLShaderCache update(Material material) {
     var vertexShader = material.vertexShader;

@@ -13,10 +13,10 @@ class WebGLInfo {
     "lines": 0.0
   };
 
-  var programs = null;
+  var programs;
   bool autoReset = true;
 
-  WebGLInfo(this.gl) {}
+  WebGLInfo(this.gl);
 
   update(count, mode, instanceCount) {
     render["calls"] = render["calls"]! + 1;
@@ -33,7 +33,7 @@ class WebGLInfo {
     } else if (mode == gl.POINTS) {
       render["points"] = render["points"]! + instanceCount * count;
     } else {
-      print('THREE.WebGLInfo: Unknown draw mode: ${mode} ');
+      print('THREE.WebGLInfo: Unknown draw mode: $mode ');
     }
   }
 

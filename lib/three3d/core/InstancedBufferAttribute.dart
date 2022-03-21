@@ -24,13 +24,14 @@ class InstancedBufferAttribute extends BufferAttribute {
     return this;
   }
 
-  toJSON() {
-    var data = super.toJSON();
+  @override
+  toJSON([data]) {
+    var result = super.toJSON();
 
-    data.meshPerAttribute = meshPerAttribute;
+    result.meshPerAttribute = meshPerAttribute;
 
-    data.isInstancedBufferAttribute = true;
+    result.isInstancedBufferAttribute = true;
 
-    return data;
+    return result;
   }
 }

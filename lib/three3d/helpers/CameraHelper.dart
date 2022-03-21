@@ -3,19 +3,18 @@ part of three_helpers;
 var _vector = /*@__PURE__*/ Vector3.init();
 var _camera = /*@__PURE__*/ Camera();
 
-/**
- *	- shows frustum, line of sight and up of the camera
- *	- suitable for fast updates
- * 	- based on frustum visualization in lightgl.js shadowmap example
- *		http://evanw.github.com/lightgl.js/tests/shadowmap.html
- */
+///	- shows frustum, line of sight and up of the camera
+///	- suitable for fast updates
+/// 	- based on frustum visualization in lightgl.js shadowmap example
+///		http://evanw.github.com/lightgl.js/tests/shadowmap.html
 
 class CameraHelper extends LineSegments {
+  @override
   String type = "CameraHelper";
   late Camera camera;
   late Map<String, dynamic> pointMap;
 
-  CameraHelper.create(geometry, material) : super(geometry, material) {}
+  CameraHelper.create(geometry, material) : super(geometry, material);
 
   factory CameraHelper(camera) {
     var geometry = BufferGeometry();
@@ -108,9 +107,7 @@ class CameraHelper extends LineSegments {
     CameraHelper cameraHelper = CameraHelper.create(geometry, material);
     cameraHelper.camera = camera;
 
-    if (cameraHelper.camera.updateProjectionMatrix != null) {
-      cameraHelper.camera.updateProjectionMatrix();
-    }
+    cameraHelper.camera.updateProjectionMatrix();
 
     cameraHelper.matrix = camera.matrixWorld;
     cameraHelper.matrixAutoUpdate = false;
@@ -131,7 +128,7 @@ class CameraHelper extends LineSegments {
     // we need just camera projection matrix inverse
     // world matrix must be identity
 
-    _camera.projectionMatrixInverse.copy(this.camera.projectionMatrixInverse);
+    _camera.projectionMatrixInverse.copy(camera.projectionMatrixInverse);
 
     // center / target
 
@@ -173,9 +170,10 @@ class CameraHelper extends LineSegments {
     geometry!.getAttribute('position').needsUpdate = true;
   }
 
+  @override
   dispose() {
-    this.geometry!.dispose();
-    this.material.dispose();
+    geometry!.dispose();
+    material.dispose();
   }
 }
 

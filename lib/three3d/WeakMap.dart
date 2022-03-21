@@ -41,7 +41,7 @@
 class WeakMap<K, V> {
   final Map<K, V> _map;
   Expando _expando;
-  List<K> _keys = [];
+  final List<K> _keys = [];
 
   WeakMap()
       : _map = {},

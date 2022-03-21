@@ -61,35 +61,35 @@ class WebGLState {
   dynamic viewportParam;
 
   WebGLState(this.gl, this.extensions, this.capabilities) {
-    this.isWebGL2 = capabilities.isWebGL2;
+    isWebGL2 = capabilities.isWebGL2;
 
-    this.colorBuffer = ColorBuffer(this.gl);
-    this.depthBuffer = DepthBuffer(this.gl);
-    this.stencilBuffer = StencilBuffer(this.gl);
+    colorBuffer = ColorBuffer(gl);
+    depthBuffer = DepthBuffer(gl);
+    stencilBuffer = StencilBuffer(gl);
 
-    this.colorBuffer.enable = enable;
-    this.colorBuffer.disable = disable;
+    colorBuffer.enable = enable;
+    colorBuffer.disable = disable;
 
-    this.depthBuffer.enable = enable;
-    this.depthBuffer.disable = disable;
+    depthBuffer.enable = enable;
+    depthBuffer.disable = disable;
 
-    this.stencilBuffer.enable = enable;
-    this.stencilBuffer.disable = disable;
+    stencilBuffer.enable = enable;
+    stencilBuffer.disable = disable;
 
-    this.maxTextures = gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS);
-    this.emptyTextures[gl.TEXTURE_2D] =
+    maxTextures = gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS);
+    emptyTextures[gl.TEXTURE_2D] =
         createTexture(gl.TEXTURE_2D, gl.TEXTURE_2D, 1);
-    this.emptyTextures[gl.TEXTURE_CUBE_MAP] =
+    emptyTextures[gl.TEXTURE_CUBE_MAP] =
         createTexture(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_CUBE_MAP_POSITIVE_X, 6);
 
     // init
 
-    this.colorBuffer.setClear(0, 0, 0, 1, false);
-    this.depthBuffer.setClear(1);
-    this.stencilBuffer.setClear(0);
+    colorBuffer.setClear(0, 0, 0, 1, false);
+    depthBuffer.setClear(1);
+    stencilBuffer.setClear(0);
 
     enable(gl.DEPTH_TEST);
-    this.depthBuffer.setFunc(LessEqualDepth);
+    depthBuffer.setFunc(LessEqualDepth);
 
     setFlipSided(false);
     setCullFace(CullFaceBack);
@@ -171,8 +171,9 @@ class WebGLState {
   }
 
   bindFramebuffer(target, framebuffer) {
-    if (framebuffer == null && xrFramebuffer != null)
-      framebuffer = xrFramebuffer; // use active XR framebuffer if available
+    if (framebuffer == null && xrFramebuffer != null) {
+      framebuffer = xrFramebuffer;
+    } // use active XR framebuffer if available
 
     if (currentBoundFramebuffers[target] != framebuffer) {
       gl.bindFramebuffer(target, framebuffer);
@@ -327,7 +328,7 @@ class WebGLState {
               break;
 
             default:
-              print('THREE.WebGLState: Invalid blending: ${blending}');
+              print('THREE.WebGLState: Invalid blending: $blending');
               break;
           }
         } else {
@@ -351,7 +352,7 @@ class WebGLState {
               break;
 
             default:
-              print('THREE.WebGLState: Invalid blending: ${blending}');
+              print('THREE.WebGLState: Invalid blending: $blending');
               break;
           }
         }
@@ -512,7 +513,7 @@ class WebGLState {
   // texture
 
   activeTexture(int? webglSlot) {
-    if (webglSlot == null) webglSlot = gl.TEXTURE0 + maxTextures - 1;
+    webglSlot ??= gl.TEXTURE0 + maxTextures - 1;
 
     if (currentTextureSlot != webglSlot) {
       gl.activeTexture(webglSlot);
@@ -803,10 +804,10 @@ class ColorBuffer {
   late Function disable;
 
   Vector4 color = Vector4.init();
-  bool? currentColorMask = null;
+  bool? currentColorMask;
   Vector4 currentColorClear = Vector4(0, 0, 0, 0);
 
-  ColorBuffer(this.gl) {}
+  ColorBuffer(this.gl);
 
   setMask(bool colorMask) {
     if (currentColorMask != colorMask && !locked) {
@@ -850,12 +851,12 @@ class DepthBuffer {
   late Function enable;
   late Function disable;
 
-  bool? currentDepthMask = null;
+  bool? currentDepthMask;
 
   int? currentDepthFunc;
   int? currentDepthClear;
 
-  DepthBuffer(this.gl) {}
+  DepthBuffer(this.gl);
 
   setTest(depthTest) {
     if (depthTest) {
@@ -956,7 +957,7 @@ class StencilBuffer {
   int? currentStencilZPass;
   int? currentStencilClear;
 
-  StencilBuffer(this.gl) {}
+  StencilBuffer(this.gl);
 
   setTest(bool stencilTest) {
     if (!locked) {

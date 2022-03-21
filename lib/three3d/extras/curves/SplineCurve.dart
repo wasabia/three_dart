@@ -1,22 +1,24 @@
 part of three_extra;
 
 class SplineCurve extends Curve {
+  @override
   bool isSplineCurve = true;
 
   SplineCurve(points) : super() {
-    this.type = 'SplineCurve';
+    type = 'SplineCurve';
     this.points = points;
   }
 
   SplineCurve.fromJSON(Map<String, dynamic> json) : super.fromJSON(json) {
-    this.points = [];
+    points = [];
 
     for (var i = 0, l = json["points"].length; i < l; i++) {
       var point = json["points"][i];
-      this.points.add(new Vector2(null, null).fromArray(point));
+      points.add(Vector2(null, null).fromArray(point));
     }
   }
 
+  @override
   getPoint(num t, optionalTarget) {
     var point = optionalTarget ?? Vector2(null, null);
 
@@ -39,27 +41,29 @@ class SplineCurve extends Curve {
     return point;
   }
 
+  @override
   copy(source) {
     super.copy(source);
 
-    this.points = [];
+    points = [];
 
     for (var i = 0, l = source.points.length; i < l; i++) {
       var point = source.points[i];
 
-      this.points.add(point.clone());
+      points.add(point.clone());
     }
 
     return this;
   }
 
+  @override
   toJSON() {
     var data = super.toJSON();
 
     data["points"] = [];
 
-    for (var i = 0, l = this.points.length; i < l; i++) {
-      var point = this.points[i];
+    for (var i = 0, l = points.length; i < l; i++) {
+      var point = points[i];
       data["points"].add(point.toArray());
     }
 

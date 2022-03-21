@@ -28,7 +28,7 @@ class WebGLProgramExtra {
       case GammaEncoding:
         return ['Gamma', '( value, float( GAMMA_FACTOR ) )'];
       default:
-        print('THREE.WebGLProgram: Unsupported encoding: ${encoding}');
+        print('THREE.WebGLProgram: Unsupported encoding: $encoding');
         return ['Linear', '( value )'];
     }
   }
@@ -62,7 +62,7 @@ class WebGLProgramExtra {
   }
 
   getToneMappingFunction(functionName, toneMapping) {
-    var toneMappingName;
+    String toneMappingName;
 
     switch (toneMapping) {
       case LinearToneMapping:
@@ -86,7 +86,7 @@ class WebGLProgramExtra {
         break;
 
       default:
-        print('THREE.WebGLProgram: Unsupported toneMapping: ${toneMapping}');
+        print('THREE.WebGLProgram: Unsupported toneMapping: $toneMapping');
         toneMappingName = 'Linear';
     }
 
@@ -135,7 +135,7 @@ class WebGLProgramExtra {
         if (value == false) continue;
 
         // print("WebGLProgramExtra generateDefines name: ${name} value: ${value} ");
-        chunks.add('#define ${name} ${value}');
+        chunks.add('#define $name $value');
       }
     }
 
@@ -248,7 +248,7 @@ class WebGLProgramExtra {
     var string = ShaderChunk[include];
 
     if (string == null) {
-      throw ('Can not resolve #include <${include}>');
+      throw ('Can not resolve #include <$include>');
     }
 
     return resolveIncludes(string);
@@ -278,7 +278,7 @@ class WebGLProgramExtra {
   String unrollLoopPatternReplace(String string) {
     var matches = unrollLoopPattern.allMatches(string);
 
-    matches.forEach((RegExpMatch match) {
+    for (var match in matches) {
       var stringResult = '';
 
       int start = int.parse(match.group(1)!);
@@ -286,7 +286,7 @@ class WebGLProgramExtra {
       var snippet = match.group(3)!;
 
       for (var i = start; i < end; i++) {
-        var snippet2 = snippet.replaceAll(RegExp(r"\[\s*i\s*\]"), "[${i}]");
+        var snippet2 = snippet.replaceAll(RegExp(r"\[\s*i\s*\]"), "[$i]");
         snippet2 =
             snippet2.replaceAll(RegExp(r"UNROLLED_LOOP_INDEX"), i.toString());
         // string += snippet
@@ -297,7 +297,7 @@ class WebGLProgramExtra {
       }
 
       string = string.replaceFirst(match.group(0)!, stringResult);
-    });
+    }
 
     // print(string);
     // if(match != null) {
@@ -329,7 +329,7 @@ class WebGLProgramExtra {
 
     for (var i = _start; i < _end; i++) {
       snippet = snippet
-        ..replaceAll(RegExp(r"\[\s*i\s*\]"), '[ ${i} ]')
+        ..replaceAll(RegExp(r"\[\s*i\s*\]"), '[ $i ]')
         ..replaceAll(RegExp(r"UNROLLED_LOOP_INDEX"), i);
 
       string += snippet;

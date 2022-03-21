@@ -32,7 +32,7 @@ class TypefaceConvert {
         var glyphCharacter = String.fromCharCode(glyph.unicode);
         var needToExport = true;
         if (restriction["set"] != null) {
-          needToExport = (restrictContent!.indexOf(glyphCharacter) != -1);
+          needToExport = (restrictContent!.contains(glyphCharacter));
         }
 
         if (needToExport) {
@@ -121,7 +121,7 @@ class TypefaceConvert {
     });
 
     var reversed = [];
-    paths.forEach((p) {
+    for (var p in paths) {
       var result = {
         "type": "m",
         "x": p[p.length - 1].x,
@@ -145,7 +145,7 @@ class TypefaceConvert {
         result["y"] = p[i - 1].y;
         reversed.add(result);
       }
-    });
+    }
 
     return reversed;
   }

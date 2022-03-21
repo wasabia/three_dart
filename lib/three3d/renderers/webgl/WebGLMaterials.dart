@@ -3,7 +3,7 @@ part of three_webgl;
 class WebGLMaterials {
   WebGLProperties properties;
 
-  WebGLMaterials(this.properties) {}
+  WebGLMaterials(this.properties);
 
   refreshFogUniforms(uniforms, fog) {
     uniforms["fogColor"]["value"].copy(fog.color);
@@ -18,51 +18,51 @@ class WebGLMaterials {
 
   refreshMaterialUniforms(uniforms, Material material, pixelRatio, height,
       transmissionRenderTarget) {
-    if (material.isMeshBasicMaterial) {
+    if (material is MeshBasicMaterial) {
       refreshUniformsCommon(uniforms, material);
-    } else if (material.isMeshLambertMaterial) {
+    } else if (material is MeshLambertMaterial) {
       refreshUniformsCommon(uniforms, material);
       refreshUniformsLambert(uniforms, material);
-    } else if (material.isMeshToonMaterial) {
+    } else if (material is MeshToonMaterial) {
       refreshUniformsCommon(uniforms, material);
       refreshUniformsToon(uniforms, material);
-    } else if (material.isMeshPhongMaterial) {
+    } else if (material is MeshPhongMaterial) {
       refreshUniformsCommon(uniforms, material);
       refreshUniformsPhong(uniforms, material);
-    } else if (material.isMeshStandardMaterial) {
+    } else if (material is MeshStandardMaterial) {
       refreshUniformsCommon(uniforms, material);
 
-      if (material.isMeshPhysicalMaterial) {
+      if (material is MeshPhysicalMaterial) {
         refreshUniformsPhysical(uniforms, material, transmissionRenderTarget);
       } else {
         refreshUniformsStandard(uniforms, material);
       }
-    } else if (material.isMeshMatcapMaterial) {
+    } else if (material is MeshMatcapMaterial) {
       refreshUniformsCommon(uniforms, material);
       refreshUniformsMatcap(uniforms, material);
-    } else if (material.isMeshDepthMaterial) {
+    } else if (material is MeshDepthMaterial) {
       refreshUniformsCommon(uniforms, material);
       refreshUniformsDepth(uniforms, material);
-    } else if (material.isMeshDistanceMaterial) {
+    } else if (material is MeshDistanceMaterial) {
       refreshUniformsCommon(uniforms, material);
       refreshUniformsDistance(uniforms, material);
-    } else if (material.isMeshNormalMaterial) {
+    } else if (material is MeshNormalMaterial) {
       refreshUniformsCommon(uniforms, material);
       refreshUniformsNormal(uniforms, material);
-    } else if (material.isLineBasicMaterial) {
+    } else if (material is LineBasicMaterial) {
       refreshUniformsLine(uniforms, material);
 
       if (material.isLineDashedMaterial) {
         refreshUniformsDash(uniforms, material);
       }
-    } else if (material.isPointsMaterial) {
+    } else if (material is PointsMaterial) {
       refreshUniformsPoints(uniforms, material, pixelRatio, height);
-    } else if (material.isSpriteMaterial) {
+    } else if (material is SpriteMaterial) {
       refreshUniformsSprites(uniforms, material);
-    } else if (material.isShadowMaterial) {
+    } else if (material is ShadowMaterial) {
       uniforms["color"]["value"].copy(material.color);
       uniforms["opacity"]["value"] = material.opacity;
-    } else if (material.isShaderMaterial) {
+    } else if (material is ShaderMaterial) {
       material.uniformsNeedUpdate = false; // #15581
 
     }
@@ -71,9 +71,7 @@ class WebGLMaterials {
   refreshUniformsCommon(Map<String, dynamic> uniforms, Material material) {
     uniforms["opacity"]["value"] = material.opacity;
 
-    if (material.color != null) {
-      uniforms["diffuse"]["value"].copy(material.color);
-    }
+    uniforms["diffuse"]["value"].copy(material.color);
 
     if (material.emissive != null) {
       uniforms["emissive"]["value"]
@@ -182,8 +180,8 @@ class WebGLMaterials {
         uvScaleMap = uvScaleMap.texture;
       }
 
-      if (uvScaleMap.matrixAutoUpdate == true) {
-        uvScaleMap.updateMatrix();
+      if (uvScaleMap?.matrixAutoUpdate == true) {
+        uvScaleMap?.updateMatrix();
       }
 
       uniforms["uvTransform"]["value"].copy(uvScaleMap.matrix);
@@ -248,7 +246,7 @@ class WebGLMaterials {
     // 1. color map
     // 2. alpha map
 
-    var uvScaleMap;
+    Texture? uvScaleMap;
 
     if (material.map != null) {
       uvScaleMap = material.map;

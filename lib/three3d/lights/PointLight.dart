@@ -1,7 +1,9 @@
 part of three_lights;
 
 class PointLight extends Light {
+  @override
   String type = "PointLight";
+  @override
   bool isPointLight = true;
 
   PointLight(color, [num? intensity, num? distance, num? decay])
@@ -11,7 +13,7 @@ class PointLight extends Light {
     this.distance = distance;
     this.decay = decay ?? 1; // for physically correct lights, should be 2.
 
-    this.shadow = PointLightShadow();
+    shadow = PointLightShadow();
   }
 
   PointLight.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON)
@@ -22,27 +24,29 @@ class PointLight extends Light {
   }
 
   get power {
-    return this.intensity * 4 * Math.PI;
+    return intensity * 4 * Math.PI;
   }
 
   set power(value) {
-    this.intensity = value / (4 * Math.PI);
+    intensity = value / (4 * Math.PI);
   }
 
+  @override
   copy(Object3D source, [bool? recursive]) {
     super.copy.call(source);
 
     PointLight source1 = source as PointLight;
 
-    this.distance = source1.distance;
-    this.decay = source1.decay;
+    distance = source1.distance;
+    decay = source1.decay;
 
-    this.shadow = source1.shadow!.clone();
+    shadow = source1.shadow!.clone();
 
     return this;
   }
 
+  @override
   dispose() {
-    this.shadow?.dispose();
+    shadow?.dispose();
   }
 }

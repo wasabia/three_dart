@@ -10,6 +10,7 @@ part of three_geometries;
 // thetaLength — 圆形扇形的中心角，通常称为theta。默认值是2 * Pi，画出一个整圆
 
 class CylinderGeometry extends BufferGeometry {
+  @override
   String type = "CylinderGeometry";
 
   CylinderGeometry(

@@ -3,7 +3,7 @@ part of three_textures;
 int textureId = 0;
 
 class Texture with EventDispatcher {
-  static String? DEFAULT_IMAGE = null;
+  static String? DEFAULT_IMAGE;
   static int DEFAULT_MAPPING = UVMapping;
 
   bool isTexture = true;
@@ -262,6 +262,6 @@ class ImageDataInfo {
   num height;
   num depth;
 
-  ImageDataInfo(this.data, this.width, this.height, this.depth) {}
+  ImageDataInfo(this.data, this.width, this.height, this.depth);
 }
 

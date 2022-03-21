@@ -1,14 +1,12 @@
 part of three_extra;
 
-/**
- * Port from https://github.com/mapbox/earcut (v2.2.2)
- */
+/// Port from https://github.com/mapbox/earcut (v2.2.2)
 
 class Earcut {
   static triangulate(data, List<num>? holeIndices, dim) {
     dim = dim ?? 2;
 
-    var hasHoles = holeIndices != null && holeIndices.length >= 1;
+    var hasHoles = holeIndices != null && holeIndices.isNotEmpty;
     var outerLen = hasHoles ? holeIndices![0] * dim : data.length;
 
     var outerNode = linkedList(data, 0, outerLen, dim, true);
@@ -50,11 +48,13 @@ linkedList(data, start, end, dim, clockwise) {
   var i, last;
 
   if (clockwise == (signedArea(data, start, end, dim) > 0)) {
-    for (i = start; i < end; i += dim)
+    for (i = start; i < end; i += dim) {
       last = insertNode(i, data[i], data[i + 1], last);
+    }
   } else {
-    for (i = end - dim; i >= start; i -= dim)
+    for (i = end - dim; i >= start; i -= dim) {
       last = insertNode(i, data[i], data[i + 1], last);
+    }
   }
 
   if (last != null && equals(last, last.next)) {
@@ -68,7 +68,7 @@ linkedList(data, start, end, dim, clockwise) {
 // eliminate colinear or duplicate points
 filterPoints(start, end) {
   if (start == null) return start;
-  if (end == null) end = start;
+  end ??= start;
 
   var p = start, again;
   do {
@@ -386,7 +386,7 @@ sectorContainsSector(m, p) {
 indexCurve(Node start, minX, minY, invSize) {
   var p = start;
   do {
-    if (p.z == null) p.z = zOrder(p.x, p.y, minX, minY, invSize);
+    p.z ??= zOrder(p.x, p.y, minX, minY, invSize);
     p.prevZ = p.prev;
     p.nextZ = p.next;
     p = p.next!;
@@ -432,10 +432,11 @@ sortLinked(list) {
           qSize--;
         }
 
-        if (tail != null)
+        if (tail != null) {
           tail.nextZ = e;
-        else
+        } else {
           list = e;
+        }
 
         e.prevZ = tail;
         tail = e;
@@ -475,8 +476,9 @@ zOrder(num x0, num y0, num minX, num minY, num invSize) {
 getLeftmost(start) {
   var p = start, leftmost = start;
   do {
-    if (p.x < leftmost.x || (p.x == leftmost.x && p.y < leftmost.y))
+    if (p.x < leftmost.x || (p.x == leftmost.x && p.y < leftmost.y)) {
       leftmost = p;
+    }
     p = p.next;
   } while (p != start);
 
@@ -534,14 +536,18 @@ intersects(p1, q1, p2, q2) {
 
   if (o1 != o2 && o3 != o4) return true; // general case
 
-  if (o1 == 0 && onSegment(p1, p2, q1))
-    return true; // p1, q1 and p2 are collinear and p2 lies on p1q1
-  if (o2 == 0 && onSegment(p1, q2, q1))
-    return true; // p1, q1 and q2 are collinear and q2 lies on p1q1
-  if (o3 == 0 && onSegment(p2, p1, q2))
-    return true; // p2, q2 and p1 are collinear and p1 lies on p2q2
-  if (o4 == 0 && onSegment(p2, q1, q2))
-    return true; // p2, q2 and q1 are collinear and q1 lies on p2q2
+  if (o1 == 0 && onSegment(p1, p2, q1)) {
+    return true;
+  } // p1, q1 and p2 are collinear and p2 lies on p1q1
+  if (o2 == 0 && onSegment(p1, q2, q1)) {
+    return true;
+  } // p1, q1 and q2 are collinear and q2 lies on p1q1
+  if (o3 == 0 && onSegment(p2, p1, q2)) {
+    return true;
+  } // p2, q2 and p1 are collinear and p1 lies on p2q2
+  if (o4 == 0 && onSegment(p2, q1, q2)) {
+    return true;
+  } // p2, q2 and q1 are collinear and q1 lies on p2q2
 
   return false;
 }
@@ -592,8 +598,9 @@ middleInside(a, b) {
   do {
     if (((p.y > py) != (p.next.y > py)) &&
         p.next.y != p.y &&
-        (px < (p.next.x - p.x) * (py - p.y) / (p.next.y - p.y) + p.x))
+        (px < (p.next.x - p.x) * (py - p.y) / (p.next.y - p.y) + p.x)) {
       inside = !inside;
+    }
     p = p.next;
   } while (p != a);
 
@@ -603,8 +610,8 @@ middleInside(a, b) {
 // link two polygon vertices with a bridge; if the vertices belong to the same ring, it splits polygon into two;
 // if one belongs to the outer ring and another to a hole, it merges it into a single ring
 splitPolygon(a, b) {
-  var a2 = new Node(a.i, a.x, a.y),
-      b2 = new Node(b.i, b.x, b.y),
+  var a2 = Node(a.i, a.x, a.y),
+      b2 = Node(b.i, b.x, b.y),
       an = a.next,
       bp = b.prev;
 
@@ -625,7 +632,7 @@ splitPolygon(a, b) {
 
 // create a node and optionally link it with previous one (in a circular doubly linked list)
 insertNode(i, x, y, last) {
-  var p = new Node(i, x, y);
+  var p = Node(i, x, y);
 
   if (last == null) {
     p.prev = p;
@@ -668,18 +675,18 @@ class Node {
     this.y = y;
 
     // previous and next vertex nodes in a polygon ring
-    this.prev = null;
-    this.next = null;
+    prev = null;
+    next = null;
 
     // z-order curve value
-    this.z = null;
+    z = null;
 
     // previous and next nodes in z-order
-    this.prevZ = null;
-    this.nextZ = null;
+    prevZ = null;
+    nextZ = null;
 
     // indicates whether this is a steiner point
-    this.steiner = false;
+    steiner = false;
   }
 }
 

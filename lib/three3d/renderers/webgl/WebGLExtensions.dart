@@ -4,7 +4,7 @@ class WebGLExtensions {
   Map<String, dynamic> extensions = {};
   dynamic gl;
 
-  WebGLExtensions(this.gl) {}
+  WebGLExtensions(this.gl);
 
   getExtension(name) {
     return has(name);
@@ -77,13 +77,13 @@ class WebGLExtensions {
   }
 
   hasForApp(name) {
-    if (extensions.keys.length == 0) {
+    if (extensions.keys.isEmpty) {
       List<String> _extensions = gl.getExtension(name);
 
       extensions = {};
-      _extensions.forEach((element) {
+      for (var element in _extensions) {
         extensions[element] = element;
-      });
+      }
     }
 
     Map<String, dynamic> _names = {
@@ -119,7 +119,7 @@ class WebGLExtensions {
     var extension = getExtension(name);
 
     if (extension == null) {
-      print('THREE.WebGLExtensions.get: ${name} extension not supported.');
+      print('THREE.WebGLExtensions.get: $name extension not supported.');
     }
 
     return extension;

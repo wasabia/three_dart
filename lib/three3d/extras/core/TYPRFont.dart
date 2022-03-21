@@ -5,9 +5,10 @@ class TYPRFont extends Font {
     this.data = data;
   }
 
+  @override
   List<Shape> generateShapes(text, {int size = 100}) {
     List<Shape> shapes = [];
-    var paths = createPaths(text, size, this.data);
+    var paths = createPaths(text, size, data);
 
     for (var p = 0, pl = paths.length; p < pl; p++) {
       // Array.prototype.push.apply( shapes, paths[ p ].toShapes() );
@@ -18,7 +19,7 @@ class TYPRFont extends Font {
   }
 
   Map<String, dynamic> generateShapes2(text, {int size = 100}) {
-    return createPaths2(text, size, this.data);
+    return createPaths2(text, size, data);
   }
 
   // 同样文字路径不重复生成
@@ -29,7 +30,7 @@ class TYPRFont extends Font {
     List<String> chars = text.split("");
 
     num scale = size / data["resolution"];
-    num line_height = (data["boundingBox"]["yMax"] -
+    num lineHeight = (data["boundingBox"]["yMax"] -
             data["boundingBox"]["yMin"] +
             data["underlineThickness"]) *
         scale;
@@ -49,7 +50,7 @@ class TYPRFont extends Font {
 
       if (char == '\n') {
         offsetX = 0;
-        offsetY -= line_height;
+        offsetY -= lineHeight;
       } else {
         var charPath = paths[char];
         if (charPath == null) {
@@ -78,7 +79,7 @@ class TYPRFont extends Font {
     Map<String, dynamic> _data = {
       "paths": paths,
       "chars": result,
-      "height": offsetY + line_height,
+      "height": offsetY + lineHeight,
       "width": maxWidth
     };
 
@@ -91,7 +92,7 @@ class TYPRFont extends Font {
     List<String> chars = text.split("");
 
     num scale = size / data["resolution"];
-    num line_height = (data["boundingBox"]["yMax"] -
+    num lineHeight = (data["boundingBox"]["yMax"] -
             data["boundingBox"]["yMin"] +
             data["underlineThickness"]) *
         scale;
@@ -106,7 +107,7 @@ class TYPRFont extends Font {
 
       if (char == '\n') {
         offsetX = 0;
-        offsetY -= line_height;
+        offsetY -= lineHeight;
       } else {
         var ret = createPath(char, scale, offsetX, offsetY, data);
         offsetX += ret["offsetX"];

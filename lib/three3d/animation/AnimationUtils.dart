@@ -20,8 +20,9 @@ class AnimationUtils {
   // converts an array to a specific type
   static convertArray(array, String type, [bool forceClone = false]) {
     // var 'null' and 'null' pass
-    if (array == null || !forceClone && array.runtimeType.toString() == type)
+    if (array == null || !forceClone && array.runtimeType.toString() == type) {
       return array;
+    }
 
     if (array is NativeArray && type == 'List<num>') {
       return array.toDartList();
@@ -51,8 +52,10 @@ class AnimationUtils {
     };
 
     var n = times.length;
-    var result = new List<int>.filled(n, 0);
-    for (var i = 0; i != n; ++i) result[i] = i;
+    var result = List<int>.filled(n, 0);
+    for (var i = 0; i != n; ++i) {
+      result[i] = i;
+    }
 
     result.sort((a, b) {
       return compareTime(a, b);
@@ -158,7 +161,7 @@ class AnimationUtils {
         }
       }
 
-      if (times.length == 0) continue;
+      if (times.isEmpty) continue;
 
       track.times = AnimationUtils.convertArray(times, track.times.constructor);
       track.values =
@@ -192,9 +195,7 @@ class AnimationUtils {
 
   makeClipAdditive(AnimationClip targetClip,
       {int referenceFrame = 0, AnimationClip? referenceClip, int fps = 30}) {
-    if (referenceClip == null) {
-      referenceClip = targetClip;
-    }
+    referenceClip ??= targetClip;
 
     if (fps <= 0) fps = 30;
 
@@ -207,8 +208,9 @@ class AnimationUtils {
       var referenceTrackType = referenceTrack.ValueTypeName;
 
       // Skip this track if it's non-numeric
-      if (referenceTrackType == 'bool' || referenceTrackType == 'string')
+      if (referenceTrackType == 'bool' || referenceTrackType == 'string') {
         continue;
+      }
 
       // Find the track in the target clip whose name and type matches the reference track
       var targetTrack = targetClip.tracks.firstWhere((track) {
@@ -265,7 +267,7 @@ class AnimationUtils {
       // Conjugate the quaternion
       if (referenceTrackType == 'quaternion') {
         var referenceQuat =
-            new Quaternion().fromArray(referenceValue).normalize().conjugate();
+            Quaternion().fromArray(referenceValue).normalize().conjugate();
         referenceQuat.toArray(referenceValue);
       }
 

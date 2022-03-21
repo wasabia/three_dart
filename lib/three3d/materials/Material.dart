@@ -723,7 +723,7 @@ class Material with EventDispatcher {
     stencilWrite = source.stencilWrite;
 
     var srcPlanes = source.clippingPlanes;
-    var dstPlanes = null;
+    List<Plane>? dstPlanes;
 
     if (srcPlanes != null) {
       var n = srcPlanes.length;

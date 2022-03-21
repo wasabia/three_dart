@@ -7,6 +7,7 @@ class DefaultProgram {
 }
 
 class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
+  @override
   int id = -1;
   late String name;
   WebGLRenderer renderer;
@@ -66,7 +67,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
       prefixVertex =
           [customDefines].where((s) => filterEmptyLine(s)).join('\n');
 
-      if (prefixVertex.length > 0) {
+      if (prefixVertex.isNotEmpty) {
         prefixVertex = "$prefixVertex\n";
       }
 
@@ -74,7 +75,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
           .where((s) => filterEmptyLine(s))
           .join('\n');
 
-      if (prefixFragment.length > 0) {
+      if (prefixFragment.isNotEmpty) {
         prefixFragment = "$prefixFragment\n";
       }
     } else {

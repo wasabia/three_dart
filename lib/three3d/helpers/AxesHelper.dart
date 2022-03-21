@@ -1,10 +1,11 @@
 part of three_helpers;
 
 class AxesHelper extends LineSegments {
+  @override
   String type = "AxesHelper";
 
   AxesHelper.create({num size = 1, geometry, material})
-      : super(geometry, material) {}
+      : super(geometry, material);
 
   factory AxesHelper([num size = 1]) {
     List<double> vertices = [
@@ -85,6 +86,7 @@ class AxesHelper extends LineSegments {
     return this;
   }
 
+  @override
   void dispose() {
     geometry!.dispose();
     material.dispose();

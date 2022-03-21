@@ -1,12 +1,13 @@
 part of three_animation;
 
-/**
- * A Track of Boolean keyframe values.
- */
+/// A Track of Boolean keyframe values.
 
 class BooleanKeyframeTrack extends KeyframeTrack {
+  @override
   var ValueTypeName = 'bool';
+  @override
   var DefaultInterpolation = InterpolateDiscrete;
+  @override
   var ValueBufferType = "Array";
 
   // Note: Actually this track could have a optimized / compressed
@@ -14,8 +15,10 @@ class BooleanKeyframeTrack extends KeyframeTrack {
   // computes "firstValue ^ isOdd( index )".
 
   BooleanKeyframeTrack(name, times, values, interpolation)
-      : super(name, times, values, null) {}
+      : super(name, times, values, null);
 
+  @override
   InterpolantFactoryMethodLinear(result) {}
+  @override
   InterpolantFactoryMethodSmooth(result) {}
 }

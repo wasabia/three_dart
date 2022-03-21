@@ -15,11 +15,11 @@ class AnimationClip {
     this.duration = duration;
     this.blendMode = blendMode;
 
-    this.uuid = MathUtils.generateUUID();
+    uuid = MathUtils.generateUUID();
 
     // this means it should figure out its duration by scanning the tracks
     if (this.duration < 0) {
-      this.resetDuration();
+      resetDuration();
     }
   }
 
@@ -39,8 +39,8 @@ class AnimationClip {
   }
 
   trim() {
-    for (var i = 0; i < this.tracks.length; i++) {
-      this.tracks[i].trim(0, this.duration);
+    for (var i = 0; i < tracks.length; i++) {
+      tracks[i].trim(0, duration);
     }
 
     return this;
@@ -49,16 +49,16 @@ class AnimationClip {
   validate() {
     var valid = true;
 
-    for (var i = 0; i < this.tracks.length; i++) {
-      valid = valid && this.tracks[i].validate();
+    for (var i = 0; i < tracks.length; i++) {
+      valid = valid && tracks[i].validate();
     }
 
     return valid;
   }
 
   optimize() {
-    for (var i = 0; i < this.tracks.length; i++) {
-      this.tracks[i].optimize();
+    for (var i = 0; i < tracks.length; i++) {
+      tracks[i].optimize();
     }
 
     return this;
@@ -71,7 +71,7 @@ class AnimationClip {
       tracks.add(this.tracks[i].clone());
     }
 
-    return new AnimationClip(this.name, this.duration, tracks, this.blendMode);
+    return AnimationClip(name, duration, tracks, blendMode);
   }
 
   toJSON() {
@@ -88,7 +88,7 @@ class AnimationClip {
     }
 
     var clip =
-        new AnimationClip(json.name, json.duration, tracks, json.blendMode);
+        AnimationClip(json.name, json.duration, tracks, json.blendMode);
     clip.uuid = json.uuid;
 
     return clip;
@@ -139,7 +139,7 @@ class AnimationClip {
         values.add(values[0]);
       }
 
-      tracks.add(new NumberKeyframeTrack(
+      tracks.add(NumberKeyframeTrack(
               '.morphTargetInfluences[${morphTargetSequence[i].name}]',
               times,
               values,
@@ -147,7 +147,7 @@ class AnimationClip {
           .scale(1.0 / fps));
     }
 
-    return new AnimationClip(name, -1, tracks);
+    return AnimationClip(name, -1, tracks);
   }
 
   static findByName(List<AnimationClip> objectOrClipArray, name) {
@@ -223,14 +223,14 @@ class AnimationClip {
         AnimationUtils.flattenJSON(animationKeys, times, values, propertyName);
 
         // empty keys are filtered out, so check again
-        if (times.length != 0) {
+        if (times.isNotEmpty) {
           if (trackType == "VectorKeyframeTrack") {
             destTracks.add(VectorKeyframeTrack(trackName, times, values, null));
           } else if (trackType == "QuaternionKeyframeTrack") {
             destTracks
                 .add(QuaternionKeyframeTrack(trackName, times, values, null));
           } else {
-            throw ("AnimationClip. addNonemptyTrack trackType: ${trackType} is not support ");
+            throw ("AnimationClip. addNonemptyTrack trackType: $trackType is not support ");
           }
         }
       }
@@ -258,7 +258,7 @@ class AnimationClip {
         // figure out all morph targets used in this track
         var morphTargetNames = {};
 
-        var k;
+        int k;
 
         for (k = 0; k < animationKeys.length; k++) {
           if (animationKeys[k].morphTargets) {
@@ -283,8 +283,8 @@ class AnimationClip {
             values.add((animationKey.morphTarget == morphTargetName) ? 1 : 0);
           }
 
-          tracks.add(new NumberKeyframeTrack(
-              '.morphTargetInfluence[${morphTargetName}]',
+          tracks.add(NumberKeyframeTrack(
+              '.morphTargetInfluence[$morphTargetName]',
               times,
               values,
               null));
@@ -307,11 +307,11 @@ class AnimationClip {
       }
     }
 
-    if (tracks.length == 0) {
+    if (tracks.isEmpty) {
       return null;
     }
 
-    var clip = new AnimationClip(clipName, duration, tracks, blendMode);
+    var clip = AnimationClip(clipName, duration, tracks, blendMode);
 
     return clip;
   }
@@ -346,7 +346,7 @@ String getTrackTypeForValueTypeName(typeName) {
       return "StringKeyframeTrack";
   }
 
-  throw ('THREE.KeyframeTrack: Unsupported typeName: ${typeName}');
+  throw ('THREE.KeyframeTrack: Unsupported typeName: $typeName');
 }
 
 parseKeyframeTrack(json) {
@@ -374,24 +374,24 @@ parseKeyframeTrack(json) {
   // }
 
   if (trackType == "NumberKeyframeTrack") {
-    return new NumberKeyframeTrack(
+    return NumberKeyframeTrack(
         json.name, json.times, json.values, json.interpolation);
   } else if (trackType == "VectorKeyframeTrack") {
-    return new VectorKeyframeTrack(
+    return VectorKeyframeTrack(
         json.name, json.times, json.values, json.interpolation);
   } else if (trackType == "ColorKeyframeTrack") {
-    return new ColorKeyframeTrack(
+    return ColorKeyframeTrack(
         json.name, json.times, json.values, json.interpolation);
   } else if (trackType == "QuaternionKeyframeTrack") {
-    return new QuaternionKeyframeTrack(
+    return QuaternionKeyframeTrack(
         json.name, json.times, json.values, json.interpolation);
   } else if (trackType == "BooleanKeyframeTrack") {
-    return new BooleanKeyframeTrack(
+    return BooleanKeyframeTrack(
         json.name, json.times, json.values, json.interpolation);
   } else if (trackType == "StringKeyframeTrack") {
-    return new StringKeyframeTrack(
+    return StringKeyframeTrack(
         json.name, json.times, json.values, json.interpolation);
   } else {
-    throw ("AnimationClip.parseKeyframeTrack trackType: ${trackType} ");
+    throw ("AnimationClip.parseKeyframeTrack trackType: $trackType ");
   }
 }

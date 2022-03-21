@@ -60,7 +60,7 @@ class WebGLMorphtargets {
 
       Map? entry = morphTextures.get(geometry);
 
-      if (entry == null || (entry != null && entry["count"] != morphTargetsCount)) {
+      if (entry == null || (entry["count"] != morphTargetsCount)) {
         if (entry != null) entry["texture"].dispose();
 
         var hasMorphPosition = geometry.morphAttributes["position"] != null;

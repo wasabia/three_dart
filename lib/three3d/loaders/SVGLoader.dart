@@ -7,8 +7,9 @@ class SVGLoader extends Loader {
   // Accepted units: 'mm', 'cm', 'in', 'pt', 'pc', 'px'
   String defaultUnit = 'px';
 
-  SVGLoader(manager) : super(manager) {}
+  SVGLoader(manager) : super(manager);
 
+  @override
   loadAsync(url, [onProgress]) async {
     var completer = Completer();
 
@@ -19,6 +20,7 @@ class SVGLoader extends Loader {
     return completer.future;
   }
 
+  @override
   load(url, onLoad, [onProgress, onError]) {
     var scope = this;
 
@@ -28,9 +30,7 @@ class SVGLoader extends Loader {
     loader.setWithCredentials(scope.withCredentials);
     loader.load(url, (text) {
       // try {
-      if (onLoad != null) {
-        onLoad(scope.parse(text));
-      }
+      onLoad(scope.parse(text));
 
       // } catch ( e ) {
 
@@ -51,9 +51,10 @@ class SVGLoader extends Loader {
   }
 
   // Function parse =========== start
+  @override
   parse(text, [String? path, Function? onLoad, Function? onError]) {
     var _parse = SVGLoaderParser(text,
-        defaultUnit: this.defaultUnit, defaultDPI: this.defaultDPI);
+        defaultUnit: defaultUnit, defaultDPI: defaultDPI);
     return _parse.parse(text);
   }
   // Function parse ================ end
@@ -67,11 +68,11 @@ class SVGLoader extends Loader {
     // Param miterLimit: Maximum join length, in multiples of the "width" parameter (join is truncated if it exceeds that distance)
     // Returns style object
 
-    width = width != null ? width : 1;
-    color = color != null ? color : '#000';
-    lineJoin = lineJoin != null ? lineJoin : 'miter';
-    lineCap = lineCap != null ? lineCap : 'butt';
-    miterLimit = miterLimit != null ? miterLimit : 4;
+    width = width ?? 1;
+    color = color ?? '#000';
+    lineJoin = lineJoin ?? 'miter';
+    lineCap = lineCap ?? 'butt';
+    miterLimit = miterLimit ?? 4;
 
     return {
       "strokeColor": color,
@@ -298,13 +299,13 @@ class SVGLoader extends Loader {
         if (path["boundingBox"].containsPoint(center)) {
           var intersections = getIntersections(scanline, path["points"]);
 
-          intersections.forEach((p) {
+          for (var p in intersections) {
             allIntersections.add({
               "identifier": path["identifier"],
               "isCW": path["isCW"],
               "point": p
             });
-          });
+          }
         }
       });
 
@@ -338,13 +339,13 @@ class SVGLoader extends Loader {
       var baseIntersections = [];
       var otherIntersections = [];
 
-      scanlineIntersections.forEach((i) {
+      for (var i in scanlineIntersections) {
         if (i["identifier"] == simplePath["identifier"]) {
           baseIntersections.add(i);
         } else {
           otherIntersections.add(i);
         }
-      });
+      }
 
       var firstXOfPath = baseIntersections[0]["point"].x;
 
@@ -354,7 +355,7 @@ class SVGLoader extends Loader {
 
       while (i < otherIntersections.length &&
           otherIntersections[i]["point"].x < firstXOfPath) {
-        if (stack.length > 0 &&
+        if (stack.isNotEmpty &&
             stack[stack.length - 1] == otherIntersections[i]["identifier"]) {
           stack.removeLast();
         } else {
@@ -378,8 +379,8 @@ class SVGLoader extends Loader {
       } else if (_fillRule == 'nonzero') {
         // check if path is a hole by counting the amount of paths with alternating rotations it has to cross.
         var isHole = true;
-        var isHoleFor = null;
-        var lastCWValue = null;
+        var isHoleFor;
+        var lastCWValue;
 
         for (var i = 0; i < stack.length; i++) {
           var identifier = stack[i];
@@ -474,7 +475,7 @@ class SVGLoader extends Loader {
         .toList();
 
     var shapesToReturn = [];
-    simplePaths.forEach((p) {
+    for (var p in simplePaths) {
       var amIAHole = isAHole[p["identifier"]]!;
 
       if (!amIAHole["isHole"]) {
@@ -483,15 +484,15 @@ class SVGLoader extends Loader {
         var holes = isAHole
             .where((h) => h!["isHole"] && h["for"] == p["identifier"])
             .toList();
-        holes.forEach((h) {
+        for (var h in holes) {
           var hole = simplePaths[h!["identifier"]];
           var path = Path(null);
           path.curves = hole["curves"];
           shape.holes.add(path);
-        });
+        }
         shapesToReturn.add(shape);
       }
-    });
+    }
 
     return shapesToReturn;
   }

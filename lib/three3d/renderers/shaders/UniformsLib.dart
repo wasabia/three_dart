@@ -1,8 +1,6 @@
 part of three_shaders;
 
-/**
- * Uniforms library for shared webgl shaders
- */
+/// Uniforms library for shared webgl shaders
 
 Map<String, dynamic> UniformsLib = {
   "common": {

@@ -1,11 +1,12 @@
 part of three_helpers;
 
 class PlaneHelper extends Line {
+  @override
   String type = "PlaneHelper";
   num size = 1.0;
   Plane? plane;
 
-  PlaneHelper.create(geometry, material) : super(geometry, material) {}
+  PlaneHelper.create(geometry, material) : super(geometry, material);
 
   factory PlaneHelper(plane, [size = 1, hex = 0xffff00]) {
     var color = hex;
@@ -96,6 +97,7 @@ class PlaneHelper extends Line {
     return planeHelper;
   }
 
+  @override
   updateMatrixWorld([bool force = false]) {
     var scale = -plane!.constant;
 
