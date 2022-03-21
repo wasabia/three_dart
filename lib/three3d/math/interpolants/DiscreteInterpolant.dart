@@ -12,6 +12,6 @@ class DiscreteInterpolant extends Interpolant {
       : super(parameterPositions, sampleValues, sampleSize, resultBuffer) {}
 
   interpolate(i1, t0, t, t1) {
-    return this.copySampleValue(i1 - 1);
+    return copySampleValue(i1 - 1);
   }
 }

@@ -5,7 +5,7 @@ class Scene extends Object3D {
 
   bool isScene = true;
 
-  dynamic fog;
+  Fog? fog;
 
   bool autoUpdate = true; // checked by the renderer
 
@@ -45,7 +45,7 @@ class Scene extends Object3D {
     rootJSON["materials"] = _materials;
     rootJSON["geometries"] = _geometries;
 
-    return Object3D.castJSON(json["object"], rootJSON);
+    return Object3D.castJSON(json["object"], rootJSON) as Scene;
   }
 
   copy(Object3D source, [bool? recursive]) {

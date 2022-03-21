@@ -14,7 +14,7 @@ class GridHelper extends LineSegments {
     var step = size / divisions;
     var halfSize = size / 2;
 
-    List<num> vertices = [];
+    List<double> vertices = [];
     List<double> colors = List<double>.filled((divisions + 1) * 3 * 4, 0);
 
     for (var i = 0, j = 0, k = -halfSize; i <= divisions; i++, k += step) {
@@ -35,8 +35,10 @@ class GridHelper extends LineSegments {
 
     var geometry = BufferGeometry();
     geometry.setAttribute(
-        'position', Float32BufferAttribute(vertices, 3, false));
-    geometry.setAttribute('color', Float32BufferAttribute(colors, 3, false));
+        'position',
+        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    geometry.setAttribute('color',
+        Float32BufferAttribute(Float32Array.from(colors), 3, false));
 
     var material =
         LineBasicMaterial({"vertexColors": true, "toneMapped": false});

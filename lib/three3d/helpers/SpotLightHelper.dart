@@ -1,6 +1,6 @@
 part of three_helpers;
 
-var _SpotLightHelpervector = /*@__PURE__*/ new Vector3.init();
+var _SpotLightHelpervector = /*@__PURE__*/ Vector3.init();
 
 class SpotLightHelper extends Object3D {
   late Light light;
@@ -14,17 +14,14 @@ class SpotLightHelper extends Object3D {
   late Color? color;
   late LineSegments cone;
 
-  SpotLightHelper(light, color) : super() {
-    this.light = light;
-    this.light.updateMatrixWorld(false);
+  SpotLightHelper(this.light, this.color) : super() {
+    light.updateMatrixWorld(false);
 
-    this.matrix = light.matrixWorld;
+    matrix = light.matrixWorld;
 
-    this.color = color;
+    var geometry = BufferGeometry();
 
-    var geometry = new BufferGeometry();
-
-    List<num> positions = [
+    List<double> positions = [
       0,
       0,
       0,
@@ -66,38 +63,39 @@ class SpotLightHelper extends Object3D {
     }
 
     geometry.setAttribute(
-        'position', new Float32BufferAttribute(positions, 3, false));
+        'position',
+        Float32BufferAttribute(Float32Array.from(positions), 3, false));
 
-    var material = new LineBasicMaterial({"fog": false, "toneMapped": false});
+    var material = LineBasicMaterial({"fog": false, "toneMapped": false});
 
-    this.cone = new LineSegments(geometry, material);
-    this.add(this.cone);
+    cone = LineSegments(geometry, material);
+    add(cone);
 
-    this.update();
+    update();
   }
 
   dispose() {
-    this.cone.geometry!.dispose();
-    this.cone.material.dispose();
+    cone.geometry!.dispose();
+    cone.material.dispose();
   }
 
   update() {
-    this.light.updateMatrixWorld(false);
+    light.updateMatrixWorld(false);
 
-    var coneLength = this.light.distance != null ? this.light.distance : 1000;
-    var coneWidth = coneLength! * Math.tan(this.light.angle!);
+    var coneLength = light.distance ?? 1000;
+    var coneWidth = coneLength * Math.tan(light.angle!);
 
-    this.cone.scale.set(coneWidth, coneWidth, coneLength);
+    cone.scale.set(coneWidth, coneWidth, coneLength);
 
     _SpotLightHelpervector.setFromMatrixPosition(
-        this.light.target!.matrixWorld);
+        light.target!.matrixWorld);
 
-    this.cone.lookAt(_SpotLightHelpervector);
+    cone.lookAt(_SpotLightHelpervector);
 
-    if (this.color != null) {
-      this.cone.material.color.copy(this.color);
+    if (color != null) {
+      cone.material.color.copy(color);
     } else {
-      this.cone.material.color.copy(this.light.color);
+      cone.material.color.copy(light.color);
     }
   }
 }

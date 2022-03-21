@@ -1,24 +1,24 @@
 part of three_webgl;
 
 var emptyTexture =
-    new Texture(null, null, null, null, null, null, null, null, null, null);
-var emptyArrayTexture = new DataArrayTexture(null);
-var empty3dTexture = new Data3DTexture();
+    Texture(null, null, null, null, null, null, null, null, null, null);
+var emptyArrayTexture = DataArrayTexture(null);
+var empty3dTexture = Data3DTexture();
 var emptyCubeTexture =
-    new CubeTexture(null, null, null, null, null, null, null, null, null, null);
+    CubeTexture(null, null, null, null, null, null, null, null, null, null);
 
 // --- Utilities ---
 
 // Array Caches (provide typed arrays for temporary by size)
 
-var arrayCacheF32 = {};
-var arrayCacheI32 = {};
+Map<int, Float32Array> arrayCacheF32 = {};
+Map arrayCacheI32 = {};
 
-// Float32Array caches used for uploading Matrix uniforms
+// Float32List caches used for uploading Matrix uniforms
 
-var mat4array = new Float32Array(16);
-var mat3array = new Float32Array(9);
-var mat2array = new Float32Array(4);
+var mat4array = Float32Array(16);
+var mat3array = Float32Array(9);
+var mat2array = Float32Array(4);
 
 // --- Uniform Classes ---
 
@@ -28,12 +28,10 @@ class SingleUniform with WebGLUniformsHelper {
   late int activeInfoType;
   late dynamic activeInfo;
 
-  SingleUniform(id, activeInfo, addr) {
-    this.id = id;
+  SingleUniform(this.id, this.activeInfo, addr) {
     this.addr = addr;
-    this.activeInfo = activeInfo;
-    this.activeInfoType = activeInfo.type;
-    this.setValue = getSingularSetter(id, activeInfo);
+    activeInfoType = activeInfo.type;
+    setValue = getSingularSetter(id, activeInfo);
   }
 
   // for DEBUG
@@ -69,14 +67,12 @@ class PureArrayUniform with WebGLUniformsHelper {
   late int activeInfoType;
   late dynamic activeInfo;
 
-  PureArrayUniform(id, activeInfo, addr) {
-    this.id = id;
+  PureArrayUniform(this.id, this.activeInfo, addr) {
     this.addr = addr;
-    this.cache = {};
-    this.activeInfo = activeInfo;
-    this.size = activeInfo.size;
-    this.activeInfoType = activeInfo.type;
-    this.setValue = getPureArraySetter(id, activeInfo);
+    cache = {};
+    size = activeInfo.size;
+    activeInfoType = activeInfo.type;
+    setValue = getPureArraySetter(id, activeInfo);
   }
 
   // for DEBUG
@@ -124,13 +120,12 @@ class StructuredUniform with WebGLUniformsHelper, WebGLUniform {
   late dynamic id;
   late int activeInfoType;
 
-  StructuredUniform(id) {
-    this.id = id;
-    this.seq = [];
-    this.map = {};
+  StructuredUniform(this.id) {
+    seq = [];
+    map = {};
   }
 
-  setValue(gl, value, textures) {
+  void setValue(gl, value, textures) {
     var seq = this.seq;
 
     for (var i = 0, n = seq.length; i != n; ++i) {
@@ -187,8 +182,8 @@ parseUniform(activeInfo, addr, WebGLUniform container) {
       addUniform(
           container,
           subscript == null
-              ? new SingleUniform(id, activeInfo, addr)
-              : new PureArrayUniform(id, activeInfo, addr));
+              ? SingleUniform(id, activeInfo, addr)
+              : PureArrayUniform(id, activeInfo, addr));
 
       break;
     } else {
@@ -198,7 +193,7 @@ parseUniform(activeInfo, addr, WebGLUniform container) {
       var next = map[id];
 
       if (next == null) {
-        next = new StructuredUniform(id);
+        next = StructuredUniform(id);
         addUniform(container, next);
       }
 
@@ -211,11 +206,11 @@ class WebGLUniformsHelper {
   // Flattening for arrays of vectors and matrices
   // id 类型  string || int
   late dynamic id;
-  Map<int, dynamic> cache = Map<int, dynamic>();
-  dynamic addr;
+  Map<int, dynamic> cache = <int, dynamic>{};
+  dynamic addr = 0;
   late int size;
 
-  Float32List flatten(List array, int nBlocks, int blockSize) {
+  Float32Array flatten(List array, int nBlocks, int blockSize) {
     var firstElem = array[0];
 
     if (firstElem.runtimeType == num ||
@@ -223,21 +218,21 @@ class WebGLUniformsHelper {
         firstElem.runtimeType == int) {
       List<double> array2 = [];
 
-      array.forEach((element) {
+      for (var element in array) {
         array2.add(element.toDouble());
-      });
+      }
 
-      return Float32List.fromList(array2);
+      return Float32Array.from(array2);
     }
 
     // // unoptimized: ! isNaN( firstElem )
     // // see http://jacksondunstan.com/articles/983
 
     var n = nBlocks * blockSize;
-    var r = arrayCacheF32[n];
+    Float32Array? r = arrayCacheF32[n];
 
     if (r == null) {
-      r = Float32List(n);
+      r = Float32Array(n);
       arrayCacheF32[n] = r;
     }
 
@@ -258,7 +253,7 @@ class WebGLUniformsHelper {
 
         _data.asMap().forEach((index, element) {
           int _idx = i * blockSize + index;
-          r[_idx] = element.toDouble();
+          r![_idx] = element.toDouble();
         });
       }
 
@@ -350,7 +345,7 @@ class WebGLUniformsHelper {
 
     if (cache[0] == v) return;
 
-    gl.uniform1f(this.addr, v);
+    gl.uniform1f(addr, v.toDouble());
 
     cache[0] = v;
   }
@@ -362,7 +357,7 @@ class WebGLUniformsHelper {
 
     if (v.x != null) {
       if (cache[0] != v.x || cache[1] != v.y) {
-        gl.uniform2f(this.addr, v.x, v.y);
+        gl.uniform2f(addr, v.x, v.y);
 
         cache[0] = v.x;
         cache[1] = v.y;
@@ -370,13 +365,13 @@ class WebGLUniformsHelper {
     } else {
       if (arraysEqual(cache, v)) return;
 
-      gl.uniform2fv(this.addr, v);
+      gl.uniform2fv(addr, v);
 
       copyArray(cache, v);
     }
   }
 
-  setValueV3f(gl, v, textures) {
+  void setValueV3f(gl, v, WebGLTextures textures) {
     // if ( v.runtimeType == Vector3 ) {
     //   print("v setValueV3f ${v.runtimeType} v: ${v.toJSON()}  ");
     // } else if ( v.runtimeType == Color ) {
@@ -387,15 +382,15 @@ class WebGLUniformsHelper {
 
     var cache = this.cache;
 
-    if (v.runtimeType == Vector3) {
+    if (v is Vector3) {
       if (cache[0] != v.x || cache[1] != v.y || cache[2] != v.z) {
-        gl.uniform3f(this.addr, v.x, v.y, v.z);
+        gl.uniform3f(addr, v.x, v.y, v.z);
 
         cache[0] = v.x;
         cache[1] = v.y;
         cache[2] = v.z;
       }
-    } else if (v.runtimeType == Color) {
+    } else if (v is Color) {
       var cacheR = null;
       var cacheG = null;
       var cacheB = null;
@@ -407,7 +402,7 @@ class WebGLUniformsHelper {
       }
 
       if (cacheR != v.r || cacheG != v.g || cacheB != v.b) {
-        gl.uniform3f(this.addr, v.r, v.g, v.b);
+        gl.uniform3f(addr, v.r, v.g, v.b);
 
         cache[0] = v.r;
         cache[1] = v.g;
@@ -415,8 +410,7 @@ class WebGLUniformsHelper {
       }
     } else {
       if (arraysEqual(cache, v)) return;
-
-      gl.uniform3fv(this.addr, v);
+      gl.uniform3fv(addr, Float32Array.from(v));
 
       copyArray(cache, v);
     }
@@ -430,7 +424,7 @@ class WebGLUniformsHelper {
           cache[1] != v.y ||
           cache[2] != v.z ||
           cache[3] != v.w) {
-        gl.uniform4f(this.addr, v.x, v.y, v.z, v.w);
+        gl.uniform4f(addr, v.x, v.y, v.z, v.w);
 
         cache[0] = v.x;
         cache[1] = v.y;
@@ -442,11 +436,11 @@ class WebGLUniformsHelper {
           cache[1] != v.g ||
           cache[2] != v.b ||
           cache[3] != 1.0) {
-        gl.uniform4f(this.addr, v.r, v.g, v.b, 1.0);
+        gl.uniform4f(addr, v.r, v.g, v.b, 1.0);
 
-        cache[0] = v.r;
-        cache[1] = v.g;
-        cache[2] = v.b;
+        cache[0] = v.r.toDouble();
+        cache[1] = v.g.toDouble();
+        cache[2] = v.b.toDouble();
         cache[3] = 1.0;
       }
     } else if (v is List) {
@@ -454,7 +448,7 @@ class WebGLUniformsHelper {
           cache[1] != v[1] ||
           cache[2] != v[2] ||
           cache[3] != v[3]) {
-        gl.uniform4f(this.addr, v[0], v[1], v[2], v[3]);
+        gl.uniform4f(addr, v[0], v[1], v[2], v[3]);
 
         cache[0] = v[0];
         cache[1] = v[1];
@@ -464,7 +458,7 @@ class WebGLUniformsHelper {
     } else {
       if (arraysEqual(cache, v)) return;
 
-      gl.uniform4fv(this.addr, v);
+      gl.uniform4fv(addr, v);
 
       copyArray(cache, v);
     }
@@ -479,15 +473,15 @@ class WebGLUniformsHelper {
     if (elements == null) {
       if (arraysEqual(cache, v)) return;
 
-      gl.uniformMatrix2fv(this.addr, false, v);
+      gl.uniformMatrix2fv(addr, false, v);
 
       copyArray(cache, v);
     } else {
       if (arraysEqual(cache, elements)) return;
 
-      mat2array.set(elements);
+      mat2array.set(List<double>.from(elements.map((e) => e.toDouble())), 0);
 
-      gl.uniformMatrix2fv(this.addr, false, mat2array);
+      gl.uniformMatrix2fv(addr, false, mat2array);
 
       copyArray(cache, elements);
     }
@@ -500,7 +494,7 @@ class WebGLUniformsHelper {
     if (elements == null) {
       if (arraysEqual(cache, v)) return;
 
-      gl.uniformMatrix3fv(this.addr, false, v);
+      gl.uniformMatrix3fv(addr, false, v);
 
       copyArray(cache, v);
     } else {
@@ -511,20 +505,20 @@ class WebGLUniformsHelper {
       // TODO ???
       // mat3array.set( elements );
 
-      gl.uniformMatrix3fv(this.addr, false, elements);
+      gl.uniformMatrix3fv(addr, false, elements);
 
       copyArray(cache, elements);
     }
   }
 
-  setValueM4(gl, v, textures) {
+  setValueM4(gl, Matrix4 v, WebGLTextures textures) {
     var cache = this.cache;
     var elements = v.elements;
 
     if (elements == null) {
       if (arraysEqual(cache, v)) return;
 
-      gl.uniformMatrix4fv(this.addr, false, v);
+      gl.uniformMatrix4fv(addr, false, v);
 
       copyArray(cache, v);
     } else {
@@ -535,7 +529,7 @@ class WebGLUniformsHelper {
       // TODO
       // mat4array.set( elements );
 
-      gl.uniformMatrix4fv(this.addr, false, elements);
+      gl.uniformMatrix4fv(addr, false, elements);
 
       copyArray(cache, elements);
     }
@@ -548,7 +542,7 @@ class WebGLUniformsHelper {
     var unit = textures.allocateTextureUnit();
 
     if (cache[0] != unit) {
-      gl.uniform1i(this.addr, unit);
+      gl.uniform1i(addr, unit);
       cache[0] = unit;
     }
 
@@ -560,7 +554,7 @@ class WebGLUniformsHelper {
     var unit = textures.allocateTextureUnit();
 
     if (cache[0] != unit) {
-      gl.uniform1i(this.addr, unit);
+      gl.uniform1i(addr, unit);
       cache[0] = unit;
     }
 
@@ -572,7 +566,7 @@ class WebGLUniformsHelper {
     var unit = textures.allocateTextureUnit();
 
     if (cache[0] != unit) {
-      gl.uniform1i(this.addr, unit);
+      gl.uniform1i(addr, unit);
       cache[0] = unit;
     }
 
@@ -584,7 +578,7 @@ class WebGLUniformsHelper {
     var unit = textures.allocateTextureUnit();
 
     if (cache[0] != unit) {
-      gl.uniform1i(this.addr, unit);
+      gl.uniform1i(addr, unit);
       cache[0] = unit;
     }
 
@@ -600,12 +594,12 @@ class WebGLUniformsHelper {
 
     if (v.runtimeType == bool) {
       if (v) {
-        gl.uniform1i(this.addr, 1);
+        gl.uniform1i(addr, 1);
       } else {
-        gl.uniform1i(this.addr, 0);
+        gl.uniform1i(addr, 0);
       }
     } else {
-      gl.uniform1i(this.addr, v.toInt());
+      gl.uniform1i(addr, v.toInt());
     }
 
     cache[0] = v;
@@ -616,7 +610,7 @@ class WebGLUniformsHelper {
 
     if (arraysEqual(cache, v)) return;
 
-    gl.uniform2iv(this.addr, v);
+    gl.uniform2iv(addr, v);
 
     copyArray(cache, v);
   }
@@ -626,7 +620,7 @@ class WebGLUniformsHelper {
 
     if (arraysEqual(cache, v)) return;
 
-    gl.uniform3iv(this.addr, v);
+    gl.uniform3iv(addr, v);
 
     copyArray(cache, v);
   }
@@ -636,7 +630,7 @@ class WebGLUniformsHelper {
 
     if (arraysEqual(cache, v)) return;
 
-    gl.uniform4iv(this.addr, v);
+    gl.uniform4iv(addr, v);
 
     copyArray(cache, v);
   }
@@ -648,7 +642,7 @@ class WebGLUniformsHelper {
 
     if (cache[0] == v) return;
 
-    gl.uniform1ui(this.addr, v);
+    gl.uniform1ui(addr, v);
 
     cache[0] = v;
   }
@@ -658,7 +652,7 @@ class WebGLUniformsHelper {
 
     if (arraysEqual(cache, v)) return;
 
-    gl.uniform2uiv(this.addr, v);
+    gl.uniform2uiv(addr, v);
 
     copyArray(cache, v);
   }
@@ -668,7 +662,7 @@ class WebGLUniformsHelper {
 
     if (arraysEqual(cache, v)) return;
 
-    gl.uniform3uiv(this.addr, v);
+    gl.uniform3uiv(addr, v);
 
     copyArray(cache, v);
   }
@@ -678,7 +672,7 @@ class WebGLUniformsHelper {
 
     if (arraysEqual(cache, v)) return;
 
-    gl.uniform4uiv(this.addr, v);
+    gl.uniform4uiv(addr, v);
 
     copyArray(cache, v);
   }
@@ -686,8 +680,6 @@ class WebGLUniformsHelper {
   // Helper to pick the right setter for the singular case
 
   getSingularSetter(id, activeInfo) {
-    // print("getSingularSetter id: ${id} type: ${activeInfo.type}  ");
-
     var type = activeInfo.type;
 
     switch (type) {
@@ -759,84 +751,84 @@ class WebGLUniformsHelper {
 
   // Array of scalars
   setValueV1fArray(gl, v, textures) {
-    gl.uniform1fv(this.addr, v);
+    gl.uniform1fv(addr, v);
   }
 
   // Integer / Boolean vectors or arrays thereof (always flat arrays)
   setValueV1iArray(gl, v, textures) {
-    gl.uniform1iv(this.addr, v);
+    gl.uniform1iv(addr, v);
   }
 
   setValueV2iArray(gl, v, textures) {
-    gl.uniform2iv(this.addr, v);
+    gl.uniform2iv(addr, v);
   }
 
   setValueV3iArray(gl, v, textures) {
-    gl.uniform3iv(this.addr, v);
+    gl.uniform3iv(addr, v);
   }
 
   setValueV4iArray(gl, v, textures) {
-    gl.uniform4iv(this.addr, v);
+    gl.uniform4iv(addr, v);
   }
 
   // Array of vectors (flat or from THREE classes)
 
   setValueV2fArray(gl, v, textures) {
-    var data = flatten(v, this.size, 2);
+    var data = flatten(v, size, 2);
 
-    gl.uniform2fv(this.addr, data);
+    gl.uniform2fv(addr, data);
   }
 
   setValueV3fArray(gl, v, textures) {
-    var data = flatten(v, this.size, 3);
+    var data = flatten(v, size, 3);
 
-    gl.uniform3fv(this.addr, data);
+    gl.uniform3fv(addr, data);
   }
 
   setValueV4fArray(gl, v, textures) {
-    var data = flatten(v, this.size, 4);
+    var data = flatten(v, size, 4);
 
-    gl.uniform4fv(this.addr, data);
+    gl.uniform4fv(addr, data);
   }
 
   // Array of matrices (flat or from THREE clases)
 
   setValueM2Array(gl, v, textures) {
-    var data = flatten(v, this.size, 4);
+    var data = flatten(v, size, 4);
 
-    gl.uniformMatrix2fv(this.addr, false, data);
+    gl.uniformMatrix2fv(addr, false, data);
   }
 
   setValueM3Array(gl, v, textures) {
-    var data = flatten(v, this.size, 9);
+    var data = flatten(v, size, 9);
 
-    gl.uniformMatrix3fv(this.addr, false, data);
+    gl.uniformMatrix3fv(addr, false, data);
   }
 
   setValueM4Array(gl, v, textures) {
-    var data = flatten(v, this.size, 16);
+    var data = flatten(v, size, 16);
 
-    gl.uniformMatrix4fv(this.addr, false, data);
+    gl.uniformMatrix4fv(addr, false, data);
   }
 
   // Array of unsigned integer
 
   setValueV1uiArray(gl, v, textures) {
-    gl.uniform1uiv(this.addr, v);
+    gl.uniform1uiv(addr, v);
   }
 
   // Array of unsigned integer vectors (from flat array)
 
   setValueV2uiArray(gl, v, textures) {
-    gl.uniform2uiv(this.addr, v);
+    gl.uniform2uiv(addr, v);
   }
 
   setValueV3uiArray(gl, v, textures) {
-    gl.uniform3uiv(this.addr, v);
+    gl.uniform3uiv(addr, v);
   }
 
   setValueV4uiArray(gl, v, textures) {
-    gl.uniform4uiv(this.addr, v);
+    gl.uniform4uiv(addr, v);
   }
 
   // Array of textures (2D / 3D / Cube / 2DArray)
@@ -846,7 +838,7 @@ class WebGLUniformsHelper {
     var units = allocTexUnits(textures, n);
 
     // print("setValueT1Array n: ${n} ");
-    gl.uniform1iv(this.addr, units);
+    gl.uniform1iv(addr, units);
 
     for (var i = 0; i != n; ++i) {
       textures.setTexture2D(v[i] ?? emptyTexture, units[i]);
@@ -858,7 +850,7 @@ class WebGLUniformsHelper {
 
     var units = allocTexUnits(textures, n);
 
-    gl.uniform1iv(this.addr, units);
+    gl.uniform1iv(addr, units);
 
     for (var i = 0; i != n; ++i) {
       textures.setTexture3D(v[i] ?? empty3dTexture, units[i]);
@@ -870,7 +862,7 @@ class WebGLUniformsHelper {
 
     var units = allocTexUnits(textures, n);
 
-    gl.uniform1iv(this.addr, units);
+    gl.uniform1iv(addr, units);
 
     for (var i = 0; i != n; ++i) {
       textures.setTextureCube(v[i] ?? emptyCubeTexture, units[i]);
@@ -882,7 +874,7 @@ class WebGLUniformsHelper {
 
     var units = allocTexUnits(textures, n);
 
-    gl.uniform1iv(this.addr, units);
+    gl.uniform1iv(addr, units);
 
     for (var i = 0; i != n; ++i) {
       textures.setTexture2DArray(v[i] ?? emptyArrayTexture, units[i]);

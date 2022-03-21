@@ -69,15 +69,15 @@ class Matrix3 {
     return this;
   }
 
-  Matrix3 multiply(m) {
+  Matrix3 multiply(Matrix3 m) {
     return multiplyMatrices(this, m);
   }
 
-  Matrix3 premultiply(m) {
+  Matrix3 premultiply(Matrix3 m) {
     return multiplyMatrices(m, this);
   }
 
-  Matrix3 multiplyMatrices(a, b) {
+  Matrix3 multiplyMatrices(Matrix3 a, Matrix3 b) {
     var ae = a.elements;
     var be = b.elements;
     var te = elements;
@@ -178,7 +178,7 @@ class Matrix3 {
   }
 
   Matrix3 transpose() {
-    num tmp;
+    double tmp;
     final m = elements;
 
     tmp = m[1];

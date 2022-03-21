@@ -1,7 +1,7 @@
 part of three_core;
 
-class BaseBufferAttribute {
-  dynamic array;
+abstract class BaseBufferAttribute<TData extends NativeArray> {
+  late TData array;
   late int itemSize;
 
   InterleavedBuffer? data;
@@ -28,5 +28,5 @@ class BaseBufferAttribute {
   bool isInstancedBufferAttribute = false;
   bool isFloat16BufferAttribute = false;
 
-  BaseBufferAttribute() {}
+  BaseBufferAttribute();
 }

@@ -1,6 +1,6 @@
 part of three_materials;
 
-/**
+/*
  * parameters = {
  *  defines: { "label" : "value" },
  *  uniforms: { "parameter1": { value: 1.0 }, "parameter2": { value2: 2 } },
@@ -16,27 +16,25 @@ part of three_materials;
  */
 
 class ShaderMaterial extends Material {
-  String type = 'ShaderMaterial';
-
-  bool isShaderMaterial = true;
-
   ShaderMaterial([Map<String, dynamic>? parameters]) : super() {
-    this.defines = {};
-    this.uniforms = {};
+    type = 'ShaderMaterial';
+    isShaderMaterial = true;
+    defines = {};
+    uniforms = {};
 
-    this.vertexShader = default_vertex;
-    this.fragmentShader = default_fragment;
+    vertexShader = default_vertex;
+    fragmentShader = default_fragment;
 
-    this.linewidth = 1;
+    linewidth = 1;
 
-    this.wireframe = false;
-    this.wireframeLinewidth = 1;
+    wireframe = false;
+    wireframeLinewidth = 1;
 
-    this.fog = false; // set to use scene fog
-    this.lights = false; // set to use scene lights
-    this.clipping = false; // set to use user-defined clipping planes
+    fog = false; // set to use scene fog
+    lights = false; // set to use scene lights
+    clipping = false; // set to use user-defined clipping planes
 
-    this.extensions = {
+    extensions = {
       "derivatives": false, // set to use derivatives
       "fragDepth": false, // set to use fragment depth values
       "drawBuffers": false, // set to use draw buffers
@@ -45,16 +43,16 @@ class ShaderMaterial extends Material {
 
     // When rendered geometry doesn't include these attributes but the material does,
     // use these default values in WebGL. This avoids errors when buffer data is missing.
-    this.defaultAttributeValues = {
+    defaultAttributeValues = {
       'color': [1, 1, 1],
       'uv': [0, 0],
       'uv2': [0, 0]
     };
 
-    this.index0AttributeName = null;
-    this.uniformsNeedUpdate = false;
+    index0AttributeName = null;
+    uniformsNeedUpdate = false;
 
-    this.glslVersion = null;
+    glslVersion = null;
 
     if (parameters != null) {
       if (parameters["attributes"] != null) {
@@ -62,34 +60,36 @@ class ShaderMaterial extends Material {
             'THREE.ShaderMaterial: attributes should now be defined in THREE.BufferGeometry instead.');
       }
 
-      this.setValues(parameters);
+      setValues(parameters);
     }
   }
 
-  copy(source) {
+  @override
+  ShaderMaterial copy(Material source) {
     super.copy(source);
 
-    this.fragmentShader = source.fragmentShader;
-    this.vertexShader = source.vertexShader;
+    fragmentShader = source.fragmentShader;
+    vertexShader = source.vertexShader;
 
-    this.uniforms = cloneUniforms(source.uniforms);
+    uniforms = cloneUniforms(source.uniforms);
 
-    this.defines = json.decode(json.encode(source.defines));
+    defines = json.decode(json.encode(source.defines));
 
-    this.wireframe = source.wireframe;
-    this.wireframeLinewidth = source.wireframeLinewidth;
+    wireframe = source.wireframe;
+    wireframeLinewidth = source.wireframeLinewidth;
 
-    this.lights = source.lights;
-    this.clipping = source.clipping;
+    lights = source.lights;
+    clipping = source.clipping;
 
-    this.extensions = json.decode(json.encode(source.extensions));
+    extensions = json.decode(json.encode(source.extensions));
 
-    this.glslVersion = source.glslVersion;
+    glslVersion = source.glslVersion;
 
     return this;
   }
 
-  clone() {
+  @override
+  ShaderMaterial clone() {
     return ShaderMaterial({}).copy(this);
   }
 

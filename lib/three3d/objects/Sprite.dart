@@ -2,34 +2,34 @@ part of three_objects;
 
 var _geometry;
 
-var _intersectPoint = new Vector3.init();
-var _worldScale = new Vector3.init();
-var _mvPosition = new Vector3.init();
+var _intersectPoint = Vector3.init();
+var _worldScale = Vector3.init();
+var _mvPosition = Vector3.init();
 
-var _alignedPosition = new Vector2(null, null);
-var _rotatedPosition = new Vector2(null, null);
-var _viewWorldMatrix = new Matrix4();
+var _alignedPosition = Vector2(null, null);
+var _rotatedPosition = Vector2(null, null);
+var _viewWorldMatrix = Matrix4();
 
-var _spritevA = new Vector3.init();
-var _spritevB = new Vector3.init();
-var _spritevC = new Vector3.init();
+var _spritevA = Vector3.init();
+var _spritevB = Vector3.init();
+var _spritevC = Vector3.init();
 
-var _spriteuvA = new Vector2(null, null);
-var _spriteuvB = new Vector2(null, null);
-var _spriteuvC = new Vector2(null, null);
+var _spriteuvA = Vector2(null, null);
+var _spriteuvB = Vector2(null, null);
+var _spriteuvC = Vector2(null, null);
 
 class Sprite extends Object3D {
-  Vector2 center = new Vector2(0.5, 0.5);
+  Vector2 center = Vector2(0.5, 0.5);
 
   bool isSprite = true;
 
-  Sprite(material) : super() {
-    this.type = 'Sprite';
+  Sprite([Material? material]) : super() {
+    type = 'Sprite';
 
     if (_geometry == null) {
-      _geometry = new BufferGeometry();
+      _geometry = BufferGeometry();
 
-      var float32Array = Float32Array(20).set([
+      var float32List = Float32Array.from([
         -0.5,
         -0.5,
         0,
@@ -52,43 +52,41 @@ class Sprite extends Object3D {
         1
       ]);
 
-      var interleavedBuffer = new InterleavedBuffer(float32Array, 5);
+      var interleavedBuffer = InterleavedBuffer(float32List, 5);
 
       _geometry.setIndex([0, 1, 2, 0, 2, 3]);
       _geometry.setAttribute('position',
-          new InterleavedBufferAttribute(interleavedBuffer, 3, 0, false));
+          InterleavedBufferAttribute(interleavedBuffer, 3, 0, false));
       _geometry.setAttribute(
-          'uv', new InterleavedBufferAttribute(interleavedBuffer, 2, 3, false));
+          'uv', InterleavedBufferAttribute(interleavedBuffer, 2, 3, false));
     }
 
-    this.geometry = _geometry;
-    this.material = (material != null) ? material : new SpriteMaterial(null);
+    geometry = _geometry;
+    this.material = (material != null) ? material : SpriteMaterial(null);
   }
 
   Sprite.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON) {}
+      : super.fromJSON(json, rootJSON) {
+    type = 'Sprite';
+  }
 
-  raycast(raycaster, intersects) {
-    if (raycaster.camera == null) {
-      print(
-          'THREE.Sprite: "Raycaster.camera" needs to be set in order to raycast against sprites.');
-    }
-
-    _worldScale.setFromMatrixScale(this.matrixWorld);
+  @override
+  void raycast(Raycaster raycaster, List<Intersection> intersects) {
+    _worldScale.setFromMatrixScale(matrixWorld);
 
     _viewWorldMatrix.copy(raycaster.camera.matrixWorld);
-    this.modelViewMatrix.multiplyMatrices(
-        raycaster.camera.matrixWorldInverse, this.matrixWorld);
+    modelViewMatrix.multiplyMatrices(
+        raycaster.camera.matrixWorldInverse, matrixWorld);
 
-    _mvPosition.setFromMatrixPosition(this.modelViewMatrix);
+    _mvPosition.setFromMatrixPosition(modelViewMatrix);
 
     if (raycaster.camera.type == "PerspectiveCamera" &&
-        this.material.sizeAttenuation == false) {
+        material.sizeAttenuation == false) {
       _worldScale.multiplyScalar(-_mvPosition.z);
     }
 
-    var rotation = this.material.rotation;
-    var sin, cos;
+    var rotation = material.rotation;
+    double? sin, cos;
 
     if (rotation != 0) {
       cos = Math.cos(rotation);
@@ -132,34 +130,27 @@ class Sprite extends Object3D {
     intersects.add(Intersection({
       "distance": distance,
       "point": _intersectPoint.clone(),
-      "uv": Triangle.static_getUV(
-          _intersectPoint,
-          _spritevA,
-          _spritevB,
-          _spritevC,
-          _spriteuvA,
-          _spriteuvB,
-          _spriteuvC,
-          new Vector2(null, null)),
+      "uv": Triangle.static_getUV(_intersectPoint, _spritevA, _spritevB,
+          _spritevC, _spriteuvA, _spriteuvB, _spriteuvC, Vector2(null, null)),
       "face": null,
       "object": this
     }));
   }
 
-  copy(Object3D source, [bool? recursive]) {
+  @override
+  Sprite copy(Object3D source, [bool? recursive]) {
     super.copy(source);
 
-    Sprite source1 = source as Sprite;
-
-    if (source1.center != null) this.center.copy(source1.center);
-
-    this.material = source1.material;
-
+    if (source is Sprite) {
+      if (source.center != null) center.copy(source.center);
+      material = source.material;
+    }
     return this;
   }
 }
 
-transformVertex(vertexPosition, mvPosition, center, scale, sin, cos) {
+void transformVertex(vertexPosition, Vector3 mvPosition, Vector2 center, scale,
+    double? sin, double? cos) {
   // compute position in camera space
   _alignedPosition
       .subVectors(vertexPosition, center)
@@ -167,7 +158,7 @@ transformVertex(vertexPosition, mvPosition, center, scale, sin, cos) {
       .multiply(scale);
 
   // to check if rotation is not zero
-  if (sin != null) {
+  if (sin != null && cos != null) {
     _rotatedPosition.x =
         (cos * _alignedPosition.x) - (sin * _alignedPosition.y);
     _rotatedPosition.y =

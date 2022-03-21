@@ -689,9 +689,9 @@ class Color {
   }
 
   Color fromBufferAttribute(BufferAttribute attribute, int index) {
-    r = attribute.getX(index);
-    g = attribute.getY(index);
-    b = attribute.getZ(index);
+    r = attribute.getX(index)!;
+    g = attribute.getY(index)!;
+    b = attribute.getZ(index)!;
 
     if (attribute.normalized == true) {
       // assuming Uint8Array

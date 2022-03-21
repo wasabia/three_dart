@@ -37,7 +37,7 @@ class TextureLoader extends Loader {
       ImageElement imageElement;
 
       // Web better way ???
-      if (kIsWeb && !(image is Image)) {
+      if (kIsWeb && image is! Image) {
         imageElement = ImageElement(
             url: url is Blob ? "" : url,
             data: image,

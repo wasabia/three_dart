@@ -49,13 +49,13 @@ class WebGLRenderList {
   Map<int, RenderItem> renderItems = {};
   var renderItemsIndex = 0;
 
-  var opaque = [];
-  var transmissive = [];
-  var transparent = [];
+  List<RenderItem> opaque = [];
+  List<RenderItem> transmissive = [];
+  List<RenderItem> transparent = [];
 
   var defaultProgram = DefaultProgram();
 
-  init() {
+  void init() {
     renderItemsIndex = 0;
 
     opaque.length = 0;
@@ -63,7 +63,8 @@ class WebGLRenderList {
     transparent.length = 0;
   }
 
-  getNextRenderItem(object, geometry, material, groupOrder, z, group) {
+  RenderItem getNextRenderItem(Object3D object, BufferGeometry? geometry,
+      Material? material, int groupOrder, num z, Map<String, dynamic>? group) {
     var renderItem = renderItems[renderItemsIndex];
 
     if (renderItem == null) {
@@ -95,7 +96,8 @@ class WebGLRenderList {
     return renderItem;
   }
 
-  push(object, geometry, material, groupOrder, z, group) {
+  void push(Object3D object, BufferGeometry geometry, material, int groupOrder,
+      num z, Map<String, dynamic>? group) {
     var renderItem =
         getNextRenderItem(object, geometry, material, groupOrder, z, group);
 
@@ -110,7 +112,8 @@ class WebGLRenderList {
     }
   }
 
-  unshift(object, geometry, material, groupOrder, z, group) {
+  void unshift(Object3D object, BufferGeometry? geometry, Material material,
+      int groupOrder, num z, Map<String, dynamic>? group) {
     var renderItem =
         getNextRenderItem(object, geometry, material, groupOrder, z, group);
 

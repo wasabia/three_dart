@@ -12,7 +12,7 @@ class WebGLIndexedBufferRenderer extends BaseWebGLBufferRenderer {
 
   WebGLIndexedBufferRenderer(
       this.gl, this.extensions, this.info, this.capabilities) {
-    this.isWebGL2 = capabilities.isWebGL2;
+    isWebGL2 = capabilities.isWebGL2;
   }
 
   setMode(value) {
@@ -24,7 +24,7 @@ class WebGLIndexedBufferRenderer extends BaseWebGLBufferRenderer {
     bytesPerElement = value["bytesPerElement"];
   }
 
-  render(start, count) {
+  void render(start, count) {
 
     gl.drawElements(mode, count, type, start * bytesPerElement);
 

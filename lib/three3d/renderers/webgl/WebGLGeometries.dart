@@ -89,8 +89,7 @@ class WebGLGeometries {
 
     if (geometryIndex != null) {
       var array = geometryIndex.array;
-      version = geometryIndex.version;
-
+      version = geometryIndex.version; 
       for (var i = 0, l = array.length; i < l; i += 3) {
         var a = array[i + 0];
         var b = array[i + 1];
@@ -134,7 +133,7 @@ class WebGLGeometries {
     wireframeAttributes.add(key: geometry, value: attribute);
   }
 
-  getWireframeAttribute(geometry) {
+  getWireframeAttribute(BufferGeometry geometry) {
     var currentAttribute = wireframeAttributes.get(geometry);
 
     if (currentAttribute != null) {

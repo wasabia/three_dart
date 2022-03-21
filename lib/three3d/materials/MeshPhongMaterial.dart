@@ -1,6 +1,6 @@
 part of three_materials;
 
-/**
+/*
  * 高光Phong材质,与光照有反应
  * parameters = {
  *  color: <hex>,
@@ -47,97 +47,98 @@ part of three_materials;
  */
 
 class MeshPhongMaterial extends Material {
-  bool isMeshPhongMaterial = true;
-
-  num? bumpScale = 1;
-  num? shininess = 30;
-  Color? specular = Color(0.067, 0.067, 0.067);
-  Color? color = Color(1, 1, 1); // diffuse
-
-  String type = "MeshPhongMaterial";
-  Color? emissive = Color(0, 0, 0);
-  int? normalMapType = TangentSpaceNormalMap;
-  Vector2? normalScale = Vector2(1, 1);
-
   MeshPhongMaterial([Map<String, dynamic>? parameters]) : super() {
-    this.map = null;
+    isMeshPhongMaterial = true;
 
-    this.lightMap = null;
-    this.lightMapIntensity = 1.0;
+    bumpScale = 1;
+    shininess = 30;
+    specular = Color(0.067, 0.067, 0.067);
+    color = Color(1, 1, 1); // diffuse
 
-    this.aoMap = null;
-    this.aoMapIntensity = 1.0;
+    type = "MeshPhongMaterial";
+    emissive = Color(0, 0, 0);
+    normalMapType = TangentSpaceNormalMap;
+    normalScale = Vector2(1, 1);
 
-    this.emissiveIntensity = 1.0;
-    this.emissiveMap = null;
+    map = null;
 
-    this.normalMap = null;
+    lightMap = null;
+    lightMapIntensity = 1.0;
 
-    this.displacementMap = null;
-    this.displacementScale = 1;
-    this.displacementBias = 0;
+    aoMap = null;
+    aoMapIntensity = 1.0;
 
-    this.specularMap = null;
+    emissiveIntensity = 1.0;
+    emissiveMap = null;
 
-    this.alphaMap = null;
+    normalMap = null;
+
+    displacementMap = null;
+    displacementScale = 1;
+    displacementBias = 0;
+
+    specularMap = null;
+
+    alphaMap = null;
 
     // this.envMap = null;
-    this.combine = MultiplyOperation;
-    this.reflectivity = 1;
-    this.refractionRatio = 0.98;
+    combine = MultiplyOperation;
+    reflectivity = 1;
+    refractionRatio = 0.98;
 
-    this.wireframe = false;
-    this.wireframeLinewidth = 1;
-    this.wireframeLinecap = 'round';
-    this.wireframeLinejoin = 'round';
+    wireframe = false;
+    wireframeLinewidth = 1;
+    wireframeLinecap = 'round';
+    wireframeLinejoin = 'round';
 
-    this.setValues(parameters);
+    setValues(parameters);
   }
 
-  copy(source) {
+  @override
+  MeshPhongMaterial copy(Material source) {
     super.copy(source);
 
-    this.color!.copy(source.color);
-    this.specular!.copy(source.specular);
-    this.shininess = source.shininess;
+    color!.copy(source.color!);
+    specular!.copy(source.specular!);
+    shininess = source.shininess;
 
-    this.map = source.map;
+    map = source.map;
 
-    this.lightMap = source.lightMap;
-    this.lightMapIntensity = source.lightMapIntensity;
+    lightMap = source.lightMap;
+    lightMapIntensity = source.lightMapIntensity;
 
-    this.aoMap = source.aoMap;
-    this.aoMapIntensity = source.aoMapIntensity;
+    aoMap = source.aoMap;
+    aoMapIntensity = source.aoMapIntensity;
 
-    this.emissive!.copy(source.emissive);
-    this.emissiveMap = source.emissiveMap;
-    this.emissiveIntensity = source.emissiveIntensity;
+    emissive!.copy(source.emissive!);
+    emissiveMap = source.emissiveMap;
+    emissiveIntensity = source.emissiveIntensity;
 
-    this.bumpMap = source.bumpMap;
-    this.bumpScale = source.bumpScale;
+    bumpMap = source.bumpMap;
+    bumpScale = source.bumpScale;
 
-    this.normalMap = source.normalMap;
-    this.normalMapType = source.normalMapType;
-    this.normalScale!.copy(source.normalScale);
+    normalMap = source.normalMap;
+    normalMapType = source.normalMapType;
+    normalScale!.copy(source.normalScale!);
 
-    this.displacementMap = source.displacementMap;
-    this.displacementScale = source.displacementScale;
-    this.displacementBias = source.displacementBias;
+    displacementMap = source.displacementMap;
+    displacementScale = source.displacementScale;
+    displacementBias = source.displacementBias;
 
-    this.specularMap = source.specularMap;
+    specularMap = source.specularMap;
 
-    this.alphaMap = source.alphaMap;
+    alphaMap = source.alphaMap;
 
-    this.envMap = source.envMap;
-    this.combine = source.combine;
-    this.reflectivity = source.reflectivity;
-    this.refractionRatio = source.refractionRatio;
+    envMap = source.envMap;
+    combine = source.combine;
+    reflectivity = source.reflectivity;
+    refractionRatio = source.refractionRatio;
 
-    this.wireframe = source.wireframe;
-    this.wireframeLinewidth = source.wireframeLinewidth;
-    this.wireframeLinecap = source.wireframeLinecap;
-    this.wireframeLinejoin = source.wireframeLinejoin;
-    this.flatShading = source.flatShading;
+    wireframe = source.wireframe;
+    wireframeLinewidth = source.wireframeLinewidth;
+    wireframeLinecap = source.wireframeLinecap;
+    wireframeLinejoin = source.wireframeLinejoin;
+    flatShading = source.flatShading;
 
     return this;
   }
