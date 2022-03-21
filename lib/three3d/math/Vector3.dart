@@ -580,10 +580,16 @@ class Vector3 {
     return this;
   }
 
-  List<num> toArray(List<num> array, [int offset = 0]) {
-    while (array.length < offset + 3) {
-      array.add(0);
+  List<num> toArray([List<num>? array, int offset = 0]) {
+    
+    if(array == null) {
+      array = List<num>.filled(offset + 3, 0);
+    } else {
+      while (array.length < offset + 3) {
+        array.add(0);
+      }
     }
+    
 
     array[offset] = x;
     array[offset + 1] = y;

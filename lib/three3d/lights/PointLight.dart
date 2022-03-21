@@ -4,7 +4,7 @@ class PointLight extends Light {
   String type = "PointLight";
   bool isPointLight = true;
 
-  PointLight(color, [double? intensity, double? distance, double? decay])
+  PointLight(color, [num? intensity, num? distance, num? decay])
       : super(color, intensity) {
     // remove default 0  for js 0 is false  but for dart 0 is not.
     // PointLightShadow.updateMatrices  far value

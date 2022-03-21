@@ -20,19 +20,11 @@ class Euler {
 
   Function onChangeCallback = () {};
 
-  Euler(num x, num y, num z, [String? order]) {
-    _x = x;
-    _y = y;
-    _z = z;
+  Euler([num? x, num? y, num? z, String? order]) {
+    _x = x ?? 0;
+    _y = y ?? 0;
+    _z = z ?? 0;
     _order = order ?? DefaultOrder;
-  }
-
-  Euler.init(
-      {num x = 0, num y = 0, num z = 0, String order = Euler.DefaultOrder}) {
-    _x = x;
-    _y = y;
-    _z = z;
-    _order = order;
   }
 
   num get x => _x;
@@ -59,7 +51,7 @@ class Euler {
     onChangeCallback();
   }
 
-  Euler set(num x, num y, num z, {String? order}) {
+  Euler set(num x, num y, num z, [String? order]) {
     _x = x;
     _y = y;
     _z = z;
@@ -230,7 +222,12 @@ class Euler {
     return [_x, _y, _z, orderNo];
   }
 
-  List<num> toArray(List<num> array, {int offset = 0}) {
+  List<num> toArray([List<num>? array, int offset = 0]) {
+
+    if(array == null) {
+      array = List<num>.filled(offset + 4, 0);
+    }
+
     array[offset] = _x;
     array[offset + 1] = _y;
     array[offset + 2] = _z;

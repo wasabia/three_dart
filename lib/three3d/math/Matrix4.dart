@@ -479,7 +479,8 @@ class Matrix4 {
     return this;
   }
 
-  Matrix4 setPosition(x, y, z) {
+  // x is Vector3 | num
+  Matrix4 setPosition(x, [y, z]) {
     var te = elements;
 
     if (x is Vector3) {

@@ -118,7 +118,7 @@ class BufferGeometry with EventDispatcher {
     return this.attributes[name] != null;
   }
 
-  addGroup(int start, int count, {int materialIndex = 0}) {
+  addGroup(int start, int count, [int materialIndex = 0]) {
     this
         .groups
         .add({"start": start, "count": count, "materialIndex": materialIndex});
