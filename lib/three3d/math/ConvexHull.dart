@@ -1,8 +1,6 @@
 part of three_math;
 
-/**
- * Ported from: https://github.com/maurizzzio/quickhull3d/ by Mauricio Poppe (https://github.com/maurizzzio)
- */
+/// Ported from: https://github.com/maurizzzio/quickhull3d/ by Mauricio Poppe (https://github.com/maurizzzio)
 
 var Visible = 0;
 var Deleted = 1;
@@ -568,7 +566,7 @@ class ConvexHull {
   VertexNode? nextVertexToAdd() {
     // if the 'assigned' list of vertices is empty, no vertices are left. return with 'undefined'
     VertexNode? eyeVertex;
-    if (assigned.isEmpty() == false) { 
+    if (assigned.isEmpty() == false) {
       num maxDistance = 0;
 
       // grap the first available face and start with the first visible vertex of that face
@@ -588,7 +586,6 @@ class ConvexHull {
 
         vertex = vertex.next;
       } while (vertex != null && vertex.face == eyeFace2);
-
     }
     return eyeVertex;
   }
@@ -719,14 +716,14 @@ class ConvexHull {
   }
 
   ConvexHull compute() {
-    var vertex;
+    VertexNode? vertex;
 
     computeInitialHull();
 
     // add all available vertices gradually to the hull
 
     while ((vertex = nextVertexToAdd()) != null) {
-      addVertexToHull(vertex);
+      addVertexToHull(vertex!);
     }
 
     reindexFace2s();

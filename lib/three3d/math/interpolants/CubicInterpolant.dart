@@ -1,12 +1,10 @@
 part of three_math;
 
-/**
- * Fast and simple cubic spline interpolant.
- *
- * It was derived from a Hermitian construction setting the first derivative
- * at each sample position to the linear slope between neighboring positions
- * over their parameter interval.
- */
+/// Fast and simple cubic spline interpolant.
+///
+/// It was derived from a Hermitian construction setting the first derivative
+/// at each sample position to the linear slope between neighboring positions
+/// over their parameter interval.
 
 class CubicInterpolant extends Interpolant {
   late num _weightPrev;
@@ -27,6 +25,7 @@ class CubicInterpolant extends Interpolant {
     };
   }
 
+  @override
   intervalChanged(i1, t0, t1) {
     var pp = parameterPositions;
     var iPrev = i1 - 2, iNext = i1 + 1, tPrev = pp[iPrev], tNext = pp[iNext];
@@ -91,6 +90,7 @@ class CubicInterpolant extends Interpolant {
     _offsetNext = iNext * stride;
   }
 
+  @override
   interpolate(i1, t0, t, t1) {
     var result = resultBuffer,
         values = sampleValues,

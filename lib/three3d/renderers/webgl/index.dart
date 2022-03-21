@@ -2,7 +2,6 @@ library three_webgl;
 
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
 import 'package:three_dart/three3d/utils.dart';
