@@ -34,7 +34,14 @@ abstract class RenderTarget with EventDispatcher {
   late bool stencilBuffer;
   DepthTexture? depthTexture;
 
-  late int samples;
+  late int _samples;
+
+  int get samples => _samples;
+
+  set samples(int value) {
+    print("Important warn: make sure set samples before setRenderTarget  ");
+    _samples = value;
+  }
 
   WebGLRenderTarget clone() {
     throw ("RenderTarget clone need implemnt ");
@@ -95,7 +102,7 @@ class WebGLRenderTarget extends RenderTarget {
     useMultisampleRenderToTexture = false;
     useMultisampleRenderbuffer = false;
 
-    samples =
+    _samples  =
         (options != null && options.samples != null) ? options.samples! : 0;
   }
 
@@ -153,7 +160,6 @@ class WebGLRenderTarget extends RenderTarget {
 
   @override
   void dispose() {
-    print(" WebGLRenderTarget dispose() ......... ");
     dispatchEvent(Event({"type": "dispose"}));
   }
 }
