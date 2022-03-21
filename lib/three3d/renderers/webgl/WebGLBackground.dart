@@ -15,9 +15,9 @@ class WebGLBackground {
   Mesh? planeMesh;
   Mesh? boxMesh;
 
-  var currentBackground = null;
+  var currentBackground;
   int currentBackgroundVersion = 0;
-  var currentTonemapping = null;
+  var currentTonemapping;
 
   WebGLBackground(this.renderer, this.cubemaps, this.state, this.objects,
       this.alpha, this.premultipliedAlpha) {

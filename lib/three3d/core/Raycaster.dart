@@ -51,7 +51,7 @@ class Raycaster {
   }
 
   void setFromCamera(Vector2 coords, Camera camera) {
-    if (camera.isPerspectiveCamera) {
+    if (camera is PerspectiveCamera) {
       ray.origin.setFromMatrixPosition(camera.matrixWorld);
       ray
           .direction
@@ -60,7 +60,7 @@ class Raycaster {
           .sub(ray.origin)
           .normalize();
       this.camera = camera;
-    } else if (camera.isOrthographicCamera) {
+    } else if (camera is OrthographicCamera) {
       ray
           .origin
           .set(coords.x, coords.y,

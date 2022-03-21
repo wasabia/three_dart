@@ -47,16 +47,16 @@ class LoaderUtils {
     if (url is! String || url == '') return '';
 
     // Host Relative URL
-    final _reg1 = RegExp("^https?:\/\/", caseSensitive: false);
+    final _reg1 = RegExp("^https?://", caseSensitive: false);
     if (_reg1.hasMatch(path) &&
-        RegExp("^\/", caseSensitive: false).hasMatch(url)) {
-      final _reg2 = RegExp("(^https?:\/\/[^\/]+).*", caseSensitive: false);
+        RegExp("^/", caseSensitive: false).hasMatch(url)) {
+      final _reg2 = RegExp("(^https?://[^/]+).*", caseSensitive: false);
 
       final matches = _reg2.allMatches(path);
 
-      matches.forEach((_match) {
+      for (var _match in matches) {
         path = path.replaceFirst(_match.group(0)!, _match.group(1)!);
-      });
+      }
 
       print("GLTFHelper.resolveURL todo debug  ");
       // path = path.replace( RegExp("(^https?:\/\/[^\/]+).*", caseSensitive: false), '$1' );
@@ -64,8 +64,9 @@ class LoaderUtils {
     }
 
     // Absolute URL http://,https://,//
-    if (RegExp("^(https?:)?\/\/", caseSensitive: false).hasMatch(url))
+    if (RegExp("^(https?:)?//", caseSensitive: false).hasMatch(url)) {
       return url;
+    }
 
     // Data URI
     if (RegExp(r"^data:.*,.*$", caseSensitive: false).hasMatch(url)) return url;

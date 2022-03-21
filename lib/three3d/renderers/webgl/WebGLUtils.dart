@@ -7,10 +7,10 @@ class WebGLUtils {
   WebGLCapabilities capabilities;
 
   WebGLUtils(this.gl, this.extensions, this.capabilities) {
-    this.isWebGL2 = capabilities.isWebGL2;
+    isWebGL2 = capabilities.isWebGL2;
   }
 
-  convert(p, [encoding = null]) {
+  convert(p, [encoding]) {
     var extension;
 
     if (p == UnsignedByteType) return gl.UNSIGNED_BYTE;

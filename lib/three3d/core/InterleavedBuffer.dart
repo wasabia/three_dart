@@ -15,7 +15,7 @@ class InterleavedBuffer {
   String type = "InterleavedBuffer";
 
   InterleavedBuffer(this.array, this.stride) {
-    count = array != null ? (array.length / stride).toInt() : 0;
+    count = array != null ? array.length ~/ stride : 0;
 
     usage = StaticDrawUsage;
     updateRange = {"offset": 0, "count": -1};

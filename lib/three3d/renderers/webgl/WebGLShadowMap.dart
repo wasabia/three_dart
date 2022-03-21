@@ -287,14 +287,12 @@ class WebGLShadowMap {
     result.wireframeLinewidth = material.wireframeLinewidth;
     result.linewidth = material.linewidth;
 
-    if (light.isPointLight == true && result.isMeshDistanceMaterial) {
-      MeshDistanceMaterial result2 = result as MeshDistanceMaterial;
+    if (light.isPointLight == true && result is MeshDistanceMaterial) {
+      result.referencePosition.setFromMatrixPosition(light.matrixWorld);
+      result.nearDistance = shadowCameraNear;
+      result.farDistance = shadowCameraFar;
 
-      result2.referencePosition.setFromMatrixPosition(light.matrixWorld);
-      result2.nearDistance = shadowCameraNear;
-      result2.farDistance = shadowCameraFar;
-
-      return result2;
+      return result;
     } else {
       return result;
     }

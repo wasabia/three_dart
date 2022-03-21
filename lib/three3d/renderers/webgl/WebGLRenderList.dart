@@ -44,7 +44,7 @@ class RenderItem {
 }
 
 class WebGLRenderList {
-  WebGLRenderList() {}
+  WebGLRenderList();
 
   Map<int, RenderItem> renderItems = {};
   var renderItemsIndex = 0;

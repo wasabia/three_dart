@@ -24,14 +24,14 @@ class SpriteAnimator {
     animation["currentTile"] = animation["startFrame"];
     animation["looped"] = 0;
 
-    this.animations.add(animation);
+    animations.add(animation);
 
     return animation;
   }
 
   // Release this sprite from our tracking and upating
   free(animation) {
-    splice(this.animations, this.animations.indexOf(animation), 1);
+    splice(animations, animations.indexOf(animation), 1);
     animation.onEnd && animation.onEnd();
   }
 
@@ -39,7 +39,7 @@ class SpriteAnimator {
   update(delta) {
     var currentColumn, currentRow, complete = [], x, animation;
 
-    for (x = 0; animation; animation = this.animations[x++]) {
+    for (x = 0; animation; animation = animations[x++]) {
       animation.duration += delta;
 
       // Have we gone longer than the duration of this tile? Show the
@@ -74,10 +74,10 @@ class SpriteAnimator {
 
     // Go over all completed animations. If we exceed our looping quota,
     // free it
-    if (complete.length > 0) {
+    if (complete.isNotEmpty) {
       for (x = 0; animation; animation = complete[x++]) {
         if (animation.looped >= animation.repeat) {
-          this.free(animation);
+          free(animation);
         }
       }
     }

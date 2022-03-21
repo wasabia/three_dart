@@ -650,8 +650,7 @@ class BufferGeometry with EventDispatcher {
     if (offset == null) {
       offset = 0;
 
-      print('THREE.BufferGeometry.merge(): Overwriting original geometry, starting at offset=0. ' +
-          'Use BufferGeometryUtils.mergeBufferGeometries() for lossless merge.');
+      print('THREE.BufferGeometry.merge(): Overwriting original geometry, starting at offset=0. ' 'Use BufferGeometryUtils.mergeBufferGeometries() for lossless merge.');
     }
 
     var attributes = this.attributes;

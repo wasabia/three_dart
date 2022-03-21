@@ -80,7 +80,7 @@ class MeshStandardMaterial extends Material {
 
     normalMap = null;
     normalMapType = TangentSpaceNormalMap;
-    normalScale = new Vector2(1, 1);
+    normalScale = Vector2(1, 1);
 
     displacementMap = null;
     displacementScale = 1;

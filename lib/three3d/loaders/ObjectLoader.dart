@@ -1,8 +1,9 @@
 part of three_loaders;
 
 class ObjectLoader extends Loader {
-  ObjectLoader(manager) : super(manager) {}
+  ObjectLoader(manager) : super(manager);
 
+  @override
   load(url, onLoad, [onProgress, onError]) {
     var scope = this;
 
@@ -14,14 +15,14 @@ class ObjectLoader extends Loader {
     loader.setRequestHeader(requestHeader);
     loader.setWithCredentials(withCredentials);
     loader.load(url, (text) {
-      var json = null;
+      var json;
 
       try {
         json = convert.jsonDecode(text);
       } catch (error) {
         if (onError != null) onError(error);
 
-        print('THREE:ObjectLoader: Can\'t parse ' + url + '.${error}');
+        print('THREE:ObjectLoader: Can\'t parse ' + url + '.$error');
 
         return;
       }
@@ -39,6 +40,7 @@ class ObjectLoader extends Loader {
     }, onProgress, onError);
   }
 
+  @override
   loadAsync(url) async {
     var scope = this;
 
@@ -65,6 +67,7 @@ class ObjectLoader extends Loader {
     return await scope.parseAsync(json);
   }
 
+  @override
   parse(json, [String? path, Function? onLoad, Function? onError]) async {
     var animations = parseAnimations(json.animations);
     var shapes = parseShapes(json.shapes);
@@ -262,21 +265,22 @@ class ObjectLoader extends Loader {
     var scope = this;
     var images = {};
 
-    var loader;
+    late ImageLoader loader;
 
-    Function loadImage = (url) async {
+    loadImage(url) async {
       scope.manager.itemStart(url);
 
       return await loader.loadAsync(url, () {
         scope.manager.itemEnd(url);
       });
-    };
+    }
 
-    Function deserializeImage = (image) async {
+    deserializeImage(image) async {
       if (image is String) {
         var url = image;
 
-        var path = RegExp("^(\/\/)|([a-z]+:(\/\/)?)", caseSensitive: false)
+        var path =
+            RegExp("^(//)|([a-z]+:(//)?)", caseSensitive: false)
                 .hasMatch(url)
             ? url
             : (scope.resourcePath ?? "") + url;
@@ -293,7 +297,7 @@ class ObjectLoader extends Loader {
           return null;
         }
       }
-    };
+    }
 
     if (json != null && json.length > 0) {
       var manager = LoadingManager(onLoad, null, null);
@@ -349,15 +353,15 @@ class ObjectLoader extends Loader {
     return images;
   }
 
-  parseTextures(json, images) {
-    Function parseConstant = (value, type) {
+  Map parseTextures(json, images) {
+    parseConstant(value, type) {
       if (value is num) return value;
 
       print(
-          'THREE.ObjectLoader.parseTexture: Constant should be in numeric form. ${value}');
+          'THREE.ObjectLoader.parseTexture: Constant should be in numeric form. $value');
 
       return type[value];
-    };
+    }
 
     var textures = {};
 
@@ -373,7 +377,7 @@ class ObjectLoader extends Loader {
           print('THREE.ObjectLoader: Undefined image ${data["image"]}');
         }
 
-        var texture;
+        Texture texture;
 
         var source = images[ data["image"] ];
 				var image = source.data;
@@ -448,15 +452,15 @@ class ObjectLoader extends Loader {
       Map<String, dynamic> data, geometries, materials, textures, animations) {
     var object;
 
-    Function getGeometry = (name) {
+    getGeometry(name) {
       if (geometries[name] == null) {
-        print('THREE.ObjectLoader: Undefined geometry ${name}');
+        print('THREE.ObjectLoader: Undefined geometry $name');
       }
 
       return geometries[name];
-    };
+    }
 
-    Function getMaterial = (name) {
+    getMaterial(name) {
       if (name == null) return null;
 
       if (name is List) {
@@ -466,7 +470,7 @@ class ObjectLoader extends Loader {
           var uuid = name[i];
 
           if (materials[uuid] == null) {
-            print('THREE.ObjectLoader: Undefined material ${uuid}');
+            print('THREE.ObjectLoader: Undefined material $uuid');
           }
 
           array.add(materials[uuid]);
@@ -476,19 +480,19 @@ class ObjectLoader extends Loader {
       }
 
       if (materials[name] == null) {
-        print('THREE.ObjectLoader: Undefined material ${name}');
+        print('THREE.ObjectLoader: Undefined material $name');
       }
 
       return materials[name];
-    };
+    }
 
-    Function getTexture = (uuid) {
+    getTexture(uuid) {
       if (textures[uuid] == null) {
-        print('THREE.ObjectLoader: Undefined texture ${uuid}');
+        print('THREE.ObjectLoader: Undefined texture $uuid');
       }
 
       return textures[uuid];
-    };
+    }
 
     var geometry, material;
 

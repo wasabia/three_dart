@@ -1,6 +1,7 @@
 part of three_geometries;
 
 class SphereGeometry extends BufferGeometry {
+  @override
   String type = "SphereGeometry";
 
   SphereGeometry(
@@ -99,8 +100,9 @@ class SphereGeometry extends BufferGeometry {
         var d = grid[iy + 1][ix + 1];
 
         if (iy != 0 || thetaStart > 0) indices.addAll([a, b, d]);
-        if (iy != heightSegments - 1 || thetaEnd < Math.PI)
+        if (iy != heightSegments - 1 || thetaEnd < Math.PI) {
           indices.addAll([b, c, d]);
+        }
       }
     }
 

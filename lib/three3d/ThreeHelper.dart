@@ -29,7 +29,7 @@ class ThreeHelper {
   static rotateWithPoint(obj, anchorPoint,
       {angleX = 0.0, angleY = 0.0, angleZ = 0.0}) {
     /// step 1: calculate move direction and move distance:
-    var moveDir = new Vector3(anchorPoint.x - obj.position.x,
+    var moveDir = Vector3(anchorPoint.x - obj.position.x,
         anchorPoint.y - obj.position.y, anchorPoint.z - obj.position.z);
     moveDir.normalize();
     var moveDist = obj.position.distanceTo(anchorPoint);
@@ -55,7 +55,7 @@ class ThreeHelper {
     var axis = rotateAxis;
 
     // Define the matrix:
-    var matrix = new Matrix4();
+    var matrix = Matrix4();
 
     // Define the rotation in radians:
     var radians = angle * Math.PI / 180.0;

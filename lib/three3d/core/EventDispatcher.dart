@@ -1,8 +1,6 @@
 part of three_core;
 
-/**
- * https://github.com/mrdoob/eventdispatcher.js/
- */
+/// https://github.com/mrdoob/eventdispatcher.js/
 
 class Event {
   late String? type;

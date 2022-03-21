@@ -1,11 +1,12 @@
 part of three_geometries;
 
 class DodecahedronGeometry extends PolyhedronGeometry {
+  @override
   String type = "DodecahedronGeometry";
 
   DodecahedronGeometry.create(vertices, indices, radius, detail)
       : super(vertices, indices, radius, detail) {
-    this.parameters = {"radius": radius, "detail": detail};
+    parameters = {"radius": radius, "detail": detail};
   }
 
   factory DodecahedronGeometry([num radius = 1, int detail = 0]) {

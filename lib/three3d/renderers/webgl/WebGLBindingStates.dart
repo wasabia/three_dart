@@ -284,10 +284,12 @@ class WebGLBindingStates {
         var geometryAttribute = geometryAttributes[name];
 
         if (geometryAttribute == null) {
-          if (name == 'instanceMatrix' && object.instanceMatrix != null)
+          if (name == 'instanceMatrix' && object.instanceMatrix != null) {
             geometryAttribute = object.instanceMatrix;
-          if (name == 'instanceColor' && object.instanceColor != null)
+          }
+          if (name == 'instanceColor' && object.instanceColor != null) {
             geometryAttribute = object.instanceColor;
+          }
         }
 
         if (geometryAttribute != null) {
@@ -300,7 +302,7 @@ class WebGLBindingStates {
 
           if (attribute == null) {
             print(
-                "WebGLBindingState setupVertexAttributes name: ${name} attribute == null ");
+                "WebGLBindingState setupVertexAttributes name: $name attribute == null ");
             continue;
           }
 
@@ -352,10 +354,8 @@ class WebGLBindingStates {
                     geometryAttribute.meshPerAttribute);
               }
 
-              if (geometry.maxInstanceCount == null) {
-                geometry.maxInstanceCount = geometryAttribute.meshPerAttribute *
+              geometry.maxInstanceCount ??= geometryAttribute.meshPerAttribute *
                     geometryAttribute.count;
-              }
             } else {
               // enableAttribute( programAttribute );
               for (var i = 0; i < programAttribute["locationSize"]; i++) {
@@ -401,7 +401,6 @@ class WebGLBindingStates {
         }
       }
     }
-    ;
 
     disableUnusedAttributes();
   }

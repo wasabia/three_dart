@@ -9,13 +9,13 @@ void main() {
       // INSTANCING
       test("Instancing", () {
         // default ctor
-        var c1 = new Color();
+        var c1 = Color();
         expect(c1.r, 1.0);
         expect(c1.g, 1.0);
         expect(c1.b, 1.0);
 
         // rgb ctor
-        var c2 = new Color(1, 1, 1);
+        var c2 = Color(1, 1, 1);
         expect(c2.r, 1);
         expect(c2.g, 1);
         expect(c2.b, 1);
@@ -28,18 +28,18 @@ void main() {
 
       // PUBLIC STUFF
       test("isColor", () {
-        var a = new Color();
+        var a = Color();
         expect(a.isColor, true);
 
-        var b = new Object();
+        var b = Object();
         expect(!(b is Color), true);
       });
 
       group("set", () {
-        var a = new Color();
-        var b = new Color(0.5, 0, 0);
-        var c = new Color(0xFF0000);
-        var d = new Color(0, 1.0, 0);
+        var a = Color();
+        var b = Color(0.5, 0, 0);
+        var c = Color(0xFF0000);
+        var d = Color(0, 1.0, 0);
 
         test("Set with Color instance", () {
           a.set(b);
@@ -62,7 +62,7 @@ void main() {
       });
 
       test("setScalar", () {
-        var c = new Color();
+        var c = Color();
         c.setScalar(0.5);
 
         expect(c.r, 0.5);
@@ -71,7 +71,7 @@ void main() {
       });
 
       test("setHex", () {
-        var c = new Color();
+        var c = Color();
         c.setHex(0xFA8072);
         expect(c.getHex(), 0xFA8072);
         expect(c.r, 0xFA / 0xFF);
@@ -80,7 +80,7 @@ void main() {
       });
 
       test("setRGB", () {
-        var c = new Color();
+        var c = Color();
         c.setRGB(0.3, 0.5, 0.7);
         expect(c.r, 0.3);
         expect(c.g, 0.5);
@@ -88,7 +88,7 @@ void main() {
       });
 
       test("setHSL", () {
-        var c = new Color();
+        var c = Color();
         Map<String, dynamic> hsl = {"h": 0, "s": 0, "l": 0};
         c.setHSL(0.75, 1.0, 0.25);
         c.getHSL(hsl);
@@ -99,13 +99,13 @@ void main() {
       });
 
       test("setStyle", () {
-        var a = new Color();
+        var a = Color();
 
-        var b = new Color(8 / 255, 25 / 255, 178 / 255);
+        var b = Color(8 / 255, 25 / 255, 178 / 255);
         a.setStyle("rgb(8,25,178)");
         expect(a.equals(b), true);
 
-        b = new Color(8 / 255, 25 / 255, 178 / 255);
+        b = Color(8 / 255, 25 / 255, 178 / 255);
         a.setStyle("rgba(8,25,178,200)");
         expect(a.equals(b), true);
 
@@ -140,7 +140,7 @@ void main() {
       });
 
       test("setColorName", () {
-        var c = new Color();
+        var c = Color();
         var res = c.setColorName("aliceblue");
 
         expect(c.getHex(), 0xF0F8FF);
@@ -148,14 +148,14 @@ void main() {
       });
 
       test("clone", () {
-        var c = new Color('teal');
+        var c = Color('teal');
         var c2 = c.clone();
         expect(c2.getHex(), 0x008080);
       });
 
       test("copy", () {
-        var a = new Color('teal');
-        var b = new Color();
+        var a = Color('teal');
+        var b = Color();
         b.copy(a);
         expect(b.r, 0x00 / 255);
         expect(b.g, 0x80 / 255);
@@ -163,8 +163,8 @@ void main() {
       });
 
       test("copyGammaToLinear", () {
-        var c = new Color();
-        var c2 = new Color();
+        var c = Color();
+        var c2 = Color();
         c2.setRGB(0.3, 0.5, 0.9);
         c.copyGammaToLinear(c2);
         expect(c.r, 0.09);
@@ -173,8 +173,8 @@ void main() {
       });
 
       test("copyLinearToGamma", () {
-        var c = new Color();
-        var c2 = new Color();
+        var c = Color();
+        var c2 = Color();
         c2.setRGB(0.09, 0.25, 0.81);
         c.copyLinearToGamma(c2);
         expect(c.r, 0.3);
@@ -183,7 +183,7 @@ void main() {
       });
 
       test("convertGammaToLinear", () {
-        var c = new Color();
+        var c = Color();
         c.setRGB(0.3, 0.5, 0.9);
         c.convertGammaToLinear();
         expect(c.r, 0.09);
@@ -192,7 +192,7 @@ void main() {
       });
 
       test("convertLinearToGamma", () {
-        var c = new Color();
+        var c = Color();
         c.setRGB(4, 9, 16);
         c.convertLinearToGamma();
         expect(c.r, 2);
@@ -201,19 +201,19 @@ void main() {
       });
 
       test("getHex", () {
-        var c = new Color('red');
+        var c = Color('red');
         var res = c.getHex();
         expect(res, 0xFF0000);
       });
 
       test("getHexString", () {
-        var c = new Color('tomato');
+        var c = Color('tomato');
         var res = c.getHexString();
         expect(res, 'ff6347');
       });
 
       test("getHSL", () {
-        var c = new Color(0x80ffff);
+        var c = Color(0x80ffff);
         Map<String, dynamic> hsl = {"h": 0, "s": 0, "l": 0};
         c.getHSL(hsl);
 
@@ -223,7 +223,7 @@ void main() {
       });
 
       test("getStyle", () {
-        var c = new Color('plum');
+        var c = Color('plum');
         var res = c.getStyle();
         expect(
           res,
@@ -232,8 +232,8 @@ void main() {
       });
 
       test("offsetHSL", () {
-        var a = new Color("hsl(120,50%,50%)");
-        var b = new Color(0.36, 0.84, 0.648);
+        var a = Color("hsl(120,50%,50%)");
+        var b = Color(0.36, 0.84, 0.648);
 
         a.offsetHSL(0.1, 0.1, 0.1);
 
@@ -243,9 +243,9 @@ void main() {
       });
 
       test("add", () {
-        var a = new Color(0x0000FF);
-        var b = new Color(0xFF0000);
-        var c = new Color(0xFF00FF);
+        var a = Color(0x0000FF);
+        var b = Color(0xFF0000);
+        var c = Color(0xFF00FF);
 
         a.add(b);
 
@@ -253,10 +253,10 @@ void main() {
       });
 
       test("addColors", () {
-        var a = new Color(0x0000FF);
-        var b = new Color(0xFF0000);
-        var c = new Color(0xFF00FF);
-        var d = new Color();
+        var a = Color(0x0000FF);
+        var b = Color(0xFF0000);
+        var c = Color(0xFF00FF);
+        var d = Color();
 
         d.addColors(a, b);
 
@@ -264,8 +264,8 @@ void main() {
       });
 
       test("addScalar", () {
-        var a = new Color(0.1, 0.0, 0.0);
-        var b = new Color(0.6, 0.5, 0.5);
+        var a = Color(0.1, 0.0, 0.0);
+        var b = Color(0.6, 0.5, 0.5);
 
         a.addScalar(0.5);
 
@@ -273,9 +273,9 @@ void main() {
       });
 
       test("sub", () {
-        var a = new Color(0x0000CC);
-        var b = new Color(0xFF0000);
-        var c = new Color(0x0000AA);
+        var a = Color(0x0000CC);
+        var b = Color(0xFF0000);
+        var c = Color(0x0000AA);
 
         a.sub(b);
         expect(
@@ -288,39 +288,39 @@ void main() {
       });
 
       test("multiply", () {
-        var a = new Color(1, 0, 0.5);
-        var b = new Color(0.5, 1, 0.5);
-        var c = new Color(0.5, 0, 0.25);
+        var a = Color(1, 0, 0.5);
+        var b = Color(0.5, 1, 0.5);
+        var c = Color(0.5, 0, 0.25);
 
         a.multiply(b);
         expect(a.equals(c), true);
       });
 
       test("multiplyScalar", () {
-        var a = new Color(0.25, 0, 0.5);
-        var b = new Color(0.5, 0, 1);
+        var a = Color(0.25, 0, 0.5);
+        var b = Color(0.5, 0, 1);
 
         a.multiplyScalar(2);
         expect(a.equals(b), true);
       });
 
       test("copyHex", () {
-        var c = new Color();
-        var c2 = new Color(0xF5FFFA);
+        var c = Color();
+        var c2 = Color(0xF5FFFA);
         c.copy(c2);
         expect(c.getHex(), c2.getHex());
       });
 
       test("copyColorString", () {
-        var c = new Color();
-        var c2 = new Color('ivory');
+        var c = Color();
+        var c2 = Color('ivory');
         c.copy(c2);
         expect(c.getHex(), c2.getHex());
       });
 
       test("lerp", () {
-        var c = new Color();
-        var c2 = new Color();
+        var c = Color();
+        var c2 = Color();
         c.setRGB(0, 0, 0);
         c.lerp(c2, 0.2);
         expect(c.r, 0.2);
@@ -329,8 +329,8 @@ void main() {
       });
 
       test("equals", () {
-        var a = new Color(0.5, 0.0, 1.0);
-        var b = new Color(0.5, 1.0, 0.0);
+        var a = Color(0.5, 0.0, 1.0);
+        var b = Color(0.5, 1.0, 0.0);
 
         expect(a.r, b.r);
         expect(a.g == b.g, false);
@@ -349,8 +349,8 @@ void main() {
       });
 
       group("fromArray", () {
-        var a = new Color();
-        var array = [0.5, 0.6, 0.7, 0, 1, 0];
+        var a = Color();
+        List<double> array = [0.5, 0.6, 0.7, 0, 1, 0];
 
         test("No offset: ", () {
           a.fromArray(array);
@@ -369,7 +369,7 @@ void main() {
 
       group("toArray", () {
         var r = 0.5, g = 1.0, b = 0.0;
-        var a = new Color(r, g, b);
+        var a = Color(r, g, b);
 
         test("No array, no offset", () {
           var array = a.toArray();
@@ -397,10 +397,10 @@ void main() {
       });
 
       test("toJSON", () {
-        var a = new Color(0.0, 0.0, 0.0);
-        var b = new Color(0.0, 0.5, 0.0);
-        var c = new Color(1.0, 0.0, 0.0);
-        var d = new Color(1.0, 1.0, 1.0);
+        var a = Color(0.0, 0.0, 0.0);
+        var b = Color(0.0, 0.5, 0.0);
+        var c = Color(1.0, 0.0, 0.0);
+        var d = Color(1.0, 1.0, 1.0);
 
         expect(a.toJSON(), 0x000000);
         expect(b.toJSON(), 0x007F00);
@@ -410,7 +410,7 @@ void main() {
 
       // OTHERS
       test("setWithNum", () {
-        var c = new Color();
+        var c = Color();
         c.set(0xFF0000);
         expect(c.r, 1);
         expect(c.g, 0);
@@ -418,13 +418,13 @@ void main() {
       });
 
       test("setWithString", () {
-        var c = new Color();
+        var c = Color();
         c.set('silver');
         expect(c.getHex(), 0xC0C0C0);
       });
 
       test("setStyleRGBRed", () {
-        var c = new Color();
+        var c = Color();
         c.setStyle('rgb(255,0,0)');
         expect(c.r, 1);
         expect(c.g, 0);
@@ -432,7 +432,7 @@ void main() {
       });
 
       test("setStyleRGBARed", () {
-        var c = new Color();
+        var c = Color();
 
         c.setStyle('rgba(255,0,0,0.5)');
 
@@ -442,7 +442,7 @@ void main() {
       });
 
       test("setStyleRGBRedWithSpaces", () {
-        var c = new Color();
+        var c = Color();
         c.setStyle('rgb( 255 , 0,   0 )');
         expect(c.r, 1);
         expect(c.g, 0);
@@ -450,7 +450,7 @@ void main() {
       });
 
       test("setStyleRGBARedWithSpaces", () {
-        var c = new Color();
+        var c = Color();
         c.setStyle('rgba( 255,  0,  0  , 1 )');
         expect(c.r, 1);
         expect(c.g, 0);
@@ -458,7 +458,7 @@ void main() {
       });
 
       test("setStyleRGBPercent", () {
-        var c = new Color();
+        var c = Color();
         c.setStyle('rgb(100%,50%,10%)');
         expect(c.r, 1);
         expect(c.g, 0.5);
@@ -466,7 +466,7 @@ void main() {
       });
 
       test("setStyleRGBAPercent", () {
-        var c = new Color();
+        var c = Color();
 
         c.setStyle('rgba(100%,50%,10%, 0.5)');
 
@@ -476,7 +476,7 @@ void main() {
       });
 
       test("setStyleRGBPercentWithSpaces", () {
-        var c = new Color();
+        var c = Color();
         c.setStyle('rgb( 100% ,50%  , 10% )');
         expect(c.r, 1);
         expect(c.g, 0.5);
@@ -484,7 +484,7 @@ void main() {
       });
 
       test("setStyleRGBAPercentWithSpaces", () {
-        var c = new Color();
+        var c = Color();
 
         c.setStyle('rgba( 100% ,50%  ,  10%, 0.5 )');
 
@@ -494,7 +494,7 @@ void main() {
       });
 
       test("setStyleHSLRed", () {
-        var c = new Color();
+        var c = Color();
         c.setStyle('hsl(360,100%,50%)');
         expect(c.r, 1);
         expect(c.g, 0);
@@ -502,7 +502,7 @@ void main() {
       });
 
       test("setStyleHSLARed", () {
-        var c = new Color();
+        var c = Color();
 
         c.setStyle('hsla(360,100%,50%,0.5)');
 
@@ -512,7 +512,7 @@ void main() {
       });
 
       test("setStyleHSLRedWithSpaces", () {
-        var c = new Color();
+        var c = Color();
         c.setStyle('hsl(360,  100% , 50% )');
         expect(c.r, 1);
         expect(c.g, 0);
@@ -520,7 +520,7 @@ void main() {
       });
 
       test("setStyleHSLARedWithSpaces", () {
-        var c = new Color();
+        var c = Color();
 
         c.setStyle('hsla( 360,  100% , 50%,  0.5 )');
 
@@ -530,13 +530,13 @@ void main() {
       });
 
       test("setStyleHexSkyBlue", () {
-        var c = new Color();
+        var c = Color();
         c.setStyle('#87CEEB');
         expect(c.getHex(), 0x87CEEB);
       });
 
       test("setStyleHexSkyBlueMixed", () {
-        var c = new Color();
+        var c = Color();
         c.setStyle('#87cEeB');
         expect(
           c.getHex(),
@@ -545,7 +545,7 @@ void main() {
       });
 
       test("setStyleHex2Olive", () {
-        var c = new Color();
+        var c = Color();
         c.setStyle('#F00');
         expect(
           c.getHex(),
@@ -554,7 +554,7 @@ void main() {
       });
 
       test("setStyleHex2OliveMixed", () {
-        var c = new Color();
+        var c = Color();
         c.setStyle('#f00');
         expect(
           c.getHex(),
@@ -563,7 +563,7 @@ void main() {
       });
 
       test("setStyleColorName", () {
-        var c = new Color();
+        var c = Color();
         c.setStyle('powderblue');
         expect(
           c.getHex(),

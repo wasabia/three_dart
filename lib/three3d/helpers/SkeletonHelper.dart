@@ -5,13 +5,15 @@ var _boneMatrix = /*@__PURE__*/ Matrix4();
 var _matrixWorldInv = /*@__PURE__*/ Matrix4();
 
 class SkeletonHelper extends LineSegments {
+  @override
   String type = 'SkeletonHelper';
   bool isSkeletonHelper = true;
+  @override
   bool matrixAutoUpdate = false;
   late dynamic root;
   late dynamic bones;
 
-  SkeletonHelper.create(geometry, material) : super(geometry, material) {}
+  SkeletonHelper.create(geometry, material) : super(geometry, material);
 
   factory SkeletonHelper(object) {
     var bones = getBoneList(object);
@@ -62,13 +64,14 @@ class SkeletonHelper extends LineSegments {
     return keletonHelper;
   }
 
+  @override
   updateMatrixWorld([bool force = false]) {
     var bones = this.bones;
 
     var geometry = this.geometry!;
     var position = geometry.getAttribute('position');
 
-    _matrixWorldInv.copy(this.root.matrixWorld).invert();
+    _matrixWorldInv.copy(root.matrixWorld).invert();
 
     for (var i = 0, j = 0; i < bones.length; i++) {
       var bone = bones[i];

@@ -16,9 +16,9 @@ class WebGLTextures {
   late int maxTextureSize;
   late int maxSamples;
 
-  Map _videoTextures = Map();
+  final Map _videoTextures = {};
 
-  WeakMap _sources = new WeakMap(); // maps WebglTexture objects to instances of Source
+  final WeakMap _sources = WeakMap(); // maps WebglTexture objects to instances of Source
 
   Map<int, int> wrappingToGL = {};
   Map<int, int> filterToGL = {};

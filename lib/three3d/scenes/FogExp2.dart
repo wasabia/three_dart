@@ -1,11 +1,12 @@
 part of three_scenes;
 
 class FogExp2 extends FogBase {
+  @override
   bool isFogExp2 = true;
   late num density;
 
   FogExp2(color, density) {
-    this.name = '';
+    name = '';
 
     if (color is int) {
       this.color = Color(0, 0, 0).setHex(color);
@@ -19,14 +20,15 @@ class FogExp2 extends FogBase {
   }
 
   clone() {
-    return new FogExp2(this.color, this.density);
+    return FogExp2(color, density);
   }
 
+  @override
   toJSON(/* meta */) {
     return {
       "type": 'FogExp2',
-      "color": this.color.getHex(),
-      "density": this.density
+      "color": color.getHex(),
+      "density": density
     };
   }
 }

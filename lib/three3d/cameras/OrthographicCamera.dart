@@ -1,11 +1,6 @@
 part of three_camera;
 
 class OrthographicCamera extends Camera {
-  bool isOrthographicCamera = true;
-  String type = 'OrthographicCamera';
-
-  double zoom = 1;
-
   OrthographicCamera(
       [num left = -1,
       num right = 1,
@@ -14,7 +9,11 @@ class OrthographicCamera extends Camera {
       num near = 0.1,
       num far = 2000])
       : super() {
-    this.view = null;
+    type = 'OrthographicCamera';
+    isOrthographicCamera = true;
+    zoom = 1;
+
+    view = null;
 
     this.left = left;
     this.right = right;
@@ -24,31 +23,31 @@ class OrthographicCamera extends Camera {
     this.near = near;
     this.far = far;
 
-    this.updateProjectionMatrix();
+    updateProjectionMatrix();
   }
 
+  @override
   copy(source, [bool? recursive]) {
     super.copy(source, recursive);
 
     OrthographicCamera source1 = source as OrthographicCamera;
 
-    this.left = source1.left;
-    this.right = source1.right;
-    this.top = source1.top;
-    this.bottom = source1.bottom;
-    this.near = source1.near;
-    this.far = source1.far;
+    left = source1.left;
+    right = source1.right;
+    top = source1.top;
+    bottom = source1.bottom;
+    near = source1.near;
+    far = source1.far;
 
-    this.zoom = source1.zoom;
-    this.view =
+    zoom = source1.zoom;
+    view =
         source1.view == null ? null : json.decode(json.encode(source1.view));
 
     return this;
   }
 
   setViewOffset(fullWidth, fullHeight, x, y, width, height) {
-    if (this.view == null) {
-      this.view = {
+    view ??= {
         "enabled": true,
         "fullWidth": 1,
         "fullHeight": 1,
@@ -56,31 +55,31 @@ class OrthographicCamera extends Camera {
         "offsetY": 0,
         "width": 1,
         "height": 1
-      };
-    }
+    };
 
-    this.view!["enabled"] = true;
-    this.view!["fullWidth"] = fullWidth;
-    this.view!["fullHeight"] = fullHeight;
-    this.view!["offsetX"] = x;
-    this.view!["offsetY"] = y;
-    this.view!["width"] = width;
-    this.view!["height"] = height;
+    view!["enabled"] = true;
+    view!["fullWidth"] = fullWidth;
+    view!["fullHeight"] = fullHeight;
+    view!["offsetX"] = x;
+    view!["offsetY"] = y;
+    view!["width"] = width;
+    view!["height"] = height;
 
-    this.updateProjectionMatrix();
+    updateProjectionMatrix();
   }
 
   clearViewOffset() {
-    if (this.view != null) {
-      this.view!["enabled"] = false;
+    if (view != null) {
+      view!["enabled"] = false;
     }
 
-    this.updateProjectionMatrix();
+    updateProjectionMatrix();
   }
 
+  @override
   updateProjectionMatrix() {
-    var dx = (this.right - this.left) / (2 * this.zoom);
-    var dy = (this.top - this.bottom) / (2 * this.zoom);
+    var dx = (this.right - this.left) / (2 * zoom);
+    var dy = (this.top - this.bottom) / (2 * zoom);
     var cx = (this.right + this.left) / 2;
     var cy = (this.top + this.bottom) / 2;
 
@@ -89,38 +88,38 @@ class OrthographicCamera extends Camera {
     var top = cy + dy;
     var bottom = cy - dy;
 
-    if (this.view != null && this.view!["enabled"]) {
+    if (view != null && view!["enabled"]) {
       var scaleW =
-          (this.right - this.left) / this.view!["fullWidth"] / this.zoom;
+          (this.right - this.left) / view!["fullWidth"] / zoom;
       var scaleH =
-          (this.top - this.bottom) / this.view!["fullHeight"] / this.zoom;
+          (this.top - this.bottom) / view!["fullHeight"] / zoom;
 
-      left += scaleW * this.view!["offsetX"];
-      right = left + scaleW * this.view!["width"];
-      top -= scaleH * this.view!["offsetY"];
-      bottom = top - scaleH * this.view!["height"];
+      left += scaleW * view!["offsetX"];
+      right = left + scaleW * view!["width"];
+      top -= scaleH * view!["offsetY"];
+      bottom = top - scaleH * view!["height"];
     }
 
-    this
-        .projectionMatrix
-        .makeOrthographic(left, right, top, bottom, this.near, this.far);
+    projectionMatrix.makeOrthographic(left, right, top, bottom, near, far);
 
-    this.projectionMatrixInverse.copy(this.projectionMatrix).invert();
+    projectionMatrixInverse.copy(projectionMatrix).invert();
   }
 
+  @override
   toJSON({Object3dMeta? meta}) {
     var data = super.toJSON(meta: meta);
 
-    data["object"]["zoom"] = this.zoom;
-    data["object"]["left"] = this.left;
-    data["object"]["right"] = this.right;
-    data["object"]["top"] = this.top;
-    data["object"]["bottom"] = this.bottom;
-    data["object"]["near"] = this.near;
-    data["object"]["far"] = this.far;
+    data["object"]["zoom"] = zoom;
+    data["object"]["left"] = left;
+    data["object"]["right"] = right;
+    data["object"]["top"] = top;
+    data["object"]["bottom"] = bottom;
+    data["object"]["near"] = near;
+    data["object"]["far"] = far;
 
-    if (this.view != null)
-      data["object"]["view"] = json.decode(json.encode(this.view));
+    if (view != null) {
+      data["object"]["view"] = json.decode(json.encode(view));
+    }
 
     return data;
   }

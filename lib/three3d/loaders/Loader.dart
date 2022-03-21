@@ -13,11 +13,11 @@ abstract class Loader {
   Loader([manager]) {
     this.manager = (manager != null) ? manager : DefaultLoadingManager;
 
-    this.crossOrigin = 'anonymous';
-    this.withCredentials = false;
-    this.path = '';
-    this.resourcePath = '';
-    this.requestHeader = {};
+    crossOrigin = 'anonymous';
+    withCredentials = false;
+    path = '';
+    resourcePath = '';
+    requestHeader = {};
   }
 
   load(url, Function onLoad, [Function? onProgress, Function? onError]) {
@@ -36,7 +36,7 @@ abstract class Loader {
   }
 
   setWithCredentials(value) {
-    this.withCredentials = value;
+    withCredentials = value;
     return this;
   }
 

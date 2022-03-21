@@ -15,13 +15,14 @@ class FogBase {
 
 class Fog extends FogBase {
 
+  @override
   bool isFog = true;
 
   late num near;
   late num far;
 
   Fog(color, num? near, num? far) {
-    this.name = '';
+    name = '';
 
     if (color is int) {
       this.color = Color(0, 0, 0).setHex(color);
@@ -36,15 +37,16 @@ class Fog extends FogBase {
   }
 
   clone() {
-    return new Fog(this.color, this.near, this.far);
+    return Fog(color, near, far);
   }
 
+  @override
   toJSON(/* meta */) {
     return {
       "type": 'Fog',
-      "color": this.color.getHex(),
-      "near": this.near,
-      "far": this.far
+      "color": color.getHex(),
+      "near": near,
+      "far": far
     };
   }
 }

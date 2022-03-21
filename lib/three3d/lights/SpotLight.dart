@@ -1,15 +1,17 @@
 part of three_lights;
 
 class SpotLight extends Light {
+  @override
   String type = "SpotLight";
+  @override
   bool isSpotLight = true;
 
   SpotLight(color, [intensity, num? distance, angle, penumbra, decay])
       : super(color, intensity) {
-    this.position.copy(Object3D.DefaultUp);
-    this.updateMatrix();
+    position.copy(Object3D.DefaultUp);
+    updateMatrix();
 
-    this.target = new Object3D();
+    target = Object3D();
 
     // remove default 0  for js 0 is false  but for dart 0 is not.
     // SpotLightShadow.updateMatrices  far value
@@ -18,35 +20,37 @@ class SpotLight extends Light {
     this.penumbra = penumbra ?? 0;
     this.decay = decay ?? 1; // for physically correct lights, should be 2.
 
-    this.shadow = new SpotLightShadow();
+    shadow = SpotLightShadow();
   }
 
   get power {
-    return this.intensity * Math.PI;
+    return intensity * Math.PI;
   }
 
   set power(value) {
-    this.intensity = value / Math.PI;
+    intensity = value / Math.PI;
   }
 
+  @override
   copy(Object3D source, [bool? recursive]) {
     super.copy(source);
 
     SpotLight source1 = source as SpotLight;
 
-    this.distance = source1.distance;
-    this.angle = source1.angle;
-    this.penumbra = source1.penumbra;
-    this.decay = source1.decay;
+    distance = source1.distance;
+    angle = source1.angle;
+    penumbra = source1.penumbra;
+    decay = source1.decay;
 
-    this.target = source1.target!.clone();
+    target = source1.target!.clone();
 
-    this.shadow = source1.shadow!.clone();
+    shadow = source1.shadow!.clone();
 
     return this;
   }
 
+  @override
   dispose() {
-    this.shadow!.dispose();
+    shadow!.dispose();
   }
 }

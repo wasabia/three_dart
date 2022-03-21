@@ -43,7 +43,7 @@ class WebGLRenderStates {
   WebGLCapabilities capabilities;
   var renderStates = WeakMap();
 
-  WebGLRenderStates(this.extensions, this.capabilities) {}
+  WebGLRenderStates(this.extensions, this.capabilities);
 
   WebGLRenderState get(scene, {int renderCallDepth = 0}) {
     var renderState;
@@ -73,5 +73,5 @@ class RenderState {
   List<Light> lightsArray;
   List<Light> shadowsArray;
 
-  RenderState(this.lights, this.lightsArray, this.shadowsArray) {}
+  RenderState(this.lights, this.lightsArray, this.shadowsArray);
 }

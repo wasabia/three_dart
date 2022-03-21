@@ -1,7 +1,7 @@
 part of three_webgl;
 
 class UniformsCache {
-  UniformsCache() {}
+  UniformsCache();
 
   Map<int, Map<String, dynamic>> lights = {};
 
@@ -14,17 +14,14 @@ class UniformsCache {
 
     switch (light.type) {
       case 'DirectionalLight':
-        uniforms = {
-          "direction": new Vector3.init(),
-          "color": new Color(0, 0, 0)
-        };
+        uniforms = {"direction": Vector3.init(), "color": Color(0, 0, 0)};
         break;
 
       case 'SpotLight':
         uniforms = {
-          "position": new Vector3.init(),
-          "direction": new Vector3.init(),
-          "color": new Color(0, 0, 0),
+          "position": Vector3.init(),
+          "direction": Vector3.init(),
+          "color": Color(0, 0, 0),
           "distance": 0,
           "coneCos": 0,
           "penumbraCos": 0,
@@ -34,8 +31,8 @@ class UniformsCache {
 
       case 'PointLight':
         uniforms = {
-          "position": new Vector3.init(),
-          "color": new Color(1, 1, 1),
+          "position": Vector3.init(),
+          "color": Color(1, 1, 1),
           "distance": 0,
           "decay": 0
         };
@@ -43,18 +40,18 @@ class UniformsCache {
 
       case 'HemisphereLight':
         uniforms = {
-          "direction": new Vector3.init(),
-          "skyColor": new Color(0, 0, 0),
-          "groundColor": new Color(0, 0, 0)
+          "direction": Vector3.init(),
+          "skyColor": Color(0, 0, 0),
+          "groundColor": Color(0, 0, 0)
         };
         break;
 
       case 'RectAreaLight':
         uniforms = {
-          "color": new Color(0, 0, 0),
-          "position": new Vector3.init(),
-          "halfWidth": new Vector3.init(),
-          "halfHeight": new Vector3.init()
+          "color": Color(0, 0, 0),
+          "position": Vector3.init(),
+          "halfWidth": Vector3.init(),
+          "halfHeight": Vector3.init()
         };
         break;
     }
@@ -73,7 +70,7 @@ class ShadowUniformsCache {
       return lights[light.id];
     }
 
-    var uniforms;
+    Map<String, dynamic> uniforms = {};
 
     switch (light.type) {
       case 'DirectionalLight':
@@ -81,7 +78,7 @@ class ShadowUniformsCache {
           "shadowBias": 0,
           "shadowNormalBias": 0,
           "shadowRadius": 1,
-          "shadowMapSize": new Vector2(null, null)
+          "shadowMapSize": Vector2(null, null)
         };
         break;
 
@@ -90,7 +87,7 @@ class ShadowUniformsCache {
           "shadowBias": 0,
           "shadowNormalBias": 0,
           "shadowRadius": 1,
-          "shadowMapSize": new Vector2(null, null)
+          "shadowMapSize": Vector2(null, null)
         };
         break;
 
@@ -99,7 +96,7 @@ class ShadowUniformsCache {
           "shadowBias": 0,
           "shadowNormalBias": 0,
           "shadowRadius": 1,
-          "shadowMapSize": new Vector2(null, null),
+          "shadowMapSize": Vector2(null, null),
           "shadowCameraNear": 1,
           "shadowCameraFar": 1000
         };
@@ -132,7 +129,7 @@ class WebGLLights {
   WebGLCapabilities capabilities;
 
   WebGLLights(this.extensions, this.capabilities) {
-    cache = new UniformsCache();
+    cache = UniformsCache();
     shadowCache = ShadowUniformsCache();
 
     state = LightState({
@@ -168,13 +165,12 @@ class WebGLLights {
     });
 
     for (int i = 0; i < 9; i++) {
-      state.probe.add(new Vector3.init());
+      state.probe.add(Vector3.init());
     }
-    ;
 
-    vector3 = new Vector3.init();
-    matrix4 = new Matrix4();
-    matrix42 = new Matrix4();
+    vector3 = Vector3.init();
+    matrix4 = Matrix4();
+    matrix42 = Matrix4();
   }
 
   setup(List<Light> lights, physicallyCorrectLights) {

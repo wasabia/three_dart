@@ -1,6 +1,7 @@
 part of three_geometries;
 
 class RingGeometry extends BufferGeometry {
+  @override
   String type = 'RingGeometry';
 
   RingGeometry(

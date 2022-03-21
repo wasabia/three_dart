@@ -1,23 +1,23 @@
 part of three_loaders;
 
 class SVGLoaderPointsToStroke {
-  var tempV2_1 = new Vector2(null, null);
-  var tempV2_2 = new Vector2(null, null);
-  var tempV2_3 = new Vector2(null, null);
-  var tempV2_4 = new Vector2(null, null);
-  var tempV2_5 = new Vector2(null, null);
-  var tempV2_6 = new Vector2(null, null);
-  var tempV2_7 = new Vector2(null, null);
-  var lastPointL = new Vector2(null, null);
-  var lastPointR = new Vector2(null, null);
-  var point0L = new Vector2(null, null);
-  var point0R = new Vector2(null, null);
-  var currentPointL = new Vector2(null, null);
-  var currentPointR = new Vector2(null, null);
-  var nextPointL = new Vector2(null, null);
-  var nextPointR = new Vector2(null, null);
-  var innerPoint = new Vector2(null, null);
-  var outerPoint = new Vector2(null, null);
+  var tempV2_1 = Vector2(null, null);
+  var tempV2_2 = Vector2(null, null);
+  var tempV2_3 = Vector2(null, null);
+  var tempV2_4 = Vector2(null, null);
+  var tempV2_5 = Vector2(null, null);
+  var tempV2_6 = Vector2(null, null);
+  var tempV2_7 = Vector2(null, null);
+  var lastPointL = Vector2(null, null);
+  var lastPointR = Vector2(null, null);
+  var point0L = Vector2(null, null);
+  var point0R = Vector2(null, null);
+  var currentPointL = Vector2(null, null);
+  var currentPointR = Vector2(null, null);
+  var nextPointL = Vector2(null, null);
+  var nextPointR = Vector2(null, null);
+  var innerPoint = Vector2(null, null);
+  var outerPoint = Vector2(null, null);
 
   num arcDivisions = 12;
   num minDistance = 0.001;
@@ -46,9 +46,9 @@ class SVGLoaderPointsToStroke {
 
   SVGLoaderPointsToStroke(points, style, arcDivisions, minDistance, vertices,
       normals, uvs, vertexOffset) {
-    arcDivisions = arcDivisions != null ? arcDivisions : 12;
-    minDistance = minDistance != null ? minDistance : 0.001;
-    vertexOffset = vertexOffset != null ? vertexOffset : 0;
+    arcDivisions = arcDivisions ?? 12;
+    minDistance = minDistance ?? 0.001;
+    vertexOffset = vertexOffset ?? 0;
 
     // First ensure there are no duplicated points
     this.points = removeDuplicatedPoints(points);
@@ -56,8 +56,8 @@ class SVGLoaderPointsToStroke {
     this.vertices = vertices;
     this.normals = normals;
     this.uvs = uvs;
-    this.currentCoordinate = vertexOffset * 3;
-    this.currentCoordinateUV = vertexOffset * 2;
+    currentCoordinate = vertexOffset * 3;
+    currentCoordinateUV = vertexOffset * 2;
   }
 
   convert() {
@@ -74,10 +74,10 @@ class SVGLoaderPointsToStroke {
 
     var deltaU = 1 / (numPoints - 1);
 
-    var innerSideModified;
-    var joinIsOnLeftSide;
-    var isMiter;
-    var initialJoinIsOnLeftSide = false;
+    bool innerSideModified = false;
+    bool joinIsOnLeftSide = false;
+    bool isMiter = false;
+    bool initialJoinIsOnLeftSide = false;
     num u1 = 0;
 
     // Get initial left and right stroke points
@@ -95,8 +95,9 @@ class SVGLoaderPointsToStroke {
         if (isClosed) {
           // Skip duplicated initial point
           nextPoint = points[1];
-        } else
+        } else {
           nextPoint = null;
+        }
       } else {
         nextPoint = points[iPoint + 1];
       }
@@ -349,7 +350,7 @@ class SVGLoaderPointsToStroke {
       // Ending line endcap
       addCapGeometry(currentPoint, currentPointL, currentPointR,
           joinIsOnLeftSide, false, u1);
-    } else if (innerSideModified && vertices != null) {
+    } else if (innerSideModified) {
       // Modify path first segment vertices to adjust to the segments inner and outer intersections
 
       var lastOuter = outerPoint;
@@ -420,39 +421,30 @@ class SVGLoaderPointsToStroke {
   }
 
   addVertex(position, u, v) {
-    if (vertices != null) {
-      // vertices[ currentCoordinate ] = position.x;
-      listSetter(vertices, currentCoordinate, position.x);
+    listSetter(vertices, currentCoordinate, position.x);
 
-      // vertices[ currentCoordinate + 1 ] = position.y;
-      listSetter(vertices, currentCoordinate + 1, position.y);
+    // vertices[ currentCoordinate + 1 ] = position.y;
+    listSetter(vertices, currentCoordinate + 1, position.y);
 
-      // vertices[ currentCoordinate + 2 ] = 0;
-      listSetter(vertices, currentCoordinate + 2, 0.0);
+    // vertices[ currentCoordinate + 2 ] = 0;
+    listSetter(vertices, currentCoordinate + 2, 0.0);
 
-      if (normals != null) {
-        // normals[ currentCoordinate ] = 0;
-        listSetter(normals, currentCoordinate, 0.0);
+    listSetter(normals, currentCoordinate, 0.0);
 
-        // normals[ currentCoordinate + 1 ] = 0;
-        listSetter(normals, currentCoordinate + 1, 0.0);
+    // normals[ currentCoordinate + 1 ] = 0;
+    listSetter(normals, currentCoordinate + 1, 0.0);
 
-        // normals[ currentCoordinate + 2 ] = 1;
-        listSetter(normals, currentCoordinate + 2, 1.0);
-      }
+    // normals[ currentCoordinate + 2 ] = 1;
+    listSetter(normals, currentCoordinate + 2, 1.0);
 
-      currentCoordinate += 3;
+    currentCoordinate += 3;
 
-      if (uvs != null) {
-        // uvs[ currentCoordinateUV ] = u;
-        listSetter(uvs, currentCoordinateUV, u.toDouble());
+    listSetter(uvs, currentCoordinateUV, u.toDouble());
 
-        // uvs[ currentCoordinateUV + 1 ] = v;
-        listSetter(uvs, currentCoordinateUV + 1, v.toDouble());
+    // uvs[ currentCoordinateUV + 1 ] = v;
+    listSetter(uvs, currentCoordinateUV + 1, v.toDouble());
 
-        currentCoordinateUV += 2;
-      }
-    }
+    currentCoordinateUV += 2;
 
     numVertices += 3;
   }

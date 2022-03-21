@@ -16,7 +16,7 @@ class LoadingManager {
     // Refer to #5689 for the reason why we don't set .onStart
     // in the constructor
 
-    this.onStart = null;
+    onStart = null;
     this.onLoad = onLoad;
     this.onProgress = onProgress;
     this.onError = onError;
@@ -26,8 +26,8 @@ class LoadingManager {
     itemsTotal++;
 
     if (isLoading == false) {
-      if (this.onStart != null) {
-        this.onStart!(url, itemsLoaded, itemsTotal);
+      if (onStart != null) {
+        onStart!(url, itemsLoaded, itemsTotal);
       }
     }
 
@@ -37,22 +37,22 @@ class LoadingManager {
   itemEnd(url) {
     itemsLoaded++;
 
-    if (this.onProgress != null) {
-      this.onProgress!(url, itemsLoaded, itemsTotal);
+    if (onProgress != null) {
+      onProgress!(url, itemsLoaded, itemsTotal);
     }
 
     if (itemsLoaded == itemsTotal) {
       isLoading = false;
 
-      if (this.onLoad != null) {
-        this.onLoad!();
+      if (onLoad != null) {
+        onLoad!();
       }
     }
   }
 
   itemError(url) {
-    if (this.onError != null) {
-      this.onError!(url);
+    if (onError != null) {
+      onError!(url);
     }
   }
 
@@ -102,4 +102,4 @@ class LoadingManager {
   }
 }
 
-var DefaultLoadingManager = new LoadingManager(null, null, null);
+var DefaultLoadingManager = LoadingManager(null, null, null);
