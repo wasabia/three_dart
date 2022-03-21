@@ -1,39 +1,42 @@
 part of three_objects;
 
-var _start = new Vector3.init();
-var _end = new Vector3.init();
-var _inverseMatrix = new Matrix4();
-var _ray = new Ray(null, null);
-var _sphere = new Sphere(null, null);
+var _start = Vector3.init();
+var _end = Vector3.init();
+var _inverseMatrix = Matrix4();
+var _ray = Ray(null, null);
+var _sphere = Sphere(null, null);
 
 class Line extends Object3D {
-  String type = "Line";
-  bool isLine = true;
-
   Line(BufferGeometry? geometry, Material? material) : super() {
     this.geometry = geometry ?? BufferGeometry();
-    this.material = material ?? LineBasicMaterial(Map<String, dynamic>());
-
-    this.updateMorphTargets();
+    this.material = material ?? LineBasicMaterial(<String, dynamic>{});
+    type = "Line";
+    isLine = true;
+    updateMorphTargets();
   }
 
   Line.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON) {}
+      : super.fromJSON(json, rootJSON) {
+    type = "Line";
+    isLine = true;
+  }
 
-  copy(Object3D source, [bool? recursive]) {
+  @override
+  Line copy(Object3D source, [bool? recursive]) {
     super.copy(source);
 
-    this.material = source.material;
-    this.geometry = source.geometry;
+    material = source.material;
+    geometry = source.geometry;
 
     return this;
   }
 
-  clone([bool? recursive = true]) {
-    return Line(this.geometry!, this.material!).copy(this, recursive);
+  @override
+  Line clone([bool? recursive = true]) {
+    return Line(geometry!, material!).copy(this, recursive);
   }
 
-  computeLineDistances() {
+  Line computeLineDistances() {
     var geometry = this.geometry!;
 
     if (geometry.isBufferGeometry) {
@@ -43,7 +46,7 @@ class Line extends Object3D {
         var positionAttribute = geometry.attributes["position"];
 
         // List<num> lineDistances = [ 0.0 ];
-        var lineDistances = new Float32Array(positionAttribute.count + 1);
+        var lineDistances = Float32Array(positionAttribute.count + 1);
 
         lineDistances[0] = 0.0;
 
@@ -56,7 +59,7 @@ class Line extends Object3D {
         }
 
         geometry.setAttribute('lineDistance',
-            new Float32BufferAttribute(lineDistances, 1, false));
+            Float32BufferAttribute(lineDistances, 1, false));
       } else {
         print(
             'THREE.Line.computeLineDistances(): Computation only possible with non-indexed BufferGeometry.');
@@ -68,7 +71,8 @@ class Line extends Object3D {
     return this;
   }
 
-  raycast(Raycaster raycaster, List<Intersection> intersects) {
+  @override
+  void raycast(Raycaster raycaster, List<Intersection> intersects) {
     var geometry = this.geometry!;
     var matrixWorld = this.matrixWorld;
     var threshold = raycaster.params["Line"]["threshold"];
@@ -90,14 +94,14 @@ class Line extends Object3D {
     _ray.copy(raycaster.ray).applyMatrix4(_inverseMatrix);
 
     var localThreshold =
-        threshold / ((this.scale.x + this.scale.y + this.scale.z) / 3);
+        threshold / ((scale.x + scale.y + scale.z) / 3);
     var localThresholdSq = localThreshold * localThreshold;
 
-    var vStart = new Vector3.init();
-    var vEnd = new Vector3.init();
-    var interSegment = new Vector3.init();
-    var interRay = new Vector3.init();
-    var step = this.type == "LineSegments" ? 2 : 1;
+    var vStart = Vector3.init();
+    var vEnd = Vector3.init();
+    var interSegment = Vector3.init();
+    var interRay = Vector3.init();
+    var step = type == "LineSegments" ? 2 : 1;
 
     var index = geometry.index;
     var attributes = geometry.attributes;
@@ -109,8 +113,8 @@ class Line extends Object3D {
           Math.min(index.count, (drawRange["start"]! + drawRange["count"]!));
 
       for (var i = start, l = end - 1; i < l; i += step) {
-        var a = index.getX(i);
-        var b = index.getX(i + 1);
+        var a = index.getX(i)!;
+        var b = index.getX(i + 1)!;
 
         vStart.fromBufferAttribute(positionAttribute, a.toInt());
         vEnd.fromBufferAttribute(positionAttribute, b.toInt());
@@ -173,25 +177,25 @@ class Line extends Object3D {
     }
   }
 
-  updateMorphTargets() {
+  void updateMorphTargets() {
     var geometry = this.geometry!;
 
     if (geometry.isBufferGeometry) {
       var morphAttributes = geometry.morphAttributes;
       var keys = morphAttributes.keys.toList();
 
-      if (keys.length > 0) {
+      if (keys.isNotEmpty) {
         var morphAttribute = morphAttributes[keys[0]];
 
         if (morphAttribute != null) {
-          this.morphTargetInfluences = [];
-          this.morphTargetDictionary = {};
+          morphTargetInfluences = [];
+          morphTargetDictionary = {};
 
           for (int m = 0, ml = morphAttribute.length; m < ml; m++) {
             var name = morphAttribute[m].name ?? m.toString();
 
-            this.morphTargetInfluences!.add(0);
-            this.morphTargetDictionary![name] = m;
+            morphTargetInfluences!.add(0);
+            morphTargetDictionary![name] = m;
           }
         }
       }

@@ -1,13 +1,13 @@
 part of three_webgl;
 
 class WebGLCubeUVMaps {
-  var cubeUVmaps = new WeakMap();
+  var cubeUVmaps = WeakMap();
   WebGLRenderer renderer;
   dynamic pmremGenerator;
 
-  WebGLCubeUVMaps(this.renderer) {}
+  WebGLCubeUVMaps(this.renderer);
 
-  get(texture) {
+  Texture? get(Texture? texture) {
     if (texture != null && texture.isTexture) {
       var mapping = texture.mapping;
 
@@ -23,8 +23,7 @@ class WebGLCubeUVMaps {
 
           var renderTarget = cubeUVmaps.get(texture);
 
-          if (pmremGenerator == null)
-            pmremGenerator = new PMREMGenerator(renderer);
+          pmremGenerator ??= PMREMGenerator(renderer);
 
           renderTarget = isEquirectMap
               ? pmremGenerator.fromEquirectangular(texture, renderTarget)
@@ -40,8 +39,7 @@ class WebGLCubeUVMaps {
 
             if ((isEquirectMap && image != null && image.height > 0) ||
                 (isCubeMap && image != null && isCubeTextureComplete(image))) {
-              if (pmremGenerator == null)
-                pmremGenerator = new PMREMGenerator(renderer);
+              pmremGenerator ??= PMREMGenerator(renderer);
 
               var renderTarget = isEquirectMap
                   ? pmremGenerator.fromEquirectangular(texture)
@@ -89,7 +87,7 @@ class WebGLCubeUVMaps {
   }
 
   dispose() {
-    cubeUVmaps = new WeakMap();
+    cubeUVmaps = WeakMap();
 
     if (pmremGenerator != null) {
       pmremGenerator.dispose();
