@@ -10,17 +10,17 @@ class Source {
 
 	Source( [data = null] ) {
 
-		this.uuid = MathUtils.generateUUID();
+    uuid = MathUtils.generateUUID();
 
 		this.data = data;
 
-		this.version = 0;
+    version = 0;
 
 	}
 
 	set needsUpdate( value ) {
 
-		if ( value == true ) this.version ++;
+    if (value == true) version++;
 
 	}
 
@@ -28,14 +28,14 @@ class Source {
 
 		var isRootObject = ( meta == null || meta is String );
 
-		if ( ! isRootObject && meta.images[ this.uuid ] != null ) {
+    if (!isRootObject && meta.images[uuid] != null) {
 
-			return meta.images[ this.uuid ];
+      return meta.images[uuid];
 
 		}
 
 		var output = {
-			"uuid": this.uuid,
+			"uuid": uuid,
 			"url": ''
 		};
 
@@ -79,7 +79,7 @@ class Source {
 
 		if ( ! isRootObject ) {
 
-			meta.images[ this.uuid ] = output;
+      meta.images[uuid] = output;
 
 		}
 

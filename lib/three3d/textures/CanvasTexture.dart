@@ -7,6 +7,6 @@ class CanvasTexture extends Texture {
       type, anisotropy)
       : super(canvas, mapping, wrapS, wrapT, magFilter, minFilter, format, type,
             anisotropy, null) {
-    this.needsUpdate = true;
+    needsUpdate = true;
   }
 }

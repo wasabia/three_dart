@@ -9,11 +9,11 @@ class WebGLBackground {
   bool alpha;
   bool premultipliedAlpha;
 
-  Color clearColor = new Color(0x000000);
+  Color clearColor = Color(0x000000);
   num clearAlpha = 0;
 
-  var planeMesh;
-  var boxMesh;
+  Mesh? planeMesh;
+  Mesh? boxMesh;
 
   var currentBackground = null;
   int currentBackgroundVersion = 0;
@@ -24,9 +24,9 @@ class WebGLBackground {
     clearAlpha = alpha == true ? 0.0 : 1.0;
   }
 
-  render(renderList, scene) {
+  void render(WebGLRenderList renderList, Object3D scene) {
     var forceClear = false;
-    var background = scene.isScene == true ? scene.background : null;
+    var background = scene is Scene ? scene.background : null;
 
     if (background != null && background is Texture) {
       background = cubemaps.get(background);
@@ -60,10 +60,10 @@ class WebGLBackground {
         (background is CubeTexture ||
             (background is Texture &&
                 background.mapping == CubeUVReflectionMapping))) {
-      if (boxMesh == undefined) {
-        boxMesh = new Mesh(
-            new BoxGeometry(1, 1, 1),
-            new ShaderMaterial({
+      if (boxMesh == null) {
+        boxMesh = Mesh(
+            BoxGeometry(1, 1, 1),
+            ShaderMaterial({
               "name": 'BackgroundCubeMaterial',
               "uniforms": cloneUniforms(ShaderLib["cube"]["uniforms"]),
               "vertexShader": ShaderLib["cube"]["vertexShader"],
@@ -74,11 +74,19 @@ class WebGLBackground {
               "fog": false
             }));
 
-        boxMesh.geometry.deleteAttribute('normal');
-        boxMesh.geometry.deleteAttribute('uv');
+        boxMesh!.geometry?.deleteAttribute('normal');
+        boxMesh!.geometry?.deleteAttribute('uv');
 
-        boxMesh.onBeforeRender = ({renderer, scene, camera, renderTarget, mesh, geometry, material, group}) {
-          boxMesh.matrixWorld.copyPosition(camera.matrixWorld);
+        boxMesh!.onBeforeRender = (
+            {renderer,
+            scene,
+            camera,
+            renderTarget,
+            mesh,
+            geometry,
+            material,
+            group}) {
+          boxMesh!.matrixWorld.copyPosition(camera.matrixWorld);
         };
 
         // enable code injection for non-built-in material
@@ -92,19 +100,19 @@ class WebGLBackground {
 
         // } );
 
-        objects.update(boxMesh);
+        objects.update(boxMesh!);
       }
 
-      boxMesh.material.uniforms["envMap"]["value"] = background;
-      boxMesh.material.uniforms["flipEnvMap"]["value"] = (background.isCubeTexture &&
-              background.isRenderTargetTexture == false)
+      boxMesh!.material.uniforms["envMap"]["value"] = background;
+      boxMesh!.material.uniforms["flipEnvMap"]["value"] =
+          (background is CubeTexture && background is WebGL3DRenderTarget)
           ? -1
           : 1;
 
       if (currentBackground != background ||
           currentBackgroundVersion != background.version ||
           currentTonemapping != renderer.toneMapping) {
-        boxMesh.material.needsUpdate = true;
+        boxMesh!.material.needsUpdate = true;
 
         currentBackground = background;
         currentBackgroundVersion = background.version;
@@ -113,12 +121,12 @@ class WebGLBackground {
 
       // push to the pre-sorted opaque render list
       renderList.unshift(
-          boxMesh, boxMesh.geometry, boxMesh.material, 0, 0, null);
+          boxMesh!, boxMesh!.geometry, boxMesh!.material, 0, 0, null);
     } else if (background != null && background is Texture) {
       if (planeMesh == undefined) {
-        planeMesh = new Mesh(
-            new PlaneGeometry(2, 2),
-            new ShaderMaterial({
+        planeMesh = Mesh(
+            PlaneGeometry(2, 2),
+            ShaderMaterial({
               "name": 'BackgroundMaterial',
               "uniforms": cloneUniforms(ShaderLib["background"]["uniforms"]),
               "vertexShader": ShaderLib["background"]["vertexShader"],
@@ -129,7 +137,7 @@ class WebGLBackground {
               "fog": false
             }));
 
-        planeMesh.geometry.deleteAttribute('normal');
+        planeMesh!.geometry?.deleteAttribute('normal');
 
         // enable code injection for non-built-in material
         // Object.defineProperty( planeMesh.material, 'map', {
@@ -142,22 +150,22 @@ class WebGLBackground {
 
         // } );
 
-        objects.update(planeMesh);
+        objects.update(planeMesh!);
       }
 
-      planeMesh.material.uniforms["t2D"]["value"] = background;
+      planeMesh!.material.uniforms["t2D"]["value"] = background;
 
       if (background.matrixAutoUpdate == true) {
         background.updateMatrix();
       }
 
-      planeMesh.material.uniforms["uvTransform"]["value"]
+      planeMesh!.material.uniforms["uvTransform"]["value"]
           .copy(background.matrix);
 
       if (currentBackground != background ||
           currentBackgroundVersion != background.version ||
           currentTonemapping != renderer.toneMapping) {
-        planeMesh.material.needsUpdate = true;
+        planeMesh!.material.needsUpdate = true;
 
         currentBackground = background;
         currentBackgroundVersion = background.version;
@@ -166,30 +174,30 @@ class WebGLBackground {
 
       // push to the pre-sorted opaque render list
       renderList.unshift(
-          planeMesh, planeMesh.geometry, planeMesh.material, 0, 0, null);
+          planeMesh!, planeMesh!.geometry, planeMesh!.material, 0, 0, null);
     }
   }
 
-  setClear(color, alpha) {
+  void setClear(Color color, num alpha) {
     state.buffers["color"]
         .setClear(color.r, color.g, color.b, alpha, premultipliedAlpha);
   }
 
-  getClearColor() {
+  Color getClearColor() {
     return clearColor;
   }
 
-  setClearColor(color, [num alpha = 1.0]) {
+  void setClearColor(Color color, [num alpha = 1.0]) {
     clearColor.set(color);
     clearAlpha = alpha;
     setClear(clearColor, clearAlpha);
   }
 
-  getClearAlpha() {
+  num getClearAlpha() {
     return clearAlpha;
   }
 
-  setClearAlpha(alpha) {
+  void setClearAlpha(num alpha) {
     clearAlpha = alpha;
     setClear(clearColor, clearAlpha);
   }

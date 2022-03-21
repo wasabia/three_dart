@@ -1,6 +1,6 @@
 part of three_materials;
 
-/**
+/*
  * Lambert网格材质，与光照有反应，漫反射
  * parameters = {
  *  color: <hex>,
@@ -33,39 +33,39 @@ part of three_materials;
  */
 
 class MeshLambertMaterial extends Material {
-  String type = "MeshLambertMaterial";
-  bool isMeshLambertMaterial = true;
-
   MeshLambertMaterial([parameters]) : super() {
-    this.color = new Color(0, 0, 0).setHex(0xffffff); // diffuse
+    type = "MeshLambertMaterial";
+    isMeshLambertMaterial = true;
 
-    this.map = null;
+    color = Color(0, 0, 0).setHex(0xffffff); // diffuse
 
-    this.lightMap = null;
-    this.lightMapIntensity = 1.0;
+    map = null;
 
-    this.aoMap = null;
-    this.aoMapIntensity = 1.0;
+    lightMap = null;
+    lightMapIntensity = 1.0;
 
-    this.emissive = new Color(0, 0, 0);
-    this.emissiveIntensity = 1.0;
-    this.emissiveMap = null;
+    aoMap = null;
+    aoMapIntensity = 1.0;
 
-    this.specularMap = null;
+    emissive = Color(0, 0, 0);
+    emissiveIntensity = 1.0;
+    emissiveMap = null;
 
-    this.alphaMap = null;
+    specularMap = null;
+
+    alphaMap = null;
 
     // this.envMap = null;
-    this.combine = MultiplyOperation;
-    this.reflectivity = 1;
-    this.refractionRatio = 0.98;
+    combine = MultiplyOperation;
+    reflectivity = 1;
+    refractionRatio = 0.98;
 
-    this.wireframe = false;
-    this.wireframeLinewidth = 1;
-    this.wireframeLinecap = 'round';
-    this.wireframeLinejoin = 'round';
+    wireframe = false;
+    wireframeLinewidth = 1;
+    wireframeLinecap = 'round';
+    wireframeLinejoin = 'round';
 
-    this.setValues(parameters);
+    setValues(parameters);
   }
 
   // copy( source ) {

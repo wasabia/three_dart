@@ -1,13 +1,15 @@
 part of three_objects;
 
 class Bone extends Object3D {
-  String type = 'Bone';
+  Bone() : super() {
+    type = 'Bone';
+    isBone = true;
+  }
 
-  bool isBone = true;
-
-  Bone() : super() {}
-
-  clone([bool? recursive]) {
-    return Bone().copy(this, recursive);
+  @override
+  Bone clone([bool? recursive]) {
+    final bone = Bone();
+    bone.copy(this, recursive);
+    return bone;
   }
 }

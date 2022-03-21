@@ -24,7 +24,7 @@ class Plane {
     return _data;
   }
 
-  Plane set(normal, num constant) {
+  Plane set(Vector3 normal, num constant) {
     this.normal.copy(normal);
     this.constant = constant;
 
@@ -38,14 +38,14 @@ class Plane {
     return this;
   }
 
-  Plane setFromNormalAndCoplanarPoint(normal, point) {
+  Plane setFromNormalAndCoplanarPoint(Vector3 normal, Vector3 point) {
     this.normal.copy(normal);
     constant = -point.dot(this.normal);
 
     return this;
   }
 
-  Plane setFromCoplanarPoints(a, b, c) {
+  Plane setFromCoplanarPoints(Vector3 a, Vector3 b, Vector3 c) {
     var normal =
         _vector1.subVectors(c, b).cross(_vector2.subVectors(a, b)).normalize();
 
@@ -88,18 +88,18 @@ class Plane {
     return normal.dot(point) + constant;
   }
 
-  num distanceToSphere(sphere) {
+  num distanceToSphere(Sphere sphere) {
     return distanceToPoint(sphere.center) - sphere.radius;
   }
 
-  Vector3 projectPoint(point, Vector3 target) {
+  Vector3 projectPoint(Vector3 point, Vector3 target) {
     return target
         .copy(normal)
         .multiplyScalar(-distanceToPoint(point))
         .add(point);
   }
 
-  Vector3? intersectLine(line, Vector3 target) {
+  Vector3? intersectLine(Line3 line, Vector3 target) {
     var direction = line.delta(_vector1);
 
     var denominator = normal.dot(direction);
@@ -123,7 +123,7 @@ class Plane {
     return target.copy(direction).multiplyScalar(t).add(line.start);
   }
 
-  bool intersectsLine(line) {
+  bool intersectsLine(Line3 line) {
     // Note: this tests if a line intersects the plane, not whether it (or its end-points) are coplanar with it.
 
     var startSign = distanceToPoint(line.start);
@@ -132,11 +132,11 @@ class Plane {
     return (startSign < 0 && endSign > 0) || (endSign < 0 && startSign > 0);
   }
 
-  intersectsBox(box) {
+  bool intersectsBox(Box3 box) {
     return box.intersectsPlane(this);
   }
 
-  intersectsSphere(sphere) {
+  bool intersectsSphere(Sphere sphere) {
     return sphere.intersectsPlane(this);
   }
 
@@ -144,7 +144,7 @@ class Plane {
     return target.copy(normal).multiplyScalar(-constant);
   }
 
-  Plane applyMatrix4(Matrix4 matrix, optionalNormalMatrix) {
+  Plane applyMatrix4(Matrix4 matrix, [Matrix3? optionalNormalMatrix]) {
     var normalMatrix =
         optionalNormalMatrix ?? _normalMatrix.getNormalMatrix(matrix);
 
@@ -157,7 +157,7 @@ class Plane {
     return this;
   }
 
-  Plane translate(offset) {
+  Plane translate(Vector3 offset) {
     constant -= offset.dot(normal);
 
     return this;

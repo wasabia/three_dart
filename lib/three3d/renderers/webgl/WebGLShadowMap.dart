@@ -2,9 +2,9 @@ part of three_webgl;
 
 class WebGLShadowMap {
   Frustum _frustum = Frustum(null, null, null, null, null, null);
-  var _shadowMapSize = new Vector2(null, null);
-  var _viewportSize = new Vector2(null, null);
-  var _viewport = new Vector4.init();
+  final _shadowMapSize = Vector2(null, null);
+  final _viewportSize = Vector2(null, null);
+  final _viewport = Vector4.init();
 
   var shadowSide = {0: BackSide, 1: FrontSide, 2: DoubleSide};
 
@@ -14,7 +14,7 @@ class WebGLShadowMap {
   late MeshDepthMaterial _depthMaterial;
   late MeshDistanceMaterial _distanceMaterial;
 
-  var _materialCache = {};
+  final _materialCache = {};
 
   late ShaderMaterial shadowMaterialVertical;
   late ShaderMaterial shadowMaterialHorizontal;
@@ -32,35 +32,35 @@ class WebGLShadowMap {
 
   late WebGLShadowMap scope;
 
-  WebGLRenderer _renderer;
-  WebGLObjects _objects;
-  WebGLCapabilities _capabilities;
+  final WebGLRenderer _renderer;
+  final WebGLObjects _objects;
+  final WebGLCapabilities _capabilities;
   late int _maxTextureSize;
 
   WebGLShadowMap(this._renderer, this._objects, this._capabilities) {
     _maxTextureSize = _capabilities.maxTextureSize;
 
-    _depthMaterial = new MeshDepthMaterial({"depthPacking": RGBADepthPacking});
-    _distanceMaterial = new MeshDistanceMaterial(null);
+    _depthMaterial = MeshDepthMaterial({"depthPacking": RGBADepthPacking});
+    _distanceMaterial = MeshDistanceMaterial(null);
 
     shadowMaterialVertical = ShaderMaterial({
       "defines": {"VSM_SAMPLES": 8},
       "uniforms": {
         "shadow_pass": {"value": null},
-        "resolution": {"value": new Vector2(null, null)},
+        "resolution": {"value": Vector2(null, null)},
         "radius": {"value": 4.0}
       },
       "vertexShader": vsm_vert,
       "fragmentShader": vsm_frag
     });
 
-    var _float32Array = Float32Array(9);
-    _float32Array.set([-1.0, -1.0, 0.5, 3.0, -1.0, 0.5, -1.0, 3.0, 0.5]);
+    var _float32List =
+        Float32Array.from([-1.0, -1.0, 0.5, 3.0, -1.0, 0.5, -1.0, 3.0, 0.5]);
 
     fullScreenTri.setAttribute(
-        'position', Float32BufferAttribute(_float32Array, 3, false));
+        'position', Float32BufferAttribute(_float32List, 3, false));
 
-    fullScreenMesh = new Mesh(fullScreenTri, shadowMaterialVertical);
+    fullScreenMesh = Mesh(fullScreenTri, shadowMaterialVertical);
 
     shadowMaterialHorizontal = shadowMaterialVertical.clone();
     shadowMaterialHorizontal.defines!["HORIZONTAL_PASS"] = 1;
@@ -68,11 +68,11 @@ class WebGLShadowMap {
     scope = this;
   }
 
-  render(List<Light> lights, scene, Camera camera) {
+  void render(List<Light> lights, Object3D scene, Camera camera) {
     if (scope.enabled == false) return;
     if (scope.autoUpdate == false && scope.needsUpdate == false) return;
 
-    if (lights.length == 0) return;
+    if (lights.isEmpty) return;
 
     var currentRenderTarget = _renderer.getRenderTarget();
     var activeCubeFace = _renderer.getActiveCubeFace();
@@ -124,7 +124,7 @@ class WebGLShadowMap {
 
       if (shadow.map == null &&
           !shadow.isPointLightShadow &&
-          this.type == VSMShadowMap) {
+          type == VSMShadowMap) {
         var pars = WebGLRenderTargetOptions({
           "minFilter": LinearFilter,
           "magFilter": LinearFilter,
@@ -156,7 +156,7 @@ class WebGLShadowMap {
       }
 
       _renderer.setRenderTarget(shadow.map);
-      _renderer.clear();
+      _renderer.clear(null, null, null);
 
       var viewportCount = shadow.getViewportCount();
 
@@ -175,12 +175,12 @@ class WebGLShadowMap {
 
         _frustum = shadow.getFrustum();
 
-        renderObject(scene, camera, shadow.camera, light, this.type);
+        renderObject(scene, camera, shadow.camera, light, type);
       }
 
       // do blur pass for VSM
 
-      if (!shadow.isPointLightShadow && this.type == VSMShadowMap) {
+      if (shadow is! PointLightShadow && type == VSMShadowMap) {
         VSMPass(shadow, camera);
       }
 
@@ -193,7 +193,7 @@ class WebGLShadowMap {
         currentRenderTarget, activeCubeFace, activeMipmapLevel);
   }
 
-  VSMPass(shadow, camera) {
+  void VSMPass(LightShadow shadow, Camera camera) {
     var geometry = _objects.update(fullScreenMesh);
 
     if (shadowMaterialVertical.defines!["VSM_SAMPLES"] != shadow.blurSamples) {
@@ -206,30 +206,30 @@ class WebGLShadowMap {
 
     // vertical pass
 
-    shadowMaterialVertical.uniforms["shadow_pass"].value = shadow.map.texture;
+    shadowMaterialVertical.uniforms["shadow_pass"].value = shadow.map!.texture;
     shadowMaterialVertical.uniforms["resolution"].value = shadow.mapSize;
     shadowMaterialVertical.uniforms["radius"].value = shadow.radius;
 
     _renderer.setRenderTarget(shadow.mapPass);
-    _renderer.clear();
+    _renderer.clear(null, null, null);
     _renderer.renderBufferDirect(
         camera, null, geometry, shadowMaterialVertical, fullScreenMesh, null);
 
     // horizontal pass
 
     shadowMaterialHorizontal.uniforms["shadow_pass"].value =
-        shadow.mapPass.texture;
+        shadow.mapPass!.texture;
     shadowMaterialHorizontal.uniforms["resolution"].value = shadow.mapSize;
     shadowMaterialHorizontal.uniforms["radius"].value = shadow.radius;
 
     _renderer.setRenderTarget(shadow.map);
-    _renderer.clear();
+    _renderer.clear(null, null, null);
     _renderer.renderBufferDirect(
         camera, null, geometry, shadowMaterialHorizontal, fullScreenMesh, null);
   }
 
-  getDepthMaterial(object, material, light, shadowCameraNear,
-      shadowCameraFar, type) {
+  getDepthMaterial(
+      object, material, light, shadowCameraNear, shadowCameraFar, type) {
     Material? result;
 
     var customMaterial = light.isPointLight
@@ -323,21 +323,16 @@ class WebGLShadowMap {
             var groupMaterial = material[group["materialIndex"]];
 
             if (groupMaterial != null && groupMaterial.visible) {
-              var depthMaterial = getDepthMaterial(
-                  object,
-                  groupMaterial,
-                  light,
-                  shadowCamera.near,
-                  shadowCamera.far,
-                  type);
+              var depthMaterial = getDepthMaterial(object, groupMaterial, light,
+                  shadowCamera.near, shadowCamera.far, type);
 
               _renderer.renderBufferDirect(
                   shadowCamera, null, geometry, depthMaterial, object, group);
             }
           }
         } else if (material.visible) {
-          var depthMaterial = getDepthMaterial(object, material,
-              light, shadowCamera.near, shadowCamera.far, type);
+          var depthMaterial = getDepthMaterial(object, material, light,
+              shadowCamera.near, shadowCamera.far, type);
 
           // print("WebGLShadowMap object: ${object} light: ${light} depthMaterial: ${depthMaterial} ");
 

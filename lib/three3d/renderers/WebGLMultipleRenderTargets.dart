@@ -1,58 +1,61 @@
 part of three_renderers;
 
 class WebGLMultipleRenderTargets extends WebGLRenderTarget {
-  bool isWebGLMultipleRenderTargets = true;
-
-  WebGLMultipleRenderTargets(width, height, count, [options])
-      : super(width, height, options ?? {}) {
+  WebGLMultipleRenderTargets(
+    int width,
+    int height,
+    int count, [
+    WebGLRenderTargetOptions? options,
+  ]) : super(width, height, options) {
+    isWebGLMultipleRenderTargets = true;
     var texture = this.texture;
-
     this.texture = [];
-
     for (var i = 0; i < count; i++) {
       this.texture.add(texture.clone());
     }
   }
 
-  setSize(width, height, {depth = 1}) {
+  @override
+  WebGLMultipleRenderTargets setSize(int width, int height, {int depth = 1}) {
     if (this.width != width || this.height != height || this.depth != depth) {
       this.width = width;
       this.height = height;
       this.depth = depth;
 
-      for (var i = 0, il = this.texture.length; i < il; i++) {
-        this.texture[i].image.width = width;
-        this.texture[i].image.height = height;
-        this.texture[i].image.depth = depth;
+      for (var i = 0, il = texture.length; i < il; i++) {
+        texture[i].image.width = width;
+        texture[i].image.height = height;
+        texture[i].image.depth = depth;
       }
 
-      this.dispose();
+      dispose();
     }
 
-    this.viewport.set(0, 0, width, height);
-    this.scissor.set(0, 0, width, height);
+    viewport.set(0, 0, width, height);
+    scissor.set(0, 0, width, height);
 
     return this;
   }
 
-  copy(source) {
-    this.dispose();
+  @override
+  WebGLMultipleRenderTargets copy(WebGLRenderTarget source) {
+    dispose();
 
-    this.width = source.width;
-    this.height = source.height;
-    this.depth = source.depth;
+    width = source.width;
+    height = source.height;
+    depth = source.depth;
 
-    this.viewport.set(0, 0, this.width, this.height);
-    this.scissor.set(0, 0, this.width, this.height);
+    viewport.set(0, 0, width, height);
+    scissor.set(0, 0, width, height);
 
-    this.depthBuffer = source.depthBuffer;
-    this.stencilBuffer = source.stencilBuffer;
-    this.depthTexture = source.depthTexture;
+    depthBuffer = source.depthBuffer;
+    stencilBuffer = source.stencilBuffer;
+    depthTexture = source.depthTexture;
 
-    this.texture.length = 0;
+    texture.length = 0;
 
     for (var i = 0, il = source.texture.length; i < il; i++) {
-      this.texture[i] = source.texture[i].clone();
+      texture[i] = source.texture[i].clone();
     }
 
     return this;
