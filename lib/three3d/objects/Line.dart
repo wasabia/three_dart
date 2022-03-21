@@ -7,7 +7,7 @@ var _ray = Ray(null, null);
 var _sphere = Sphere(null, null);
 
 class Line extends Object3D {
-  Line(BufferGeometry? geometry, Material? material) : super() {
+  Line(BufferGeometry? geometry, material) : super() {
     this.geometry = geometry ?? BufferGeometry();
     this.material = material ?? LineBasicMaterial(<String, dynamic>{});
     type = "Line";

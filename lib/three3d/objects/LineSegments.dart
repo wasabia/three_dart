@@ -4,7 +4,7 @@ var _lsstart = Vector3.init();
 var _lsend = Vector3.init();
 
 class LineSegments extends Line {
-  LineSegments(BufferGeometry? geometry, Material? material)
+  LineSegments(BufferGeometry? geometry, material)
       : super(geometry, material) {
     type = 'LineSegments';
     isLineSegments = true;

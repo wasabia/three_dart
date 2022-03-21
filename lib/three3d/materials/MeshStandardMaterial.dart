@@ -116,7 +116,7 @@ class MeshStandardMaterial extends Material {
 
     defines = {'STANDARD': ''};
 
-    color = source.color?.clone();
+    color = source.color.clone();
     roughness = source.roughness;
     metalness = source.metalness;
 

@@ -46,7 +46,7 @@ class _MyAppState extends State<webgl_camera> {
 
   int frustumSize = 600;
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   num aspect = 1.0;
 
@@ -245,7 +245,7 @@ class _MyAppState extends State<webgl_camera> {
         "samples": 4
       });
       renderTarget = THREE.WebGLRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderer!.setRenderTarget(renderTarget);
       
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -331,7 +331,7 @@ class _MyAppState extends State<webgl_camera> {
     }
 
     geometry.setAttribute(
-        'position', new THREE.Float32BufferAttribute(Float32List.fromList(vertices), 3));
+        'position', new THREE.Float32BufferAttribute(Float32Array.fromList(vertices), 3));
 
     var particles = new THREE.Points(
         geometry, new THREE.PointsMaterial({"color": 0x888888}));

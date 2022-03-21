@@ -151,10 +151,10 @@ const Map<String, int> _colorKeywords = {
   'yellowgreen': 0x9ACD32
 };
 
-Map<String, num> _hslA = {"h": 0, "s": 0, "l": 0};
-Map<String, num> _hslB = {"h": 0, "s": 0, "l": 0};
+Map<String, double> _hslA = {"h": 0, "s": 0, "l": 0};
+Map<String, double> _hslB = {"h": 0, "s": 0, "l": 0};
 
-num hue2rgb(num p, num q, num t) {
+double hue2rgb(double p, double q, double t) {
   if (t < 0) t += 1;
   if (t > 1) t -= 1;
   if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -163,13 +163,13 @@ num hue2rgb(num p, num q, num t) {
   return p;
 }
 
-num SRGBToLinear<T extends num>(T c) {
+double SRGBToLinear<T extends double>(T c) {
   return (c < 0.04045)
       ? c * 0.0773993808
-      : Math.pow(c * 0.9478672986 + 0.0521327014, 2.4);
+      : Math.pow(c * 0.9478672986 + 0.0521327014, 2.4).toDouble();
 }
 
-num LinearToSRGB<T extends num>(T c) {
+double LinearToSRGB<T extends double>(T c) {
   return (c < 0.0031308) ? c * 12.92 : 1.055 * (Math.pow(c, 0.41666)) - 0.055;
 }
 
@@ -184,9 +184,9 @@ class Color {
   // set default value
   // var c = Color();
   // r g b is all 1.0;
-  num r = 1.0;
-  num g = 1.0;
-  num b = 1.0;
+  double r = 1.0;
+  double g = 1.0;
+  double b = 1.0;
 
   static const Map<String, int> NAMES = _colorKeywords;
 
@@ -196,12 +196,12 @@ class Color {
   /// var color = Color(1.0, 0.0, 1.0);
   /// var color = Color("#ff00ee");
   /// r is THREE.Color, hex or string
-  Color([r, num? g, num? b]) {
+  Color([r, double? g, double? b]) {
     if (g == null && b == null) {
       // r is THREE.Color, hex or string
       set(r);
     } else {
-      setRGB(r, g, b);
+      setRGB(r.toDouble(), g, b);
     }
   }
 
@@ -231,7 +231,7 @@ class Color {
     return _color;
   }
 
-  factory Color.setRGBArray(List<num> cl) {
+  factory Color.setRGBArray(List<double> cl) {
     var _color = Color(cl[0], cl[1], cl[2]);
 
     return _color;
@@ -252,7 +252,7 @@ class Color {
     return r == color.r && g == color.g && b == color.b;
   }
 
-  Color setScalar(num scalar) {
+  Color setScalar(double scalar) {
     r = scalar;
     g = scalar;
     b = scalar;
@@ -270,7 +270,7 @@ class Color {
     return this;
   }
 
-  Color setRGB([num? r, num? g, num? b]) {
+  Color setRGB([double? r, double? g, double? b]) {
     this.r = r ?? 1.0;
     this.g = g ?? 1.0;
     this.b = b ?? 1.0;
@@ -278,7 +278,7 @@ class Color {
     return this;
   }
 
-  Color setHSL(num h, num s, num l) {
+  Color setHSL(double h, double s, double l) {
     // h,s,l ranges are in 0.0 - 1.0
     h = MathUtils.euclideanModulo(h, 1).toDouble();
     s = MathUtils.clamp(s, 0, 1);
@@ -571,7 +571,7 @@ class Color {
     return 'rgb(${((r * 255).toInt() | 0)},${((g * 255).toInt() | 0)},${((b * 255).toInt() | 0)})';
   }
 
-  Color offsetHSL(num h, num s, num l) {
+  Color offsetHSL(double h, double s, double l) {
     getHSL(_hslA);
 
     _hslA["h"] = _hslA["h"]! + h;
@@ -651,9 +651,9 @@ class Color {
     getHSL(_hslA);
     color.getHSL(_hslB);
 
-    var h = MathUtils.lerp(_hslA["h"]!, _hslB["h"]!, alpha);
-    var s = MathUtils.lerp(_hslA["s"]!, _hslB["s"]!, alpha);
-    var l = MathUtils.lerp(_hslA["l"]!, _hslB["l"]!, alpha);
+    var h = MathUtils.lerp(_hslA["h"]!, _hslB["h"]!, alpha).toDouble();
+    var s = MathUtils.lerp(_hslA["s"]!, _hslB["s"]!, alpha).toDouble();
+    var l = MathUtils.lerp(_hslA["l"]!, _hslB["l"]!, alpha).toDouble();
 
     setHSL(h, s, l);
 
@@ -668,7 +668,7 @@ class Color {
     return (r == 0) && (g == 0) && (b == 0);
   }
 
-  Color fromArray(List<num> array, [int offset = 0]) {
+  Color fromArray(List<double> array, [int offset = 0]) {
     r = array[offset];
     g = array[offset + 1];
     b = array[offset + 2];
@@ -689,9 +689,9 @@ class Color {
   }
 
   Color fromBufferAttribute(BufferAttribute attribute, int index) {
-    r = attribute.getX(index)!;
-    g = attribute.getY(index)!;
-    b = attribute.getZ(index)!;
+    r = attribute.getX(index)!.toDouble();
+    g = attribute.getY(index)!.toDouble();
+    b = attribute.getZ(index)!.toDouble();
 
     if (attribute.normalized == true) {
       // assuming Uint8Array

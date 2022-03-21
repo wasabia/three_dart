@@ -34,7 +34,7 @@ class _State extends State<webgl_morphtargets> {
   THREE.Clock clock = new THREE.Clock();
   THREE_JSM.OrbitControls? controls;
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   var AMOUNT = 4;
 
@@ -248,10 +248,10 @@ class _State extends State<webgl_morphtargets> {
     var positionAttribute = geometry.attributes["position"];
 
     // for the first morph target we'll move the cube's vertices onto the surface of a sphere
-    List<num> spherePositions = [];
+    List<double> spherePositions = [];
 
     // for the second morph target, we'll twist the cubes vertices
-    List<num> twistPositions = [];
+    List<double> twistPositions = [];
     var direction = new THREE.Vector3(1, 0, 0);
     var vertex = new THREE.Vector3();
 
@@ -281,11 +281,11 @@ class _State extends State<webgl_morphtargets> {
     // add the spherical positions as the first morph target
     // geometry.morphAttributes["position"][ 0 ] = new THREE.Float32BufferAttribute( spherePositions, 3 );
     geometry.morphAttributes["position"]!
-        .add(new THREE.Float32BufferAttribute(spherePositions, 3));
+        .add(new THREE.Float32BufferAttribute(Float32Array.fromList(spherePositions), 3));
 
     // add the twisted positions as the second morph target
     geometry.morphAttributes["position"]!
-        .add(new THREE.Float32BufferAttribute(twistPositions, 3));
+        .add(new THREE.Float32BufferAttribute(Float32Array.fromList(twistPositions), 3));
 
     return geometry;
   }

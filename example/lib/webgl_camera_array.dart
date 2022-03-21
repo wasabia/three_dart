@@ -29,7 +29,7 @@ class _MyAppState extends State<webgl_camera_array> {
   late THREE.Mesh mesh;
 
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   var AMOUNT = 4;
 
@@ -185,7 +185,7 @@ class _MyAppState extends State<webgl_camera_array> {
         "format": THREE.RGBAFormat
       });
       renderTarget = THREE.WebGLRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
      

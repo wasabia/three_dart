@@ -63,7 +63,7 @@ class MeshMatcapMaterial extends Material {
 
     defines = {'MATCAP': ''};
 
-    color!.copy(source.color!);
+    color.copy(source.color);
 
     matcap = source.matcap;
 

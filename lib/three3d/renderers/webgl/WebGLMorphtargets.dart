@@ -76,15 +76,15 @@ class WebGLMorphtargets {
 				if ( hasMorphNormals == true ) vertexDataCount = 2;
 				if ( hasMorphColors == true ) vertexDataCount = 3;
 
-				var width = geometry.attributes["position"].count * vertexDataCount;
-        var height = 1;
+				double width = geometry.attributes["position"].count * vertexDataCount;
+        double height = 1;
 
         if (width > capabilities.maxTextureSize) {
-          height = Math.ceil(width / capabilities.maxTextureSize);
-          width = capabilities.maxTextureSize;
+          height = Math.ceil(width / capabilities.maxTextureSize).toDouble();
+          width = capabilities.maxTextureSize.toDouble();
         }
 
-        var buffer = Float32Array(width * height * 4 * morphTargetsCount);
+        var buffer = Float32Array((width * height * 4 * morphTargetsCount).toInt());
 
         var texture =
             DataArrayTexture(buffer, width, height, morphTargetsCount);
@@ -101,7 +101,7 @@ class WebGLMorphtargets {
         for (var i = 0; i < morphTargetsCount; i++) {
           var morphTarget = morphTargets[ i ];
 					
-          var offset = width * height * 4 * i;
+          int offset = (width * height * 4 * i).toInt();
 
           for (var j = 0; j < morphTarget.count; j++) {
             var stride = j * vertexDataStride;

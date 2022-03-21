@@ -134,7 +134,7 @@ class CylinderGeometry extends BufferGeometry {
 
       // add a group to the geometry. this will ensure multi material support
 
-      scope.addGroup(groupStart, groupCount, materialIndex: 0);
+      scope.addGroup(groupStart, groupCount, 0);
 
       // calculate new start value for groups
 
@@ -232,7 +232,7 @@ class CylinderGeometry extends BufferGeometry {
       // add a group to the geometry. this will ensure multi material support
 
       scope.addGroup(groupStart, groupCount,
-          materialIndex: top == true ? 1 : 2);
+          top == true ? 1 : 2);
 
       // calculate new start value for groups
 

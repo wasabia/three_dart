@@ -35,7 +35,7 @@ class _State extends State<webgl_animation_skinning_blending> {
   late THREE.Clock clock;
   THREE_JSM.OrbitControls? controls;
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   var AMOUNT = 4;
 

@@ -26,7 +26,7 @@ class SpriteMaterial extends Material {
   @override
   SpriteMaterial copy(Material source) {
     super.copy(source);
-    color?.copy(source.color!);
+    color.copy(source.color);
     map = source.map;
     alphaMap = source.alphaMap;
     rotation = source.rotation;

@@ -37,7 +37,7 @@ class webgl_debugState extends State<webgl_debug> {
   THREE.Clock clock = new THREE.Clock();
   THREE_JSM.OrbitControls? controls;
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   var AMOUNT = 4;
 

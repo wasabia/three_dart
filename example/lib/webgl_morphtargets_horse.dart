@@ -35,7 +35,7 @@ class _State extends State<webgl_morphtargets_horse> {
   THREE.Clock clock = new THREE.Clock();
   THREE_JSM.OrbitControls? controls;
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   bool verbose = true;
   bool disposed = false;

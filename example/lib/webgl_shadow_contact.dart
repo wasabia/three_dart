@@ -40,7 +40,7 @@ class _MyAppState extends State<webgl_shadow_contact> {
   late THREE.Mesh blurPlane;
   late THREE.Mesh fillPlane;
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   var AMOUNT = 4;
 
@@ -284,7 +284,7 @@ class _MyAppState extends State<webgl_shadow_contact> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget!.samples = 4;
       renderer!.setRenderTarget(renderTarget!);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget!);

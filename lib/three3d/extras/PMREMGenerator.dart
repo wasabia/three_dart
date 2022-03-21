@@ -278,12 +278,12 @@ class PMREMGenerator {
     var background = scene.background;
     if (background != null) {
       if (background is Color) {
-        backgroundMaterial.color!.copy(background);
+        backgroundMaterial.color.copy(background);
         scene.background = null;
         useSolidColor = true;
       }
     } else {
-      backgroundMaterial.color!.copy(_clearColor);
+      backgroundMaterial.color.copy(_clearColor);
       useSolidColor = true;
     }
     for (var i = 0; i < 6; i++) {

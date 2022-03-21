@@ -36,7 +36,7 @@ class _MyAppState extends State<webgl_geometry_text> {
   late THREE.Group group;
   late List<THREE.Material> materials;
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   var AMOUNT = 4;
 
@@ -198,7 +198,7 @@ class _MyAppState extends State<webgl_geometry_text> {
         "format": THREE.RGBAFormat
       });
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }

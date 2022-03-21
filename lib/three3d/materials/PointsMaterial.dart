@@ -27,7 +27,7 @@ class PointsMaterial extends Material {
   @override
   PointsMaterial copy(Material source) {
     super.copy(source);
-    color?.copy(source.color!);
+    color.copy(source.color);
 
     map = source.map;
     alphaMap = source.alphaMap;

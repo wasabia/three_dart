@@ -28,7 +28,7 @@ class LineBasicMaterial extends Material {
   LineBasicMaterial copy(Material source) {
     super.copy(source);
 
-    color?.copy(source.color!);
+    color.copy(source.color);
 
     linewidth = source.linewidth;
     linecap = source.linecap;

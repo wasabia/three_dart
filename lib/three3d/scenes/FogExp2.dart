@@ -1,11 +1,7 @@
 part of three_scenes;
 
-class FogExp2 {
+class FogExp2 extends FogBase {
   bool isFogExp2 = true;
-  bool isFog = false;
-
-  String name = "";
-  late Color color;
   late num density;
 
   FogExp2(color, density) {

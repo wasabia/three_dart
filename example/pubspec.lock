@@ -93,9 +93,9 @@ packages:
   flutter_gl:
     dependency: "direct main"
     description:
-      name: flutter_gl
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "../../flutter_gl/flutter_gl"
+      relative: true
+    source: path
     version: "0.0.13"
   flutter_gl_macos:
     dependency: transitive

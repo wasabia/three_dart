@@ -132,11 +132,11 @@ class WebGLShadowMap {
         });
 
         shadow.map = WebGLRenderTarget(
-            _shadowMapSize.x.toInt(), _shadowMapSize.y.toInt(), pars);
+            _shadowMapSize.x.toDouble(), _shadowMapSize.y.toDouble(), pars);
         shadow.map!.texture.name = light.name + '.shadowMap';
 
         shadow.mapPass = WebGLRenderTarget(
-            _shadowMapSize.x.toInt(), _shadowMapSize.y.toInt(), pars);
+            _shadowMapSize.x.toDouble(), _shadowMapSize.y.toDouble(), pars);
 
         shadow.camera!.updateProjectionMatrix();
       }
@@ -149,14 +149,14 @@ class WebGLShadowMap {
         });
 
         shadow.map = WebGLRenderTarget(
-            _shadowMapSize.x.toInt(), _shadowMapSize.y.toInt(), pars);
+            _shadowMapSize.x.toDouble(), _shadowMapSize.y.toDouble(), pars);
         shadow.map!.texture.name = light.name + '.shadowMap';
 
         shadow.camera!.updateProjectionMatrix();
       }
 
       _renderer.setRenderTarget(shadow.map);
-      _renderer.clear(null, null, null);
+      _renderer.clear();
 
       var viewportCount = shadow.getViewportCount();
 
@@ -211,7 +211,7 @@ class WebGLShadowMap {
     shadowMaterialVertical.uniforms["radius"].value = shadow.radius;
 
     _renderer.setRenderTarget(shadow.mapPass);
-    _renderer.clear(null, null, null);
+    _renderer.clear();
     _renderer.renderBufferDirect(
         camera, null, geometry, shadowMaterialVertical, fullScreenMesh, null);
 
@@ -223,7 +223,7 @@ class WebGLShadowMap {
     shadowMaterialHorizontal.uniforms["radius"].value = shadow.radius;
 
     _renderer.setRenderTarget(shadow.map);
-    _renderer.clear(null, null, null);
+    _renderer.clear();
     _renderer.renderBufferDirect(
         camera, null, geometry, shadowMaterialHorizontal, fullScreenMesh, null);
   }

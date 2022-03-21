@@ -33,7 +33,7 @@ class _MyAppState extends State<webgl_geometry_colors> {
 
   var objects = [], materials = [];
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   var AMOUNT = 4;
 

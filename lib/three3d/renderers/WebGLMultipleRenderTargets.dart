@@ -2,8 +2,8 @@ part of three_renderers;
 
 class WebGLMultipleRenderTargets extends WebGLRenderTarget {
   WebGLMultipleRenderTargets(
-    int width,
-    int height,
+    double width,
+    double height,
     int count, [
     WebGLRenderTargetOptions? options,
   ]) : super(width, height, options) {
@@ -16,7 +16,7 @@ class WebGLMultipleRenderTargets extends WebGLRenderTarget {
   }
 
   @override
-  WebGLMultipleRenderTargets setSize(int width, int height, {int depth = 1}) {
+  WebGLMultipleRenderTargets setSize(double width, double height, [int depth = 1]) {
     if (this.width != width || this.height != height || this.depth != depth) {
       this.width = width;
       this.height = height;

@@ -41,8 +41,8 @@ class TextureLoader extends Loader {
         imageElement = ImageElement(
             url: url is Blob ? "" : url,
             data: image,
-            width: image.width!,
-            height: image.height!);
+            width: image.width!.toDouble(),
+            height: image.height!.toDouble());
       } else {
         var _pixels = image.getBytes(format: Format.rgba);
 
@@ -51,8 +51,8 @@ class TextureLoader extends Loader {
         imageElement = ImageElement(
             url: url,
             data: Uint8Array.from(_pixels),
-            width: image.width,
-            height: image.height);
+            width: image.width.toDouble(),
+            height: image.height.toDouble());
       }
 
       // print(" image.width: ${image.width} image.height: ${image.height} isJPEG: ${isJPEG} ");

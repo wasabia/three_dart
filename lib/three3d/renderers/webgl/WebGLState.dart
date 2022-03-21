@@ -573,7 +573,7 @@ class WebGLState {
     // try {
 
     gl.texSubImage2D(
-        target, level, x, y, width, height, glFormat, glType, data);
+        target, level, x, y, width.toInt(), height.toInt(), glFormat, glType, data);
 
     // } catch ( error ) {
 
@@ -667,7 +667,7 @@ class WebGLState {
     }
   }
 
-  void texImage2D(int target, int level, int internalformat, width, height,
+  void texImage2D(int target, int level, int internalformat, int width, int height,
       border,
       int format, int type, data) {
     gl.texImage2D(target, level, internalformat, width, height, border, format,
@@ -690,14 +690,14 @@ class WebGLState {
 
   void scissor(Vector4 scissor) {
     if (currentScissor.equals(scissor) == false) {
-      gl.scissor(scissor.x, scissor.y, scissor.z, scissor.w);
+      gl.scissor(scissor.x.toInt(), scissor.y.toInt(), scissor.z.toInt(), scissor.w.toInt());
       currentScissor.copy(scissor);
     }
   }
 
   void viewport(Vector4 viewport) {
     if (currentViewport.equals(viewport) == false) {
-      gl.viewport(viewport.x, viewport.y, viewport.z, viewport.w);
+      gl.viewport(viewport.x.toInt(), viewport.y.toInt(), viewport.z.toInt(), viewport.w.toInt());
       currentViewport.copy(viewport);
     }
   }

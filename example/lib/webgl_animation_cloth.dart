@@ -44,7 +44,7 @@ class _State extends State<webgl_animation_cloth> {
   THREE.Clock clock = new THREE.Clock();
   THREE_JSM.OrbitControls? controls;
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   var AMOUNT = 4;
 

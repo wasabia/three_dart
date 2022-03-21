@@ -64,7 +64,7 @@ class WebGLRenderList {
   }
 
   RenderItem getNextRenderItem(Object3D object, BufferGeometry? geometry,
-      Material? material, int groupOrder, num z, Map<String, dynamic>? group) {
+      Material? material, double groupOrder, num z, Map<String, dynamic>? group) {
     var renderItem = renderItems[renderItemsIndex];
 
     if (renderItem == null) {
@@ -96,7 +96,7 @@ class WebGLRenderList {
     return renderItem;
   }
 
-  void push(Object3D object, BufferGeometry geometry, material, int groupOrder,
+  void push(Object3D object, BufferGeometry geometry, material, double groupOrder,
       num z, Map<String, dynamic>? group) {
     var renderItem =
         getNextRenderItem(object, geometry, material, groupOrder, z, group);
@@ -113,7 +113,7 @@ class WebGLRenderList {
   }
 
   void unshift(Object3D object, BufferGeometry? geometry, Material material,
-      int groupOrder, num z, Map<String, dynamic>? group) {
+      double groupOrder, num z, Map<String, dynamic>? group) {
     var renderItem =
         getNextRenderItem(object, geometry, material, groupOrder, z, group);
 

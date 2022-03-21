@@ -36,7 +36,7 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
   THREE.Clock clock = new THREE.Clock();
   THREE_JSM.OrbitControls? controls;
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   var AMOUNT = 4;
 

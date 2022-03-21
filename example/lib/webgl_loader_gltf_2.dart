@@ -29,7 +29,7 @@ class _MyAppState extends State<webgl_loader_gltf_2> {
   late THREE.Camera camera;
   late THREE.Mesh mesh;
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   var AMOUNT = 4;
 
