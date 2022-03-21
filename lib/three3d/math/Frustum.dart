@@ -6,7 +6,7 @@ var _vectorFrustum = Vector3.init();
 class Frustum {
   late List<Plane> planes;
 
-  Frustum([p0, p1, p2, p3, p4, p5]) {
+  Frustum([Plane? p0, Plane? p1, Plane? p2, Plane? p3, Plane? p4, Plane? p5]) {
     planes = [
       (p0 != null) ? p0 : Plane(null, null),
       (p1 != null) ? p1 : Plane(null, null),

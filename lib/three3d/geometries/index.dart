@@ -1,5 +1,7 @@
 library three_geometries;
 
+import 'dart:typed_data';
+
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/dartHelpers.dart';
