@@ -10,10 +10,10 @@ var _matrix4z = Vector3.init();
 
 class Matrix4 {
   String type = "Matrix4";
-  late Float32List elements;
+  late Float32Array elements;
 
   Matrix4() {
-    elements = Float32List.fromList([
+    elements = Float32Array.from([
       1.0,
       0.0,
       0.0,

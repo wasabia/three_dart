@@ -11,11 +11,12 @@ class InstancedMesh extends Mesh {
   late InstancedBufferAttribute instanceMatrix;
   late BufferAttribute? instanceColor;
 
-  InstancedMesh(geometry, material, count) : super(geometry, material) {
+  InstancedMesh(BufferGeometry? geometry, material, int count)
+      : super(geometry, material) {
     type = "InstancedMesh";
     isInstancedMesh = true;
 
-    var dl = Float32List(count * 16);
+    var dl = Float32Array(count * 16);
     instanceMatrix = InstancedBufferAttribute(dl, 16, false);
     instanceColor = null;
 
@@ -38,7 +39,7 @@ class InstancedMesh extends Mesh {
   }
 
   Color getColorAt(int index, Color color) {
-    return color.fromArray(instanceColor!.array, index * 3);
+    return color.fromArray(instanceColor!.array.data, index * 3);
   }
 
   getMatrixAt(int index, matrix) {
@@ -82,13 +83,13 @@ class InstancedMesh extends Mesh {
   }
 
   List<num> setColorAt(int index, Color color) {
-    instanceColor ??= BufferAttribute(
-        Float32List((instanceMatrix.count * 3).toInt()), 3, false);
+    instanceColor ??= Float32BufferAttribute(
+        Float32Array((instanceMatrix.count * 3).toInt()), 3, false);
 
-    return color.toArray(instanceColor!.array, index * 3);
+    return color.toArray(instanceColor!.array.data, index * 3);
   }
 
-  setMatrixAt(int index, Matrix4 matrix) {
+  void setMatrixAt(int index, Matrix4 matrix) {
     matrix.toArray(instanceMatrix.array, index * 16);
   }
 

@@ -8,7 +8,7 @@ class BoxHelper extends LineSegments {
   BoxHelper.create(geometry, material) : super(geometry, material) {}
 
   factory BoxHelper(object, {color = 0xffff00}) {
-    var indices = Uint16List.fromList([
+    var indices = Uint16Array.from([
       0,
       1,
       1,
@@ -34,7 +34,7 @@ class BoxHelper extends LineSegments {
       3,
       7
     ]);
-    var positions = Float32List(8 * 3);
+    var positions = Float32Array(8 * 3);
 
     var geometry = BufferGeometry();
     geometry.setIndex(Uint16BufferAttribute(indices, 1, false));

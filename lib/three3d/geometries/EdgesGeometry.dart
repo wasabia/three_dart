@@ -109,6 +109,6 @@ class EdgesGeometry extends BufferGeometry {
     }
 
     setAttribute('position',
-        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
+        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
   }
 }

@@ -6,7 +6,7 @@ class WebGLShader {
   String content;
 
   WebGLShader(this.gl, int type, this.content) {
-    this.shader = gl.createShader(type);
+    shader = gl.createShader(type);
 
     gl.shaderSource(shader, content);
     gl.compileShader(shader);

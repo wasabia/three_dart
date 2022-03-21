@@ -1,6 +1,6 @@
 part of three_materials;
 
-/**
+/*
  * parameters = {
  *  color: <hex>,
  *
@@ -36,84 +36,84 @@ part of three_materials;
  */
 
 class MeshToonMaterial extends Material {
-  bool isMeshToonMaterial = true;
+  MeshToonMaterial([Map<String, dynamic>? parameters]) : super() {
+    isMeshToonMaterial = true;
+    defines = {'TOON': ''};
 
-  MeshToonMaterial([parameters]) : super() {
-    this.defines = {'TOON': ''};
+    type = 'MeshToonMaterial';
 
-    this.type = 'MeshToonMaterial';
+    color = Color.fromHex(0xffffff);
 
-    this.color = Color.fromHex(0xffffff);
+    map = null;
+    gradientMap = null;
 
-    this.map = null;
-    this.gradientMap = null;
+    lightMap = null;
+    lightMapIntensity = 1.0;
 
-    this.lightMap = null;
-    this.lightMapIntensity = 1.0;
+    aoMap = null;
+    aoMapIntensity = 1.0;
 
-    this.aoMap = null;
-    this.aoMapIntensity = 1.0;
+    emissive = Color.fromHex(0x000000);
+    emissiveIntensity = 1.0;
+    emissiveMap = null;
 
-    this.emissive = Color.fromHex(0x000000);
-    this.emissiveIntensity = 1.0;
-    this.emissiveMap = null;
+    bumpMap = null;
+    bumpScale = 1;
 
-    this.bumpMap = null;
-    this.bumpScale = 1;
+    normalMap = null;
+    normalMapType = TangentSpaceNormalMap;
+    normalScale = Vector2(1, 1);
 
-    this.normalMap = null;
-    this.normalMapType = TangentSpaceNormalMap;
-    this.normalScale = new Vector2(1, 1);
+    displacementMap = null;
+    displacementScale = 1;
+    displacementBias = 0;
 
-    this.displacementMap = null;
-    this.displacementScale = 1;
-    this.displacementBias = 0;
+    alphaMap = null;
 
-    this.alphaMap = null;
+    wireframe = false;
+    wireframeLinewidth = 1;
+    wireframeLinecap = 'round';
+    wireframeLinejoin = 'round';
 
-    this.wireframe = false;
-    this.wireframeLinewidth = 1;
-    this.wireframeLinecap = 'round';
-    this.wireframeLinejoin = 'round';
-
-    this.setValues(parameters);
+    setValues(parameters);
   }
 
-  copy(source) {
+  @override
+  MeshToonMaterial copy(Material source) {
     super.copy(source);
 
-    this.color?.copy(source.color);
+    color?.copy(source.color!);
 
-    this.map = source.map;
-    this.gradientMap = source.gradientMap;
+    map = source.map;
+    gradientMap = source.gradientMap;
 
-    this.lightMap = source.lightMap;
-    this.lightMapIntensity = source.lightMapIntensity;
+    lightMap = source.lightMap;
+    lightMapIntensity = source.lightMapIntensity;
 
-    this.aoMap = source.aoMap;
-    this.aoMapIntensity = source.aoMapIntensity;
+    aoMap = source.aoMap;
+    aoMapIntensity = source.aoMapIntensity;
 
-    this.emissive?.copy(source.emissive);
-    this.emissiveMap = source.emissiveMap;
-    this.emissiveIntensity = source.emissiveIntensity;
+    emissive?.copy(source.emissive!);
+    emissiveMap = source.emissiveMap;
+    emissiveIntensity = source.emissiveIntensity;
 
-    this.bumpMap = source.bumpMap;
-    this.bumpScale = source.bumpScale;
+    bumpMap = source.bumpMap;
+    bumpScale = source.bumpScale;
 
-    this.normalMap = source.normalMap;
-    this.normalMapType = source.normalMapType;
-    this.normalScale?.copy(source.normalScale);
+    normalMap = source.normalMap;
+    normalMapType = source.normalMapType;
+    normalScale?.copy(source.normalScale!);
 
-    this.displacementMap = source.displacementMap;
-    this.displacementScale = source.displacementScale;
-    this.displacementBias = source.displacementBias;
+    displacementMap = source.displacementMap;
+    displacementScale = source.displacementScale;
+    displacementBias = source.displacementBias;
 
-    this.alphaMap = source.alphaMap;
+    alphaMap = source.alphaMap;
 
-    this.wireframe = source.wireframe;
-    this.wireframeLinewidth = source.wireframeLinewidth;
-    this.wireframeLinecap = source.wireframeLinecap;
-    this.wireframeLinejoin = source.wireframeLinejoin;
+    wireframe = source.wireframe;
+    wireframeLinewidth = source.wireframeLinewidth;
+    wireframeLinecap = source.wireframeLinecap;
+    wireframeLinejoin = source.wireframeLinejoin;
 
     return this;
   }

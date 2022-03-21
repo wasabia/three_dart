@@ -73,7 +73,7 @@ class BufferGeometry with EventDispatcher {
     }
   }
 
-  BufferAttribute<TypedData>? getIndex() => index;
+  BufferAttribute? getIndex() => index;
 
   void setIndex(index) {
     // if ( Array.isArray( index ) ) {
@@ -89,9 +89,9 @@ class BufferGeometry with EventDispatcher {
     if (index is List) {
       final list = index.map<int>((e) => e.toInt()).toList();
       if (arrayMax(index) > 65535) {
-        this.index = Uint32BufferAttribute(Uint32List.fromList(list), 1, false);
+        this.index = Uint32BufferAttribute(Uint32Array.from(list), 1, false);
       } else {
-        this.index = Uint16BufferAttribute(Uint16List.fromList(list), 1, false);
+        this.index = Uint16BufferAttribute(Uint16Array.from(list), 1, false);
       }
     } else {
       this.index = index;
@@ -263,7 +263,7 @@ class BufferGeometry with EventDispatcher {
       }
     }
 
-    final array = Float32List.fromList(position);
+    final array = Float32Array.from(position);
     setAttribute('position', Float32BufferAttribute(array, 3, false));
 
     return this;
@@ -438,7 +438,8 @@ class BufferGeometry with EventDispatcher {
     int nVertices = positions.length ~/ 3;
 
     if (attributes["tangent"] == null) {
-      setAttribute('tangent', BufferAttribute(Float32List(4 * nVertices), 4));
+      setAttribute(
+          'tangent', Float32BufferAttribute(Float32Array(4 * nVertices), 4));
     }
 
     var tangents = attributes["tangent"].array;
@@ -573,7 +574,7 @@ class BufferGeometry with EventDispatcher {
       if (normalAttribute == null) {
         final array = List<double>.filled(positionAttribute.count * 3, 0);
         normalAttribute =
-            Float32BufferAttribute(Float32List.fromList(array), 3, false);
+            Float32BufferAttribute(Float32Array.from(array), 3, false);
         setAttribute('normal', normalAttribute);
       } else {
         // reset existing normals to zero
@@ -697,7 +698,7 @@ class BufferGeometry with EventDispatcher {
       var itemSize = attribute.itemSize;
       var normalized = attribute.normalized;
 
-      var array2 = Float32List(indices.length * itemSize);
+      var array2 = Float32Array(indices.length * itemSize);
 
       var index = 0, index2 = 0;
 

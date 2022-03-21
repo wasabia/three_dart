@@ -1,12 +1,12 @@
 part of three_textures;
 
 class DepthTexture extends Texture {
-  bool isDepthTexture = true;
-
-  DepthTexture(width, height, type, mapping, wrapS, wrapT, magFilter, minFilter,
+  DepthTexture(int width, int height, type, mapping, wrapS, wrapT, magFilter,
+      minFilter,
       anisotropy, format)
       : super(null, mapping, wrapS, wrapT, magFilter, minFilter, format, type,
             anisotropy, null) {
+    isDepthTexture = true;
     format = format ?? DepthFormat;
 
     if (format != DepthFormat && format != DepthStencilFormat) {
@@ -16,12 +16,12 @@ class DepthTexture extends Texture {
     if (type == null && format == DepthFormat) type = UnsignedShortType;
     if (type == null && format == DepthStencilFormat) type = UnsignedInt248Type;
 
-    this.image = ImageElement(width: width, height: height);
+    image = ImageElement(width: width, height: height);
 
-    this.magFilter = magFilter != null ? magFilter : NearestFilter;
-    this.minFilter = minFilter != null ? minFilter : NearestFilter;
+    this.magFilter = magFilter ?? NearestFilter;
+    this.minFilter = minFilter ?? NearestFilter;
 
-    this.flipY = false;
-    this.generateMipmaps = false;
+    flipY = false;
+    generateMipmaps = false;
   }
 }

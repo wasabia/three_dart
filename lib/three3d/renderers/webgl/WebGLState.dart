@@ -12,7 +12,7 @@ class WebGLState {
 
   late int maxTextures;
 
-  var emptyTextures = Map<int, dynamic>();
+  var emptyTextures = <int, dynamic>{};
   late Map<int, int> equationToGL;
   late Map<int, int> factorToGL;
 
@@ -21,11 +21,11 @@ class WebGLState {
 
   //
 
-  Map<int, bool> enabledCapabilities = Map<int, bool>();
+  Map<int, bool> enabledCapabilities = <int, bool>{};
 
   dynamic xrFramebuffer;
   Map currentBoundFramebuffers = {};
-  WeakMap currentDrawbuffers = new WeakMap();
+  WeakMap currentDrawbuffers = WeakMap();
   var defaultDrawbuffers = [];
 
   dynamic currentProgram;
@@ -52,7 +52,7 @@ class WebGLState {
   bool lineWidthAvailable = true;
 
   int? currentTextureSlot;
-  var currentBoundTextures = Map<int, BoundTexture>();
+  var currentBoundTextures = <int, BoundTexture>{};
 
   late Vector4 currentScissor;
   late Vector4 currentViewport;
@@ -126,12 +126,12 @@ class WebGLState {
     // currentScissor = new Vector4.init().fromArray( scissorParam );
     // currentViewport = new Vector4.init().fromArray( viewportParam );
 
-    currentScissor = new Vector4.init();
-    currentViewport = new Vector4.init();
+    currentScissor = Vector4.init();
+    currentViewport = Vector4.init();
   }
 
   createTexture(int type, int target, int count) {
-    var data = Uint8List(4);
+    var data = Uint8Array(4);
     // 4 is required to match default unpack alignment of 4.
     //
     var texture = gl.createTexture();
@@ -400,7 +400,7 @@ class WebGLState {
     currentPremultipledAlpha = null;
   }
 
-  setMaterial(material, frontFaceCW) {
+  void setMaterial(Material material, bool frontFaceCW) {
     material.side == DoubleSide ? disable(gl.CULL_FACE) : enable(gl.CULL_FACE);
 
     var flipSided = (material.side == BackSide);
@@ -583,7 +583,7 @@ class WebGLState {
   }
 
 
-  texSubImage2D_IF(target, level, x, y, glFormat, glType, image) {
+  void texSubImage2D_IF(target, level, x, y, glFormat, glType, image) {
     if (kIsWeb) {
       texSubImage2D_NOSIZE(gl.TEXTURE_2D, 0, 0, 0, glFormat, glType, image.data);
     } else {
@@ -591,7 +591,7 @@ class WebGLState {
     }
   }
 
-  texSubImage2D_NOSIZE(target, level, x, y, glFormat, glType, data) {
+  void texSubImage2D_NOSIZE(target, level, x, y, glFormat, glType, data) {
     // try {
 
     gl.texSubImage2D_NOSIZE(target, level, x, y, glFormat, glType, data);
@@ -603,7 +603,8 @@ class WebGLState {
     // }
   }
 
-  texSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth,
+  void texSubImage3D(target, level, xoffset, yoffset, zoffset, width, height,
+      depth,
       format, type, pixels) {
     // try {
 
@@ -617,7 +618,7 @@ class WebGLState {
     // }
   }
 
-  compressedTexSubImage2D(
+  void compressedTexSubImage2D(
       target, level, xoffset, yoffset, width, height, format, pixels) {
     // try {
 
@@ -631,7 +632,7 @@ class WebGLState {
     // }
   }
 
-  texStorage2D(int type, int levels, int glInternalFormat, width, height) {
+  void texStorage2D(int type, int levels, int glInternalFormat, width, height) {
     // try {
 
     gl.texStorage2D(
@@ -644,7 +645,7 @@ class WebGLState {
     // }
   }
 
-  texStorage3D(target, levels, internalformat, width, height, depth) {
+  void texStorage3D(target, levels, internalformat, width, height, depth) {
     // try {
 
     gl.texStorage3D(target, levels, internalformat, width, height, depth);
@@ -656,7 +657,8 @@ class WebGLState {
     // }
   }
 
-  texImage2D_IF(int target, int level, int internalformat, int format, int type, image) {
+  void texImage2D_IF(
+      int target, int level, int internalformat, int format, int type, image) {
     if(kIsWeb) {
       texImage2D_NOSIZE(target, level, internalformat, format, type, image.data);
     } else {
@@ -665,18 +667,20 @@ class WebGLState {
     }
   }
 
-  texImage2D(int target, int level, int internalformat, width, height, border,
+  void texImage2D(int target, int level, int internalformat, width, height,
+      border,
       int format, int type, data) {
     gl.texImage2D(target, level, internalformat, width, height, border, format,
         type, data);
   }
 
-  texImage2D_NOSIZE(
+  void texImage2D_NOSIZE(
       int target, int level, int internalformat, int format, int type, data) {
     gl.texImage2D_NOSIZE(target, level, internalformat, format, type, data);
   }
 
-  texImage3D(int target, int level, int internalformat, int width, int height,
+  void texImage3D(int target, int level, int internalformat, int width,
+      int height,
       int depth, int border, int format, int type, offset) {
     gl.texImage3D(target, level, internalformat, width, height, depth, border,
         format, type, offset);
@@ -684,14 +688,14 @@ class WebGLState {
 
   //
 
-  scissor(Vector4 scissor) {
+  void scissor(Vector4 scissor) {
     if (currentScissor.equals(scissor) == false) {
       gl.scissor(scissor.x, scissor.y, scissor.z, scissor.w);
       currentScissor.copy(scissor);
     }
   }
 
-  viewport(viewport) {
+  void viewport(Vector4 viewport) {
     if (currentViewport.equals(viewport) == false) {
       gl.viewport(viewport.x, viewport.y, viewport.z, viewport.w);
       currentViewport.copy(viewport);
@@ -700,7 +704,7 @@ class WebGLState {
 
   //
 
-  reset() {
+  void reset() {
     // reset state
 
     gl.disable(gl.BLEND);
@@ -761,7 +765,7 @@ class WebGLState {
 
     xrFramebuffer = null;
     currentBoundFramebuffers = {};
-    currentDrawbuffers = new WeakMap();
+    currentDrawbuffers = WeakMap();
     defaultDrawbuffers = [];
 
     currentProgram = null;
@@ -815,7 +819,7 @@ class ColorBuffer {
     locked = lock;
   }
 
-  setClear(num r, num g, num b, num a, bool premultipliedAlpha) {
+  setClear(double r, double g, double b, double a, bool premultipliedAlpha) {
     if (premultipliedAlpha == true) {
       r *= a;
       g *= a;

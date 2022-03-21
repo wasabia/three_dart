@@ -104,12 +104,12 @@ class SVGLoader extends Loader {
     var geometry = BufferGeometry();
     geometry.setAttribute(
         'position',
-        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
+        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
     geometry.setAttribute(
         'normal',
-        Float32BufferAttribute(Float32List.fromList(normals), 3, false));
+        Float32BufferAttribute(Float32Array.from(normals), 3, false));
     geometry.setAttribute(
-        'uv', Float32BufferAttribute(Float32List.fromList(uvs), 2, false));
+        'uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
 
     return geometry;
   }

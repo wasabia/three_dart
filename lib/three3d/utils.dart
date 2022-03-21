@@ -40,14 +40,27 @@ arrayMax(array) {
 // 	Float64Array: Float64Array
 // };
 
-TypedData getTypedArray(String type, buffer) {
+NativeArray getTypedArray(String type, List buffer) {
   if (type == "Uint32Array" || type == "Uint32List") {
-    return Uint32List.fromList(buffer);
+    return Uint32Array.from(buffer as List<int>);
   } else if (type == "Uint16Array" || type == "Uint16List") {
-    return Uint16List.fromList(buffer);
+    return Uint16Array.from(buffer as List<int>);
   } else if (type == "Float32Array" || type == "Float32List") {
-    return Float32List.fromList(buffer);
+    return Float32Array.from(buffer as List<double>);
   } else {
     throw (" Util.dart getTypedArray type: $type is not support ");
+  }
+}
+
+BufferAttribute getTypedAttribute(NativeArray array, int itemSize,
+    [bool normalized = false]) {
+  if (array is Uint32Array) {
+    return Uint32BufferAttribute(array, itemSize, normalized);
+  } else if (array is Uint16Array) {
+    return Uint16BufferAttribute(array, itemSize, normalized);
+  } else if (array is Float32Array) {
+    return Float32BufferAttribute(array, itemSize, normalized);
+  } else {
+    throw (" Util.dart getTypedArray type: ${array.runtimeType} is not support ");
   }
 }

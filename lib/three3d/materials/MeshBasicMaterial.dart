@@ -1,6 +1,6 @@
 part of three_materials;
 
-/**
+/*
  * 基础网格材质，不受光照影响的材质
  * parameters = {
  *  color: <hex>,
@@ -32,68 +32,69 @@ part of three_materials;
  */
 
 class MeshBasicMaterial extends Material {
-  bool isMeshBasicMaterial = true;
-  String type = 'MeshBasicMaterial';
-
   MeshBasicMaterial([Map<String, dynamic>? parameters]) : super() {
-    this.color = new Color(1, 1, 1); // emissive
+    type = 'MeshBasicMaterial';
+    isMeshBasicMaterial = true;
+    color = Color(1, 1, 1); // emissive
 
-    this.map = null;
+    map = null;
 
-    this.lightMap = null;
-    this.lightMapIntensity = 1.0;
+    lightMap = null;
+    lightMapIntensity = 1.0;
 
-    this.aoMap = null;
-    this.aoMapIntensity = 1.0;
+    aoMap = null;
+    aoMapIntensity = 1.0;
 
-    this.specularMap = null;
+    specularMap = null;
 
-    this.alphaMap = null;
+    alphaMap = null;
 
     // this.envMap = null;
-    this.combine = MultiplyOperation;
-    this.reflectivity = 1;
-    this.refractionRatio = 0.98;
+    combine = MultiplyOperation;
+    reflectivity = 1;
+    refractionRatio = 0.98;
 
-    this.wireframe = false;
-    this.wireframeLinewidth = 1;
-    this.wireframeLinecap = 'round';
-    this.wireframeLinejoin = 'round';
+    wireframe = false;
+    wireframeLinewidth = 1;
+    wireframeLinecap = 'round';
+    wireframeLinejoin = 'round';
 
-    this.setValues(parameters);
+    setValues(parameters);
   }
 
-  copy(source) {
+  @override
+  MeshBasicMaterial copy(Material source) {
     super.copy(source);
 
-    if (source.color != null) this.color?.copy(source.color);
+    if (source.color != null) color?.copy(source.color!);
 
-    this.map = source.map;
+    map = source.map;
 
-    this.lightMap = source.lightMap;
-    this.lightMapIntensity = source.lightMapIntensity;
+    lightMap = source.lightMap;
+    lightMapIntensity = source.lightMapIntensity;
 
-    this.aoMap = source.aoMap;
-    this.aoMapIntensity = source.aoMapIntensity;
+    aoMap = source.aoMap;
+    aoMapIntensity = source.aoMapIntensity;
 
-    this.specularMap = source.specularMap;
+    specularMap = source.specularMap;
 
-    this.alphaMap = source.alphaMap;
+    alphaMap = source.alphaMap;
 
-    this.envMap = source.envMap;
-    this.combine = source.combine;
-    this.reflectivity = source.reflectivity;
-    this.refractionRatio = source.refractionRatio;
+    envMap = source.envMap;
+    combine = source.combine;
+    reflectivity = source.reflectivity;
+    refractionRatio = source.refractionRatio;
 
-    this.wireframe = source.wireframe;
-    this.wireframeLinewidth = source.wireframeLinewidth;
-    this.wireframeLinecap = source.wireframeLinecap;
-    this.wireframeLinejoin = source.wireframeLinejoin;
+    wireframe = source.wireframe;
+    wireframeLinewidth = source.wireframeLinewidth;
+    wireframeLinecap = source.wireframeLinecap;
+    wireframeLinejoin = source.wireframeLinejoin;
 
     return this;
   }
 
-  clone() {
+  @override
+  MeshBasicMaterial clone() {
     return MeshBasicMaterial().copy(this);
   }
 }

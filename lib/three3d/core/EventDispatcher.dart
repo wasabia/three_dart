@@ -25,7 +25,7 @@ class Event {
 mixin EventDispatcher {
   Map<String, List<Function>>? _listeners = {};
 
-  addEventListener(String type, Function listener) {
+  void addEventListener(String type, Function listener) {
     _listeners ??= {};
 
     Map<String, List<Function>> listeners = _listeners!;
@@ -39,7 +39,7 @@ mixin EventDispatcher {
     }
   }
 
-  hasEventListener(String type, Function listener) {
+  bool hasEventListener(String type, Function listener) {
     if (_listeners == null) return false;
 
     var listeners = _listeners!;
@@ -47,7 +47,7 @@ mixin EventDispatcher {
     return listeners[type] != null && listeners[type]!.contains(listener);
   }
 
-  removeEventListener(String type, Function listener) {
+  void removeEventListener(String type, Function listener) {
     if (_listeners == null) return;
 
     var listeners = _listeners!;
@@ -62,7 +62,7 @@ mixin EventDispatcher {
     }
   }
 
-  dispatchEvent(Event event) {
+  void dispatchEvent(Event event) {
     if (_listeners == null || _listeners!.isEmpty) return;
 
     var listeners = _listeners!;
@@ -86,7 +86,7 @@ mixin EventDispatcher {
     }
   }
 
-  clearListeners() {
+  void clearListeners() {
     _listeners?.clear();
   }
 }

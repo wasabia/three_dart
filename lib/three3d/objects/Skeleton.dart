@@ -7,7 +7,7 @@ class Skeleton {
   String uuid = MathUtils.generateUUID();
   late List<Bone> bones;
   late List<Matrix4> boneInverses;
-  late Float32List boneMatrices;
+  late Float32Array boneMatrices;
   DataTexture? boneTexture;
   num boneTextureSize = 0;
   num frame = -1;
@@ -23,7 +23,7 @@ class Skeleton {
     var bones = this.bones;
     var boneInverses = this.boneInverses;
 
-    boneMatrices = Float32List(bones.length * 16);
+    boneMatrices = Float32Array(bones.length * 16);
 
     // calculate inverse bone matrices if necessary
 
@@ -76,7 +76,7 @@ class Skeleton {
       var bone = bones[i];
 
       if (bone != null) {
-        if (bone.parent != null && bone.parent!.isBone) {
+        if (bone.parent != null && bone.parent is Bone) {
           bone.matrix.copy(bone.parent!.matrixWorld).invert();
           bone.matrix.multiply(bone.matrixWorld);
         } else {
@@ -128,17 +128,17 @@ class Skeleton {
     size = MathUtils.ceilPowerOfTwo(size);
     size = Math.max(size, 4);
 
-    var _boneMatrices = boneMatrices;
-    //Float32List((size * size * 4).toInt()); // 4 floats per RGBA pixel
+    var _boneMatrices =
+        Float32Array((size * size * 4).toInt()); // 4 floats per RGBA pixel
 
-    //_boneMatrices.set(boneMatrices.toDartList()); // copy current values
+    _boneMatrices.set(boneMatrices.toDartList()); // copy current values
 
     var boneTexture = DataTexture(_boneMatrices, size.toInt(), size.toInt(),
         RGBAFormat, FloatType, null, null, null, null, null, null, null);
     boneTexture.name = "DataTexture from Skeleton.computeBoneTexture";
     boneTexture.needsUpdate = true;
 
-    //boneMatrices.dispose();
+    boneMatrices.dispose();
 
     boneMatrices = _boneMatrices;
     this.boneTexture = boneTexture;

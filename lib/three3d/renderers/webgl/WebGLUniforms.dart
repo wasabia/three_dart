@@ -1,6 +1,6 @@
 part of three_webgl;
 
-/**
+/*
  * Uniforms of a program.
  * Those form a tree structure with a special top-level container for the root,
  * which you get by calling 'new WebGLUniforms( gl, program )'.
@@ -50,8 +50,8 @@ class WebGLUniforms with WebGLUniform {
   WebGLProgram program;
 
   WebGLUniforms(this.gl, this.program) {
-    this.seq = [];
-    this.map = {};
+    seq = [];
+    map = {};
 
     var n = gl.getProgramParameter(program.program, gl.ACTIVE_UNIFORMS);
 
@@ -66,7 +66,7 @@ class WebGLUniforms with WebGLUniform {
   }
 
   setValue(gl, name, value, [WebGLTextures? textures]) {
-    var u = this.map[name];
+    var u = map[name];
 
     // var _vt = value.runtimeType.toString();
     // print("WebGLUniforms.setValue name: ${name}  value: ${_vt} u: ${u} ");
@@ -83,7 +83,7 @@ class WebGLUniforms with WebGLUniform {
     // var v = object[ name ];
     var v = object.getValue(name);
 
-    if (v != null) this.setValue(gl, name, v, null);
+    if (v != null) setValue(gl, name, v, null);
   }
 
   static upload(gl, seq, values, textures) {

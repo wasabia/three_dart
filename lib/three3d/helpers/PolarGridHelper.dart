@@ -65,9 +65,9 @@ class PolarGridHelper extends LineSegments {
 
     var geometry = BufferGeometry();
     geometry.setAttribute(
-        'position', Float32BufferAttribute(Float32List.fromList(vertices), 3));
+        'position', Float32BufferAttribute(Float32Array.from(vertices), 3));
     geometry.setAttribute(
-        'color', Float32BufferAttribute(Float32List.fromList(colors), 3));
+        'color', Float32BufferAttribute(Float32Array.from(colors), 3));
 
     var material =
         LineBasicMaterial({"vertexColors": true, "toneMapped": false});

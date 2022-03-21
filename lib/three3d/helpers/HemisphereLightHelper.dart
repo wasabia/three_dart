@@ -22,7 +22,7 @@ class HemisphereLightHelper extends Object3D {
     if (color == null) material.vertexColors = true;
 
     var position = geometry.getAttribute('position');
-    var colors = Float32List(position.count * 3);
+    var colors = Float32Array(position.count * 3);
 
     geometry.setAttribute(
         'color', Float32BufferAttribute(colors, 3, false));
@@ -32,7 +32,8 @@ class HemisphereLightHelper extends Object3D {
     update();
   }
 
-  dispose() {
+  @override
+  void dispose() {
     children[0].geometry!.dispose();
     children[0].material.dispose();
   }
