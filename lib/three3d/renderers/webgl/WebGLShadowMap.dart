@@ -55,7 +55,7 @@ class WebGLShadowMap {
     });
 
     var _float32List =
-        Float32List.fromList([-1.0, -1.0, 0.5, 3.0, -1.0, 0.5, -1.0, 3.0, 0.5]);
+        Float32Array.from([-1.0, -1.0, 0.5, 3.0, -1.0, 0.5, -1.0, 3.0, 0.5]);
 
     fullScreenTri.setAttribute(
         'position', Float32BufferAttribute(_float32List, 3, false));
@@ -68,7 +68,7 @@ class WebGLShadowMap {
     scope = this;
   }
 
-  render(List<Light> lights, scene, Camera camera) {
+  void render(List<Light> lights, Object3D scene, Camera camera) {
     if (scope.enabled == false) return;
     if (scope.autoUpdate == false && scope.needsUpdate == false) return;
 
@@ -124,7 +124,7 @@ class WebGLShadowMap {
 
       if (shadow.map == null &&
           !shadow.isPointLightShadow &&
-          this.type == VSMShadowMap) {
+          type == VSMShadowMap) {
         var pars = WebGLRenderTargetOptions({
           "minFilter": LinearFilter,
           "magFilter": LinearFilter,
@@ -175,12 +175,12 @@ class WebGLShadowMap {
 
         _frustum = shadow.getFrustum();
 
-        renderObject(scene, camera, shadow.camera, light, this.type);
+        renderObject(scene, camera, shadow.camera, light, type);
       }
 
       // do blur pass for VSM
 
-      if (!shadow.isPointLightShadow && this.type == VSMShadowMap) {
+      if (shadow is! PointLightShadow && type == VSMShadowMap) {
         VSMPass(shadow, camera);
       }
 
@@ -193,7 +193,7 @@ class WebGLShadowMap {
         currentRenderTarget, activeCubeFace, activeMipmapLevel);
   }
 
-  VSMPass(shadow, camera) {
+  void VSMPass(LightShadow shadow, Camera camera) {
     var geometry = _objects.update(fullScreenMesh);
 
     if (shadowMaterialVertical.defines!["VSM_SAMPLES"] != shadow.blurSamples) {
@@ -206,7 +206,7 @@ class WebGLShadowMap {
 
     // vertical pass
 
-    shadowMaterialVertical.uniforms["shadow_pass"].value = shadow.map.texture;
+    shadowMaterialVertical.uniforms["shadow_pass"].value = shadow.map!.texture;
     shadowMaterialVertical.uniforms["resolution"].value = shadow.mapSize;
     shadowMaterialVertical.uniforms["radius"].value = shadow.radius;
 
@@ -218,7 +218,7 @@ class WebGLShadowMap {
     // horizontal pass
 
     shadowMaterialHorizontal.uniforms["shadow_pass"].value =
-        shadow.mapPass.texture;
+        shadow.mapPass!.texture;
     shadowMaterialHorizontal.uniforms["resolution"].value = shadow.mapSize;
     shadowMaterialHorizontal.uniforms["radius"].value = shadow.radius;
 

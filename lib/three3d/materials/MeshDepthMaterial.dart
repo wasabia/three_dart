@@ -1,6 +1,6 @@
 part of three_materials;
 
-/**
+/*
  * parameters = {
  *
  *  opacity: <float>,
@@ -19,42 +19,43 @@ part of three_materials;
  */
 
 class MeshDepthMaterial extends Material {
-  bool isMeshDepthMaterial = true;
-  String type = "MeshDepthMaterial";
-  int? depthPacking = BasicDepthPacking;
-
-  num? displacementScale = 1.0;
-  num? displacementBias = 0;
-  bool wireframe = false;
-  num? wireframeLinewidth = 1;
-  bool fog = false;
-
   MeshDepthMaterial([Map<String, dynamic>? parameters]) : super() {
-    this.displacementMap = null;
+    isMeshDepthMaterial = true;
+    type = "MeshDepthMaterial";
+    depthPacking = BasicDepthPacking;
+    displacementScale = 1.0;
+    displacementBias = 0;
+    wireframe = false;
+    wireframeLinewidth = 1;
+    fog = false;
 
-    this.setValues(parameters);
+    displacementMap = null;
+
+    setValues(parameters);
   }
 
-  copy(source) {
+  @override
+  MeshDepthMaterial copy(Material source) {
     super.copy(source);
 
-    this.depthPacking = source.depthPacking;
+    depthPacking = source.depthPacking;
 
-    this.map = source.map;
+    map = source.map;
 
-    this.alphaMap = source.alphaMap;
+    alphaMap = source.alphaMap;
 
-    this.displacementMap = source.displacementMap;
-    this.displacementScale = source.displacementScale;
-    this.displacementBias = source.displacementBias;
+    displacementMap = source.displacementMap;
+    displacementScale = source.displacementScale;
+    displacementBias = source.displacementBias;
 
-    this.wireframe = source.wireframe;
-    this.wireframeLinewidth = source.wireframeLinewidth;
+    wireframe = source.wireframe;
+    wireframeLinewidth = source.wireframeLinewidth;
 
     return this;
   }
 
-  clone() {
+  @override
+  MeshDepthMaterial clone() {
     return MeshDepthMaterial().copy(this);
   }
 }

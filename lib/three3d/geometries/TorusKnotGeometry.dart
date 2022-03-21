@@ -132,11 +132,11 @@ class TorusKnotGeometry extends BufferGeometry {
 
     setIndex(indices);
     setAttribute('position',
-        Float32BufferAttribute(Float32List.fromList(vertices), 3, false));
+        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
     setAttribute('normal',
-        Float32BufferAttribute(Float32List.fromList(normals), 3, false));
+        Float32BufferAttribute(Float32Array.from(normals), 3, false));
     setAttribute(
-        'uv', Float32BufferAttribute(Float32List.fromList(uvs), 2, false));
+        'uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
 
     // this function calculates the current position on the torus curve
   }

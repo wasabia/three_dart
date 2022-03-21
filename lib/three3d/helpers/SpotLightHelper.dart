@@ -64,7 +64,7 @@ class SpotLightHelper extends Object3D {
 
     geometry.setAttribute(
         'position',
-        Float32BufferAttribute(Float32List.fromList(positions), 3, false));
+        Float32BufferAttribute(Float32Array.from(positions), 3, false));
 
     var material = LineBasicMaterial({"fog": false, "toneMapped": false});
 

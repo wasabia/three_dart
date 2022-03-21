@@ -222,13 +222,13 @@ class PolyhedronGeometry extends BufferGeometry {
     // build non-indexed geometry
 
     setAttribute('position',
-        Float32BufferAttribute(Float32List.fromList(vertexBuffer), 3, false));
+        Float32BufferAttribute(Float32Array.from(vertexBuffer), 3, false));
     setAttribute(
         'normal',
         Float32BufferAttribute(
-            Float32List.fromList(slice(vertexBuffer, 0)), 3, false));
+            Float32Array.from(slice(vertexBuffer, 0)), 3, false));
     setAttribute(
-        'uv', Float32BufferAttribute(Float32List.fromList(uvBuffer), 2, false));
+        'uv', Float32BufferAttribute(Float32Array.from(uvBuffer), 2, false));
 
     if (detail == 0) {
       computeVertexNormals(); // flat normals

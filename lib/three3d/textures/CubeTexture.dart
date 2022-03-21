@@ -7,17 +7,17 @@ class CubeTexture extends Texture {
       anisotropy, encoding])
       : super(images, mapping, wrapS, wrapT, magFilter, minFilter, format, type,
             anisotropy, encoding) {
-    images = images != null ? images : [];
-    mapping = mapping != null ? mapping : CubeReflectionMapping;
+    images = images ?? [];
+    mapping = mapping ?? CubeReflectionMapping;
 
-    this.flipY = false;
+    flipY = false;
   }
 
   get images {
-    return this.image;
+    return image;
   }
 
   set images(value) {
-    this.image = value;
+    image = value;
   }
 }

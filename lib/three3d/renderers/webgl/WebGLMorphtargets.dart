@@ -10,15 +10,15 @@ int absNumericalSort(a, b) {
 
 denormalize(morph, BufferAttribute attribute) {
   var denominator = 1;
-  var array = attribute.isInterleavedBufferAttribute
+  NativeArray array = attribute.isInterleavedBufferAttribute
       ? attribute.data!.array
       : attribute.array;
 
-  if (array is Int8List) {
+  if (array is Int8Array) {
     denominator = 127;
-  } else if (array is Int16List) {
+  } else if (array is Int16Array) {
     denominator = 32767;
-  } else if (array is Int32List) {
+  } else if (array is Int32Array) {
     denominator = 2147483647;
   } else {
     console.error(
@@ -47,7 +47,8 @@ class WebGLMorphtargets {
     }
   }
 
-  update(Object3D object, geometry, material, program) {
+  void update(Object3D object, BufferGeometry geometry, Material material,
+      WebGLProgram program) {
     List<num>? objectInfluences = object.morphTargetInfluences;
 
     if (capabilities.isWebGL2 == true) {
@@ -83,7 +84,7 @@ class WebGLMorphtargets {
           width = capabilities.maxTextureSize;
         }
 
-        var buffer = Float32List(width * height * 4 * morphTargetsCount);
+        var buffer = Float32Array(width * height * 4 * morphTargetsCount);
 
         var texture =
             DataArrayTexture(buffer, width, height, morphTargetsCount);
@@ -243,31 +244,31 @@ class WebGLMorphtargets {
 
       for (var i = 0; i < 8; i++) {
         var influence = workInfluences[i];
-        var index = influence[0];
+        var index = influence[0].toInt();
         var value = influence[1];
 
         if (index != Math.MAX_SAFE_INTEGER && value != 0) {
           if (morphTargets != null &&
-              geometry.getAttribute('morphTarget${i}') != morphTargets[index]) {
-            geometry.setAttribute('morphTarget${i}', morphTargets[index]);
+              geometry.getAttribute('morphTarget$i') != morphTargets[index]) {
+            geometry.setAttribute('morphTarget$i', morphTargets[index]);
           }
 
           if (morphNormals != null &&
-              geometry.getAttribute('morphNormal${i}') != morphNormals[index]) {
-            geometry.setAttribute('morphNormal${i}', morphNormals[index]);
+              geometry.getAttribute('morphNormal$i') != morphNormals[index]) {
+            geometry.setAttribute('morphNormal$i', morphNormals[index]);
           }
 
           morphInfluences[i] = value.toDouble();
           morphInfluencesSum += value;
         } else {
           if (morphTargets != null &&
-              geometry.hasAttribute('morphTarget${i}') == true) {
-            geometry.deleteAttribute('morphTarget${i}');
+              geometry.hasAttribute('morphTarget$i') == true) {
+            geometry.deleteAttribute('morphTarget$i');
           }
 
           if (morphNormals != null &&
-              geometry.hasAttribute('morphNormal${i}') == true) {
-            geometry.deleteAttribute('morphNormal${i}');
+              geometry.hasAttribute('morphNormal$i') == true) {
+            geometry.deleteAttribute('morphNormal$i');
           }
 
           morphInfluences[i] = 0;

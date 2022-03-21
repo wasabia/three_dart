@@ -22,9 +22,9 @@ class Material with EventDispatcher {
   int blendSrc = SrcAlphaFactor;
   int blendDst = OneMinusSrcAlphaFactor;
   int blendEquation = AddEquation;
-  num? blendSrcAlpha;
-  num? blendDstAlpha;
-  num? blendEquationAlpha;
+  int? blendSrcAlpha;
+  int? blendDstAlpha;
+  int? blendEquationAlpha;
   int depthFunc = LessEqualDepth;
   bool depthTest = true;
   bool depthWrite = true;
@@ -249,18 +249,18 @@ class Material with EventDispatcher {
     color = Color(0, 0, 0).setHex(json["color"]);
   }
 
-  onBuild(shaderobject, renderer) {}
+  void onBuild(shaderobject, renderer) {}
 
   // onBeforeCompile(shaderobject, renderer) {}
 
-  setValues(Map<String, dynamic>? values) {
+  void setValues(Map<String, dynamic>? values) {
     if (values == null) return;
 
     for (var key in values.keys) {
       var newValue = values[key];
 
       if (newValue == null) {
-        print('THREE.Material setValues: ${key} parameter is null.');
+        print('THREE.Material setValues: $key parameter is null.');
         continue;
       }
 
@@ -268,7 +268,7 @@ class Material with EventDispatcher {
     }
   }
 
-  setValue(String key, dynamic newValue) {
+  void setValue(String key, dynamic newValue) {
     if (key == "alphaTest") {
       alphaTest = newValue;
     } else if (key == "alphaMap") {
@@ -425,11 +425,11 @@ class Material with EventDispatcher {
         specular = Color(0, 0, 0).setHex(newValue);
       }
     } else {
-      throw ("Material.setValues key: ${key} newValue: ${newValue} is not support");
+      throw ("Material.setValues key: $key newValue: $newValue is not support");
     }
   }
 
-  toJSON({Object3dMeta? meta}) {
+  Map<String, dynamic> toJSON({Object3dMeta? meta}) {
     var isRoot = (meta == null || meta is String);
 
     if (isRoot) {
@@ -454,21 +454,19 @@ class Material with EventDispatcher {
       data["color"] = color!.getHex();
     }
 
-    if (roughness != null) data["roughness"] = roughness;
-    if (metalness != null) data["metalness"] = metalness;
+    data["roughness"] = roughness;
+    data["metalness"] = metalness;
 
-    if (sheen != null) data["sheen"] = sheen;
+    data["sheen"] = sheen;
     if (sheenColor != null && sheenColor is Color) {
       data["sheenColor"] = sheenColor!.getHex();
     }
-    if (sheenRoughness != null) {
-      data["sheenRoughness"] = sheenRoughness;
-    }
+    data["sheenRoughness"] = sheenRoughness;
 
     if (emissive != null && emissive!.isColor) {
       data["emissive"] = emissive!.getHex();
     }
-    if (emissiveIntensity != null && emissiveIntensity != 1) {
+    if (emissiveIntensity != 1) {
       data["emissiveIntensity"] = emissiveIntensity;
     }
 
@@ -482,22 +480,22 @@ class Material with EventDispatcher {
       data["specularColor"] = specularColor!.getHex();
     }
     if (shininess != null) data["shininess"] = shininess;
-    if (clearcoat != null) data["clearcoat"] = clearcoat;
+    data["clearcoat"] = clearcoat;
     if (clearcoatRoughness != null) {
       data["clearcoatRoughness"] = clearcoatRoughness;
     }
 
     if (clearcoatMap != null && clearcoatMap!.isTexture) {
-      data["clearcoatMap"] = clearcoatMap!.toJSON(meta).uuid;
+      data["clearcoatMap"] = clearcoatMap!.toJSON(meta)['uuid'];
     }
 
     if (clearcoatRoughnessMap != null && clearcoatRoughnessMap!.isTexture) {
       data["clearcoatRoughnessMap"] =
-          clearcoatRoughnessMap!.toJSON(meta).uuid;
+          clearcoatRoughnessMap!.toJSON(meta)['uuid'];
     }
 
     if (clearcoatNormalMap != null && clearcoatNormalMap!.isTexture) {
-      data["clearcoatNormalMap"] = clearcoatNormalMap!.toJSON(meta).uuid;
+      data["clearcoatNormalMap"] = clearcoatNormalMap!.toJSON(meta)['uuid'];
       data["clearcoatNormalScale"] = clearcoatNormalScale!.toArray();
     }
 
@@ -515,55 +513,55 @@ class Material with EventDispatcher {
     }
 
     if (lightMap != null && lightMap!.isTexture) {
-      data["lightMap"] = lightMap!.toJSON(meta).uuid;
+      data["lightMap"] = lightMap!.toJSON(meta)['uuid'];
       data["lightMapIntensity"] = lightMapIntensity;
     }
 
     if (aoMap != null && aoMap!.isTexture) {
-      data["aoMap"] = aoMap!.toJSON(meta).uuid;
+      data["aoMap"] = aoMap!.toJSON(meta)['uuid'];
       data["aoMapIntensity"] = aoMapIntensity;
     }
 
     if (bumpMap != null && bumpMap!.isTexture) {
-      data["bumpMap"] = bumpMap!.toJSON(meta).uuid;
+      data["bumpMap"] = bumpMap!.toJSON(meta)['uuid'];
       data["bumpScale"] = bumpScale;
     }
 
     if (normalMap != null && normalMap!.isTexture) {
-      data["normalMap"] = normalMap!.toJSON(meta).uuid;
+      data["normalMap"] = normalMap!.toJSON(meta)['uuid'];
       data["normalMapType"] = normalMapType;
       data["normalScale"] = normalScale!.toArray();
     }
 
     if (displacementMap != null && displacementMap!.isTexture) {
-      data["displacementMap"] = displacementMap!.toJSON(meta).uuid;
+      data["displacementMap"] = displacementMap!.toJSON(meta)['uuid'];
       data["displacementScale"] = displacementScale;
       data["displacementBias"] = displacementBias;
     }
 
     if (roughnessMap != null && roughnessMap!.isTexture) {
-      data["roughnessMap"] = roughnessMap!.toJSON(meta).uuid;
+      data["roughnessMap"] = roughnessMap!.toJSON(meta)['uuid'];
     }
     if (metalnessMap != null && metalnessMap!.isTexture) {
-      data["metalnessMap"] = metalnessMap!.toJSON(meta).uuid;
+      data["metalnessMap"] = metalnessMap!.toJSON(meta)['uuid'];
     }
 
     if (emissiveMap != null && emissiveMap!.isTexture) {
-      data["emissiveMap"] = emissiveMap!.toJSON(meta).uuid;
+      data["emissiveMap"] = emissiveMap!.toJSON(meta)['uuid'];
     }
     if (specularMap != null && specularMap!.isTexture) {
-      data["specularMap"] = specularMap!.toJSON(meta).uuid;
+      data["specularMap"] = specularMap!.toJSON(meta)['uuid'];
     }
     if (specularIntensityMap != null && specularIntensityMap!.isTexture) {
       data["specularIntensityMap"] =
-          specularIntensityMap!.toJSON(meta).uuid;
+          specularIntensityMap!.toJSON(meta)['uuid'];
     }
     if (specularColorMap != null && specularColorMap!.isTexture) {
-      data["specularColorMap"] = specularColorMap!.toJSON(meta).uuid;
+      data["specularColorMap"] = specularColorMap!.toJSON(meta)['uuid'];
     }
 
     if (envMap != null && envMap!.isTexture) {
-      data["envMap"] = envMap!.toJSON(meta).uuid;
+      data["envMap"] = envMap!.toJSON(meta)['uuid'];
 
       data["refractionRatio"] = refractionRatio;
 
@@ -574,16 +572,16 @@ class Material with EventDispatcher {
     }
 
     if (gradientMap != null && gradientMap!.isTexture) {
-      data["gradientMap"] = gradientMap!.toJSON(meta).uuid;
+      data["gradientMap"] = gradientMap!.toJSON(meta)['uuid'];
     }
 
-    if (transmission != null) data["transmission"] = transmission;
+    data["transmission"] = transmission;
     if (transmissionMap != null && transmissionMap!.isTexture) {
-      data["transmissionMap"] = transmissionMap!.toJSON(meta).uuid;
+      data["transmissionMap"] = transmissionMap!.toJSON(meta)['uuid'];
     }
     if (thickness != null) data["thickness"] = thickness;
     if (thicknessMap != null && thicknessMap!.isTexture) {
-      data["thicknessMap"] = thicknessMap!.toJSON(meta).uuid;
+      data["thicknessMap"] = thicknessMap!.toJSON(meta)['uuid'];
     }
     if (attenuationColor != null) {
       data["attenuationColor"] = attenuationColor!.getHex();
@@ -594,9 +592,7 @@ class Material with EventDispatcher {
 
     if (size != null) data["size"] = size;
     if (shadowSide != null) data["shadowSide"] = shadowSide;
-    if (sizeAttenuation != null) {
-      data["sizeAttenuation"] = sizeAttenuation;
-    }
+    data["sizeAttenuation"] = sizeAttenuation;
 
     if (blending != NormalBlending) data["blending"] = blending;
     if (side != FrontSide) data["side"] = side;
@@ -619,7 +615,7 @@ class Material with EventDispatcher {
     data["stencilZFail"] = stencilZFail;
     data["stencilZPass"] = stencilZPass;
 
-    if (rotation != null && rotation != 0) {
+    if (rotation != 0) {
       data["rotation"] = rotation;
     }
 
@@ -690,11 +686,11 @@ class Material with EventDispatcher {
     return data;
   }
 
-  clone() {
-    throw ("Material.clone ${type} need implement.... ");
+  Material clone() {
+    throw ("Material.clone $type need implement.... ");
   }
 
-  copy(source) {
+  Material copy(Material source) {
     name = source.name;
 
     fog = source.fog;
@@ -767,11 +763,11 @@ class Material with EventDispatcher {
     return this;
   }
 
-  dispose() {
+  void dispose() {
     dispatchEvent(Event({"type": "dispose"}));
   }
 
-  getProperty(propertyName) {
+  Object? getProperty(String propertyName) {
     if (propertyName == "vertexParameters") {
       return color;
     } else if (propertyName == "opacity") {
@@ -803,11 +799,11 @@ class Material with EventDispatcher {
     } else if (propertyName == "metalness") {
       return metalness;
     } else {
-      throw ("Material.getProperty type: ${type} propertyName: ${propertyName} is not support ");
+      throw ("Material.getProperty type: $type propertyName: $propertyName is not support ");
     }
   }
 
-  setProperty(propertyName, value) {
+  void setProperty(String propertyName, dynamic value) {
     if (propertyName == "color") {
       color = value;
     } else if (propertyName == "opacity") {
@@ -837,7 +833,7 @@ class Material with EventDispatcher {
     } else if (propertyName == "metalness") {
       metalness = value;
     } else {
-      throw ("Material.setProperty type: ${type} propertyName: ${propertyName} is not support ");
+      throw ("Material.setProperty type: $type propertyName: $propertyName is not support ");
     }
   }
 

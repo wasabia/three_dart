@@ -21,7 +21,7 @@ class InterleavedBufferAttribute extends BaseBufferAttribute {
   }
 
   @override
-  get array {
+  NativeArray get array {
     return data!.array;
   }
 

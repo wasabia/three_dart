@@ -7,7 +7,7 @@
 
 part of three_renderers;
 
-class RenderTarget with EventDispatcher {
+abstract class RenderTarget with EventDispatcher {
   late int width;
   late int height;
   int depth = 1;
@@ -36,19 +36,19 @@ class RenderTarget with EventDispatcher {
 
   late int samples;
 
-  clone() {
+  WebGLRenderTarget clone() {
     throw ("RenderTarget clone need implemnt ");
   }
 
-  setSize(width, height) {
+  void setSize(int width, int height, {int depth = 1}) {
     throw ("RenderTarget setSize need implemnt ");
   }
 
-  is3D() {
+  bool is3D() {
     throw ("RenderTarget is3D need implemnt ");
   }
 
-  dispose() {
+  void dispose() {
     throw ("RenderTarget dispose need implemnt ");
   }
 }
@@ -60,16 +60,16 @@ class WebGLRenderTarget extends RenderTarget {
   WebGLRenderTarget(int width, int height, [WebGLRenderTargetOptions? options]) {
     this.width = width;
     this.height = height;
-    this.scissor = Vector4(0, 0, width, height);
-    this.scissorTest = false;
+    scissor = Vector4(0, 0, width, height);
+    scissorTest = false;
 
-    this.viewport = Vector4(0, 0, width, height);
+    viewport = Vector4(0, 0, width, height);
 
     this.options = options ?? WebGLRenderTargetOptions({});
 
     var image = ImageElement( width: width, height: height, depth: 1 );
 
-    this.texture = Texture(
+    texture = Texture(
         image,
         this.options.mapping,
         this.options.wrapS,
@@ -80,81 +80,81 @@ class WebGLRenderTarget extends RenderTarget {
         this.options.type,
         this.options.anisotropy,
         this.options.encoding);
-    this.texture.isRenderTargetTexture = true;
-
-
-    this.texture.generateMipmaps = this.options.generateMipmaps != null
-        ? this.options.generateMipmaps
-        : false;
-    this.texture.minFilter =
+    texture.isRenderTargetTexture = true;
+    texture.generateMipmaps = this.options.generateMipmaps;
+    texture.minFilter =
         this.options.minFilter != null ? this.options.minFilter! : LinearFilter;
 
-    this.depthBuffer =
+    depthBuffer =
         this.options.depthBuffer != null ? this.options.depthBuffer! : true;
-    this.stencilBuffer =
-        this.options.stencilBuffer != null ? this.options.stencilBuffer : false;
-    this.depthTexture =
-        this.options.depthTexture != null ? this.options.depthTexture : null;
+    stencilBuffer = this.options.stencilBuffer;
+    depthTexture = this.options.depthTexture;
 
-    this.ignoreDepthForMultisampleCopy =
-        this.options.ignoreDepth != null ? this.options.ignoreDepth : true;
-    this.hasExternalTextures = false;
-    this.useMultisampleRenderToTexture = false;
-    this.useMultisampleRenderbuffer = false;
+    ignoreDepthForMultisampleCopy = this.options.ignoreDepth;
+    hasExternalTextures = false;
+    useMultisampleRenderToTexture = false;
+    useMultisampleRenderbuffer = false;
 
-    this.samples = (options != null && options.samples != null) ? options.samples! : 0;
+    samples =
+        (options != null && options.samples != null) ? options.samples! : 0;
   }
 
-  setSize(width, height, {depth = 1}) {
+  @override
+  void setSize(int width, int height, {int depth = 1}) {
     if (this.width != width || this.height != height || this.depth != depth) {
       this.width = width;
       this.height = height;
       this.depth = depth;
 
-      this.texture.image!.width = width;
-      this.texture.image!.height = height;
-      this.texture.image!.depth = depth;
+      texture.image!.width = width;
+      texture.image!.height = height;
+      texture.image!.depth = depth;
 
-      this.dispose();
+      dispose();
     }
 
-    this.viewport.set(0, 0, width, height);
-    this.scissor.set(0, 0, width, height);
+    viewport.set(0, 0, width, height);
+    scissor.set(0, 0, width, height);
   }
 
-  clone() {
-    return WebGLRenderTarget(this.width, this.height, this.options).copy(this);
+  @override
+  WebGLRenderTarget clone() {
+    return WebGLRenderTarget(width, height, options).copy(this);
   }
 
-  copy(source) {
-    this.width = source.width;
-    this.height = source.height;
-    this.depth = source.depth;
+  WebGLRenderTarget copy(WebGLRenderTarget source) {
+    width = source.width;
+    height = source.height;
+    depth = source.depth;
 
-    this.viewport.copy(source.viewport);
-    this.scissor.copy(source.scissor);
+    viewport.copy(source.viewport);
+    scissor.copy(source.scissor);
 
-    this.texture = source.texture.clone();
+    texture = source.texture.clone();
 
     // TODO Follow threejs
     //  this.texture.image = { ...this.texture.image }; // See #20328.
 
-    this.depthBuffer = source.depthBuffer;
-    this.stencilBuffer = source.stencilBuffer;
-    if ( source.depthTexture != null ) this.depthTexture = source.depthTexture.clone();
+    depthBuffer = source.depthBuffer;
+    stencilBuffer = source.stencilBuffer;
+    if (source.depthTexture != null) {
+      depthTexture = source.depthTexture!.clone() as DepthTexture;
+    }
 
-    this.samples = source.samples;
+    samples = source.samples;
 
     return this;
   }
 
-  is3D() {
-    return this.texture.isDataTexture3D || this.texture.isDataTexture2DArray;
+  @override
+  bool is3D() {
+    return texture.isDataTexture3D || texture.isDataTexture2DArray;
   }
 
-  dispose() {
+  @override
+  void dispose() {
     print(" WebGLRenderTarget dispose() ......... ");
-    this.dispatchEvent(Event({"type": "dispose"}));
+    dispatchEvent(Event({"type": "dispose"}));
   }
 }
 
@@ -230,7 +230,7 @@ class WebGLRenderTargetOptions {
     samples = json["samples"];
   }
 
-  toJSON() {
+  Map<String, dynamic> toJSON() {
     return {
       "wrapS": wrapS,
       "wrapT": wrapT,

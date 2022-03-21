@@ -1,7 +1,7 @@
 part of three_core;
 
-abstract class BaseBufferAttribute {
-  late List<num> array;
+abstract class BaseBufferAttribute<TData extends NativeArray> {
+  late TData array;
   late int itemSize;
 
   InterleavedBuffer? data;

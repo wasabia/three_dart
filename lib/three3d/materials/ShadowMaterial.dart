@@ -1,31 +1,32 @@
 part of three_materials;
 
-/**
+/*
  * parameters = {
  *  color: <THREE.Color>
  * }
  */
 
 class ShadowMaterial extends Material {
-  bool isShadowMaterial = true;
-  String type = 'ShadowMaterial';
-
   ShadowMaterial([parameters]) : super() {
-    this.color = Color.fromHex(0x000000);
-    this.transparent = true;
+    type = 'ShadowMaterial';
+    isShadowMaterial = true;
+    color = Color.fromHex(0x000000);
+    transparent = true;
 
-    this.setValues(parameters);
+    setValues(parameters);
   }
 
-  copy(source) {
+  @override
+  ShadowMaterial copy(Material source) {
     super.copy(source);
 
-    if (source.color != null) this.color?.copy(source.color);
+    if (source.color != null) color?.copy(source.color!);
 
     return this;
   }
 
-  clone() {
+  @override
+  ShadowMaterial clone() {
     return ShadowMaterial().copy(this);
   }
 }

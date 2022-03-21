@@ -29,7 +29,7 @@ class Sprite extends Object3D {
     if (_geometry == null) {
       _geometry = BufferGeometry();
 
-      var float32List = Float32List.fromList([
+      var float32List = Float32Array.from([
         -0.5,
         -0.5,
         0,

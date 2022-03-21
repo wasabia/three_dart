@@ -20,7 +20,7 @@ class WebGLClipping {
   WebGLClipping(this.properties) {}
 
   init(List<Plane> planes, bool enableLocalClipping, Camera camera) {
-    var enabled = planes.length != 0 ||
+    var enabled = planes.isNotEmpty ||
         enableLocalClipping ||
         // enable state of previous frame - the clipping code has to
         // run another frame in order to reset the state:
@@ -54,7 +54,7 @@ class WebGLClipping {
 
     if (!localClippingEnabled ||
         planes == null ||
-        planes.length == 0 ||
+        planes.isEmpty ||
         renderingShadows && !clipShadows) {
       // there's no local clipping
 

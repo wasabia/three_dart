@@ -61,7 +61,7 @@ class Object3D with EventDispatcher {
   bool receiveShadow = false;
 
   bool frustumCulled = true;
-  num renderOrder = 0;
+  int renderOrder = 0;
 
   // List<AnimationClip> animations = [];
 
@@ -330,7 +330,7 @@ class Object3D with EventDispatcher {
     _position.setFromMatrixPosition(matrixWorld);
 
     // TODO
-    if (isCamera || isLight) {
+    if (this is Camera || this is Light) {
       _m1.lookAt(_position, _target, up);
     } else {
       _m1.lookAt(_target, _position, up);
@@ -647,19 +647,19 @@ class Object3D with EventDispatcher {
       }
     }
 
-    if (isScene) {
+    if (this is Scene) {
       if (background != null) {
-        if (background.isColor) {
+        if (background is Color) {
           object["background"] = background!.getHex();
-        } else if (background.isTexture) {
+        } else if (background is Texture) {
           object["background"] = background.toJSON(meta).uuid;
         }
       }
 
       if (environment != null && environment!.isTexture) {
-        object["environment"] = environment!.toJSON(meta).uuid;
+        object["environment"] = environment!.toJSON(meta)['uuid'];
       }
-    } else if (isMesh || isLine || isPoints) {
+    } else if (this is Mesh || this is Line || this is Points) {
       object["geometry"] = serialize(meta!.geometries, geometry, meta);
 
       var parameters = geometry!.parameters;
