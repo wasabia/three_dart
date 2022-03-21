@@ -1,6 +1,6 @@
 part of three_materials;
 
-/**
+/*
  * parameters = {
  *  color: <hex>,
  *  map: new THREE.Texture( <Image> ),
@@ -11,35 +11,26 @@ part of three_materials;
  */
 
 class SpriteMaterial extends Material {
-  bool isSpriteMaterial = true;
-
-  bool transparent = true;
-
   SpriteMaterial([parameters]) : super() {
-    this.type = 'SpriteMaterial';
-
-    this.color = new Color(1, 1, 1);
-
-    this.setValues(parameters);
+    type = 'SpriteMaterial';
+    isSpriteMaterial = true;
+    transparent = true;
+    color = Color(1, 1, 1);
+    setValues(parameters);
   }
 
   SpriteMaterial.fromJSON(
       Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON) {}
+      : super.fromJSON(json, rootJSON);
 
-  copy(source) {
+  @override
+  SpriteMaterial copy(Material source) {
     super.copy(source);
-
-    this.color?.copy(source.color);
-
-    this.map = source.map;
-
-    this.alphaMap = source.alphaMap;
-
-    this.rotation = source.rotation;
-
-    this.sizeAttenuation = source.sizeAttenuation;
-
+    color?.copy(source.color!);
+    map = source.map;
+    alphaMap = source.alphaMap;
+    rotation = source.rotation;
+    sizeAttenuation = source.sizeAttenuation;
     return this;
   }
 }

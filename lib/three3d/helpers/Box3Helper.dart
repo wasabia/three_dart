@@ -33,7 +33,7 @@ class Box3Helper extends LineSegments {
       7
     ]);
 
-    var positions = [
+    List<double> positions = [
       1,
       1,
       1,
@@ -60,15 +60,16 @@ class Box3Helper extends LineSegments {
       -1
     ];
 
-    var geometry = new BufferGeometry();
+    var geometry = BufferGeometry();
 
-    geometry.setIndex(new BufferAttribute(indices, 1, false));
+    geometry.setIndex(Uint16BufferAttribute(indices, 1, false));
 
     geometry.setAttribute(
-        'position', new Float32BufferAttribute(positions, 3, false));
+        'position',
+        Float32BufferAttribute(Float32Array.from(positions), 3, false));
 
     var box3Helper = Box3Helper.create(
-        geometry, new LineBasicMaterial({"color": color, "toneMapped": false}));
+        geometry, LineBasicMaterial({"color": color, "toneMapped": false}));
 
     box3Helper.box = box;
 

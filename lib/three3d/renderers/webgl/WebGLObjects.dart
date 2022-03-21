@@ -9,12 +9,12 @@ class WebGLObjects {
 
   WebGLObjects(this.gl, this.geometries, this.attributes, this.info) {}
 
-  update(object) {
+  BufferGeometry update(Object3D object) {
     num frame = info.render["frame"]!;
 
     var geometry = object.geometry;
 
-    var buffergeometry = geometries.get(object, geometry);
+    var buffergeometry = geometries.get(object, geometry!);
 
     // Update once per frame
 
@@ -41,18 +41,19 @@ class WebGLObjects {
     return buffergeometry;
   }
 
-  dispose() {
+  void dispose() {
     updateMap.clear();
   }
 
-  onInstancedMeshDispose(event) {
+  void onInstancedMeshDispose(event) {
     var instancedMesh = event.target;
 
     instancedMesh.removeEventListener('dispose', onInstancedMeshDispose);
 
     attributes.remove(instancedMesh.instanceMatrix);
 
-    if (instancedMesh.instanceColor != null)
+    if (instancedMesh.instanceColor != null) {
       attributes.remove(instancedMesh.instanceColor);
+    }
   }
 }

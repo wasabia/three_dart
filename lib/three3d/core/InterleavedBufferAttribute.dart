@@ -1,139 +1,142 @@
 part of three_core;
 
-var _vector = new Vector3.init();
+var _vector = Vector3.init();
 
 class InterleavedBufferAttribute extends BaseBufferAttribute {
-  InterleavedBuffer? data;
-  int itemSize;
   int offset;
-  bool normalized;
-  bool isInterleavedBufferAttribute = true;
-  String type = "InterleavedBufferAttribute";
 
   InterleavedBufferAttribute(
-      this.data, this.itemSize, this.offset, this.normalized)
-      : super() {}
-
-  get count {
-    return this.data!.count;
+      InterleavedBuffer? _data, int _itemSize, this.offset, bool _normalized)
+      : super() {
+    type = "InterleavedBufferAttribute";
+    isInterleavedBufferAttribute = true;
+    data = _data;
+    itemSize = _itemSize;
+    normalized = _normalized;
   }
 
-  get array {
-    return this.data!.array;
+  @override
+  int get count {
+    return data!.count;
   }
 
-  set needsUpdate(value) {
-    this.data!.needsUpdate = value;
+  @override
+  NativeArray get array {
+    return data!.array;
   }
 
-  applyMatrix4(m) {
-    for (var i = 0, l = this.data!.count; i < l; i++) {
-      _vector.x = this.getX(i);
-      _vector.y = this.getY(i);
-      _vector.z = this.getZ(i);
+  set needsUpdate(bool value) {
+    data!.needsUpdate = value;
+  }
+
+  InterleavedBufferAttribute applyMatrix4(Matrix4 m) {
+    for (var i = 0, l = data!.count; i < l; i++) {
+      _vector.x = getX(i);
+      _vector.y = getY(i);
+      _vector.z = getZ(i);
 
       _vector.applyMatrix4(m);
 
-      this.setXYZ(i, _vector.x, _vector.y, _vector.z);
+      setXYZ(i, _vector.x, _vector.y, _vector.z);
     }
 
     return this;
   }
 
-  applyNormalMatrix(m) {
-    for (var i = 0, l = this.count; i < l; i++) {
-      _vector.x = this.getX(i);
-      _vector.y = this.getY(i);
-      _vector.z = this.getZ(i);
+  InterleavedBufferAttribute applyNormalMatrix(Matrix3 m) {
+    for (var i = 0, l = count; i < l; i++) {
+      _vector.x = getX(i);
+      _vector.y = getY(i);
+      _vector.z = getZ(i);
 
       _vector.applyNormalMatrix(m);
 
-      this.setXYZ(i, _vector.x, _vector.y, _vector.z);
+      setXYZ(i, _vector.x, _vector.y, _vector.z);
     }
 
     return this;
   }
 
-  transformDirection(m) {
-    for (var i = 0, l = this.count; i < l; i++) {
-      _vector.x = this.getX(i);
-      _vector.y = this.getY(i);
-      _vector.z = this.getZ(i);
+  InterleavedBufferAttribute transformDirection(Matrix4 m) {
+    for (var i = 0, l = count; i < l; i++) {
+      _vector.x = getX(i);
+      _vector.y = getY(i);
+      _vector.z = getZ(i);
 
       _vector.transformDirection(m);
 
-      this.setXYZ(i, _vector.x, _vector.y, _vector.z);
+      setXYZ(i, _vector.x, _vector.y, _vector.z);
     }
 
     return this;
   }
 
-  setX(index, x) {
-    this.data!.array[index * this.data!.stride + this.offset] = x;
+  InterleavedBufferAttribute setX(int index, x) {
+    data!.array[index * data!.stride + offset] = x;
 
     return this;
   }
 
-  setY(index, y) {
-    this.data!.array[index * this.data!.stride + this.offset + 1] = y;
+  InterleavedBufferAttribute setY(int index, y) {
+    data!.array[index * data!.stride + offset + 1] = y;
 
     return this;
   }
 
-  setZ(index, z) {
-    this.data!.array[index * this.data!.stride + this.offset + 2] = z;
+  InterleavedBufferAttribute setZ(int index, z) {
+    data!.array[index * data!.stride + offset + 2] = z;
 
     return this;
   }
 
-  setW(index, w) {
-    this.data!.array[index * this.data!.stride + this.offset + 3] = w;
+  InterleavedBufferAttribute setW(int index, w) {
+    data!.array[index * data!.stride + offset + 3] = w;
 
     return this;
   }
 
-  getX(index) {
-    return this.data!.array[index * this.data!.stride + this.offset];
+  getX(int index) {
+    return data!.array[index * data!.stride + offset];
   }
 
-  getY(index) {
-    return this.data!.array[index * this.data!.stride + this.offset + 1];
+  getY(int index) {
+    return data!.array[index * data!.stride + offset + 1];
   }
 
-  getZ(index) {
-    return this.data!.array[index * this.data!.stride + this.offset + 2];
+  getZ(int index) {
+    return data!.array[index * data!.stride + offset + 2];
   }
 
-  getW(index) {
-    return this.data!.array[index * this.data!.stride + this.offset + 3];
+  getW(int index) {
+    return data!.array[index * data!.stride + offset + 3];
   }
 
-  setXY(index, x, y) {
-    index = index * this.data!.stride + this.offset;
+  InterleavedBufferAttribute setXY(int index, x, y) {
+    index = index * data!.stride + offset;
 
-    this.data!.array[index + 0] = x;
-    this.data!.array[index + 1] = y;
+    data!.array[index + 0] = x;
+    data!.array[index + 1] = y;
 
     return this;
   }
 
-  setXYZ(index, x, y, z) {
-    index = index * this.data!.stride + this.offset;
+  InterleavedBufferAttribute setXYZ(int index, x, y, z) {
+    index = index * data!.stride + offset;
 
-    this.data!.array[index + 0] = x;
-    this.data!.array[index + 1] = y;
-    this.data!.array[index + 2] = z;
+    data!.array[index + 0] = x;
+    data!.array[index + 1] = y;
+    data!.array[index + 2] = z;
 
     return this;
   }
 
-  setXYZW(index, x, y, z, w) {
-    index = index * this.data!.stride + this.offset;
+  InterleavedBufferAttribute setXYZW(int index, x, y, z, w) {
+    index = index * data!.stride + offset;
 
-    this.data!.array[index + 0] = x;
-    this.data!.array[index + 1] = y;
-    this.data!.array[index + 2] = z;
-    this.data!.array[index + 3] = w;
+    data!.array[index + 0] = x;
+    data!.array[index + 1] = y;
+    data!.array[index + 2] = z;
+    data!.array[index + 3] = w;
 
     return this;
   }
@@ -180,17 +183,17 @@ class InterleavedBufferAttribute extends BaseBufferAttribute {
 
   // }
 
-  toJSON(data) {
+  Map<String, Object> toJSON(data) {
     if (data == null) {
       print(
           'THREE.InterleavedBufferAttribute.toJSON(): Serializing an interlaved buffer attribute will deinterleave buffer data!.');
 
       var array = [];
 
-      for (var i = 0; i < this.count; i++) {
-        var index = i * this.data!.stride + this.offset;
+      for (var i = 0; i < count; i++) {
+        var index = i * this.data!.stride + offset;
 
-        for (var j = 0; j < this.itemSize; j++) {
+        for (var j = 0; j < itemSize; j++) {
           array.add(this.data!.array[index + j]);
         }
       }
@@ -198,17 +201,15 @@ class InterleavedBufferAttribute extends BaseBufferAttribute {
       // deinterleave data and save it as an ordinary buffer attribute for now
 
       return {
-        "itemSize": this.itemSize,
+        "itemSize": itemSize,
         "type": this.array.runtimeType.toString(),
         "array": array,
-        "normalized": this.normalized
+        "normalized": normalized
       };
     } else {
       // save as true interlaved attribtue
 
-      if (data.interleavedBuffers == null) {
-        data.interleavedBuffers = {};
-      }
+      data.interleavedBuffers ??= {};
 
       if (data.interleavedBuffers[this.data!.uuid] == null) {
         data.interleavedBuffers[this.data!.uuid] = this.data!.toJSON(data);
@@ -216,10 +217,10 @@ class InterleavedBufferAttribute extends BaseBufferAttribute {
 
       return {
         "isInterleavedBufferAttribute": true,
-        "itemSize": this.itemSize,
+        "itemSize": itemSize,
         "data": this.data!.uuid,
-        "offset": this.offset,
-        "normalized": this.normalized
+        "offset": offset,
+        "normalized": normalized
       };
     }
   }

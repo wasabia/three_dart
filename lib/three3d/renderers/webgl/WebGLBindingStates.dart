@@ -19,18 +19,19 @@ class WebGLBindingStates {
       this.gl, this.extensions, this.attributes, this.capabilities) {
     maxVertexAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
 
-    bindingStates = Map<int, dynamic>();
+    bindingStates = <int, dynamic>{};
 
     extension = capabilities.isWebGL2
         ? null
         : extensions.get('OES_vertex_array_object');
     vaoAvailable = capabilities.isWebGL2 || extension != null;
 
-    this.defaultState = createBindingState(null);
-    this.currentState = defaultState;
+    defaultState = createBindingState(null);
+    currentState = defaultState;
   }
 
-  setup(object, material, program, geometry, index) {
+  void setup(Object3D object, Material material, WebGLProgram program,
+      BufferGeometry geometry, BufferAttribute? index) {
     bool updateBuffers = false;
 
     if (vaoAvailable) {
@@ -59,7 +60,7 @@ class WebGLBindingStates {
       }
     }
 
-    if (object.isInstancedMesh == true) {
+    if (object is InstancedMesh) {
       updateBuffers = true;
     }
 
@@ -434,9 +435,9 @@ class WebGLBindingStates {
   }
 
   releaseStatesOfGeometry(geometry) {
-    if (this.bindingStates[geometry.id] == null) return;
+    if (bindingStates[geometry.id] == null) return;
 
-    var programMap = this.bindingStates[geometry.id];
+    var programMap = bindingStates[geometry.id];
     for (var programId in programMap.keys) {
       var stateMap = programMap[programId];
       for (var wireframe in stateMap.keys) {

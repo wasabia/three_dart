@@ -9,8 +9,8 @@ Map<String, dynamic> UniformsLib = {
     "diffuse": {"value": Color.fromHex(0xffffff)},
     "opacity": {"value": 1.0},
     "map": {},
-    "uvTransform": {"value": new Matrix3()},
-    "uv2Transform": {"value": new Matrix3()},
+    "uvTransform": {"value": Matrix3()},
+    "uv2Transform": {"value": Matrix3()},
     "alphaMap": {},
     "alphaTest": {"value": 0.0}
   },
@@ -39,7 +39,7 @@ Map<String, dynamic> UniformsLib = {
   },
   "normalmap": {
     "normalMap": {},
-    "normalScale": {"value": new Vector2(1, 1)}
+    "normalScale": {"value": Vector2(1, 1)}
   },
   "displacementmap": {
     "displacementMap": {},
@@ -53,7 +53,7 @@ Map<String, dynamic> UniformsLib = {
     "fogDensity": {"value": 0.00025},
     "fogNear": {"value": 1},
     "fogFar": {"value": 2000},
-    "fogColor": {"value": new Color(0, 0, 0)}
+    "fogColor": {"value": Color(0, 0, 0)}
   },
   "lights": {
     "ambientLightColor": {"value": []},
@@ -146,16 +146,16 @@ Map<String, dynamic> UniformsLib = {
     "map": {},
     "alphaMap": {},
     "alphaTest": {"value": 0.0},
-    "uvTransform": {"value": new Matrix3()}
+    "uvTransform": {"value": Matrix3()}
   },
   "sprite": {
     "diffuse": {"value": Color.fromHex(0xffffff)},
     "opacity": {"value": 1.0},
-    "center": {"value": new Vector2(0.5, 0.5)},
+    "center": {"value": Vector2(0.5, 0.5)},
     "rotation": {"value": 0.0},
     "map": {},
     "alphaMap": {},
     "alphaTest": {"value": 0.0},
-    "uvTransform": {"value": new Matrix3()}
+    "uvTransform": {"value": Matrix3()}
   }
 };

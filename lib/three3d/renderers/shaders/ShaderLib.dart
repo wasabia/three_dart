@@ -15,7 +15,7 @@ Map<String, dynamic> ShaderLibStandard = {
     UniformsLib["fog"],
     UniformsLib["lights"],
     {
-      "emissive": {"value": new Color(0, 0, 0)},
+      "emissive": {"value": Color(0, 0, 0)},
       "roughness": {"value": 1.0},
       "metalness": {"value": 0.0},
       "envMapIntensity": {"value": 1} // temporary
@@ -155,7 +155,7 @@ Map<String, dynamic> ShaderLib = {
   },
   "background": {
     "uniforms": {
-      "uvTransform": {"value": new Matrix3()},
+      "uvTransform": {"value": Matrix3()},
       "t2D": {"value": null},
     },
     "vertexShader": ShaderChunk["background_vert"],
@@ -187,7 +187,7 @@ Map<String, dynamic> ShaderLib = {
       UniformsLib["common"],
       UniformsLib["displacementmap"],
       {
-        "referencePosition": {"value": new Vector3.init()},
+        "referencePosition": {"value": Vector3.init()},
         "nearDistance": {"value": 1},
         "farDistance": {"value": 1000}
       }
@@ -215,7 +215,7 @@ Map<String, dynamic> ShaderLib = {
         "clearcoatMap": {"value": null},
         "clearcoatRoughness": {"value": 0},
         "clearcoatRoughnessMap": {"value": null},
-        "clearcoatNormalScale": {"value": new Vector2(1, 1)},
+        "clearcoatNormalScale": {"value": Vector2(1, 1)},
         "clearcoatNormalMap": {"value": null},
         "sheenColor": {"value": Color.fromHex(0x000000)},
         "sheenColorMap": {},
@@ -223,7 +223,7 @@ Map<String, dynamic> ShaderLib = {
         "sheenRoughnessMap": {},
         "transmission": {"value": 0},
         "transmissionMap": {"value": null},
-        "transmissionSamplerSize": {"value": new Vector2(null, null)},
+        "transmissionSamplerSize": {"value": Vector2(null, null)},
         "transmissionSamplerMap": {"value": null},
         "thickness": {"value": 0},
         "thicknessMap": {"value": null},
@@ -231,7 +231,7 @@ Map<String, dynamic> ShaderLib = {
         "attenuationColor": {"value": Color.fromHex(0x000000)},
         "specularIntensity": {"value": 1.0},
         "specularIntensityMap": {"value": null},
-        "specularColor": {"value": new Color(1, 1, 1)},
+        "specularColor": {"value": Color(1, 1, 1)},
         "specularColorMap": {"value": null}
       }
     ]),

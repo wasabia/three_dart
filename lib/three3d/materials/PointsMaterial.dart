@@ -1,6 +1,6 @@
 part of three_materials;
 
-/**
+/*
  * parameters = {
  *  color: <hex>,
  *  opacity: <float>,
@@ -14,31 +14,25 @@ part of three_materials;
  */
 
 class PointsMaterial extends Material {
-  num? size = 1;
+  PointsMaterial([Map<String, dynamic>? parameters]) {
+    type = "PointsMaterial";
+    isPointsMaterial = true;
+    sizeAttenuation = true;
+    color = Color(1, 1, 1);
+    size = 1;
 
-  String type = "PointsMaterial";
-  bool isPointsMaterial = true;
-
-  bool sizeAttenuation = true;
-
-  Color? color = new Color(1, 1, 1);
-
-  PointsMaterial([parameters]) {
-    this.setValues(parameters);
+    setValues(parameters);
   }
 
-  copy(source) {
+  @override
+  PointsMaterial copy(Material source) {
     super.copy(source);
+    color?.copy(source.color!);
 
-    this.color?.copy(source.color);
-
-    this.map = source.map;
-
-    this.alphaMap = source.alphaMap;
-
-    this.size = source.size;
-    this.sizeAttenuation = source.sizeAttenuation;
-
+    map = source.map;
+    alphaMap = source.alphaMap;
+    size = source.size;
+    sizeAttenuation = source.sizeAttenuation;
     return this;
   }
 }

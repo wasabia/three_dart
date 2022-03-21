@@ -1,6 +1,6 @@
 part of three_materials;
 
-/**
+/*
  * parameters = {
  *  clearcoat: <float>,
  *  clearcoatMap: new THREE.Texture( <Image> ),
@@ -30,79 +30,71 @@ part of three_materials;
  */
 
 class MeshPhysicalMaterial extends MeshStandardMaterial {
-  bool isMeshPhysicalMaterial = true;
-
-  Texture? clearcoatMap;
-  num? clearcoatRoughness = 0.0;
-  String type = 'MeshPhysicalMaterial';
-  Texture? clearcoatRoughnessMap;
-  Vector2? clearcoatNormalScale = Vector2(1, 1);
-  Texture? clearcoatNormalMap;
-
-  // null will disable sheenColor bsdf
-  Color? sheenColor;
-
-  num? thickness = 0.0;
-
-  Color? attenuationColor = new Color(1, 1, 1);
-  num? attenuationDistance = 0.0;
-
-  num? specularIntensity = 1.0;
-  Texture? specularIntensityMap = null;
-  Color? specularColor = new Color(1, 1, 1);
-  Texture? specularColorMap = null;
-  num? ior = 1.5;
-
   MeshPhysicalMaterial([parameters]) : super(parameters) {
-    this.defines = {'STANDARD': '', 'PHYSICAL': ''};
+    isMeshPhysicalMaterial = true;
+    clearcoatRoughness = 0.0;
+    type = 'MeshPhysicalMaterial';
+    clearcoatNormalScale = Vector2(1, 1);
+    thickness = 0.0;
+    attenuationColor = Color(1, 1, 1);
+    attenuationDistance = 0.0;
+    specularIntensity = 1.0;
+    specularColor = Color(1, 1, 1);
+    ior = 1.5;
 
-    this.setValues(parameters);
+    defines = {'STANDARD': '', 'PHYSICAL': ''};
+
+    setValues(parameters);
   }
 
-  num get reflectivity =>
-      (MathUtils.clamp(2.5 * (this.ior! - 1) / (this.ior! + 1), 0, 1));
+  @override
+  num get reflectivity {
+    return (MathUtils.clamp(2.5 * (ior! - 1) / (ior! + 1), 0, 1));
+  }
+
+  @override
   set reflectivity(value) {
-    this.ior = (1 + 0.4 * value) / (1 - 0.4 * value);
+    ior = (1 + 0.4 * value) / (1 - 0.4 * value);
   }
 
-  copy(source) {
+  @override
+  MeshPhysicalMaterial copy(Material source) {
     super.copy(source);
 
-    this.defines = {'STANDARD': '', 'PHYSICAL': ''};
+    defines = {'STANDARD': '', 'PHYSICAL': ''};
 
-    this.clearcoat = source.clearcoat;
-    this.clearcoatMap = source.clearcoatMap;
-    this.clearcoatRoughness = source.clearcoatRoughness;
-    this.clearcoatRoughnessMap = source.clearcoatRoughnessMap;
-    this.clearcoatNormalMap = source.clearcoatNormalMap;
-    this.clearcoatNormalScale!.copy(source.clearcoatNormalScale);
+    clearcoat = source.clearcoat;
+    clearcoatMap = source.clearcoatMap;
+    clearcoatRoughness = source.clearcoatRoughness;
+    clearcoatRoughnessMap = source.clearcoatRoughnessMap;
+    clearcoatNormalMap = source.clearcoatNormalMap;
+    clearcoatNormalScale!.copy(source.clearcoatNormalScale!);
 
-    this.ior = source.ior;
+    ior = source.ior;
 
     if (source.sheenColor != null) {
-      this.sheenColor =
-          (this.sheenColor ?? new Color(0, 0, 0)).copy(source.sheen);
+      sheenColor = (sheenColor ?? Color(0, 0, 0)).copy(source.sheenColor!);
     } else {
-      this.sheenColor = null;
+      sheenColor = null;
     }
 
-    this.sheenColorMap = source.sheenColorMap;
-    this.sheenRoughness = source.sheenRoughness;
-    this.sheenRoughnessMap = source.sheenRoughnessMap;
+    sheenColorMap = source.sheenColorMap;
+    sheenRoughness = source.sheenRoughness;
+    sheenRoughnessMap = source.sheenRoughnessMap;
 
-    this.transmission = source.transmission;
-    this.transmissionMap = source.transmissionMap;
+    transmission = source.transmission;
+    transmissionMap = source.transmissionMap;
 
-    this.thickness = source.thickness;
-    this.thicknessMap = source.thicknessMap;
+    thickness = source.thickness;
+    thicknessMap = source.thicknessMap;
 
-    this.attenuationColor!.copy(source.attenuationColor);
-    this.attenuationDistance = source.attenuationDistance;
+    attenuationColor!.copy(source.attenuationColor!);
+    attenuationDistance = source.attenuationDistance;
 
-    this.specularIntensity = source.specularIntensity;
-    this.specularIntensityMap = source.specularIntensityMap;
-    this.specularColor!.copy(source.specularColor);
-    this.specularColorMap = source.specularColorMap;
+    specularIntensity = source.specularIntensity;
+    specularIntensityMap = source.specularIntensityMap;
+    specularColor!.copy(source.specularColor!);
+    specularColorMap = source.specularColorMap;
 
     return this;
   }
