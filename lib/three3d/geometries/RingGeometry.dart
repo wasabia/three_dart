@@ -11,7 +11,7 @@ class RingGeometry extends BufferGeometry {
       thetaStart = 0,
       thetaLength = Math.PI * 2])
       : super() {
-    this.parameters = {
+    parameters = {
       "innerRadius": innerRadius,
       "outerRadius": outerRadius,
       "thetaSegments": thetaSegments,
@@ -26,16 +26,16 @@ class RingGeometry extends BufferGeometry {
     // buffers
 
     List<num> indices = [];
-    List<num> vertices = [];
-    List<num> normals = [];
-    List<num> uvs = [];
+    List<double> vertices = [];
+    List<double> normals = [];
+    List<double> uvs = [];
 
     // some helper variables
 
     var radius = innerRadius;
     var radiusStep = ((outerRadius - innerRadius) / phiSegments);
-    var vertex = new Vector3();
-    var uv = new Vector2();
+    var vertex = Vector3();
+    var uv = Vector2();
 
     // generate vertices, normals and uvs
 
@@ -50,7 +50,8 @@ class RingGeometry extends BufferGeometry {
         vertex.x = radius * Math.cos(segment);
         vertex.y = radius * Math.sin(segment);
 
-        vertices.addAll([vertex.x, vertex.y, vertex.z]);
+        vertices.addAll(
+            [vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
 
         // normal
 
@@ -61,7 +62,7 @@ class RingGeometry extends BufferGeometry {
         uv.x = (vertex.x / outerRadius + 1) / 2;
         uv.y = (vertex.y / outerRadius + 1) / 2;
 
-        uvs.addAll([uv.x, uv.y]);
+        uvs.addAll([uv.x.toDouble(), uv.y.toDouble()]);
       }
 
       // increase the radius for next row of vertices
@@ -91,14 +92,16 @@ class RingGeometry extends BufferGeometry {
 
     // build geometry
 
-    this.setIndex(indices);
-    this.setAttribute('position', new Float32BufferAttribute(vertices, 3));
-    this.setAttribute('normal', new Float32BufferAttribute(normals, 3));
-    this.setAttribute('uv', new Float32BufferAttribute(uvs, 2));
+    setIndex(indices);
+    setAttribute(
+        'position', Float32BufferAttribute(Float32Array.from(vertices), 3));
+    setAttribute(
+        'normal', Float32BufferAttribute(Float32Array.from(normals), 3));
+    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvs), 2));
   }
 
   static fromJSON(data) {
-    return new RingGeometry(
+    return RingGeometry(
         data.innerRadius,
         data.outerRadius,
         data.thetaSegments,

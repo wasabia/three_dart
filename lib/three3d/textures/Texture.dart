@@ -65,7 +65,7 @@ class Texture with EventDispatcher {
 
   Texture([image, int? mapping, int? wrapS, int? wrapT, int? magFilter,
       int? minFilter, int? format, int? type, int? anisotropy, int? encoding]) {
-    this.source = Source(image);
+    source = Source(image);
     this.mapping = mapping ?? Texture.DEFAULT_MAPPING;
 
     this.wrapS = wrapS ?? ClampToEdgeWrapping;
@@ -77,82 +77,82 @@ class Texture with EventDispatcher {
     this.anisotropy = anisotropy ?? 1;
 
     this.format = format ?? RGBAFormat;
-    this.internalFormat = null;
+    internalFormat = null;
     this.type = type ?? UnsignedByteType;
     this.encoding = encoding ?? LinearEncoding;
   }
 
   get image {
 
-		return this.source.data;
+    return source.data;
 
 	}
 
 	set image( value ) {
 
-		this.source.data = value;
+    source.data = value;
 
 	}
 
   set needsUpdate(bool value) {
     if (value) {
-      this.version++;
-      this.source.needsUpdate = true;
+      version++;
+      source.needsUpdate = true;
     }
   }
 
   updateMatrix() {
-    this.matrix.setUvTransform(this.offset.x, this.offset.y, this.repeat.x,
-        this.repeat.y, this.rotation, this.center.x, this.center.y);
+    matrix.setUvTransform(
+        offset.x, offset.y, repeat.x, repeat.y, rotation, center.x, center.y);
   }
 
   Texture clone() {
     return Texture().copy(this);
   }
 
-  copy(source) {
-    this.name = source.name;
+  Texture copy(Texture source) {
+    name = source.name;
 
     this.source = source.source;
 
-    this.mapping = source.mapping;
+    mapping = source.mapping;
 
-    this.wrapS = source.wrapS;
-    this.wrapT = source.wrapT;
+    wrapS = source.wrapS;
+    wrapT = source.wrapT;
 
-    this.magFilter = source.magFilter;
-    this.minFilter = source.minFilter;
+    magFilter = source.magFilter;
+    minFilter = source.minFilter;
 
-    this.anisotropy = source.anisotropy;
+    anisotropy = source.anisotropy;
 
-    this.format = source.format;
-    this.internalFormat = source.internalFormat;
-    this.type = source.type;
+    format = source.format;
+    internalFormat = source.internalFormat;
+    type = source.type;
 
-    this.offset.copy(source.offset);
-    this.repeat.copy(source.repeat);
-    this.center.copy(source.center);
-    this.rotation = source.rotation;
+    offset.copy(source.offset);
+    repeat.copy(source.repeat);
+    center.copy(source.center);
+    rotation = source.rotation;
 
-    this.matrixAutoUpdate = source.matrixAutoUpdate;
-    this.matrix.copy(source.matrix);
+    matrixAutoUpdate = source.matrixAutoUpdate;
+    matrix.copy(source.matrix);
 
-    this.generateMipmaps = source.generateMipmaps;
-    this.premultiplyAlpha = source.premultiplyAlpha;
-    this.flipY = source.flipY;
-    this.unpackAlignment = source.unpackAlignment;
-    this.encoding = source.encoding;
+    generateMipmaps = source.generateMipmaps;
+    premultiplyAlpha = source.premultiplyAlpha;
+    flipY = source.flipY;
+    unpackAlignment = source.unpackAlignment;
+    encoding = source.encoding;
 
-    this.userData = json.decode(json.encode(source.userData));
+    userData = json.decode(json.encode(source.userData));
 
     return this;
   }
 
-  toJSON(meta) {
+  Map<String, dynamic> toJSON(meta) {
     bool isRootObject = (meta == null || meta is String);
 
-    if (!isRootObject && meta.textures[this.uuid] != null) {
-      return meta.textures[this.uuid];
+    if (!isRootObject && meta.textures[uuid] != null) {
+      return meta.textures[uuid];
     }
 
     Map<String, dynamic> output = {
@@ -161,37 +161,37 @@ class Texture with EventDispatcher {
         "type": 'Texture',
         "generator": 'Texture.toJSON'
       },
-      "uuid": this.uuid,
-      "name": this.name,
-      "image": this.source.toJSON( meta ).uuid,
-      "mapping": this.mapping,
-      "repeat": [this.repeat.x, this.repeat.y],
-      "offset": [this.offset.x, this.offset.y],
-      "center": [this.center.x, this.center.y],
-      "rotation": this.rotation,
-      "wrap": [this.wrapS, this.wrapT],
-      "format": this.format,
-      "type": this.type,
-      "encoding": this.encoding,
-      "minFilter": this.minFilter,
-      "magFilter": this.magFilter,
-      "anisotropy": this.anisotropy,
-      "flipY": this.flipY,
-      "premultiplyAlpha": this.premultiplyAlpha,
-      "unpackAlignment": this.unpackAlignment
+      "uuid": uuid,
+      "name": name,
+      "image": source.toJSON(meta).uuid,
+      "mapping": mapping,
+      "repeat": [repeat.x, repeat.y],
+      "offset": [offset.x, offset.y],
+      "center": [center.x, center.y],
+      "rotation": rotation,
+      "wrap": [wrapS, wrapT],
+      "format": format,
+      "type": type,
+      "encoding": encoding,
+      "minFilter": minFilter,
+      "magFilter": magFilter,
+      "anisotropy": anisotropy,
+      "flipY": flipY,
+      "premultiplyAlpha": premultiplyAlpha,
+      "unpackAlignment": unpackAlignment
     };
 
-    if (this.userData.isNotEmpty) output["userData"] = this.userData;
+    if (userData.isNotEmpty) output["userData"] = userData;
 
     if (!isRootObject) {
-      meta.textures[this.uuid] = output;
+      meta.textures[uuid] = output;
     }
 
     return output;
   }
 
-  dispose() {
-    this.dispatchEvent(Event({"type": "dispose"}));
+  void dispose() {
+    dispatchEvent(Event({"type": "dispose"}));
     if (image is List) {
       image.forEach((img) {
         img.dispose();
@@ -202,12 +202,12 @@ class Texture with EventDispatcher {
   }
 
   transformUv(uv) {
-    if (this.mapping != UVMapping) return uv;
+    if (mapping != UVMapping) return uv;
 
-    uv.applyMatrix3(this.matrix);
+    uv.applyMatrix3(matrix);
 
     if (uv.x < 0 || uv.x > 1) {
-      switch (this.wrapS) {
+      switch (wrapS) {
         case RepeatWrapping:
           uv.x = uv.x - Math.floor(uv.x);
           break;
@@ -228,7 +228,7 @@ class Texture with EventDispatcher {
     }
 
     if (uv.y < 0 || uv.y > 1) {
-      switch (this.wrapT) {
+      switch (wrapT) {
         case RepeatWrapping:
           uv.y = uv.y - Math.floor(uv.y);
           break;
@@ -248,7 +248,7 @@ class Texture with EventDispatcher {
       }
     }
 
-    if (this.flipY) {
+    if (flipY) {
       uv.y = 1 - uv.y;
     }
 

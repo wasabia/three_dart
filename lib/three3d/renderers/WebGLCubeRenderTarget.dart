@@ -1,9 +1,8 @@
 part of three_renderers;
 
 class WebGLCubeRenderTarget extends WebGLRenderTarget {
-  bool isWebGLCubeRenderTarget = true;
-
   WebGLCubeRenderTarget(int size, options, dummy) : super(size, size, options) {
+    isWebGLCubeRenderTarget = true;
     // By convention -- likely based on the RenderMan spec from the 1990's -- cube maps are specified by WebGL (and three.js)
     // in a coordinate system in which positive-x is to the right when looking up the positive-z axis -- in other words,
     // in a left-handed coordinate system. By continuing this convention, preexisting cube maps continued to render correctly.
@@ -15,7 +14,7 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
 		var images = [ image, image, image, image, image, image ];
 
     options = options ?? WebGLRenderTargetOptions({});
-    this.texture = CubeTexture(
+    texture = CubeTexture(
         images,
         options.mapping,
         options.wrapS,
@@ -26,13 +25,13 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
         options.type,
         options.anisotropy,
         options.encoding);
-    this.texture.isRenderTargetTexture = true;
+    texture.isRenderTargetTexture = true;
 
-    this.texture.generateMipmaps = options.generateMipmaps ?? false;
-    this.texture.minFilter = options.minFilter ?? LinearFilter;
+    texture.generateMipmaps = options.generateMipmaps ?? false;
+    texture.minFilter = options.minFilter ?? LinearFilter;
   }
 
-  fromEquirectangularTexture(renderer, texture) {
+  WebGLCubeRenderTarget fromEquirectangularTexture(renderer, Texture texture) {
     this.texture.type = texture.type;
     this.texture.format = RGBAFormat; // see #18859
     this.texture.encoding = texture.encoding;
@@ -84,9 +83,9 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
       """
     };
 
-    var geometry = new BoxGeometry(5, 5, 5);
+    var geometry = BoxGeometry(5, 5, 5);
 
-    var material = new ShaderMaterial({
+    var material = ShaderMaterial({
       "name": 'CubemapFromEquirect',
       "uniforms": cloneUniforms(shader["uniforms"] as Map<String, dynamic>),
       "vertexShader": shader["vertexShader"],
@@ -102,8 +101,9 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
     var currentMinFilter = texture.minFilter;
 
     // Avoid blurred poles
-    if (texture.minFilter == LinearMipmapLinearFilter)
+    if (texture.minFilter == LinearMipmapLinearFilter) {
       texture.minFilter = LinearFilter;
+    }
 
     var camera = CubeCamera(1, 10, this);
     camera.update(renderer, mesh);
@@ -116,7 +116,7 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
     return this;
   }
 
-  clear(renderer, color, depth, stencil) {
+  void clear(renderer, Color color, int depth, stencil) {
     var currentRenderTarget = renderer.getRenderTarget();
 
     for (var i = 0; i < 6; i++) {

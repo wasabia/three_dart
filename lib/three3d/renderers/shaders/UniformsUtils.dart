@@ -8,7 +8,7 @@ part of three_shaders;
  */
 
 Map<String, dynamic> cloneUniforms(Map<String, dynamic> src) {
-  var dst = Map<String, dynamic>();
+  var dst = <String, dynamic>{};
 
   for (var u in src.keys) {
     dst[u] = {};
@@ -38,7 +38,7 @@ Map<String, dynamic> cloneUniforms(Map<String, dynamic> src) {
 }
 
 Map<String, dynamic> mergeUniforms(uniforms) {
-  Map<String, dynamic> merged = Map<String, dynamic>();
+  Map<String, dynamic> merged = <String, dynamic>{};
 
   for (var u = 0; u < uniforms.length; u++) {
     var tmp = cloneUniforms(uniforms[u]);
@@ -52,11 +52,11 @@ Map<String, dynamic> mergeUniforms(uniforms) {
 }
 
 class UniformsUtils {
-  static clone(p) {
+  static Map<String, dynamic> clone(Map<String, dynamic> p) {
     return cloneUniforms(p);
   }
 
-  static merge(p) {
+  static Map<String, dynamic> merge(p) {
     return mergeUniforms(p);
   }
 }

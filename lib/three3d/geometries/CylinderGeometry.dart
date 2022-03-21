@@ -22,7 +22,7 @@ class CylinderGeometry extends BufferGeometry {
       thetaStart = 0,
       thetaLength = Math.PI * 2])
       : super() {
-    this.parameters = {
+    parameters = {
       "radiusTop": radiusTop,
       "radiusBottom": radiusBottom,
       "height": height,
@@ -41,9 +41,9 @@ class CylinderGeometry extends BufferGeometry {
     // buffers
 
     List<num> indices = [];
-    List<num> vertices = [];
-    List<num> normals = [];
-    List<num> uvs = [];
+    List<double> vertices = [];
+    List<double> normals = [];
+    List<double> uvs = [];
 
     // helper variables
 
@@ -87,12 +87,14 @@ class CylinderGeometry extends BufferGeometry {
           vertex.x = radius * sinTheta;
           vertex.y = -v * height + halfHeight;
           vertex.z = radius * cosTheta;
-          vertices.addAll([vertex.x, vertex.y, vertex.z]);
+          vertices.addAll(
+              [vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
 
           // normal
 
           normal.set(sinTheta, slope, cosTheta).normalize();
-          normals.addAll([normal.x, normal.y, normal.z]);
+          normals.addAll(
+              [normal.x.toDouble(), normal.y.toDouble(), normal.z.toDouble()]);
 
           // uv
 
@@ -143,7 +145,7 @@ class CylinderGeometry extends BufferGeometry {
       // save the index of the first center vertex
       var centerIndexStart = index;
 
-      var uv = new Vector2(null, null);
+      var uv = Vector2(null, null);
       var vertex = Vector3.init();
 
       var groupCount = 0;
@@ -162,7 +164,7 @@ class CylinderGeometry extends BufferGeometry {
 
         // normal
 
-        normals.addAll([0, sign, 0]);
+        normals.addAll([0, sign.toDouble(), 0]);
 
         // uv
 
@@ -190,17 +192,18 @@ class CylinderGeometry extends BufferGeometry {
         vertex.x = radius * sinTheta;
         vertex.y = halfHeight * sign;
         vertex.z = radius * cosTheta;
-        vertices.addAll([vertex.x, vertex.y, vertex.z]);
+        vertices.addAll(
+            [vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
 
         // normal
 
-        normals.addAll([0, sign, 0]);
+        normals.addAll([0, sign.toDouble(), 0]);
 
         // uv
 
         uv.x = (cosTheta * 0.5) + 0.5;
         uv.y = (sinTheta * 0.5 * sign) + 0.5;
-        uvs.addAll([uv.x, uv.y]);
+        uvs.addAll([uv.x.toDouble(), uv.y.toDouble()]);
 
         // increase index
 
@@ -245,15 +248,17 @@ class CylinderGeometry extends BufferGeometry {
 
     // build geometry
 
-    this.setIndex(indices);
-    this.setAttribute(
-        'position', new Float32BufferAttribute(vertices, 3, false));
-    this.setAttribute('normal', new Float32BufferAttribute(normals, 3, false));
-    this.setAttribute('uv', new Float32BufferAttribute(uvs, 2, false));
+    setIndex(indices);
+    setAttribute('position',
+        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    setAttribute('normal',
+        Float32BufferAttribute(Float32Array.from(normals), 3, false));
+    setAttribute(
+        'uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
   }
 
-  static fromJSON(data) {
-    return new CylinderGeometry(
+  static CylinderGeometry fromJSON(data) {
+    return CylinderGeometry(
         data["radiusTop"],
         data["radiusBottom"],
         data["height"],

@@ -35,8 +35,6 @@ class WebGLTextures {
     maxSamples = capabilities.maxSamples;
     MultisampledRenderToTextureExtension = extensions.has( 'WEBGL_multisampled_render_to_texture' ) != null ? extensions.get( 'WEBGL_multisampled_render_to_texture' ) : null;
 
-    
-    
     wrappingToGL[RepeatWrapping] = gl.REPEAT;
     wrappingToGL[ClampToEdgeWrapping] = gl.CLAMP_TO_EDGE;
     wrappingToGL[MirroredRepeatWrapping] = gl.MIRRORED_REPEAT;
@@ -134,7 +132,7 @@ class WebGLTextures {
       // if ( gl[ internalFormatName ] != null ) return gl[ internalFormatName ];
 
       print(
-          'THREE.WebGLRenderer: Attempt to use non-existing WebGL internal format ${internalFormatName}');
+          'THREE.WebGLRenderer: Attempt to use non-existing WebGL internal format $internalFormatName');
     }
 
     var internalFormat = glFormat;
@@ -160,10 +158,11 @@ class WebGLTextures {
     if (glFormat == gl.RGBA) {
       if (glType == gl.FLOAT) internalFormat = gl.RGBA32F;
       if (glType == gl.HALF_FLOAT) internalFormat = gl.RGBA16F;
-      if (glType == gl.UNSIGNED_BYTE)
+      if (glType == gl.UNSIGNED_BYTE) {
         internalFormat = (encoding == sRGBEncoding && isVideoTexture == false)
             ? gl.SRGB8_ALPHA8
             : gl.RGBA8;
+      }
       if (glType == _gl.UNSIGNED_SHORT_4_4_4_4) internalFormat = _gl.RGBA4;
       if (glType == _gl.UNSIGNED_SHORT_5_5_5_1) internalFormat = _gl.RGB5_A1;
     }
@@ -307,23 +306,28 @@ class WebGLTextures {
     if (renderTarget.isWebGLCubeRenderTarget) {
       for (var i = 0; i < 6; i++) {
         gl.deleteFramebuffer(renderTargetProperties["__webglFramebuffer"][i]);
-        if (renderTargetProperties["__webglDepthbuffer"] != null)
+        if (renderTargetProperties["__webglDepthbuffer"] != null) {
           gl.deleteRenderbuffer(
               renderTargetProperties["__webglDepthbuffer"][i]);
+        }
       }
     } else {
       gl.deleteFramebuffer(renderTargetProperties["__webglFramebuffer"]);
-      if (renderTargetProperties["__webglDepthbuffer"] != null)
+      if (renderTargetProperties["__webglDepthbuffer"] != null) {
         gl.deleteRenderbuffer(renderTargetProperties["__webglDepthbuffer"]);
-      if (renderTargetProperties["__webglMultisampledFramebuffer"] != null)
+      }
+      if (renderTargetProperties["__webglMultisampledFramebuffer"] != null) {
         gl.deleteFramebuffer(
             renderTargetProperties["__webglMultisampledFramebuffer"]);
-      if (renderTargetProperties["__webglColorRenderbuffer"] != null)
+      }
+      if (renderTargetProperties["__webglColorRenderbuffer"] != null) {
         gl.deleteRenderbuffer(
             renderTargetProperties["__webglColorRenderbuffer"]);
-      if (renderTargetProperties["__webglDepthRenderbuffer"] != null)
+      }
+      if (renderTargetProperties["__webglDepthRenderbuffer"] != null) {
         gl.deleteRenderbuffer(
             renderTargetProperties["__webglDepthRenderbuffer"]);
+      }
     }
 
     if (renderTarget.isWebGLMultipleRenderTargets) {
@@ -348,7 +352,7 @@ class WebGLTextures {
 
   int textureUnits = 0;
 
-  resetTextureUnits() {
+  void resetTextureUnits() {
     textureUnits = 0;
   }
 
@@ -357,7 +361,7 @@ class WebGLTextures {
 
     if (textureUnit >= maxTextures) {
       print(
-          'THREE.WebGLTextures: Trying to use ${textureUnit} texture units while this GPU supports only ${maxTextures}');
+          'THREE.WebGLTextures: Trying to use $textureUnit texture units while this GPU supports only $maxTextures');
     }
 
     textureUnits += 1;
@@ -504,8 +508,10 @@ class WebGLTextures {
       if (texture.type == FloatType &&
           extensions.get('OES_texture_float_linear') == null) return;
       if (texture.type == HalfFloatType &&
-          (isWebGL2 || extensions.get('OES_texture_half_float_linear')) == null)
+          (isWebGL2 || extensions.get('OES_texture_half_float_linear')) ==
+              null) {
         return;
+      }
 
       if (texture.anisotropy > 1 ||
           properties.get(texture)["__currentAnisotropy"] != null) {
@@ -1865,8 +1871,9 @@ class WebGLTextures {
   // Setup resources for a Depth Texture for a FBO (needs an extension)
   setupDepthTexture(framebuffer, renderTarget) {
     var isCube = (renderTarget && renderTarget.isWebGLCubeRenderTarget);
-    if (isCube)
+    if (isCube) {
       throw ('Depth Texture with cube render targets is not supported');
+    }
 
     state.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
@@ -1921,8 +1928,9 @@ class WebGLTextures {
     var isCube = (renderTarget.isWebGLCubeRenderTarget == true);
 
     if (renderTarget.depthTexture != null) {
-      if (isCube)
+      if (isCube) {
         throw ('target.depthTexture not supported in Cube render targets');
+      }
 
       setupDepthTexture(
           renderTargetProperties["__webglFramebuffer"], renderTarget);
@@ -2274,7 +2282,7 @@ class WebGLTextures {
           }
         }
       } else {
-        print('THREE.WebGLTextures: Unsupported texture encoding: ${encoding}');
+        print('THREE.WebGLTextures: Unsupported texture encoding: $encoding');
       }
     }
 

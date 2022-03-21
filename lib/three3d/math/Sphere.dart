@@ -21,14 +21,14 @@ class Sphere {
     return _data;
   }
 
-  Sphere set(center, radius) {
+  Sphere set(Vector3 center, double radius) {
     this.center.copy(center);
     this.radius = radius;
 
     return this;
   }
 
-  Sphere setFromPoints(points, optionalCenter) {
+  Sphere setFromPoints(List<Vector3> points, [Vector3? optionalCenter]) {
     var center = this.center;
 
     if (optionalCenter != null) {
@@ -70,11 +70,11 @@ class Sphere {
     return this;
   }
 
-  containsPoint(point) {
+  bool containsPoint(Vector3 point) {
     return (point.distanceToSquared(center) <= (radius * radius));
   }
 
-  distanceToPoint(point) {
+  double distanceToPoint(Vector3 point) {
     return (point.distanceTo(center) - radius);
   }
 
@@ -84,7 +84,7 @@ class Sphere {
     return sphere.center.distanceToSquared(center) <= (radiusSum * radiusSum);
   }
 
-  intersectsBox(box) {
+  bool intersectsBox(Box3 box) {
     return box.intersectsSphere(this);
   }
 
@@ -92,7 +92,7 @@ class Sphere {
     return Math.abs(plane.distanceToPoint(center)) <= radius;
   }
 
-  Vector3 clampPoint(point, Vector3 target) {
+  Vector3 clampPoint(Vector3 point, Vector3 target) {
     var deltaLengthSq = center.distanceToSquared(point);
 
     target.copy(point);
@@ -126,13 +126,13 @@ class Sphere {
     return this;
   }
 
-  Sphere translate(offset) {
+  Sphere translate(Vector3 offset) {
     center.add(offset);
 
     return this;
   }
 
-  Sphere expandByPoint(point) {
+  Sphere expandByPoint(Vector3 point) {
     // from https://github.com/juj/MathGeoLib/blob/2940b99b99cfe575dd45103ef20f4019dee15b54/src/Geometry/Sphere.cpp#L649-L671
 
     _toPoint.subVectors(point, center);

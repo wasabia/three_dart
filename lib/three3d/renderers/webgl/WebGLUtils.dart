@@ -79,14 +79,18 @@ class WebGLUtils {
         extension = extensions.get('WEBGL_compressed_texture_s3tc_srgb');
 
         if (extension != null) {
-          if (p == RGB_S3TC_DXT1_Format)
+          if (p == RGB_S3TC_DXT1_Format) {
             return extension.COMPRESSED_SRGB_S3TC_DXT1_EXT;
-          if (p == RGBA_S3TC_DXT1_Format)
+          }
+          if (p == RGBA_S3TC_DXT1_Format) {
             return extension.COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT;
-          if (p == RGBA_S3TC_DXT3_Format)
+          }
+          if (p == RGBA_S3TC_DXT3_Format) {
             return extension.COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT;
-          if (p == RGBA_S3TC_DXT5_Format)
+          }
+          if (p == RGBA_S3TC_DXT5_Format) {
             return extension.COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT;
+          }
         } else {
           return null;
         }
@@ -94,14 +98,18 @@ class WebGLUtils {
         extension = extensions.get('WEBGL_compressed_texture_s3tc');
 
         if (extension != null) {
-          if (p == RGB_S3TC_DXT1_Format)
+          if (p == RGB_S3TC_DXT1_Format) {
             return extension.COMPRESSED_RGB_S3TC_DXT1_EXT;
-          if (p == RGBA_S3TC_DXT1_Format)
+          }
+          if (p == RGBA_S3TC_DXT1_Format) {
             return extension.COMPRESSED_RGBA_S3TC_DXT1_EXT;
-          if (p == RGBA_S3TC_DXT3_Format)
+          }
+          if (p == RGBA_S3TC_DXT3_Format) {
             return extension.COMPRESSED_RGBA_S3TC_DXT3_EXT;
-          if (p == RGBA_S3TC_DXT5_Format)
+          }
+          if (p == RGBA_S3TC_DXT5_Format) {
             return extension.COMPRESSED_RGBA_S3TC_DXT5_EXT;
+          }
         } else {
           return null;
         }
@@ -117,14 +125,18 @@ class WebGLUtils {
       extension = extensions.get('WEBGL_compressed_texture_pvrtc');
 
       if (extension != null) {
-        if (p == RGB_PVRTC_4BPPV1_Format)
+        if (p == RGB_PVRTC_4BPPV1_Format) {
           return extension.COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
-        if (p == RGB_PVRTC_2BPPV1_Format)
+        }
+        if (p == RGB_PVRTC_2BPPV1_Format) {
           return extension.COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
-        if (p == RGBA_PVRTC_4BPPV1_Format)
+        }
+        if (p == RGBA_PVRTC_4BPPV1_Format) {
           return extension.COMPRESSED_RGBA_PVRTC_4BPPV1_IMG;
-        if (p == RGBA_PVRTC_2BPPV1_Format)
+        }
+        if (p == RGBA_PVRTC_2BPPV1_Format) {
           return extension.COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
+        }
       } else {
         return null;
       }
@@ -148,14 +160,16 @@ class WebGLUtils {
       extension = extensions.get('WEBGL_compressed_texture_etc');
 
       if (extension != null) {
-        if (p == RGB_ETC2_Format)
+        if (p == RGB_ETC2_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB8_ETC2
               : extension.COMPRESSED_RGB8_ETC2;
-        if (p == RGBA_ETC2_EAC_Format)
+        }
+        if (p == RGBA_ETC2_EAC_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB8_ALPHA8_ETC2_EAC
               : extension.COMPRESSED_RGBA8_ETC2_EAC;
+        }
       } else {
         return null;
       }
@@ -180,62 +194,76 @@ class WebGLUtils {
       extension = extensions.get('WEBGL_compressed_texture_astc');
 
       if (extension != null) {
-        if (p == RGBA_ASTC_4x4_Format)
+        if (p == RGBA_ASTC_4x4_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR
               : extension.COMPRESSED_RGBA_ASTC_4x4_KHR;
-        if (p == RGBA_ASTC_5x4_Format)
+        }
+        if (p == RGBA_ASTC_5x4_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR
               : extension.COMPRESSED_RGBA_ASTC_5x4_KHR;
-        if (p == RGBA_ASTC_5x5_Format)
+        }
+        if (p == RGBA_ASTC_5x5_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR
               : extension.COMPRESSED_RGBA_ASTC_5x5_KHR;
-        if (p == RGBA_ASTC_6x5_Format)
+        }
+        if (p == RGBA_ASTC_6x5_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR
               : extension.COMPRESSED_RGBA_ASTC_6x5_KHR;
-        if (p == RGBA_ASTC_6x6_Format)
+        }
+        if (p == RGBA_ASTC_6x6_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR
               : extension.COMPRESSED_RGBA_ASTC_6x6_KHR;
-        if (p == RGBA_ASTC_8x5_Format)
+        }
+        if (p == RGBA_ASTC_8x5_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR
               : extension.COMPRESSED_RGBA_ASTC_8x5_KHR;
-        if (p == RGBA_ASTC_8x6_Format)
+        }
+        if (p == RGBA_ASTC_8x6_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR
               : extension.COMPRESSED_RGBA_ASTC_8x6_KHR;
-        if (p == RGBA_ASTC_8x8_Format)
+        }
+        if (p == RGBA_ASTC_8x8_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR
               : extension.COMPRESSED_RGBA_ASTC_8x8_KHR;
-        if (p == RGBA_ASTC_10x5_Format)
+        }
+        if (p == RGBA_ASTC_10x5_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR
               : extension.COMPRESSED_RGBA_ASTC_10x5_KHR;
-        if (p == RGBA_ASTC_10x6_Format)
+        }
+        if (p == RGBA_ASTC_10x6_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR
               : extension.COMPRESSED_RGBA_ASTC_10x6_KHR;
-        if (p == RGBA_ASTC_10x8_Format)
+        }
+        if (p == RGBA_ASTC_10x8_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR
               : extension.COMPRESSED_RGBA_ASTC_10x8_KHR;
-        if (p == RGBA_ASTC_10x10_Format)
+        }
+        if (p == RGBA_ASTC_10x10_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR
               : extension.COMPRESSED_RGBA_ASTC_10x10_KHR;
-        if (p == RGBA_ASTC_12x10_Format)
+        }
+        if (p == RGBA_ASTC_12x10_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR
               : extension.COMPRESSED_RGBA_ASTC_12x10_KHR;
-        if (p == RGBA_ASTC_12x12_Format)
+        }
+        if (p == RGBA_ASTC_12x12_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR
               : extension.COMPRESSED_RGBA_ASTC_12x12_KHR;
+        }
       } else {
         return null;
       }
@@ -247,10 +275,11 @@ class WebGLUtils {
       extension = extensions.get('EXT_texture_compression_bptc');
 
       if (extension != null) {
-        if (p == RGBA_BPTC_Format)
+        if (p == RGBA_BPTC_Format) {
           return (encoding == sRGBEncoding)
               ? extension.COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT
               : extension.COMPRESSED_RGBA_BPTC_UNORM_EXT;
+        }
       } else {
         return null;
       }

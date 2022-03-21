@@ -1,6 +1,6 @@
 part of three_materials;
 
-/**
+/*
  * parameters = {
  *  opacity: <float>,
  *
@@ -22,27 +22,18 @@ part of three_materials;
  */
 
 class MeshNormalMaterial extends Material {
-  bool isMeshNormalMaterial = true;
-
-  String type = "MeshNormalMaterial";
-  num? bumpScale = 1;
-  Texture? bumpMap;
-
-  Texture? normalMap;
-  int? normalMapType = TangentSpaceNormalMap;
-
-  Vector2? normalScale = Vector2(1, 1);
-
-  Texture? displacementMap;
-  num? displacementScale = 1;
-  num? displacementBias = 0;
-
-  bool wireframe = false;
-  num? wireframeLinewidth = 1;
-
-  bool fog = false;
-
   MeshNormalMaterial([Map<String, dynamic>? parameters]) : super() {
-    this.setValues(parameters);
+    isMeshNormalMaterial = true;
+    type = "MeshNormalMaterial";
+    bumpScale = 1;
+    normalMapType = TangentSpaceNormalMap;
+    normalScale = Vector2(1, 1);
+    displacementScale = 1;
+    displacementBias = 0;
+    wireframe = false;
+    wireframeLinewidth = 1;
+    fog = false;
+    
+    setValues(parameters);
   }
 }

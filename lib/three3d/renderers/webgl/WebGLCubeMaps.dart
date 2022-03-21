@@ -4,19 +4,18 @@ class WebGLCubeMaps {
   WebGLRenderer renderer;
   var cubemaps = WeakMap();
 
-  WebGLCubeMaps(this.renderer) {}
+  WebGLCubeMaps(this.renderer);
 
-  mapTextureMapping(texture, mapping) {
+  Texture mapTextureMapping(Texture texture, int? mapping) {
     if (mapping == EquirectangularReflectionMapping) {
       texture.mapping = CubeReflectionMapping;
     } else if (mapping == EquirectangularRefractionMapping) {
       texture.mapping = CubeRefractionMapping;
     }
-
     return texture;
   }
 
-  get(texture) {
+  Texture? get(Texture? texture) {
     if (texture != null &&
         texture.isTexture &&
         texture.isRenderTargetTexture == false) {
@@ -64,7 +63,7 @@ class WebGLCubeMaps {
     }
   }
 
-  dispose() {
-    cubemaps = new WeakMap();
+  void dispose() {
+    cubemaps = WeakMap();
   }
 }

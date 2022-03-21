@@ -1,8 +1,8 @@
 part of three_helpers;
 
-var _v1 = /*@__PURE__*/ new Vector3.init();
-var _v2 = /*@__PURE__*/ new Vector3.init();
-var _v3 = /*@__PURE__*/ new Vector3.init();
+var _v1 = /*@__PURE__*/ Vector3.init();
+var _v2 = /*@__PURE__*/ Vector3.init();
+var _v3 = /*@__PURE__*/ Vector3.init();
 
 class DirectionalLightHelper extends Object3D {
   late DirectionalLight light;
@@ -10,17 +10,14 @@ class DirectionalLightHelper extends Object3D {
   late Line targetLine;
   Color? color;
 
-  DirectionalLightHelper(light, size, color) : super() {
-    this.light = light;
-    this.light.updateMatrixWorld(false);
+  DirectionalLightHelper(this.light, [int? size = 1, this.color]) : super() {
+    light.updateMatrixWorld(false);
 
-    this.matrix = light.matrixWorld;
-    this.matrixAutoUpdate = false;
+    matrix = light.matrixWorld;
+    matrixAutoUpdate = false;
 
-    this.color = color;
-
-    if (size == null) size = 1;
-    var geometry = new BufferGeometry();
+    size ??= 1;
+    var geometry = BufferGeometry();
 
     double _size = size.toDouble();
 
@@ -43,47 +40,47 @@ class DirectionalLightHelper extends Object3D {
     ];
 
     geometry.setAttribute('position',
-        new Float32BufferAttribute(Float32Array.from(_posData), 3, false));
+        Float32BufferAttribute(Float32Array.from(_posData), 3, false));
 
-    var material = new LineBasicMaterial({"fog": false, "toneMapped": false});
+    var material = LineBasicMaterial({"fog": false, "toneMapped": false});
 
-    this.lightPlane = new Line(geometry, material);
-    this.add(this.lightPlane);
+    lightPlane = Line(geometry, material);
+    add(lightPlane);
 
-    geometry = new BufferGeometry();
+    geometry = BufferGeometry();
     List<double> _d2 = [0, 0, 0, 0, 0, 1];
     geometry.setAttribute('position',
-        new Float32BufferAttribute(Float32Array.from(_d2), 3, false));
+        Float32BufferAttribute(Float32Array.from(_d2), 3, false));
 
-    this.targetLine = new Line(geometry, material);
-    this.add(this.targetLine);
+    targetLine = Line(geometry, material);
+    add(targetLine);
 
-    this.update();
+    update();
   }
 
   dispose() {
-    this.lightPlane.geometry!.dispose();
-    this.lightPlane.material.dispose();
-    this.targetLine.geometry!.dispose();
-    this.targetLine.material.dispose();
+    lightPlane.geometry!.dispose();
+    lightPlane.material.dispose();
+    targetLine.geometry!.dispose();
+    targetLine.material.dispose();
   }
 
   update() {
-    _v1.setFromMatrixPosition(this.light.matrixWorld);
-    _v2.setFromMatrixPosition(this.light.target!.matrixWorld);
+    _v1.setFromMatrixPosition(light.matrixWorld);
+    _v2.setFromMatrixPosition(light.target!.matrixWorld);
     _v3.subVectors(_v2, _v1);
 
-    this.lightPlane.lookAt(_v2);
+    lightPlane.lookAt(_v2);
 
-    if (this.color != null) {
-      this.lightPlane.material.color.set(this.color);
-      this.targetLine.material.color.set(this.color);
+    if (color != null) {
+      lightPlane.material.color.set(color);
+      targetLine.material.color.set(color);
     } else {
-      this.lightPlane.material.color.copy(this.light.color);
-      this.targetLine.material.color.copy(this.light.color);
+      lightPlane.material.color.copy(light.color);
+      targetLine.material.color.copy(light.color);
     }
 
-    this.targetLine.lookAt(_v2);
-    this.targetLine.scale.z = _v3.length();
+    targetLine.lookAt(_v2);
+    targetLine.scale.z = _v3.length();
   }
 }
