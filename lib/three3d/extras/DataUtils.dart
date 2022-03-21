@@ -1,12 +1,12 @@
 part of three_extra;
 
 var _floatView = Float32List(1);
-var _int32View = new Int32List.view(_floatView.buffer);
+var _int32View = Int32List.view(_floatView.buffer);
 
 class DataUtils {
   // Converts float32 to float16 (stored as uint16 value).
 
-  static toHalfFloat(num val) {
+  static int toHalfFloat(num val) {
     // Source: http://gamedev.stackexchange.com/questions/17326/conversion-of-a-number-from-single-precision-floating-point-representation-to-a/17410#17410
 
     /* This method is faster than the OpenEXR implementation (very often

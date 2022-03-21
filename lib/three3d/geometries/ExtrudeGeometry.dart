@@ -32,14 +32,14 @@ class ExtrudeGeometry extends BufferGeometry {
   String type = "ExtrudeGeometry";
 
   ExtrudeGeometry(List<Shape> shapes, Map<String, dynamic> options) : super() {
-    this.parameters = {"shapes": shapes, "options": options};
+    parameters = {"shapes": shapes, "options": options};
 
     this.shapes = shapes;
 
     var scope = this;
 
-    List<num> verticesArray = [];
-    List<num> uvArray = [];
+    List<double> verticesArray = [];
+    List<double> uvArray = [];
 
     addShape(Shape shape) {
       var placeholder = [];
@@ -47,27 +47,23 @@ class ExtrudeGeometry extends BufferGeometry {
       // options
 
       var curveSegments =
-          options["curveSegments"] != null ? options["curveSegments"] : 12;
-      var steps = options["steps"] != null ? options["steps"] : 1;
-      var depth = options["depth"] != null ? options["depth"] : 100;
+          options["curveSegments"] ?? 12;
+      var steps = options["steps"] ?? 1;
+      var depth = options["depth"] ?? 100;
 
       bool bevelEnabled =
-          options["bevelEnabled"] != null ? options["bevelEnabled"] : true;
+          options["bevelEnabled"] ?? true;
       var bevelThickness =
-          options["bevelThickness"] != null ? options["bevelThickness"] : 6;
-      var bevelSize = options["bevelSize"] != null
-          ? options["bevelSize"]
-          : bevelThickness - 2;
+          options["bevelThickness"] ?? 6;
+      var bevelSize = options["bevelSize"] ?? bevelThickness - 2;
       var bevelOffset =
-          options["bevelOffset"] != null ? options["bevelOffset"] : 0;
+          options["bevelOffset"] ?? 0;
       var bevelSegments =
-          options["bevelSegments"] != null ? options["bevelSegments"] : 3;
+          options["bevelSegments"] ?? 3;
 
       var extrudePath = options["extrudePath"];
 
-      var uvgen = options["UVGenerator"] != null
-          ? options["UVGenerator"]
-          : "WorldUVGenerator";
+      var uvgen = options["UVGenerator"] ?? "WorldUVGenerator";
 
       // deprecated options
 
@@ -96,9 +92,9 @@ class ExtrudeGeometry extends BufferGeometry {
 
         // console.log(splineTube, 'splineTube', splineTube.normals.length, 'steps', steps, 'extrudePts', extrudePts.length);
 
-        binormal = new Vector3.init();
-        normal = new Vector3.init();
-        position2 = new Vector3.init();
+        binormal = Vector3.init();
+        normal = Vector3.init();
+        position2 = Vector3.init();
       }
 
       // Safeguards if bevels are not enabled
@@ -212,7 +208,7 @@ class ExtrudeGeometry extends BufferGeometry {
           //  but prevent crazy spikes
           var v_trans_lensq = (v_trans_x * v_trans_x + v_trans_y * v_trans_y);
           if (v_trans_lensq <= 2) {
-            return new Vector2(v_trans_x, v_trans_y);
+            return Vector2(v_trans_x, v_trans_y);
           } else {
             shrink_by = Math.sqrt(v_trans_lensq / 2);
           }
@@ -250,7 +246,7 @@ class ExtrudeGeometry extends BufferGeometry {
           }
         }
 
-        return new Vector2(v_trans_x / shrink_by, v_trans_y / shrink_by);
+        return Vector2(v_trans_x / shrink_by, v_trans_y / shrink_by);
       }
 
       var contourMovements = [];
@@ -433,7 +429,7 @@ class ExtrudeGeometry extends BufferGeometry {
           uvs = WorldUVGenerator.generateTopUV(scope, verticesArray,
               nextIndex - 3, nextIndex - 2, nextIndex - 1);
         } else {
-          throw ("ExtrudeBufferGeometry uvgen: ${uvgen} is not support yet ");
+          throw ("ExtrudeBufferGeometry uvgen: $uvgen is not support yet ");
         }
 
         // var uvs = uvgen.generateTopUV( scope, verticesArray, nextIndex - 3, nextIndex - 2, nextIndex - 1 );
@@ -505,7 +501,7 @@ class ExtrudeGeometry extends BufferGeometry {
           uvs = WorldUVGenerator.generateSideWallUV(scope, verticesArray,
               nextIndex - 6, nextIndex - 3, nextIndex - 2, nextIndex - 1);
         } else {
-          throw ("ExtrudeBufferGeometry uvgen: ${uvgen} is not support yet ");
+          throw ("ExtrudeBufferGeometry uvgen: $uvgen is not support yet ");
         }
         // var uvs = uvgen.generateSideWallUV( scope, verticesArray, nextIndex - 6, nextIndex - 3, nextIndex - 2, nextIndex - 1 );
 
@@ -545,7 +541,7 @@ class ExtrudeGeometry extends BufferGeometry {
       // Create faces for the z-sides of the shape
 
       buildSideFaces() {
-        int start = (verticesArray.length / 3.0).toInt();
+        int start = verticesArray.length ~/ 3.0;
         int layeroffset = 0;
         sidewalls(contour, layeroffset);
         layeroffset = layeroffset + contour.length;
@@ -585,11 +581,12 @@ class ExtrudeGeometry extends BufferGeometry {
 
     // build geometry
 
-    this.setAttribute(
-        'position', Float32BufferAttribute(verticesArray, 3, false));
-    this.setAttribute('uv', Float32BufferAttribute(uvArray, 2, false));
+    setAttribute('position',
+        Float32BufferAttribute(Float32Array.from(verticesArray), 3, false));
+    setAttribute(
+        'uv', Float32BufferAttribute(Float32Array.from(uvArray), 2, false));
 
-    this.computeVertexNormals();
+    computeVertexNormals();
 
     // functions
   }
@@ -601,8 +598,8 @@ class ExtrudeGeometry extends BufferGeometry {
   toJSON({Object3dMeta? meta}) {
     var data = super.toJSON(meta: meta);
 
-    var shapes = this.parameters?["shapes"];
-    var options = this.parameters?["options"];
+    var shapes = parameters?["shapes"];
+    var options = parameters?["options"];
 
     return toJSON2(shapes, options, data);
   }
@@ -618,9 +615,7 @@ class WorldUVGenerator {
     var c_y = vertices[indexC.toInt() * 3 + 1];
 
     return [
-      new Vector2(a_x, a_y),
-      new Vector2(b_x, b_y),
-      new Vector2(c_x, c_y)
+      Vector2(a_x, a_y), Vector2(b_x, b_y), Vector2(c_x, c_y)
     ];
   }
 
@@ -641,17 +636,17 @@ class WorldUVGenerator {
 
     if (Math.abs(a_y - b_y) < Math.abs(a_x - b_x)) {
       return [
-        new Vector2(a_x, 1 - a_z),
-        new Vector2(b_x, 1 - b_z),
-        new Vector2(c_x, 1 - c_z),
-        new Vector2(d_x, 1 - d_z)
+        Vector2(a_x, 1 - a_z),
+        Vector2(b_x, 1 - b_z),
+        Vector2(c_x, 1 - c_z),
+        Vector2(d_x, 1 - d_z)
       ];
     } else {
       return [
-        new Vector2(a_y, 1 - a_z),
-        new Vector2(b_y, 1 - b_z),
-        new Vector2(c_y, 1 - c_z),
-        new Vector2(d_y, 1 - d_z)
+        Vector2(a_y, 1 - a_z),
+        Vector2(b_y, 1 - b_z),
+        Vector2(c_y, 1 - c_z),
+        Vector2(d_y, 1 - d_z)
       ];
     }
   }

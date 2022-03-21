@@ -2,19 +2,19 @@ part of three_webgl;
 
 class BaseWebGLBufferRenderer {
   setIndex(value) {
-    throw (" BaseWebGLBufferRenderer.setIndex value: ${value}  ");
+    throw (" BaseWebGLBufferRenderer.setIndex value: $value  ");
   }
 
   render(start, count) {
-    throw (" BaseWebGLBufferRenderer.render start: ${start} ${count}  ");
+    throw (" BaseWebGLBufferRenderer.render start: $start $count  ");
   }
 
   renderInstances(start, count, primcount) {
-    throw (" BaseWebGLBufferRenderer.renderInstances start: ${start} ${count} primcount: ${primcount}  ");
+    throw (" BaseWebGLBufferRenderer.renderInstances start: $start $count primcount: $primcount  ");
   }
 
   setMode(value) {
-    throw (" BaseWebGLBufferRenderer.setMode value: ${value} ");
+    throw (" BaseWebGLBufferRenderer.setMode value: $value ");
   }
 }
 
@@ -27,21 +27,22 @@ class WebGLBufferRenderer extends BaseWebGLBufferRenderer {
   WebGLCapabilities capabilities;
 
   WebGLBufferRenderer(this.gl, this.extensions, this.info, this.capabilities) {
-    this.isWebGL2 = capabilities.isWebGL2;
+    isWebGL2 = capabilities.isWebGL2;
   }
 
+  @override
   setMode(value) {
     mode = value;
   }
 
-  render(start, count) {
-
+  @override
+  void render(start, count) {
     gl.drawArrays(mode, start, count);
-
     info.update(count, mode, 1);
   }
 
-  renderInstances(start, count, primcount) {
+  @override
+  void renderInstances(start, count, primcount) {
 
     if (primcount == 0) return;
 

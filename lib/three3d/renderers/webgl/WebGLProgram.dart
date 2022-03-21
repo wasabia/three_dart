@@ -26,11 +26,11 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
   WebGLProgram(
       this.renderer, this.cacheKey, this.parameters, this.bindingStates) {
-    this.name = parameters.shaderName;
-    this.id = programIdCount++;
+    name = parameters.shaderName;
+    id = programIdCount++;
 
-    this.gl = renderer.getContext();
-    this.program = gl.createProgram();
+    gl = renderer.getContext();
+    program = gl.createProgram();
     init();
   }
 
@@ -44,7 +44,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     var envMapTypeDefine = generateEnvMapTypeDefine(parameters);
     var envMapModeDefine = generateEnvMapModeDefine(parameters);
     var envMapBlendingDefine = generateEnvMapBlendingDefine(parameters);
-    var cubeUVSize = generateCubeUVSize( parameters );
+    var cubeUVSize = generateCubeUVSize(parameters);
 
     var customExtensions =
         parameters.isWebGL2 ? '' : generateExtensions(parameters);
@@ -67,7 +67,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
           [customDefines].where((s) => filterEmptyLine(s)).join('\n');
 
       if (prefixVertex.length > 0) {
-        prefixVertex = "${prefixVertex}\n";
+        prefixVertex = "$prefixVertex\n";
       }
 
       prefixFragment = [customExtensions, customDefines]
@@ -75,7 +75,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
           .join('\n');
 
       if (prefixFragment.length > 0) {
-        prefixFragment = "${prefixFragment}\n";
+        prefixFragment = "$prefixFragment\n";
       }
     } else {
       prefixVertex = [
@@ -142,10 +142,18 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.morphNormals && parameters.flatShading == false
             ? '#define USE_MORPHNORMALS'
             : '',
-        ( parameters.morphColors && parameters.isWebGL2 ) ? '#define USE_MORPHCOLORS' : '',
-        ( parameters.morphTargetsCount > 0 && parameters.isWebGL2 ) ? '#define MORPHTARGETS_TEXTURE' : '',
-        ( parameters.morphTargetsCount > 0 && parameters.isWebGL2 ) ? '#define MORPHTARGETS_TEXTURE_STRIDE ${parameters.morphTextureStride}' : '',
-        ( parameters.morphTargetsCount > 0 && parameters.isWebGL2 ) ? '#define MORPHTARGETS_COUNT ${parameters.morphTargetsCount}' : '',
+        (parameters.morphColors && parameters.isWebGL2)
+            ? '#define USE_MORPHCOLORS'
+            : '',
+        (parameters.morphTargetsCount > 0 && parameters.isWebGL2)
+            ? '#define MORPHTARGETS_TEXTURE'
+            : '',
+        (parameters.morphTargetsCount > 0 && parameters.isWebGL2)
+            ? '#define MORPHTARGETS_TEXTURE_STRIDE ${parameters.morphTextureStride}'
+            : '',
+        (parameters.morphTargetsCount > 0 && parameters.isWebGL2)
+            ? '#define MORPHTARGETS_COUNT ${parameters.morphTargetsCount}'
+            : '',
         parameters.doubleSided ? '#define DOUBLE_SIDED' : '',
         parameters.flipSided ? '#define FLIP_SIDED' : '',
         parameters.shadowMapEnabled ? '#define USE_SHADOWMAP' : '',
@@ -223,10 +231,16 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.envMap ? '#define ' + envMapTypeDefine : '',
         parameters.envMap ? '#define ' + envMapModeDefine : '',
         parameters.envMap ? '#define ' + envMapBlendingDefine : '',
-        cubeUVSize != null ? '#define CUBEUV_TEXEL_WIDTH ${cubeUVSize["texelWidth"]}' : '',
-        cubeUVSize != null ? '#define CUBEUV_TEXEL_HEIGHT ${cubeUVSize["texelHeight"]}' : '',
-        cubeUVSize != null ? '#define CUBEUV_MAX_MIP ' + cubeUVSize["maxMip"].toString() + '.0' : '',
-        
+        cubeUVSize != null
+            ? '#define CUBEUV_TEXEL_WIDTH ${cubeUVSize["texelWidth"]}'
+            : '',
+        cubeUVSize != null
+            ? '#define CUBEUV_TEXEL_HEIGHT ${cubeUVSize["texelHeight"]}'
+            : '',
+        cubeUVSize != null
+            ? '#define CUBEUV_MAX_MIP ' + cubeUVSize["maxMip"].toString() + '.0'
+            : '',
+
         parameters.lightMap ? '#define USE_LIGHTMAP' : '',
         parameters.aoMap ? '#define USE_AOMAP' : '',
         parameters.emissiveMap ? '#define USE_EMISSIVEMAP' : '',
@@ -382,24 +396,24 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
     var glFragmentShader = WebGLShader(gl, gl.FRAGMENT_SHADER, fragmentGlsl);
 
-    this.vertexShader = glVertexShader.content;
-    this.fragmentShader = glFragmentShader.content;
+    vertexShader = glVertexShader.content;
+    fragmentShader = glFragmentShader.content;
 
-    gl.attachShader(this.program, glVertexShader.shader);
-    gl.attachShader(this.program, glFragmentShader.shader);
+    gl.attachShader(program, glVertexShader.shader);
+    gl.attachShader(program, glFragmentShader.shader);
 
     // Force a particular attribute to index 0.
 
     if (parameters.index0AttributeName != null) {
-      gl.bindAttribLocation(this.program, 0, parameters.index0AttributeName);
+      gl.bindAttribLocation(program, 0, parameters.index0AttributeName);
     } else if (parameters.morphTargets == true) {
       // programs with morphTargets displace position out of attribute 0
-      gl.bindAttribLocation(this.program, 0, 'position');
+      gl.bindAttribLocation(program, 0, 'position');
     }
 
     // final _b = gl.isProgram(this.program);
 
-    gl.linkProgram(this.program);
+    gl.linkProgram(program);
 
     // check for link errors
     if (renderer.debug["checkShaderErrors"]) {
@@ -417,16 +431,16 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         var fragmentErrors = getShaderErrors(gl, glFragmentShader, 'fragment');
 
         print(
-            'THREE.WebGLProgram: shader error: ${gl.getError()} gl.VALIDATE_STATUS ${gl.getProgramParameter(program, gl.VALIDATE_STATUS)} gl.getProgramInfoLog ${programLog}  ${vertexErrors} ${fragmentErrors} ');
-      } else if (programLog != '') {
+            'THREE.WebGLProgram: shader error: ${gl.getError()} gl.VALIDATE_STATUS ${gl.getProgramParameter(program, gl.VALIDATE_STATUS)} gl.getProgramInfoLog $programLog  $vertexErrors $fragmentErrors ');
+      } else if (programLog != '' && programLog != null) {
         print(
-            'THREE.WebGLProgram: gl.getProgramInfoLog() programLog: ${programLog} vertexLog: ${vertexLog} fragmentLog: ${fragmentLog} ');
+            'THREE.WebGLProgram: gl.getProgramInfoLog() programLog: $programLog vertexLog: $vertexLog fragmentLog: $fragmentLog ');
       } else if (vertexLog == '' || fragmentLog == '') {
         haveDiagnostics = false;
       }
 
       if (haveDiagnostics) {
-        this.diagnostics = {
+        diagnostics = {
           "runnable": runnable,
           "programLog": programLog,
           "vertexShader": {"log": vertexLog, "prefix": prefixVertex},
@@ -449,17 +463,13 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
   // set up caching for attribute locations
 
   WebGLUniforms getUniforms() {
-    if (cachedUniforms == null) {
-      cachedUniforms = WebGLUniforms(gl, this);
-    }
+    cachedUniforms ??= WebGLUniforms(gl, this);
 
     return cachedUniforms!;
   }
 
   Map<String, dynamic> getAttributes() {
-    if (cachedAttributes == null) {
-      cachedAttributes = fetchAttributeLocations(gl, program);
-    }
+    cachedAttributes ??= fetchAttributeLocations(gl, program);
 
     return cachedAttributes!;
   }
@@ -470,7 +480,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     bindingStates.releaseStatesOfProgram(this);
 
     gl.deleteProgram(program);
-    this.program = null;
+    program = null;
   }
 
   //

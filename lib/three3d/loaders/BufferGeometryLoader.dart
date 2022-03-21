@@ -39,20 +39,20 @@ class BufferGeometryLoader extends Loader {
     var interleavedBufferMap = {};
     var arrayBufferMap = {};
 
-    Function getArrayBuffer = (json, uuid) {
+    getArrayBuffer(json, uuid) {
       if (arrayBufferMap[uuid] != null) return arrayBufferMap[uuid];
 
       var arrayBuffers = json.arrayBuffers;
       var arrayBuffer = arrayBuffers[uuid];
 
-      var ab = new Uint32Array(arrayBuffer).buffer;
+      var ab = Uint32Array(arrayBuffer).buffer;
 
       arrayBufferMap[uuid] = ab;
 
       return ab;
-    };
+    }
 
-    Function getInterleavedBuffer = (json, uuid) {
+    getInterleavedBuffer(json, uuid) {
       if (interleavedBufferMap[uuid] != null) return interleavedBufferMap[uuid];
 
       var interleavedBuffers = json.interleavedBuffers;
@@ -61,7 +61,7 @@ class BufferGeometryLoader extends Loader {
       var buffer = getArrayBuffer(json, interleavedBuffer.buffer);
 
       var array = getTypedArray(interleavedBuffer.type, buffer);
-      var ib = new InterleavedBuffer(array, interleavedBuffer.stride);
+      var ib = InterleavedBuffer(array, interleavedBuffer.stride);
       ib.uuid = interleavedBuffer.uuid;
 
       interleavedBufferMap[uuid] = ib;
@@ -70,14 +70,14 @@ class BufferGeometryLoader extends Loader {
     };
 
     var geometry = json["isInstancedBufferGeometry"] == true
-        ? new InstancedBufferGeometry()
-        : new BufferGeometry();
+        ? InstancedBufferGeometry()
+        : BufferGeometry();
 
     var index = json["data"]["index"];
 
     if (index != null) {
       var typedArray = getTypedArray(index["type"], index["array"]);
-      geometry.setIndex(new BufferAttribute(typedArray, 1, false));
+      geometry.setIndex(getTypedAttribute(typedArray, 1, false));
     }
 
     var attributes = json["data"]["attributes"];
@@ -89,7 +89,7 @@ class BufferGeometryLoader extends Loader {
       if (attribute["isInterleavedBufferAttribute"] == true) {
         var interleavedBuffer =
             getInterleavedBuffer(json["data"], attribute["data"]);
-        bufferAttribute = new InterleavedBufferAttribute(
+        bufferAttribute = InterleavedBufferAttribute(
             interleavedBuffer,
             attribute["itemSize"],
             attribute["offset"],
@@ -98,17 +98,18 @@ class BufferGeometryLoader extends Loader {
         var typedArray = getTypedArray(attribute["type"], attribute["array"]);
         // var bufferAttributeConstr = attribute.isInstancedBufferAttribute ? InstancedBufferAttribute : BufferAttribute;
         if (attribute["isInstancedBufferAttribute"] == true) {
-          bufferAttribute = new InstancedBufferAttribute(
+          bufferAttribute = InstancedBufferAttribute(
               typedArray, attribute["itemSize"], attribute["normalized"]);
         } else {
-          bufferAttribute = new BufferAttribute(typedArray,
+          bufferAttribute = getTypedAttribute(typedArray,
               attribute["itemSize"], attribute["normalized"] == true);
         }
       }
 
       if (attribute["name"] != null) bufferAttribute.name = attribute["name"];
-      if (attribute["usage"] != null)
+      if (attribute["usage"] != null) {
         bufferAttribute.setUsage(attribute["usage"]);
+      }
 
       if (attribute["updateRange"] != null) {
         bufferAttribute.updateRange.offset = attribute["updateRange"]["offset"];
@@ -133,11 +134,11 @@ class BufferGeometryLoader extends Loader {
           if (attribute.isInterleavedBufferAttribute) {
             var interleavedBuffer =
                 getInterleavedBuffer(json["data"], attribute.data);
-            bufferAttribute = new InterleavedBufferAttribute(interleavedBuffer,
+            bufferAttribute = InterleavedBufferAttribute(interleavedBuffer,
                 attribute.itemSize, attribute.offset, attribute.normalized);
           } else {
             var typedArray = getTypedArray(attribute.type, attribute.array);
-            bufferAttribute = new BufferAttribute(
+            bufferAttribute = getTypedAttribute(
                 typedArray, attribute.itemSize, attribute.normalized);
           }
 
@@ -171,13 +172,13 @@ class BufferGeometryLoader extends Loader {
     var boundingSphere = json["data"]["boundingSphere"];
 
     if (boundingSphere != null) {
-      var center = new Vector3(0, 0, 0);
+      var center = Vector3(0, 0, 0);
 
       if (boundingSphere["center"] != null) {
         center.fromArray(boundingSphere["center"]);
       }
 
-      geometry.boundingSphere = new Sphere(center, boundingSphere["radius"]);
+      geometry.boundingSphere = Sphere(center, boundingSphere["radius"]);
     }
 
     if (json["name"] != null) geometry.name = json["name"];

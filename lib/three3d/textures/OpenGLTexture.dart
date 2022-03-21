@@ -1,31 +1,30 @@
 part of three_textures;
 
 class OpenGLTexture extends Texture {
-  bool isOpenGLTexture = true;
   dynamic openGLTexture;
 
-  OpenGLTexture(openGLTexture, mapping, wrapS, wrapT, magFilter, minFilter,
+  OpenGLTexture(this.openGLTexture, mapping, wrapS, wrapT, magFilter, minFilter,
       format, type, anisotropy)
       : super(null, mapping, wrapS, wrapT, magFilter, minFilter, format, type,
             anisotropy, null) {
-    this.openGLTexture = openGLTexture;
+    isOpenGLTexture = true;
 
     this.format = format ?? RGBAFormat;
-
     this.minFilter = minFilter ?? LinearFilter;
     this.magFilter = magFilter ?? LinearFilter;
 
-    this.generateMipmaps = false;
-    this.needsUpdate = true;
+    generateMipmaps = false;
+    needsUpdate = true;
   }
 
-  clone() {
+  @override
+  OpenGLTexture clone() {
     return OpenGLTexture(
-            this.image, null, null, null, null, null, null, null, null)
-        .copy(this);
+            image, null, null, null, null, null, null, null, null)
+      ..copy(this);
   }
 
-  update() {
-    this.needsUpdate = true;
+  void update() {
+    needsUpdate = true;
   }
 }

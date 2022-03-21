@@ -12,13 +12,13 @@ class ImageElement {
   dynamic data;
   int depth = 1;
 
-  ImageElement({url, data, int width = 1, int height = 1, int depth = 1}) {
-    this.url = url;
-    this.data = data;
-    this.width = width;
-    this.height = height;
-    this.depth = depth;
-  }
+  ImageElement({
+    this.url,
+    this.data,
+    this.width = 1,
+    this.height = 1,
+    this.depth = 1,
+  });
 
   dispose() {
     data?.dispose();

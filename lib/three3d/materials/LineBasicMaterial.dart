@@ -1,6 +1,6 @@
 part of three_materials;
 
-/**
+/*
  * parameters = {
  *  color: <hex>,
  *  opacity: <float>,
@@ -12,31 +12,33 @@ part of three_materials;
  */
 
 class LineBasicMaterial extends Material {
-  bool isLineBasicMaterial = true;
-  String type = 'LineBasicMaterial';
-
   LineBasicMaterial([Map<String, dynamic>? parameters]) : super() {
-    this.color = new Color(1, 1, 1);
-    this.linewidth = 1;
-    this.linecap = 'round'; // 'butt', 'round' and 'square'.
-    this.linejoin = 'round'; // 'round', 'bevel' and 'miter'.
+    isLineBasicMaterial = true;
+    type = 'LineBasicMaterial';
 
-    this.setValues(parameters);
+    color = Color(1, 1, 1);
+    linewidth = 1;
+    linecap = 'round'; // 'butt', 'round' and 'square'.
+    linejoin = 'round'; // 'round', 'bevel' and 'miter'.
+
+    setValues(parameters);
   }
 
-  copy(source) {
+  @override
+  LineBasicMaterial copy(Material source) {
     super.copy(source);
 
-    this.color?.copy(source.color);
+    color?.copy(source.color!);
 
-    this.linewidth = source.linewidth;
-    this.linecap = source.linecap;
-    this.linejoin = source.linejoin;
+    linewidth = source.linewidth;
+    linecap = source.linecap;
+    linejoin = source.linejoin;
 
     return this;
   }
 
-  clone() {
+  @override
+  LineBasicMaterial clone() {
     return LineBasicMaterial({}).copy(this);
   }
 }

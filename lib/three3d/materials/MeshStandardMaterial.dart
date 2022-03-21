@@ -1,6 +1,6 @@
 part of three_materials;
 
-/**
+/*
  * PBR物理材质，相比较高光Phong材质可以更好的模拟金属、玻璃等效果
  * parameters = {
  *  color: <hex>,
@@ -48,120 +48,118 @@ part of three_materials;
  */
 
 class MeshStandardMaterial extends Material {
-  bool isMeshStandardMaterial = true;
-  String type = "MeshStandardMaterial";
-
-  num roughness = 1.0;
-  num metalness = 0.0;
-
-  num? bumpScale = 1.0;
-
-  Vector2? normalScale = Vector2(1, 1);
-
-  num? envMapIntensity = 1.0;
-
   MeshStandardMaterial([Map<String, dynamic>? parameters]) : super() {
-    this.defines = {'STANDARD': ''};
+    isMeshStandardMaterial = true;
+    type = "MeshStandardMaterial";
+    roughness = 1.0;
+    metalness = 0.0;
+    bumpScale = 1.0;
+    normalScale = Vector2(1, 1);
+    envMapIntensity = 1.0;
 
-    this.color = Color.fromHex(0xffffff); // diffuse
-    this.roughness = 1.0;
-    this.metalness = 0.0;
+    defines = {'STANDARD': ''};
 
-    this.map = null;
+    color = Color.fromHex(0xffffff); // diffuse
+    roughness = 1.0;
+    metalness = 0.0;
 
-    this.lightMap = null;
-    this.lightMapIntensity = 1.0;
+    map = null;
 
-    this.aoMap = null;
-    this.aoMapIntensity = 1.0;
+    lightMap = null;
+    lightMapIntensity = 1.0;
 
-    this.emissive = Color.fromHex(0x000000);
-    this.emissiveIntensity = 1.0;
-    this.emissiveMap = null;
+    aoMap = null;
+    aoMapIntensity = 1.0;
 
-    this.bumpMap = null;
-    this.bumpScale = 1;
+    emissive = Color.fromHex(0x000000);
+    emissiveIntensity = 1.0;
+    emissiveMap = null;
 
-    this.normalMap = null;
-    this.normalMapType = TangentSpaceNormalMap;
-    this.normalScale = new Vector2(1, 1);
+    bumpMap = null;
+    bumpScale = 1;
 
-    this.displacementMap = null;
-    this.displacementScale = 1;
-    this.displacementBias = 0;
+    normalMap = null;
+    normalMapType = TangentSpaceNormalMap;
+    normalScale = new Vector2(1, 1);
 
-    this.roughnessMap = null;
+    displacementMap = null;
+    displacementScale = 1;
+    displacementBias = 0;
 
-    this.metalnessMap = null;
+    roughnessMap = null;
 
-    this.alphaMap = null;
+    metalnessMap = null;
+
+    alphaMap = null;
 
     // this.envMap = null;
-    this.envMapIntensity = 1.0;
+    envMapIntensity = 1.0;
 
-    this.refractionRatio = 0.98;
+    refractionRatio = 0.98;
 
-    this.wireframe = false;
-    this.wireframeLinewidth = 1;
-    this.wireframeLinecap = 'round';
-    this.wireframeLinejoin = 'round';
+    wireframe = false;
+    wireframeLinewidth = 1;
+    wireframeLinecap = 'round';
+    wireframeLinejoin = 'round';
 
-    this.setValues(parameters);
+    setValues(parameters);
   }
 
-  clone() {
-    return MeshStandardMaterial(Map<String, dynamic>()).copy(this);
+  @override
+  MeshStandardMaterial clone() {
+    return MeshStandardMaterial(<String, dynamic>{}).copy(this);
   }
 
-  copy(source) {
+  @override
+  MeshStandardMaterial copy(Material source) {
     super.copy(source);
 
-    this.defines = {'STANDARD': ''};
+    defines = {'STANDARD': ''};
 
-    this.color = source.color?.clone();
-    this.roughness = source.roughness;
-    this.metalness = source.metalness;
+    color = source.color?.clone();
+    roughness = source.roughness;
+    metalness = source.metalness;
 
-    this.map = source.map;
+    map = source.map;
 
-    this.lightMap = source.lightMap;
-    this.lightMapIntensity = source.lightMapIntensity;
+    lightMap = source.lightMap;
+    lightMapIntensity = source.lightMapIntensity;
 
-    this.aoMap = source.aoMap;
-    this.aoMapIntensity = source.aoMapIntensity;
+    aoMap = source.aoMap;
+    aoMapIntensity = source.aoMapIntensity;
 
-    this.emissive = source.emissive?.clone();
-    this.emissiveMap = source.emissiveMap;
-    this.emissiveIntensity = source.emissiveIntensity;
+    emissive = source.emissive?.clone();
+    emissiveMap = source.emissiveMap;
+    emissiveIntensity = source.emissiveIntensity;
 
-    this.bumpMap = source.bumpMap;
-    this.bumpScale = source.bumpScale;
+    bumpMap = source.bumpMap;
+    bumpScale = source.bumpScale;
 
-    this.normalMap = source.normalMap;
-    this.normalMapType = source.normalMapType;
-    this.normalScale = source.normalScale?.clone();
+    normalMap = source.normalMap;
+    normalMapType = source.normalMapType;
+    normalScale = source.normalScale?.clone();
 
-    this.displacementMap = source.displacementMap;
-    this.displacementScale = source.displacementScale;
-    this.displacementBias = source.displacementBias;
+    displacementMap = source.displacementMap;
+    displacementScale = source.displacementScale;
+    displacementBias = source.displacementBias;
 
-    this.roughnessMap = source.roughnessMap;
+    roughnessMap = source.roughnessMap;
 
-    this.metalnessMap = source.metalnessMap;
+    metalnessMap = source.metalnessMap;
 
-    this.alphaMap = source.alphaMap;
+    alphaMap = source.alphaMap;
 
-    this.envMap = source.envMap;
-    this.envMapIntensity = source.envMapIntensity;
+    envMap = source.envMap;
+    envMapIntensity = source.envMapIntensity;
 
-    this.refractionRatio = source.refractionRatio;
+    refractionRatio = source.refractionRatio;
 
-    this.wireframe = source.wireframe;
-    this.wireframeLinewidth = source.wireframeLinewidth;
-    this.wireframeLinecap = source.wireframeLinecap;
-    this.wireframeLinejoin = source.wireframeLinejoin;
+    wireframe = source.wireframe;
+    wireframeLinewidth = source.wireframeLinewidth;
+    wireframeLinecap = source.wireframeLinecap;
+    wireframeLinejoin = source.wireframeLinejoin;
 
-    this.flatShading = source.flatShading;
+    flatShading = source.flatShading;
 
     return this;
   }
