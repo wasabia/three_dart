@@ -8,7 +8,7 @@ class QuaternionKeyframeTrack extends KeyframeTrack {
   var ValueTypeName = 'quaternion';
   var DefaultInterpolation = InterpolateLinear;
 
-  QuaternionKeyframeTrack(name, times, values, interpolation)
+  QuaternionKeyframeTrack(name, times, values, [interpolation])
       : super(name, times, values, interpolation) {}
 
   InterpolantFactoryMethodLinear(result) {

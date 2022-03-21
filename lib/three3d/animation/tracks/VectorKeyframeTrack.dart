@@ -7,6 +7,6 @@ part of three_animation;
 class VectorKeyframeTrack extends KeyframeTrack {
   var ValueTypeName = 'vector';
 
-  VectorKeyframeTrack(name, times, values, interpolation)
+  VectorKeyframeTrack(name, times, values, [interpolation])
       : super(name, times, values, interpolation) {}
 }

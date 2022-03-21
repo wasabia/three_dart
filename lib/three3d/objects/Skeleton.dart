@@ -12,7 +12,7 @@ class Skeleton {
   num boneTextureSize = 0;
   num frame = -1;
 
-  Skeleton({List<Bone>? bones, List<Matrix4>? boneInverses}) {
+  Skeleton([List<Bone>? bones, List<Matrix4>? boneInverses]) {
     this.bones = bones!.sublist(0);
     this.boneInverses = boneInverses ?? [];
 

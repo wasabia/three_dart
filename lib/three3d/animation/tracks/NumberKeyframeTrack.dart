@@ -7,6 +7,6 @@ part of three_animation;
 class NumberKeyframeTrack extends KeyframeTrack {
   var ValueTypeName = "number";
 
-  NumberKeyframeTrack(name, times, values, interpolation)
+  NumberKeyframeTrack(name, times, values, [interpolation])
       : super(name, times, values, interpolation) {}
 }

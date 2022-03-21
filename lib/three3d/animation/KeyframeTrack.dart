@@ -13,7 +13,7 @@ class KeyframeTrack {
   Function? createInterpolant;
   late int? _interpolation;
 
-  KeyframeTrack(name, times, values, interpolation) {
+  KeyframeTrack(name, times, values, [interpolation]) {
     if (name == null) throw ('THREE.KeyframeTrack: track name is null');
     if (times == null || times.length == 0)
       throw ('THREE.KeyframeTrack: no keyframes in track named ${name}');
