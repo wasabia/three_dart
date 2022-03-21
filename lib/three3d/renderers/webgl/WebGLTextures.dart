@@ -106,7 +106,7 @@ class WebGLTextures {
     return image;
   }
 
-  isPowerOfTwo(image) {
+  bool isPowerOfTwo(image) {
     return MathUtils.isPowerOfTwo(image.width.toInt()) &&
         MathUtils.isPowerOfTwo(image.height.toInt());
   }
