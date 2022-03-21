@@ -640,11 +640,11 @@ class WebGLRenderer {
     if (_isContextLost == true) return;
 
     // update scene graph
-    if (scene.autoUpdate == true) scene.updateMatrixWorld(false);
+    if (scene.autoUpdate == true) scene.updateMatrixWorld();
 
     // update camera matrices and frustum
 
-    if (camera.parent == null) camera.updateMatrixWorld(false);
+    if (camera.parent == null) camera.updateMatrixWorld();
 
     // if ( xr.enabled == true && xr.isPresenting == true ) {
 
@@ -720,24 +720,6 @@ class WebGLRenderer {
     } else {
       renderScene(currentRenderList!, scene, camera);
     }
-
-    // var opaqueObjects = currentRenderList!.opaque;
-    // var transmissiveObjects = currentRenderList!.transmissive;
-    // var transparentObjects = currentRenderList!.transparent;
-
-    // print("opaqueObjects: ${opaqueObjects} ");
-    // print("transmissiveObjects: ${transmissiveObjects} ");
-    // print("transparentObjects: ${transparentObjects} ");
-
-    // print(" renderObjects: scene: ${scene} ${scene.name} -1:${DateTime.now().millisecondsSinceEpoch} - ${DateTime.now().microsecondsSinceEpoch}  ");
-    // print(" ============================================ ");
-
-    // if (opaqueObjects.length > 0) renderObjects(opaqueObjects, scene, camera);
-    // if (transmissiveObjects.length > 0)
-    //   renderTransmissiveObjects(
-    //       opaqueObjects, transmissiveObjects, scene, camera);
-    // if (transparentObjects.length > 0)
-    //   renderObjects(transparentObjects, scene, camera);
 
     if (_currentRenderTarget != null) {
       // resolve multisample renderbuffers to a single-sample texture if necessary
