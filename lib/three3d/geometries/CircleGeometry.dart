@@ -13,7 +13,7 @@ class CircleGeometry extends BufferGeometry {
       "thetaLength": thetaLength
     };
 
-    segments = Math.max(3, segments);
+    segments = Math.max<num>(3, segments);
 
     // buffers
 

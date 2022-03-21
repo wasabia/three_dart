@@ -491,9 +491,9 @@ class Vector3 {
   }
 
   num distanceToSquared(Vector3 v) {
-    var dx = x - v.x, dy = y - v.y, dz = z - v.z;
-
-    return dx * dx + dy * dy + dz * dz;
+    final dx = x - v.x, dy = y - v.y, dz = z - v.z;
+    final distance = dx * dx + dy * dy + dz * dz;
+    return distance;
   }
 
   manhattanDistanceTo(Vector3 v) {
@@ -577,15 +577,13 @@ class Vector3 {
   }
 
   List<num> toArray([List<num>? array, int offset = 0]) {
-    
-    if(array == null) {
+    if (array == null) {
       array = List<num>.filled(offset + 3, 0);
     } else {
       while (array.length < offset + 3) {
         array.add(0);
       }
     }
-    
 
     array[offset] = x;
     array[offset + 1] = y;

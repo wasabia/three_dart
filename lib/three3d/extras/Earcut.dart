@@ -33,7 +33,7 @@ class Earcut {
       }
 
       // minX, minY and invSize are later used to transform coords into integers for z-order calculation
-      invSize = Math.max(maxX - minX, maxY - minY);
+      invSize = Math.max<num>(maxX - minX, maxY - minY);
       invSize = invSize != 0 ? 1 / invSize : 0;
     }
 
@@ -554,13 +554,13 @@ intersects(p1, q1, p2, q2) {
 
 // for collinear points p, q, r, check if point q lies on segment pr
 onSegment(p, q, r) {
-  return q.x <= Math.max(p.x, r.x) &&
-      q.x >= Math.min(p.x, r.x) &&
-      q.y <= Math.max(p.y, r.y) &&
-      q.y >= Math.min(p.y, r.y);
+  return q.x <= Math.max<num>(p.x, r.x) &&
+      q.x >= Math.min<num>(p.x, r.x) &&
+      q.y <= Math.max<num>(p.y, r.y) &&
+      q.y >= Math.min<num>(p.y, r.y);
 }
 
-sign(num) {
+int sign(num num) {
   return num > 0
       ? 1
       : num < 0

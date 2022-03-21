@@ -531,7 +531,7 @@ class WebGLRenderer {
     var groupCount =
         group != null ? group["count"] * rangeFactor : double.maxFinite;
 
-    var drawStart = Math.max(rangeStart, groupStart);
+    var drawStart = Math.max<num>(rangeStart, groupStart);
 
     var drawEnd =
         Math.min3(dataCount, rangeStart + rangeCount, groupStart + groupCount) -
@@ -723,10 +723,10 @@ class WebGLRenderer {
 
     if (_currentRenderTarget != null) {
       // resolve multisample renderbuffers to a single-sample texture if necessary
-      textures.updateMultisampleRenderTarget(_currentRenderTarget);
+      textures.updateMultisampleRenderTarget(_currentRenderTarget!);
 
       // Generate mipmap if we're using any kind of mipmap filtering
-      textures.updateRenderTargetMipmap(_currentRenderTarget);
+      textures.updateRenderTargetMipmap(_currentRenderTarget!);
     }
 
     if (scene is Scene) {

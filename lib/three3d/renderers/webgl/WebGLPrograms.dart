@@ -67,7 +67,7 @@ class WebGLPrograms {
       var nVertexUniforms = maxVertexUniforms;
       var nVertexMatrices = Math.floor((nVertexUniforms - 20) / 4);
 
-      var maxBones = Math.min(nVertexMatrices, bones.length);
+      var maxBones = Math.min<num>(nVertexMatrices, bones.length);
 
       if (maxBones < bones.length) {
         print(
@@ -184,7 +184,7 @@ class WebGLPrograms {
       "objectSpaceNormalMap": material.normalMapType == ObjectSpaceNormalMap,
       "tangentSpaceNormalMap": material.normalMapType == TangentSpaceNormalMap,
       "decodeVideoTexture": material.map != null &&
-          (material.map!.isVideoTexture == true) &&
+          (material.map is VideoTexture) &&
           (material.map!.encoding == sRGBEncoding),
       "clearcoat": useClearcoat,
       "clearcoatMap": useClearcoat && material.clearcoatMap != null,

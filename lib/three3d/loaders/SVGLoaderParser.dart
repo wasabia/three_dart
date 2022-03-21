@@ -539,7 +539,7 @@ class SVGLoaderParser {
       stylesheetStyles.addAll(stylesheets['#' + node.getAttribute('id')] ?? {});
     }
 
-    Function addStyle = (svgName, jsName, [adjustFunction]) {
+    void addStyle(svgName, jsName, [adjustFunction]) {
       adjustFunction ??= (v) {
           if (v.startsWith('url')) {
             print('SVGLoader: url access in attributes is not implemented.');
@@ -563,15 +563,15 @@ class SVGLoaderParser {
           style2[jsName] = adjustFunction(_value);
         }
       }
-    };
+    }
 
-    Function clamp = (v) {
-      return Math.max(0, Math.min(1, parseFloatWithUnits(v)));
-    };
+    num clamp(v) {
+      return Math.max<num>(0, Math.min(1, parseFloatWithUnits(v)));
+    }
 
-    Function positive = (v) {
-      return Math.max(0, parseFloatWithUnits(v));
-    };
+    num positive(v) {
+      return Math.max<num>(0, parseFloatWithUnits(v));
+    }
 
     addStyle('fill', 'fill');
     addStyle('fill-opacity', 'fillOpacity', clamp);

@@ -26,7 +26,7 @@ class SphereGeometry extends BufferGeometry {
     widthSegments = Math.max(3, Math.floor(widthSegments));
     heightSegments = Math.max(2, Math.floor(heightSegments));
 
-    var thetaEnd = Math.min(thetaStart + thetaLength, Math.PI);
+    var thetaEnd = Math.min<num>(thetaStart + thetaLength, Math.PI);
 
     var index = 0;
     var grid = [];
