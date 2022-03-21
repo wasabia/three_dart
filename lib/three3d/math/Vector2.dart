@@ -9,10 +9,7 @@ class Vector2 {
     this.x = x ?? 0;
     this.y = y ?? 0;
   }
-  Vector2.init({num x = 0, num y = 0}) {
-    this.x = x;
-    this.y = y;
-  }
+  Vector2.init({this.x = 0, this.y = 0});
 
   Vector2.fromJSON(List<num>? json) {
     if (json != null) {

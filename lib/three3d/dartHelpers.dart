@@ -66,7 +66,7 @@ int unshift(List list, item) {
   return list.length;
 }
 
-List slice(List list, int begin, [int? end]) => list
+List<T> slice<T>(List<T> list, int begin, [int? end]) => list
     .getRange(
         begin,
         end == null

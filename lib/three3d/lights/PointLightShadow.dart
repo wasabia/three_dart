@@ -60,7 +60,7 @@ class PointLightShadow extends LightShadow {
   PointLightShadow.fromJSON(
       Map<String, dynamic> json, Map<String, dynamic> rootJSON)
       : super.fromJSON(json, rootJSON) {
-    camera = Object3D.castJSON(json["camera"], rootJSON);
+    camera = Object3D.castJSON(json["camera"], rootJSON) as Camera;
   }
 
   updateMatrices(light, {viewportIndex = 0}) {

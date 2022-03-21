@@ -46,19 +46,19 @@ class Ray {
     return target.copy(direction).multiplyScalar(t).add(origin);
   }
 
-  Ray lookAt(v) {
+  Ray lookAt(Vector3 v) {
     direction.copy(v).sub(origin).normalize();
 
     return this;
   }
 
-  Ray recast(t) {
+  Ray recast(double t) {
     origin.copy(at(t, _vector));
 
     return this;
   }
 
-  Vector3 closestPointToPoint(point, Vector3 target) {
+  Vector3 closestPointToPoint(Vector3 point, Vector3 target) {
     target.subVectors(point, origin);
 
     var directionDistance = target.dot(direction);
@@ -70,11 +70,11 @@ class Ray {
     return target.copy(direction).multiplyScalar(directionDistance).add(origin);
   }
 
-  double distanceToPoint(point) {
+  double distanceToPoint(Vector3 point) {
     return Math.sqrt(distanceSqToPoint(point));
   }
 
-  num distanceSqToPoint(point) {
+  num distanceSqToPoint(Vector3 point) {
     var directionDistance = _vector.subVectors(point, origin).dot(direction);
 
     // point behind the ray
@@ -88,7 +88,7 @@ class Ray {
     return _vector.distanceToSquared(point);
   }
 
-  distanceSqToSegment(Vector3 v0, Vector3 v1,
+  num distanceSqToSegment(Vector3 v0, Vector3 v1,
       [Vector3? optionalPointOnRay, Vector3? optionalPointOnSegment]) {
     // from http://www.geometrictools.com/GTEngine/Include/Mathematics/GteDistRaySegment.h
     // It returns the min distance between the ray and the segment
@@ -107,7 +107,7 @@ class Ray {
     var b1 = -_diff.dot(_segDir);
     var c = _diff.lengthSq();
     var det = Math.abs(1 - a01 * a01);
-    var s0, s1, sqrDist, extDet;
+    num s0, s1, sqrDist, extDet;
 
     if (det > 0) {
       // The ray and segment are not parallel.
@@ -186,7 +186,7 @@ class Ray {
     return sqrDist;
   }
 
-  intersectSphere(Sphere sphere, target) {
+  Vector3? intersectSphere(Sphere sphere, Vector3 target) {
     _vector.subVectors(sphere.center, origin);
     var tca = _vector.dot(direction);
     var d2 = _vector.dot(_vector) - tca * tca;
@@ -218,7 +218,7 @@ class Ray {
     return distanceSqToPoint(sphere.center) <= (sphere.radius * sphere.radius);
   }
 
-  distanceToPlane(Plane plane) {
+  num? distanceToPlane(Plane plane) {
     var denominator = plane.normal.dot(direction);
 
     if (denominator == 0) {
@@ -239,14 +239,10 @@ class Ray {
     return t >= 0 ? t : null;
   }
 
-  intersectPlane(Plane plane, target) {
-    var t = distanceToPlane(plane);
+  intersectPlane(Plane plane, Vector3 target) {
+    num? t = distanceToPlane(plane);
 
-    if (t == null) {
-      return null;
-    }
-
-    return at(t, target);
+    return t == null ? null : at(t, target);
   }
 
   bool intersectsPlane(Plane plane) {
@@ -269,7 +265,7 @@ class Ray {
     return false;
   }
 
-  intersectBox(box, target) {
+  Vector3? intersectBox(Box3 box, Vector3 target) {
     var tmin, tmax, tymin, tymax, tzmin, tzmax;
 
     var invdirx = 1 / direction.x,
@@ -324,11 +320,12 @@ class Ray {
     return at(tmin >= 0 ? tmin : tmax, target);
   }
 
-  intersectsBox(box) {
+  bool intersectsBox(Box3 box) {
     return intersectBox(box, _vector) != null;
   }
 
-  intersectTriangle(a, b, c, backfaceCulling, target) {
+  Vector3? intersectTriangle(
+      Vector3 a, Vector3 b, Vector3 c, bool backfaceCulling, Vector3 target) {
     // Compute the offset origin, edges, and normal.
 
     // from http://www.geometrictools.com/GTEngine/Include/Mathematics/GteIntrRay3Triangle3.h

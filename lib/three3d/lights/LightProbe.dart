@@ -12,7 +12,7 @@ class LightProbe extends Light {
 
     LightProbe source1 = source as LightProbe;
 
-    this.sh!.copy(source1.sh);
+    this.sh!.copy(source1.sh!);
 
     return this;
   }
@@ -24,10 +24,10 @@ class LightProbe extends Light {
     return this;
   }
 
-  toJSON({Object3dMeta? meta}) {
+  Map<String, dynamic> toJSON({Object3dMeta? meta}) {
     var data = super.toJSON(meta: meta);
 
-    data.object.sh = this.sh!.toArray([]);
+    data["object"]['sh'] = sh!.toArray([]);
 
     return data;
   }
