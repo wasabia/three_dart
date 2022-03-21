@@ -66,7 +66,7 @@ class MeshBasicMaterial extends Material {
   MeshBasicMaterial copy(Material source) {
     super.copy(source);
 
-    if (source.color != null) color?.copy(source.color!);
+    color.copy(source.color);
 
     map = source.map;
 

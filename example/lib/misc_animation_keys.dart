@@ -31,9 +31,9 @@ class _State extends State<misc_animation_keys> {
   late THREE.Mesh mesh;
 
   late THREE.AnimationMixer mixer;
-  THREE.Clock clock = new THREE.Clock();
+  THREE.Clock clock = THREE.Clock();
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   var AMOUNT = 4;
 
@@ -45,13 +45,11 @@ class _State extends State<misc_animation_keys> {
 
   late THREE.WebGLMultisampleRenderTarget renderTarget;
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   bool loaded = false;
 
   late THREE.Object3D model;
-
-  Map<String, List<Function>> _listeners = {};
 
   @override
   void initState() {

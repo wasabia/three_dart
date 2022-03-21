@@ -137,7 +137,7 @@ class BoxGeometry extends BufferGeometry {
 
       // add a group to the geometry. this will ensure multi material support
 
-      addGroup(groupStart, groupCount, materialIndex: materialIndex);
+      addGroup(groupStart, groupCount, materialIndex);
 
       // calculate new start value for groups
 

@@ -35,7 +35,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
   late THREE.Group group;
   late THREE.Texture texture;
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   bool verbose = true;
   bool disposed = false;
@@ -184,7 +184,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
         "format": THREE.RGBAFormat
       });
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }

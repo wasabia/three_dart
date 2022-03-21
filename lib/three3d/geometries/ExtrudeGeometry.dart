@@ -42,7 +42,7 @@ class ExtrudeGeometry extends BufferGeometry {
     List<double> uvArray = [];
 
     addShape(Shape shape) {
-      var placeholder = [];
+      List<double> placeholder = [];
 
       // options
 
@@ -287,7 +287,7 @@ class ExtrudeGeometry extends BufferGeometry {
         verticesMovements.addAll(oneHoleMovements);
       }
 
-      v(x, y, z) {
+      v(double x, double y, double z) {
         placeholder.add(x);
         placeholder.add(y);
         placeholder.add(z);
@@ -481,7 +481,7 @@ class ExtrudeGeometry extends BufferGeometry {
 
         scope.addGroup(
             start.toInt(), (verticesArray.length / 3 - start).toInt(),
-            materialIndex: 0);
+            0);
       }
 
       f4(a, b, c, d) {
@@ -557,7 +557,7 @@ class ExtrudeGeometry extends BufferGeometry {
 
         // TODO WHY???  need fix ???
         scope.addGroup(start, (verticesArray.length / 3 - start).toInt(),
-            materialIndex: 1);
+            1);
       }
 
       /* Faces */

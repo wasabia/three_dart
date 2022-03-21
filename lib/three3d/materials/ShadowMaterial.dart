@@ -20,7 +20,7 @@ class ShadowMaterial extends Material {
   ShadowMaterial copy(Material source) {
     super.copy(source);
 
-    if (source.color != null) color?.copy(source.color!);
+    color.copy(source.color);
 
     return this;
   }

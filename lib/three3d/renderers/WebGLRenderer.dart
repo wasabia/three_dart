@@ -368,7 +368,7 @@ class WebGLRenderer {
   }
 
   // color 接受多种类型 same as Color.set
-  setClearColor(color, [num alpha = 1.0]) {
+  setClearColor(color, [double alpha = 1.0]) {
     background.setClearColor(color, alpha);
   }
 
@@ -380,12 +380,12 @@ class WebGLRenderer {
     background.setClearAlpha(alpha);
   }
 
-  clear(color, depth, stencil) {
+  clear([bool color = true, bool depth = true, bool stencil = true]) {
     int bits = 0;
 
-    if (color == null || color) bits |= _gl.COLOR_BUFFER_BIT;
-    if (depth == null || depth) bits |= _gl.DEPTH_BUFFER_BIT;
-    if (stencil == null || stencil) bits |= _gl.STENCIL_BUFFER_BIT;
+    if (color) bits |= _gl.COLOR_BUFFER_BIT;
+    if (depth) bits |= _gl.DEPTH_BUFFER_BIT;
+    if (stencil) bits |= _gl.STENCIL_BUFFER_BIT;
 
     _gl.clear(bits);
   }
@@ -473,7 +473,7 @@ class WebGLRenderer {
 
   void renderBufferDirect(
     Camera camera,
-    Scene? scene,
+    Object3D? scene,
     BufferGeometry geometry,
     Material material,
     Object3D object,
@@ -756,7 +756,7 @@ class WebGLRenderer {
   }
 
   void projectObject(
-      Object3D object, Camera camera, int groupOrder, bool sortObjects) {
+      Object3D object, Camera camera, double groupOrder, bool sortObjects) {
     // print("projectObject object: ${object} name: ${object.name} tag: ${object.tag}  ${object.visible} ${object.scale.toJSON()} ${object.children.length}  ");
 
     if (object.visible == false) return;
@@ -1135,13 +1135,13 @@ class WebGLRenderer {
     materialProperties["toneMapping"] = parameters.toneMapping;
   }
 
-  WebGLProgram setProgram(Camera camera, Scene? scene, BufferGeometry? geometry,
+  WebGLProgram setProgram(Camera camera, Object3D? scene, BufferGeometry? geometry,
       Material material, Object3D object) {
     if (scene is! Scene) scene = _emptyScene;
     // scene could be a Mesh, Line, Points, ...
     textures.resetTextureUnits();
 
-    Fog? fog = scene.fog;
+    var fog = scene.fog;
     var environment =
         material is MeshStandardMaterial ? scene.environment : null;
     var encoding = (_currentRenderTarget == null)

@@ -769,7 +769,7 @@ class BufferGeometry with EventDispatcher {
     for (var i = 0, l = groups.length; i < l; i++) {
       var group = groups[i];
       geometry2.addGroup(group["start"], group["count"],
-          materialIndex: group["materialIndex"]);
+          group["materialIndex"]);
     }
 
     return geometry2;
@@ -960,7 +960,7 @@ class BufferGeometry with EventDispatcher {
     for (var i = 0, l = groups.length; i < l; i++) {
       var group = groups[i];
       addGroup(group["start"], group["count"],
-          materialIndex: group["materialIndex"]);
+          group["materialIndex"]);
     }
 
     // bounding box

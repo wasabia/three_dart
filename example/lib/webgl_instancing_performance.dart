@@ -36,7 +36,7 @@ class _MyAppState extends State<webgl_instancing_performance> {
 
   late THREE.Material material;
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   var AMOUNT = 4;
 

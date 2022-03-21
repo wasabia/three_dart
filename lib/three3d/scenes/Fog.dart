@@ -1,11 +1,21 @@
 part of three_scenes;
 
-class Fog {
+class FogBase {
   String name = "";
   late Color color;
 
-  bool isFog = true;
+  bool isFog = false;
   bool isFogExp2 = false;
+
+  toJSON() {
+    throw(" need implement .... ");
+  }
+
+}
+
+class Fog extends FogBase {
+
+  bool isFog = true;
 
   late num near;
   late num far;

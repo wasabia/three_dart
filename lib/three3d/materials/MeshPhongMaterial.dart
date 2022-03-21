@@ -98,7 +98,7 @@ class MeshPhongMaterial extends Material {
   MeshPhongMaterial copy(Material source) {
     super.copy(source);
 
-    color!.copy(source.color!);
+    color.copy(source.color);
     specular!.copy(source.specular!);
     shininess = source.shininess;
 

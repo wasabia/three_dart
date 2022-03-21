@@ -113,7 +113,7 @@ class Skeleton {
   }
 
   Skeleton clone() {
-    return Skeleton(bones: bones, boneInverses: boneInverses);
+    return Skeleton(bones, boneInverses);
   }
 
   Skeleton computeBoneTexture() {
@@ -124,8 +124,8 @@ class Skeleton {
     //       32x32 pixel texture max  256 bones * 4 pixels = (32 * 32)
     //       64x64 pixel texture max 1024 bones * 4 pixels = (64 * 64)
 
-    num size = Math.sqrt(bones.length * 4); // 4 pixels needed for 1 matrix
-    size = MathUtils.ceilPowerOfTwo(size);
+    double size = Math.sqrt(bones.length * 4); // 4 pixels needed for 1 matrix
+    size = MathUtils.ceilPowerOfTwo(size).toDouble();
     size = Math.max(size, 4);
 
     var _boneMatrices =
@@ -133,7 +133,7 @@ class Skeleton {
 
     _boneMatrices.set(boneMatrices.toDartList()); // copy current values
 
-    var boneTexture = DataTexture(_boneMatrices, size.toInt(), size.toInt(),
+    var boneTexture = DataTexture(_boneMatrices, size, size,
         RGBAFormat, FloatType, null, null, null, null, null, null, null);
     boneTexture.name = "DataTexture from Skeleton.computeBoneTexture";
     boneTexture.needsUpdate = true;

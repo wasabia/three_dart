@@ -61,7 +61,7 @@ class Object3D with EventDispatcher {
   bool receiveShadow = false;
 
   bool frustumCulled = true;
-  int renderOrder = 0;
+  double renderOrder = 0.0;
 
   // List<AnimationClip> animations = [];
 
@@ -83,7 +83,8 @@ class Object3D with EventDispatcher {
   Matrix4 modelViewMatrix = Matrix4();
   Matrix3 normalMatrix = Matrix3();
 
-  dynamic? material;
+  // how to handle material is a single material or List<Material>
+  dynamic material;
 
   List<num>? morphTargetInfluences;
   Map<String, dynamic>? morphTargetDictionary;

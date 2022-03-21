@@ -188,7 +188,7 @@ class Euler {
   }
 
   Euler setFromVector3(Vector3 v, [String? order]) {
-    return set(v.x, v.y, v.z, order: order ?? _order);
+    return set(v.x, v.y, v.z, order ?? _order);
   }
 
   Euler reorder(String newOrder) {

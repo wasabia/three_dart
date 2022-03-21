@@ -46,7 +46,7 @@ class _MyAppState extends State<webgl_debug_for_macos> {
 
   late THREE.Material material;
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   var AMOUNT = 4;
 

@@ -27,9 +27,9 @@ dependencies:
   # flutter_webgpu:
   #   path: ../flutter_webgpu
 
-# dependency_overrides:
-#   flutter_gl:
-#     path: ../flutter_gl/flutter_gl
+dependency_overrides:
+  flutter_gl:
+    path: ../flutter_gl/flutter_gl
 
 dev_dependencies:
   flutter_test:

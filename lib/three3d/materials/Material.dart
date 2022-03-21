@@ -85,7 +85,7 @@ class Material with EventDispatcher {
 
   bool isMaterial = true;
   bool flatShading = false;
-  Color? color;
+  Color color = Color(1,1,1);
 
   Color? specular;
   num? specularIntensity;
@@ -246,7 +246,7 @@ class Material with EventDispatcher {
   Material.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) {
     uuid = json["uuid"];
     type = json["type"];
-    color = Color(0, 0, 0).setHex(json["color"]);
+    color.setHex(json["color"]);
   }
 
   void onBuild(shaderobject, renderer) {}
@@ -450,8 +450,8 @@ class Material with EventDispatcher {
 
     if (name != '') data["name"] = name;
 
-    if (color != null && color!.isColor) {
-      data["color"] = color!.getHex();
+    if (color.isColor) {
+      data["color"] = color.getHex();
     }
 
     data["roughness"] = roughness;

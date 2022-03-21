@@ -105,8 +105,8 @@ class WebGLTextures {
   }
 
   isPowerOfTwo(image) {
-    return MathUtils.isPowerOfTwo(image.width) &&
-        MathUtils.isPowerOfTwo(image.height);
+    return MathUtils.isPowerOfTwo(image.width.toInt()) &&
+        MathUtils.isPowerOfTwo(image.height.toInt());
   }
 
   textureNeedsPowerOfTwo(texture) {
@@ -1764,10 +1764,10 @@ class WebGLTextures {
     if (textureTarget == gl.TEXTURE_3D ||
         textureTarget == gl.TEXTURE_2D_ARRAY) {
       state.texImage3D(textureTarget, 0, glInternalFormat, renderTarget.width,
-          renderTarget.height, renderTarget.depth, 0, glFormat, glType, null);
+          renderTarget.height.toInt(), renderTarget.depth.toInt(), 0, glFormat, glType, null);
     } else {
-      state.texImage2D(textureTarget, 0, glInternalFormat, renderTarget.width,
-          renderTarget.height, 0, glFormat, glType, null);
+      state.texImage2D(textureTarget, 0, glInternalFormat, renderTarget.width.toInt(),
+          renderTarget.height.toInt(), 0, glFormat, glType, null);
     }
 
     state.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
@@ -1812,14 +1812,14 @@ class WebGLTextures {
 
         if ( useMultisampledRenderToTexture( renderTarget ) ) {
 
-					MultisampledRenderToTextureExtension.renderbufferStorageMultisampleEXT( gl.RENDERBUFFER, samples, glInternalFormat, renderTarget.width, renderTarget.height );
+					MultisampledRenderToTextureExtension.renderbufferStorageMultisampleEXT( gl.RENDERBUFFER, samples, glInternalFormat, renderTarget.width.toInt(), renderTarget.height.toInt() );
 
 				} else {
-					gl.renderbufferStorageMultisample( gl.RENDERBUFFER, samples, glInternalFormat, renderTarget.width, renderTarget.height );
+					gl.renderbufferStorageMultisample( gl.RENDERBUFFER, samples, glInternalFormat, renderTarget.width.toInt(), renderTarget.height.toInt() );
 				}
       } else {
         gl.renderbufferStorage(gl.RENDERBUFFER, glInternalFormat,
-            renderTarget.width, renderTarget.height);
+            renderTarget.width.toInt(), renderTarget.height.toInt());
       }
 
       gl.framebufferRenderbuffer(
@@ -1830,9 +1830,9 @@ class WebGLTextures {
         var samples = getRenderTargetSamples(renderTarget);
 
         gl.renderbufferStorageMultisample(gl.RENDERBUFFER, samples,
-            gl.DEPTH24_STENCIL8, renderTarget.width, renderTarget.height);
+            gl.DEPTH24_STENCIL8, renderTarget.width.toInt(), renderTarget.height.toInt());
       } else if (useMultisampledRenderToTexture( renderTarget )) {
-        MultisampledRenderToTextureExtension.renderbufferStorageMultisampleEXT( _gl.RENDERBUFFER, samples, _gl.DEPTH24_STENCIL8, renderTarget.width, renderTarget.height );      
+        MultisampledRenderToTextureExtension.renderbufferStorageMultisampleEXT( _gl.RENDERBUFFER, samples, _gl.DEPTH24_STENCIL8, renderTarget.width.toInt(), renderTarget.height.toInt() );      
       } else {
         gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_STENCIL,
             renderTarget.width, renderTarget.height);
@@ -2045,7 +2045,7 @@ class WebGLTextures {
 				var glType = utils.convert( texture.type );
 				var glInternalFormat = getInternalFormat( texture.internalFormat, glFormat, glType, texture.encoding );
 				var samples = getRenderTargetSamples( renderTarget );
-				_gl.renderbufferStorageMultisample( _gl.RENDERBUFFER, samples, glInternalFormat, renderTarget.width, renderTarget.height );
+				_gl.renderbufferStorageMultisample( _gl.RENDERBUFFER, samples, glInternalFormat, renderTarget.width.toInt(), renderTarget.height.toInt() );
 
 				state.bindFramebuffer( _gl.FRAMEBUFFER, renderTargetProperties["__webglMultisampledFramebuffer"] );
 				_gl.framebufferRenderbuffer( _gl.FRAMEBUFFER, _gl.COLOR_ATTACHMENT0, _gl.RENDERBUFFER, renderTargetProperties["__webglColorRenderbuffer"] );
@@ -2160,8 +2160,8 @@ class WebGLTextures {
   updateMultisampleRenderTarget(renderTarget) {
     if ( ( isWebGL2 && renderTarget.samples > 0 ) && useMultisampledRenderToTexture( renderTarget ) == false ) {
 
-			var width = renderTarget.width;
-			var height = renderTarget.height;
+			var width = renderTarget.width.toInt();
+			var height = renderTarget.height.toInt();
 			var mask = _gl.COLOR_BUFFER_BIT;
 			var invalidationArray = [ _gl.COLOR_ATTACHMENT0 ];
 			var depthStyle = renderTarget.stencilBuffer ? _gl.DEPTH_STENCIL_ATTACHMENT : _gl.DEPTH_ATTACHMENT;

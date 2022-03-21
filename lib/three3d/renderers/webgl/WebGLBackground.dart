@@ -10,7 +10,7 @@ class WebGLBackground {
   bool premultipliedAlpha;
 
   Color clearColor = Color(0x000000);
-  num clearAlpha = 0;
+  double clearAlpha = 0;
 
   Mesh? planeMesh;
   Mesh? boxMesh;
@@ -178,7 +178,7 @@ class WebGLBackground {
     }
   }
 
-  void setClear(Color color, num alpha) {
+  void setClear(Color color, double alpha) {
     state.buffers["color"]
         .setClear(color.r, color.g, color.b, alpha, premultipliedAlpha);
   }
@@ -187,7 +187,7 @@ class WebGLBackground {
     return clearColor;
   }
 
-  void setClearColor(Color color, [num alpha = 1.0]) {
+  void setClearColor(Color color, [double alpha = 1.0]) {
     clearColor.set(color);
     clearAlpha = alpha;
     setClear(clearColor, clearAlpha);
@@ -197,7 +197,7 @@ class WebGLBackground {
     return clearAlpha;
   }
 
-  void setClearAlpha(num alpha) {
+  void setClearAlpha(double alpha) {
     clearAlpha = alpha;
     setClear(clearColor, clearAlpha);
   }

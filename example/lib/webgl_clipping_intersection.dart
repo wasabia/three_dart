@@ -34,7 +34,7 @@ class _State extends State<webgl_clipping_intersection> {
   late THREE.AnimationMixer mixer;
   THREE.Clock clock = new THREE.Clock();
 
-  num dpr = 1.0;
+  double dpr = 1.0;
 
   var AMOUNT = 4;
 

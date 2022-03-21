@@ -82,7 +82,7 @@ class MeshToonMaterial extends Material {
   MeshToonMaterial copy(Material source) {
     super.copy(source);
 
-    color?.copy(source.color!);
+    color.copy(source.color);
 
     map = source.map;
     gradientMap = source.gradientMap;

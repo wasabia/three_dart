@@ -165,7 +165,7 @@ class BufferGeometryLoader extends Loader {
         var group = groups[i];
 
         geometry.addGroup(group["start"], group["count"],
-            materialIndex: group["materialIndex"]);
+            group["materialIndex"]);
       }
     }
 
