@@ -1,9 +1,8 @@
 part of three_geometries;
 
 class PolyhedronGeometry extends BufferGeometry {
-  String type = "PolyhedronGeometry";
-
   PolyhedronGeometry(vertices, indices, [radius = 1, detail = 0]) : super() {
+    type = "PolyhedronGeometry";
     // default buffer data
     List<double> vertexBuffer = [];
     List<double> uvBuffer = [];
@@ -226,7 +225,7 @@ class PolyhedronGeometry extends BufferGeometry {
     setAttribute(
         'normal',
         Float32BufferAttribute(
-            Float32Array.from(slice(vertexBuffer, 0)), 3, false));
+            Float32Array.from(slice<double>(vertexBuffer, 0)), 3, false));
     setAttribute(
         'uv', Float32BufferAttribute(Float32Array.from(uvBuffer), 2, false));
 
