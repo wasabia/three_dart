@@ -406,7 +406,7 @@ class ConvexHull {
     // (max.y - min.y)
     // (max.z - min.z)
 
-    var distance;
+    num distance;
     num maxDistance = 0;
     var index = 0;
 
