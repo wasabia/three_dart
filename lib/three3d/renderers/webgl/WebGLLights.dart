@@ -173,7 +173,7 @@ class WebGLLights {
     matrix42 = Matrix4();
   }
 
-  setup(List<Light> lights, physicallyCorrectLights) {
+  void setup(List<Light> lights, [bool? physicallyCorrectLights]) {
     num r = 0.0;
     num g = 0.0;
     num b = 0.0;

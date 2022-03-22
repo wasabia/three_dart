@@ -1,9 +1,11 @@
 library three_renderers;
 
-
+import 'package:flutter_gl/native-array/index.dart';
+import 'package:three_dart/three3d/WeakMap.dart';
 import 'package:three_dart/three3d/cameras/index.dart';
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/dartHelpers.dart';
 import 'package:three_dart/three3d/geometries/index.dart';
 import 'package:three_dart/three3d/materials/index.dart';
 import 'package:three_dart/three3d/math/index.dart';

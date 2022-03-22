@@ -287,9 +287,9 @@ class Curve {
     normals.add(Vector3.init());
     binormals.add(Vector3.init());
     var min = Math.MAX_VALUE;
-    var tx = Math.abs(tangents[0].x);
-    var ty = Math.abs(tangents[0].y);
-    var tz = Math.abs(tangents[0].z);
+    final tx = Math.abs(tangents[0].x).toDouble();
+    final ty = Math.abs(tangents[0].y).toDouble();
+    final tz = Math.abs(tangents[0].z).toDouble();
 
     if (tx <= min) {
       min = tx;

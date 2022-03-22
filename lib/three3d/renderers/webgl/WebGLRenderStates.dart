@@ -16,24 +16,24 @@ class WebGLRenderState {
     return _state;
   }
 
-  init() {
+  void init() {
     lightsArray.length = 0;
     shadowsArray.length = 0;
   }
 
-  pushLight(light) {
+  void pushLight(Light light) {
     lightsArray.add(light);
   }
 
-  pushShadow(shadowLight) {
+  void pushShadow(Light shadowLight) {
     shadowsArray.add(shadowLight);
   }
 
-  setupLights(physicallyCorrectLights) {
+  void setupLights([bool? physicallyCorrectLights]) {
     lights.setup(lightsArray, physicallyCorrectLights);
   }
 
-  setupLightsView(camera) {
+  void setupLightsView(Camera camera) {
     lights.setupView(lightsArray, camera);
   }
 }
@@ -46,7 +46,7 @@ class WebGLRenderStates {
   WebGLRenderStates(this.extensions, this.capabilities);
 
   WebGLRenderState get(scene, {int renderCallDepth = 0}) {
-    var renderState;
+    WebGLRenderState renderState;
 
     if (renderStates.has(scene) == false) {
       renderState = WebGLRenderState(extensions, capabilities);
@@ -63,7 +63,7 @@ class WebGLRenderStates {
     return renderState;
   }
 
-  dispose() {
+  void dispose() {
     renderStates = WeakMap();
   }
 }
