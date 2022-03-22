@@ -2,6 +2,10 @@ library three_geometries;
 
 
 import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/dartHelpers.dart';
+import 'package:three_dart/three3d/extras/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
 import 'package:three_dart/three_dart.dart';
 
 part 'BoxGeometry.dart';
