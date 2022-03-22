@@ -187,7 +187,7 @@ class WebGLTextures {
             texture.minFilter != NearestFilter &&
             texture.minFilter != LinearFilter)) {
       return Math.log2(Math.max(image.width, image.height)).toInt() + 1;
-    } else if (texture.mipmaps != null && texture.mipmaps.isNotEmpty) {
+    } else if (texture.mipmaps.isNotEmpty) {
       // user-defined mipmaps
 
       return texture.mipmaps.length;
@@ -1012,7 +1012,7 @@ class WebGLTextures {
         // if there are no manual mipmaps
         // set 0 level mipmap and then use GL to generate other mipmap levels
 
-        if (mipmaps.length > 0 && supportsMips) {
+        if (mipmaps.isNotEmpty && supportsMips) {
           if (useTexStorage && allocateMemory) {
             state.texStorage2D(_gl.TEXTURE_2D, levels, glInternalFormat,
                 mipmaps[0].width, mipmaps[0].height);
@@ -1858,7 +1858,7 @@ class WebGLTextures {
 
   // Setup resources for a Depth Texture for a FBO (needs an extension)
   void setupDepthTexture(framebuffer, RenderTarget renderTarget) {
-    var isCube = (renderTarget != null && renderTarget.isWebGLCubeRenderTarget);
+    var isCube = (renderTarget.isWebGLCubeRenderTarget);
     if (isCube) {
       throw ('Depth Texture with cube render targets is not supported');
     }

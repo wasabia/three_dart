@@ -537,7 +537,7 @@ class Color {
     var max = Math.max3(r, g, b);
     var min = Math.min3(r, g, b);
 
-    var hue, saturation;
+    num hue, saturation;
     var lightness = (min + max) / 2.0;
 
     if (min == max) {
