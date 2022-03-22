@@ -3,7 +3,6 @@ part of three_lights;
 class SpotLightShadow extends LightShadow {
   SpotLightShadow() : super(PerspectiveCamera(50, 1, 0.5, 500)) {
     focus = 1;
-    isSpotLightShadow = true;
   }
 
   @override

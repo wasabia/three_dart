@@ -3,8 +3,6 @@ part of three_lights;
 class PointLight extends Light {
   @override
   String type = "PointLight";
-  @override
-  bool isPointLight = true;
 
   PointLight(color, [num? intensity, num? distance, num? decay])
       : super(color, intensity) {

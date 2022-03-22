@@ -35,7 +35,7 @@ class WebGLGeometries {
 
     bindingStates.releaseStatesOfGeometry(geometry);
 
-    if (geometry.isInstancedBufferGeometry == true) {
+    if (geometry is InstancedBufferGeometry) {
       // geometry.remove("maxInstanceCount");
       geometry.maxInstanceCount = null;
     }
@@ -89,7 +89,7 @@ class WebGLGeometries {
 
     if (geometryIndex != null) {
       var array = geometryIndex.array;
-      version = geometryIndex.version; 
+      version = geometryIndex.version;
       for (var i = 0, l = array.length; i < l; i += 3) {
         var a = array[i + 0].toInt();
         var b = array[i + 1].toInt();
@@ -111,8 +111,8 @@ class WebGLGeometries {
     }
 
     BufferAttribute attribute;
-
-    if (arrayMax(indices) > 65535) {
+    final max = arrayMax(indices);
+    if (max != null && max > 65535) {
       attribute = Uint32BufferAttribute(Uint32Array.from(indices), 1, false);
     } else {
       attribute = Uint16BufferAttribute(Uint16Array.from(indices), 1, false);

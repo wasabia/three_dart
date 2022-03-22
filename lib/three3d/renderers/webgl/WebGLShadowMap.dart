@@ -123,7 +123,7 @@ class WebGLShadowMap {
       }
 
       if (shadow.map == null &&
-          !shadow.isPointLightShadow &&
+          shadow is! PointLightShadow &&
           type == VSMShadowMap) {
         var pars = WebGLRenderTargetOptions({
           "minFilter": LinearFilter,
@@ -304,7 +304,7 @@ class WebGLShadowMap {
 
     var visible = object.layers.test(camera.layers);
 
-    if (visible && (object.isMesh || object.isLine || object.isPoints)) {
+    if (visible && (object is Mesh || object is Line || object is Points)) {
       if ((object.castShadow ||
               (object.receiveShadow && type == VSMShadowMap)) &&
           (!object.frustumCulled || _frustum.intersectsObject(object))) {

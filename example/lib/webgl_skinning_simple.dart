@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/objects/index.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
@@ -257,7 +258,7 @@ class _MyAppState extends State<webgl_skinning_simple> {
     object = result["scene"];
 
     object.traverse((child) {
-      if (child.isSkinnedMesh) child.castShadow = true;
+      if (child is SkinnedMesh) child.castShadow = true;
     });
 
     var skeleton = THREE.SkeletonHelper(object);

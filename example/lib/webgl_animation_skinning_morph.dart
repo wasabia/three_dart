@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/objects/index.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
@@ -248,7 +249,7 @@ class _State extends State<webgl_animation_skinning_morph> {
     scene.add(model);
 
     model.traverse((object) {
-      if (object.isMesh) object.castShadow = true;
+      if (object is Mesh) object.castShadow = true;
     });
 
     //

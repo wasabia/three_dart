@@ -17,9 +17,8 @@ class WebGLMultisampleRenderTarget extends WebGLRenderTarget {
   }
 
   @override
-  clone() {
-    return WebGLMultisampleRenderTarget(width, height, options)
-        .copy(this);
+  WebGLMultisampleRenderTarget clone() {
+    return WebGLMultisampleRenderTarget(width, height, options).copy(this);
   }
 
   @override

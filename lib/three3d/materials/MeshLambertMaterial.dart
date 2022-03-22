@@ -35,7 +35,6 @@ part of three_materials;
 class MeshLambertMaterial extends Material {
   MeshLambertMaterial([parameters]) : super() {
     type = "MeshLambertMaterial";
-    isMeshLambertMaterial = true;
 
     color = Color(0, 0, 0).setHex(0xffffff); // diffuse
 

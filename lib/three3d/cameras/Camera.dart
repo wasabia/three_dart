@@ -4,12 +4,6 @@ class Camera extends Object3D {
   @override
   String type = "Camera";
 
-  @override
-  bool isCamera = true;
-  bool isArrayCamera = false;
-  bool isOrthographicCamera = false;
-  bool isPerspectiveCamera = false;
-
   Matrix4 matrixWorldInverse = Matrix4();
 
   Matrix4 projectionMatrix = Matrix4();
@@ -44,7 +38,7 @@ class Camera extends Object3D {
   }
 
   @override
-  copy(Object3D source, [bool? recursive]) {
+  Camera copy(Object3D source, [bool? recursive]) {
     super.copy(source, recursive);
 
     Camera source1 = source as Camera;
@@ -58,7 +52,7 @@ class Camera extends Object3D {
   }
 
   @override
-  getWorldDirection(Vector3 target) {
+  Vector3 getWorldDirection(Vector3 target) {
     updateWorldMatrix(true, false);
 
     var e = matrixWorld.elements;
@@ -67,14 +61,14 @@ class Camera extends Object3D {
   }
 
   @override
-  updateMatrixWorld([bool force = false]) {
+  void updateMatrixWorld([bool force = false]) {
     super.updateMatrixWorld(force);
 
     matrixWorldInverse.copy(matrixWorld).invert();
   }
 
   @override
-  updateWorldMatrix(updateParents, updateChildren) {
+  void updateWorldMatrix(updateParents, updateChildren) {
     super.updateWorldMatrix(updateParents, updateChildren);
 
     matrixWorldInverse.copy(matrixWorld).invert();

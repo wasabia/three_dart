@@ -10,7 +10,6 @@ class OrthographicCamera extends Camera {
       num far = 2000])
       : super() {
     type = 'OrthographicCamera';
-    isOrthographicCamera = true;
     zoom = 1;
 
     view = null;

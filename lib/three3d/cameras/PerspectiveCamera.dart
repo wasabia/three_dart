@@ -5,7 +5,6 @@ class PerspectiveCamera extends Camera {
   PerspectiveCamera(
       [num fov = 50, num aspect = 1, num near = 0.1, num far = 2000])
       : super() {
-    isPerspectiveCamera = true;
     type = "PerspectiveCamera";
     this.fov = fov;
     this.aspect = aspect;
@@ -18,7 +17,6 @@ class PerspectiveCamera extends Camera {
   PerspectiveCamera.fromJSON(
       Map<String, dynamic> json, Map<String, dynamic> rootJSON)
       : super.fromJSON(json, rootJSON) {
-    isPerspectiveCamera = true;
     type = "PerspectiveCamera";
     fov = json["fov"];
     aspect = json["aspect"];
@@ -42,8 +40,7 @@ class PerspectiveCamera extends Camera {
     focus = source1.focus;
 
     aspect = source1.aspect;
-    view =
-        source1.view == null ? null : json.decode(json.encode(source1.view));
+    view = source1.view == null ? null : json.decode(json.encode(source1.view));
 
     filmGauge = source1.filmGauge;
     filmOffset = source1.filmOffset;
@@ -141,14 +138,14 @@ class PerspectiveCamera extends Camera {
     aspect = fullWidth / fullHeight;
 
     view ??= {
-        "enabled": true,
-        "fullWidth": 1,
-        "fullHeight": 1,
-        "offsetX": 0,
-        "offsetY": 0,
-        "width": 1,
-        "height": 1
-      };
+      "enabled": true,
+      "fullWidth": 1,
+      "fullHeight": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "width": 1,
+      "height": 1
+    };
 
     view!["enabled"] = true;
     view!["fullWidth"] = fullWidth;
@@ -189,8 +186,8 @@ class PerspectiveCamera extends Camera {
     num skew = filmOffset;
     if (skew != 0) left += near * skew / getFilmWidth();
 
-    projectionMatrix
-        .makePerspective(left, left + width, top, top - height, near, far);
+    projectionMatrix.makePerspective(
+        left, left + width, top, top - height, near, far);
     projectionMatrixInverse.copy(projectionMatrix).invert();
   }
 

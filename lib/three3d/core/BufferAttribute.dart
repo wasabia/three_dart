@@ -257,7 +257,7 @@ abstract class BufferAttribute<TData extends NativeArray>
     return this;
   }
 
-  BufferAttribute onUpload(callback) {
+  BufferAttribute onUpload(void Function()? callback) {
     onUploadCallback = callback;
 
     return this;
@@ -281,7 +281,7 @@ abstract class BufferAttribute<TData extends NativeArray>
     }
   }
 
-  toJSON([data]) {
+  Map<String, dynamic> toJSON([data]) {
     // print(" BufferAttribute to JSON todo  ${this.array.runtimeType} ");
 
     // return {
@@ -365,12 +365,12 @@ class Uint32BufferAttribute extends BufferAttribute<Uint32Array> {
   }
 }
 
-// class Float16BufferAttribute extends BufferAttribute {
-//   Float16BufferAttribute(array, int itemSize, [bool normalized = false])
-//       : super(array, itemSize, normalized) {
-//     type = "Float16BufferAttribute";
-//   }
-// }
+class Float16BufferAttribute extends BufferAttribute {
+  Float16BufferAttribute(array, int itemSize, [bool normalized = false])
+      : super(array, itemSize, normalized) {
+    type = "Float16BufferAttribute";
+  }
+}
 
 class Float32BufferAttribute extends BufferAttribute<Float32Array> {
   Float32BufferAttribute(Float32Array array, int itemSize,

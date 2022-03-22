@@ -37,7 +37,6 @@ part of three_materials;
 
 class MeshToonMaterial extends Material {
   MeshToonMaterial([Map<String, dynamic>? parameters]) : super() {
-    isMeshToonMaterial = true;
     defines = {'TOON': ''};
 
     type = 'MeshToonMaterial';

@@ -4,7 +4,6 @@ class SpotLight extends Light {
   SpotLight(color, [intensity, num? distance, angle, penumbra, decay])
       : super(color, intensity) {
     type = "SpotLight";
-    isSpotLight = true;
     position.copy(Object3D.DefaultUp);
     updateMatrix();
 

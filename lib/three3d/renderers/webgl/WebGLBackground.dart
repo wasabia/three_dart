@@ -106,8 +106,8 @@ class WebGLBackground {
       boxMesh!.material.uniforms["envMap"]["value"] = background;
       boxMesh!.material.uniforms["flipEnvMap"]["value"] =
           (background is CubeTexture && background is WebGL3DRenderTarget)
-          ? -1
-          : 1;
+              ? -1
+              : 1;
 
       if (currentBackground != background ||
           currentBackgroundVersion != background.version ||
@@ -193,7 +193,7 @@ class WebGLBackground {
     setClear(clearColor, clearAlpha);
   }
 
-  num getClearAlpha() {
+  double getClearAlpha() {
     return clearAlpha;
   }
 
