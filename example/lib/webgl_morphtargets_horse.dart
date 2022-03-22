@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
@@ -14,6 +13,7 @@ class webgl_morphtargets_horse extends StatefulWidget {
   webgl_morphtargets_horse({Key? key, required this.fileName})
       : super(key: key);
 
+  @override
   createState() => _State();
 }
 
@@ -32,7 +32,7 @@ class _State extends State<webgl_morphtargets_horse> {
   late THREE.Mesh mesh;
 
   THREE.AnimationMixer? mixer;
-  THREE.Clock clock = new THREE.Clock();
+  THREE.Clock clock = THREE.Clock();
   THREE_JSM.OrbitControls? controls;
 
   double dpr = 1.0;
@@ -86,7 +86,7 @@ class _State extends State<webgl_morphtargets_horse> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -119,7 +119,7 @@ class _State extends State<webgl_morphtargets_horse> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           clickRender();
         },
@@ -175,7 +175,7 @@ class _State extends State<webgl_morphtargets_horse> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -198,7 +198,7 @@ class _State extends State<webgl_morphtargets_horse> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -211,30 +211,30 @@ class _State extends State<webgl_morphtargets_horse> {
   }
 
   initPage() async {
-    camera = new THREE.PerspectiveCamera(50, width / height, 1, 10000);
+    camera = THREE.PerspectiveCamera(50, width / height, 1, 10000);
     camera.position.y = 300;
 
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf0f0f0);
+    scene = THREE.Scene();
+    scene.background = THREE.Color(0xf0f0f0);
 
     //
 
-    var light1 = new THREE.DirectionalLight(0xefefff, 1.5);
+    var light1 = THREE.DirectionalLight(0xefefff, 1.5);
     light1.position.set(1, 1, 1).normalize();
     scene.add(light1);
 
-    var light2 = new THREE.DirectionalLight(0xffefef, 1.5);
+    var light2 = THREE.DirectionalLight(0xffefef, 1.5);
     light2.position.set(-1, -1, -1).normalize();
     scene.add(light2);
 
-    var loader = new THREE_JSM.GLTFLoader(null);
+    var loader = THREE_JSM.GLTFLoader(null);
     var gltf = await loader.loadAsync('assets/models/gltf/Horse.gltf');
 
     mesh = gltf["scene"].children[0];
     mesh.scale.set(1.5, 1.5, 1.5);
     scene.add(mesh);
 
-    mixer = new THREE.AnimationMixer(mesh);
+    mixer = THREE.AnimationMixer(mesh);
 
     mixer!.clipAction(gltf["animations"][0]).setDuration(1).play();
 
@@ -278,7 +278,7 @@ class _State extends State<webgl_morphtargets_horse> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }

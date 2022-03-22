@@ -3,16 +3,15 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_clipping_advanced extends StatefulWidget {
   String fileName;
 
   webgl_clipping_advanced({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   createState() => _State();
 }
 
@@ -31,7 +30,7 @@ class _State extends State<webgl_clipping_advanced> {
   late THREE.Mesh mesh;
 
   late THREE.AnimationMixer mixer;
-  THREE.Clock clock = new THREE.Clock();
+  THREE.Clock clock = THREE.Clock();
 
   double dpr = 1.0;
 
@@ -58,7 +57,7 @@ class _State extends State<webgl_clipping_advanced> {
 
   dynamic volumeVisualization, globalClippingPlanes;
 
-  Map<String, List<Function>> _listeners = {};
+  final Map<String, List<Function>> _listeners = {};
 
   late List<THREE.Plane> _Planes;
 
@@ -90,7 +89,7 @@ class _State extends State<webgl_clipping_advanced> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -123,7 +122,7 @@ class _State extends State<webgl_clipping_advanced> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           clickRender();
         },
@@ -179,7 +178,7 @@ class _State extends State<webgl_clipping_advanced> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -204,7 +203,7 @@ class _State extends State<webgl_clipping_advanced> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -221,14 +220,14 @@ class _State extends State<webgl_clipping_advanced> {
     // specified by the arrays 'vertices' and 'indices'
 
     var n = indices.length / 3;
-    var result = new List<THREE.Plane>.filled(n, new THREE.Plane(null, null));
+    var result = List<THREE.Plane>.filled(n, THREE.Plane(null, null));
 
     for (var i = 0, j = 0; i < n; ++i, j += 3) {
       var a = vertices[indices[j]],
           b = vertices[indices[j + 1]],
           c = vertices[indices[j + 2]];
 
-      result[i] = new THREE.Plane(null, null).setFromCoplanarPoints(a, b, c);
+      result[i] = THREE.Plane(null, null).setFromCoplanarPoints(a, b, c);
     }
 
     return result;
@@ -237,7 +236,7 @@ class _State extends State<webgl_clipping_advanced> {
   createPlanes(n) {
     // creates an array of n uninitialized plane objects
 
-    var result = new List<THREE.Plane>.filled(n, new THREE.Plane(null, null));
+    var result = List<THREE.Plane>.filled(n, THREE.Plane(null, null));
 
     // for ( var i = 0; i != n; ++ i )
     //   result[ i ] = new THREE.Plane(null, null);
@@ -248,8 +247,9 @@ class _State extends State<webgl_clipping_advanced> {
   assignTransformedPlanes(planesOut, planesIn, matrix) {
     // sets an array of existing planes to transformed 'planesIn'
 
-    for (var i = 0, n = planesIn.length; i != n; ++i)
+    for (var i = 0, n = planesIn.length; i != n; ++i) {
       planesOut[i].copy(planesIn[i]).applyMatrix4(matrix, null);
+    }
   }
 
   cylindricalPlanes(n, innerRadius) {
@@ -266,12 +266,12 @@ class _State extends State<webgl_clipping_advanced> {
     return result;
   }
 
-  var xAxis = new THREE.Vector3(),
-      yAxis = new THREE.Vector3(),
-      trans = new THREE.Vector3();
+  var xAxis = THREE.Vector3(),
+      yAxis = THREE.Vector3(),
+      trans = THREE.Vector3();
 
   THREE.Matrix4 planeToMatrix(plane) {
-    var zAxis = plane.normal, matrix = new THREE.Matrix4();
+    var zAxis = plane.normal, matrix = THREE.Matrix4();
 
     // Hughes & Moeller '99
     // "Building an Orthonormal Basis from a Unit Vector."
@@ -291,10 +291,10 @@ class _State extends State<webgl_clipping_advanced> {
 
   initPage() async {
     var Vertices = [
-          new THREE.Vector3(1, 0, THREE.Math.SQRT1_2),
-          new THREE.Vector3(-1, 0, THREE.Math.SQRT1_2),
-          new THREE.Vector3(0, 1, -THREE.Math.SQRT1_2),
-          new THREE.Vector3(0, -1, -THREE.Math.SQRT1_2)
+          THREE.Vector3(1, 0, THREE.Math.SQRT1_2),
+          THREE.Vector3(-1, 0, THREE.Math.SQRT1_2),
+          THREE.Vector3(0, 1, -THREE.Math.SQRT1_2),
+          THREE.Vector3(0, -1, -THREE.Math.SQRT1_2)
         ],
         Indices = [0, 1, 2, 0, 2, 3, 0, 3, 1, 1, 3, 2];
 
@@ -306,19 +306,19 @@ class _State extends State<webgl_clipping_advanced> {
 
     var Empty = [];
 
-    camera = new THREE.PerspectiveCamera(45, width / height, 0.25, 16);
+    camera = THREE.PerspectiveCamera(45, width / height, 0.25, 16);
 
     camera.position.set(0, 1.5, 5);
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
 
     // Lights
 
     camera.lookAt(scene.position);
 
-    scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+    scene.add(THREE.AmbientLight(0xffffff, 0.3));
 
-    var spotLight = new THREE.SpotLight(0xffffff, 0.5);
+    var spotLight = THREE.SpotLight(0xffffff, 0.5);
     spotLight.angle = THREE.Math.PI / 5;
     spotLight.penumbra = 0.2;
     spotLight.position.set(2, 3, 3);
@@ -329,7 +329,7 @@ class _State extends State<webgl_clipping_advanced> {
     spotLight.shadow!.mapSize.height = 1024;
     scene.add(spotLight);
 
-    var dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    var dirLight = THREE.DirectionalLight(0xffffff, 0.5);
     dirLight.position.set(0, 2, 0);
     dirLight.castShadow = true;
     dirLight.shadow!.camera!.near = 1;
@@ -346,7 +346,7 @@ class _State extends State<webgl_clipping_advanced> {
 
     // Geometry
 
-    clipMaterial = new THREE.MeshPhongMaterial({
+    clipMaterial = THREE.MeshPhongMaterial({
       "color": 0xee0a10,
       "shininess": 100,
       "side": THREE.DoubleSide,
@@ -355,25 +355,26 @@ class _State extends State<webgl_clipping_advanced> {
       "clipShadows": true
     });
 
-    object = new THREE.Group();
+    object = THREE.Group();
 
-    var geometry = new THREE.BoxGeometry(0.18, 0.18, 0.18);
+    var geometry = THREE.BoxGeometry(0.18, 0.18, 0.18);
 
     for (var z = -2; z <= 2; ++z)
-      for (var y = -2; y <= 2; ++y)
+      for (var y = -2; y <= 2; ++y) {
         for (var x = -2; x <= 2; ++x) {
-          var mesh = new THREE.Mesh(geometry, clipMaterial);
+          var mesh = THREE.Mesh(geometry, clipMaterial);
           mesh.position.set(x / 5, y / 5, z / 5);
           mesh.castShadow = true;
           object.add(mesh);
         }
+      }
 
     scene.add(object);
 
-    var planeGeometry = new THREE.PlaneGeometry(3, 3, 1, 1),
-        color = new THREE.Color(0, 0, 0);
+    var planeGeometry = THREE.PlaneGeometry(3, 3, 1, 1),
+        color = THREE.Color(0, 0, 0);
 
-    volumeVisualization = new THREE.Group();
+    volumeVisualization = THREE.Group();
     volumeVisualization.visible = true;
 
     for (var i = 0, n = _Planes.length; i != n; ++i) {
@@ -385,7 +386,7 @@ class _State extends State<webgl_clipping_advanced> {
         }
       });
 
-      var material = new THREE.MeshBasicMaterial({
+      var material = THREE.MeshBasicMaterial({
         "color": color.setHSL(i / n, 0.5, 0.5).getHex(),
         "side": THREE.DoubleSide,
 
@@ -400,7 +401,7 @@ class _State extends State<webgl_clipping_advanced> {
         // visualization does not cast shadows
       });
 
-      var mesh = new THREE.Mesh(planeGeometry, material);
+      var mesh = THREE.Mesh(planeGeometry, material);
       mesh.matrixAutoUpdate = false;
 
       volumeVisualization.add(mesh);
@@ -408,8 +409,8 @@ class _State extends State<webgl_clipping_advanced> {
 
     scene.add(volumeVisualization);
 
-    var ground = new THREE.Mesh(planeGeometry,
-        new THREE.MeshPhongMaterial({"color": 0xa0adaf, "shininess": 10}));
+    var ground = THREE.Mesh(planeGeometry,
+        THREE.MeshPhongMaterial({"color": 0xa0adaf, "shininess": 10}));
     ground.rotation.x = -THREE.Math.PI / 2;
     ground.scale.multiplyScalar(3);
     ground.receiveShadow = true;
@@ -440,7 +441,7 @@ class _State extends State<webgl_clipping_advanced> {
     object.applyMatrix4(matrix);
   }
 
-  var transform = new THREE.Matrix4(), tmpMatrix = new THREE.Matrix4();
+  var transform = THREE.Matrix4(), tmpMatrix = THREE.Matrix4();
 
   animate() {
     if (!mounted || disposed) {

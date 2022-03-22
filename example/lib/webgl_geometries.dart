@@ -3,16 +3,15 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_geometries extends StatefulWidget {
   String fileName;
 
   webgl_geometries({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   createState() => _State();
 }
 
@@ -31,7 +30,7 @@ class _State extends State<webgl_geometries> {
   late THREE.Mesh mesh;
 
   late THREE.AnimationMixer mixer;
-  THREE.Clock clock = new THREE.Clock();
+  THREE.Clock clock = THREE.Clock();
 
   double dpr = 1.0;
 
@@ -83,7 +82,7 @@ class _State extends State<webgl_geometries> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -116,7 +115,7 @@ class _State extends State<webgl_geometries> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           clickRender();
         },
@@ -172,7 +171,7 @@ class _State extends State<webgl_geometries> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -196,7 +195,7 @@ class _State extends State<webgl_geometries> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -209,60 +208,60 @@ class _State extends State<webgl_geometries> {
   }
 
   initPage() async {
-    camera = new THREE.PerspectiveCamera(45, width / height, 1, 2000);
+    camera = THREE.PerspectiveCamera(45, width / height, 1, 2000);
     camera.position.y = 400;
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
 
-    var object;
+    THREE.Mesh object;
 
-    var ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
+    var ambientLight = THREE.AmbientLight(0xcccccc, 0.4);
     scene.add(ambientLight);
 
-    var pointLight = new THREE.PointLight(0xffffff, 0.8);
+    var pointLight = THREE.PointLight(0xffffff, 0.8);
     camera.add(pointLight);
     scene.add(camera);
 
-    var _loader = new THREE.TextureLoader(null);
+    var _loader = THREE.TextureLoader(null);
     var map =
         await _loader.loadAsync('assets/textures/uv_grid_opengl.jpg', null);
     map.wrapS = map.wrapT = THREE.RepeatWrapping;
     map.anisotropy = 16;
 
     var material =
-        new THREE.MeshPhongMaterial({"map": map, "side": THREE.DoubleSide});
+        THREE.MeshPhongMaterial({"map": map, "side": THREE.DoubleSide});
 
     //
 
-    object = new THREE.Mesh(new THREE.SphereGeometry(75, 20, 10), material);
+    object = THREE.Mesh(THREE.SphereGeometry(75, 20, 10), material);
     object.position.set(-300, 0, 200);
     scene.add(object);
 
-    object = new THREE.Mesh(new THREE.IcosahedronGeometry(75, 1), material);
+    object = THREE.Mesh(THREE.IcosahedronGeometry(75, 1), material);
     object.position.set(-100, 0, 200);
     scene.add(object);
 
-    object = new THREE.Mesh(new THREE.OctahedronGeometry(75, 2), material);
+    object = THREE.Mesh(THREE.OctahedronGeometry(75, 2), material);
     object.position.set(100, 0, 200);
     scene.add(object);
 
-    object = new THREE.Mesh(new THREE.TetrahedronGeometry(75, 0), material);
+    object = THREE.Mesh(THREE.TetrahedronGeometry(75, 0), material);
     object.position.set(300, 0, 200);
     scene.add(object);
 
     //
 
-    object = new THREE.Mesh(new THREE.PlaneGeometry(100, 100, 4, 4), material);
+    object = THREE.Mesh(THREE.PlaneGeometry(100, 100, 4, 4), material);
     object.position.set(-300, 0, 0);
     scene.add(object);
 
     object =
-        new THREE.Mesh(new THREE.BoxGeometry(100, 100, 100, 4, 4, 4), material);
+        THREE.Mesh(THREE.BoxGeometry(100, 100, 100, 4, 4, 4), material);
     object.position.set(-100, 0, 0);
     scene.add(object);
 
-    object = new THREE.Mesh(
-        new THREE.CircleGeometry(
+    object = THREE.Mesh(
+        THREE.CircleGeometry(
             radius: 50,
             segments: 20,
             thetaStart: 0,
@@ -271,37 +270,37 @@ class _State extends State<webgl_geometries> {
     object.position.set(100, 0, 0);
     scene.add(object);
 
-    object = new THREE.Mesh(
-        new THREE.RingGeometry(10, 50, 20, 5, 0, THREE.Math.PI * 2), material);
+    object = THREE.Mesh(
+        THREE.RingGeometry(10, 50, 20, 5, 0, THREE.Math.PI * 2), material);
     object.position.set(300, 0, 0);
     scene.add(object);
 
     //
 
-    object = new THREE.Mesh(
-        new THREE.CylinderGeometry(25, 75, 100, 40, 5), material);
+    object = THREE.Mesh(
+        THREE.CylinderGeometry(25, 75, 100, 40, 5), material);
     object.position.set(-300, 0, -200);
     scene.add(object);
 
     var points = [];
 
     for (var i = 0; i < 50; i++) {
-      points.add(new THREE.Vector2(
+      points.add(THREE.Vector2(
           THREE.Math.sin(i * 0.2) * THREE.Math.sin(i * 0.1) * 15 + 50,
           (i - 5) * 2));
     }
 
     object =
-        new THREE.Mesh(new THREE.LatheGeometry(points, segments: 20), material);
+        THREE.Mesh(THREE.LatheGeometry(points, segments: 20), material);
     object.position.set(-100, 0, -200);
     scene.add(object);
 
-    object = new THREE.Mesh(new THREE.TorusGeometry(50, 20, 20, 20), material);
+    object = THREE.Mesh(THREE.TorusGeometry(50, 20, 20, 20), material);
     object.position.set(100, 0, -200);
     scene.add(object);
 
     object =
-        new THREE.Mesh(new THREE.TorusKnotGeometry(50, 10, 50, 20), material);
+        THREE.Mesh(THREE.TorusKnotGeometry(50, 10, 50, 20), material);
     object.position.set(300, 0, -200);
     scene.add(object);
 
@@ -343,7 +342,7 @@ class _State extends State<webgl_geometries> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }

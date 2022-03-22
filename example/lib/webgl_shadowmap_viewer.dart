@@ -1,13 +1,10 @@
 import 'dart:async';
 
-import 'dart:typed_data';
 
-import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 
 import 'package:three_dart/three_dart.dart' as THREE;
@@ -16,6 +13,7 @@ class webgl_shadowmap_viewer extends StatefulWidget {
   String fileName;
   webgl_shadowmap_viewer({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   _MyAppState createState() => _MyAppState();
 }
 
@@ -82,7 +80,7 @@ class _MyAppState extends State<webgl_shadowmap_viewer> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -115,7 +113,7 @@ class _MyAppState extends State<webgl_shadowmap_viewer> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           render();
         },
@@ -170,7 +168,7 @@ class _MyAppState extends State<webgl_shadowmap_viewer> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -219,17 +217,17 @@ class _MyAppState extends State<webgl_shadowmap_viewer> {
   }
 
   _initScene() {
-    camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
+    camera = THREE.PerspectiveCamera(45, width / height, 1, 1000);
     camera.position.set(0, 15, 70);
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
     camera.lookAt(scene.position);
 
     // Lights
 
-    scene.add(new THREE.AmbientLight(0x404040, null));
+    scene.add(THREE.AmbientLight(0x404040, null));
 
-    spotLight = new THREE.SpotLight(0xffffff);
+    spotLight = THREE.SpotLight(0xffffff);
     spotLight.name = 'Spot Light';
     spotLight.angle = THREE.Math.PI / 5;
     spotLight.penumbra = 0.3;
@@ -241,9 +239,9 @@ class _MyAppState extends State<webgl_shadowmap_viewer> {
     spotLight.shadow!.mapSize.height = 1024;
     scene.add(spotLight);
 
-    scene.add(new THREE.CameraHelper(spotLight.shadow!.camera));
+    scene.add(THREE.CameraHelper(spotLight.shadow!.camera));
 
-    dirLight = new THREE.DirectionalLight(0xffffff, 1);
+    dirLight = THREE.DirectionalLight(0xffffff, 1);
     dirLight.name = 'Dir. Light';
     dirLight.position.set(0, 10, 0);
     dirLight.castShadow = true;
@@ -257,35 +255,35 @@ class _MyAppState extends State<webgl_shadowmap_viewer> {
     dirLight.shadow!.mapSize.height = 1024;
     scene.add(dirLight);
 
-    scene.add(new THREE.CameraHelper(dirLight.shadow!.camera));
+    scene.add(THREE.CameraHelper(dirLight.shadow!.camera));
 
     // Geometry
-    var geometry = new THREE.TorusKnotGeometry(25, 8, 75, 20);
-    var material = new THREE.MeshPhongMaterial({
+    var geometry = THREE.TorusKnotGeometry(25, 8, 75, 20);
+    var material = THREE.MeshPhongMaterial({
       "color": THREE.Color.fromHex(0x222222),
       "shininess": 150,
       "specular": THREE.Color.fromHex(0x222222)
     });
 
-    torusKnot = new THREE.Mesh(geometry, material);
+    torusKnot = THREE.Mesh(geometry, material);
     torusKnot.scale.multiplyScalar(1 / 18);
     torusKnot.position.y = 3;
     torusKnot.castShadow = true;
     torusKnot.receiveShadow = true;
     scene.add(torusKnot);
 
-    var geometry2 = new THREE.BoxGeometry(3, 3, 3);
-    cube = new THREE.Mesh(geometry2, material);
+    var geometry2 = THREE.BoxGeometry(3, 3, 3);
+    cube = THREE.Mesh(geometry2, material);
     cube.position.set(8, 3, 8);
     cube.castShadow = true;
     cube.receiveShadow = true;
     scene.add(cube);
 
-    var geometry3 = new THREE.BoxGeometry(10, 0.15, 10);
-    material = new THREE.MeshPhongMaterial(
+    var geometry3 = THREE.BoxGeometry(10, 0.15, 10);
+    material = THREE.MeshPhongMaterial(
         {"color": 0xa0adaf, "shininess": 150, "specular": 0x111111});
 
-    var ground = new THREE.Mesh(geometry3, material);
+    var ground = THREE.Mesh(geometry3, material);
     ground.scale.multiplyScalar(3);
     ground.castShadow = false;
     ground.receiveShadow = true;
@@ -317,7 +315,7 @@ class _MyAppState extends State<webgl_shadowmap_viewer> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }

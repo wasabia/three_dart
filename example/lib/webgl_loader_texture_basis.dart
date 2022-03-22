@@ -3,16 +3,15 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_loader_texture_basis extends StatefulWidget {
   String fileName;
   webgl_loader_texture_basis({Key? key, required this.fileName})
       : super(key: key);
 
+  @override
   _MyAppState createState() => _MyAppState();
 }
 
@@ -70,7 +69,7 @@ class _MyAppState extends State<webgl_loader_texture_basis> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -103,7 +102,7 @@ class _MyAppState extends State<webgl_loader_texture_basis> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           render();
         },
@@ -158,7 +157,7 @@ class _MyAppState extends State<webgl_loader_texture_basis> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -181,7 +180,7 @@ class _MyAppState extends State<webgl_loader_texture_basis> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -194,26 +193,26 @@ class _MyAppState extends State<webgl_loader_texture_basis> {
   }
 
   initPage() async {
-    camera = new THREE.PerspectiveCamera(60, width / height, 0.25, 20);
+    camera = THREE.PerspectiveCamera(60, width / height, 0.25, 20);
     camera.position.set(-0.0, 0.0, 20.0);
 
     // scene
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
 
-    var ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
+    var ambientLight = THREE.AmbientLight(0xcccccc, 0.4);
     scene.add(ambientLight);
 
     camera.lookAt(scene.position);
 
     var geometry = THREE.PlaneGeometry(10, 10);
-    var material = new THREE.MeshBasicMaterial({"side": THREE.DoubleSide});
+    var material = THREE.MeshBasicMaterial({"side": THREE.DoubleSide});
 
-    mesh = new THREE.Mesh(geometry, material);
+    mesh = THREE.Mesh(geometry, material);
 
     scene.add(mesh);
 
-    var loader = new THREE.TextureLoader(null);
+    var loader = THREE.TextureLoader(null);
     var texture = await loader.loadAsync(
         "assets/textures/758px-Canestra_di_frutta_(Caravaggio).jpg", null);
 

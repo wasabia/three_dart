@@ -3,14 +3,15 @@ import 'package:example/HomePage.dart';
 import 'package:flutter/material.dart';
 
 class ExampleApp extends StatefulWidget {
-  ExampleApp({Key? key}) : super(key: key);
+  const ExampleApp({Key? key}) : super(key: key);
 
+  @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<ExampleApp> {
-  AppRouterDelegate _routerDelegate = AppRouterDelegate();
-  AppRouteInformationParser _routeInformationParser =
+  final AppRouterDelegate _routerDelegate = AppRouterDelegate();
+  final AppRouteInformationParser _routeInformationParser =
       AppRouteInformationParser();
 
   @override
@@ -34,7 +35,7 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
       RouteInformation routeInformation) async {
     final uri = Uri.parse(routeInformation.location!);
     // Handle '/'
-    if (uri.pathSegments.length == 0) {
+    if (uri.pathSegments.isEmpty) {
       return AppRoutePath.home();
     }
 
@@ -54,10 +55,10 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
   @override
   RouteInformation? restoreRouteInformation(AppRoutePath path) {
     if (path.isUnknown) {
-      return RouteInformation(location: '/404');
+      return const RouteInformation(location: '/404');
     }
     if (path.isHomePage) {
-      return RouteInformation(location: '/');
+      return const RouteInformation(location: '/');
     }
     if (path.isDetailsPage) {
       return RouteInformation(location: '/examples/${path.id}');
@@ -68,6 +69,7 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
 
 class AppRouterDelegate extends RouterDelegate<AppRoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRoutePath> {
+  @override
   final GlobalKey<NavigatorState> navigatorKey;
 
   String? _selectedExample;
@@ -75,6 +77,7 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
 
   AppRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>();
 
+  @override
   AppRoutePath get currentConfiguration {
     if (show404) {
       return AppRoutePath.unknown();
@@ -90,16 +93,16 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
       key: navigatorKey,
       pages: [
         MaterialPage(
-          key: ValueKey('HomePage'),
+          key: const ValueKey('HomePage'),
           child: HomePage(chooseExample: (id) {
             _handleExampleTapped(id);
           }),
         ),
         if (show404)
-          MaterialPage(key: ValueKey('UnknownPage'), child: UnknownScreen())
+          MaterialPage(key: const ValueKey('UnknownPage'), child: UnknownScreen())
         else if (_selectedExample != null)
           MaterialPage(
-              key: ValueKey('ExamplePage'),
+              key: const ValueKey('ExamplePage'),
               child: Builder(
                 builder: (BuildContext context) {
                   return ExamplePage(id: _selectedExample);
@@ -170,7 +173,7 @@ class UnknownScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Center(
+      body: const Center(
         child: Text('404!'),
       ),
     );

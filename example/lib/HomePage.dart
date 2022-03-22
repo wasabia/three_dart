@@ -6,6 +6,7 @@ class HomePage extends StatefulWidget {
 
   HomePage({Key? key, required this.chooseExample}) : super(key: key);
 
+  @override
   _MyAppState createState() => _MyAppState();
 }
 
@@ -44,7 +45,7 @@ class _MyAppState extends State<HomePage> {
   Widget _buildItem(BuildContext context, int index) {
     var fileName = filesJson[index];
 
-    var assetFile = "assets/screenshots/${fileName}.jpg";
+    var assetFile = "assets/screenshots/$fileName.jpg";
     var name = getName(fileName);
 
     return TextButton(
@@ -55,7 +56,7 @@ class _MyAppState extends State<HomePage> {
             child: Column(
           children: [
             Container(
-              constraints: BoxConstraints(minHeight: 50),
+              constraints: const BoxConstraints(minHeight: 50),
               child: Image.asset(assetFile),
             ),
             Container(
