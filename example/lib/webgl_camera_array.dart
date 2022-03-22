@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 
@@ -11,6 +10,7 @@ class webgl_camera_array extends StatefulWidget {
   String fileName;
   webgl_camera_array({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   _MyAppState createState() => _MyAppState();
 }
 
@@ -61,14 +61,14 @@ class _MyAppState extends State<webgl_camera_array> {
       "dpr": dpr
     };
 
-    print("three3dRender.initialize _options: ${_options} ");
+    print("three3dRender.initialize _options: $_options ");
 
     await three3dRender.initialize(options: _options);
 
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 200), () async {
+    Future.delayed(const Duration(milliseconds: 200), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -101,7 +101,7 @@ class _MyAppState extends State<webgl_camera_array> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           animate();
         },
@@ -160,7 +160,7 @@ class _MyAppState extends State<webgl_camera_array> {
     // print(" --------------pixels............. ");
     // print(pixels);
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} three3dRender.textureId! ${three3dRender.textureId!}");
+    if (verbose) print(" render: sourceTexture: $sourceTexture three3dRender.textureId! ${three3dRender.textureId!}");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -199,7 +199,7 @@ class _MyAppState extends State<webgl_camera_array> {
   }
 
   initPage() {
-    var ASPECT_RATIO = width / height;
+    var ASPECTRATIO = width / height;
 
     var WIDTH = (width / AMOUNT) * dpr;
     var HEIGHT = (height / AMOUNT) * dpr;
@@ -208,8 +208,8 @@ class _MyAppState extends State<webgl_camera_array> {
 
     for (var y = 0; y < AMOUNT; y++) {
       for (var x = 0; x < AMOUNT; x++) {
-        var subcamera = new THREE.PerspectiveCamera(40, ASPECT_RATIO, 0.1, 10);
-        subcamera.viewport = new THREE.Vector4(
+        var subcamera = THREE.PerspectiveCamera(40, ASPECTRATIO, 0.1, 10);
+        subcamera.viewport = THREE.Vector4(
             THREE.Math.floor(x * WIDTH),
             THREE.Math.floor(y * HEIGHT),
             THREE.Math.ceil(WIDTH),
@@ -224,38 +224,38 @@ class _MyAppState extends State<webgl_camera_array> {
       }
     }
 
-    camera = new THREE.ArrayCamera(cameras);
+    camera = THREE.ArrayCamera(cameras);
     // camera = new THREE.PerspectiveCamera(45, width / height, 1, 10);
     camera.position.z = 3;
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
 
     
 
 
-    var ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
+    var ambientLight = THREE.AmbientLight(0xcccccc, 0.4);
     scene.add(ambientLight);
 
     camera.lookAt(scene.position);
 
-    var light = new THREE.DirectionalLight(0xffffff, null);
+    var light = THREE.DirectionalLight(0xffffff, null);
     light.position.set(0.5, 0.5, 1);
     light.castShadow = true;
     light.shadow!.camera!.zoom = 4; // tighter shadow map
     scene.add(light);
 
-    var geometryBackground = new THREE.PlaneGeometry(100, 100);
-    var materialBackground = new THREE.MeshPhongMaterial({"color": 0x000066});
+    var geometryBackground = THREE.PlaneGeometry(100, 100);
+    var materialBackground = THREE.MeshPhongMaterial({"color": 0x000066});
 
-    var background = new THREE.Mesh(geometryBackground, materialBackground);
+    var background = THREE.Mesh(geometryBackground, materialBackground);
     background.receiveShadow = true;
     background.position.set(0, 0, -1);
     scene.add(background);
 
-    var geometryCylinder = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
-    var materialCylinder = new THREE.MeshPhongMaterial({"color": 0xff0000});
+    var geometryCylinder = THREE.CylinderGeometry(0.5, 0.5, 1, 32);
+    var materialCylinder = THREE.MeshPhongMaterial({"color": 0xff0000});
 
-    mesh = new THREE.Mesh(geometryCylinder, materialCylinder);
+    mesh = THREE.Mesh(geometryCylinder, materialCylinder);
     // mesh.castShadow = true;
     // mesh.receiveShadow = true;
     scene.add(mesh);
@@ -279,7 +279,7 @@ class _MyAppState extends State<webgl_camera_array> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }

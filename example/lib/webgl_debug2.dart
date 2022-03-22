@@ -3,15 +3,14 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_debug2 extends StatefulWidget {
   String fileName;
   webgl_debug2({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   _MyAppState createState() => _MyAppState();
 }
 
@@ -69,7 +68,7 @@ class _MyAppState extends State<webgl_debug2> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -102,7 +101,7 @@ class _MyAppState extends State<webgl_debug2> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           render();
         },
@@ -159,7 +158,7 @@ class _MyAppState extends State<webgl_debug2> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -182,7 +181,7 @@ class _MyAppState extends State<webgl_debug2> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -195,23 +194,23 @@ class _MyAppState extends State<webgl_debug2> {
   }
 
   initPage() async {
-    camera = new THREE.PerspectiveCamera(45, width / height, 1, 2000);
+    camera = THREE.PerspectiveCamera(45, width / height, 1, 2000);
     camera.position.z = 250;
 
     // scene
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
 
-    var ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
+    var ambientLight = THREE.AmbientLight(0xcccccc, 0.4);
     scene.add(ambientLight);
 
-    var pointLight = new THREE.PointLight(0xffffff, 0.8);
+    var pointLight = THREE.PointLight(0xffffff, 0.8);
     camera.add(pointLight);
     scene.add(camera);
 
     // texture
 
-    var textureLoader = new THREE.TextureLoader(null);
+    var textureLoader = THREE.TextureLoader(null);
     texture = await textureLoader.loadAsync(
         'assets/textures/uv_grid_opengl.jpg', null);
     texture.flipY = false;
@@ -224,17 +223,17 @@ class _MyAppState extends State<webgl_debug2> {
 
     // Triangle
 
-    var triangleShape = new THREE.Shape(null)
+    var triangleShape = THREE.Shape(null)
         .moveTo(80, 20)
         .lineTo(40, 80)
         .lineTo(120, 80)
         .lineTo(80, 20); // close path
 
-    var geometry = new THREE.ShapeGeometry(triangleShape);
+    var geometry = THREE.ShapeGeometry(triangleShape);
 
-    var mesh = new THREE.Mesh(
+    var mesh = THREE.Mesh(
         geometry,
-        new THREE.MeshBasicMaterial(
+        THREE.MeshBasicMaterial(
             {"side": THREE.DoubleSide, "map": texture}));
 
     scene.add(mesh);

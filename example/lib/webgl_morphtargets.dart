@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
@@ -13,6 +12,7 @@ class webgl_morphtargets extends StatefulWidget {
 
   webgl_morphtargets({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   createState() => _State();
 }
 
@@ -31,7 +31,7 @@ class _State extends State<webgl_morphtargets> {
   late THREE.Mesh mesh;
 
   late THREE.AnimationMixer mixer;
-  THREE.Clock clock = new THREE.Clock();
+  THREE.Clock clock = THREE.Clock();
   THREE_JSM.OrbitControls? controls;
 
   double dpr = 1.0;
@@ -83,7 +83,7 @@ class _State extends State<webgl_morphtargets> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -116,7 +116,7 @@ class _State extends State<webgl_morphtargets> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           clickRender();
         },
@@ -172,7 +172,7 @@ class _State extends State<webgl_morphtargets> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -195,7 +195,7 @@ class _State extends State<webgl_morphtargets> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -208,26 +208,26 @@ class _State extends State<webgl_morphtargets> {
   }
 
   initPage() async {
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x8FBCD4);
+    scene = THREE.Scene();
+    scene.background = THREE.Color(0x8FBCD4);
 
-    camera = new THREE.PerspectiveCamera(45, width / height, 1, 20);
+    camera = THREE.PerspectiveCamera(45, width / height, 1, 20);
     camera.position.z = 10;
     scene.add(camera);
 
     camera.lookAt(scene.position);
 
-    scene.add(new THREE.AmbientLight(0x8FBCD4, 0.4));
+    scene.add(THREE.AmbientLight(0x8FBCD4, 0.4));
 
-    var pointLight = new THREE.PointLight(0xffffff, 1);
+    var pointLight = THREE.PointLight(0xffffff, 1);
     camera.add(pointLight);
 
     var geometry = createGeometry();
 
     var material =
-        new THREE.MeshPhongMaterial({"color": 0xff0000, "flatShading": true});
+        THREE.MeshPhongMaterial({"color": 0xff0000, "flatShading": true});
 
-    mesh = new THREE.Mesh(geometry, material);
+    mesh = THREE.Mesh(geometry, material);
     scene.add(mesh);
 
     loaded = true;
@@ -238,7 +238,7 @@ class _State extends State<webgl_morphtargets> {
   }
 
   createGeometry() {
-    var geometry = new THREE.BoxGeometry(2, 2, 2, 32, 32, 32);
+    var geometry = THREE.BoxGeometry(2, 2, 2, 32, 32, 32);
 
     // create an empty array to  hold targets for the attribute we want to morph
     // morphing positions and normals is supported
@@ -252,8 +252,8 @@ class _State extends State<webgl_morphtargets> {
 
     // for the second morph target, we'll twist the cubes vertices
     List<double> twistPositions = [];
-    var direction = new THREE.Vector3(1, 0, 0);
-    var vertex = new THREE.Vector3();
+    var direction = THREE.Vector3(1, 0, 0);
+    var vertex = THREE.Vector3();
 
     for (var i = 0; i < positionAttribute.count; i++) {
       var x = positionAttribute.getX(i);
@@ -281,11 +281,11 @@ class _State extends State<webgl_morphtargets> {
     // add the spherical positions as the first morph target
     // geometry.morphAttributes["position"][ 0 ] = new THREE.Float32BufferAttribute( spherePositions, 3 );
     geometry.morphAttributes["position"]!
-        .add(new THREE.Float32BufferAttribute(Float32Array.fromList(spherePositions), 3));
+        .add(THREE.Float32BufferAttribute(Float32Array.fromList(spherePositions), 3));
 
     // add the twisted positions as the second morph target
     geometry.morphAttributes["position"]!
-        .add(new THREE.Float32BufferAttribute(Float32Array.fromList(twistPositions), 3));
+        .add(THREE.Float32BufferAttribute(Float32Array.fromList(twistPositions), 3));
 
     return geometry;
   }
@@ -318,7 +318,7 @@ class _State extends State<webgl_morphtargets> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }

@@ -3,16 +3,15 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_clipping extends StatefulWidget {
   String fileName;
 
   webgl_clipping({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   createState() => _State();
 }
 
@@ -31,7 +30,7 @@ class _State extends State<webgl_clipping> {
   late THREE.Mesh mesh;
 
   late THREE.AnimationMixer mixer;
-  THREE.Clock clock = new THREE.Clock();
+  THREE.Clock clock = THREE.Clock();
 
   double dpr = 1.0;
 
@@ -83,7 +82,7 @@ class _State extends State<webgl_clipping> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -116,7 +115,7 @@ class _State extends State<webgl_clipping> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           clickRender();
         },
@@ -172,7 +171,7 @@ class _State extends State<webgl_clipping> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -196,7 +195,7 @@ class _State extends State<webgl_clipping> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -209,17 +208,17 @@ class _State extends State<webgl_clipping> {
   }
 
   initPage() async {
-    camera = new THREE.PerspectiveCamera(36, width / height, 0.25, 16);
+    camera = THREE.PerspectiveCamera(36, width / height, 0.25, 16);
 
     camera.position.set(0, 1.3, 3);
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
 
     // Lights
 
-    scene.add(new THREE.AmbientLight(0x505050, 1));
+    scene.add(THREE.AmbientLight(0x505050, 1));
 
-    var spotLight = new THREE.SpotLight(0xffffff);
+    var spotLight = THREE.SpotLight(0xffffff);
     spotLight.angle = THREE.Math.PI / 5;
     spotLight.penumbra = 0.2;
     spotLight.position.set(2, 3, 3);
@@ -230,7 +229,7 @@ class _State extends State<webgl_clipping> {
     spotLight.shadow!.mapSize.height = 1024;
     scene.add(spotLight);
 
-    var dirLight = new THREE.DirectionalLight(0x55505a, 1);
+    var dirLight = THREE.DirectionalLight(0x55505a, 1);
     dirLight.position.set(0, 3, 0);
     dirLight.castShadow = true;
     dirLight.shadow!.camera!.near = 1;
@@ -247,12 +246,12 @@ class _State extends State<webgl_clipping> {
 
     // ***** Clipping planes: *****
 
-    var localPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0.8);
-    var globalPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0.1);
+    var localPlane = THREE.Plane(THREE.Vector3(0, -1, 0), 0.8);
+    var globalPlane = THREE.Plane(THREE.Vector3(-1, 0, 0), 0.1);
 
     // Geometry
 
-    var material = new THREE.MeshPhongMaterial({
+    var material = THREE.MeshPhongMaterial({
       "color": 0x80ee10,
       "shininess": 100,
       "side": THREE.DoubleSide,
@@ -262,14 +261,14 @@ class _State extends State<webgl_clipping> {
       "clipShadows": true
     });
 
-    var geometry = new THREE.TorusKnotGeometry(0.4, 0.08, 95, 20);
+    var geometry = THREE.TorusKnotGeometry(0.4, 0.08, 95, 20);
 
-    object = new THREE.Mesh(geometry, material);
+    object = THREE.Mesh(geometry, material);
     object.castShadow = true;
     scene.add(object);
 
-    var ground = new THREE.Mesh(new THREE.PlaneGeometry(9, 9, 1, 1),
-        new THREE.MeshPhongMaterial({"color": 0xa0adaf, "shininess": 150}));
+    var ground = THREE.Mesh(THREE.PlaneGeometry(9, 9, 1, 1),
+        THREE.MeshPhongMaterial({"color": 0xa0adaf, "shininess": 150}));
 
     ground.rotation.x = -THREE.Math.PI / 2; // rotates X/Y to X/Z
     ground.receiveShadow = true;
@@ -307,7 +306,7 @@ class _State extends State<webgl_clipping> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }

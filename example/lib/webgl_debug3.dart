@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
@@ -16,6 +15,7 @@ class webgl_debug3 extends StatefulWidget {
 
   webgl_debug3({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   createState() => webgl_animation_keyframesState();
 }
 
@@ -34,7 +34,7 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
   late THREE.Mesh mesh;
 
   late THREE.AnimationMixer mixer;
-  THREE.Clock clock = new THREE.Clock();
+  THREE.Clock clock = THREE.Clock();
   THREE_JSM.OrbitControls? controls;
 
   double dpr = 1.0;
@@ -56,7 +56,7 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
 
   late THREE.Object3D model;
 
-  Map<String, List<Function>> _listeners = {};
+  final Map<String, List<Function>> _listeners = {};
 
   @override
   void initState() {
@@ -84,7 +84,7 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -117,7 +117,7 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           clickRender();
         },
@@ -174,7 +174,7 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -197,7 +197,7 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -210,30 +210,30 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
   }
 
   initPage() async {
-    camera = new THREE.PerspectiveCamera(45, width / height, 1, 100);
+    camera = THREE.PerspectiveCamera(45, width / height, 1, 100);
     camera.position.set(0, 0, 100);
 
     // scene
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
 
-    var ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
+    var ambientLight = THREE.AmbientLight(0xcccccc, 0.4);
     scene.add(ambientLight);
     scene.add(camera);
 
     camera.lookAt(scene.position);
 
-    var loader = new THREE.TextureLoader(null);
+    var loader = THREE.TextureLoader(null);
     var clothTexture = await loader.loadAsync(
         'assets/textures/patterns/circuit_pattern.png', null);
     clothTexture.anisotropy = 16;
 
-    var clothMaterial = new THREE.MeshLambertMaterial(
+    var clothMaterial = THREE.MeshLambertMaterial(
         {"alphaMap": clothTexture, "side": THREE.DoubleSide, "alphaTest": 0.5});
 
     var plane = THREE.PlaneGeometry(50, 50);
 
-    var _mesh = new THREE.Mesh(plane, clothMaterial);
+    var _mesh = THREE.Mesh(plane, clothMaterial);
     scene.add(_mesh);
 
     loaded = true;

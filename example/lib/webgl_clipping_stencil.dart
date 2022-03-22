@@ -3,16 +3,15 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_clipping_stencil extends StatefulWidget {
   String fileName;
 
   webgl_clipping_stencil({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   createState() => _State();
 }
 
@@ -31,7 +30,7 @@ class _State extends State<webgl_clipping_stencil> {
   late THREE.Mesh mesh;
 
   late THREE.AnimationMixer mixer;
-  THREE.Clock clock = new THREE.Clock();
+  THREE.Clock clock = THREE.Clock();
 
   double dpr = 1.0;
 
@@ -81,7 +80,7 @@ class _State extends State<webgl_clipping_stencil> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -114,7 +113,7 @@ class _State extends State<webgl_clipping_stencil> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           clickRender();
         },
@@ -170,7 +169,7 @@ class _State extends State<webgl_clipping_stencil> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -195,7 +194,7 @@ class _State extends State<webgl_clipping_stencil> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -208,8 +207,8 @@ class _State extends State<webgl_clipping_stencil> {
   }
 
   createPlaneStencilGroup(geometry, plane, renderOrder) {
-    var group = new THREE.Group();
-    var baseMat = new THREE.MeshBasicMaterial({
+    var group = THREE.Group();
+    var baseMat = THREE.MeshBasicMaterial({
       "depthWrite": false,
       "depthTest": false,
       "colorWrite": false,
@@ -224,7 +223,7 @@ class _State extends State<webgl_clipping_stencil> {
     // mat0.stencilFail = THREE.IncrementWrapStencilOp;
     // mat0.stencilZFail = THREE.IncrementWrapStencilOp;
     // mat0.stencilZPass = THREE.IncrementWrapStencilOp;
-    var mat0 = new THREE.MeshBasicMaterial({
+    var mat0 = THREE.MeshBasicMaterial({
       "side": THREE.BackSide,
       "clippingPlanes": List<THREE.Plane>.from([plane]),
       "stencilFail": THREE.IncrementWrapStencilOp,
@@ -237,7 +236,7 @@ class _State extends State<webgl_clipping_stencil> {
       "stencilFunc": THREE.AlwaysStencilFunc
     });
 
-    var mesh0 = new THREE.Mesh(geometry, mat0);
+    var mesh0 = THREE.Mesh(geometry, mat0);
     mesh0.renderOrder = renderOrder;
     group.add(mesh0);
 
@@ -248,7 +247,7 @@ class _State extends State<webgl_clipping_stencil> {
     // mat1.stencilFail = THREE.DecrementWrapStencilOp;
     // mat1.stencilZFail = THREE.DecrementWrapStencilOp;
     // mat1.stencilZPass = THREE.DecrementWrapStencilOp;
-    var mat1 = new THREE.MeshBasicMaterial({
+    var mat1 = THREE.MeshBasicMaterial({
       "side": THREE.BackSide,
       "clippingPlanes": List<THREE.Plane>.from([plane]),
       "stencilFail": THREE.DecrementWrapStencilOp,
@@ -261,7 +260,7 @@ class _State extends State<webgl_clipping_stencil> {
       "stencilFunc": THREE.AlwaysStencilFunc
     });
 
-    var mesh1 = new THREE.Mesh(geometry, mat1);
+    var mesh1 = THREE.Mesh(geometry, mat1);
     mesh1.renderOrder = renderOrder;
 
     group.add(mesh1);
@@ -270,16 +269,16 @@ class _State extends State<webgl_clipping_stencil> {
   }
 
   initPage() async {
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
 
-    camera = new THREE.PerspectiveCamera(36, width / height, 1, 100);
+    camera = THREE.PerspectiveCamera(36, width / height, 1, 100);
     camera.position.set(2, 2, 2);
 
-    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+    scene.add(THREE.AmbientLight(0xffffff, 0.5));
 
     camera.lookAt(scene.position);
 
-    var dirLight = new THREE.DirectionalLight(0xffffff, 1);
+    var dirLight = THREE.DirectionalLight(0xffffff, 1);
     dirLight.position.set(5, 10, 7.5);
     dirLight.castShadow = true;
     dirLight.shadow!.camera!.right = 2;
@@ -292,35 +291,35 @@ class _State extends State<webgl_clipping_stencil> {
     scene.add(dirLight);
 
     planes = [
-      new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0),
-      new THREE.Plane(new THREE.Vector3(0, -1, 0), 0),
-      new THREE.Plane(new THREE.Vector3(0, 0, -1), 0)
+      THREE.Plane(THREE.Vector3(-1, 0, 0), 0),
+      THREE.Plane(THREE.Vector3(0, -1, 0), 0),
+      THREE.Plane(THREE.Vector3(0, 0, -1), 0)
     ];
 
     planeHelpers =
-        planes.map((p) => new THREE.PlaneHelper(p, 2, 0xffffff)).toList();
-    planeHelpers.forEach((ph) {
+        planes.map((p) => THREE.PlaneHelper(p, 2, 0xffffff)).toList();
+    for (var ph in planeHelpers) {
       ph.visible = true;
       scene.add(ph);
-    });
+    }
 
-    var geometry = new THREE.TorusKnotGeometry(0.4, 0.15, 220, 60);
-    object = new THREE.Group();
+    var geometry = THREE.TorusKnotGeometry(0.4, 0.15, 220, 60);
+    object = THREE.Group();
     scene.add(object);
 
     // Set up clip plane rendering
     planeObjects = [];
-    var planeGeom = new THREE.PlaneGeometry(4, 4);
+    var planeGeom = THREE.PlaneGeometry(4, 4);
 
     for (int i = 0; i < 1; i++) {
-      var poGroup = new THREE.Group();
+      var poGroup = THREE.Group();
       var plane = planes[i];
       var stencilGroup = createPlaneStencilGroup(geometry, plane, i + 1);
 
       List<THREE.Plane> _planes = planes.where((p) => p != plane).toList();
 
       // plane is clipped by the other clipping planes
-      var planeMat = new THREE.MeshStandardMaterial({
+      var planeMat = THREE.MeshStandardMaterial({
         "color": 0xff00ff,
         "metalness": 0.1,
         "roughness": 0.75,
@@ -333,7 +332,7 @@ class _State extends State<webgl_clipping_stencil> {
         "stencilZPass": THREE.ReplaceStencilOp,
       });
 
-      var po = new THREE.Mesh(planeGeom, planeMat);
+      var po = THREE.Mesh(planeGeom, planeMat);
       // po.onAfterRender =  ( renderer ) {
 
       //   renderer.clearStencil();
@@ -348,7 +347,7 @@ class _State extends State<webgl_clipping_stencil> {
       scene.add(poGroup);
     }
 
-    var material = new THREE.MeshStandardMaterial({
+    var material = THREE.MeshStandardMaterial({
       "color": 0xFFC107,
       "metalness": 0.1,
       "roughness": 0.75,
@@ -363,9 +362,9 @@ class _State extends State<webgl_clipping_stencil> {
     // clippedColorFront.renderOrder = 6;
     // object.add(clippedColorFront);
 
-    var ground = new THREE.Mesh(
-        new THREE.PlaneGeometry(9, 9, 1, 1),
-        new THREE.ShadowMaterial(
+    var ground = THREE.Mesh(
+        THREE.PlaneGeometry(9, 9, 1, 1),
+        THREE.ShadowMaterial(
             {"color": 0, "opacity": 0.25, "side": THREE.DoubleSide}));
 
     ground.rotation.x = -THREE.Math.PI / 2; // rotates X/Y to X/Z
