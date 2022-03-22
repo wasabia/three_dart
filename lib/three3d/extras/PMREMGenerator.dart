@@ -44,7 +44,7 @@ class PMREMGenerator {
   dynamic _cubemapMaterial;
 
   late int _lodMax;
-  late num _cubeSize;
+  late double _cubeSize;
 
   PMREMGenerator(renderer) {
     // Golden Ratio
@@ -165,7 +165,7 @@ class PMREMGenerator {
 
   _setSize(cubeSize) {
     _lodMax = Math.floor(Math.log2(cubeSize));
-    _cubeSize = Math.pow(2, _lodMax);
+    _cubeSize = Math.pow(2, _lodMax).toDouble();
   }
 
   _dispose() {
@@ -207,8 +207,8 @@ class PMREMGenerator {
   }
 
   _allocateTargets() {
-    var width = 3 * Math.max(_cubeSize, 16 * 7);
-    var height = 4 * _cubeSize - 32;
+    double width = 3 * Math.max(_cubeSize, 16 * 7);
+    double height = 4 * _cubeSize - 32;
 
     var params = {
       "magFilter": LinearFilter,
@@ -544,7 +544,7 @@ class PMREMGenerator {
     return {"lodPlanes": lodPlanes, "sizeLods": sizeLods, "sigmas": sigmas};
   }
 
-  _createRenderTarget(width, height, params) {
+  _createRenderTarget(double width, double height, params) {
     var cubeUVRenderTarget =
         WebGLRenderTarget(width, height, WebGLRenderTargetOptions(params));
     cubeUVRenderTarget.texture.mapping = CubeUVReflectionMapping;
@@ -563,23 +563,23 @@ class PMREMGenerator {
       return "";
     }
 
-    if (Platform.isMacOS) {
-      return """
-        #define varying in
-        out highp vec4 pc_fragColor;
-        #define gl_FragColor pc_fragColor
-        #define gl_FragDepthEXT gl_FragDepth
-        #define texture2D texture
-        #define textureCube texture
-        #define texture2DProj textureProj
-        #define texture2DLodEXT textureLod
-        #define texture2DProjLodEXT textureProjLod
-        #define textureCubeLodEXT textureLod
-        #define texture2DGradEXT textureGrad
-        #define texture2DProjGradEXT textureProjGrad
-        #define textureCubeGradEXT textureGrad
-      """;
-    }
+    // if (Platform.isMacOS) {
+    //   return """
+    //     #define varying in
+    //     out highp vec4 pc_fragColor;
+    //     #define gl_FragColor pc_fragColor
+    //     #define gl_FragDepthEXT gl_FragDepth
+    //     #define texture2D texture
+    //     #define textureCube texture
+    //     #define texture2DProj textureProj
+    //     #define texture2DLodEXT textureLod
+    //     #define texture2DProjLodEXT textureProjLod
+    //     #define textureCubeLodEXT textureLod
+    //     #define texture2DGradEXT textureGrad
+    //     #define texture2DProjGradEXT textureProjGrad
+    //     #define textureCubeGradEXT textureGrad
+    //   """;
+    // }
     return """
       
     """;
@@ -594,7 +594,7 @@ class PMREMGenerator {
         'n': MAX_SAMPLES,
         'CUBEUV_TEXEL_WIDTH': 1.0 / width,
         'CUBEUV_TEXEL_HEIGHT': 1.0 / height,
-        'CUBEUV_MAX_MIP': "$lodMax.0",
+        // 'CUBEUV_MAX_MIP': "$lodMax.0",
       },
       "uniforms": {
         'envMap': {},
