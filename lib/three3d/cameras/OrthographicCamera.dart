@@ -27,34 +27,31 @@ class OrthographicCamera extends Camera {
   }
 
   @override
-  copy(source, [bool? recursive]) {
+  OrthographicCamera copy(Object3D source, [bool? recursive]) {
     super.copy(source, recursive);
+    if (source is OrthographicCamera) {
+      left = source.left;
+      right = source.right;
+      top = source.top;
+      bottom = source.bottom;
+      near = source.near;
+      far = source.far;
 
-    OrthographicCamera source1 = source as OrthographicCamera;
-
-    left = source1.left;
-    right = source1.right;
-    top = source1.top;
-    bottom = source1.bottom;
-    near = source1.near;
-    far = source1.far;
-
-    zoom = source1.zoom;
-    view =
-        source1.view == null ? null : json.decode(json.encode(source1.view));
-
+      zoom = source.zoom;
+      view = source.view == null ? null : json.decode(json.encode(source.view));
+    }
     return this;
   }
 
   setViewOffset(fullWidth, fullHeight, x, y, width, height) {
     view ??= {
-        "enabled": true,
-        "fullWidth": 1,
-        "fullHeight": 1,
-        "offsetX": 0,
-        "offsetY": 0,
-        "width": 1,
-        "height": 1
+      "enabled": true,
+      "fullWidth": 1,
+      "fullHeight": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "width": 1,
+      "height": 1
     };
 
     view!["enabled"] = true;
@@ -68,7 +65,7 @@ class OrthographicCamera extends Camera {
     updateProjectionMatrix();
   }
 
-  clearViewOffset() {
+  void clearViewOffset() {
     if (view != null) {
       view!["enabled"] = false;
     }
@@ -77,7 +74,7 @@ class OrthographicCamera extends Camera {
   }
 
   @override
-  updateProjectionMatrix() {
+  void updateProjectionMatrix() {
     var dx = (this.right - this.left) / (2 * zoom);
     var dy = (this.top - this.bottom) / (2 * zoom);
     var cx = (this.right + this.left) / 2;
@@ -89,10 +86,8 @@ class OrthographicCamera extends Camera {
     var bottom = cy - dy;
 
     if (view != null && view!["enabled"]) {
-      var scaleW =
-          (this.right - this.left) / view!["fullWidth"] / zoom;
-      var scaleH =
-          (this.top - this.bottom) / view!["fullHeight"] / zoom;
+      var scaleW = (this.right - this.left) / view!["fullWidth"] / zoom;
+      var scaleH = (this.top - this.bottom) / view!["fullHeight"] / zoom;
 
       left += scaleW * view!["offsetX"];
       right = left + scaleW * view!["width"];
@@ -106,7 +101,7 @@ class OrthographicCamera extends Camera {
   }
 
   @override
-  toJSON({Object3dMeta? meta}) {
+  Map<String, dynamic> toJSON({Object3dMeta? meta}) {
     var data = super.toJSON(meta: meta);
 
     data["object"]["zoom"] = zoom;

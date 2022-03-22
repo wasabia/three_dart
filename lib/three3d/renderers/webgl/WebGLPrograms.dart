@@ -126,7 +126,7 @@ class WebGLPrograms {
 
 		//
 
-    var vertexShader, fragmentShader;
+    String? vertexShader, fragmentShader;
     var customVertexShaderID, customFragmentShaderID;
 
     if (shaderID != null) {

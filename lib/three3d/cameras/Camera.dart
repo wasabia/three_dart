@@ -81,7 +81,7 @@ class Camera extends Object3D {
   }
 
   @override
-  clone([bool? recursive = true]) {
-    return Camera().copy(this);
+  Camera clone([bool? recursive = true]) {
+    return Camera()..copy(this);
   }
 }
