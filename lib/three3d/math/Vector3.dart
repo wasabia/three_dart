@@ -581,7 +581,7 @@ class Vector3 {
       array = List<num>.filled(offset + 3, 0);
     } else {
       while (array.length < offset + 3) {
-        array.add(0);
+        array.add(0.0);
       }
     }
 

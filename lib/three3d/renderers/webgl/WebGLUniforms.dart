@@ -67,23 +67,12 @@ class WebGLUniforms with WebGLUniform {
 
   setValue(gl, name, value, [WebGLTextures? textures]) {
     var u = map[name];
-
-    // var _vt = value.runtimeType.toString();
-    // print("WebGLUniforms.setValue name: ${name}  value: ${_vt} u: ${u} ");
-    // if(_vt == "Matrix4" || _vt == "Matrix3" || _vt == "Color") {
-    //   print(value.toJSON());
-    // } else {
-    //   print(value);
-    // }
-
     if (u != null) u.setValue(gl, value, textures);
   }
 
   setOptional(gl, object, name) {
-    // var v = object[ name ];
     var v = object.getValue(name);
-
-    if (v != null) setValue(gl, name, v, null);
+    if (v != null) setValue(gl, name, v);
   }
 
   static upload(gl, seq, values, textures) {

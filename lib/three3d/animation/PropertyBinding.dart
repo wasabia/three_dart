@@ -408,7 +408,7 @@ class PropertyBinding {
   }
 
   setValue_fromArray_setNeedsUpdate(buffer, offset) {
-    resolvedProperty.fromArray(buffer, offset);
+    resolvedProperty.fromArray(List<double>.from(buffer.map((e) => e.toDouble())), offset);
     targetObject.needsUpdate = true;
   }
 

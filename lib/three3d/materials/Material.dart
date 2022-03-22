@@ -85,7 +85,7 @@ class Material with EventDispatcher {
 
   bool isMaterial = true;
   bool flatShading = false;
-  Color color = Color(1,1,1);
+  Color color = Color(1, 1, 1);
 
   Color? specular;
   num? specularIntensity;

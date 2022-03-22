@@ -71,12 +71,12 @@ class WebGLMorphtargets {
         var morphNormals = geometry.morphAttributes["normal"] ?? [];
         var morphColors = geometry.morphAttributes["color"] ?? [];
 
-        var vertexDataCount = 0;
+        int vertexDataCount = 0;
         if ( hasMorphPosition == true ) vertexDataCount = 1;
 				if ( hasMorphNormals == true ) vertexDataCount = 2;
 				if ( hasMorphColors == true ) vertexDataCount = 3;
 
-				double width = geometry.attributes["position"].count * vertexDataCount;
+				double width = (geometry.attributes["position"].count * vertexDataCount).toDouble();
         double height = 1;
 
         if (width > capabilities.maxTextureSize) {
