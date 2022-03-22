@@ -274,13 +274,13 @@ class WebGLState {
 
   setBlending(
       int blending,
-      int? blendEquation,
+      [int? blendEquation,
       int? blendSrc,
       int? blendDst,
       int? blendEquationAlpha,
       int? blendSrcAlpha,
       int? blendDstAlpha,
-      bool? premultipliedAlpha) {
+      bool? premultipliedAlpha]) {
     if (blending == NoBlending) {
       if (currentBlendingEnabled) {
         disable(gl.BLEND);
@@ -649,7 +649,7 @@ class WebGLState {
   void texStorage3D(target, levels, internalformat, width, height, depth) {
     // try {
 
-    gl.texStorage3D(target, levels, internalformat, width, height, depth);
+    gl.texStorage3D(target, levels, internalformat, width.toInt(), height.toInt(), depth);
 
     // } catch ( error ) {
 

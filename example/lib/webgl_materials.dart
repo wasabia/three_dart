@@ -363,10 +363,10 @@ class _MyAppState extends State<webgl_materials> {
 
     materials[materials.length - 2]
         .emissive
-        .setHSL(0.54, 1, 0.35 * (0.5 + 0.5 * THREE.Math.sin(35 * timer)));
+        .setHSL(0.54, 1.0, 0.35 * (0.5 + 0.5 * THREE.Math.sin(35 * timer)));
     materials[materials.length - 3]
         .emissive
-        .setHSL(0.04, 1, 0.35 * (0.5 + 0.5 * THREE.Math.cos(35 * timer)));
+        .setHSL(0.04, 1.0, 0.35 * (0.5 + 0.5 * THREE.Math.cos(35 * timer)));
 
     pointLight.position.x = THREE.Math.sin(timer * 7) * 300;
     pointLight.position.y = THREE.Math.cos(timer * 5) * 400;

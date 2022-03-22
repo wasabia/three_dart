@@ -81,8 +81,8 @@ class WebGLShadowMap {
     var _state = _renderer.state;
 
     // Set GL state for depth map.
-    _state.setBlending(NoBlending, null, null, null, null, null, null, null);
-    _state.buffers["color"].setClear(1, 1, 1, 1, false);
+    _state.setBlending(NoBlending);
+    _state.buffers["color"].setClear(1.0, 1.0, 1.0, 1.0, false);
     _state.buffers["depth"].setTest(true);
     _state.setScissorTest(false);
 

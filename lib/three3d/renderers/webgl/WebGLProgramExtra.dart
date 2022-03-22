@@ -435,7 +435,7 @@ class WebGLProgramExtra {
 
     if ( imageHeight == null ) return null;
 
-    var maxMip = Math.log2( imageHeight / 32 + 1 ) + 3;
+    int maxMip = Math.log2( imageHeight / 32 + 1 ).toInt() + 3;
 
     var texelHeight = 1.0 / imageHeight;
 

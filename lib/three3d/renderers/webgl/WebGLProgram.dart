@@ -387,10 +387,10 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
     // developer.log(" alphaTest: ${parameters.alphaTest} ");
     // developer.log(" 111 ================= VERTEX  ");
-    // // developer.log(vertexGlsl);
+    // developer.log(vertexGlsl);
     // print(vertexGlsl);
     // developer.log("  111 ==================== FRAGMENT ");
-    // // developer.log(fragmentGlsl);
+    // developer.log(fragmentGlsl);
     // print( fragmentGlsl );
 
     final glVertexShader = WebGLShader(gl, gl.VERTEX_SHADER, vertexGlsl);

@@ -355,7 +355,7 @@ class WebGLUniformsHelper {
 
   // Single float vector (from flat array or THREE.VectorN)
 
-  setValueV2f(gl, v, textures) {
+  setValueV2f(gl, v, [WebGLTextures? textures]) {
     var cache = this.cache;
 
     if (v.x != null) {
@@ -374,15 +374,7 @@ class WebGLUniformsHelper {
     }
   }
 
-  void setValueV3f(gl, v, WebGLTextures textures) {
-    // if ( v.runtimeType == Vector3 ) {
-    //   print("v setValueV3f ${v.runtimeType} v: ${v.toJSON()}  ");
-    // } else if ( v.runtimeType == Color ) {
-    //   print("c setValueV3f ${v.runtimeType} v: ${v.toJSON()}  ");
-    // } else {
-    //   print("1 setValueV3f ${v.runtimeType} v: ${v}  ");
-    // }
-
+  void setValueV3f(gl, v, [WebGLTextures? textures]) {
     var cache = this.cache;
 
     if (v is Vector3) {
@@ -419,7 +411,7 @@ class WebGLUniformsHelper {
     }
   }
 
-  setValueV4f(gl, v, textures) {
+  setValueV4f(gl, v, [WebGLTextures? textures]) {
     var cache = this.cache;
 
     if (v.runtimeType == Vector4) {
@@ -469,7 +461,7 @@ class WebGLUniformsHelper {
 
   // Single matrix (from flat array or THREE.MatrixN)
 
-  setValueM2(gl, v, textures) {
+  setValueM2(gl, v, [WebGLTextures? textures]) {
     var cache = this.cache;
     var elements = v.elements;
 
@@ -490,7 +482,7 @@ class WebGLUniformsHelper {
     }
   }
 
-  setValueM3(gl, v, textures) {
+  setValueM3(gl, v, [WebGLTextures? textures]) {
     var cache = this.cache;
     var elements = v.elements;
 
@@ -514,7 +506,7 @@ class WebGLUniformsHelper {
     }
   }
 
-  setValueM4(gl, Matrix4 v, WebGLTextures textures) {
+  setValueM4(gl, Matrix4 v, [WebGLTextures? textures]) {
     var cache = this.cache;
     var elements = v.elements;
 
@@ -564,9 +556,9 @@ class WebGLUniformsHelper {
     textures.setTexture2DArray(v ?? emptyArrayTexture, unit);
   }
 
-  setValueT3D1(gl, v, textures) {
+  setValueT3D1(gl, v, [WebGLTextures? textures]) {
     var cache = this.cache;
-    var unit = textures.allocateTextureUnit();
+    var unit = textures!.allocateTextureUnit();
 
     if (cache[0] != unit) {
       gl.uniform1i(addr, unit);
@@ -576,9 +568,9 @@ class WebGLUniformsHelper {
     textures.setTexture3D(v ?? empty3dTexture, unit);
   }
 
-  setValueT6(gl, v, textures) {
+  setValueT6(gl, v, [WebGLTextures? textures]) {
     var cache = this.cache;
-    var unit = textures.allocateTextureUnit();
+    var unit = textures!.allocateTextureUnit();
 
     if (cache[0] != unit) {
       gl.uniform1i(addr, unit);
@@ -590,7 +582,7 @@ class WebGLUniformsHelper {
 
   // Integer / Boolean vectors or arrays thereof (always flat arrays)
 
-  setValueV1i(gl, v, textures) {
+  setValueV1i(gl, v, [WebGLTextures? textures]) {
     var cache = this.cache;
 
     if (cache[0] == v) return;
