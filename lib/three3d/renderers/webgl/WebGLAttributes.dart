@@ -96,10 +96,12 @@ class WebGLAttributes {
     } else if (array is Uint8Array) {
       type = gl.UNSIGNED_BYTE;
       bytesPerElement = Uint8List.bytesPerElement;
+    } else if (array is Int32Array) {
+      type = gl.INT;
+      bytesPerElement = Int32List.bytesPerElement;  
     } else {
       print("createBuffer array: ${array.runtimeType} ");
       // arrayList = Float32Array.fromList(array.map((e) => e.toDouble()).toList());
-      // 保持抛出异常 及时发现异常情况
       throw ("1 WebGLAttributes.createBuffer BufferAttribute arrayType: ${array.runtimeType} is not support  ");
     }
 

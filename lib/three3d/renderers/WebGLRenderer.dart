@@ -368,7 +368,7 @@ class WebGLRenderer {
   }
 
   // color 接受多种类型 same as Color.set
-  setClearColor(color, [double alpha = 1.0]) {
+  setClearColor(Color color, [double alpha = 1.0]) {
     background.setClearColor(color, alpha);
   }
 

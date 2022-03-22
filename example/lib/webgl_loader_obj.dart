@@ -40,7 +40,7 @@ class _MyAppState extends State<webgl_loader_obj> {
 
   late THREE.Texture texture;
 
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late THREE.WebGLRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
@@ -179,7 +179,7 @@ class _MyAppState extends State<webgl_loader_obj> {
 
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
+      renderTarget = THREE.WebGLRenderTarget(
           (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
@@ -223,13 +223,17 @@ class _MyAppState extends State<webgl_loader_obj> {
     object = await loader.loadAsync('assets/models/obj/male02/male02.obj');
 
     object.traverse((child) {
-      if (child.isMesh) {
-        child.material.map = texture;
+      if (child is THREE.Mesh) {
+        child.material.uniforms["map"] = {"value": texture};
       }
     });
 
     object.scale.set(0.5, 0.5, 0.5);
     scene.add(object);
+
+    // var plane = THREE.PlaneGeometry(100, 100);
+    // mesh = THREE.Mesh(plane, THREE.MeshBasicMaterial({"map": texture}));
+    // scene.add(mesh);
 
     animate();
   }

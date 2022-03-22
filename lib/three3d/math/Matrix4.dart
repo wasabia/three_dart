@@ -484,11 +484,12 @@ class Matrix4 {
     var te = elements;
 
     if (x is Vector3) {
+      print("warn use setPositionFromVector3 ........... ");
       return setPositionFromVector3(x);
     } else {
-      te[12] = x;
-      te[13] = y;
-      te[14] = z;
+      te[12] = x.toDouble();
+      te[13] = y.toDouble();
+      te[14] = z.toDouble();
     }
 
     return this;
@@ -907,7 +908,7 @@ class Matrix4 {
 
   Matrix4 fromArray(array, [int offset = 0]) {
     for (var i = 0; i < 16; i++) {
-      elements[i] = array[i + offset];
+      elements[i] = array[i + offset].toDouble();
     }
 
     return this;
