@@ -1,13 +1,10 @@
 part of three_lights;
 
 class SpotLight extends Light {
-  @override
-  String type = "SpotLight";
-  @override
-  bool isSpotLight = true;
-
   SpotLight(color, [intensity, num? distance, angle, penumbra, decay])
       : super(color, intensity) {
+    type = "SpotLight";
+    isSpotLight = true;
     position.copy(Object3D.DefaultUp);
     updateMatrix();
 
@@ -23,16 +20,16 @@ class SpotLight extends Light {
     shadow = SpotLightShadow();
   }
 
-  get power {
+  double get power {
     return intensity * Math.PI;
   }
 
-  set power(value) {
+  set power(double value) {
     intensity = value / Math.PI;
   }
 
   @override
-  copy(Object3D source, [bool? recursive]) {
+  SpotLight copy(Object3D source, [bool? recursive]) {
     super.copy(source);
 
     SpotLight source1 = source as SpotLight;
@@ -50,7 +47,7 @@ class SpotLight extends Light {
   }
 
   @override
-  dispose() {
+  void dispose() {
     shadow!.dispose();
   }
 }

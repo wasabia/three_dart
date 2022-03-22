@@ -1,15 +1,12 @@
 part of three_camera;
 
 class PerspectiveCamera extends Camera {
-  @override
-  String type = "PerspectiveCamera";
-  @override
-  bool isPerspectiveCamera = true;
-
   // near 设置太小 导致 画面异常 精度问题？ 浮点运算问题？？
   PerspectiveCamera(
       [num fov = 50, num aspect = 1, num near = 0.1, num far = 2000])
       : super() {
+    isPerspectiveCamera = true;
+    type = "PerspectiveCamera";
     this.fov = fov;
     this.aspect = aspect;
     this.near = near;
@@ -21,6 +18,8 @@ class PerspectiveCamera extends Camera {
   PerspectiveCamera.fromJSON(
       Map<String, dynamic> json, Map<String, dynamic> rootJSON)
       : super.fromJSON(json, rootJSON) {
+    isPerspectiveCamera = true;
+    type = "PerspectiveCamera";
     fov = json["fov"];
     aspect = json["aspect"];
     near = json["near"];
@@ -30,7 +29,7 @@ class PerspectiveCamera extends Camera {
   }
 
   @override
-  copy(Object3D source, [bool? recursive]) {
+  PerspectiveCamera copy(Object3D source, [bool? recursive]) {
     super.copy(source, recursive);
 
     PerspectiveCamera source1 = source as PerspectiveCamera;
@@ -53,8 +52,8 @@ class PerspectiveCamera extends Camera {
   }
 
   @override
-  clone([bool? recursive = true]) {
-    return PerspectiveCamera().copy(this, recursive);
+  PerspectiveCamera clone([bool? recursive = true]) {
+    return PerspectiveCamera()..copy(this, recursive);
   }
 
 // 	/**
@@ -93,12 +92,12 @@ class PerspectiveCamera extends Camera {
 
 // 	},
 
-  getFilmWidth() {
+  num getFilmWidth() {
     // film not completely covered in portrait format (aspect < 1)
     return filmGauge * Math.min(aspect, 1);
   }
 
-  getFilmHeight() {
+  double getFilmHeight() {
     // film not completely covered in landscape format (aspect > 1)
     return filmGauge / Math.max(aspect, 1);
   }
@@ -138,7 +137,7 @@ class PerspectiveCamera extends Camera {
 	 *
 	 *   Note there is no reason monitors have to be the same size or in a grid.
 	 */
-  setViewOffset(fullWidth, fullHeight, x, y, width, height) {
+  void setViewOffset(fullWidth, fullHeight, x, y, width, height) {
     aspect = fullWidth / fullHeight;
 
     view ??= {
@@ -162,16 +161,15 @@ class PerspectiveCamera extends Camera {
     updateProjectionMatrix();
   }
 
-  clearViewOffset() {
+  void clearViewOffset() {
     if (view != null) {
       view!["enabled"] = false;
     }
-
     updateProjectionMatrix();
   }
 
   @override
-  updateProjectionMatrix() {
+  void updateProjectionMatrix() {
     num near = this.near;
     num top = near * Math.tan(MathUtils.DEG2RAD * 0.5 * fov) / zoom;
     num height = 2 * top;
@@ -197,7 +195,7 @@ class PerspectiveCamera extends Camera {
   }
 
   @override
-  toJSON({Object3dMeta? meta}) {
+  Map<String, dynamic> toJSON({Object3dMeta? meta}) {
     Map<String, dynamic> output = super.toJSON(meta: meta);
     Map<String, dynamic> object = output["object"];
 

@@ -1,18 +1,16 @@
 part of three_lights;
 
 class SpotLightShadow extends LightShadow {
-  @override
-  bool isSpotLightShadow = true;
-
   SpotLightShadow() : super(PerspectiveCamera(50, 1, 0.5, 500)) {
     focus = 1;
+    isSpotLightShadow = true;
   }
 
   @override
-  updateMatrices(light, {int viewportIndex = 0}) {
+  void updateMatrices(Light light, {int viewportIndex = 0}) {
     PerspectiveCamera camera = this.camera as PerspectiveCamera;
 
-    var fov = MathUtils.RAD2DEG * 2 * light.angle * focus;
+    var fov = MathUtils.RAD2DEG * 2 * light.angle! * focus;
     var aspect = mapSize.width / mapSize.height;
     var far = light.distance ?? camera.far;
 
@@ -27,7 +25,7 @@ class SpotLightShadow extends LightShadow {
   }
 
   @override
-  copy(source) {
+  SpotLightShadow copy(LightShadow source) {
     super.copy(source);
 
     focus = source.focus;

@@ -26,7 +26,7 @@ class StereoCamera {
     cameraR.matrixAutoUpdate = false;
   }
 
-  update(camera) {
+  void update(camera) {
     var cache = _cache;
 
     var needsUpdate = cache["focus"] != camera.focus ||

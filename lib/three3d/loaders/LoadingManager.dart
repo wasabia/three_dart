@@ -22,7 +22,7 @@ class LoadingManager {
     this.onError = onError;
   }
 
-  itemStart(String url) {
+  void itemStart(String url) {
     itemsTotal++;
 
     if (isLoading == false) {

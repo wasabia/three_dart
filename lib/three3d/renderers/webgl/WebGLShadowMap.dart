@@ -175,7 +175,7 @@ class WebGLShadowMap {
 
         _frustum = shadow.getFrustum();
 
-        renderObject(scene, camera, shadow.camera, light, type);
+        renderObject(scene, camera, shadow.camera!, light, type);
       }
 
       // do blur pass for VSM
@@ -228,27 +228,27 @@ class WebGLShadowMap {
         camera, null, geometry, shadowMaterialHorizontal, fullScreenMesh, null);
   }
 
-  getDepthMaterial(
-      object, material, light, shadowCameraNear, shadowCameraFar, type) {
+  Material getDepthMaterial(Object3D object, Material material, Light light,
+      num shadowCameraNear, num shadowCameraFar, int type) {
     Material? result;
 
-    var customMaterial = light.isPointLight
+    var customMaterial = light is PointLight
         ? object.customDistanceMaterial
         : object.customDepthMaterial;
 
     if (customMaterial != null) {
       result = customMaterial;
     } else {
-      result = light.isPointLight ? _distanceMaterial : _depthMaterial;
+      result = light is PointLight ? _distanceMaterial : _depthMaterial;
     }
 
     if (_renderer.localClippingEnabled &&
         material.clipShadows == true &&
-        material.clippingPlanes.length != 0) {
+        material.clippingPlanes!.isNotEmpty) {
       // in this case we need a unique material instance reflecting the
       // appropriate state
 
-      var keyA = result!.uuid;
+      var keyA = result.uuid;
       var keyB = material.uuid;
 
       var materialsForVariant = _materialCache[keyA];
@@ -273,11 +273,11 @@ class WebGLShadowMap {
 
     if (type == VSMShadowMap) {
       result.side =
-          (material.shadowSide != null) ? material.shadowSide : material.side;
+          (material.shadowSide != null) ? material.shadowSide! : material.side;
     } else {
       result.side = (material.shadowSide != null)
-          ? material.shadowSide
-          : shadowSide[material.side];
+          ? material.shadowSide!
+          : shadowSide[material.side]!;
     }
 
     result.clipShadows = material.clipShadows;
@@ -287,7 +287,7 @@ class WebGLShadowMap {
     result.wireframeLinewidth = material.wireframeLinewidth;
     result.linewidth = material.linewidth;
 
-    if (light.isPointLight == true && result is MeshDistanceMaterial) {
+    if (light is PointLight == true && result is MeshDistanceMaterial) {
       result.referencePosition.setFromMatrixPosition(light.matrixWorld);
       result.nearDistance = shadowCameraNear;
       result.farDistance = shadowCameraFar;
@@ -298,7 +298,8 @@ class WebGLShadowMap {
     }
   }
 
-  renderObject(object, camera, shadowCamera, light, type) {
+  void renderObject(Object3D object, Camera camera, Camera shadowCamera,
+      Light light, int type) {
     if (object.visible == false) return;
 
     var visible = object.layers.test(camera.layers);

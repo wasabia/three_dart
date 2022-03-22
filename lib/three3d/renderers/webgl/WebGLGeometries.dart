@@ -11,7 +11,7 @@ class WebGLGeometries {
 
   WebGLGeometries(this.gl, this.attributes, this.info, this.bindingStates);
 
-  onGeometryDispose(event) {
+  void onGeometryDispose(Event event) {
     var geometry = event.target;
 
     if (geometry.index != null) {
@@ -57,30 +57,30 @@ class WebGLGeometries {
     return geometry;
   }
 
-  update(geometry) {
+  void update(BufferGeometry geometry) {
     var geometryAttributes = geometry.attributes;
 
     // Updating index buffer in VAO now. See WebGLBindingStates.
 
-    geometryAttributes.keys.forEach((name) {
+    for (var name in geometryAttributes.keys) {
       attributes.update(geometryAttributes[name], gl.ARRAY_BUFFER, name: name);
-    });
+    }
 
     // morph targets
 
     var morphAttributes = geometry.morphAttributes;
 
-    morphAttributes.keys.forEach((name) {
-      var array = morphAttributes[name];
+    for (var name in morphAttributes.keys) {
+      var array = morphAttributes[name]!;
 
       for (var i = 0, l = array.length; i < l; i++) {
         attributes.update(array[i], gl.ARRAY_BUFFER,
             name: "$name - morphAttributes i: $i");
       }
-    });
+    }
   }
 
-  updateWireframeAttribute(geometry) {
+  void updateWireframeAttribute(BufferGeometry geometry) {
     List<int> indices = [];
 
     var geometryIndex = geometry.index;
@@ -91,9 +91,9 @@ class WebGLGeometries {
       var array = geometryIndex.array;
       version = geometryIndex.version; 
       for (var i = 0, l = array.length; i < l; i += 3) {
-        var a = array[i + 0];
-        var b = array[i + 1];
-        var c = array[i + 2];
+        var a = array[i + 0].toInt();
+        var b = array[i + 1].toInt();
+        var c = array[i + 2].toInt();
 
         indices.addAll([a, b, b, c, c, a]);
       }
@@ -153,5 +153,5 @@ class WebGLGeometries {
     return wireframeAttributes.get(geometry);
   }
 
-  dispose() {}
+  void dispose() {}
 }

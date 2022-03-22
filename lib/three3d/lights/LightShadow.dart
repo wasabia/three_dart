@@ -37,15 +37,15 @@ class LightShadow {
   LightShadow.fromJSON(
       Map<String, dynamic> json, Map<String, dynamic> rootJSON);
 
-  getViewportCount() {
+  num getViewportCount() {
     return _viewportCount;
   }
 
-  getFrustum() {
+  Frustum getFrustum() {
     return _frustum;
   }
 
-  updateMatrices(light, {int viewportIndex = 0}) {
+  void updateMatrices(Light light, {int viewportIndex = 0}) {
     var shadowCamera = camera;
     var shadowMatrix = matrix;
 
@@ -54,7 +54,7 @@ class LightShadow {
     lightPositionWorld.setFromMatrixPosition(light.matrixWorld);
     shadowCamera!.position.copy(lightPositionWorld);
 
-    _lookTarget.setFromMatrixPosition(light.target.matrixWorld);
+    _lookTarget.setFromMatrixPosition(light.target!.matrixWorld);
     shadowCamera.lookAt(_lookTarget);
     shadowCamera.updateMatrixWorld(false);
 
@@ -69,16 +69,16 @@ class LightShadow {
     shadowMatrix.multiply(shadowCamera.matrixWorldInverse);
   }
 
-  getViewport(viewportIndex) {
+  Vector4 getViewport(int viewportIndex) {
     return _viewports[viewportIndex];
   }
 
-  getFrameExtents() {
+  Vector2 getFrameExtents() {
     return _frameExtents;
   }
 
-  copy(source) {
-    camera = source.camera.clone();
+  LightShadow copy(LightShadow source) {
+    camera = source.camera?.clone();
 
     bias = source.bias;
     radius = source.radius;
@@ -88,11 +88,11 @@ class LightShadow {
     return this;
   }
 
-  clone() {
+  LightShadow clone() {
     return LightShadow(null).copy(this);
   }
 
-  toJSON() {
+  Map<String, dynamic> toJSON() {
     Map<String, dynamic> object = {};
 
     if (bias != 0) object["bias"] = bias;
@@ -107,7 +107,7 @@ class LightShadow {
     return object;
   }
 
-  dispose() {
+  void dispose() {
     if (map != null) {
       map!.dispose();
     }
