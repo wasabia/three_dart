@@ -224,9 +224,7 @@ class Euler {
 
   List<num> toArray([List<num>? array, int offset = 0]) {
 
-    if(array == null) {
-      array = List<num>.filled(offset + 4, 0);
-    }
+    array ??= List<num>.filled(offset + 4, 0);
 
     array[offset] = _x;
     array[offset + 1] = _y;

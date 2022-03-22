@@ -1,13 +1,10 @@
 import 'dart:async';
 
-import 'dart:typed_data';
 
-import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 
 import 'package:three_dart/three_dart.dart' as THREE;
@@ -16,6 +13,7 @@ class webgl_camera extends StatefulWidget {
   String fileName;
   webgl_camera({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   _MyAppState createState() => _MyAppState();
 }
 
@@ -84,7 +82,7 @@ class _MyAppState extends State<webgl_camera> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -117,7 +115,7 @@ class _MyAppState extends State<webgl_camera> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           render();
         },
@@ -216,7 +214,7 @@ class _MyAppState extends State<webgl_camera> {
     // print(" --------------pixels............. ");
     // print(pixels);
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -260,21 +258,21 @@ class _MyAppState extends State<webgl_camera> {
   initPage() {
     aspect = width / height;
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
 
     //
 
-    camera = new THREE.PerspectiveCamera(50, 0.5 * aspect, 1, 10000);
+    camera = THREE.PerspectiveCamera(50, 0.5 * aspect, 1, 10000);
     camera.position.z = 2500;
 
     cameraPerspective =
-        new THREE.PerspectiveCamera(50, 0.5 * aspect, 150, 1000);
+        THREE.PerspectiveCamera(50, 0.5 * aspect, 150, 1000);
 
-    cameraPerspectiveHelper = new THREE.CameraHelper(cameraPerspective);
+    cameraPerspectiveHelper = THREE.CameraHelper(cameraPerspective);
     scene.add(cameraPerspectiveHelper);
 
     //
-    cameraOrtho = new THREE.OrthographicCamera(
+    cameraOrtho = THREE.OrthographicCamera(
         0.5 * frustumSize * aspect / -2,
         0.5 * frustumSize * aspect / 2,
         frustumSize / 2,
@@ -282,7 +280,7 @@ class _MyAppState extends State<webgl_camera> {
         150,
         1000);
 
-    cameraOrthoHelper = new THREE.CameraHelper(cameraOrtho);
+    cameraOrthoHelper = THREE.CameraHelper(cameraOrtho);
     scene.add(cameraOrthoHelper);
 
     //
@@ -295,7 +293,7 @@ class _MyAppState extends State<webgl_camera> {
     cameraOrtho.rotation.y = THREE.Math.PI;
     cameraPerspective.rotation.y = THREE.Math.PI;
 
-    cameraRig = new THREE.Group();
+    cameraRig = THREE.Group();
 
     cameraRig.add(cameraPerspective);
     cameraRig.add(cameraOrtho);
@@ -304,23 +302,23 @@ class _MyAppState extends State<webgl_camera> {
 
     //
 
-    mesh = new THREE.Mesh(new THREE.SphereGeometry(100, 16, 8),
-        new THREE.MeshBasicMaterial({"color": 0xffffff, "wireframe": true}));
+    mesh = THREE.Mesh(THREE.SphereGeometry(100, 16, 8),
+        THREE.MeshBasicMaterial({"color": 0xffffff, "wireframe": true}));
     scene.add(mesh);
 
-    var mesh2 = new THREE.Mesh(new THREE.SphereGeometry(50, 16, 8),
-        new THREE.MeshBasicMaterial({"color": 0x00ff00, "wireframe": true}));
+    var mesh2 = THREE.Mesh(THREE.SphereGeometry(50, 16, 8),
+        THREE.MeshBasicMaterial({"color": 0x00ff00, "wireframe": true}));
     mesh2.position.y = 150;
     mesh.add(mesh2);
 
-    var mesh3 = new THREE.Mesh(new THREE.SphereGeometry(5, 16, 8),
-        new THREE.MeshBasicMaterial({"color": 0x0000ff, "wireframe": true}));
+    var mesh3 = THREE.Mesh(THREE.SphereGeometry(5, 16, 8),
+        THREE.MeshBasicMaterial({"color": 0x0000ff, "wireframe": true}));
     mesh3.position.z = 150;
     cameraRig.add(mesh3);
 
     //
 
-    var geometry = new THREE.BufferGeometry();
+    var geometry = THREE.BufferGeometry();
     List<double> vertices = [];
 
     for (var i = 0; i < 10000; i++) {
@@ -331,10 +329,10 @@ class _MyAppState extends State<webgl_camera> {
     }
 
     geometry.setAttribute(
-        'position', new THREE.Float32BufferAttribute(Float32Array.fromList(vertices), 3));
+        'position', THREE.Float32BufferAttribute(Float32Array.fromList(vertices), 3));
 
-    var particles = new THREE.Points(
-        geometry, new THREE.PointsMaterial({"color": 0x888888}));
+    var particles = THREE.Points(
+        geometry, THREE.PointsMaterial({"color": 0x888888}));
     scene.add(particles);
 
     animate();
@@ -347,7 +345,7 @@ class _MyAppState extends State<webgl_camera> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }

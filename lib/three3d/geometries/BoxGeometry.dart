@@ -1,6 +1,7 @@
 part of three_geometries;
 
 class BoxGeometry extends BufferGeometry {
+  @override
   String type = "BoxGeometry";
 
   late int groupStart;
@@ -146,7 +147,7 @@ class BoxGeometry extends BufferGeometry {
       // update total number of vertices
 
       numberOfVertices += vertexCounter;
-    };
+    }
 
     // build each side of the box geometry
 

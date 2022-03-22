@@ -8,7 +8,7 @@ class Source {
 
   int currentVersion = 0;
 
-	Source( [data = null] ) {
+	Source( [data] ) {
 
     uuid = MathUtils.generateUUID();
 

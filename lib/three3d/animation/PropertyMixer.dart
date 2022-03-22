@@ -40,50 +40,50 @@ class PropertyMixer {
 
     switch (typeName) {
       case 'quaternion':
-        mixFunction = this._slerp;
-        mixFunctionAdditive = this._slerpAdditive;
-        setIdentity = this._setAdditiveIdentityQuaternion;
+        mixFunction = _slerp;
+        mixFunctionAdditive = _slerpAdditive;
+        setIdentity = _setAdditiveIdentityQuaternion;
 
-        this.buffer = List<num>.filled(valueSize * 6, 0);
-        this._workIndex = 5;
+        buffer = List<num>.filled(valueSize * 6, 0);
+        _workIndex = 5;
 
         break;
 
       case 'string':
       case 'bool':
-        mixFunction = this._select;
+        mixFunction = _select;
 
         // Use the regular mix function and for additive on these types,
         // additive is not relevant for non-numeric types
-        mixFunctionAdditive = this._select;
+        mixFunctionAdditive = _select;
 
-        setIdentity = this._setAdditiveIdentityOther;
+        setIdentity = _setAdditiveIdentityOther;
 
-        print("PropertyMixer  todo  typeName: ${typeName}");
-        this.buffer = List<String?>.filled(valueSize * 5, null);
+        print("PropertyMixer  todo  typeName: $typeName");
+        buffer = List<String?>.filled(valueSize * 5, null);
         // this.buffer = new Array( valueSize * 5 );
 
         break;
 
       default:
-        mixFunction = this._lerp;
-        mixFunctionAdditive = this._lerpAdditive;
-        setIdentity = this._setAdditiveIdentityNumeric;
+        mixFunction = _lerp;
+        mixFunctionAdditive = _lerpAdditive;
+        setIdentity = _setAdditiveIdentityNumeric;
 
-        this.buffer = List<num>.filled(valueSize * 5, 0);
+        buffer = List<num>.filled(valueSize * 5, 0);
     }
 
-    this._mixBufferRegion = mixFunction;
-    this._mixBufferRegionAdditive = mixFunctionAdditive;
-    this._setIdentity = setIdentity;
-    this._origIndex = 3;
-    this._addIndex = 4;
+    _mixBufferRegion = mixFunction;
+    _mixBufferRegionAdditive = mixFunctionAdditive;
+    _setIdentity = setIdentity;
+    _origIndex = 3;
+    _addIndex = 4;
 
-    this.cumulativeWeight = 0;
-    this.cumulativeWeightAdditive = 0;
+    cumulativeWeight = 0;
+    cumulativeWeightAdditive = 0;
 
-    this.useCount = 0;
-    this.referenceCount = 0;
+    useCount = 0;
+    referenceCount = 0;
   }
 
   // accumulate data in the 'incoming' region into 'accu<i>'
@@ -93,11 +93,11 @@ class PropertyMixer {
 
     var buffer = this.buffer;
 
-    int stride = this.valueSize;
+    int stride = valueSize;
 
     int offset = accuIndex * stride + stride;
 
-    var currentWeight = this.cumulativeWeight;
+    var currentWeight = cumulativeWeight;
 
     if (currentWeight == 0) {
       // accuN := incoming * weight
@@ -112,56 +112,56 @@ class PropertyMixer {
 
       currentWeight += weight;
       var mix = weight / currentWeight;
-      this._mixBufferRegion(buffer, offset, 0, mix, stride);
+      _mixBufferRegion(buffer, offset, 0, mix, stride);
     }
 
-    this.cumulativeWeight = currentWeight;
+    cumulativeWeight = currentWeight;
   }
 
   // accumulate data in the 'incoming' region into 'add'
   accumulateAdditive(int weight) {
     var buffer = this.buffer,
-        stride = this.valueSize,
-        offset = stride * this._addIndex;
+        stride = valueSize,
+        offset = stride * _addIndex;
 
-    if (this.cumulativeWeightAdditive == 0) {
+    if (cumulativeWeightAdditive == 0) {
       // add = identity
 
-      this._setIdentity();
+      _setIdentity();
     }
 
     // add := add + incoming * weight
 
-    this._mixBufferRegionAdditive(buffer, offset, 0, weight, stride);
-    this.cumulativeWeightAdditive += weight;
+    _mixBufferRegionAdditive(buffer, offset, 0, weight, stride);
+    cumulativeWeightAdditive += weight;
   }
 
   // apply the state of 'accu<i>' to the binding when accus differ
   apply(accuIndex) {
-    var stride = this.valueSize,
+    var stride = valueSize,
         buffer = this.buffer,
         offset = accuIndex * stride + stride,
-        weight = this.cumulativeWeight,
-        weightAdditive = this.cumulativeWeightAdditive,
+        weight = cumulativeWeight,
+        weightAdditive = cumulativeWeightAdditive,
         binding = this.binding;
 
-    this.cumulativeWeight = 0;
-    this.cumulativeWeightAdditive = 0;
+    cumulativeWeight = 0;
+    cumulativeWeightAdditive = 0;
 
     if (weight < 1) {
       // accuN := accuN + original * ( 1 - cumulativeWeight )
 
-      var originalValueOffset = stride * this._origIndex;
+      var originalValueOffset = stride * _origIndex;
 
-      this._mixBufferRegion(
+      _mixBufferRegion(
           buffer, offset, originalValueOffset, 1 - weight, stride);
     }
 
     if (weightAdditive > 0) {
       // accuN := accuN + additive accuN
 
-      this._mixBufferRegionAdditive(
-          buffer, offset, this._addIndex * stride, 1, stride);
+      _mixBufferRegionAdditive(
+          buffer, offset, _addIndex * stride, 1, stride);
     }
 
     for (var i = stride, e = stride + stride; i != e; ++i) {
@@ -179,8 +179,8 @@ class PropertyMixer {
     var binding = this.binding;
 
     var buffer = this.buffer,
-        stride = this.valueSize,
-        originalValueOffset = stride * this._origIndex;
+        stride = valueSize,
+        originalValueOffset = stride * _origIndex;
 
     binding.getValue(buffer, originalValueOffset);
 
@@ -190,38 +190,38 @@ class PropertyMixer {
     }
 
     // Add to identity for additive
-    this._setIdentity();
+    _setIdentity();
 
-    this.cumulativeWeight = 0;
-    this.cumulativeWeightAdditive = 0;
+    cumulativeWeight = 0;
+    cumulativeWeightAdditive = 0;
   }
 
   // apply the state previously taken via 'saveOriginalState' to the binding
   restoreOriginalState() {
-    var originalValueOffset = this.valueSize * 3;
-    this.binding.setValue(this.buffer, originalValueOffset);
+    var originalValueOffset = valueSize * 3;
+    binding.setValue(buffer, originalValueOffset);
   }
 
   _setAdditiveIdentityNumeric() {
-    var startIndex = this._addIndex * this.valueSize;
-    var endIndex = startIndex + this.valueSize;
+    var startIndex = _addIndex * valueSize;
+    var endIndex = startIndex + valueSize;
 
     for (var i = startIndex; i < endIndex; i++) {
-      this.buffer[i] = 0;
+      buffer[i] = 0;
     }
   }
 
   _setAdditiveIdentityQuaternion() {
-    this._setAdditiveIdentityNumeric();
-    this.buffer[this._addIndex * this.valueSize + 3] = 1;
+    _setAdditiveIdentityNumeric();
+    buffer[_addIndex * valueSize + 3] = 1;
   }
 
   _setAdditiveIdentityOther() {
-    var startIndex = this._origIndex * this.valueSize;
-    var targetIndex = this._addIndex * this.valueSize;
+    var startIndex = _origIndex * valueSize;
+    var targetIndex = _addIndex * valueSize;
 
-    for (var i = 0; i < this.valueSize; i++) {
-      this.buffer[targetIndex + i] = this.buffer[startIndex + i];
+    for (var i = 0; i < valueSize; i++) {
+      buffer[targetIndex + i] = buffer[startIndex + i];
     }
   }
 
@@ -241,7 +241,7 @@ class PropertyMixer {
   }
 
   _slerpAdditive(buffer, dstOffset, srcOffset, t, stride) {
-    var workOffset = this._workIndex * stride;
+    var workOffset = _workIndex * stride;
 
     // Store result in intermediate buffer offset
     Quaternion.multiplyQuaternionsFlat(

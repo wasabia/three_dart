@@ -27,8 +27,8 @@ class WebGLPrograms {
   WebGLBindingStates bindingStates;
   WebGLClipping clipping;
 
-  var _programLayers = new Layers();
-  var _customShaders = new WebGLShaderCache();
+  final _programLayers = Layers();
+  final _customShaders = WebGLShaderCache();
   List<WebGLProgram> programs = [];
   bool isWebGL2 = true;
 
@@ -40,7 +40,7 @@ class WebGLPrograms {
 
   WebGLPrograms(this.renderer, this.cubemaps, this.cubeuvmaps, this.extensions,
       this.capabilities, this.bindingStates, this.clipping) {
-    this.isWebGL2 = capabilities.isWebGL2;
+    isWebGL2 = capabilities.isWebGL2;
 
     logarithmicDepthBuffer = capabilities.logarithmicDepthBuffer;
     floatVertexTextures = capabilities.floatVertexTextures;
@@ -67,11 +67,11 @@ class WebGLPrograms {
       var nVertexUniforms = maxVertexUniforms;
       var nVertexMatrices = Math.floor((nVertexUniforms - 20) / 4);
 
-      var maxBones = Math.min(nVertexMatrices, bones.length);
+      var maxBones = Math.min<num>(nVertexMatrices, bones.length);
 
       if (maxBones < bones.length) {
         print(
-            'THREE.WebGLRenderer: Skeleton has ${bones.length} bones. This GPU supports ${maxBones} .');
+            'THREE.WebGLRenderer: Skeleton has ${bones.length} bones. This GPU supports $maxBones .');
         return 0;
       }
 
@@ -86,10 +86,10 @@ class WebGLPrograms {
     var fog = scene.fog;
     var geometry = object.geometry;
     var environment =
-        material.isMeshStandardMaterial ? scene.environment : null;
+        material is MeshStandardMaterial ? scene.environment : null;
 
-    var envMap;
-    if (material.isMeshStandardMaterial) {
+    Texture? envMap;
+    if (material is MeshStandardMaterial) {
       envMap = cubeuvmaps.get(material.envMap ?? environment);
     } else {
       envMap = cubemaps.get(material.envMap ?? environment);
@@ -109,7 +109,7 @@ class WebGLPrograms {
 
       if (precision != material.precision) {
         print(
-            'THREE.WebGLProgram.getParameters: ${material.precision} not supported, using ${precision} instead.');
+            'THREE.WebGLProgram.getParameters: ${material.precision} not supported, using $precision instead.');
       }
     }
 
@@ -126,7 +126,7 @@ class WebGLPrograms {
 
 		//
 
-    var vertexShader, fragmentShader;
+    String? vertexShader, fragmentShader;
     var customVertexShaderID, customFragmentShaderID;
 
     if (shaderID != null) {
@@ -153,13 +153,13 @@ class WebGLPrograms {
     var parameters = WebGLParameters({
       "isWebGL2": isWebGL2,
       "shaderID": shaderID,
-      "shaderName": material.type + " - " + "${material.name}",
+      "shaderName": material.type + " - " + material.name,
       "vertexShader": vertexShader,
       "fragmentShader": fragmentShader,
       "defines": material.defines,
       "customVertexShaderID": customVertexShaderID,
       "customFragmentShaderID": customFragmentShaderID,
-      "isRawShaderMaterial": material.isRawShaderMaterial == true,
+      "isRawShaderMaterial": material is RawShaderMaterial,
       "glslVersion": material.glslVersion,
       "precision": precision,
       "instancing": object.isInstancedMesh == true,
@@ -174,7 +174,7 @@ class WebGLPrograms {
       "map": material.map != null,
       "matcap": material.matcap != null,
       "envMap": envMap != null,
-      "envMapMode": envMap != null ? envMap.mapping : null,
+      "envMapMode": envMap?.mapping,
       "cubeUVHeight": cubeUVHeight,
       "lightMap": material.lightMap != null,
       "aoMap": material.aoMap != null,
@@ -184,7 +184,7 @@ class WebGLPrograms {
       "objectSpaceNormalMap": material.normalMapType == ObjectSpaceNormalMap,
       "tangentSpaceNormalMap": material.normalMapType == TangentSpaceNormalMap,
       "decodeVideoTexture": material.map != null &&
-          (material.map!.isVideoTexture == true) &&
+          (material.map is VideoTexture) &&
           (material.map!.encoding == sRGBEncoding),
       "clearcoat": useClearcoat,
       "clearcoatMap": useClearcoat && material.clearcoatMap != null,
@@ -418,8 +418,9 @@ class WebGLPrograms {
     if (parameters.physicallyCorrectLights) _programLayers.enable(10);
     if (parameters.doubleSided) _programLayers.enable(11);
     if (parameters.flipSided) _programLayers.enable(12);
-    if (parameters.depthPacking != null && parameters.depthPacking > 0)
+    if (parameters.depthPacking != null && parameters.depthPacking > 0) {
       _programLayers.enable(13);
+    }
     if (parameters.dithering) _programLayers.enable(14);
     if (parameters.specularIntensityMap) _programLayers.enable(15);
     if (parameters.specularColorMap) _programLayers.enable(16);

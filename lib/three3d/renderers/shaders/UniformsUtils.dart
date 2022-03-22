@@ -3,9 +3,7 @@
 
 part of three_shaders;
 
-/**
- * Uniform Utilities
- */
+/// Uniform Utilities
 
 Map<String, dynamic> cloneUniforms(Map<String, dynamic> src) {
   var dst = <String, dynamic>{};

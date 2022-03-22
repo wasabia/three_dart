@@ -3,15 +3,14 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_loader_svg extends StatefulWidget {
   String fileName;
   webgl_loader_svg({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   _MyAppState createState() => _MyAppState();
 }
 
@@ -83,7 +82,7 @@ class _MyAppState extends State<webgl_loader_svg> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -116,7 +115,7 @@ class _MyAppState extends State<webgl_loader_svg> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           render();
         },
@@ -171,7 +170,7 @@ class _MyAppState extends State<webgl_loader_svg> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -194,7 +193,7 @@ class _MyAppState extends State<webgl_loader_svg> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -207,7 +206,7 @@ class _MyAppState extends State<webgl_loader_svg> {
   }
 
   initPage() async {
-    camera = new THREE.PerspectiveCamera(50, width / height, 1, 1000);
+    camera = THREE.PerspectiveCamera(50, width / height, 1, 1000);
     camera.position.set(0, 0, 200);
 
     loadSVG(guiData["currentURL"]);
@@ -218,18 +217,18 @@ class _MyAppState extends State<webgl_loader_svg> {
   loadSVG(url) {
     //
 
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xb0b0b0);
+    scene = THREE.Scene();
+    scene.background = THREE.Color(0xb0b0b0);
 
     //
 
-    var helper = new THREE.GridHelper(160, 10);
+    var helper = THREE.GridHelper(160, 10);
     helper.rotation.x = THREE.Math.PI / 2;
     scene.add(helper);
 
     //
 
-    var loader = new THREE.SVGLoader(null);
+    var loader = THREE.SVGLoader(null);
 
     loader.load(url, (data) {
       var paths = data["paths"];
@@ -237,7 +236,7 @@ class _MyAppState extends State<webgl_loader_svg> {
       print(" paths................ ");
       print(paths);
 
-      var group = new THREE.Group();
+      var group = THREE.Group();
       group.scale.multiplyScalar(0.25);
       group.position.x = -70;
       group.position.y = 70;
@@ -250,9 +249,9 @@ class _MyAppState extends State<webgl_loader_svg> {
         if (guiData["drawFillShapes"] == true &&
             fillColor != null &&
             fillColor != 'none') {
-          var material = new THREE.MeshBasicMaterial({
+          var material = THREE.MeshBasicMaterial({
             "color":
-                new THREE.Color().setStyle(fillColor).convertSRGBToLinear(),
+                THREE.Color().setStyle(fillColor).convertSRGBToLinear(),
             "opacity": path.userData["style"]["fillOpacity"],
             "transparent": true,
             "side": THREE.DoubleSide,
@@ -265,8 +264,8 @@ class _MyAppState extends State<webgl_loader_svg> {
           for (var j = 0; j < shapes.length; j++) {
             var shape = shapes[j];
 
-            var geometry = new THREE.ShapeGeometry(shape);
-            var mesh = new THREE.Mesh(geometry, material);
+            var geometry = THREE.ShapeGeometry(shape);
+            var mesh = THREE.Mesh(geometry, material);
 
             group.add(mesh);
           }
@@ -277,9 +276,9 @@ class _MyAppState extends State<webgl_loader_svg> {
         if (guiData["drawStrokes"] == true &&
             strokeColor != null &&
             strokeColor != 'none') {
-          var material = new THREE.MeshBasicMaterial({
+          var material = THREE.MeshBasicMaterial({
             "color":
-                new THREE.Color().setStyle(strokeColor).convertSRGBToLinear(),
+                THREE.Color().setStyle(strokeColor).convertSRGBToLinear(),
             "opacity": path.userData["style"]["strokeOpacity"],
             "transparent": true,
             "side": THREE.DoubleSide,
@@ -294,7 +293,7 @@ class _MyAppState extends State<webgl_loader_svg> {
                 subPath.getPoints(), path.userData["style"]);
 
             if (geometry != null) {
-              var mesh = new THREE.Mesh(geometry, material);
+              var mesh = THREE.Mesh(geometry, material);
 
               group.add(mesh);
             }

@@ -1,6 +1,7 @@
 part of three_geometries;
 
 class ConeGeometry extends CylinderGeometry {
+  @override
   String type = 'ConeGeometry';
 
   ConeGeometry(
@@ -13,7 +14,7 @@ class ConeGeometry extends CylinderGeometry {
       thetaLength = Math.PI * 2])
       : super(0, radius, height, radialSegments, heightSegments, openEnded,
             thetaStart, thetaLength) {
-    this.parameters = {
+    parameters = {
       "radius": radius,
       "height": height,
       "radialSegments": radialSegments,

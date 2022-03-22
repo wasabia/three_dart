@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
@@ -13,6 +12,7 @@ class webgl_helpers extends StatefulWidget {
 
   webgl_helpers({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   createState() => _State();
 }
 
@@ -31,7 +31,7 @@ class _State extends State<webgl_helpers> {
   late THREE.Mesh mesh;
 
   late THREE.AnimationMixer mixer;
-  THREE.Clock clock = new THREE.Clock();
+  THREE.Clock clock = THREE.Clock();
   THREE_JSM.OrbitControls? controls;
 
   double dpr = 1.0;
@@ -83,7 +83,7 @@ class _State extends State<webgl_helpers> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -116,7 +116,7 @@ class _State extends State<webgl_helpers> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           clickRender();
         },
@@ -172,7 +172,7 @@ class _State extends State<webgl_helpers> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -195,7 +195,7 @@ class _State extends State<webgl_helpers> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -208,26 +208,26 @@ class _State extends State<webgl_helpers> {
   }
 
   initPage() async {
-    camera = new THREE.PerspectiveCamera(70, width / height, 1, 1000);
+    camera = THREE.PerspectiveCamera(70, width / height, 1, 1000);
     camera.position.z = 400;
 
     // scene
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
 
-    light = new THREE.PointLight(0xffffff);
+    light = THREE.PointLight(0xffffff);
     light.position.set(200, 100, 150);
     scene.add(light);
 
-    scene.add(new THREE.PointLightHelper(light, 15, THREE.Color(0xffffff)));
+    scene.add(THREE.PointLightHelper(light, 15, THREE.Color(0xffffff)));
 
-    var gridHelper = new THREE.GridHelper(400, 40, 0x0000ff, 0x808080);
+    var gridHelper = THREE.GridHelper(400, 40, 0x0000ff, 0x808080);
     gridHelper.position.y = -150;
     gridHelper.position.x = -150;
     scene.add(gridHelper);
 
     var polarGridHelper =
-        new THREE.PolarGridHelper(200, 16, 8, 64, 0x0000ff, 0x808080);
+        THREE.PolarGridHelper(200, 16, 8, 64, 0x0000ff, 0x808080);
     polarGridHelper.position.y = -150;
     polarGridHelper.position.x = 200;
     scene.add(polarGridHelper);
@@ -241,18 +241,18 @@ class _State extends State<webgl_helpers> {
     // var result = await loader.loadAsync( 'untitled22.gltf', null);
 
     print(result);
-    print(" load gltf success result: ${result}  ");
+    print(" load gltf success result: $result  ");
 
     model = result["scene"];
 
     var mesh = model.children[2];
 
-    print(" load gltf success mesh: ${mesh}  ");
+    print(" load gltf success mesh: $mesh  ");
 
     mesh.geometry!
         .computeTangents(); // generates bad data due to degenerate UVs
 
-    var group = new THREE.Group();
+    var group = THREE.Group();
     group.scale.multiplyScalar(50);
     scene.add(group);
 
@@ -261,36 +261,36 @@ class _State extends State<webgl_helpers> {
 
     group.add(mesh);
 
-    vnh = new THREE_JSM.VertexNormalsHelper(mesh, 5);
+    vnh = THREE_JSM.VertexNormalsHelper(mesh, 5);
     scene.add(vnh!);
 
-    vth = new THREE_JSM.VertexTangentsHelper(mesh, 5);
+    vth = THREE_JSM.VertexTangentsHelper(mesh, 5);
     scene.add(vth!);
 
-    scene.add(new THREE.BoxHelper(mesh));
+    scene.add(THREE.BoxHelper(mesh));
 
-    var wireframe = new THREE.WireframeGeometry(mesh.geometry!);
+    var wireframe = THREE.WireframeGeometry(mesh.geometry!);
 
-    var line = new THREE.LineSegments(wireframe, null);
+    var line = THREE.LineSegments(wireframe, null);
 
     line.material.depthTest = false;
     line.material.opacity = 0.25;
     line.material.transparent = true;
     line.position.x = 4;
     group.add(line);
-    scene.add(new THREE.BoxHelper(line));
+    scene.add(THREE.BoxHelper(line));
 
-    var edges = new THREE.EdgesGeometry(mesh.geometry!, null);
-    line = new THREE.LineSegments(edges, null);
+    var edges = THREE.EdgesGeometry(mesh.geometry!, null);
+    line = THREE.LineSegments(edges, null);
     line.material.depthTest = false;
     line.material.opacity = 0.25;
     line.material.transparent = true;
     line.position.x = -4;
     group.add(line);
-    scene.add(new THREE.BoxHelper(line));
+    scene.add(THREE.BoxHelper(line));
 
-    scene.add(new THREE.BoxHelper(group));
-    scene.add(new THREE.BoxHelper(scene));
+    scene.add(THREE.BoxHelper(group));
+    scene.add(THREE.BoxHelper(scene));
 
     loaded = true;
 
@@ -330,7 +330,7 @@ class _State extends State<webgl_helpers> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }

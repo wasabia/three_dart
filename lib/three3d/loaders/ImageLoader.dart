@@ -3,8 +3,9 @@ part of three_loaders;
 class ImageLoader extends Loader {
   bool flipY = true;
 
-  ImageLoader(manager) : super(manager) {}
+  ImageLoader(manager) : super(manager);
 
+  @override
   loadAsync(url, [Function? onProgress]) async {
     var completer = Completer();
 
@@ -15,33 +16,30 @@ class ImageLoader extends Loader {
     return completer.future;
   }
 
+  @override
   load(url, onLoad, [onProgress, onError]) async {
-    if (this.path != "" && url is String) {
-      url = this.path + url;
+    if (path != "" && url is String) {
+      url = path + url;
     }
 
-    url = this.manager.resolveURL(url);
+    url = manager.resolveURL(url);
 
     var cached = Cache.get(url);
 
     if (cached != null) {
-      this.manager.itemStart(url);
+      manager.itemStart(url);
 
       Future.delayed(Duration(milliseconds: 0), () {
-        if (onLoad != null) {
-          onLoad(cached);
-        }
+        onLoad(cached);
 
-        this.manager.itemEnd(url);
+        manager.itemEnd(url);
       });
 
       return cached;
     }
 
     final _resp = await ImageLoaderLoader.loadImage(url, flipY);
-    if (onLoad != null) {
-      onLoad(_resp);
-    }
+    onLoad(_resp);
 
     return _resp;
   }

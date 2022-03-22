@@ -42,6 +42,7 @@ class ExamplePage extends StatefulWidget {
   String? id;
   ExamplePage({Key? key, this.id}) : super(key: key);
 
+  @override
   _MyAppState createState() => _MyAppState();
 }
 
@@ -132,7 +133,7 @@ class _MyAppState extends State<ExamplePage> {
     } else if (fileName == "misc_controls_map") {
       page = misc_controls_map(fileName: fileName);
     } else {
-      throw ("ExamplePage fileName ${fileName} is not support yet ");
+      throw ("ExamplePage fileName $fileName is not support yet ");
     }
 
     return page;

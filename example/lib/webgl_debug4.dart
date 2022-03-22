@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 
@@ -13,6 +12,7 @@ class webgl_debug4 extends StatefulWidget {
 
   webgl_debug4({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   createState() => _State();
 }
 
@@ -74,7 +74,7 @@ class _State extends State<webgl_debug4> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -107,7 +107,7 @@ class _State extends State<webgl_debug4> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           clickRender();
         },
@@ -164,7 +164,7 @@ class _State extends State<webgl_debug4> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} three3dRender.textureId! ${three3dRender.textureId!} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture three3dRender.textureId! ${three3dRender.textureId!} ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -200,24 +200,24 @@ class _State extends State<webgl_debug4> {
   }
 
   initPage() {
-    camera = new THREE.PerspectiveCamera(45, width / height, 1, 100);
+    camera = THREE.PerspectiveCamera(45, width / height, 1, 100);
     camera.position.z = 100;
 
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
 
-    var ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
+    var ambientLight = THREE.AmbientLight(0xcccccc, 0.4);
     scene.add(ambientLight);
 
     camera.lookAt(scene.position);
 
 
-    var clothMaterial = new THREE.MeshBasicMaterial(
+    var clothMaterial = THREE.MeshBasicMaterial(
         {"color": THREE.Color(1, 0.5, 1)});
 
     var plane = THREE.BoxGeometry(50, 50, 50);
 
-    mesh = new THREE.Mesh(plane, clothMaterial);
+    mesh = THREE.Mesh(plane, clothMaterial);
     scene.add(mesh);
 
     loaded = true;

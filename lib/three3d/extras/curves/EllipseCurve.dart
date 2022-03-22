@@ -13,11 +13,12 @@ class EllipseCurve extends Curve {
 
   late num aRotation;
 
+  @override
   bool isEllipseCurve = true;
 
   EllipseCurve(
       aX, aY, xRadius, yRadius, [aStartAngle, aEndAngle, aClockwise, aRotation]) {
-    this.type = 'EllipseCurve';
+    type = 'EllipseCurve';
 
     this.aX = aX ?? 0;
     this.aY = aY ?? 0;
@@ -34,30 +35,35 @@ class EllipseCurve extends Curve {
   }
 
   EllipseCurve.fromJSON(Map<String, dynamic> json) : super.fromJSON(json) {
-    this.aX = json["aX"];
-    this.aY = json["aY"];
+    aX = json["aX"];
+    aY = json["aY"];
 
-    this.xRadius = json["xRadius"];
-    this.yRadius = json["yRadius"];
+    xRadius = json["xRadius"];
+    yRadius = json["yRadius"];
 
-    this.aStartAngle = json["aStartAngle"];
-    this.aEndAngle = json["aEndAngle"];
+    aStartAngle = json["aStartAngle"];
+    aEndAngle = json["aEndAngle"];
 
-    this.aClockwise = json["aClockwise"];
+    aClockwise = json["aClockwise"];
 
-    this.aRotation = json["aRotation"];
+    aRotation = json["aRotation"];
   }
 
+  @override
   getPoint(t, optionalTarget) {
-    var point = optionalTarget ?? new Vector2(null, null);
+    var point = optionalTarget ?? Vector2(null, null);
 
     var twoPi = Math.PI * 2;
-    var deltaAngle = this.aEndAngle - this.aStartAngle;
+    var deltaAngle = aEndAngle - aStartAngle;
     var samePoints = Math.abs(deltaAngle) < Math.EPSILON;
 
     // ensures that deltaAngle is 0 .. 2 PI
-    while (deltaAngle < 0) deltaAngle += twoPi;
-    while (deltaAngle > twoPi) deltaAngle -= twoPi;
+    while (deltaAngle < 0) {
+      deltaAngle += twoPi;
+    }
+    while (deltaAngle > twoPi) {
+      deltaAngle -= twoPi;
+    }
 
     if (deltaAngle < Math.EPSILON) {
       if (samePoints) {
@@ -67,7 +73,7 @@ class EllipseCurve extends Curve {
       }
     }
 
-    if (this.aClockwise == true && !samePoints) {
+    if (aClockwise == true && !samePoints) {
       if (deltaAngle == twoPi) {
         deltaAngle = -twoPi;
       } else {
@@ -75,59 +81,61 @@ class EllipseCurve extends Curve {
       }
     }
 
-    var angle = this.aStartAngle + t * deltaAngle;
-    var x = this.aX + this.xRadius * Math.cos(angle);
-    var y = this.aY + this.yRadius * Math.sin(angle);
+    var angle = aStartAngle + t * deltaAngle;
+    var x = aX + xRadius * Math.cos(angle);
+    var y = aY + yRadius * Math.sin(angle);
 
-    if (this.aRotation != 0) {
-      var cos = Math.cos(this.aRotation);
-      var sin = Math.sin(this.aRotation);
+    if (aRotation != 0) {
+      var cos = Math.cos(aRotation);
+      var sin = Math.sin(aRotation);
 
-      var tx = x - this.aX;
-      var ty = y - this.aY;
+      var tx = x - aX;
+      var ty = y - aY;
 
       // Rotate the point about the center of the ellipse.
-      x = tx * cos - ty * sin + this.aX;
-      y = tx * sin + ty * cos + this.aY;
+      x = tx * cos - ty * sin + aX;
+      y = tx * sin + ty * cos + aY;
     }
 
     return point.set(x, y);
   }
 
+  @override
   copy(source) {
     super.copy(source);
 
-    this.aX = source.aX;
-    this.aY = source.aY;
+    aX = source.aX;
+    aY = source.aY;
 
-    this.xRadius = source.xRadius;
-    this.yRadius = source.yRadius;
+    xRadius = source.xRadius;
+    yRadius = source.yRadius;
 
-    this.aStartAngle = source.aStartAngle;
-    this.aEndAngle = source.aEndAngle;
+    aStartAngle = source.aStartAngle;
+    aEndAngle = source.aEndAngle;
 
-    this.aClockwise = source.aClockwise;
+    aClockwise = source.aClockwise;
 
-    this.aRotation = source.aRotation;
+    aRotation = source.aRotation;
 
     return this;
   }
 
+  @override
   toJSON() {
     var data = super.toJSON();
 
-    data["aX"] = this.aX;
-    data["aY"] = this.aY;
+    data["aX"] = aX;
+    data["aY"] = aY;
 
-    data["xRadius"] = this.xRadius;
-    data["yRadius"] = this.yRadius;
+    data["xRadius"] = xRadius;
+    data["yRadius"] = yRadius;
 
-    data["aStartAngle"] = this.aStartAngle;
-    data["aEndAngle"] = this.aEndAngle;
+    data["aStartAngle"] = aStartAngle;
+    data["aEndAngle"] = aEndAngle;
 
-    data["aClockwise"] = this.aClockwise;
+    data["aClockwise"] = aClockwise;
 
-    data["aRotation"] = this.aRotation;
+    data["aRotation"] = aRotation;
 
     return data;
   }

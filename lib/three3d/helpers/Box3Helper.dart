@@ -3,7 +3,7 @@ part of three_helpers;
 class Box3Helper extends LineSegments {
   Box3? box;
 
-  Box3Helper.create(geometry, material) : super(geometry, material) {}
+  Box3Helper.create(geometry, material) : super(geometry, material);
 
   factory Box3Helper(box, [color = 0xffff00]) {
     var indices = Uint16Array.from([
@@ -80,16 +80,17 @@ class Box3Helper extends LineSegments {
     return box3Helper;
   }
 
+  @override
   updateMatrixWorld([bool force = false]) {
     var box = this.box!;
 
     if (box.isEmpty()) return;
 
-    box.getCenter(this.position);
+    box.getCenter(position);
 
-    box.getSize(this.scale);
+    box.getSize(scale);
 
-    this.scale.multiplyScalar(0.5);
+    scale.multiplyScalar(0.5);
 
     super.updateMatrixWorld(force);
   }

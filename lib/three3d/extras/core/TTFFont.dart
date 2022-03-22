@@ -15,9 +15,10 @@ class TTFFont extends Font {
     this.data = data;
   }
 
+  @override
   List<Shape> generateShapes(text, {int size = 100}) {
     List<Shape> shapes = [];
-    var paths = createPaths(text, size, this.data);
+    var paths = createPaths(text, size, data);
     for (var p = 0, pl = paths.length; p < pl; p++) {
       // Array.prototype.push.apply( shapes, paths[ p ].toShapes() );
       shapes.addAll(paths[p].toShapes(false, false));
@@ -32,7 +33,7 @@ class TTFFont extends Font {
     List<String> chars = text.split("");
 
     num scale = size / data["resolution"];
-    num line_height = (data["boundingBox"]["yMax"] -
+    num lineHeight = (data["boundingBox"]["yMax"] -
             data["boundingBox"]["yMin"] +
             data["underlineThickness"]) *
         scale;
@@ -47,7 +48,7 @@ class TTFFont extends Font {
 
       if (char == '\n') {
         offsetX = 0;
-        offsetY -= line_height;
+        offsetY -= lineHeight;
       } else {
         var ret = createPath(char, scale, offsetX, offsetY, data);
         offsetX += ret["offsetX"];
@@ -64,7 +65,7 @@ class TTFFont extends Font {
 
     if (glyph == null) {
       print(
-          "THREE.Font: character ${char} does not exists in font family ${data.familyName}");
+          "THREE.Font: character $char does not exists in font family ${data.familyName}");
       // return null;
       glyph = data["glyphs"]["a"];
     }
@@ -83,7 +84,7 @@ class TTFFont extends Font {
         outline = glyph["_cachedOutline"];
       }
 
-      print(" outline scale: ${scale} ");
+      print(" outline scale: $scale ");
       print(outline);
 
       for (int i = 0, l = outline.length; i < l;) {

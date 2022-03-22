@@ -76,7 +76,7 @@ class Points extends Object3D {
       }
     } else {
       var start = Math.max(0, drawRange["start"]!);
-      var end = Math.min(
+      var end = Math.min<int>(
           positionAttribute.count, (drawRange["start"]! + drawRange["count"]!));
 
       for (var i = start, l = end; i < l; i++) {

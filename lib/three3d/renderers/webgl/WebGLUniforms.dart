@@ -129,7 +129,7 @@ class WebGLUniforms with WebGLUniform {
 
       // print("seqWithValue  u.id: ${u.id} ");
 
-      if (values.keys.toList().indexOf(u.id) >= 0) {
+      if (values.keys.toList().contains(u.id)) {
         r.add(u);
       } else {
         // print("seqWithValue  u.id: ${u.id} is not add ");

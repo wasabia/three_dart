@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
@@ -13,6 +12,7 @@ class webgl_animation_cloth extends StatefulWidget {
 
   webgl_animation_cloth({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   createState() => _State();
 }
 
@@ -41,7 +41,7 @@ class _State extends State<webgl_animation_cloth> {
   late THREE.Mesh mesh;
 
   late THREE.AnimationMixer mixer;
-  THREE.Clock clock = new THREE.Clock();
+  THREE.Clock clock = THREE.Clock();
   THREE_JSM.OrbitControls? controls;
 
   double dpr = 1.0;
@@ -71,18 +71,18 @@ class _State extends State<webgl_animation_cloth> {
 
   var pins = [];
 
-  var windForce = new THREE.Vector3(0, 0, 0);
+  var windForce = THREE.Vector3(0, 0, 0);
 
-  var ballPosition = new THREE.Vector3(0, -45, 0);
+  var ballPosition = THREE.Vector3(0, -45, 0);
   var ballSize = 60; //40
 
-  var tmpForce = new THREE.Vector3();
-  var diff = new THREE.Vector3();
+  var tmpForce = THREE.Vector3();
+  var diff = THREE.Vector3();
 
   late Cloth cloth;
 
   var GRAVITY = 981 * 1.4;
-  var gravity = new THREE.Vector3(0, -981 * 1.4, 0).multiplyScalar(0.1);
+  var gravity = THREE.Vector3(0, -981 * 1.4, 0).multiplyScalar(0.1);
 
   var TIMESTEP = 18 / 1000;
   var TIMESTEP_SQ = (18 / 1000) * (18 / 1000);
@@ -114,7 +114,7 @@ class _State extends State<webgl_animation_cloth> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -147,7 +147,7 @@ class _State extends State<webgl_animation_cloth> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           clickRender();
         },
@@ -203,7 +203,7 @@ class _State extends State<webgl_animation_cloth> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -226,7 +226,7 @@ class _State extends State<webgl_animation_cloth> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -277,14 +277,13 @@ class _State extends State<webgl_animation_cloth> {
     var particles = cloth.particles;
 
     if (params["enableWind"]) {
-      var indx;
-      var normal = new THREE.Vector3();
+      var normal = THREE.Vector3();
       var indices = clothGeometry.index!;
       var normals = clothGeometry.attributes["normal"];
 
       for (var i = 0, il = indices.count; i < il; i += 3) {
         for (var j = 0; j < 3; j++) {
-          indx = indices.getX(i + j);
+          int indx = indices.getX(i + j)!.toInt();
           normal.fromBufferAttribute(normals, indx);
           tmpForce
               .copy(normal)
@@ -357,7 +356,7 @@ class _State extends State<webgl_animation_cloth> {
   initPage() async {
     /* testing cloth simulation */
 
-    cloth = new Cloth(xSegs, ySegs);
+    cloth = Cloth(xSegs, ySegs);
 
     var pinsFormation = [];
     pins = [6];
@@ -384,22 +383,22 @@ class _State extends State<webgl_animation_cloth> {
 
     // scene
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
     scene.background = THREE.Color.fromHex(0xcce0ff);
-    scene.fog = new THREE.Fog(0xcce0ff, 500, 10000);
+    scene.fog = THREE.Fog(0xcce0ff, 500, 10000);
 
     // camera
 
-    camera = new THREE.PerspectiveCamera(30, width / height, 1, 10000);
+    camera = THREE.PerspectiveCamera(30, width / height, 1, 10000);
     camera.position.set(1000, 50, 1500);
 
     // lights
 
     camera.lookAt(scene.position);
 
-    scene.add(new THREE.AmbientLight(0x666666, 1));
+    scene.add(THREE.AmbientLight(0x666666, 1));
 
-    var light = new THREE.DirectionalLight(0xdfebff, 1);
+    var light = THREE.DirectionalLight(0xdfebff, 1);
     light.position.set(50, 200, 100);
     light.position.multiplyScalar(1.3);
 
@@ -421,32 +420,32 @@ class _State extends State<webgl_animation_cloth> {
 
     // cloth material
 
-    var loader = new THREE.TextureLoader(null);
+    var loader = THREE.TextureLoader(null);
     var clothTexture = await loader.loadAsync(
         'assets/textures/patterns/circuit_pattern.png', null);
     // clothTexture.anisotropy = 16;
 
-    var clothMaterial = new THREE.MeshLambertMaterial(
+    var clothMaterial = THREE.MeshLambertMaterial(
         {"alphaMap": clothTexture, "side": THREE.DoubleSide, "alphaTest": 0.5});
 
     // cloth geometry
 
     clothGeometry =
-        new THREE.ParametricGeometry(clothFunction, cloth.w, cloth.h);
+        THREE.ParametricGeometry(clothFunction, cloth.w, cloth.h);
 
     // cloth mesh
 
-    object = new THREE.Mesh(clothGeometry, clothMaterial);
+    object = THREE.Mesh(clothGeometry, clothMaterial);
     object.position.set(0, 0, 0);
     object.castShadow = true;
     scene.add(object);
 
     // sphere
 
-    var ballGeo = new THREE.SphereGeometry(ballSize, 32, 16);
-    var ballMaterial = new THREE.MeshLambertMaterial();
+    var ballGeo = THREE.SphereGeometry(ballSize, 32, 16);
+    var ballMaterial = THREE.MeshLambertMaterial();
 
-    sphere = new THREE.Mesh(ballGeo, ballMaterial);
+    sphere = THREE.Mesh(ballGeo, ballMaterial);
     sphere.castShadow = true;
     sphere.receiveShadow = true;
     sphere.visible = false;
@@ -461,10 +460,10 @@ class _State extends State<webgl_animation_cloth> {
     groundTexture.anisotropy = 16;
     groundTexture.encoding = THREE.sRGBEncoding;
 
-    var groundMaterial = new THREE.MeshLambertMaterial({"map": groundTexture});
+    var groundMaterial = THREE.MeshLambertMaterial({"map": groundTexture});
 
     var mesh =
-        new THREE.Mesh(new THREE.PlaneGeometry(20000, 20000), groundMaterial);
+        THREE.Mesh(THREE.PlaneGeometry(20000, 20000), groundMaterial);
     mesh.position.y = -250;
     mesh.rotation.x = -THREE.Math.PI / 2;
     mesh.receiveShadow = true;
@@ -472,39 +471,39 @@ class _State extends State<webgl_animation_cloth> {
 
     // poles
 
-    var poleGeo = new THREE.BoxGeometry(5, 375, 5);
-    var poleMat = new THREE.MeshLambertMaterial();
+    var poleGeo = THREE.BoxGeometry(5, 375, 5);
+    var poleMat = THREE.MeshLambertMaterial();
 
-    mesh = new THREE.Mesh(poleGeo, poleMat);
+    mesh = THREE.Mesh(poleGeo, poleMat);
     mesh.position.x = -125;
     mesh.position.y = -62;
     mesh.receiveShadow = true;
     mesh.castShadow = true;
     scene.add(mesh);
 
-    mesh = new THREE.Mesh(poleGeo, poleMat);
+    mesh = THREE.Mesh(poleGeo, poleMat);
     mesh.position.x = 125;
     mesh.position.y = -62;
     mesh.receiveShadow = true;
     mesh.castShadow = true;
     scene.add(mesh);
 
-    mesh = new THREE.Mesh(new THREE.BoxGeometry(255, 5, 5), poleMat);
+    mesh = THREE.Mesh(THREE.BoxGeometry(255, 5, 5), poleMat);
     mesh.position.y = -250 + (750 / 2);
     mesh.position.x = 0;
     mesh.receiveShadow = true;
     mesh.castShadow = true;
     scene.add(mesh);
 
-    var gg = new THREE.BoxGeometry(10, 10, 10);
-    mesh = new THREE.Mesh(gg, poleMat);
+    var gg = THREE.BoxGeometry(10, 10, 10);
+    mesh = THREE.Mesh(gg, poleMat);
     mesh.position.y = -250;
     mesh.position.x = 125;
     mesh.receiveShadow = true;
     mesh.castShadow = true;
     scene.add(mesh);
 
-    mesh = new THREE.Mesh(gg, poleMat);
+    mesh = THREE.Mesh(gg, poleMat);
     mesh.position.y = -250;
     mesh.position.x = -125;
     mesh.receiveShadow = true;
@@ -555,7 +554,7 @@ class _State extends State<webgl_animation_cloth> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 33), () {
+    Future.delayed(const Duration(milliseconds: 33), () {
       animate();
     });
   }
@@ -584,40 +583,40 @@ class Particle {
   late THREE.Vector3 tmp2;
 
   Particle(x, y, z, mass) {
-    this.position = new THREE.Vector3();
-    this.previous = new THREE.Vector3();
-    this.original = new THREE.Vector3();
-    this.a = new THREE.Vector3(0, 0, 0); // acceleration
+    position = THREE.Vector3();
+    previous = THREE.Vector3();
+    original = THREE.Vector3();
+    a = THREE.Vector3(0, 0, 0); // acceleration
     this.mass = mass;
-    this.invMass = 1 / mass;
-    this.tmp = new THREE.Vector3();
-    this.tmp2 = new THREE.Vector3();
+    invMass = 1 / mass;
+    tmp = THREE.Vector3();
+    tmp2 = THREE.Vector3();
 
     // init
 
-    clothFunction(x, y, this.position); // position
-    clothFunction(x, y, this.previous); // previous
-    clothFunction(x, y, this.original);
+    clothFunction(x, y, position); // position
+    clothFunction(x, y, previous); // previous
+    clothFunction(x, y, original);
   }
 
   // Force -> Acceleration
 
   addForce(force) {
-    this.a.add(this.tmp2.copy(force).multiplyScalar(this.invMass));
+    a.add(tmp2.copy(force).multiplyScalar(invMass));
   }
 
   // Performs Verlet integration
 
   integrate(timesq) {
-    var newPos = this.tmp.subVectors(this.position, this.previous);
-    newPos.multiplyScalar(DRAG).add(this.position);
-    newPos.add(this.a.multiplyScalar(timesq));
+    var newPos = tmp.subVectors(position, previous);
+    newPos.multiplyScalar(DRAG).add(position);
+    newPos.add(a.multiplyScalar(timesq));
 
-    this.tmp = this.previous;
-    this.previous = this.position;
-    this.position = newPos;
+    tmp = previous;
+    previous = position;
+    position = newPos;
 
-    this.a.set(0, 0, 0);
+    a.set(0, 0, 0);
   }
 }
 
@@ -639,7 +638,7 @@ class Cloth {
 
     for (var v = 0; v <= h; v++) {
       for (var u = 0; u <= w; u++) {
-        particles.add(new Particle(u / w, v / h, 0, MASS));
+        particles.add(Particle(u / w, v / h, 0, MASS));
       }
     }
 

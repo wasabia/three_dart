@@ -1,11 +1,10 @@
 part of three_geometries;
 
-/**
- * Parametric Surfaces Geometry
- * based on the brilliant article by @prideout https://prideout.net/blog/old/blog/index.html@p=44.html
- */
+/// Parametric Surfaces Geometry
+/// based on the brilliant article by @prideout https://prideout.net/blog/old/blog/index.html@p=44.html
 
 class ParametricGeometry extends BufferGeometry {
+  @override
   String type = "ParametricGeometry";
 
   ParametricGeometry(func, slices, stacks) : super() {

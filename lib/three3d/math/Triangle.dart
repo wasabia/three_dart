@@ -190,7 +190,7 @@ class Triangle {
 
   Vector3 closestPointToPoint(Vector3 p, Vector3 target) {
     var a = this.a, b = this.b, c = this.c;
-    var v, w;
+    double v, w;
 
     // algorithm thanks to Real-Time Collision Detection by Christer Ericson,
     // published by Morgan Kaufmann Publishers, (c) 2005 Elsevier Inc.,

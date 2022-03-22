@@ -12,7 +12,6 @@ import 'package:image/image.dart' hide Color;
 import 'package:three_dart/three3d/utils.dart';
 
 import 'package:three_dart/three_dart.dart';
-
 import 'package:universal_html/parsing.dart';
 import 'ImageLoaderForApp.dart' if (dart.library.js) 'ImageLoaderForWeb.dart';
 

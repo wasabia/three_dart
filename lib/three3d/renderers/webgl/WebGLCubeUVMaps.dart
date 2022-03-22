@@ -8,7 +8,7 @@ class WebGLCubeUVMaps {
   WebGLCubeUVMaps(this.renderer);
 
   Texture? get(Texture? texture) {
-    if (texture != null && texture.isTexture) {
+    if (texture != null) {
       var mapping = texture.mapping;
 
       bool isEquirectMap = (mapping == EquirectangularReflectionMapping ||

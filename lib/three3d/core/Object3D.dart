@@ -657,7 +657,7 @@ class Object3D with EventDispatcher {
         }
       }
 
-      if (environment != null && environment!.isTexture) {
+      if (environment != null && environment is Texture) {
         object["environment"] = environment!.toJSON(meta)['uuid'];
       }
     } else if (this is Mesh || this is Line || this is Points) {

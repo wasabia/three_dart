@@ -16,8 +16,8 @@ class PlaneGeometry extends BufferGeometry {
       "heightSegments": heightSegments
     };
 
-    num width_half = width / 2.0;
-    num height_half = height / 2.0;
+    num widthHalf = width / 2.0;
+    num heightHalf = height / 2.0;
 
     num gridX = Math.floor(widthSegments);
     num gridY = Math.floor(heightSegments);
@@ -25,8 +25,8 @@ class PlaneGeometry extends BufferGeometry {
     num gridX1 = gridX + 1;
     num gridY1 = gridY + 1;
 
-    num segment_width = width / gridX;
-    num segment_height = height / gridY;
+    num segmentWidth = width / gridX;
+    num segmentHeight = height / gridY;
 
     //
 
@@ -36,10 +36,10 @@ class PlaneGeometry extends BufferGeometry {
     List<double> uvs = [];
 
     for (var iy = 0; iy < gridY1; iy++) {
-      var y = iy * segment_height - height_half;
+      var y = iy * segmentHeight - heightHalf;
 
       for (var ix = 0; ix < gridX1; ix++) {
-        var x = ix * segment_width - width_half;
+        var x = ix * segmentWidth - widthHalf;
 
         vertices.addAll([x.toDouble(), -y.toDouble(), 0.0]);
 

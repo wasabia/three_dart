@@ -2,7 +2,7 @@ part of three_animation;
 
 // Characters [].:/ are reserved for track binding syntax.
 var _RESERVED_CHARS_RE = '\\[\\]\\.:\\/';
-var _reservedRe = RegExp("[${_RESERVED_CHARS_RE}]");
+var _reservedRe = RegExp("[$_RESERVED_CHARS_RE]");
 
 // Attempts to allow node names from any language. ES5's `\w` regexp matches
 // only latin characters, and the unicode \p{L} is not yet supported. So
@@ -28,8 +28,8 @@ var _objectRe =
 var _propertyRe =
     RegExp(r"\.(WC+)(?:\[(.+)\])?").pattern.replaceAll('WC', _wordChar);
 
-String _ts = "^${_directoryRe}${_nodeRe}${_objectRe}${_propertyRe}\$";
-var _trackRe = new RegExp(_ts);
+String _ts = "^$_directoryRe$_nodeRe$_objectRe$_propertyRe\$";
+var _trackRe = RegExp(_ts);
 
 var _supportedObjectNames = ['material', 'materials', 'bones'];
 
@@ -40,24 +40,24 @@ class Composite {
   Composite(targetGroup, path, optionalParsedPath) {
     var parsedPath = optionalParsedPath ?? PropertyBinding.parseTrackName(path);
 
-    this._targetGroup = targetGroup;
-    this._bindings = targetGroup.subscribe_(path, parsedPath);
+    _targetGroup = targetGroup;
+    _bindings = targetGroup.subscribe_(path, parsedPath);
   }
 
   getValue(array, offset) {
-    this.bind(); // bind all binding
+    bind(); // bind all binding
 
-    var firstValidIndex = this._targetGroup.nCachedObjects_,
-        binding = this._bindings[firstValidIndex];
+    var firstValidIndex = _targetGroup.nCachedObjects_,
+        binding = _bindings[firstValidIndex];
 
     // and only call .getValue on the first
     if (binding != null) binding.getValue(array, offset);
   }
 
   setValue(array, offset) {
-    var bindings = this._bindings;
+    var bindings = _bindings;
 
-    for (var i = this._targetGroup.nCachedObjects_, n = bindings.length;
+    for (var i = _targetGroup.nCachedObjects_, n = bindings.length;
         i != n;
         ++i) {
       bindings[i].setValue(array, offset);
@@ -65,9 +65,9 @@ class Composite {
   }
 
   bind() {
-    var bindings = this._bindings;
+    var bindings = _bindings;
 
-    for (var i = this._targetGroup.nCachedObjects_, n = bindings.length;
+    for (var i = _targetGroup.nCachedObjects_, n = bindings.length;
         i != n;
         ++i) {
       bindings[i].bind();
@@ -75,9 +75,9 @@ class Composite {
   }
 
   unbind() {
-    var bindings = this._bindings;
+    var bindings = _bindings;
 
-    for (var i = this._targetGroup.nCachedObjects_, n = bindings.length;
+    for (var i = _targetGroup.nCachedObjects_, n = bindings.length;
         i != n;
         ++i) {
       bindings[i].unbind();
@@ -112,21 +112,21 @@ class PropertyBinding {
     this.path = path;
     this.parsedPath = parsedPath ?? PropertyBinding.parseTrackName(path);
 
-    this.node =
+    node =
         PropertyBinding.findNode(rootNode, this.parsedPath["nodeName"]) ??
             rootNode;
 
     this.rootNode = rootNode;
-    this.getValue = getValue_unbound;
-    this.setValue = setValue_unbound;
+    getValue = getValue_unbound;
+    setValue = setValue_unbound;
   }
 
   static create(root, path, parsedPath) {
     if (!(root != null &&
         root.runtimeType.toString() == "AnimationObjectGroup")) {
-      return new PropertyBinding(root, path, parsedPath);
+      return PropertyBinding(root, path, parsedPath);
     } else {
-      return new Composite(root, path, parsedPath);
+      return Composite(root, path, parsedPath);
     }
   }
 
@@ -150,7 +150,7 @@ class PropertyBinding {
     var matches = _trackRe.firstMatch(trackName);
 
     if (matches == null) {
-      throw ('PropertyBinding: Cannot parse trackName: ${trackName}');
+      throw ('PropertyBinding: Cannot parse trackName: $trackName');
     }
 
     // var results = {
@@ -186,15 +186,15 @@ class PropertyBinding {
       // is no way to parse 'foo.bar.baz': 'baz' must be a property, but
       // 'bar' could be the objectName, or part of a nodeName (which can
       // include '.' characters).
-      if (_supportedObjectNames.indexOf(objectName) != -1) {
+      if (_supportedObjectNames.contains(objectName)) {
         results["nodeName"] = results["nodeName"]!.substring(0, lastDot);
         results["objectName"] = objectName;
       }
     }
 
     if (results["propertyName"] == null ||
-        results["propertyName"]!.length == 0) {
-      throw ('PropertyBinding: can not parse propertyName from trackName: ${trackName}');
+        results["propertyName"]!.isEmpty) {
+      throw ('PropertyBinding: can not parse propertyName from trackName: $trackName');
     }
 
     return results;
@@ -261,19 +261,19 @@ class PropertyBinding {
     } else if (idx == 3) {
       return getValue_toArray;
     } else {
-      throw ("PropertyBinding.getterByBindingType idx: ${idx} is not support ");
+      throw ("PropertyBinding.getterByBindingType idx: $idx is not support ");
     }
   }
 
   // 0
   getValue_direct(buffer, offset) {
-    var _v = this.targetObject.getProperty(this.propertyName);
+    var _v = targetObject.getProperty(propertyName);
     buffer[offset] = _v;
   }
 
   // 1
   getValue_array(buffer, offset) {
-    var source = this.resolvedProperty;
+    var source = resolvedProperty;
     for (var i = 0, n = source.length; i != n; ++i) {
       buffer[offset++] = source[i];
     }
@@ -281,12 +281,12 @@ class PropertyBinding {
 
   // 2
   getValue_arrayElement(buffer, offset) {
-    buffer[offset] = this.resolvedProperty[this.propertyIndex];
+    buffer[offset] = resolvedProperty[propertyIndex];
   }
 
   // 3
   getValue_toArray(buffer, offset) {
-    this.resolvedProperty.toArray(buffer, offset);
+    resolvedProperty.toArray(buffer, offset);
   }
 
   setterByBindingTypeAndVersioning(bindingType, versioning) {
@@ -351,77 +351,77 @@ class PropertyBinding {
 
   setValue_direct(buffer, offset) {
     // this.targetObject[ this.propertyName ] = buffer[ offset ];
-    this.targetObject.setProperty(this.propertyName, buffer[offset]);
+    targetObject.setProperty(propertyName, buffer[offset]);
   }
 
   setValue_direct_setNeedsUpdate(buffer, offset) {
     // this.targetObject[ this.propertyName ] = buffer[ offset ];
-    this.targetObject.setProperty(this.propertyName, buffer[offset]);
-    this.targetObject.needsUpdate = true;
+    targetObject.setProperty(propertyName, buffer[offset]);
+    targetObject.needsUpdate = true;
   }
 
   setValue_direct_setMatrixWorldNeedsUpdate(buffer, offset) {
     // this.targetObject[ this.propertyName ] = buffer[ offset ];
-    this.targetObject.setProperty(this.propertyName, buffer[offset]);
-    this.targetObject.matrixWorldNeedsUpdate = true;
+    targetObject.setProperty(propertyName, buffer[offset]);
+    targetObject.matrixWorldNeedsUpdate = true;
   }
 
   setValue_array(buffer, offset) {
-    var dest = this.resolvedProperty;
+    var dest = resolvedProperty;
     for (var i = 0, n = dest.length; i != n; ++i) {
       dest[i] = buffer[offset++];
     }
   }
 
   setValue_array_setNeedsUpdate(buffer, offset) {
-    var dest = this.resolvedProperty;
+    var dest = resolvedProperty;
     for (var i = 0, n = dest.length; i != n; ++i) {
       dest[i] = buffer[offset++];
     }
-    this.targetObject.needsUpdate = true;
+    targetObject.needsUpdate = true;
   }
 
   setValue_array_setMatrixWorldNeedsUpdate(buffer, offset) {
-    var dest = this.resolvedProperty;
+    var dest = resolvedProperty;
     for (var i = 0, n = dest.length; i != n; ++i) {
       dest[i] = buffer[offset++];
     }
-    this.targetObject.matrixWorldNeedsUpdate = true;
+    targetObject.matrixWorldNeedsUpdate = true;
   }
 
   setValue_arrayElement(buffer, offset) {
-    this.resolvedProperty[this.propertyIndex] = buffer[offset];
+    resolvedProperty[propertyIndex] = buffer[offset];
   }
 
   setValue_arrayElement_setNeedsUpdate(buffer, offset) {
-    this.resolvedProperty[this.propertyIndex] = buffer[offset];
-    this.targetObject.needsUpdate = true;
+    resolvedProperty[propertyIndex] = buffer[offset];
+    targetObject.needsUpdate = true;
   }
 
   setValue_arrayElement_setMatrixWorldNeedsUpdate(buffer, offset) {
-    this.resolvedProperty[this.propertyIndex] = buffer[offset];
-    this.targetObject.matrixWorldNeedsUpdate = true;
+    resolvedProperty[propertyIndex] = buffer[offset];
+    targetObject.matrixWorldNeedsUpdate = true;
   }
 
   setValue_fromArray(buffer, offset) {
-    this.resolvedProperty.fromArray(buffer, offset);
+    resolvedProperty.fromArray(buffer, offset);
   }
 
   setValue_fromArray_setNeedsUpdate(buffer, offset) {
-    this.resolvedProperty.fromArray(buffer, offset);
-    this.targetObject.needsUpdate = true;
+    resolvedProperty.fromArray(buffer, offset);
+    targetObject.needsUpdate = true;
   }
 
   setValue_fromArray_setMatrixWorldNeedsUpdate(buffer, offset) {
     // print("PropertyBinding this.resolvedProperty: ${this.resolvedProperty} ");
 
-    this.resolvedProperty.fromArray(buffer, offset);
-    this.targetObject.matrixWorldNeedsUpdate = true;
+    resolvedProperty.fromArray(buffer, offset);
+    targetObject.matrixWorldNeedsUpdate = true;
   }
 
   getValue_unbound(targetArray, offset) {
-    this.bind();
-    this.getValue(targetArray, offset);
+    bind();
+    getValue(targetArray, offset);
 
     // Note: This class uses a State pattern on a per-method basis:
     // 'bind' sets 'this.getValue' / 'setValue' and shadows the
@@ -431,13 +431,13 @@ class PropertyBinding {
   }
 
   setValue_unbound(sourceArray, offset) {
-    this.bind();
-    this.setValue(sourceArray, offset);
+    bind();
+    setValue(sourceArray, offset);
   }
 
   // create getter / setter pair for a property in the scene graph
   bind() {
-    var targetObject = this.node;
+    var targetObject = node;
     var parsedPath = this.parsedPath;
 
     var objectName = parsedPath["objectName"];
@@ -446,20 +446,20 @@ class PropertyBinding {
 
     if (targetObject == null) {
       targetObject =
-          PropertyBinding.findNode(this.rootNode, parsedPath["nodeName"]) ||
-              this.rootNode;
+          PropertyBinding.findNode(rootNode, parsedPath["nodeName"]) ||
+              rootNode;
 
-      this.node = targetObject;
+      node = targetObject;
     }
 
     // set fail state so we can just 'return' on error
-    this.getValue = this._getValue_unavailable;
-    this.setValue = this._setValue_unavailable;
+    getValue = _getValue_unavailable;
+    setValue = _setValue_unavailable;
 
     // ensure there is a value node
     if (targetObject == null) {
       print('THREE.PropertyBinding: Trying to update node for track: ' +
-          this.path +
+          path +
           ' but it wasn\'t found.');
       return;
     }
@@ -522,7 +522,7 @@ class PropertyBinding {
       if (objectIndex != null) {
         if (targetObject[objectIndex] == null) {
           print(
-              'THREE.PropertyBinding: Trying to bind to objectIndex of objectName, but is null.${this} ${targetObject}');
+              'THREE.PropertyBinding: Trying to bind to objectIndex of objectName, but is null.${this} $targetObject');
           return;
         }
 
@@ -537,26 +537,26 @@ class PropertyBinding {
       var nodeName = parsedPath["nodeName"];
 
       print(
-          'THREE.PropertyBinding: Trying to update property for track: ${nodeName} ${propertyName}  but it wasn\'t found. ${targetObject}');
+          'THREE.PropertyBinding: Trying to update property for track: $nodeName $propertyName  but it wasn\'t found. $targetObject');
       return;
     }
 
     // determine versioning scheme
-    var versioning = this.Versioning["None"];
+    var versioning = Versioning["None"];
 
     this.targetObject = targetObject;
 
     // if ( targetObject.needsUpdate != null ) { // material
     if (targetObject.runtimeType.toString().endsWith("Material")) {
-      versioning = this.Versioning["NeedsUpdate"];
+      versioning = Versioning["NeedsUpdate"];
     } else if (targetObject.matrixWorldNeedsUpdate != null) {
       // node transform
 
-      versioning = this.Versioning["MatrixWorldNeedsUpdate"];
+      versioning = Versioning["MatrixWorldNeedsUpdate"];
     }
 
     // determine how the property gets bound
-    var bindingType = this.BindingType["Direct"];
+    var bindingType = BindingType["Direct"];
 
     if (propertyIndex != null) {
       // access a sub element of the property array (only primitives are supported right now)
@@ -588,49 +588,48 @@ class PropertyBinding {
         }
       }
 
-      bindingType = this.BindingType["ArrayElement"];
+      bindingType = BindingType["ArrayElement"];
 
-      this.resolvedProperty = nodeProperty;
+      resolvedProperty = nodeProperty;
       this.propertyIndex = propertyIndex;
 
       // } else if ( nodeProperty.fromArray != null && nodeProperty.toArray != null ) {
     } else if (["Color", "Vector3", "Quaternion"]
-            .indexOf(nodeProperty.runtimeType.toString()) >=
-        0) {
+            .contains(nodeProperty.runtimeType.toString())) {
       // must use copy for Object3D.Euler/Quaternion
 
-      bindingType = this.BindingType["HasFromToArray"];
+      bindingType = BindingType["HasFromToArray"];
 
-      this.resolvedProperty = nodeProperty;
+      resolvedProperty = nodeProperty;
     } else if (nodeProperty is List) {
-      bindingType = this.BindingType["EntireArray"];
+      bindingType = BindingType["EntireArray"];
 
-      this.resolvedProperty = nodeProperty;
+      resolvedProperty = nodeProperty;
     } else {
       this.propertyName = propertyName;
     }
 
     // select getter / setter
-    this.getValue = this.getterByBindingType(bindingType!);
-    this.setValue =
-        this.setterByBindingTypeAndVersioning(bindingType, versioning);
+    getValue = getterByBindingType(bindingType!);
+    setValue =
+        setterByBindingTypeAndVersioning(bindingType, versioning);
   }
 
   unbind() {
-    this.node = null;
+    node = null;
 
     // back to the prototype version of getValue / setValue
     // note: avoiding to mutate the shape of 'this' via 'delete'
-    this.getValue = this._getValue_unbound;
-    this.setValue = this._setValue_unbound;
+    getValue = _getValue_unbound;
+    setValue = _setValue_unbound;
   }
 
   _getValue_unbound() {
-    return this.getValue();
+    return getValue();
   }
 
   _setValue_unbound() {
-    return this.setValue();
+    return setValue();
   }
 }
 

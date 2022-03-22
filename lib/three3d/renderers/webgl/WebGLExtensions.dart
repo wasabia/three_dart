@@ -4,7 +4,7 @@ class WebGLExtensions {
   Map<String, dynamic> extensions = {};
   dynamic gl;
 
-  WebGLExtensions(this.gl) {}
+  WebGLExtensions(this.gl);
 
   getExtension(name) {
     return has(name);
@@ -28,7 +28,7 @@ class WebGLExtensions {
     getExtension('EXT_color_buffer_half_float');
   }
 
-  has(name) {
+  has(String name) {
     if (kIsWeb) {
       return hasForWeb(name);
     } else {
@@ -36,7 +36,7 @@ class WebGLExtensions {
     }
   }
 
-  hasForWeb(name) {
+  hasForWeb(String name) {
     if (extensions[name] != null) {
       return extensions[name];
     }
@@ -76,14 +76,14 @@ class WebGLExtensions {
     return extension;
   }
 
-  hasForApp(name) {
-    if (extensions.keys.length == 0) {
+  bool hasForApp(name) {
+    if (extensions.keys.isEmpty) {
       List<String> _extensions = gl.getExtension(name);
 
       extensions = {};
-      _extensions.forEach((element) {
+      for (var element in _extensions) {
         extensions[element] = element;
-      });
+      }
     }
 
     Map<String, dynamic> _names = {
@@ -119,7 +119,7 @@ class WebGLExtensions {
     var extension = getExtension(name);
 
     if (extension == null) {
-      print('THREE.WebGLExtensions.get: ${name} extension not supported.');
+      print('THREE.WebGLExtensions.get: $name extension not supported.');
     }
 
     return extension;

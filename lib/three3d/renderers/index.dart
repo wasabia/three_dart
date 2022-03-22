@@ -1,7 +1,5 @@
 library three_renderers;
 
-import 'dart:typed_data';
-
 import 'package:flutter_gl/native-array/index.dart';
 import 'package:three_dart/three3d/WeakMap.dart';
 import 'package:three_dart/three3d/cameras/index.dart';

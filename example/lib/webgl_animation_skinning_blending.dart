@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
@@ -14,6 +13,7 @@ class webgl_animation_skinning_blending extends StatefulWidget {
   webgl_animation_skinning_blending({Key? key, required this.fileName})
       : super(key: key);
 
+  @override
   createState() => _State();
 }
 
@@ -80,7 +80,7 @@ class _State extends State<webgl_animation_skinning_blending> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -113,7 +113,7 @@ class _State extends State<webgl_animation_skinning_blending> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           clickRender();
         },
@@ -169,7 +169,7 @@ class _State extends State<webgl_animation_skinning_blending> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -193,7 +193,7 @@ class _State extends State<webgl_animation_skinning_blending> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -206,21 +206,21 @@ class _State extends State<webgl_animation_skinning_blending> {
   }
 
   initPage() async {
-    camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+    camera = THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
     camera.position.set(-1, -4, -2);
     camera.lookAt(THREE.Vector3(0, 1, 0));
 
-    clock = new THREE.Clock();
+    clock = THREE.Clock();
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
     scene.background = THREE.Color.fromHex(0xffffff);
-    scene.fog = new THREE.Fog(0xa0a0a0, 10, 50);
+    scene.fog = THREE.Fog(0xa0a0a0, 10, 50);
 
-    var hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
+    var hemiLight = THREE.HemisphereLight(0xffffff, 0x444444);
     hemiLight.position.set(0, -4, -2);
     scene.add(hemiLight);
 
-    var dirLight = new THREE.DirectionalLight(0xffffff);
+    var dirLight = THREE.DirectionalLight(0xffffff);
     dirLight.position.set(-0, -4, -2);
     dirLight.castShadow = true;
     dirLight.shadow!.camera!.top = 2;
@@ -235,7 +235,7 @@ class _State extends State<webgl_animation_skinning_blending> {
 
     // ground
 
-    var loader = new THREE_JSM.GLTFLoader(null);
+    var loader = THREE_JSM.GLTFLoader(null);
     var gltf = await loader.loadAsync('assets/models/gltf/Soldier.gltf');
 
     model = gltf["scene"];
@@ -247,7 +247,7 @@ class _State extends State<webgl_animation_skinning_blending> {
 
     //
 
-    var skeleton = new THREE.SkeletonHelper(model);
+    var skeleton = THREE.SkeletonHelper(model);
     skeleton.visible = true;
     scene.add(skeleton);
 
@@ -259,7 +259,7 @@ class _State extends State<webgl_animation_skinning_blending> {
 
     var animations = gltf["animations"];
 
-    mixer = new THREE.AnimationMixer(model);
+    mixer = THREE.AnimationMixer(model);
 
     var idleAction = mixer.clipAction(animations[0]);
     var walkAction = mixer.clipAction(animations[3]);
@@ -296,7 +296,7 @@ class _State extends State<webgl_animation_skinning_blending> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }

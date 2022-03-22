@@ -608,9 +608,9 @@ class Color {
   }
 
   Color sub(Color color) {
-    r = Math.max(0, r - color.r);
-    g = Math.max(0, g - color.g);
-    b = Math.max(0, b - color.b);
+    r = Math.max(0.0, r - color.r);
+    g = Math.max(0.0, g - color.g);
+    b = Math.max(0.0, b - color.b);
 
     return this;
   }

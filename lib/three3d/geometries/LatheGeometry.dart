@@ -1,6 +1,7 @@
 part of three_geometries;
 
 class LatheGeometry extends BufferGeometry {
+  @override
   String type = 'LatheGeometry';
 
   LatheGeometry(points,

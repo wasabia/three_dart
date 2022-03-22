@@ -257,7 +257,7 @@ class WebGLParameters {
   }
 
   getValue(String name) {
-    Map<String, dynamic> _json = this.toJSON();
+    Map<String, dynamic> _json = toJSON();
 
     return _json[name];
   }

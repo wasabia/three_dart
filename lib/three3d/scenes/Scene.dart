@@ -1,45 +1,42 @@
 part of three_scenes;
 
 class Scene extends Object3D {
+  @override
   String type = 'Scene';
 
+  @override
   bool isScene = true;
 
   FogBase? fog;
 
+  @override
   bool autoUpdate = true; // checked by the renderer
 
-  Scene() : super() {}
+  Scene() : super();
 
   Scene.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON) {}
+      : super.fromJSON(json, rootJSON);
 
   static Scene initJSON(Map<String, dynamic> json) {
     Map<String, dynamic> rootJSON = {};
 
     List<Shape> _shapes = [];
     List<Map<String, dynamic>> _shapesJSON = json["shapes"];
-    if (_shapesJSON != null) {
-      _shapesJSON.forEach((_shape) {
-        _shapes.add(Curve.castJSON(_shape));
-      });
+    for (var _shape in _shapesJSON) {
+      _shapes.add(Curve.castJSON(_shape));
     }
     rootJSON["shapes"] = _shapes;
 
     List<BufferGeometry> _geometries = [];
     List<Map<String, dynamic>> _geometriesJSON = json["geometries"];
-    if (_geometriesJSON != null) {
-      _geometriesJSON.forEach((_geometry) {
-        _geometries.add(BufferGeometry.castJSON(_geometry, rootJSON));
-      });
+    for (var _geometry in _geometriesJSON) {
+      _geometries.add(BufferGeometry.castJSON(_geometry, rootJSON));
     }
 
     List<Material> _materials = [];
     List<Map<String, dynamic>> _materialsJSON = json["materials"];
-    if (_materialsJSON != null) {
-      _materialsJSON.forEach((_material) {
-        _materials.add(Material.fromJSON(_material, {}));
-      });
+    for (var _material in _materialsJSON) {
+      _materials.add(Material.fromJSON(_material, {}));
     }
 
     rootJSON["materials"] = _materials;
@@ -48,6 +45,7 @@ class Scene extends Object3D {
     return Object3D.castJSON(json["object"], rootJSON) as Scene;
   }
 
+  @override
   copy(Object3D source, [bool? recursive]) {
     super.copy(source);
 
@@ -63,10 +61,11 @@ class Scene extends Object3D {
     return this;
   }
 
+  @override
   toJSON({Object3dMeta? meta}) {
     Map<String, dynamic> data = super.toJSON(meta: meta);
 
-    if (this.fog != null) data["object"]["fog"] = this.fog!.toJSON();
+    if (fog != null) data["object"]["fog"] = fog!.toJSON();
 
     return data;
   }

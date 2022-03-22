@@ -7,6 +7,7 @@ class app_debug2 extends StatefulWidget {
 
   app_debug2({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   createState() => webgl_debugState();
 }
 
@@ -25,15 +26,14 @@ class webgl_debugState extends State<app_debug2> {
   init() {
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(divId, (int viewId) {
-      this.element = CanvasElement(width: 300, height: 300)..id = 'canvas-id';
+      element = CanvasElement(width: 300, height: 300)..id = 'canvas-id';
 
       print(" set element ");
       print(" set gl ");
 
-      this.gl = this
-          .element!
+      gl = element!
           .getContext("webgl2", {"alpha": true, "antialias": true});
-      return this.element!;
+      return element!;
     });
   }
 
@@ -48,7 +48,7 @@ class webgl_debugState extends State<app_debug2> {
           child: HtmlElementView(viewType: divId),
         ),
         floatingActionButton: FloatingActionButton(
-          child: Text("render"),
+          child: const Text("render"),
           onPressed: () {
             render();
           },
@@ -58,11 +58,11 @@ class webgl_debugState extends State<app_debug2> {
   }
 
   render() {
-    print(" render gl: ${gl} ");
+    print(" render gl: $gl ");
 
     var _ext = gl.getExtension("EXT_texture_filter_anisotropic");
 
-    print(" _ext: ${_ext} ");
+    print(" _ext: $_ext ");
     print(" _ext: ${_ext.TEXTURE_MAX_ANISOTROPY_EXT} ");
   }
 }

@@ -23,6 +23,7 @@ var mat2array = Float32Array(4);
 // --- Uniform Classes ---
 
 class SingleUniform with WebGLUniformsHelper {
+  @override
   late dynamic id;
   late Function setValue;
   late int activeInfoType;
@@ -62,6 +63,7 @@ class SingleUniform with WebGLUniformsHelper {
 }
 
 class PureArrayUniform with WebGLUniformsHelper {
+  @override
   late dynamic id;
   late Function setValue;
   late int activeInfoType;
@@ -117,6 +119,7 @@ class WebGLUniform {
 }
 
 class StructuredUniform with WebGLUniformsHelper, WebGLUniform {
+  @override
   late dynamic id;
   late int activeInfoType;
 
@@ -391,9 +394,9 @@ class WebGLUniformsHelper {
         cache[2] = v.z;
       }
     } else if (v is Color) {
-      var cacheR = null;
-      var cacheG = null;
-      var cacheB = null;
+      var cacheR;
+      var cacheG;
+      var cacheB;
 
       if (cache.length >= 3) {
         cacheR = cache[0];
@@ -745,7 +748,7 @@ class WebGLUniformsHelper {
       case 0x8dc4: // SAMPLER_2D_ARRAY_SHADOW
         return setValueT2DArray1;
       default:
-        throw ("getSingularSetter id: ${id} name: ${activeInfo.name} size: ${activeInfo.size} type: ${activeInfo.type}  ");
+        throw ("getSingularSetter id: $id name: ${activeInfo.name} size: ${activeInfo.size} type: ${activeInfo.type}  ");
     }
   }
 

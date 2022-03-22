@@ -2,7 +2,7 @@ part of three_geometries;
 
 class TetrahedronGeometry extends PolyhedronGeometry {
   TetrahedronGeometry.create(vertices, indices, radius, detail)
-      : super(vertices, indices, radius, detail) {}
+      : super(vertices, indices, radius, detail);
 
   factory TetrahedronGeometry([radius = 1, detail = 0]) {
     var vertices = [1, 1, 1, -1, -1, 1, -1, 1, -1, 1, -1, -1];
@@ -20,6 +20,6 @@ class TetrahedronGeometry extends PolyhedronGeometry {
   }
 
   static fromJSON(data) {
-    return new TetrahedronGeometry(data.radius, data.detail);
+    return TetrahedronGeometry(data.radius, data.detail);
   }
 }

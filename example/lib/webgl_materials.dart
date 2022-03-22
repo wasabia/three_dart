@@ -3,15 +3,14 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_materials extends StatefulWidget {
   String fileName;
   webgl_materials({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   _MyAppState createState() => _MyAppState();
 }
 
@@ -49,7 +48,7 @@ class _MyAppState extends State<webgl_materials> {
   late THREE.WebGLMultisampleRenderTarget renderTarget;
 
   THREE.AnimationMixer? mixer;
-  THREE.Clock clock = new THREE.Clock();
+  THREE.Clock clock = THREE.Clock();
 
   dynamic? sourceTexture;
 
@@ -78,7 +77,7 @@ class _MyAppState extends State<webgl_materials> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -111,7 +110,7 @@ class _MyAppState extends State<webgl_materials> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           clickRender();
         },
@@ -171,7 +170,7 @@ class _MyAppState extends State<webgl_materials> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -194,7 +193,7 @@ class _MyAppState extends State<webgl_materials> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -207,53 +206,53 @@ class _MyAppState extends State<webgl_materials> {
   }
 
   initPage() async {
-    camera = new THREE.PerspectiveCamera(45, width / height, 1, 2000);
+    camera = THREE.PerspectiveCamera(45, width / height, 1, 2000);
     camera.position.set(0, 200, 800);
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
 
     // Grid
 
-    var helper = new THREE.GridHelper(1000, 40, 0x303030, 0x303030);
+    var helper = THREE.GridHelper(1000, 40, 0x303030, 0x303030);
     helper.position.y = -75;
     scene.add(helper);
 
     // Materials
 
-    var texture = new THREE.DataTexture(generateTexture().data, 256, 256, null,
+    var texture = THREE.DataTexture(generateTexture().data, 256, 256, null,
         null, null, null, null, null, null, null, null);
     texture.needsUpdate = true;
 
     materials.add(
-        new THREE.MeshLambertMaterial({"map": texture, "transparent": true}));
-    materials.add(new THREE.MeshLambertMaterial({"color": 0xdddddd}));
-    materials.add(new THREE.MeshPhongMaterial({
+        THREE.MeshLambertMaterial({"map": texture, "transparent": true}));
+    materials.add(THREE.MeshLambertMaterial({"color": 0xdddddd}));
+    materials.add(THREE.MeshPhongMaterial({
       "color": 0xdddddd,
       "specular": 0x009900,
       "shininess": 30,
       "flatShading": true
     }));
-    materials.add(new THREE.MeshNormalMaterial());
-    materials.add(new THREE.MeshBasicMaterial({
+    materials.add(THREE.MeshNormalMaterial());
+    materials.add(THREE.MeshBasicMaterial({
       "color": 0xffaa00,
       "transparent": true,
       "blending": THREE.AdditiveBlending
     }));
-    materials.add(new THREE.MeshLambertMaterial({"color": 0xdddddd}));
-    materials.add(new THREE.MeshPhongMaterial({
+    materials.add(THREE.MeshLambertMaterial({"color": 0xdddddd}));
+    materials.add(THREE.MeshPhongMaterial({
       "color": 0xdddddd,
       "specular": 0x009900,
       "shininess": 30,
       "map": texture,
       "transparent": true
     }));
-    materials.add(new THREE.MeshNormalMaterial({"flatShading": true}));
+    materials.add(THREE.MeshNormalMaterial({"flatShading": true}));
     materials.add(
-        new THREE.MeshBasicMaterial({"color": 0xffaa00, "wireframe": true}));
-    materials.add(new THREE.MeshDepthMaterial());
-    materials.add(new THREE.MeshLambertMaterial(
+        THREE.MeshBasicMaterial({"color": 0xffaa00, "wireframe": true}));
+    materials.add(THREE.MeshDepthMaterial());
+    materials.add(THREE.MeshLambertMaterial(
         {"color": 0x666666, "emissive": 0xff0000}));
-    materials.add(new THREE.MeshPhongMaterial({
+    materials.add(THREE.MeshPhongMaterial({
       "color": 0x000000,
       "specular": 0x666666,
       "emissive": 0xff0000,
@@ -262,11 +261,11 @@ class _MyAppState extends State<webgl_materials> {
       "transparent": true
     }));
     materials.add(
-        new THREE.MeshBasicMaterial({"map": texture, "transparent": true}));
+        THREE.MeshBasicMaterial({"map": texture, "transparent": true}));
 
     // Spheres geometry
 
-    var geometry = new THREE.SphereGeometry(70, 32, 16);
+    var geometry = THREE.SphereGeometry(70, 32, 16);
 
     for (var i = 0, l = materials.length; i < l; i++) {
       addMesh(geometry, materials[i]);
@@ -274,9 +273,9 @@ class _MyAppState extends State<webgl_materials> {
 
     // Lights
 
-    scene.add(new THREE.AmbientLight(0x111111, 1));
+    scene.add(THREE.AmbientLight(0x111111, 1));
 
-    var directionalLight = new THREE.DirectionalLight(0xffffff, 0.125);
+    var directionalLight = THREE.DirectionalLight(0xffffff, 0.125);
 
     directionalLight.position.x = THREE.Math.random() - 0.5;
     directionalLight.position.y = THREE.Math.random() - 0.5;
@@ -285,11 +284,11 @@ class _MyAppState extends State<webgl_materials> {
 
     scene.add(directionalLight);
 
-    pointLight = new THREE.PointLight(0xffffff, 1);
+    pointLight = THREE.PointLight(0xffffff, 1);
     scene.add(pointLight);
 
-    pointLight.add(new THREE.Mesh(new THREE.SphereGeometry(4, 8, 8),
-        new THREE.MeshBasicMaterial({"color": 0xffffff})));
+    pointLight.add(THREE.Mesh(THREE.SphereGeometry(4, 8, 8),
+        THREE.MeshBasicMaterial({"color": 0xffffff})));
 
     //
 
@@ -319,7 +318,7 @@ class _MyAppState extends State<webgl_materials> {
   }
 
   addMesh(geometry, material) {
-    var mesh = new THREE.Mesh(geometry, material);
+    var mesh = THREE.Mesh(geometry, material);
 
     mesh.position.x = (objects.length % 4) * 200 - 400;
     mesh.position.z = THREE.Math.floor(objects.length / 4) * 200 - 200;
@@ -334,7 +333,7 @@ class _MyAppState extends State<webgl_materials> {
   }
 
   animate() {
-    print("before animate render mounted: ${mounted} loaded: ${loaded}");
+    print("before animate render mounted: $mounted loaded: $loaded");
 
     if (!mounted || disposed) {
       return;
@@ -376,7 +375,7 @@ class _MyAppState extends State<webgl_materials> {
     render();
 
     // 30FPS
-    Future.delayed(Duration(milliseconds: 33), () {
+    Future.delayed(const Duration(milliseconds: 33), () {
       animate();
     });
   }

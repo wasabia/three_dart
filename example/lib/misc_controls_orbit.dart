@@ -1,13 +1,10 @@
 import 'dart:async';
 
-import 'dart:typed_data';
 
-import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 
 import 'package:three_dart/three_dart.dart' as THREE;
@@ -17,6 +14,7 @@ class misc_controls_orbit extends StatefulWidget {
   String fileName;
   misc_controls_orbit({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   _MyAppState createState() => _MyAppState();
 }
 
@@ -75,7 +73,7 @@ class _MyAppState extends State<misc_controls_orbit> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -108,7 +106,7 @@ class _MyAppState extends State<misc_controls_orbit> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           render();
         },
@@ -171,7 +169,7 @@ class _MyAppState extends State<misc_controls_orbit> {
     // print(" --------------pixels............. ");
     // print(pixels);
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -211,21 +209,21 @@ class _MyAppState extends State<misc_controls_orbit> {
   }
 
   initPage() {
-    var ASPECT_RATIO = width / height;
+    var ASPECTRATIO = width / height;
 
     var WIDTH = (width / AMOUNT) * dpr;
     var HEIGHT = (height / AMOUNT) * dpr;
 
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xcccccc);
-    scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
+    scene = THREE.Scene();
+    scene.background = THREE.Color(0xcccccc);
+    scene.fog = THREE.FogExp2(0xcccccc, 0.002);
 
-    camera = new THREE.PerspectiveCamera(60, width / height, 1, 1000);
+    camera = THREE.PerspectiveCamera(60, width / height, 1, 1000);
     camera.position.set(400, 200, 0);
 
     // controls
 
-    controls = new THREE_JSM.OrbitControls(camera, _globalKey);
+    controls = THREE_JSM.OrbitControls(camera, _globalKey);
     // controls.listenToKeyEvents( window );
 
     //controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
@@ -243,12 +241,12 @@ class _MyAppState extends State<misc_controls_orbit> {
 
     // world
 
-    var geometry = new THREE.CylinderGeometry(0, 10, 30, 4, 1);
+    var geometry = THREE.CylinderGeometry(0, 10, 30, 4, 1);
     var material =
-        new THREE.MeshPhongMaterial({"color": 0xffffff, "flatShading": true});
+        THREE.MeshPhongMaterial({"color": 0xffffff, "flatShading": true});
 
     for (var i = 0; i < 500; i++) {
-      var mesh = new THREE.Mesh(geometry, material);
+      var mesh = THREE.Mesh(geometry, material);
       mesh.position.x = THREE.Math.random() * 1600 - 800;
       mesh.position.y = 0;
       mesh.position.z = THREE.Math.random() * 1600 - 800;
@@ -259,15 +257,15 @@ class _MyAppState extends State<misc_controls_orbit> {
 
     // lights
 
-    var dirLight1 = new THREE.DirectionalLight(0xffffff);
+    var dirLight1 = THREE.DirectionalLight(0xffffff);
     dirLight1.position.set(1, 1, 1);
     scene.add(dirLight1);
 
-    var dirLight2 = new THREE.DirectionalLight(0x002288);
+    var dirLight2 = THREE.DirectionalLight(0x002288);
     dirLight2.position.set(-1, -1, -1);
     scene.add(dirLight2);
 
-    var ambientLight = new THREE.AmbientLight(0x222222);
+    var ambientLight = THREE.AmbientLight(0x222222);
     scene.add(ambientLight);
 
     animate();
@@ -280,7 +278,7 @@ class _MyAppState extends State<misc_controls_orbit> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }

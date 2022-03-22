@@ -15,15 +15,18 @@ class WebGLIndexedBufferRenderer extends BaseWebGLBufferRenderer {
     isWebGL2 = capabilities.isWebGL2;
   }
 
+  @override
   setMode(value) {
     mode = value;
   }
 
+  @override
   setIndex(value) {
     type = value["type"];
     bytesPerElement = value["bytesPerElement"];
   }
 
+  @override
   void render(start, count) {
 
     gl.drawElements(mode, count, type, start * bytesPerElement);
@@ -31,6 +34,7 @@ class WebGLIndexedBufferRenderer extends BaseWebGLBufferRenderer {
     info.update(count, mode, 1);
   }
 
+  @override
   renderInstances(start, count, primcount) {
 
     if (primcount == 0) return;

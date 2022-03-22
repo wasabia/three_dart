@@ -4,11 +4,14 @@ part of three_lights;
 
 class AmbientLight extends Light {
   bool isAmbientLight = true;
-  String type = 'AmbientLight';
 
-  AmbientLight(color, [intensity]) : super(color, intensity) {}
+  AmbientLight(color, [intensity]) : super(color, intensity) {
+    type = 'AmbientLight';
+  }
 
   AmbientLight.fromJSON(
       Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON) {}
+      : super.fromJSON(json, rootJSON) {
+    type = 'AmbientLight';
+  }
 }

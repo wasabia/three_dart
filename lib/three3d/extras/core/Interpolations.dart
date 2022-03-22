@@ -1,9 +1,7 @@
 part of three_extra;
 
-/**
- * Bezier Curves formulas obtained from
- * http://en.wikipedia.org/wiki/Bézier_curve
- */
+/// Bezier Curves formulas obtained from
+/// http://en.wikipedia.org/wiki/Bézier_curve
 
 CatmullRom(t, p0, p1, p2, p3) {
   var v0 = (p2 - p0) * 0.5;

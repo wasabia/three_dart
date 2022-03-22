@@ -1,8 +1,8 @@
 part of three_camera;
 
-var _eyeRight = new Matrix4();
-var _eyeLeft = new Matrix4();
-var _projectionMatrix = /*@__PURE__*/ new Matrix4();
+var _eyeRight = Matrix4();
+var _eyeLeft = Matrix4();
+var _projectionMatrix = /*@__PURE__*/ Matrix4();
 
 class StereoCamera {
   String type = 'StereoCamera';
@@ -14,37 +14,37 @@ class StereoCamera {
   late PerspectiveCamera cameraL;
   late PerspectiveCamera cameraR;
 
-  Map<String, dynamic> _cache = {};
+  final Map<String, dynamic> _cache = {};
 
   StereoCamera() {
-    cameraL = new PerspectiveCamera();
-    this.cameraL.layers.enable(1);
-    this.cameraL.matrixAutoUpdate = false;
+    cameraL = PerspectiveCamera();
+    cameraL.layers.enable(1);
+    cameraL.matrixAutoUpdate = false;
 
-    cameraR = new PerspectiveCamera();
-    this.cameraR.layers.enable(2);
-    this.cameraR.matrixAutoUpdate = false;
+    cameraR = PerspectiveCamera();
+    cameraR.layers.enable(2);
+    cameraR.matrixAutoUpdate = false;
   }
 
-  update(camera) {
-    var cache = this._cache;
+  void update(camera) {
+    var cache = _cache;
 
     var needsUpdate = cache["focus"] != camera.focus ||
         cache["fov"] != camera.fov ||
-        cache["aspect"] != camera.aspect * this.aspect ||
+        cache["aspect"] != camera.aspect * aspect ||
         cache["near"] != camera.near ||
         cache["far"] != camera.far ||
         cache["zoom"] != camera.zoom ||
-        cache["eyeSep"] != this.eyeSep;
+        cache["eyeSep"] != eyeSep;
 
     if (needsUpdate) {
       cache["focus"] = camera.focus;
       cache["fov"] = camera.fov;
-      cache["aspect"] = camera.aspect * this.aspect;
+      cache["aspect"] = camera.aspect * aspect;
       cache["near"] = camera.near;
       cache["far"] = camera.far;
       cache["zoom"] = camera.zoom;
-      cache["eyeSep"] = this.eyeSep;
+      cache["eyeSep"] = eyeSep;
 
       // Off-axis stereoscopic effect based on
       // http://paulbourke.net/stereographics/stereorender/
@@ -70,7 +70,7 @@ class StereoCamera {
       _projectionMatrix.elements[0] = 2 * cache["near"] / (xmax - xmin);
       _projectionMatrix.elements[8] = (xmax + xmin) / (xmax - xmin);
 
-      this.cameraL.projectionMatrix.copy(_projectionMatrix);
+      cameraL.projectionMatrix.copy(_projectionMatrix);
 
       // for right eye
 
@@ -80,10 +80,10 @@ class StereoCamera {
       _projectionMatrix.elements[0] = 2 * cache["near"] / (xmax - xmin);
       _projectionMatrix.elements[8] = (xmax + xmin) / (xmax - xmin);
 
-      this.cameraR.projectionMatrix.copy(_projectionMatrix);
+      cameraR.projectionMatrix.copy(_projectionMatrix);
     }
 
-    this.cameraL.matrixWorld.copy(camera.matrixWorld).multiply(_eyeLeft);
-    this.cameraR.matrixWorld.copy(camera.matrixWorld).multiply(_eyeRight);
+    cameraL.matrixWorld.copy(camera.matrixWorld).multiply(_eyeLeft);
+    cameraR.matrixWorld.copy(camera.matrixWorld).multiply(_eyeRight);
   }
 }

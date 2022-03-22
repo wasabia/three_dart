@@ -3,8 +3,9 @@ part of three_loaders;
 var loading = {};
 
 class FileLoader extends Loader {
-  FileLoader(manager) : super(manager) {}
+  FileLoader(manager) : super(manager);
 
+  @override
   loadAsync(url) async {
     var completer = Completer();
 
@@ -15,12 +16,13 @@ class FileLoader extends Loader {
     return completer.future;
   }
 
+  @override
   load(url, onLoad, [onProgress, onError]) async {
-    if (url == null) url = '';
+    url ??= '';
 
-    if (this.path != null) url = this.path + url;
+ url = path + url;
 
-    url = this.manager.resolveURL(url);
+    url = manager.resolveURL(url);
 
     var scope = this;
 
@@ -29,7 +31,7 @@ class FileLoader extends Loader {
     if (cached != null) {
       scope.manager.itemStart(url);
 
-      if (onLoad != null) onLoad(cached);
+ onLoad(cached);
       scope.manager.itemEnd(url);
 
       return cached;
@@ -73,7 +75,7 @@ class FileLoader extends Loader {
         case 'blob':
           if (responseType == 'blob') {
             // response = new Blob( [ view.buffer ], { type: mimeType } );
-            throw (" FileLoader responseType: ${responseType} need support .... ");
+            throw (" FileLoader responseType: $responseType need support .... ");
           } else {
             response = base64Data;
           }
@@ -85,7 +87,7 @@ class FileLoader extends Loader {
           // var parser = new DOMParser();
           // response = parser.parseFromString( data, mimeType );
 
-          throw ("FileLoader responseType: ${responseType} is not support ....  ");
+          throw ("FileLoader responseType: $responseType is not support ....  ");
 
           break;
 
@@ -146,7 +148,7 @@ class FileLoader extends Loader {
     dynamic respData;
     if (!kIsWeb && !url.startsWith("http")) {
       if (url.startsWith("assets")) {
-        if (this.responseType == "text") {
+        if (responseType == "text") {
           respData = await rootBundle.loadString(url);
         } else {
           ByteData resp = await rootBundle.load(url);
@@ -155,7 +157,7 @@ class FileLoader extends Loader {
       } else {
         var file = File(url);
 
-        if (this.responseType == "text") {
+        if (responseType == "text") {
           respData = await file.readAsString();
         } else {
           respData = await file.readAsBytes();
@@ -179,7 +181,7 @@ class FileLoader extends Loader {
         scope.manager.itemEnd(url);
       }
 
-      if (this.responseType == "text") {
+      if (responseType == "text") {
         respData = response.body;
       } else {
         respData = response.bodyBytes;
@@ -317,12 +319,12 @@ class FileLoader extends Loader {
   }
 
   setResponseType(value) {
-    this.responseType = value;
+    responseType = value;
     return this;
   }
 
   setMimeType(value) {
-    this.mimeType = value;
+    mimeType = value;
     return this;
   }
 }

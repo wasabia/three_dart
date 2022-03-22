@@ -142,7 +142,7 @@ class Sprite extends Object3D {
     super.copy(source);
 
     if (source is Sprite) {
-      if (source.center != null) center.copy(source.center);
+ center.copy(source.center);
       material = source.material;
     }
     return this;

@@ -14,7 +14,7 @@ class SvgPath {
     double y = 0;
     double nx = 0;
     double ny = 0;
-    var firstX = null, firstY = null;
+    double firstX = 0, firstY = 0;
     double x1 = 0,
         x2 = 0,
         y1 = 0,
@@ -29,7 +29,7 @@ class SvgPath {
 
     var len = svgPathStr.length;
 
-    Function eatNum = () {
+    double eatNum() {
       int sidx;
       double c = 0.0;
       bool isFloat = false;
@@ -70,15 +70,15 @@ class SvgPath {
 
         // print("s: ${s}  sidx: ${sidx} idx: ${idx} c: ${c}");
 
-        return num.parse(s);
+        return double.parse(s);
       }
 
       s = svgPathStr.substring(sidx);
       // return isFloat ? num.parse( s ) : int.parse( s );
-      return num.parse(s);
-    };
+      return double.parse(s);
+    }
 
-    Function nextIsNum = () {
+    bool nextIsNum() {
       var c;
 
       // do permanently eat any delims...
@@ -93,9 +93,9 @@ class SvgPath {
 
       c = svgPathStr.codeUnitAt(idx);
       return (c == MINUS || (DIGIT_0 <= c && c <= DIGIT_9));
-    };
+    }
 
-    var canRepeat;
+    bool canRepeat;
     activeCmd = svgPathStr[0];
 
     while (idx <= len) {
@@ -229,8 +229,9 @@ class SvgPath {
           sf = eatNum();
           nx = eatNum();
           ny = eatNum();
-          if (rx != ry)
-            print('Forcing elliptical arc to be a circular one: ${rx} ${ry}');
+          if (rx != ry) {
+            print('Forcing elliptical arc to be a circular one: $rx $ry');
+          }
 
           // SVG implementation notes does all the math for us! woo!
           // http://www.w3.org/TR/SVG/implnote.html#ArcImplementationNotes
@@ -286,7 +287,7 @@ class SvgPath {
           break;
 
         default:
-          throw ("Wrong path command: ${activeCmd}");
+          throw ("Wrong path command: $activeCmd");
       }
 
       // just reissue the command

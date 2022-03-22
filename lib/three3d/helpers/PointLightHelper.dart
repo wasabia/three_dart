@@ -1,15 +1,16 @@
 part of three_helpers;
 
 class PointLightHelper extends Mesh {
+  @override
   String type = "PointLightHelper";
   late PointLight light;
   Color? color;
 
-  PointLightHelper.create(geometry, material) : super(geometry, material) {}
+  PointLightHelper.create(geometry, material) : super(geometry, material);
 
   factory PointLightHelper(light, sphereSize, Color color) {
     var geometry = SphereGeometry(sphereSize, 4, 2);
-    var material = new MeshBasicMaterial(
+    var material = MeshBasicMaterial(
         {"wireframe": true, "fog": false, "toneMapped": false});
 
     var _plh = PointLightHelper.create(geometry, material);
@@ -48,16 +49,17 @@ class PointLightHelper extends Mesh {
 	*/
   }
 
+  @override
   dispose() {
-    this.geometry!.dispose();
-    this.material.dispose();
+    geometry!.dispose();
+    material.dispose();
   }
 
   update() {
-    if (this.color != null) {
-      this.material.color.set(this.color);
+    if (color != null) {
+      material.color.set(color);
     } else {
-      this.material.color.copy(this.light.color);
+      material.color.copy(light.color);
     }
 
     /*

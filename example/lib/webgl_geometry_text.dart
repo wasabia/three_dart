@@ -1,13 +1,10 @@
 import 'dart:async';
 
-import 'dart:typed_data';
 
-import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 
 import 'package:three_dart/three_dart.dart' as THREE;
@@ -17,6 +14,7 @@ class webgl_geometry_text extends StatefulWidget {
   String fileName;
   webgl_geometry_text({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   _MyAppState createState() => _MyAppState();
 }
 
@@ -83,7 +81,7 @@ class _MyAppState extends State<webgl_geometry_text> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       await initScene();
@@ -116,7 +114,7 @@ class _MyAppState extends State<webgl_geometry_text> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           render();
         },
@@ -171,7 +169,7 @@ class _MyAppState extends State<webgl_geometry_text> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -212,24 +210,24 @@ class _MyAppState extends State<webgl_geometry_text> {
   initPage() async {
     // CAMERA
 
-    camera = new THREE.PerspectiveCamera(30, width / height, 1, 1500);
+    camera = THREE.PerspectiveCamera(30, width / height, 1, 1500);
     camera.position.set(0, 400, 700);
 
-    var cameraTarget = new THREE.Vector3(0, 50, 0);
+    var cameraTarget = THREE.Vector3(0, 50, 0);
     camera.lookAt(cameraTarget);
 
     // SCENE
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
     scene.background = THREE.Color.fromHex(0x000000);
-    scene.fog = new THREE.Fog(THREE.Color.fromHex(0x000000), 250, 1400);
+    scene.fog = THREE.Fog(THREE.Color.fromHex(0x000000), 250, 1400);
     // LIGHTS
 
-    var dirLight = new THREE.DirectionalLight(0xffffff, 0.125);
+    var dirLight = THREE.DirectionalLight(0xffffff, 0.125);
     dirLight.position.set(0, 0, 1).normalize();
     scene.add(dirLight);
 
-    var pointLight = new THREE.PointLight(0xffffff, 1.5);
+    var pointLight = THREE.PointLight(0xffffff, 1.5);
     pointLight.position.set(0, 100, 90);
     scene.add(pointLight);
 
@@ -239,12 +237,12 @@ class _MyAppState extends State<webgl_geometry_text> {
     // hex = decimalToHex( pointLight.color!.getHex() );
 
     materials = [
-      new THREE.MeshPhongMaterial(
+      THREE.MeshPhongMaterial(
           {"color": 0xffffff, "flatShading": true}), // front
-      new THREE.MeshPhongMaterial({"color": 0xffffff}) // side
+      THREE.MeshPhongMaterial({"color": 0xffffff}) // side
     ];
 
-    group = new THREE.Group();
+    group = THREE.Group();
 
     // change size position fit mobile
     group.position.y = 50;
@@ -256,9 +254,9 @@ class _MyAppState extends State<webgl_geometry_text> {
 
     createText(font);
 
-    var plane = new THREE.Mesh(
-        new THREE.PlaneGeometry(10000, 10000),
-        new THREE.MeshBasicMaterial(
+    var plane = THREE.Mesh(
+        THREE.PlaneGeometry(10000, 10000),
+        THREE.MeshBasicMaterial(
             {"color": 0xffffff, "opacity": 0.5, "transparent": true}));
     plane.position.y = 100;
     plane.rotation.x = -THREE.Math.PI / 2;
@@ -268,14 +266,14 @@ class _MyAppState extends State<webgl_geometry_text> {
   }
 
   loadFont() async {
-    var loader = new THREE_JSM.TYPRLoader(null);
+    var loader = THREE_JSM.TYPRLoader(null);
     var fontJson = await loader.loadAsync("assets/pingfang.ttf");
 
     return THREE.TYPRFont(fontJson);
   }
 
   createText(font) {
-    var textGeo = new THREE.TextGeometry(text, {
+    var textGeo = THREE.TextGeometry(text, {
       "font": font,
       "size": size,
       "height": fontHeight,
@@ -290,7 +288,7 @@ class _MyAppState extends State<webgl_geometry_text> {
     var centerOffset =
         -0.5 * (textGeo.boundingBox!.max.x - textGeo.boundingBox!.min.x);
 
-    var textMesh1 = new THREE.Mesh(textGeo, materials);
+    var textMesh1 = THREE.Mesh(textGeo, materials);
 
     textMesh1.position.x = centerOffset;
     textMesh1.position.y = hover;
@@ -302,7 +300,7 @@ class _MyAppState extends State<webgl_geometry_text> {
     group.add(textMesh1);
 
     if (mirror) {
-      var textMesh2 = new THREE.Mesh(textGeo, materials);
+      var textMesh2 = THREE.Mesh(textGeo, materials);
 
       textMesh2.position.x = centerOffset;
       textMesh2.position.y = -hover;

@@ -1,8 +1,9 @@
 part of three_loaders;
 
 class BufferGeometryLoader extends Loader {
-  BufferGeometryLoader(manager) : super(manager) {}
+  BufferGeometryLoader(manager) : super(manager);
 
+  @override
   loadAsync(url) async {
     var completer = Completer();
 
@@ -13,6 +14,7 @@ class BufferGeometryLoader extends Loader {
     return completer.future;
   }
 
+  @override
   load(url, onLoad, [onProgress, onError]) {
     var scope = this;
 
@@ -35,6 +37,7 @@ class BufferGeometryLoader extends Loader {
     }, onProgress, onError);
   }
 
+  @override
   parse(json, [String? path, Function? onLoad, Function? onError]) {
     var interleavedBufferMap = {};
     var arrayBufferMap = {};
@@ -67,7 +70,7 @@ class BufferGeometryLoader extends Loader {
       interleavedBufferMap[uuid] = ib;
 
       return ib;
-    };
+    }
 
     var geometry = json["isInstancedBufferGeometry"] == true
         ? InstancedBufferGeometry()
@@ -84,7 +87,7 @@ class BufferGeometryLoader extends Loader {
 
     for (var key in attributes.keys) {
       var attribute = attributes[key];
-      var bufferAttribute;
+      BaseBufferAttribute bufferAttribute;
 
       if (attribute["isInterleavedBufferAttribute"] == true) {
         var interleavedBuffer =
@@ -101,19 +104,25 @@ class BufferGeometryLoader extends Loader {
           bufferAttribute = InstancedBufferAttribute(
               typedArray, attribute["itemSize"], attribute["normalized"]);
         } else {
-          bufferAttribute = getTypedAttribute(typedArray,
-              attribute["itemSize"], attribute["normalized"] == true);
+          bufferAttribute = getTypedAttribute(typedArray, attribute["itemSize"],
+              attribute["normalized"] == true);
         }
       }
 
       if (attribute["name"] != null) bufferAttribute.name = attribute["name"];
       if (attribute["usage"] != null) {
-        bufferAttribute.setUsage(attribute["usage"]);
+        if (bufferAttribute is InstancedBufferAttribute) {
+          bufferAttribute.setUsage(attribute["usage"]);
+        }
       }
 
       if (attribute["updateRange"] != null) {
-        bufferAttribute.updateRange.offset = attribute["updateRange"]["offset"];
-        bufferAttribute.updateRange.count = attribute["updateRange"]["count"];
+        if (bufferAttribute is InterleavedBufferAttribute) {
+          bufferAttribute.updateRange?['offset'] =
+              attribute["updateRange"]["offset"];
+          bufferAttribute.updateRange?['count'] =
+              attribute["updateRange"]["count"];
+        }
       }
 
       geometry.setAttribute(key, bufferAttribute);
@@ -125,11 +134,11 @@ class BufferGeometryLoader extends Loader {
       for (var key in morphAttributes.keys) {
         var attributeArray = morphAttributes[key];
 
-        List<BufferAttribute> array = [];
+        final array = <BufferAttribute>[];
 
         for (var i = 0, il = attributeArray.length; i < il; i++) {
           var attribute = attributeArray[i];
-          var bufferAttribute;
+          BufferAttribute bufferAttribute;
 
           if (attribute.isInterleavedBufferAttribute) {
             var interleavedBuffer =
@@ -164,8 +173,8 @@ class BufferGeometryLoader extends Loader {
       for (var i = 0, n = groups.length; i != n; ++i) {
         var group = groups[i];
 
-        geometry.addGroup(group["start"], group["count"],
-            group["materialIndex"]);
+        geometry.addGroup(
+            group["start"], group["count"], group["materialIndex"]);
       }
     }
 

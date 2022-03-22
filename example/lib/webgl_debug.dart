@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
@@ -16,6 +15,7 @@ class webgl_debug extends StatefulWidget {
 
   webgl_debug({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   createState() => webgl_debugState();
 }
 
@@ -34,7 +34,7 @@ class webgl_debugState extends State<webgl_debug> {
   late THREE.Mesh mesh;
 
   late THREE.AnimationMixer mixer;
-  THREE.Clock clock = new THREE.Clock();
+  THREE.Clock clock = THREE.Clock();
   THREE_JSM.OrbitControls? controls;
 
   double dpr = 1.0;
@@ -82,7 +82,7 @@ class webgl_debugState extends State<webgl_debug> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -115,7 +115,7 @@ class webgl_debugState extends State<webgl_debug> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           clickRender();
         },
@@ -173,7 +173,7 @@ class webgl_debugState extends State<webgl_debug> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -196,7 +196,7 @@ class webgl_debugState extends State<webgl_debug> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -209,14 +209,14 @@ class webgl_debugState extends State<webgl_debug> {
   }
 
   initPage() async {
-    camera = new THREE.PerspectiveCamera(40, 1, 1, 100);
+    camera = THREE.PerspectiveCamera(40, 1, 1, 100);
     camera.position.set(0, 0, 100);
 
     // scene
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
 
-    var ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
+    var ambientLight = THREE.AmbientLight(0xcccccc, 0.4);
     scene.add(ambientLight);
 
     scene.add(camera);
@@ -231,17 +231,17 @@ class webgl_debugState extends State<webgl_debug> {
 
     print(result);
 
-    print(" load gltf success result: ${result}  ");
+    print(" load gltf success result: $result  ");
 
     model = result["scene"];
 
-    print(" load gltf success model: ${model}  ");
+    print(" load gltf success model: $model  ");
 
     // model.position.set( 1, 1, 0 );
     // model.scale.set( 0.01, 0.01, 0.01 );
     scene.add(model);
 
-    mixer = new THREE.AnimationMixer(model);
+    mixer = THREE.AnimationMixer(model);
     mixer.clipAction(result["animations"][0], null, null).play();
 
     // console.log(model);
@@ -271,7 +271,7 @@ class webgl_debugState extends State<webgl_debug> {
 
     var delta = clock.getDelta();
 
-    print(" delat: ${delta} ");
+    print(" delat: $delta ");
 
     mixer.update(delta);
 
@@ -279,7 +279,7 @@ class webgl_debugState extends State<webgl_debug> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }

@@ -3,28 +3,29 @@ part of three_extra;
 class Shape extends Path {
   late String uuid;
   late List<Path> holes;
+  @override
   String type = "Shape";
 
   Shape(points) : super(points) {
-    this.uuid = MathUtils.generateUUID();
-    this.holes = [];
+    uuid = MathUtils.generateUUID();
+    holes = [];
   }
 
   Shape.fromJSON(Map<String, dynamic> json) : super.fromJSON(json) {
-    this.uuid = json["uuid"];
-    this.holes = [];
+    uuid = json["uuid"];
+    holes = [];
 
     for (var i = 0, l = json["holes"].length; i < l; i++) {
       var hole = json["holes"][i];
-      this.holes.add(new Path.fromJSON(hole));
+      holes.add(Path.fromJSON(hole));
     }
   }
 
   getPointsHoles(divisions) {
-    var holesPts = List<dynamic>.filled(this.holes.length, null);
+    var holesPts = List<dynamic>.filled(holes.length, null);
 
-    for (var i = 0, l = this.holes.length; i < l; i++) {
-      holesPts[i] = this.holes[i].getPoints(divisions);
+    for (var i = 0, l = holes.length; i < l; i++) {
+      holesPts[i] = holes[i].getPoints(divisions);
     }
 
     return holesPts;
@@ -34,48 +35,51 @@ class Shape extends Path {
 
   Map<String, dynamic> extractPoints(divisions) {
     return {
-      "shape": this.getPoints(divisions),
-      "holes": this.getPointsHoles(divisions)
+      "shape": getPoints(divisions),
+      "holes": getPointsHoles(divisions)
     };
   }
 
+  @override
   copy(source) {
     super.copy(source);
 
-    this.holes = [];
+    holes = [];
 
     for (var i = 0, l = source.holes.length; i < l; i++) {
       var hole = source.holes[i];
 
-      this.holes.add(hole.clone());
+      holes.add(hole.clone());
     }
 
     return this;
   }
 
+  @override
   toJSON({Object3dMeta? meta}) {
     var data = super.toJSON();
 
-    data["uuid"] = this.uuid;
+    data["uuid"] = uuid;
     data["holes"] = [];
 
-    for (var i = 0, l = this.holes.length; i < l; i++) {
-      var hole = this.holes[i];
+    for (var i = 0, l = holes.length; i < l; i++) {
+      var hole = holes[i];
       data["holes"].add(hole.toJSON());
     }
 
     return data;
   }
 
+  @override
   fromJSON(json) {
     super.fromJSON(json);
 
-    this.uuid = json.uuid;
-    this.holes = [];
+    uuid = json.uuid;
+    holes = [];
 
     for (var i = 0, l = json.holes.length; i < l; i++) {
       var hole = json.holes[i];
-      this.holes.add(new Path(null).fromJSON(hole));
+      holes.add(Path(null).fromJSON(hole));
     }
 
     return this;

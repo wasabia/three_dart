@@ -10,14 +10,14 @@ class WebGLClipping {
   bool localClippingEnabled = false;
   bool renderingShadows = false;
 
-  var globalState = null;
+  var globalState;
 
   Map<String, dynamic> uniform = {"value": null, "needsUpdate": false};
 
   num numPlanes = 0;
   num numIntersection = 0;
 
-  WebGLClipping(this.properties) {}
+  WebGLClipping(this.properties);
 
   init(List<Plane> planes, bool enableLocalClipping, Camera camera) {
     var enabled = planes.isNotEmpty ||
@@ -80,8 +80,8 @@ class WebGLClipping {
       }
 
       materialProperties["clippingState"] = dstArray;
-      this.numIntersection = clipIntersection ? this.numPlanes : 0;
-      this.numPlanes += nGlobal;
+      numIntersection = clipIntersection ? numPlanes : 0;
+      numPlanes += nGlobal;
     }
   }
 
@@ -91,13 +91,13 @@ class WebGLClipping {
       uniform["needsUpdate"] = numGlobalPlanes > 0;
     }
 
-    this.numPlanes = numGlobalPlanes;
-    this.numIntersection = 0;
+    numPlanes = numGlobalPlanes;
+    numIntersection = 0;
   }
 
   projectPlanes(planes, camera, dstOffset, skipTransform) {
     var nPlanes = planes != null ? planes.length : 0;
-    var dstArray = null;
+    var dstArray;
 
     if (nPlanes != 0) {
       dstArray = uniform["value"];
@@ -124,8 +124,8 @@ class WebGLClipping {
       uniform["needsUpdate"] = true;
     }
 
-    this.numPlanes = nPlanes;
-    this.numIntersection = 0;
+    numPlanes = nPlanes;
+    numIntersection = 0;
 
     return dstArray;
   }
