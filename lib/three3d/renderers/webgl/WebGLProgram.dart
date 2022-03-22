@@ -35,7 +35,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     init();
   }
 
-  init() {
+  void init() {
     var defines = parameters.defines;
 
     vertexShader = parameters.vertexShader;
@@ -477,7 +477,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
   // free resource
 
-  destroy() {
+  void destroy() {
     bindingStates.releaseStatesOfProgram(this);
 
     gl.deleteProgram(program);

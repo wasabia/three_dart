@@ -458,7 +458,7 @@ class SVGLoaderPointsToStroke {
 
     var angle = Math.PI;
     var dot = tempV2_1.dot(tempV2_2);
-    if (Math.abs(dot) < 1) angle = Math.abs(Math.acos(dot));
+    if (Math.abs(dot) < 1) angle = Math.abs(Math.acos(dot)).toDouble();
 
     angle /= arcDivisions;
 

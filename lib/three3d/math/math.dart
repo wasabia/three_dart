@@ -45,7 +45,7 @@ class Math {
     return math.sqrt(x);
   }
 
-  static abs(num x) {
+  static num abs(num x) {
     return x.abs();
   }
 
