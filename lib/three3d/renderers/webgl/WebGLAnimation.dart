@@ -1,12 +1,12 @@
 part of three_webgl;
 
 class WebGLAnimation {
-  var context = null;
+  var context;
   var isAnimating = false;
-  var animationLoop = null;
-  var requestId = null;
+  var animationLoop;
+  var requestId;
 
-  WebGLAnimation() {}
+  WebGLAnimation();
 
   onAnimationFrame(time, frame) {
     animationLoop(time, frame);

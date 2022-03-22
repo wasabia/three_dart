@@ -52,9 +52,7 @@ class Skeleton {
     for (var i = 0, il = bones.length; i < il; i++) {
       var inverse = Matrix4();
 
-      if (bones[i] != null) {
-        inverse.copy(bones[i].matrixWorld).invert();
-      }
+      inverse.copy(bones[i].matrixWorld).invert();
       boneInverses.add(inverse);
     }
   }
@@ -65,9 +63,7 @@ class Skeleton {
     for (var i = 0, il = bones.length; i < il; i++) {
       var bone = bones[i];
 
-      if (bone != null) {
-        bone.matrixWorld.copy(boneInverses[i]).invert();
-      }
+      bone.matrixWorld.copy(boneInverses[i]).invert();
     }
 
     // compute the local matrices, positions, rotations and scales
@@ -75,16 +71,14 @@ class Skeleton {
     for (var i = 0, il = bones.length; i < il; i++) {
       var bone = bones[i];
 
-      if (bone != null) {
-        if (bone.parent != null && bone.parent is Bone) {
-          bone.matrix.copy(bone.parent!.matrixWorld).invert();
-          bone.matrix.multiply(bone.matrixWorld);
-        } else {
-          bone.matrix.copy(bone.matrixWorld);
-        }
-
-        bone.matrix.decompose(bone.position, bone.quaternion, bone.scale);
+      if (bone.parent != null && bone.parent is Bone) {
+        bone.matrix.copy(bone.parent!.matrixWorld).invert();
+        bone.matrix.multiply(bone.matrixWorld);
+      } else {
+        bone.matrix.copy(bone.matrixWorld);
       }
+
+      bone.matrix.decompose(bone.position, bone.quaternion, bone.scale);
     }
   }
 
@@ -175,7 +169,7 @@ class Skeleton {
       var bone = bones[uuid];
 
       if (bone == null) {
-        print('THREE.Skeleton: No bone found with UUID: ${uuid}');
+        print('THREE.Skeleton: No bone found with UUID: $uuid');
         bone = Bone();
       }
 

@@ -2,23 +2,20 @@ import 'dart:async';
 
 import 'dart:typed_data';
 
-import 'dart:ui' as ui;
-import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 
 import 'package:three_dart/three_dart.dart' as THREE;
 
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_debug_for_macos extends StatefulWidget {
   String fileName;
   webgl_debug_for_macos({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   _MyAppState createState() => _MyAppState();
 }
 
@@ -89,7 +86,7 @@ class _MyAppState extends State<webgl_debug_for_macos> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -122,7 +119,7 @@ class _MyAppState extends State<webgl_debug_for_macos> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           render();
         },
@@ -205,7 +202,7 @@ class _MyAppState extends State<webgl_debug_for_macos> {
     //   });
     // });
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -233,7 +230,7 @@ class _MyAppState extends State<webgl_debug_for_macos> {
         "format": THREE.RGBAFormat
       });
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }
@@ -249,23 +246,23 @@ class _MyAppState extends State<webgl_debug_for_macos> {
   }
 
   _initScene() {
-    camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
+    camera = THREE.PerspectiveCamera(45, width / height, 1, 1000);
     camera.position.set(0, 15, 70);
 
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
     scene.background = THREE.Color(1.0, 0.0, 0.0);
 
     camera.lookAt(scene.position);
 
-    dirLight = new THREE.DirectionalLight(0xffffff, 1);
+    dirLight = THREE.DirectionalLight(0xffffff, 1);
     dirLight.name = 'Dir. Light';
     dirLight.position.set(0, 20, 40);
     scene.add(dirLight);
 
-    var geometry = new THREE.BoxGeometry(10, 10, 10);
-    var material = new THREE.MeshLambertMaterial({"color": 0xffffff});
+    var geometry = THREE.BoxGeometry(10, 10, 10);
+    var material = THREE.MeshLambertMaterial({"color": 0xffffff});
 
-    var box = new THREE.Mesh(geometry, material);
+    var box = THREE.Mesh(geometry, material);
 
     scene.add(box);
 

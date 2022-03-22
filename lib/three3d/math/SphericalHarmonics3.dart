@@ -1,12 +1,10 @@
 part of three_math;
 
-/**
- * Primary reference:
- *   https://graphics.stanford.edu/papers/envmap/envmap.pdf
- *
- * Secondary reference:
- *   https://www.ppsloan.org/publications/StupidSH36.pdf
- */
+/// Primary reference:
+///   https://graphics.stanford.edu/papers/envmap/envmap.pdf
+///
+/// Secondary reference:
+///   https://www.ppsloan.org/publications/StupidSH36.pdf
 
 // 3-band SH defined by 9 coefficients
 

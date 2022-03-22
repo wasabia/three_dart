@@ -7,6 +7,7 @@ class DefaultProgram {
 }
 
 class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
+  @override
   int id = -1;
   late String name;
   WebGLRenderer renderer;
@@ -34,19 +35,19 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     init();
   }
 
-  init() {
-    var defines = parameters.defines;
+  void init() {
+    final defines = parameters.defines;
 
     vertexShader = parameters.vertexShader;
     fragmentShader = parameters.fragmentShader;
 
-    var shadowMapTypeDefine = generateShadowMapTypeDefine(parameters);
-    var envMapTypeDefine = generateEnvMapTypeDefine(parameters);
-    var envMapModeDefine = generateEnvMapModeDefine(parameters);
-    var envMapBlendingDefine = generateEnvMapBlendingDefine(parameters);
-    var cubeUVSize = generateCubeUVSize(parameters);
+    final shadowMapTypeDefine = generateShadowMapTypeDefine(parameters);
+    final envMapTypeDefine = generateEnvMapTypeDefine(parameters);
+    final envMapModeDefine = generateEnvMapModeDefine(parameters);
+    final envMapBlendingDefine = generateEnvMapBlendingDefine(parameters);
+    final cubeUVSize = generateCubeUVSize(parameters);
 
-    var customExtensions =
+    final customExtensions =
         parameters.isWebGL2 ? '' : generateExtensions(parameters);
 
     String customDefines = generateDefines(defines);
@@ -66,7 +67,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
       prefixVertex =
           [customDefines].where((s) => filterEmptyLine(s)).join('\n');
 
-      if (prefixVertex.length > 0) {
+      if (prefixVertex.isNotEmpty) {
         prefixVertex = "$prefixVertex\n";
       }
 
@@ -74,7 +75,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
           .where((s) => filterEmptyLine(s))
           .join('\n');
 
-      if (prefixFragment.length > 0) {
+      if (prefixFragment.isNotEmpty) {
         prefixFragment = "$prefixFragment\n";
       }
     } else {
@@ -381,8 +382,8 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
           prefixFragment;
     }
 
-    var vertexGlsl = versionString + prefixVertex + vertexShader;
-    var fragmentGlsl = versionString + prefixFragment + fragmentShader;
+    final vertexGlsl = versionString + prefixVertex + vertexShader;
+    final fragmentGlsl = versionString + prefixFragment + fragmentShader;
 
     // developer.log(" alphaTest: ${parameters.alphaTest} ");
     // developer.log(" 111 ================= VERTEX  ");
@@ -392,9 +393,9 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     // // developer.log(fragmentGlsl);
     // print( fragmentGlsl );
 
-    var glVertexShader = WebGLShader(gl, gl.VERTEX_SHADER, vertexGlsl);
+    final glVertexShader = WebGLShader(gl, gl.VERTEX_SHADER, vertexGlsl);
 
-    var glFragmentShader = WebGLShader(gl, gl.FRAGMENT_SHADER, fragmentGlsl);
+    final glFragmentShader = WebGLShader(gl, gl.FRAGMENT_SHADER, fragmentGlsl);
 
     vertexShader = glVertexShader.content;
     fragmentShader = glFragmentShader.content;
@@ -417,18 +418,19 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
     // check for link errors
     if (renderer.debug["checkShaderErrors"]) {
-      var programLog = gl.getProgramInfoLog(program)?.trim();
-      var vertexLog = gl.getShaderInfoLog(glVertexShader.shader)?.trim();
-      var fragmentLog = gl.getShaderInfoLog(glFragmentShader.shader)?.trim();
+      final programLog = gl.getProgramInfoLog(program)?.trim();
+      final vertexLog = gl.getShaderInfoLog(glVertexShader.shader)?.trim();
+      final fragmentLog = gl.getShaderInfoLog(glFragmentShader.shader)?.trim();
 
-      var runnable = true;
-      var haveDiagnostics = true;
+      bool runnable = true;
+      bool haveDiagnostics = true;
 
       if (gl.getProgramParameter(program, gl.LINK_STATUS) == false) {
         runnable = false;
 
-        var vertexErrors = getShaderErrors(gl, glVertexShader, 'vertex');
-        var fragmentErrors = getShaderErrors(gl, glFragmentShader, 'fragment');
+        final vertexErrors = getShaderErrors(gl, glVertexShader, 'vertex');
+        final fragmentErrors =
+            getShaderErrors(gl, glFragmentShader, 'fragment');
 
         print(
             'THREE.WebGLProgram: shader error: ${gl.getError()} gl.VALIDATE_STATUS ${gl.getProgramParameter(program, gl.VALIDATE_STATUS)} gl.getProgramInfoLog $programLog  $vertexErrors $fragmentErrors ');
@@ -476,7 +478,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
   // free resource
 
-  destroy() {
+  void destroy() {
     bindingStates.releaseStatesOfProgram(this);
 
     gl.deleteProgram(program);

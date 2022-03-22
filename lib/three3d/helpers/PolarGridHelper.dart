@@ -1,7 +1,7 @@
 part of three_helpers;
 
 class PolarGridHelper extends LineSegments {
-  PolarGridHelper.create(geomertey, material) : super(geomertey, material) {}
+  PolarGridHelper.create(geomertey, material) : super(geomertey, material);
 
   factory PolarGridHelper(
       [radius = 10,

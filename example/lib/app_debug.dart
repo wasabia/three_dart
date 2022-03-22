@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as Math;
 
 class app_debug extends StatefulWidget {
   String fileName;
 
   app_debug({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   createState() => webgl_debugState();
 }
 
@@ -24,7 +24,7 @@ class webgl_debugState extends State<app_debug> {
         ),
         body: Container(),
         floatingActionButton: FloatingActionButton(
-          child: Text("render"),
+          child: const Text("render"),
           onPressed: () {
             clickRender();
           },
@@ -135,14 +135,14 @@ class Interpolant {
   Interpolant(parameterPositions, sampleValues, sampleSize, resultBuffer) {
     this.parameterPositions = parameterPositions;
 
-    this.resultBuffer = resultBuffer != null ? resultBuffer : null;
+    this.resultBuffer = resultBuffer;
     this.sampleValues = sampleValues;
-    this.valueSize = sampleSize;
+    valueSize = sampleSize;
   }
 
   evaluate(double t) {
-    var pp = this.parameterPositions;
-    int i1 = this._cachedIndex;
+    var pp = parameterPositions;
+    int i1 = _cachedIndex;
 
     num? t1;
     num t0 = 0;
@@ -175,8 +175,8 @@ class Interpolant {
                 // after end
 
                 i1 = pp.length;
-                this._cachedIndex = i1;
-                return this.afterEnd(i1 - 1, t, t0);
+                _cachedIndex = i1;
+                return afterEnd(i1 - 1, t, t0);
               }
 
               if (i1 == giveUpAt) break; // this loop
@@ -204,7 +204,7 @@ class Interpolant {
 
           //- slower code:
           //-					if ( t < t0 || t0 == null ) {
-          if (t0 == null || !(t >= t0)) {
+          if (!(t >= t0)) {
             // looping?
 
             var t1global = pp[1];
@@ -220,8 +220,8 @@ class Interpolant {
               if (t0 == null) {
                 // before start
 
-                this._cachedIndex = 0;
-                return this.beforeStart(0, t, t1);
+                _cachedIndex = 0;
+                return beforeStart(0, t, t1);
               }
 
               if (i1 == giveUpAt) break; // this loop
@@ -235,7 +235,7 @@ class Interpolant {
                 t0 = pp[iii];
               }
 
-              if (t0 != null && t >= t0) {
+              if (t >= t0) {
                 // we have arrived at the sought interval
                 break seek;
               }
@@ -279,29 +279,29 @@ class Interpolant {
         // check boundary cases, again
 
         if (t0 == null) {
-          this._cachedIndex = 0;
-          return this.beforeStart(0, t, t1);
+          _cachedIndex = 0;
+          return beforeStart(0, t, t1);
         }
 
         if (t1 == null) {
           i1 = pp.length;
-          this._cachedIndex = i1;
-          return this.afterEnd(i1 - 1, t0, t);
+          _cachedIndex = i1;
+          return afterEnd(i1 - 1, t0, t);
         }
       } // seek
 
-      this._cachedIndex = i1;
+      _cachedIndex = i1;
 
-      this.intervalChanged(i1, t0, t1);
+      intervalChanged(i1, t0, t1);
     } // validate_interval
 
-    return this.interpolate(i1, t0, t, t1!);
+    return interpolate(i1, t0, t, t1!);
   }
 
   interpolate(int i1, num t0, num t, num t1) {
-    var result = this.resultBuffer;
-    var values = this.sampleValues;
-    var stride = this.valueSize;
+    var result = resultBuffer;
+    var values = sampleValues;
+    var stride = valueSize;
 
     double _v0 = t + (t0 * -1);
     double _v1 = t1 + (t0 * -1);

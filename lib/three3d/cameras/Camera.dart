@@ -1,17 +1,19 @@
 part of three_camera;
 
 class Camera extends Object3D {
+  @override
   String type = "Camera";
 
+  @override
   bool isCamera = true;
   bool isArrayCamera = false;
   bool isOrthographicCamera = false;
   bool isPerspectiveCamera = false;
 
-  Matrix4 matrixWorldInverse = new Matrix4();
+  Matrix4 matrixWorldInverse = Matrix4();
 
-  Matrix4 projectionMatrix = new Matrix4();
-  Matrix4 projectionMatrixInverse = new Matrix4();
+  Matrix4 projectionMatrix = Matrix4();
+  Matrix4 projectionMatrixInverse = Matrix4();
 
   late num fov;
   double zoom = 1.0;
@@ -32,49 +34,54 @@ class Camera extends Object3D {
 
   late Vector4 viewport;
 
-  Camera() : super() {}
+  Camera() : super();
 
   Camera.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON) {}
+      : super.fromJSON(json, rootJSON);
 
   updateProjectionMatrix() {
     print(" Camera.updateProjectionMatrix ");
   }
 
+  @override
   copy(Object3D source, [bool? recursive]) {
     super.copy(source, recursive);
 
     Camera source1 = source as Camera;
 
-    this.matrixWorldInverse.copy(source1.matrixWorldInverse);
+    matrixWorldInverse.copy(source1.matrixWorldInverse);
 
-    this.projectionMatrix.copy(source1.projectionMatrix);
-    this.projectionMatrixInverse.copy(source1.projectionMatrixInverse);
+    projectionMatrix.copy(source1.projectionMatrix);
+    projectionMatrixInverse.copy(source1.projectionMatrixInverse);
 
     return this;
   }
 
+  @override
   getWorldDirection(Vector3 target) {
-    this.updateWorldMatrix(true, false);
+    updateWorldMatrix(true, false);
 
-    var e = this.matrixWorld.elements;
+    var e = matrixWorld.elements;
 
     return target.set(-e[8], -e[9], -e[10]).normalize();
   }
 
+  @override
   updateMatrixWorld([bool force = false]) {
     super.updateMatrixWorld(force);
 
-    this.matrixWorldInverse.copy(this.matrixWorld).invert();
+    matrixWorldInverse.copy(matrixWorld).invert();
   }
 
+  @override
   updateWorldMatrix(updateParents, updateChildren) {
     super.updateWorldMatrix(updateParents, updateChildren);
 
-    this.matrixWorldInverse.copy(this.matrixWorld).invert();
+    matrixWorldInverse.copy(matrixWorld).invert();
   }
 
-  clone([bool? recursive = true]) {
-    return Camera().copy(this);
+  @override
+  Camera clone([bool? recursive = true]) {
+    return Camera()..copy(this);
   }
 }

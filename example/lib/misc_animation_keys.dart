@@ -3,16 +3,15 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class misc_animation_keys extends StatefulWidget {
   String fileName;
 
   misc_animation_keys({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   createState() => _State();
 }
 
@@ -76,7 +75,7 @@ class _State extends State<misc_animation_keys> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -110,7 +109,7 @@ class _State extends State<misc_animation_keys> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           clickRender();
         },
@@ -166,7 +165,7 @@ class _State extends State<misc_animation_keys> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.finish();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -189,7 +188,7 @@ class _State extends State<misc_animation_keys> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -202,36 +201,36 @@ class _State extends State<misc_animation_keys> {
   }
 
   initPage() async {
-    scene = new THREE.Scene();
+    scene = THREE.Scene();
 
     //
 
-    camera = new THREE.PerspectiveCamera(40, width / height, 1, 1000);
+    camera = THREE.PerspectiveCamera(40, width / height, 1, 1000);
     camera.position.set(25, 25, 50);
     camera.lookAt(scene.position);
 
     //
 
-    var axesHelper = new THREE.AxesHelper(10);
+    var axesHelper = THREE.AxesHelper(10);
     scene.add(axesHelper);
 
     //
 
-    var geometry = new THREE.BoxGeometry(5, 5, 5);
+    var geometry = THREE.BoxGeometry(5, 5, 5);
     var material =
-        new THREE.MeshBasicMaterial({"color": 0xffffff, "transparent": true});
-    var mesh = new THREE.Mesh(geometry, material);
+        THREE.MeshBasicMaterial({"color": 0xffffff, "transparent": true});
+    var mesh = THREE.Mesh(geometry, material);
     scene.add(mesh);
 
     // create a keyframe track (i.e. a timed sequence of keyframes) for each animated property
     // Note: the keyframe track type should correspond to the type of the property being animated
 
     // POSITION
-    var positionKF = new THREE.VectorKeyframeTrack(
+    var positionKF = THREE.VectorKeyframeTrack(
         '.position', [0, 1, 2], [0, 0, 0, 30, 0, 0, 0, 0, 0], null);
 
     // SCALE
-    var scaleKF = new THREE.VectorKeyframeTrack(
+    var scaleKF = THREE.VectorKeyframeTrack(
         '.scale', [0, 1, 2], [1, 1, 1, 2, 2, 2, 1, 1, 1], null);
 
     // ROTATION
@@ -239,11 +238,11 @@ class _State extends State<misc_animation_keys> {
     // Interpolating Euler angles (.rotation property) can be problematic and is currently not supported
 
     // set up rotation about x axis
-    var xAxis = new THREE.Vector3(1, 0, 0);
+    var xAxis = THREE.Vector3(1, 0, 0);
 
-    var qInitial = new THREE.Quaternion().setFromAxisAngle(xAxis, 0);
-    var qFinal = new THREE.Quaternion().setFromAxisAngle(xAxis, THREE.Math.PI);
-    var quaternionKF = new THREE.QuaternionKeyframeTrack(
+    var qInitial = THREE.Quaternion().setFromAxisAngle(xAxis, 0);
+    var qFinal = THREE.Quaternion().setFromAxisAngle(xAxis, THREE.Math.PI);
+    var quaternionKF = THREE.QuaternionKeyframeTrack(
         '.quaternion',
         [0, 1, 2],
         [
@@ -263,20 +262,20 @@ class _State extends State<misc_animation_keys> {
         null);
 
     // COLOR
-    var colorKF = new THREE.ColorKeyframeTrack('.material.color', [0, 1, 2],
+    var colorKF = THREE.ColorKeyframeTrack('.material.color', [0, 1, 2],
         [1, 0, 0, 0, 1, 0, 0, 0, 1], THREE.InterpolateDiscrete);
 
     // OPACITY
-    var opacityKF = new THREE.NumberKeyframeTrack(
+    var opacityKF = THREE.NumberKeyframeTrack(
         '.material.opacity', [0, 1, 2], [1, 0, 1], null);
 
     // create an animation sequence with the tracks
     // If a negative time value is passed, the duration will be calculated from the times of the passed tracks array
-    var clip = new THREE.AnimationClip(
+    var clip = THREE.AnimationClip(
         'Action', 3, [scaleKF, positionKF, quaternionKF, colorKF, opacityKF]);
 
     // setup the THREE.AnimationMixer
-    mixer = new THREE.AnimationMixer(mesh);
+    mixer = THREE.AnimationMixer(mesh);
 
     // create a ClipAction and set it to play
     var clipAction = mixer.clipAction(clip);
@@ -307,13 +306,13 @@ class _State extends State<misc_animation_keys> {
 
     var delta = clock.getDelta();
 
-    print(" delat: ${delta} ");
+    print(" delat: $delta ");
 
     mixer.update(delta);
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }

@@ -1,6 +1,7 @@
 part of three_geometries;
 
 class TorusGeometry extends BufferGeometry {
+  @override
   String type = "TorusGeometry";
 
   TorusGeometry(

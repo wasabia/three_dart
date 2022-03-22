@@ -7,7 +7,7 @@ class WebGLObjects {
   WebGLGeometries geometries;
   WebGLAttributes attributes;
 
-  WebGLObjects(this.gl, this.geometries, this.attributes, this.info) {}
+  WebGLObjects(this.gl, this.geometries, this.attributes, this.info);
 
   BufferGeometry update(Object3D object) {
     num frame = info.render["frame"]!;

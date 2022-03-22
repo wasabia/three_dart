@@ -1,23 +1,22 @@
 part of three_loaders;
 
-/**
- * Abstract Base class to load generic binary textures formats (rgbe, hdr, ...)
- *
- * Sub classes have to implement the parse() method which will be used in load().
- */
+/// Abstract Base class to load generic binary textures formats (rgbe, hdr, ...)
+///
+/// Sub classes have to implement the parse() method which will be used in load().
 
 class DataTextureLoader extends Loader {
-  DataTextureLoader(manager) : super(manager) {}
+  DataTextureLoader(manager) : super(manager);
 
+  @override
   load(url, Function onLoad, [Function? onProgress, Function? onError]) {
     var scope = this;
 
-    var texture = new DataTexture();
+    var texture = DataTexture();
 
-    var loader = new FileLoader(this.manager);
+    var loader = FileLoader(manager);
     loader.setResponseType('arraybuffer');
-    loader.setRequestHeader(this.requestHeader);
-    loader.setPath(this.path);
+    loader.setRequestHeader(requestHeader);
+    loader.setPath(path);
     loader.setWithCredentials(scope.withCredentials);
     loader.load(url, (buffer) {
       var texData = scope.parse(buffer);
@@ -33,17 +32,17 @@ class DataTextureLoader extends Loader {
       }
 
       texture.wrapS =
-          texData["wrapS"] != null ? texData["wrapS"] : ClampToEdgeWrapping;
+          texData["wrapS"] ?? ClampToEdgeWrapping;
       texture.wrapT =
-          texData["wrapT"] != null ? texData["wrapT"] : ClampToEdgeWrapping;
+          texData["wrapT"] ?? ClampToEdgeWrapping;
 
       texture.magFilter =
-          texData["magFilter"] != null ? texData["magFilter"] : LinearFilter;
+          texData["magFilter"] ?? LinearFilter;
       texture.minFilter =
-          texData["minFilter"] != null ? texData["minFilter"] : LinearFilter;
+          texData["minFilter"] ?? LinearFilter;
 
       texture.anisotropy =
-          texData["anisotropy"] != null ? texData["anisotropy"] : 1;
+          texData["anisotropy"] ?? 1;
 
       if (texData["encoding"] != null) {
         texture.encoding = texData["encoding"];
@@ -77,7 +76,7 @@ class DataTextureLoader extends Loader {
 
       texture.needsUpdate = true;
 
-      if (onLoad != null) onLoad(texture, texData);
+ onLoad(texture, texData);
     }, onProgress, onError);
 
     return texture;

@@ -1,10 +1,11 @@
 part of three_geometries;
 
 class IcosahedronGeometry extends PolyhedronGeometry {
+  @override
   String type = "IcosahedronGeometry";
 
   IcosahedronGeometry.create(vertices, indices, [radius = 1, detail = 0])
-      : super(vertices, indices, radius, detail) {}
+      : super(vertices, indices, radius, detail);
 
   factory IcosahedronGeometry([radius = 1, detail = 0]) {
     var t = (1 + Math.sqrt(5)) / 2;

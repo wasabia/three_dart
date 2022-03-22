@@ -7,14 +7,14 @@ class SVGLoaderParser {
 
   var transformStack = [];
 
-  var tempTransform0 = new Matrix3();
-  var tempTransform1 = new Matrix3();
-  var tempTransform2 = new Matrix3();
-  var tempTransform3 = new Matrix3();
-  var tempV2 = new Vector2(null, null);
-  var tempV3 = new Vector3.init();
+  var tempTransform0 = Matrix3();
+  var tempTransform1 = Matrix3();
+  var tempTransform2 = Matrix3();
+  var tempTransform3 = Matrix3();
+  var tempV2 = Vector2(null, null);
+  var tempV3 = Vector3.init();
 
-  var currentTransform = new Matrix3();
+  var currentTransform = Matrix3();
 
   String defaultUnit = "px";
   num defaultDPI = 90;
@@ -71,7 +71,7 @@ class SVGLoaderParser {
     this.defaultUnit = defaultUnit;
   }
 
-  SVGLoaderParser.parser() {}
+  SVGLoaderParser.parser();
 
   // Function parse =========== start
   Map<String, dynamic> parse(text) {
@@ -128,7 +128,7 @@ class SVGLoaderParser {
       }
     }
 
-    String _str = "${string}";
+    String _str = "$string";
     // if(_str.startsWith("-.")) {
     //   _str = _str.replaceFirst("-.", "-0.");
     // }
@@ -143,7 +143,7 @@ class SVGLoaderParser {
 
     // print(" string: ${_str} ");
 
-    return scale * num.parse("${_str}");
+    return scale * num.parse(_str);
   }
 
   // from https://github.com/ppvg/svg-numbers (MIT License)
@@ -183,17 +183,18 @@ class SVGLoaderParser {
 
     newNumber() {
       if (number != '') {
-        if (exponent == '')
+        if (exponent == '') {
           result.add(num.parse(number));
-        else
+        } else {
           result.add(num.parse(number) * Math.pow(10, num.parse(exponent)));
+        }
       }
 
       number = '';
       exponent = '';
     }
 
-    var current;
+    String current;
     var length = input.length;
 
     for (var i = 0; i < length; i++) {
@@ -201,7 +202,7 @@ class SVGLoaderParser {
 
       // check for flags
       if (flags is List &&
-          flags.indexOf(result.length % stride) >= 0 &&
+          flags.contains(result.length % stride) &&
           RE["FLAGS"].hasMatch(current)) {
         state = INT;
         number = current;
@@ -331,7 +332,7 @@ class SVGLoaderParser {
   }
 
   parseNodeTransform(node) {
-    var transform = new Matrix3();
+    var transform = Matrix3();
     var currentTransform = tempTransform0;
 
     if (node.nodeName == 'use' &&
@@ -462,7 +463,7 @@ class SVGLoaderParser {
 
     var transform = parseNodeTransform(node);
 
-    if (transformStack.length > 0) {
+    if (transformStack.isNotEmpty) {
       transform.premultiply(transformStack[transformStack.length - 1]);
     }
 
@@ -512,7 +513,7 @@ class SVGLoaderParser {
   parseStyle(node, style) {
     // style = Object.assign( {}, style );
     // clone style
-    Map<String, dynamic> style2 = Map<String, dynamic>();
+    Map<String, dynamic> style2 = <String, dynamic>{};
     style2.addAll(style);
 
     var stylesheetStyles = {};
@@ -538,19 +539,21 @@ class SVGLoaderParser {
       stylesheetStyles.addAll(stylesheets['#' + node.getAttribute('id')] ?? {});
     }
 
-    Function addStyle = (svgName, jsName, [adjustFunction]) {
-      if (adjustFunction == null)
-        adjustFunction = (v) {
-          if (v.startsWith('url'))
+    void addStyle(svgName, jsName, [adjustFunction]) {
+      adjustFunction ??= (v) {
+          if (v.startsWith('url')) {
             print('SVGLoader: url access in attributes is not implemented.');
+          }
 
           return v;
         };
 
-      if (node.hasAttribute(svgName))
+      if (node.hasAttribute(svgName)) {
         style2[jsName] = adjustFunction(node.getAttribute(svgName));
-      if (stylesheetStyles[svgName] != null)
+      }
+      if (stylesheetStyles[svgName] != null) {
         style2[jsName] = adjustFunction(stylesheetStyles[svgName]);
+      }
 
       if (node.style != null) {
         var _style = node.style;
@@ -560,15 +563,15 @@ class SVGLoaderParser {
           style2[jsName] = adjustFunction(_value);
         }
       }
-    };
+    }
 
-    Function clamp = (v) {
-      return Math.max(0, Math.min(1, parseFloatWithUnits(v)));
-    };
+    num clamp(v) {
+      return Math.max<num>(0, Math.min(1, parseFloatWithUnits(v)));
+    }
 
-    Function positive = (v) {
-      return Math.max(0, parseFloatWithUnits(v));
-    };
+    num positive(v) {
+      return Math.max<num>(0, parseFloatWithUnits(v));
+    }
 
     addStyle('fill', 'fill');
     addStyle('fill-opacity', 'fillOpacity', clamp);
@@ -614,14 +617,14 @@ class SVGLoaderParser {
 		 */
 
   parseArcCommand(
-      path, rx, ry, x_axis_rotation, large_arc_flag, sweep_flag, start, end) {
+      path, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, start, end) {
     if (rx == 0 || ry == 0) {
       // draw a line if either of the radii == 0
       path.lineTo(end.x, end.y);
       return;
     }
 
-    x_axis_rotation = x_axis_rotation * Math.PI / 180;
+    xAxisRotation = xAxisRotation * Math.PI / 180;
 
     // Ensure radii are positive
     rx = Math.abs(rx);
@@ -630,9 +633,9 @@ class SVGLoaderParser {
     // Compute (x1', y1')
     var dx2 = (start.x - end.x) / 2.0;
     var dy2 = (start.y - end.y) / 2.0;
-    var x1p = Math.cos(x_axis_rotation) * dx2 + Math.sin(x_axis_rotation) * dy2;
+    var x1p = Math.cos(xAxisRotation) * dx2 + Math.sin(xAxisRotation) * dy2;
     var y1p =
-        -Math.sin(x_axis_rotation) * dx2 + Math.cos(x_axis_rotation) * dy2;
+        -Math.sin(xAxisRotation) * dx2 + Math.cos(xAxisRotation) * dy2;
 
     // Compute (cx', cy')
     var rxs = rx * rx;
@@ -655,16 +658,16 @@ class SVGLoaderParser {
     var dq = (rxs * y1ps + rys * x1ps);
     var pq = (rxs * rys - dq) / dq;
     var q = Math.sqrt(Math.max(0, pq));
-    if (large_arc_flag == sweep_flag) q = -q;
+    if (largeArcFlag == sweepFlag) q = -q;
     var cxp = q * rx * y1p / ry;
     var cyp = -q * ry * x1p / rx;
 
     // Step 3: Compute (cx, cy) from (cx', cy')
-    var cx = Math.cos(x_axis_rotation) * cxp -
-        Math.sin(x_axis_rotation) * cyp +
+    var cx = Math.cos(xAxisRotation) * cxp -
+        Math.sin(xAxisRotation) * cyp +
         (start.x + end.x) / 2;
-    var cy = Math.sin(x_axis_rotation) * cxp +
-        Math.cos(x_axis_rotation) * cyp +
+    var cy = Math.sin(xAxisRotation) * cxp +
+        Math.cos(xAxisRotation) * cyp +
         (start.y + end.y) / 2;
 
     // Step 4: Compute θ1 and Δθ
@@ -674,16 +677,16 @@ class SVGLoaderParser {
         (Math.PI * 2);
 
     path.currentPath.absellipse(
-        cx, cy, rx, ry, theta, theta + delta, sweep_flag == 0, x_axis_rotation);
+        cx, cy, rx, ry, theta, theta + delta, sweepFlag == 0, xAxisRotation);
   }
 
   ShapePath parsePath(String d) {
-    var path = new ShapePath();
+    var path = ShapePath();
 
-    var point = new Vector2(null, null);
-    var control = new Vector2(null, null);
+    var point = Vector2(null, null);
+    var control = Vector2(null, null);
 
-    var firstPoint = new Vector2(null, null);
+    var firstPoint = Vector2(null, null);
     var isFirstPoint = true;
     var doSetFirstPoint = false;
 
@@ -692,7 +695,7 @@ class SVGLoaderParser {
 
     // var commands = d.match( /[a-df-z][^a-df-z]*/ig );
 
-    commands.forEach((item) {
+    for (var item in commands) {
       var command = item.group(0)!;
 
       var type = charAt(command, 0);
@@ -841,8 +844,9 @@ class SVGLoaderParser {
 
           for (var j = 0, jl = numbers.length; j < jl; j += 7) {
             // skip command if start point == end point
-            if (numbers[j + 5] == point.x && numbers[j + 6] == point.y)
+            if (numbers[j + 5] == point.x && numbers[j + 6] == point.y) {
               continue;
+            }
 
             var start = point.clone();
             point.x = numbers[j + 5];
@@ -1026,7 +1030,7 @@ class SVGLoaderParser {
 
           path.currentPath.autoClose = true;
 
-          if (path.currentPath.curves.length > 0) {
+          if (path.currentPath.curves.isNotEmpty) {
             // Reset point to beginning of Path
             point.copy(firstPoint);
             path.currentPath.currentPoint.copy(point);
@@ -1043,7 +1047,7 @@ class SVGLoaderParser {
       // console.log( type, parseFloats( data ), parseFloats( data ).length  )
 
       doSetFirstPoint = false;
-    });
+    }
 
     return path;
   }
@@ -1065,14 +1069,16 @@ class SVGLoaderParser {
     var w = parseFloatWithUnits(node.getAttribute('width'));
     var h = parseFloatWithUnits(node.getAttribute('height'));
 
-    var path = new ShapePath();
+    var path = ShapePath();
     path.moveTo(x + 2 * rx, y);
     path.lineTo(x + w - 2 * rx, y);
-    if (rx != 0 || ry != 0)
+    if (rx != 0 || ry != 0) {
       path.bezierCurveTo(x + w, y, x + w, y, x + w, y + 2 * ry);
+    }
     path.lineTo(x + w, y + h - 2 * ry);
-    if (rx != 0 || ry != 0)
+    if (rx != 0 || ry != 0) {
       path.bezierCurveTo(x + w, y + h, x + w, y + h, x + w - 2 * rx, y + h);
+    }
     path.lineTo(x + 2 * rx, y + h);
 
     if (rx != 0 || ry != 0) {
@@ -1092,7 +1098,7 @@ class SVGLoaderParser {
     print("SVGLoader.parsePolygonNode todo test ");
     // var regex = /(-?[\d\.?]+)[,|\s](-?[\d\.?]+)/g;
     var regex = RegExp(r"(-?[\d\.?]+)[,|\s](-?[\d\.?]+)");
-    var path = new ShapePath();
+    var path = ShapePath();
     var index = 0;
 
     // Function iterator = (match, a, b) {
@@ -1143,7 +1149,7 @@ class SVGLoaderParser {
     // var regex = /(-?[\d\.?]+)[,|\s](-?[\d\.?]+)/g;
     var regex = RegExp(r"(-?[\d\.?]+)[,|\s](-?[\d\.?]+)");
 
-    var path = new ShapePath();
+    var path = ShapePath();
 
     var index = 0;
 
@@ -1172,10 +1178,10 @@ class SVGLoaderParser {
     var y = parseFloatWithUnits(node.getAttribute('cy'));
     var r = parseFloatWithUnits(node.getAttribute('r'));
 
-    var subpath = new Path(null);
+    var subpath = Path(null);
     subpath.absarc(x, y, r, 0, Math.PI * 2, null);
 
-    var path = new ShapePath();
+    var path = ShapePath();
     path.subPaths.add(subpath);
 
     return path;
@@ -1187,10 +1193,10 @@ class SVGLoaderParser {
     var rx = parseFloatWithUnits(node.getAttribute('rx'));
     var ry = parseFloatWithUnits(node.getAttribute('ry'));
 
-    var subpath = new Path(null);
+    var subpath = Path(null);
     subpath.absellipse(x, y, rx, ry, 0, Math.PI * 2, null, null);
 
-    var path = new ShapePath();
+    var path = ShapePath();
     path.subPaths.add(subpath);
 
     return path;
@@ -1202,7 +1208,7 @@ class SVGLoaderParser {
     var x2 = parseFloatWithUnits(node.getAttribute('x2'));
     var y2 = parseFloatWithUnits(node.getAttribute('y2'));
 
-    var path = new ShapePath();
+    var path = ShapePath();
     path.moveTo(x1, y1);
     path.lineTo(x2, y2);
     path.currentPath.autoClose = false;
@@ -1279,7 +1285,7 @@ class SVGLoaderParser {
 
     var traverseChildNodes = true;
 
-    var path = null;
+    var path;
 
     switch (node.nodeName) {
       case 'svg':
@@ -1342,7 +1348,7 @@ class SVGLoaderParser {
           parseNode(usedNode, style);
         } else {
           print(
-              "SVGLoader: 'use node' references non-existent node id: ${usedNodeId}");
+              "SVGLoader: 'use node' references non-existent node id: $usedNodeId");
         }
 
         break;
@@ -1375,7 +1381,7 @@ class SVGLoaderParser {
     if (transform != null) {
       transformStack.removeLast();
 
-      if (transformStack.length > 0) {
+      if (transformStack.isNotEmpty) {
         currentTransform.copy(transformStack[transformStack.length - 1]);
       } else {
         currentTransform.identity();
@@ -1391,11 +1397,11 @@ class SVGLoaderParser {
     // Param miterLimit: Maximum join length, in multiples of the "width" parameter (join is truncated if it exceeds that distance)
     // Returns style object
 
-    width = width != null ? width : 1;
-    color = color != null ? color : '#000';
-    lineJoin = lineJoin != null ? lineJoin : 'miter';
-    lineCap = lineCap != null ? lineCap : 'butt';
-    miterLimit = miterLimit != null ? miterLimit : 4;
+    width = width ?? 1;
+    color = color ?? '#000';
+    lineJoin = lineJoin ?? 'miter';
+    lineCap = lineCap ?? 'butt';
+    miterLimit = miterLimit ?? 4;
 
     return {
       "strokeColor": color,

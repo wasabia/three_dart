@@ -370,14 +370,13 @@ class BufferGeometry with EventDispatcher {
 
       // second, try to find a boundingSphere with a radius smaller than the
       // boundingSphere of the boundingBox: sqrt(3) smaller in the best case
-
-      double maxRadiusSq = 0;
-
+      num maxRadiusSq = 0;
       for (var i = 0, il = position.count; i < il; i++) {
         _bufferGeometryvector.fromBufferAttribute(position, i);
-
         maxRadiusSq = Math.max(
-            maxRadiusSq, center.distanceToSquared(_bufferGeometryvector));
+          maxRadiusSq,
+          center.distanceToSquared(_bufferGeometryvector),
+        );
       }
 
       // process morph attributes if present
@@ -396,7 +395,9 @@ class BufferGeometry with EventDispatcher {
             }
 
             maxRadiusSq = Math.max(
-                maxRadiusSq, center.distanceToSquared(_bufferGeometryvector));
+              maxRadiusSq,
+              center.distanceToSquared(_bufferGeometryvector),
+            );
           }
         }
       }
@@ -650,7 +651,8 @@ class BufferGeometry with EventDispatcher {
     if (offset == null) {
       offset = 0;
 
-      print('THREE.BufferGeometry.merge(): Overwriting original geometry, starting at offset=0. ' +
+      print(
+          'THREE.BufferGeometry.merge(): Overwriting original geometry, starting at offset=0. '
           'Use BufferGeometryUtils.mergeBufferGeometries() for lossless merge.');
     }
 
@@ -665,7 +667,7 @@ class BufferGeometry with EventDispatcher {
         var attributeArray2 = attribute2.array;
 
         var attributeOffset = attribute2.itemSize * offset;
-        var length = Math.min(
+        var length = Math.min<int>(
             attributeArray2.length, attributeArray1.length - attributeOffset);
 
         for (var i = 0, j = attributeOffset; i < length; i++, j++) {
@@ -768,8 +770,8 @@ class BufferGeometry with EventDispatcher {
 
     for (var i = 0, l = groups.length; i < l; i++) {
       var group = groups[i];
-      geometry2.addGroup(group["start"], group["count"],
-          group["materialIndex"]);
+      geometry2.addGroup(
+          group["start"], group["count"], group["materialIndex"]);
     }
 
     return geometry2;
@@ -959,8 +961,7 @@ class BufferGeometry with EventDispatcher {
 
     for (var i = 0, l = groups.length; i < l; i++) {
       var group = groups[i];
-      addGroup(group["start"], group["count"],
-          group["materialIndex"]);
+      addGroup(group["start"], group["count"], group["materialIndex"]);
     }
 
     // bounding box

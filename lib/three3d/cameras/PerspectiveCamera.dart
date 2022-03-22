@@ -1,13 +1,12 @@
 part of three_camera;
 
 class PerspectiveCamera extends Camera {
-  String type = "PerspectiveCamera";
-  bool isPerspectiveCamera = true;
-
   // near 设置太小 导致 画面异常 精度问题？ 浮点运算问题？？
   PerspectiveCamera(
       [num fov = 50, num aspect = 1, num near = 0.1, num far = 2000])
       : super() {
+    isPerspectiveCamera = true;
+    type = "PerspectiveCamera";
     this.fov = fov;
     this.aspect = aspect;
     this.near = near;
@@ -19,6 +18,8 @@ class PerspectiveCamera extends Camera {
   PerspectiveCamera.fromJSON(
       Map<String, dynamic> json, Map<String, dynamic> rootJSON)
       : super.fromJSON(json, rootJSON) {
+    isPerspectiveCamera = true;
+    type = "PerspectiveCamera";
     fov = json["fov"];
     aspect = json["aspect"];
     near = json["near"];
@@ -27,30 +28,32 @@ class PerspectiveCamera extends Camera {
     updateProjectionMatrix();
   }
 
-  copy(Object3D source, [bool? recursive]) {
+  @override
+  PerspectiveCamera copy(Object3D source, [bool? recursive]) {
     super.copy(source, recursive);
 
     PerspectiveCamera source1 = source as PerspectiveCamera;
 
-    this.fov = source1.fov;
-    this.zoom = source1.zoom;
+    fov = source1.fov;
+    zoom = source1.zoom;
 
-    this.near = source1.near;
-    this.far = source1.far;
-    this.focus = source1.focus;
+    near = source1.near;
+    far = source1.far;
+    focus = source1.focus;
 
-    this.aspect = source1.aspect;
-    this.view =
+    aspect = source1.aspect;
+    view =
         source1.view == null ? null : json.decode(json.encode(source1.view));
 
-    this.filmGauge = source1.filmGauge;
-    this.filmOffset = source1.filmOffset;
+    filmGauge = source1.filmGauge;
+    filmOffset = source1.filmOffset;
 
     return this;
   }
 
-  clone([bool? recursive = true]) {
-    return PerspectiveCamera().copy(this, recursive);
+  @override
+  PerspectiveCamera clone([bool? recursive = true]) {
+    return PerspectiveCamera()..copy(this, recursive);
   }
 
 // 	/**
@@ -89,14 +92,14 @@ class PerspectiveCamera extends Camera {
 
 // 	},
 
-  getFilmWidth() {
+  num getFilmWidth() {
     // film not completely covered in portrait format (aspect < 1)
-    return this.filmGauge * Math.min(this.aspect, 1);
+    return filmGauge * Math.min(aspect, 1);
   }
 
-  getFilmHeight() {
+  double getFilmHeight() {
     // film not completely covered in landscape format (aspect > 1)
-    return this.filmGauge / Math.max(this.aspect, 1);
+    return filmGauge / Math.max(aspect, 1);
   }
 
   /**
@@ -134,11 +137,10 @@ class PerspectiveCamera extends Camera {
 	 *
 	 *   Note there is no reason monitors have to be the same size or in a grid.
 	 */
-  setViewOffset(fullWidth, fullHeight, x, y, width, height) {
-    this.aspect = fullWidth / fullHeight;
+  void setViewOffset(fullWidth, fullHeight, x, y, width, height) {
+    aspect = fullWidth / fullHeight;
 
-    if (this.view == null) {
-      this.view = {
+    view ??= {
         "enabled": true,
         "fullWidth": 1,
         "fullHeight": 1,
@@ -147,35 +149,34 @@ class PerspectiveCamera extends Camera {
         "width": 1,
         "height": 1
       };
-    }
 
-    this.view!["enabled"] = true;
-    this.view!["fullWidth"] = fullWidth;
-    this.view!["fullHeight"] = fullHeight;
-    this.view!["offsetX"] = x;
-    this.view!["offsetY"] = y;
-    this.view!["width"] = width;
-    this.view!["height"] = height;
+    view!["enabled"] = true;
+    view!["fullWidth"] = fullWidth;
+    view!["fullHeight"] = fullHeight;
+    view!["offsetX"] = x;
+    view!["offsetY"] = y;
+    view!["width"] = width;
+    view!["height"] = height;
 
-    this.updateProjectionMatrix();
+    updateProjectionMatrix();
   }
 
-  clearViewOffset() {
-    if (this.view != null) {
-      this.view!["enabled"] = false;
+  void clearViewOffset() {
+    if (view != null) {
+      view!["enabled"] = false;
     }
-
-    this.updateProjectionMatrix();
+    updateProjectionMatrix();
   }
 
-  updateProjectionMatrix() {
+  @override
+  void updateProjectionMatrix() {
     num near = this.near;
-    num top = near * Math.tan(MathUtils.DEG2RAD * 0.5 * this.fov) / this.zoom;
+    num top = near * Math.tan(MathUtils.DEG2RAD * 0.5 * fov) / zoom;
     num height = 2 * top;
-    num width = this.aspect * height;
+    num width = aspect * height;
     num left = -0.5 * width;
 
-    if (this.view != null && this.view!["enabled"]) {
+    if (view != null && view!["enabled"]) {
       var fullWidth = view!["fullWidth"]!;
       var fullHeight = view!["fullHeight"]!;
 
@@ -185,32 +186,32 @@ class PerspectiveCamera extends Camera {
       height *= view!["height"]! / fullHeight;
     }
 
-    num skew = this.filmOffset;
-    if (skew != 0) left += near * skew / this.getFilmWidth();
+    num skew = filmOffset;
+    if (skew != 0) left += near * skew / getFilmWidth();
 
-    this
-        .projectionMatrix
-        .makePerspective(left, left + width, top, top - height, near, this.far);
-    this.projectionMatrixInverse.copy(this.projectionMatrix).invert();
+    projectionMatrix
+        .makePerspective(left, left + width, top, top - height, near, far);
+    projectionMatrixInverse.copy(projectionMatrix).invert();
   }
 
-  toJSON({Object3dMeta? meta}) {
+  @override
+  Map<String, dynamic> toJSON({Object3dMeta? meta}) {
     Map<String, dynamic> output = super.toJSON(meta: meta);
     Map<String, dynamic> object = output["object"];
 
-    object["fov"] = this.fov;
-    object["zoom"] = this.zoom;
+    object["fov"] = fov;
+    object["zoom"] = zoom;
 
-    object["near"] = this.near;
-    object["far"] = this.far;
-    object["focus"] = this.focus;
+    object["near"] = near;
+    object["far"] = far;
+    object["focus"] = focus;
 
-    object["aspect"] = this.aspect;
+    object["aspect"] = aspect;
 
-    if (this.view != null) object["view"] = json.decode(json.encode(this.view));
+    if (view != null) object["view"] = json.decode(json.encode(view));
 
-    object["filmGauge"] = this.filmGauge;
-    object["filmOffset"] = this.filmOffset;
+    object["filmGauge"] = filmGauge;
+    object["filmOffset"] = filmOffset;
 
     return output;
   }

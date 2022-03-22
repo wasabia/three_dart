@@ -340,7 +340,7 @@ class Ray {
     //   |Dot(D,N)|*b2 = sign(Dot(D,N))*Dot(D,Cross(E1,Q))
     //   |Dot(D,N)|*t = -sign(Dot(D,N))*Dot(Q,N)
     var DdN = direction.dot(_normal);
-    var sign;
+    int sign;
 
     if (DdN > 0) {
       if (backfaceCulling) return null;

@@ -1,34 +1,33 @@
 part of three_extra;
 
-/**
- * Extensible curve object.
- *
- * Some common of curve methods:
- * .getPoint( t, optionalTarget ), .getTangent( t, optionalTarget )
- * .getPointAt( u, optionalTarget ), .getTangentAt( u, optionalTarget )
- * .getPoints(), .getSpacedPoints()
- * .getLength()
- * .updateArcLengths()
- *
- * This following curves inherit from THREE.Curve:
- *
- * -- 2D curves --
- * THREE.ArcCurve
- * THREE.CubicBezierCurve
- * THREE.EllipseCurve
- * THREE.LineCurve
- * THREE.QuadraticBezierCurve
- * THREE.SplineCurve
- *
- * -- 3D curves --
- * THREE.CatmullRomCurve3
- * THREE.CubicBezierCurve3
- * THREE.LineCurve3
- * THREE.QuadraticBezierCurve3
- *
- * A series of curves can be represented as a THREE.CurvePath.
- *
- **/
+/// Extensible curve object.
+///
+/// Some common of curve methods:
+/// .getPoint( t, optionalTarget ), .getTangent( t, optionalTarget )
+/// .getPointAt( u, optionalTarget ), .getTangentAt( u, optionalTarget )
+/// .getPoints(), .getSpacedPoints()
+/// .getLength()
+/// .updateArcLengths()
+///
+/// This following curves inherit from THREE.Curve:
+///
+/// -- 2D curves --
+/// THREE.ArcCurve
+/// THREE.CubicBezierCurve
+/// THREE.EllipseCurve
+/// THREE.LineCurve
+/// THREE.QuadraticBezierCurve
+/// THREE.SplineCurve
+///
+/// -- 3D curves --
+/// THREE.CatmullRomCurve3
+/// THREE.CubicBezierCurve3
+/// THREE.LineCurve3
+/// THREE.QuadraticBezierCurve3
+///
+/// A series of curves can be represented as a THREE.CurvePath.
+///
+///*/
 
 class Curve {
   late num arcLengthDivisions;
@@ -48,7 +47,7 @@ class Curve {
   bool isCubicBezierCurve = false;
   bool isQuadraticBezierCurve = false;
 
-  Vector2 currentPoint = new Vector2(null, null);
+  Vector2 currentPoint = Vector2(null, null);
 
   late Vector2 v0;
   late Vector2 v1;
@@ -59,13 +58,13 @@ class Curve {
   Map<String, dynamic> userData = {};
 
   Curve() {
-    this.arcLengthDivisions = 200;
+    arcLengthDivisions = 200;
   }
 
   Curve.fromJSON(Map<String, dynamic> json) {
-    this.arcLengthDivisions = json["arcLengthDivisions"];
-    this.v1 = Vector2.fromJSON(json["v1"]);
-    this.v2 = Vector2.fromJSON(json["v2"]);
+    arcLengthDivisions = json["arcLengthDivisions"];
+    v1 = Vector2.fromJSON(json["v1"]);
+    v2 = Vector2.fromJSON(json["v2"]);
   }
 
   static castJSON(Map<String, dynamic> json) {
@@ -78,7 +77,7 @@ class Curve {
     } else if (_type == "LineCurve") {
       return LineCurve.fromJSON(json);
     } else {
-      throw " type: ${_type} Curve.castJSON is not support yet... ";
+      throw " type: $_type Curve.castJSON is not support yet... ";
     }
   }
 
@@ -94,8 +93,8 @@ class Curve {
   // - u [0 .. 1]
 
   getPointAt(u, optionalTarget) {
-    var t = this.getUtoTmapping(u);
-    return this.getPoint(t, optionalTarget);
+    var t = getUtoTmapping(u);
+    return getPoint(t, optionalTarget);
   }
 
   // Get sequence of points using getPoint( t )
@@ -104,7 +103,7 @@ class Curve {
     var points = [];
 
     for (var d = 0; d <= divisions; d++) {
-      points.add(this.getPoint(d / divisions, null));
+      points.add(getPoint(d / divisions, null));
     }
 
     return points;
@@ -116,7 +115,7 @@ class Curve {
     var points = [];
 
     for (var d = 0; d <= divisions; d++) {
-      points.add(this.getPointAt(d / divisions, null));
+      points.add(getPointAt(d / divisions, null));
     }
 
     return points;
@@ -125,50 +124,50 @@ class Curve {
   // Get total curve arc length
 
   getLength() {
-    var lengths = this.getLengths(null);
+    var lengths = getLengths(null);
     return lengths[lengths.length - 1];
   }
 
   // Get list of cumulative segment lengths
 
   getLengths(divisions) {
-    if (divisions == null) divisions = this.arcLengthDivisions;
+    divisions ??= arcLengthDivisions;
 
-    if (this.cacheArcLengths != null &&
-        (this.cacheArcLengths!.length == divisions + 1) &&
-        !this.needsUpdate) {
-      return this.cacheArcLengths;
+    if (cacheArcLengths != null &&
+        (cacheArcLengths!.length == divisions + 1) &&
+        !needsUpdate) {
+      return cacheArcLengths;
     }
 
-    this.needsUpdate = false;
+    needsUpdate = false;
 
     List<num> cache = [];
-    var current, last = this.getPoint(0, null);
+    var current, last = getPoint(0, null);
     num sum = 0.0;
 
     cache.add(0);
 
     for (var p = 1; p <= divisions; p++) {
-      current = this.getPoint(p / divisions, null);
+      current = getPoint(p / divisions, null);
       sum += current.distanceTo(last);
       cache.add(sum);
       last = current;
     }
 
-    this.cacheArcLengths = cache;
+    cacheArcLengths = cache;
 
     return cache; // { sums: cache, sum: sum }; Sum is in the last element.
   }
 
   updateArcLengths() {
-    this.needsUpdate = true;
-    this.getLengths(null);
+    needsUpdate = true;
+    getLengths(null);
   }
 
   // Given u ( 0 .. 1 ), get a t to find p. This gives you points which are equidistant
 
   getUtoTmapping(u, [distance]) {
-    var arcLengths = this.getLengths(null);
+    var arcLengths = getLengths(null);
 
     int i = 0;
     int il = arcLengths.length;
@@ -243,13 +242,13 @@ class Curve {
     if (t1 < 0) t1 = 0;
     if (t2 > 1) t2 = 1;
 
-    var pt1 = this.getPoint(t1, null);
-    var pt2 = this.getPoint(t2, null);
+    var pt1 = getPoint(t1, null);
+    var pt2 = getPoint(t2, null);
 
     var tangent = optionalTarget ??
         ((pt1.runtimeType == Vector2)
-            ? new Vector2(null, null)
-            : new Vector3.init());
+            ? Vector2(null, null)
+            : Vector3.init());
 
     tangent.copy(pt2).sub(pt1).normalize();
 
@@ -257,40 +256,40 @@ class Curve {
   }
 
   getTangentAt(u, optionalTarget) {
-    var t = this.getUtoTmapping(u, null);
-    return this.getTangent(t, optionalTarget);
+    var t = getUtoTmapping(u, null);
+    return getTangent(t, optionalTarget);
   }
 
   computeFrenetFrames(segments, closed) {
     // see http://www.cs.indiana.edu/pub/techreports/TR425.pdf
 
-    var normal = new Vector3.init();
+    var normal = Vector3.init();
 
     var tangents = [];
     var normals = [];
     var binormals = [];
 
-    var vec = new Vector3.init();
-    var mat = new Matrix4();
+    var vec = Vector3.init();
+    var mat = Matrix4();
 
     // compute the tangent vectors for each segment on the curve
 
     for (var i = 0; i <= segments; i++) {
       var u = i / segments;
 
-      tangents.add(this.getTangentAt(u, new Vector3.init()));
+      tangents.add(getTangentAt(u, Vector3.init()));
       tangents[i].normalize();
     }
 
     // select an initial normal vector perpendicular to the first tangent vector,
     // and in the direction of the minimum tangent xyz component
 
-    normals.add(new Vector3.init());
-    binormals.add(new Vector3.init());
+    normals.add(Vector3.init());
+    binormals.add(Vector3.init());
     var min = Math.MAX_VALUE;
-    var tx = Math.abs(tangents[0].x);
-    var ty = Math.abs(tangents[0].y);
-    var tz = Math.abs(tangents[0].z);
+    final tx = Math.abs(tangents[0].x).toDouble();
+    final ty = Math.abs(tangents[0].y).toDouble();
+    final tz = Math.abs(tangents[0].z).toDouble();
 
     if (tx <= min) {
       min = tx;
@@ -359,7 +358,7 @@ class Curve {
   }
 
   copy(source) {
-    this.arcLengthDivisions = source.arcLengthDivisions;
+    arcLengthDivisions = source.arcLengthDivisions;
 
     return this;
   }
@@ -369,14 +368,14 @@ class Curve {
       "metadata": {"version": 4.5, "type": 'Curve', "generator": 'Curve.toJSON'}
     };
 
-    data["arcLengthDivisions"] = this.arcLengthDivisions;
-    data["type"] = this.type;
+    data["arcLengthDivisions"] = arcLengthDivisions;
+    data["type"] = type;
 
     return data;
   }
 
   fromJSON(json) {
-    this.arcLengthDivisions = json.arcLengthDivisions;
+    arcLengthDivisions = json.arcLengthDivisions;
 
     return this;
   }

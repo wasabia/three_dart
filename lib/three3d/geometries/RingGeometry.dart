@@ -1,6 +1,7 @@
 part of three_geometries;
 
 class RingGeometry extends BufferGeometry {
+  @override
   String type = 'RingGeometry';
 
   RingGeometry(
@@ -20,8 +21,8 @@ class RingGeometry extends BufferGeometry {
       "thetaLength": thetaLength
     };
 
-    thetaSegments = Math.max(3, thetaSegments);
-    phiSegments = Math.max(1, phiSegments);
+    thetaSegments = Math.max<num>(3, thetaSegments);
+    phiSegments = Math.max<num>(1, phiSegments);
 
     // buffers
 

@@ -108,9 +108,11 @@ class Line extends Object3D {
     var positionAttribute = attributes["position"];
 
     if (index != null) {
-      var start = Math.max(0, drawRange["start"]!);
-      var end =
-          Math.min(index.count, (drawRange["start"]! + drawRange["count"]!));
+      final start = Math.max<int>(0, drawRange["start"]!);
+      final end = Math.min<int>(
+        index.count,
+        (drawRange["start"]! + drawRange["count"]!),
+      );
 
       for (var i = start, l = end - 1; i < l; i += step) {
         var a = index.getX(i)!;
@@ -143,11 +145,13 @@ class Line extends Object3D {
         }));
       }
     } else {
-      var start = Math.max(0, drawRange["start"]!);
-      var end = Math.min(
-          positionAttribute.count, (drawRange["start"]! + drawRange["count"]!));
+      final start = Math.max<int>(0, drawRange["start"]!);
+      final end = Math.min<int>(
+        positionAttribute.count,
+        (drawRange["start"]! + drawRange["count"]!),
+      );
 
-      for (var i = start, l = end - 1; i < l; i += step) {
+      for (int i = start, l = end - 1; i < l; i += step) {
         vStart.fromBufferAttribute(positionAttribute, i);
         vEnd.fromBufferAttribute(positionAttribute, i + 1);
 

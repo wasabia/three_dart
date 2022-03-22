@@ -1,5 +1,5 @@
 // 支持List 自动扩展长度
-Function listSetter = (List list, int idx, dynamic? value) {
+listSetter(List list, int idx, dynamic value) {
   if (list.length > idx) {
     list[idx] = value;
   } else if (list.length == idx) {
@@ -8,7 +8,7 @@ Function listSetter = (List list, int idx, dynamic? value) {
     list.addAll(List<num>.filled(idx + 1 - list.length, 0));
     list[idx] = value;
   }
-};
+}
 
 // https://github.com/dartist/node_shims/blob/master/lib/src/js.dart
 

@@ -5,7 +5,7 @@ var _box = /*@__PURE__*/ Box3(null, null);
 class BoxHelper extends LineSegments {
   Object3D? object;
 
-  BoxHelper.create(geometry, material) : super(geometry, material) {}
+  BoxHelper.create(geometry, material) : super(geometry, material);
 
   factory BoxHelper(object, {color = 0xffff00}) {
     var indices = Uint16Array.from([

@@ -1,13 +1,14 @@
 part of three_geometries;
 
 class WireframeGeometry extends BufferGeometry {
+  @override
   String type = "WireframeGeometry";
 
   WireframeGeometry(BufferGeometry geometry) : super() {
     // buffer
 
     List<double> vertices = [];
-    var edges = Set();
+    var edges = <dynamic>{};
 
     // helper variables
 

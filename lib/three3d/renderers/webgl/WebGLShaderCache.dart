@@ -3,10 +3,10 @@ part of three_webgl;
 int _id = 0;
 
 class WebGLShaderCache {
-  var shaderCache = Map();
-  var materialCache = Map();
+  var shaderCache = {};
+  var materialCache = {};
 
-  WebGLShaderCache() {}
+  WebGLShaderCache();
 
   WebGLShaderCache update(Material material) {
     var vertexShader = material.vertexShader;
@@ -48,7 +48,7 @@ class WebGLShaderCache {
     return _getShaderStage(material.vertexShader).id;
   }
 
-  getFragmentShaderID(material) {
+  getFragmentShaderID(Material material) {
     return _getShaderStage(material.fragmentShader).id;
   }
 
@@ -57,7 +57,7 @@ class WebGLShaderCache {
     materialCache.clear();
   }
 
-  _getShaderCacheForMaterial(material) {
+  _getShaderCacheForMaterial(Material material) {
     var cache = materialCache;
 
     if (cache.containsKey(material) == false) {

@@ -1,26 +1,24 @@
 part of three_geometries;
 
-/**
- * Creates extruded geometry from a path shape.
- *
- * parameters = {
- *
- *  curveSegments: <int>, // number of points on the curves
- *  steps: <int>, // number of points for z-side extrusions / used for subdividing segments of extrude spline too
- *  depth: <float>, // Depth to extrude the shape
- *
- *  bevelEnabled: <bool>, // turn on bevel
- *  bevelThickness: <float>, // how deep into the original shape bevel goes
- *  bevelSize: <float>, // how far from shape outline (including bevelOffset) is bevel
- *  bevelOffset: <float>, // how far from shape outline does bevel start
- *  bevelSegments: <int>, // number of bevel layers
- *
- *  extrudePath: <THREE.Curve> // curve to extrude shape along
- *
- *  UVGenerator: <Object> // object that provides UV generator functions
- *
- * }
- */
+/// Creates extruded geometry from a path shape.
+///
+/// parameters = {
+///
+///  curveSegments: <int>, // number of points on the curves
+///  steps: <int>, // number of points for z-side extrusions / used for subdividing segments of extrude spline too
+///  depth: <float>, // Depth to extrude the shape
+///
+///  bevelEnabled: <bool>, // turn on bevel
+///  bevelThickness: <float>, // how deep into the original shape bevel goes
+///  bevelSize: <float>, // how far from shape outline (including bevelOffset) is bevel
+///  bevelOffset: <float>, // how far from shape outline does bevel start
+///  bevelSegments: <int>, // number of bevel layers
+///
+///  extrudePath: <THREE.Curve> // curve to extrude shape along
+///
+///  UVGenerator: <Object> // object that provides UV generator functions
+///
+/// }
 
 // import { BufferGeometry } from '../core/BufferGeometry.js';
 // import { Float32BufferAttribute } from '../core/BufferAttribute.js';
@@ -29,6 +27,7 @@ part of three_geometries;
 // import { ShapeUtils } from '../extras/ShapeUtils.js';
 
 class ExtrudeGeometry extends BufferGeometry {
+  @override
   String type = "ExtrudeGeometry";
 
   ExtrudeGeometry(List<Shape> shapes, Map<String, dynamic> options) : super() {
@@ -162,91 +161,91 @@ class ExtrudeGeometry extends BufferGeometry {
         // inPt' is the intersection of the two lines parallel to the two
         //  adjacent edges of inPt at a distance of 1 unit on the left side.
 
-        var v_trans_x,
-            v_trans_y,
-            shrink_by; // resulting translation vector for inPt
+        var vTransX,
+            vTransY,
+            shrinkBy; // resulting translation vector for inPt
 
         // good reading for geometry algorithms (here: line-line intersection)
         // http://geomalgorithms.com/a05-_intersect-1.html
 
-        var v_prev_x = inPt.x - inPrev.x, v_prev_y = inPt.y - inPrev.y;
-        var v_next_x = inNext.x - inPt.x, v_next_y = inNext.y - inPt.y;
+        var vPrevX = inPt.x - inPrev.x, vPrevY = inPt.y - inPrev.y;
+        var vNextX = inNext.x - inPt.x, vNextY = inNext.y - inPt.y;
 
-        var v_prev_lensq = (v_prev_x * v_prev_x + v_prev_y * v_prev_y);
+        var vPrevLensq = (vPrevX * vPrevX + vPrevY * vPrevY);
 
         // check for collinear edges
-        var collinear0 = (v_prev_x * v_next_y - v_prev_y * v_next_x);
+        var collinear0 = (vPrevX * vNextY - vPrevY * vNextX);
 
         if (Math.abs(collinear0) > Math.EPSILON) {
           // not collinear
 
           // length of vectors for normalizing
 
-          var v_prev_len = Math.sqrt(v_prev_lensq);
-          var v_next_len = Math.sqrt(v_next_x * v_next_x + v_next_y * v_next_y);
+          var vPrevLen = Math.sqrt(vPrevLensq);
+          var vNextLen = Math.sqrt(vNextX * vNextX + vNextY * vNextY);
 
           // shift adjacent points by unit vectors to the left
 
-          var ptPrevShift_x = (inPrev.x - v_prev_y / v_prev_len);
-          var ptPrevShift_y = (inPrev.y + v_prev_x / v_prev_len);
+          var ptPrevShiftX = (inPrev.x - vPrevY / vPrevLen);
+          var ptPrevShiftY = (inPrev.y + vPrevX / vPrevLen);
 
-          var ptNextShift_x = (inNext.x - v_next_y / v_next_len);
-          var ptNextShift_y = (inNext.y + v_next_x / v_next_len);
+          var ptNextShiftX = (inNext.x - vNextY / vNextLen);
+          var ptNextShiftY = (inNext.y + vNextX / vNextLen);
 
           // scaling factor for v_prev to intersection point
 
-          var sf = ((ptNextShift_x - ptPrevShift_x) * v_next_y -
-                  (ptNextShift_y - ptPrevShift_y) * v_next_x) /
-              (v_prev_x * v_next_y - v_prev_y * v_next_x);
+          var sf = ((ptNextShiftX - ptPrevShiftX) * vNextY -
+                  (ptNextShiftY - ptPrevShiftY) * vNextX) /
+              (vPrevX * vNextY - vPrevY * vNextX);
 
           // vector from inPt to intersection point
 
-          v_trans_x = (ptPrevShift_x + v_prev_x * sf - inPt.x);
-          v_trans_y = (ptPrevShift_y + v_prev_y * sf - inPt.y);
+          vTransX = (ptPrevShiftX + vPrevX * sf - inPt.x);
+          vTransY = (ptPrevShiftY + vPrevY * sf - inPt.y);
 
           // Don't normalize!, otherwise sharp corners become ugly
           //  but prevent crazy spikes
-          var v_trans_lensq = (v_trans_x * v_trans_x + v_trans_y * v_trans_y);
-          if (v_trans_lensq <= 2) {
-            return Vector2(v_trans_x, v_trans_y);
+          var vTransLensq = (vTransX * vTransX + vTransY * vTransY);
+          if (vTransLensq <= 2) {
+            return Vector2(vTransX, vTransY);
           } else {
-            shrink_by = Math.sqrt(v_trans_lensq / 2);
+            shrinkBy = Math.sqrt(vTransLensq / 2);
           }
         } else {
           // handle special case of collinear edges
 
-          var direction_eq = false; // assumes: opposite
+          var directionEq = false; // assumes: opposite
 
-          if (v_prev_x > Math.EPSILON) {
-            if (v_next_x > Math.EPSILON) {
-              direction_eq = true;
+          if (vPrevX > Math.EPSILON) {
+            if (vNextX > Math.EPSILON) {
+              directionEq = true;
             }
           } else {
-            if (v_prev_x < -Math.EPSILON) {
-              if (v_next_x < -Math.EPSILON) {
-                direction_eq = true;
+            if (vPrevX < -Math.EPSILON) {
+              if (vNextX < -Math.EPSILON) {
+                directionEq = true;
               }
             } else {
-              if (Math.sign(v_prev_y) == Math.sign(v_next_y)) {
-                direction_eq = true;
+              if (Math.sign(vPrevY) == Math.sign(vNextY)) {
+                directionEq = true;
               }
             }
           }
 
-          if (direction_eq) {
+          if (directionEq) {
             // console.log("Warning: lines are a straight sequence");
-            v_trans_x = -v_prev_y;
-            v_trans_y = v_prev_x;
-            shrink_by = Math.sqrt(v_prev_lensq);
+            vTransX = -vPrevY;
+            vTransY = vPrevX;
+            shrinkBy = Math.sqrt(vPrevLensq);
           } else {
             // console.log("Warning: lines are a straight spike");
-            v_trans_x = v_prev_x;
-            v_trans_y = v_prev_y;
-            shrink_by = Math.sqrt(v_prev_lensq / 2);
+            vTransX = vPrevX;
+            vTransY = vPrevY;
+            shrinkBy = Math.sqrt(vPrevLensq / 2);
           }
         }
 
-        return Vector2(v_trans_x / shrink_by, v_trans_y / shrink_by);
+        return Vector2(vTransX / shrinkBy, vTransY / shrinkBy);
       }
 
       var contourMovements = [];
@@ -593,8 +592,9 @@ class ExtrudeGeometry extends BufferGeometry {
 
   ExtrudeGeometry.fromJSON(
       Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON) {}
+      : super.fromJSON(json, rootJSON);
 
+  @override
   toJSON({Object3dMeta? meta}) {
     var data = super.toJSON(meta: meta);
 
@@ -607,46 +607,46 @@ class ExtrudeGeometry extends BufferGeometry {
 
 class WorldUVGenerator {
   static generateTopUV(geometry, vertices, num indexA, num indexB, num indexC) {
-    var a_x = vertices[indexA.toInt() * 3];
-    var a_y = vertices[indexA.toInt() * 3 + 1];
-    var b_x = vertices[indexB.toInt() * 3];
-    var b_y = vertices[indexB.toInt() * 3 + 1];
-    var c_x = vertices[indexC.toInt() * 3];
-    var c_y = vertices[indexC.toInt() * 3 + 1];
+    var aX = vertices[indexA.toInt() * 3];
+    var aY = vertices[indexA.toInt() * 3 + 1];
+    var bX = vertices[indexB.toInt() * 3];
+    var bY = vertices[indexB.toInt() * 3 + 1];
+    var cX = vertices[indexC.toInt() * 3];
+    var cY = vertices[indexC.toInt() * 3 + 1];
 
     return [
-      Vector2(a_x, a_y), Vector2(b_x, b_y), Vector2(c_x, c_y)
+      Vector2(aX, aY), Vector2(bX, bY), Vector2(cX, cY)
     ];
   }
 
   static generateSideWallUV(
       geometry, vertices, num indexA, num indexB, num indexC, num indexD) {
-    num a_x = vertices[indexA.toInt() * 3];
-    num a_y = vertices[indexA.toInt() * 3 + 1];
-    num a_z = vertices[indexA.toInt() * 3 + 2];
-    num b_x = vertices[indexB.toInt() * 3];
-    num b_y = vertices[indexB.toInt() * 3 + 1];
-    num b_z = vertices[indexB.toInt() * 3 + 2];
-    num c_x = vertices[indexC.toInt() * 3];
-    num c_y = vertices[indexC.toInt() * 3 + 1];
-    num c_z = vertices[indexC.toInt() * 3 + 2];
-    num d_x = vertices[indexD.toInt() * 3];
-    num d_y = vertices[indexD.toInt() * 3 + 1];
-    num d_z = vertices[indexD.toInt() * 3 + 2];
+    num aX = vertices[indexA.toInt() * 3];
+    num aY = vertices[indexA.toInt() * 3 + 1];
+    num aZ = vertices[indexA.toInt() * 3 + 2];
+    num bX = vertices[indexB.toInt() * 3];
+    num bY = vertices[indexB.toInt() * 3 + 1];
+    num bZ = vertices[indexB.toInt() * 3 + 2];
+    num cX = vertices[indexC.toInt() * 3];
+    num cY = vertices[indexC.toInt() * 3 + 1];
+    num cZ = vertices[indexC.toInt() * 3 + 2];
+    num dX = vertices[indexD.toInt() * 3];
+    num dY = vertices[indexD.toInt() * 3 + 1];
+    num dZ = vertices[indexD.toInt() * 3 + 2];
 
-    if (Math.abs(a_y - b_y) < Math.abs(a_x - b_x)) {
+    if (Math.abs(aY - bY) < Math.abs(aX - bX)) {
       return [
-        Vector2(a_x, 1 - a_z),
-        Vector2(b_x, 1 - b_z),
-        Vector2(c_x, 1 - c_z),
-        Vector2(d_x, 1 - d_z)
+        Vector2(aX, 1 - aZ),
+        Vector2(bX, 1 - bZ),
+        Vector2(cX, 1 - cZ),
+        Vector2(dX, 1 - dZ)
       ];
     } else {
       return [
-        Vector2(a_y, 1 - a_z),
-        Vector2(b_y, 1 - b_z),
-        Vector2(c_y, 1 - c_z),
-        Vector2(d_y, 1 - d_z)
+        Vector2(aY, 1 - aZ),
+        Vector2(bY, 1 - bZ),
+        Vector2(cY, 1 - cZ),
+        Vector2(dY, 1 - dZ)
       ];
     }
   }

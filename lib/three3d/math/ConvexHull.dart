@@ -1,8 +1,6 @@
 part of three_math;
 
-/**
- * Ported from: https://github.com/maurizzzio/quickhull3d/ by Mauricio Poppe (https://github.com/maurizzzio)
- */
+/// Ported from: https://github.com/maurizzzio/quickhull3d/ by Mauricio Poppe (https://github.com/maurizzzio)
 
 var Visible = 0;
 var Deleted = 1;
@@ -128,7 +126,7 @@ class ConvexHull {
 
       // compute the distance from the ray’s origin to the intersection with the plane
 
-      num t = (vD != 0) ? (-vN / vD) : 0;
+      double t = (vD != 0) ? (-vN / vD) : 0;
 
       // only proceed if the distance is positive. a negative distance means the intersection point
       // lies "behind" the origin
@@ -376,7 +374,7 @@ class ConvexHull {
 
     tolerance = 3 *
         Math.EPSILON *
-        (Math.max(Math.abs(min.x), Math.abs(max.x)) +
+        (Math.max<num>(Math.abs(min.x), Math.abs(max.x)) +
             Math.max(Math.abs(min.y), Math.abs(max.y)) +
             Math.max(Math.abs(min.z), Math.abs(max.z)));
 
@@ -408,7 +406,7 @@ class ConvexHull {
     // (max.y - min.y)
     // (max.z - min.z)
 
-    var distance;
+    num distance;
     num maxDistance = 0;
     var index = 0;
 
@@ -568,7 +566,7 @@ class ConvexHull {
   VertexNode? nextVertexToAdd() {
     // if the 'assigned' list of vertices is empty, no vertices are left. return with 'undefined'
     VertexNode? eyeVertex;
-    if (assigned.isEmpty() == false) { 
+    if (assigned.isEmpty() == false) {
       num maxDistance = 0;
 
       // grap the first available face and start with the first visible vertex of that face
@@ -588,7 +586,6 @@ class ConvexHull {
 
         vertex = vertex.next;
       } while (vertex != null && vertex.face == eyeFace2);
-
     }
     return eyeVertex;
   }
@@ -719,14 +716,14 @@ class ConvexHull {
   }
 
   ConvexHull compute() {
-    var vertex;
+    VertexNode? vertex;
 
     computeInitialHull();
 
     // add all available vertices gradually to the hull
 
     while ((vertex = nextVertexToAdd()) != null) {
-      addVertexToHull(vertex);
+      addVertexToHull(vertex!);
     }
 
     reindexFace2s();

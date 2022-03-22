@@ -6,6 +6,7 @@ class EdgesGeometry extends BufferGeometry {
   final _normal = Vector3.init();
   final _triangle = Triangle.init();
 
+  @override
   String type = "EdgesGeometry";
 
   EdgesGeometry(BufferGeometry geometry, thresholdAngle) : super() {

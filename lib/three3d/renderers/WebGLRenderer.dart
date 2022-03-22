@@ -81,15 +81,15 @@ class WebGLRenderer {
   RenderTarget? _currentRenderTarget;
 
   var _currentMaterialId = -1;
-  var _currentCamera = null;
+  var _currentCamera;
 
   final _currentViewport = Vector4.init();
   final _currentScissor = Vector4.init();
-  var _currentScissorTest = null;
+  var _currentScissorTest;
 
   double _pixelRatio = 1;
-  Function? _opaqueSort = null;
-  Function? _transparentSort = null;
+  Function? _opaqueSort;
+  Function? _transparentSort;
 
   var _scissorTest = false;
 
@@ -104,7 +104,7 @@ class WebGLRenderer {
 
   // transmission
 
-  var _transmissionRenderTarget = null;
+  var _transmissionRenderTarget;
 
   // camera matrices cache
 
@@ -531,7 +531,7 @@ class WebGLRenderer {
     var groupCount =
         group != null ? group["count"] * rangeFactor : double.maxFinite;
 
-    var drawStart = Math.max(rangeStart, groupStart);
+    var drawStart = Math.max<num>(rangeStart, groupStart);
 
     var drawEnd =
         Math.min3(dataCount, rangeStart + rangeCount, groupStart + groupCount) -
@@ -723,10 +723,10 @@ class WebGLRenderer {
 
     if (_currentRenderTarget != null) {
       // resolve multisample renderbuffers to a single-sample texture if necessary
-      textures.updateMultisampleRenderTarget(_currentRenderTarget);
+      textures.updateMultisampleRenderTarget(_currentRenderTarget!);
 
       // Generate mipmap if we're using any kind of mipmap filtering
-      textures.updateRenderTargetMipmap(_currentRenderTarget);
+      textures.updateRenderTargetMipmap(_currentRenderTarget!);
     }
 
     if (scene is Scene) {
@@ -1017,11 +1017,11 @@ class WebGLRenderer {
     // always update environment and fog - changing these trigger an getProgram call, but it's possible that the program doesn't change
 
     materialProperties["environment"] =
-        material.isMeshStandardMaterial ? scene.environment : null;
+        material is MeshStandardMaterial ? scene.environment : null;
     materialProperties["fog"] = scene.fog;
 
     Texture? _envMap;
-    if (material.isMeshStandardMaterial) {
+    if (material is MeshStandardMaterial) {
       _envMap =
           cubeuvmaps.get(material.envMap ?? materialProperties["environment"]);
     } else {
@@ -1068,7 +1068,7 @@ class WebGLRenderer {
 
     Map<String, dynamic> uniforms = materialProperties["uniforms"];
 
-    if ((!material.isShaderMaterial && !material.isRawShaderMaterial) ||
+    if ((material is! ShaderMaterial && material is! RawShaderMaterial) ||
         material.clipping == true) {
       uniforms["clippingPlanes"] = clipping.uniform;
     }
@@ -1260,8 +1260,8 @@ class WebGLRenderer {
     bool refreshMaterial = false;
     bool refreshLights = false;
 
-    var p_uniforms = program!.getUniforms(),
-        m_uniforms = materialProperties["uniforms"];
+    var pUniforms = program!.getUniforms(),
+        mUniforms = materialProperties["uniforms"];
 
     if (state.useProgram(program.program)) {
       refreshProgram = true;
@@ -1276,11 +1276,11 @@ class WebGLRenderer {
     }
 
     if (refreshProgram || _currentCamera != camera) {
-      p_uniforms.setValue(
+      pUniforms.setValue(
           _gl, 'projectionMatrix', camera.projectionMatrix, textures);
 
       if (capabilities.logarithmicDepthBuffer) {
-        p_uniforms.setValue(_gl, 'logDepthBufFC',
+        pUniforms.setValue(_gl, 'logDepthBufFC',
             2.0 / (Math.log(camera.far + 1.0) / Math.LN2), textures);
       }
 
@@ -1304,7 +1304,7 @@ class WebGLRenderer {
           material is MeshToonMaterial ||
           material is MeshStandardMaterial ||
           material.envMap != null) {
-        var uCamPos = p_uniforms.map["cameraPosition"];
+        var uCamPos = pUniforms.map["cameraPosition"];
 
         if (uCamPos != null) {
           uCamPos.setValue(
@@ -1318,7 +1318,7 @@ class WebGLRenderer {
           material is MeshBasicMaterial ||
           material is MeshStandardMaterial ||
           material is ShaderMaterial) {
-        p_uniforms.setValue(
+        pUniforms.setValue(
             _gl, 'isOrthographic', camera is OrthographicCamera, textures);
       }
 
@@ -1330,7 +1330,7 @@ class WebGLRenderer {
           material is ShaderMaterial ||
           material is ShadowMaterial ||
           object is SkinnedMesh) {
-        p_uniforms.setValue(
+        pUniforms.setValue(
             _gl, 'viewMatrix', camera.matrixWorldInverse, textures);
       }
     }
@@ -1340,8 +1340,8 @@ class WebGLRenderer {
     // otherwise textures used for skinning can take over texture units reserved for other material textures
 
     if (object is SkinnedMesh) {
-      p_uniforms.setOptional(_gl, object, 'bindMatrix');
-      p_uniforms.setOptional(_gl, object, 'bindMatrixInverse');
+      pUniforms.setOptional(_gl, object, 'bindMatrix');
+      pUniforms.setOptional(_gl, object, 'bindMatrixInverse');
 
       var skeleton = object.skeleton;
 
@@ -1349,12 +1349,12 @@ class WebGLRenderer {
         if (capabilities.floatVertexTextures) {
           if (skeleton.boneTexture == null) skeleton.computeBoneTexture();
 
-          p_uniforms.setValue(
+          pUniforms.setValue(
               _gl, 'boneTexture', skeleton.boneTexture, textures);
-          p_uniforms.setValue(
+          pUniforms.setValue(
               _gl, 'boneTextureSize', skeleton.boneTextureSize, textures);
         } else {
-          p_uniforms.setOptional(_gl, skeleton, 'boneMatrices');
+          pUniforms.setOptional(_gl, skeleton, 'boneMatrices');
         }
       }
     }
@@ -1370,13 +1370,13 @@ class WebGLRenderer {
     if (refreshMaterial ||
         materialProperties["receiveShadow"] != object.receiveShadow) {
       materialProperties["receiveShadow"] = object.receiveShadow;
-      p_uniforms.setValue(_gl, 'receiveShadow', object.receiveShadow, textures);
+      pUniforms.setValue(_gl, 'receiveShadow', object.receiveShadow, textures);
     }
 
     // print(" setProgram .......... material: ${material.type} ");
 
     if (refreshMaterial) {
-      p_uniforms.setValue(
+      pUniforms.setValue(
           _gl, 'toneMappingExposure', toneMappingExposure, textures);
 
       if (materialProperties["needsLights"]) {
@@ -1389,16 +1389,16 @@ class WebGLRenderer {
         // use the current material's .needsUpdate flags to set
         // the GL state when required
 
-        markUniformsLightsNeedsUpdate(m_uniforms, refreshLights);
+        markUniformsLightsNeedsUpdate(mUniforms, refreshLights);
       }
 
       // refresh uniforms common to several materials
 
       if (fog != null && material.fog) {
-        materials.refreshFogUniforms(m_uniforms, fog);
+        materials.refreshFogUniforms(mUniforms, fog);
       }
 
-      materials.refreshMaterialUniforms(m_uniforms, material, _pixelRatio,
+      materials.refreshMaterialUniforms(mUniforms, material, _pixelRatio,
           _height, _transmissionRenderTarget);
 
       // print("m_uniforms  ");
@@ -1406,26 +1406,26 @@ class WebGLRenderer {
       // print(m_uniforms["ambientLightColor"]["value"].runtimeType);
 
       WebGLUniforms.upload(
-          _gl, materialProperties["uniformsList"], m_uniforms, textures);
+          _gl, materialProperties["uniformsList"], mUniforms, textures);
     }
 
-    if (material.isShaderMaterial && material.uniformsNeedUpdate == true) {
+    if (material is ShaderMaterial && material.uniformsNeedUpdate == true) {
       WebGLUniforms.upload(
-          _gl, materialProperties["uniformsList"], m_uniforms, textures);
+          _gl, materialProperties["uniformsList"], mUniforms, textures);
       material.uniformsNeedUpdate = false;
     }
 
     if (material is SpriteMaterial) {
       dynamic c = object;
-      p_uniforms.setValue(_gl, 'center', c.center, textures);
+      pUniforms.setValue(_gl, 'center', c.center, textures);
     }
 
     // common matrices
 
-    p_uniforms.setValue(
+    pUniforms.setValue(
         _gl, 'modelViewMatrix', object.modelViewMatrix, textures);
-    p_uniforms.setValue(_gl, 'normalMatrix', object.normalMatrix, textures);
-    p_uniforms.setValue(_gl, 'modelMatrix', object.matrixWorld, textures);
+    pUniforms.setValue(_gl, 'normalMatrix', object.normalMatrix, textures);
+    pUniforms.setValue(_gl, 'modelMatrix', object.matrixWorld, textures);
 
     return program;
   }
@@ -1526,7 +1526,7 @@ class WebGLRenderer {
       }
     }
 
-    var framebuffer = null;
+    var framebuffer;
     var isCube = false;
     var isRenderTarget3D = false;
 

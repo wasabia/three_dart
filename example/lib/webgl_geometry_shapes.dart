@@ -1,13 +1,10 @@
 import 'dart:async';
 
-import 'dart:typed_data';
 
-import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 
 import 'package:three_dart/three_dart.dart' as THREE;
@@ -16,6 +13,7 @@ class webgl_geometry_shapes extends StatefulWidget {
   String fileName;
   webgl_geometry_shapes({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   _MyAppState createState() => _MyAppState();
 }
 
@@ -69,7 +67,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -102,7 +100,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           render();
         },
@@ -157,7 +155,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -198,19 +196,19 @@ class _MyAppState extends State<webgl_geometry_shapes> {
   initPage() async {
     scene = THREE.Scene();
 
-    camera = new THREE.PerspectiveCamera(50, width / height, 1, 2000);
+    camera = THREE.PerspectiveCamera(50, width / height, 1, 2000);
     // let camra far
     camera.position.set(0, 150, 1500);
     scene.add(camera);
 
-    var light = new THREE.PointLight(0xffffff, 0.8);
+    var light = THREE.PointLight(0xffffff, 0.8);
     camera.add(light);
 
-    group = new THREE.Group();
+    group = THREE.Group();
     group.position.y = 50;
     scene.add(group);
 
-    var loader = new THREE.TextureLoader(null);
+    var loader = THREE.TextureLoader(null);
     texture =
         await loader.loadAsync("assets/textures/uv_grid_opengl.jpg", null);
 
@@ -223,37 +221,38 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
     var californiaPts = [];
 
-    californiaPts.add(new THREE.Vector2(610, 320));
-    californiaPts.add(new THREE.Vector2(450, 300));
-    californiaPts.add(new THREE.Vector2(392, 392));
-    californiaPts.add(new THREE.Vector2(266, 438));
-    californiaPts.add(new THREE.Vector2(190, 570));
-    californiaPts.add(new THREE.Vector2(190, 600));
-    californiaPts.add(new THREE.Vector2(160, 620));
-    californiaPts.add(new THREE.Vector2(160, 650));
-    californiaPts.add(new THREE.Vector2(180, 640));
-    californiaPts.add(new THREE.Vector2(165, 680));
-    californiaPts.add(new THREE.Vector2(150, 670));
-    californiaPts.add(new THREE.Vector2(90, 737));
-    californiaPts.add(new THREE.Vector2(80, 795));
-    californiaPts.add(new THREE.Vector2(50, 835));
-    californiaPts.add(new THREE.Vector2(64, 870));
-    californiaPts.add(new THREE.Vector2(60, 945));
-    californiaPts.add(new THREE.Vector2(300, 945));
-    californiaPts.add(new THREE.Vector2(300, 743));
-    californiaPts.add(new THREE.Vector2(600, 473));
-    californiaPts.add(new THREE.Vector2(626, 425));
-    californiaPts.add(new THREE.Vector2(600, 370));
-    californiaPts.add(new THREE.Vector2(610, 320));
+    californiaPts.add(THREE.Vector2(610, 320));
+    californiaPts.add(THREE.Vector2(450, 300));
+    californiaPts.add(THREE.Vector2(392, 392));
+    californiaPts.add(THREE.Vector2(266, 438));
+    californiaPts.add(THREE.Vector2(190, 570));
+    californiaPts.add(THREE.Vector2(190, 600));
+    californiaPts.add(THREE.Vector2(160, 620));
+    californiaPts.add(THREE.Vector2(160, 650));
+    californiaPts.add(THREE.Vector2(180, 640));
+    californiaPts.add(THREE.Vector2(165, 680));
+    californiaPts.add(THREE.Vector2(150, 670));
+    californiaPts.add(THREE.Vector2(90, 737));
+    californiaPts.add(THREE.Vector2(80, 795));
+    californiaPts.add(THREE.Vector2(50, 835));
+    californiaPts.add(THREE.Vector2(64, 870));
+    californiaPts.add(THREE.Vector2(60, 945));
+    californiaPts.add(THREE.Vector2(300, 945));
+    californiaPts.add(THREE.Vector2(300, 743));
+    californiaPts.add(THREE.Vector2(600, 473));
+    californiaPts.add(THREE.Vector2(626, 425));
+    californiaPts.add(THREE.Vector2(600, 370));
+    californiaPts.add(THREE.Vector2(610, 320));
 
-    for (var i = 0; i < californiaPts.length; i++)
+    for (var i = 0; i < californiaPts.length; i++) {
       californiaPts[i].multiplyScalar(0.25);
+    }
 
-    var californiaShape = new THREE.Shape(californiaPts);
+    var californiaShape = THREE.Shape(californiaPts);
 
     // Triangle
 
-    var triangleShape = new THREE.Shape(null)
+    var triangleShape = THREE.Shape(null)
         .moveTo(80, 20)
         .lineTo(40, 80)
         .lineTo(120, 80)
@@ -264,7 +263,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
     var x = 0, y = 0;
 
     var heartShape =
-        new THREE.Shape(null) // From http://blog.burlock.org/html5/130-paths
+        THREE.Shape(null) // From http://blog.burlock.org/html5/130-paths
             .moveTo(x + 25, y + 25)
             .bezierCurveTo(x + 25, y + 25, x + 20, y, x, y)
             .bezierCurveTo(x - 30, y, x - 30, y + 35, x - 30, y + 35)
@@ -277,7 +276,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
     var sqLength = 80;
 
-    var squareShape = new THREE.Shape(null)
+    var squareShape = THREE.Shape(null)
         .moveTo(0, 0)
         .lineTo(0, sqLength)
         .lineTo(sqLength, sqLength)
@@ -286,7 +285,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
     // Rounded rectangle
 
-    var roundedRectShape = new THREE.Shape(null);
+    var roundedRectShape = THREE.Shape(null);
 
     Function roundedRect = (ctx, x, y, width, height, radius) {
       ctx.moveTo(x, y + radius);
@@ -304,7 +303,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
     // Track
 
-    var trackShape = new THREE.Shape(null)
+    var trackShape = THREE.Shape(null)
         .moveTo(40, 40)
         .lineTo(40, 160)
         .absarc(60, 160, 20, THREE.Math.PI, 0, true)
@@ -314,7 +313,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
     // Circle
 
     var circleRadius = 40;
-    var circleShape = new THREE.Shape(null)
+    var circleShape = THREE.Shape(null)
         .moveTo(0, circleRadius)
         .quadraticCurveTo(circleRadius, circleRadius, circleRadius, 0)
         .quadraticCurveTo(circleRadius, -circleRadius, 0, -circleRadius)
@@ -323,7 +322,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
     // Fish
 
-    var fishShape = new THREE.Shape(null)
+    var fishShape = THREE.Shape(null)
         .moveTo(x, y)
         .quadraticCurveTo(x + 50, y - 80, x + 90, y - 10)
         .quadraticCurveTo(x + 100, y - 10, x + 115, y - 40)
@@ -333,11 +332,11 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
     // Arc circle
 
-    var arcShape = new THREE.Shape(null)
+    var arcShape = THREE.Shape(null)
         .moveTo(50, 10)
         .absarc(10, 10, 40, 0, THREE.Math.PI * 2, false);
 
-    var holePath = new THREE.Path(null)
+    var holePath = THREE.Path(null)
         .moveTo(20, 10)
         .absarc(10, 10, 10, 0, THREE.Math.PI * 2, true);
 
@@ -345,19 +344,19 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
     // Smiley
 
-    var smileyShape = new THREE.Shape(null)
+    var smileyShape = THREE.Shape(null)
         .moveTo(80, 40)
         .absarc(40, 40, 40, 0, THREE.Math.PI * 2, false);
 
-    var smileyEye1Path = new THREE.Path(null)
+    var smileyEye1Path = THREE.Path(null)
         .moveTo(35, 20)
         .absellipse(25, 20, 10, 10, 0, THREE.Math.PI * 2, true, null);
 
-    var smileyEye2Path = new THREE.Path(null)
+    var smileyEye2Path = THREE.Path(null)
         .moveTo(65, 20)
         .absarc(55, 20, 10, 0, THREE.Math.PI * 2, true);
 
-    var smileyMouthPath = new THREE.Path(null)
+    var smileyMouthPath = THREE.Path(null)
         .moveTo(20, 40)
         .quadraticCurveTo(40, 60, 60, 40)
         .bezierCurveTo(70, 45, 70, 50, 60, 60)
@@ -371,12 +370,12 @@ class _MyAppState extends State<webgl_geometry_shapes> {
     // Spline shape
 
     List<THREE.Vector2> splinepts = [];
-    splinepts.add(new THREE.Vector2(70, 20));
-    splinepts.add(new THREE.Vector2(80, 90));
-    splinepts.add(new THREE.Vector2(-30, 70));
-    splinepts.add(new THREE.Vector2(0, 0));
+    splinepts.add(THREE.Vector2(70, 20));
+    splinepts.add(THREE.Vector2(80, 90));
+    splinepts.add(THREE.Vector2(-30, 70));
+    splinepts.add(THREE.Vector2(0, 0));
 
-    var splineShape = new THREE.Shape(null).moveTo(0, 0).splineThru(splinepts);
+    var splineShape = THREE.Shape(null).moveTo(0, 0).splineThru(splinepts);
 
     var extrudeSettings = {
       "depth": 8,
@@ -421,11 +420,11 @@ class _MyAppState extends State<webgl_geometry_shapes> {
     // flat shape with texture
     // note: default UVs generated by THREE.ShapeGeometry are simply the x- and y-coordinates of the vertices
 
-    var geometry = new THREE.ShapeGeometry(shape);
+    var geometry = THREE.ShapeGeometry(shape);
 
-    var mesh = new THREE.Mesh(
+    var mesh = THREE.Mesh(
         geometry,
-        new THREE.MeshPhongMaterial(
+        THREE.MeshPhongMaterial(
             {"side": THREE.DoubleSide, "map": texture}));
     mesh.position.set(x, y, z - 175);
     mesh.rotation.set(rx, ry, rz);
@@ -434,11 +433,11 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
     // flat shape
 
-    geometry = new THREE.ShapeGeometry(shape);
+    geometry = THREE.ShapeGeometry(shape);
 
-    mesh = new THREE.Mesh(
+    mesh = THREE.Mesh(
         geometry,
-        new THREE.MeshPhongMaterial(
+        THREE.MeshPhongMaterial(
             {"color": color, "side": THREE.DoubleSide}));
     mesh.position.set(x, y, z - 125);
     mesh.rotation.set(rx, ry, rz);
@@ -447,10 +446,10 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
     // extruded shape
 
-    var geometry2 = new THREE.ExtrudeGeometry([shape], extrudeSettings);
+    var geometry2 = THREE.ExtrudeGeometry([shape], extrudeSettings);
 
-    mesh = new THREE.Mesh(
-        geometry2, new THREE.MeshPhongMaterial({"color": color}));
+    mesh = THREE.Mesh(
+        geometry2, THREE.MeshPhongMaterial({"color": color}));
     mesh.position.set(x, y, z - 75);
     mesh.rotation.set(rx, ry, rz);
     mesh.scale.set(s, s, s);
@@ -467,14 +466,14 @@ class _MyAppState extends State<webgl_geometry_shapes> {
     var points = shape.getPoints();
     var spacedPoints = shape.getSpacedPoints(50);
 
-    var geometryPoints = new THREE.BufferGeometry().setFromPoints(points);
+    var geometryPoints = THREE.BufferGeometry().setFromPoints(points);
     var geometrySpacedPoints =
-        new THREE.BufferGeometry().setFromPoints(spacedPoints);
+        THREE.BufferGeometry().setFromPoints(spacedPoints);
 
     // solid line
 
-    var line = new THREE.Line(
-        geometryPoints, new THREE.LineBasicMaterial({"color": color}));
+    var line = THREE.Line(
+        geometryPoints, THREE.LineBasicMaterial({"color": color}));
     line.position.set(x, y, z - 25);
     line.rotation.set(rx, ry, rz);
     line.scale.set(s, s, s);
@@ -482,8 +481,8 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
     // line from equidistance sampled points
 
-    line = new THREE.Line(
-        geometrySpacedPoints, new THREE.LineBasicMaterial({"color": color}));
+    line = THREE.Line(
+        geometrySpacedPoints, THREE.LineBasicMaterial({"color": color}));
     line.position.set(x, y, z + 25);
     line.rotation.set(rx, ry, rz);
     line.scale.set(s, s, s);
@@ -491,8 +490,8 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
     // vertices from real points
 
-    var particles = new THREE.Points(
-        geometryPoints, new THREE.PointsMaterial({"color": color, "size": 4}));
+    var particles = THREE.Points(
+        geometryPoints, THREE.PointsMaterial({"color": color, "size": 4}));
     particles.position.set(x, y, z + 75);
     particles.rotation.set(rx, ry, rz);
     particles.scale.set(s, s, s);
@@ -500,8 +499,8 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
     // equidistance sampled points
 
-    particles = new THREE.Points(geometrySpacedPoints,
-        new THREE.PointsMaterial({"color": color, "size": 4}));
+    particles = THREE.Points(geometrySpacedPoints,
+        THREE.PointsMaterial({"color": color, "size": 4}));
     particles.position.set(x, y, z + 125);
     particles.rotation.set(rx, ry, rz);
     particles.scale.set(s, s, s);
@@ -518,7 +517,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }

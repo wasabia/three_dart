@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
@@ -14,6 +13,7 @@ class webgl_animation_multiple extends StatefulWidget {
   webgl_animation_multiple({Key? key, required this.fileName})
       : super(key: key);
 
+  @override
   createState() => _State();
 }
 
@@ -36,7 +36,7 @@ class _State extends State<webgl_animation_multiple> {
   //////////////////////////////
   late THREE.Scene worldScene; // THREE.Scene where it all will be rendered
 
-  THREE.Clock clock = new THREE.Clock();
+  THREE.Clock clock = THREE.Clock();
   THREE_JSM.OrbitControls? controls;
 
   double dpr = 1.0;
@@ -93,7 +93,7 @@ class _State extends State<webgl_animation_multiple> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -126,7 +126,7 @@ class _State extends State<webgl_animation_multiple> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           clickRender();
         },
@@ -185,7 +185,7 @@ class _State extends State<webgl_animation_multiple> {
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
     _gl.flush();
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -208,7 +208,7 @@ class _State extends State<webgl_animation_multiple> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+          (width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -299,21 +299,21 @@ class _State extends State<webgl_animation_multiple> {
   }
 
   initScene2() {
-    camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
+    camera = THREE.PerspectiveCamera(45, width / height, 1, 10000);
     camera.position.set(3, 6, -10);
     camera.lookAt(THREE.Vector3(0, 1, 0));
 
-    clock = new THREE.Clock();
+    clock = THREE.Clock();
 
-    worldScene = new THREE.Scene();
+    worldScene = THREE.Scene();
     worldScene.background = THREE.Color.fromHex(0xa0a0a0);
-    worldScene.fog = new THREE.Fog(0xa0a0a0, 10, 22);
+    worldScene.fog = THREE.Fog(0xa0a0a0, 10, 22);
 
-    var hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
+    var hemiLight = THREE.HemisphereLight(0xffffff, 0x444444);
     hemiLight.position.set(0, 20, 0);
     worldScene.add(hemiLight);
 
-    var dirLight = new THREE.DirectionalLight(0xffffff);
+    var dirLight = THREE.DirectionalLight(0xffffff);
     dirLight.position.set(-3, 10, -10);
     dirLight.castShadow = true;
     dirLight.shadow!.camera!.top = 10;
@@ -324,11 +324,11 @@ class _State extends State<webgl_animation_multiple> {
     dirLight.shadow!.camera!.far = 40;
     worldScene.add(dirLight);
 
-    var controls = new THREE_JSM.OrbitControls(camera, _globalKey);
+    var controls = THREE_JSM.OrbitControls(camera, _globalKey);
 
     // ground
-    var groundMesh = new THREE.Mesh(new THREE.PlaneGeometry(40, 40),
-        new THREE.MeshPhongMaterial({"color": 0x999999, "depthWrite": false}));
+    var groundMesh = THREE.Mesh(THREE.PlaneGeometry(40, 40),
+        THREE.MeshPhongMaterial({"color": 0x999999, "depthWrite": false}));
 
     groundMesh.rotation.x = -THREE.Math.PI / 2;
     groundMesh.receiveShadow = true;
@@ -413,7 +413,7 @@ class _State extends State<webgl_animation_multiple> {
       }
     }
 
-    print(" Successfully instantiated ${numSuccess} units ");
+    print(" Successfully instantiated $numSuccess units ");
 
 
     animate();
@@ -427,7 +427,7 @@ class _State extends State<webgl_animation_multiple> {
      * @return {THREE.AnimationMixer} Mixer to be used in the render loop
      */
   startAnimation(skinnedMesh, animations, animationName) {
-    var mixer = new THREE.AnimationMixer(skinnedMesh);
+    var mixer = THREE.AnimationMixer(skinnedMesh);
     var clip = THREE.AnimationClip.findByName(animations, animationName);
 
     if (clip != null) {
@@ -459,7 +459,7 @@ class _State extends State<webgl_animation_multiple> {
      * @param onLoaded {function} A callback function that will be called when the model is loaded
      */
   loadGltfModel(model, onLoaded) {
-    var loader = new THREE_JSM.GLTFLoader(null);
+    var loader = THREE_JSM.GLTFLoader(null);
     var modelName = "assets/models/gltf/" + model["name"] + ".gltf";
 
     loader.load(modelName, (gltf) {
@@ -506,7 +506,7 @@ class _State extends State<webgl_animation_multiple> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }
