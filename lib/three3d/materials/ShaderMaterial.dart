@@ -18,7 +18,6 @@ part of three_materials;
 class ShaderMaterial extends Material {
   ShaderMaterial([Map<String, dynamic>? parameters]) : super() {
     type = 'ShaderMaterial';
-    isShaderMaterial = true;
     defines = {};
     uniforms = {};
 

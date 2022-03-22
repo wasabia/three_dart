@@ -1,13 +1,12 @@
 part of three_core;
 
 class InstancedBufferAttribute extends BufferAttribute {
-  late num meshPerAttribute;
+  late int meshPerAttribute;
 
   InstancedBufferAttribute(NativeArray array, int itemSize,
       [bool normalized = false, this.meshPerAttribute = 1])
       : super(array, itemSize, normalized) {
     type = "InstancedBufferAttribute";
-    isInstancedBufferAttribute = true;
     // if ( normalized is num ) {
     //   meshPerAttribute = normalized;
     //   normalized = false;
@@ -25,13 +24,10 @@ class InstancedBufferAttribute extends BufferAttribute {
   }
 
   @override
-  toJSON([data]) {
+  Map<String, dynamic> toJSON([data]) {
     var result = super.toJSON();
-
-    result.meshPerAttribute = meshPerAttribute;
-
-    result.isInstancedBufferAttribute = true;
-
+    result['meshPerAttribute'] = meshPerAttribute;
+    result['isInstancedBufferAttribute'] = true;
     return result;
   }
 }

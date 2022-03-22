@@ -1,9 +1,8 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart';
 
-arrayMin(array) {
-  if (array.length == 0) return 9999999;
+T? arrayMin<T extends num>(List<T> array) {
+  if (array.isEmpty) return null; //return 9999999;
 
   var min = array[0];
 
@@ -14,8 +13,8 @@ arrayMin(array) {
   return min;
 }
 
-arrayMax(array) {
-  if (array.length == 0) return -99999999;
+T? arrayMax<T extends num>(List<T> array) {
+  if (array.isEmpty) return null; // return -99999999;
 
   var max = array[0];
 

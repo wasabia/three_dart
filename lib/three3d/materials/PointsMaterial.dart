@@ -16,7 +16,6 @@ part of three_materials;
 class PointsMaterial extends Material {
   PointsMaterial([Map<String, dynamic>? parameters]) {
     type = "PointsMaterial";
-    isPointsMaterial = true;
     sizeAttenuation = true;
     color = Color(1, 1, 1);
     size = 1;

@@ -1,17 +1,11 @@
 part of three_lights;
 
 class Light extends Object3D {
-  @override
-  bool isLight = true;
   late num intensity;
   Color? color;
   num? distance;
   LightShadow? shadow;
   SphericalHarmonics3? sh;
-
-  bool isLightProbe = false;
-  bool isSpotLight = false;
-  bool isPointLight = false;
 
   num? angle;
   num? decay;

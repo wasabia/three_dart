@@ -29,8 +29,6 @@ class LightShadow {
   final Vector3 _lookTarget = Vector3.init();
 
   late num focus;
-  bool isSpotLightShadow = false;
-  bool isPointLightShadow = false;
 
   LightShadow(this.camera);
 

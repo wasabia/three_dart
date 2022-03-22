@@ -34,7 +34,6 @@ part of three_materials;
 class MeshBasicMaterial extends Material {
   MeshBasicMaterial([Map<String, dynamic>? parameters]) : super() {
     type = 'MeshBasicMaterial';
-    isMeshBasicMaterial = true;
     color = Color(1, 1, 1); // emissive
 
     map = null;

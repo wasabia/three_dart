@@ -541,12 +541,12 @@ class SVGLoaderParser {
 
     void addStyle(svgName, jsName, [adjustFunction]) {
       adjustFunction ??= (v) {
-          if (v.startsWith('url')) {
-            print('SVGLoader: url access in attributes is not implemented.');
-          }
+        if (v.startsWith('url')) {
+          print('SVGLoader: url access in attributes is not implemented.');
+        }
 
-          return v;
-        };
+        return v;
+      };
 
       if (node.hasAttribute(svgName)) {
         style2[jsName] = adjustFunction(node.getAttribute(svgName));
@@ -634,8 +634,7 @@ class SVGLoaderParser {
     var dx2 = (start.x - end.x) / 2.0;
     var dy2 = (start.y - end.y) / 2.0;
     var x1p = Math.cos(xAxisRotation) * dx2 + Math.sin(xAxisRotation) * dy2;
-    var y1p =
-        -Math.sin(xAxisRotation) * dx2 + Math.cos(xAxisRotation) * dy2;
+    var y1p = -Math.sin(xAxisRotation) * dx2 + Math.cos(xAxisRotation) * dy2;
 
     // Compute (cx', cy')
     var rxs = rx * rx;
@@ -1248,7 +1247,7 @@ class SVGLoaderParser {
       for (var j = 0; j < curves.length; j++) {
         var curve = curves[j];
 
-        if (curve.isLineCurve) {
+        if (curve is LineCurve) {
           transfVec2(curve.v1);
           transfVec2(curve.v2);
         } else if (curve.isCubicBezierCurve) {

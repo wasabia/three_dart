@@ -36,18 +36,6 @@ class Object3D with EventDispatcher {
 
   bool castShadow = false;
 
-  bool isMesh = false;
-  bool isLine = false;
-  bool isPoints = false;
-  bool isSkinnedMesh = false;
-  bool isBone = false;
-  bool isInstancedMesh = false;
-  bool isCamera = false;
-  bool isLight = false;
-  bool isLineSegments = false;
-  bool isLineLoop = false;
-  bool isScene = false;
-
   bool autoUpdate = false; // checked by the renderer
 
   Matrix4 matrix = Matrix4();
@@ -71,7 +59,6 @@ class Object3D with EventDispatcher {
 
   Map<String, dynamic> extra = {};
 
-  bool isObject3D = true;
   BufferGeometry? geometry;
 
   Vector3 up = Object3D.DefaultUp.clone();
@@ -361,7 +348,7 @@ class Object3D with EventDispatcher {
       return this;
     }
 
-    if (object != null && object.isObject3D) {
+    if (object != null && object is Object3D) {
       if (object.parent != null) {
         object.parent!.remove(object);
       }
