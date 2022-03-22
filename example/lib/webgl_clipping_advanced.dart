@@ -219,7 +219,7 @@ class _State extends State<webgl_clipping_advanced> {
     // creates a clipping volume from a convex triangular mesh
     // specified by the arrays 'vertices' and 'indices'
 
-    var n = indices.length / 3;
+    int n = indices.length ~/ 3;
     var result = List<THREE.Plane>.filled(n, THREE.Plane(null, null));
 
     for (var i = 0, j = 0; i < n; ++i, j += 3) {

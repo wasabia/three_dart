@@ -39,7 +39,7 @@ abstract class BufferAttribute<TData extends NativeArray>
     normalized = source.normalized;
     type = source.type;
     usage = source.usage;
-    array = source.array.clone() as TData;
+    array = (source.array..clone()) as TData;
     return this;
   }
 

@@ -703,8 +703,8 @@ class BufferGeometry with EventDispatcher {
       var index = 0, index2 = 0;
 
       for (var i = 0, l = indices.length; i < l; i++) {
-        if (attribute.isInterleavedBufferAttribute) {
-          index = indices[i] * attribute.data.stride + attribute.offset;
+        if (attribute is InterleavedBufferAttribute) {
+          index = indices[i] * attribute.data!.stride + attribute.offset;
         } else {
           index = indices[i] * itemSize;
         }
