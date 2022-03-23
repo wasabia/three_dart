@@ -5,7 +5,6 @@ class PointLightShadow extends LightShadow {
   late List<Vector3> _cubeUps;
 
   PointLightShadow() : super(PerspectiveCamera(90, 1, 0.5, 500)) {
-    isPointLightShadow = true;
     _frameExtents = Vector2(4, 2);
 
     _viewportCount = 6;

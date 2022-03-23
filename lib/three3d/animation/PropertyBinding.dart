@@ -112,9 +112,8 @@ class PropertyBinding {
     this.path = path;
     this.parsedPath = parsedPath ?? PropertyBinding.parseTrackName(path);
 
-    node =
-        PropertyBinding.findNode(rootNode, this.parsedPath["nodeName"]) ??
-            rootNode;
+    node = PropertyBinding.findNode(rootNode, this.parsedPath["nodeName"]) ??
+        rootNode;
 
     this.rootNode = rootNode;
     getValue = getValue_unbound;
@@ -192,8 +191,7 @@ class PropertyBinding {
       }
     }
 
-    if (results["propertyName"] == null ||
-        results["propertyName"]!.isEmpty) {
+    if (results["propertyName"] == null || results["propertyName"]!.isEmpty) {
       throw ('PropertyBinding: can not parse propertyName from trackName: $trackName');
     }
 
@@ -571,7 +569,7 @@ class PropertyBinding {
           return;
         }
 
-        if (targetObject.geometry.isBufferGeometry) {
+        if (targetObject.geometry is BufferGeometry) {
           if (!targetObject.geometry.morphAttributes) {
             print(
                 'THREE.PropertyBinding: Can not bind to morphTargetInfluences because node does not have a geometry.morphAttributes. ${this}');
@@ -595,7 +593,7 @@ class PropertyBinding {
 
       // } else if ( nodeProperty.fromArray != null && nodeProperty.toArray != null ) {
     } else if (["Color", "Vector3", "Quaternion"]
-            .contains(nodeProperty.runtimeType.toString())) {
+        .contains(nodeProperty.runtimeType.toString())) {
       // must use copy for Object3D.Euler/Quaternion
 
       bindingType = BindingType["HasFromToArray"];
@@ -611,8 +609,7 @@ class PropertyBinding {
 
     // select getter / setter
     getValue = getterByBindingType(bindingType!);
-    setValue =
-        setterByBindingTypeAndVersioning(bindingType, versioning);
+    setValue = setterByBindingTypeAndVersioning(bindingType, versioning);
   }
 
   unbind() {

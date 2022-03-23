@@ -11,14 +11,12 @@ class Line extends Object3D {
     this.geometry = geometry ?? BufferGeometry();
     this.material = material ?? LineBasicMaterial(<String, dynamic>{});
     type = "Line";
-    isLine = true;
     updateMorphTargets();
   }
 
   Line.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON)
       : super.fromJSON(json, rootJSON) {
     type = "Line";
-    isLine = true;
   }
 
   @override
@@ -37,9 +35,9 @@ class Line extends Object3D {
   }
 
   Line computeLineDistances() {
-    var geometry = this.geometry!;
+    var geometry = this.geometry;
 
-    if (geometry.isBufferGeometry) {
+    if (geometry is BufferGeometry) {
       // we assume non-indexed geometry
 
       if (geometry.index == null) {
@@ -58,15 +56,17 @@ class Line extends Object3D {
           lineDistances[i] += _start.distanceTo(_end);
         }
 
-        geometry.setAttribute('lineDistance',
-            Float32BufferAttribute(lineDistances, 1, false));
-      } else {
-        print(
-            'THREE.Line.computeLineDistances(): Computation only possible with non-indexed BufferGeometry.');
+        geometry.setAttribute(
+            'lineDistance', Float32BufferAttribute(lineDistances, 1, false));
       }
-    } else if (geometry.isGeometry) {
-      throw ('THREE.Line.computeLineDistances() no longer supports THREE.Geometry. Use THREE.BufferGeometry instead.');
+      // else {
+      //   print(
+      //       'THREE.Line.computeLineDistances(): Computation only possible with non-indexed BufferGeometry.');
+      // }
     }
+    // else if (geometry.isGeometry) {
+    //   throw ('THREE.Line.computeLineDistances() no longer supports THREE.Geometry. Use THREE.BufferGeometry instead.');
+    // }
 
     return this;
   }
@@ -93,8 +93,7 @@ class Line extends Object3D {
     _inverseMatrix.copy(matrixWorld).invert();
     _ray.copy(raycaster.ray).applyMatrix4(_inverseMatrix);
 
-    var localThreshold =
-        threshold / ((scale.x + scale.y + scale.z) / 3);
+    var localThreshold = threshold / ((scale.x + scale.y + scale.z) / 3);
     var localThresholdSq = localThreshold * localThreshold;
 
     var vStart = Vector3.init();
@@ -184,32 +183,32 @@ class Line extends Object3D {
   void updateMorphTargets() {
     var geometry = this.geometry!;
 
-    if (geometry.isBufferGeometry) {
-      var morphAttributes = geometry.morphAttributes;
-      var keys = morphAttributes.keys.toList();
+    var morphAttributes = geometry.morphAttributes;
+    var keys = morphAttributes.keys.toList();
 
-      if (keys.isNotEmpty) {
-        var morphAttribute = morphAttributes[keys[0]];
+    if (keys.isNotEmpty) {
+      var morphAttribute = morphAttributes[keys[0]];
 
-        if (morphAttribute != null) {
-          morphTargetInfluences = [];
-          morphTargetDictionary = {};
+      if (morphAttribute != null) {
+        morphTargetInfluences = [];
+        morphTargetDictionary = {};
 
-          for (int m = 0, ml = morphAttribute.length; m < ml; m++) {
-            var name = morphAttribute[m].name ?? m.toString();
+        for (int m = 0, ml = morphAttribute.length; m < ml; m++) {
+          var name = morphAttribute[m].name ?? m.toString();
 
-            morphTargetInfluences!.add(0);
-            morphTargetDictionary![name] = m;
-          }
+          morphTargetInfluences!.add(0);
+          morphTargetDictionary![name] = m;
         }
       }
-    } else {
-      var morphTargets = geometry.morphTargets;
-
-      if (morphTargets != null && morphTargets.length > 0) {
-        print(
-            'THREE.Line.updateMorphTargets() does not support THREE.Geometry. Use THREE.BufferGeometry instead.');
-      }
     }
+
+    // else {
+    //   var morphTargets = geometry.morphTargets;
+
+    //   if (morphTargets != null && morphTargets.length > 0) {
+    //     print(
+    //         'THREE.Line.updateMorphTargets() does not support THREE.Geometry. Use THREE.BufferGeometry instead.');
+    //   }
+    // }
   }
 }

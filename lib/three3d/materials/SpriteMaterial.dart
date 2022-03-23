@@ -13,7 +13,6 @@ part of three_materials;
 class SpriteMaterial extends Material {
   SpriteMaterial([parameters]) : super() {
     type = 'SpriteMaterial';
-    isSpriteMaterial = true;
     transparent = true;
     color = Color(1, 1, 1);
     setValues(parameters);

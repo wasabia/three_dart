@@ -4,7 +4,6 @@ class LightProbe extends Light {
   LightProbe(sh, intensity) : super(null, intensity) {
     type = 'LightProbe';
     this.sh = (sh != null) ? sh : SphericalHarmonics3();
-    isLightProbe = true;
   }
 
   @override
@@ -18,7 +17,7 @@ class LightProbe extends Light {
     return this;
   }
 
-  fromJSON(json) {
+  LightProbe fromJSON(json) {
     intensity = json.intensity; // TODO: Move this bit to Light.fromJSON();
     sh!.fromArray(json.sh);
 

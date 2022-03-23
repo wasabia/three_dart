@@ -8,13 +8,12 @@ var _skinWeight = Vector4.init();
 var _vector = Vector3.init();
 var _matrix = Matrix4();
 
-class SkinnedMesh extends Mesh { 
-  String bindMode = "attached"; 
+class SkinnedMesh extends Mesh {
+  String bindMode = "attached";
   Matrix4 bindMatrixInverse = Matrix4();
- 
+
   SkinnedMesh(geometry, material) : super(geometry, material) {
     type = "SkinnedMesh";
-    isSkinnedMesh = true;
     bindMatrix = Matrix4();
   }
 
@@ -98,10 +97,8 @@ class SkinnedMesh extends Mesh {
     var skeleton = this.skeleton;
     var geometry = this.geometry!;
 
-    _skinIndex.fromBufferAttribute(
-        geometry.attributes["skinIndex"], index);
-    _skinWeight.fromBufferAttribute(
-        geometry.attributes["skinWeight"], index);
+    _skinIndex.fromBufferAttribute(geometry.attributes["skinIndex"], index);
+    _skinWeight.fromBufferAttribute(geometry.attributes["skinWeight"], index);
 
     _basePosition.copy(target).applyMatrix4(bindMatrix!);
 

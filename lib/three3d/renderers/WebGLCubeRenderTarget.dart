@@ -1,7 +1,8 @@
 part of three_renderers;
 
 class WebGLCubeRenderTarget extends WebGLRenderTarget {
-  WebGLCubeRenderTarget(double size, options, dummy) : super(size, size, options) {
+  WebGLCubeRenderTarget(double size, options, dummy)
+      : super(size, size, options) {
     isWebGLCubeRenderTarget = true;
     // By convention -- likely based on the RenderMan spec from the 1990's -- cube maps are specified by WebGL (and three.js)
     // in a coordinate system in which positive-x is to the right when looking up the positive-z axis -- in other words,
@@ -11,7 +12,7 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
     // and the flag isRenderTargetTexture controls this conversion. The flip is not required when using WebGLCubeRenderTarget.texture
     // as a cube texture (this is detected when isRenderTargetTexture is set to true for cube textures).
     var image = ImageElement(width: size, height: size, depth: 1);
-		var images = [ image, image, image, image, image, image ];
+    var images = [image, image, image, image, image, image];
 
     options = options ?? WebGLRenderTargetOptions({});
     texture = CubeTexture(
@@ -31,7 +32,8 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
     texture.minFilter = options.minFilter ?? LinearFilter;
   }
 
-  WebGLCubeRenderTarget fromEquirectangularTexture(renderer, Texture texture) {
+  WebGLCubeRenderTarget fromEquirectangularTexture(
+      WebGLRenderer renderer, Texture texture) {
     this.texture.type = texture.type;
     this.texture.format = RGBAFormat; // see #18859
     this.texture.encoding = texture.encoding;
@@ -44,7 +46,8 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
       "uniforms": {
         "tEquirect": {},
       },
-      "vertexShader": """
+      "vertexShader":
+          """
 
         varying vec3 vWorldDirection;
 
@@ -63,7 +66,8 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
 
         }
       """,
-      "fragmentShader": """
+      "fragmentShader":
+          """
 
         uniform sampler2D tEquirect;
 
@@ -116,15 +120,13 @@ class WebGLCubeRenderTarget extends WebGLRenderTarget {
     return this;
   }
 
-  void clear(renderer, Color color, int depth, stencil) {
-    var currentRenderTarget = renderer.getRenderTarget();
-
-    for (var i = 0; i < 6; i++) {
+  void clear(WebGLRenderer renderer,
+      [bool color = true, bool depth = true, bool stencil = true]) {
+    final currentRenderTarget = renderer.getRenderTarget();
+    for (int i = 0; i < 6; i++) {
       renderer.setRenderTarget(this, i);
-
       renderer.clear(color, depth, stencil);
     }
-
     renderer.setRenderTarget(currentRenderTarget);
   }
 }

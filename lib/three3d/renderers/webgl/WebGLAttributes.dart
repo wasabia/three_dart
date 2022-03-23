@@ -124,7 +124,7 @@ class WebGLAttributes {
     } else if (attribute is Uint16BufferAttribute) {
       bytesPerElement = Uint16List.bytesPerElement;
 
-      if (attribute.isFloat16BufferAttribute) {
+      if (attribute is Float16BufferAttribute) {
         if (isWebGL2) {
           type = gl.HALF_FLOAT;
         } else {

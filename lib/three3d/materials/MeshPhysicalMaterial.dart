@@ -31,7 +31,6 @@ part of three_materials;
 
 class MeshPhysicalMaterial extends MeshStandardMaterial {
   MeshPhysicalMaterial([parameters]) : super(parameters) {
-    isMeshPhysicalMaterial = true;
     clearcoatRoughness = 0.0;
     type = 'MeshPhysicalMaterial';
     clearcoatNormalScale = Vector2(1, 1);
