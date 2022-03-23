@@ -151,7 +151,8 @@ class Material with EventDispatcher {
 
   Texture? normalMap;
   Texture? bumpMap;
-  Texture? get envMap => (uniforms["envMap"] == null ? null : uniforms["envMap"]["value"]);
+  Texture? get envMap =>
+      (uniforms["envMap"] == null ? null : uniforms["envMap"]["value"]);
   set envMap(value) {
     uniforms["envMap"] = {"value": value};
   }
@@ -176,23 +177,6 @@ class Material with EventDispatcher {
   num emissiveIntensity = 1.0;
   Texture? emissiveMap;
 
-  bool isMeshStandardMaterial = false;
-  bool isRawShaderMaterial = false;
-  bool isShaderMaterial = false;
-  bool isMeshLambertMaterial = false;
-  bool isMeshPhongMaterial = false;
-  bool isMeshToonMaterial = false;
-  bool isMeshBasicMaterial = false;
-  bool isShadowMaterial = false;
-  bool isSpriteMaterial = false;
-  bool isMeshMatcapMaterial = false;
-  bool isMeshDepthMaterial = false;
-  bool isMeshDistanceMaterial = false;
-  bool isMeshNormalMaterial = false;
-  bool isLineDashedMaterial = false;
-  bool isLineBasicMaterial = false;
-  bool isPointsMaterial = false;
-  bool isMeshPhysicalMaterial = false;
   bool instanced = false;
 
   Map<String, dynamic>? defines;
@@ -553,8 +537,7 @@ class Material with EventDispatcher {
       data["specularMap"] = specularMap!.toJSON(meta)['uuid'];
     }
     if (specularIntensityMap != null && specularIntensityMap is Texture) {
-      data["specularIntensityMap"] =
-          specularIntensityMap!.toJSON(meta)['uuid'];
+      data["specularIntensityMap"] = specularIntensityMap!.toJSON(meta)['uuid'];
     }
     if (specularColorMap != null && specularColorMap is Texture) {
       data["specularColorMap"] = specularColorMap!.toJSON(meta)['uuid'];

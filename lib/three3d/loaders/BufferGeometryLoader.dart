@@ -140,7 +140,7 @@ class BufferGeometryLoader extends Loader {
           var attribute = attributeArray[i];
           BufferAttribute bufferAttribute;
 
-          if (attribute.isInterleavedBufferAttribute) {
+          if (attribute is InterleavedBufferAttribute) {
             var interleavedBuffer =
                 getInterleavedBuffer(json["data"], attribute.data);
             bufferAttribute = InterleavedBufferAttribute(interleavedBuffer,

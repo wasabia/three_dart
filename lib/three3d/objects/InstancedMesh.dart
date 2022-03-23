@@ -14,7 +14,6 @@ class InstancedMesh extends Mesh {
   InstancedMesh(BufferGeometry? geometry, material, int count)
       : super(geometry, material) {
     type = "InstancedMesh";
-    isInstancedMesh = true;
 
     var dl = Float32Array(count * 16);
     instanceMatrix = InstancedBufferAttribute(dl, 16, false);

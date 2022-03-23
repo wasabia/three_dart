@@ -54,22 +54,23 @@ class ConvexHull {
     object.updateMatrixWorld(true);
 
     object.traverse((node) {
-      var point;
+      Vector3 point;
 
       var geometry = node.geometry;
 
       if (geometry != null) {
-        if (geometry.isGeometry) {
-          var vertices = geometry.vertices;
+        // if (geometry.isGeometry) {
+        //   var vertices = geometry.vertices;
 
-          for (var i = 0, l = vertices.length; i < l; i++) {
-            point = vertices[i].clone();
-            point.applyMatrix4(node.matrixWorld);
+        //   for (var i = 0, l = vertices.length; i < l; i++) {
+        //     point = vertices[i].clone();
+        //     point.applyMatrix4(node.matrixWorld);
 
-            points.add(point);
-          }
-        } else if (geometry.isBufferGeometry) {
-          var attribute = geometry.attributes.position;
+        //     points.add(point);
+        //   }
+        // } else
+        if (geometry is BufferGeometry) {
+          var attribute = geometry.attributes['position'];
 
           if (attribute != null) {
             for (var i = 0, l = attribute.count; i < l; i++) {

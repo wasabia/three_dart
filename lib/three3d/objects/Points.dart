@@ -8,7 +8,6 @@ var _position = Vector3.init();
 class Points extends Object3D {
   Points(BufferGeometry geometry, material) {
     type = 'Points';
-    isPoints = true;
 
     this.geometry = geometry;
     this.material = material;
@@ -19,7 +18,6 @@ class Points extends Object3D {
   Points.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON)
       : super.fromJSON(json, rootJSON) {
     type = 'Points';
-    isPoints = true;
   }
 
   @override
@@ -89,9 +87,9 @@ class Points extends Object3D {
   }
 
   void updateMorphTargets() {
-    var geometry = this.geometry!;
+    var geometry = this.geometry;
 
-    if (geometry.isBufferGeometry) {
+    if (geometry is BufferGeometry) {
       var morphAttributes = geometry.morphAttributes;
       var keys = morphAttributes.keys.toList();
 
@@ -110,14 +108,15 @@ class Points extends Object3D {
           }
         }
       }
-    } else {
-      var morphTargets = geometry.morphTargets;
-
-      if (morphTargets != null && morphTargets.length > 0) {
-        print(
-            'THREE.Points.updateMorphTargets() does not support THREE.Geometry. Use THREE.BufferGeometry instead.');
-      }
     }
+    // else {
+    //   var morphTargets = geometry.morphTargets;
+
+    //   if (morphTargets != null && morphTargets.length > 0) {
+    //     print(
+    //         'THREE.Points.updateMorphTargets() does not support THREE.Geometry. Use THREE.BufferGeometry instead.');
+    //   }
+    // }
   }
 }
 

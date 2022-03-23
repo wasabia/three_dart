@@ -20,7 +20,6 @@ part of three_materials;
 
 class MeshDepthMaterial extends Material {
   MeshDepthMaterial([Map<String, dynamic>? parameters]) : super() {
-    isMeshDepthMaterial = true;
     type = "MeshDepthMaterial";
     depthPacking = BasicDepthPacking;
     displacementScale = 1.0;

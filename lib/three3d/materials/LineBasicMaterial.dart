@@ -13,7 +13,6 @@ part of three_materials;
 
 class LineBasicMaterial extends Material {
   LineBasicMaterial([Map<String, dynamic>? parameters]) : super() {
-    isLineBasicMaterial = true;
     type = 'LineBasicMaterial';
 
     color = Color(1, 1, 1);
@@ -42,3 +41,5 @@ class LineBasicMaterial extends Material {
     return LineBasicMaterial({}).copy(this);
   }
 }
+
+class LineDashedMaterial extends Material {}

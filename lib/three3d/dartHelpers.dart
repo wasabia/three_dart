@@ -50,16 +50,16 @@ List concat(List lists) {
   return ret;
 }
 
-dynamic pop(List list) => list.removeLast();
+T pop<T>(List<T> list) => list.removeLast();
 
-int push(List list, item) {
+int push<T>(List<T> list, T item) {
   list.add(item);
   return list.length;
 }
 
-List reverse(List list) => list = list.reversed.toList();
+List<T> reverse<T>(List<T> list) => list = list.reversed.toList();
 
-dynamic shift(List list) => list.removeAt(0);
+T shift<T>(List<T> list) => list.removeAt(0);
 
 int unshift(List list, item) {
   list.insert(0, item);
@@ -189,7 +189,7 @@ List<String?>? exec(RegExp regex, String str) {
   return retVal;
 }
 
-String toFixed(num x, int l) {
+String toFixed<T extends num>(T x, int l) {
   return x.toStringAsFixed(l);
 }
 
@@ -197,7 +197,7 @@ double parseFloat(String n) {
   return double.parse(n);
 }
 
-setList(List target, List source) {
+void setList<T>(List<T> target, List<T> source) {
   int tlen = target.length;
   int slen = source.length;
 
