@@ -247,9 +247,9 @@ class _State extends State<webgl_animation_skinning_blending> {
 
     //
 
-    var skeleton = THREE.SkeletonHelper(model);
-    skeleton.visible = true;
-    scene.add(skeleton);
+    // var skeleton = THREE.SkeletonHelper(model);
+    // skeleton.visible = true;
+    // scene.add(skeleton);
 
     //
 
