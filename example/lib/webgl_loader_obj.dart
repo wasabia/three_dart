@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/objects/index.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
@@ -179,8 +180,8 @@ class _MyAppState extends State<webgl_loader_obj> {
 
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLRenderTarget(
-          (width * dpr), (height * dpr), pars);
+      renderTarget =
+          THREE.WebGLRenderTarget((width * dpr), (height * dpr), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);

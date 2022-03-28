@@ -24,7 +24,6 @@ class MeshDistanceMaterial extends Material {
   late num farDistance;
 
   MeshDistanceMaterial(Map<String, dynamic>? parameters) : super() {
-    isMeshDistanceMaterial = true;
     type = 'MeshDistanceMaterial';
 
     referencePosition = Vector3.init();
@@ -47,7 +46,7 @@ class MeshDistanceMaterial extends Material {
   @override
   MeshDistanceMaterial copy(Material source) {
     super.copy(source);
-    
+
     if (source is MeshDistanceMaterial) {
       referencePosition.copy(source.referencePosition);
       nearDistance = source.nearDistance;

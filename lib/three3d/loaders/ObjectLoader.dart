@@ -138,7 +138,7 @@ class ObjectLoader extends Loader {
     // generate bone lookup table
 
     object.traverse((child) {
-      if (child.isBone) bones[child.uuid] = child;
+      if (child is Bone) bones[child.uuid] = child;
     });
 
     // create skeletons
@@ -194,7 +194,7 @@ class ObjectLoader extends Loader {
         geometry.uuid = data["uuid"];
 
         if (data["name"] != null) geometry.name = data["name"];
-        if (geometry.isBufferGeometry == true && data["userData"] != null) {
+        if (geometry is BufferGeometry && data["userData"] != null) {
           geometry.userData = data["userData"];
         }
 
@@ -280,10 +280,9 @@ class ObjectLoader extends Loader {
         var url = image;
 
         var path =
-            RegExp("^(//)|([a-z]+:(//)?)", caseSensitive: false)
-                .hasMatch(url)
-            ? url
-            : (scope.resourcePath ?? "") + url;
+            RegExp("^(//)|([a-z]+:(//)?)", caseSensitive: false).hasMatch(url)
+                ? url
+                : (scope.resourcePath ?? "") + url;
 
         return await loadImage(path);
       } else {
@@ -344,7 +343,7 @@ class ObjectLoader extends Loader {
           var deserializedImage = await deserializeImage(image["url"]);
 
           if (deserializedImage != null) {
-            images[image["uuid"]] = Source( deserializedImage );
+            images[image["uuid"]] = Source(deserializedImage);
           }
         }
       }
@@ -379,10 +378,9 @@ class ObjectLoader extends Loader {
 
         Texture texture;
 
-        var source = images[ data["image"] ];
-				var image = source.data;
+        var source = images[data["image"]];
+        var image = source.data;
 
-   
         if (image is List) {
           texture = CubeTexture();
 
@@ -448,7 +446,7 @@ class ObjectLoader extends Loader {
     return textures;
   }
 
-  parseObject(
+  Object3D parseObject(
       Map<String, dynamic> data, geometries, materials, textures, animations) {
     var object;
 
@@ -517,8 +515,7 @@ class ObjectLoader extends Loader {
             object.fog = Fog(
                 data["fog"]["color"], data["fog"]["near"], data["fog"]["far"]);
           } else if (data["fog"]["type"] == 'FogExp2') {
-            object.fog =
-                FogExp2(data["fog"]["color"], data["fog"]["density"]);
+            object.fog = FogExp2(data["fog"]["color"], data["fog"]["density"]);
           }
         }
 
@@ -539,8 +536,8 @@ class ObjectLoader extends Loader {
         break;
 
       case 'OrthographicCamera':
-        object = OrthographicCamera(data["left"], data["right"],
-            data["top"], data["bottom"], data["near"], data["far"]);
+        object = OrthographicCamera(data["left"], data["right"], data["top"],
+            data["bottom"], data["near"], data["far"]);
 
         if (data["zoom"] != null) object.zoom = data["zoom"];
         if (data["view"] != null) {
@@ -572,8 +569,8 @@ class ObjectLoader extends Loader {
         break;
 
       case 'SpotLight':
-        object = SpotLight(data["color"], data["intensity"],
-            data["distance"], data["angle"], data["penumbra"], data["decay"]);
+        object = SpotLight(data["color"], data["intensity"], data["distance"],
+            data["angle"], data["penumbra"], data["decay"]);
 
         break;
 
@@ -622,9 +619,7 @@ class ObjectLoader extends Loader {
             Float32Array(instanceMatrix.array), 16, false);
         if (instanceColor != null) {
           object.instanceColor = InstancedBufferAttribute(
-              Float32Array(instanceColor.array),
-              instanceColor.itemSize,
-              false);
+              Float32Array(instanceColor.array), instanceColor.itemSize, false);
         }
 
         break;
@@ -637,8 +632,7 @@ class ObjectLoader extends Loader {
 
       case 'Line':
         object =
-            Line(
-            getGeometry(data["geometry"]), getMaterial(data["material"]));
+            Line(getGeometry(data["geometry"]), getMaterial(data["material"]));
 
         break;
 
@@ -776,7 +770,7 @@ class ObjectLoader extends Loader {
     if (skeletons.keys.length == 0) return;
 
     object.traverse((child) {
-      if (child.isSkinnedMesh == true && child.skeleton != null) {
+      if (child is SkinnedMesh && child.skeleton != null) {
         var skeleton = skeletons[child.skeleton];
 
         if (skeleton == null) {

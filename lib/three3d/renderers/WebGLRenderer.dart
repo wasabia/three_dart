@@ -21,7 +21,7 @@ class WebGLRenderer {
 
   // We track this so that the nested render call gets its list and state isolated from the parent render call.
 
-  var renderListStack = [];
+  List<WebGLRenderList> renderListStack = [];
   List<WebGLRenderState> renderStateStack = [];
 
   // Debug configuration container
@@ -80,12 +80,12 @@ class WebGLRenderer {
   int _currentActiveMipmapLevel = 0;
   RenderTarget? _currentRenderTarget;
 
-  var _currentMaterialId = -1;
-  var _currentCamera;
+  int _currentMaterialId = -1;
+  Camera? _currentCamera;
 
   final _currentViewport = Vector4.init();
   final _currentScissor = Vector4.init();
-  var _currentScissorTest;
+  bool? _currentScissorTest;
 
   double _pixelRatio = 1;
   Function? _opaqueSort;
@@ -104,7 +104,7 @@ class WebGLRenderer {
 
   // transmission
 
-  var _transmissionRenderTarget;
+  RenderTarget? _transmissionRenderTarget;
 
   // camera matrices cache
 
@@ -239,7 +239,7 @@ class WebGLRenderer {
     return _gl;
   }
 
-  getContextAttributes() {
+  dynamic getContextAttributes() {
     return _gl.getContextAttributes();
   }
 
@@ -322,7 +322,7 @@ class WebGLRenderer {
     return target.copy(_viewport);
   }
 
-  void setViewport(num x, num y, num width, num height) {
+  void setViewport(num x, num y, double width, double height) {
     _viewport.set(x, y, width, height);
     state.viewport(
         _currentViewport.copy(_viewport).multiplyScalar(_pixelRatio).floor());
@@ -349,15 +349,15 @@ class WebGLRenderer {
     return _scissorTest;
   }
 
-  setScissorTest(boolean) {
+  void setScissorTest(bool boolean) {
     state.setScissorTest(_scissorTest = boolean);
   }
 
-  void setOpaqueSort(method) {
+  void setOpaqueSort(Function? method) {
     _opaqueSort = method;
   }
 
-  void setTransparentSort(method) {
+  void setTransparentSort(Function? method) {
     _transparentSort = method;
   }
 
@@ -368,19 +368,19 @@ class WebGLRenderer {
   }
 
   // color 接受多种类型 same as Color.set
-  setClearColor(Color color, [double alpha = 1.0]) {
+  void setClearColor(Color color, [double alpha = 1.0]) {
     background.setClearColor(color, alpha);
   }
 
-  getClearAlpha() {
+  double getClearAlpha() {
     return background.getClearAlpha();
   }
 
-  void setClearAlpha(alpha) {
+  void setClearAlpha(double alpha) {
     background.setClearAlpha(alpha);
   }
 
-  clear([bool color = true, bool depth = true, bool stencil = true]) {
+  void clear([bool color = true, bool depth = true, bool stencil = true]) {
     int bits = 0;
 
     if (color) bits |= _gl.COLOR_BUFFER_BIT;
@@ -390,21 +390,21 @@ class WebGLRenderer {
     _gl.clear(bits);
   }
 
-  clearColor() {
+  void clearColor() {
     clear(true, false, false);
   }
 
-  clearDepth() {
+  void clearDepth() {
     clear(false, true, false);
   }
 
-  clearStencil() {
+  void clearStencil() {
     clear(false, false, true);
   }
 
   //
 
-  dispose() {
+  void dispose() {
     renderLists.dispose();
     renderStates.dispose();
     properties.dispose();
@@ -415,13 +415,13 @@ class WebGLRenderer {
     programCache.dispose();
 
     if (_transmissionRenderTarget != null) {
-      _transmissionRenderTarget.dispose();
+      _transmissionRenderTarget!.dispose();
       _transmissionRenderTarget = null;
     }
   }
 
   // Events
-  onContextRestore(/* event */) {
+  void onContextRestore(/* event */) {
     print('THREE.WebGLRenderer: Context Restored.');
 
     _isContextLost = false;
@@ -441,7 +441,7 @@ class WebGLRenderer {
     shadowMap.type = shadowMapType;
   }
 
-  onMaterialDispose(event) {
+  void onMaterialDispose(Event event) {
     var material = event.target;
 
     material.removeEventListener('dispose', onMaterialDispose);
@@ -451,13 +451,13 @@ class WebGLRenderer {
 
   // Buffer deallocation
 
-  deallocateMaterial(material) {
+  void deallocateMaterial(Material material) {
     releaseMaterialProgramReferences(material);
 
     properties.remove(material);
   }
 
-  releaseMaterialProgramReferences(material) {
+  void releaseMaterialProgramReferences(Material material) {
     var programs = properties.get(material)["programs"];
 
     if (programs != null) {
@@ -465,7 +465,7 @@ class WebGLRenderer {
         programCache.releaseProgram(program);
       });
 
-      if (material.isShaderMaterial) {
+      if (material is ShaderMaterial) {
         programCache.releaseShaderCache(material);
       }
     }
@@ -680,7 +680,7 @@ class WebGLRenderer {
     currentRenderList = renderLists.get(scene, renderListStack.length);
     currentRenderList!.init();
 
-    renderListStack.add(currentRenderList);
+    renderListStack.add(currentRenderList!);
 
     projectObject(scene, camera, 0, sortObjects);
 
@@ -855,7 +855,7 @@ class WebGLRenderer {
   void renderScene(
       WebGLRenderList currentRenderList, Object3D scene, Camera camera,
       [Vector4? viewport]) {
-    var opaqueObjects = currentRenderList.opaque;
+    List<RenderItem> opaqueObjects = currentRenderList.opaque;
     var transmissiveObjects = currentRenderList.transmissive;
     var transparentObjects = currentRenderList.transparent;
 
@@ -884,7 +884,8 @@ class WebGLRenderer {
     state.setPolygonOffset(false, null, null);
   }
 
-  renderTransmissionPass(opaqueObjects, scene, camera) {
+  void renderTransmissionPass(
+      List<RenderItem> opaqueObjects, Object3D scene, Camera camera) {
     bool isWebGL2 = capabilities.isWebGL2;
 
     if (_transmissionRenderTarget == null) {
@@ -905,10 +906,14 @@ class WebGLRenderer {
     getDrawingBufferSize(_vector2);
 
     if (isWebGL2) {
-      _transmissionRenderTarget.setSize(_vector2.x, _vector2.y);
+      _transmissionRenderTarget!.setSize(
+        _vector2.x.toDouble(),
+        _vector2.y.toDouble(),
+      );
     } else {
-      _transmissionRenderTarget.setSize(MathUtils.floorPowerOfTwo(_vector2.x),
-          MathUtils.floorPowerOfTwo(_vector2.y));
+      _transmissionRenderTarget!.setSize(
+          MathUtils.floorPowerOfTwo(_vector2.x).toDouble(),
+          MathUtils.floorPowerOfTwo(_vector2.y).toDouble());
     }
 
     var currentRenderTarget = getRenderTarget();
@@ -924,8 +929,8 @@ class WebGLRenderer {
 
     toneMapping = currentToneMapping;
 
-    textures.updateMultisampleRenderTarget(_transmissionRenderTarget);
-    textures.updateRenderTargetMipmap(_transmissionRenderTarget);
+    textures.updateMultisampleRenderTarget(_transmissionRenderTarget!);
+    textures.updateRenderTargetMipmap(_transmissionRenderTarget!);
 
     setRenderTarget(currentRenderTarget);
   }
@@ -1118,7 +1123,7 @@ class WebGLRenderer {
     return program;
   }
 
-  updateCommonMaterialProperties(material, parameters) {
+  void updateCommonMaterialProperties(Material material, parameters) {
     var materialProperties = properties.get(material);
 
     materialProperties["outputEncoding"] = parameters.outputEncoding;
@@ -1135,8 +1140,8 @@ class WebGLRenderer {
     materialProperties["toneMapping"] = parameters.toneMapping;
   }
 
-  WebGLProgram setProgram(Camera camera, Object3D? scene, BufferGeometry? geometry,
-      Material material, Object3D object) {
+  WebGLProgram setProgram(Camera camera, Object3D? scene,
+      BufferGeometry? geometry, Material material, Object3D object) {
     if (scene is! Scene) scene = _emptyScene;
     // scene could be a Mesh, Line, Points, ...
     textures.resetTextureUnits();
@@ -1398,8 +1403,8 @@ class WebGLRenderer {
         materials.refreshFogUniforms(mUniforms, fog);
       }
 
-      materials.refreshMaterialUniforms(mUniforms, material, _pixelRatio,
-          _height, _transmissionRenderTarget);
+      materials.refreshMaterialUniforms(
+          mUniforms, material, _pixelRatio, _height, _transmissionRenderTarget);
 
       // print("m_uniforms  ");
       // print(m_uniforms);
@@ -1430,7 +1435,8 @@ class WebGLRenderer {
     return program;
   }
 
-  markUniformsLightsNeedsUpdate(Map<String, dynamic> uniforms, value) {
+  void markUniformsLightsNeedsUpdate(
+      Map<String, dynamic> uniforms, dynamic value) {
     uniforms["ambientLightColor"]["needsUpdate"] = value;
     uniforms["lightProbe"]["needsUpdate"] = value;
     uniforms["directionalLights"]["needsUpdate"] = value;
@@ -1449,28 +1455,29 @@ class WebGLRenderer {
     uniforms["pointShadowMatrix"]["needsUpdate"] = value;
   }
 
-  materialNeedsLights(material) {
-    return material.isMeshLambertMaterial ||
-        material.isMeshToonMaterial ||
-        material.isMeshPhongMaterial ||
-        material.isMeshStandardMaterial ||
-        material.isShadowMaterial ||
-        (material.isShaderMaterial && material.lights == true);
+  bool materialNeedsLights(Material material) {
+    return material is MeshLambertMaterial ||
+        material is MeshToonMaterial ||
+        material is MeshPhongMaterial ||
+        material is MeshStandardMaterial ||
+        material is ShadowMaterial ||
+        (material is ShaderMaterial && material.lights == true);
   }
 
-  getActiveCubeFace() {
+  int getActiveCubeFace() {
     return _currentActiveCubeFace;
   }
 
-  getActiveMipmapLevel() {
+  int getActiveMipmapLevel() {
     return _currentActiveMipmapLevel;
   }
 
-  getRenderTarget() {
+  RenderTarget? getRenderTarget() {
     return _currentRenderTarget;
   }
 
-  setRenderTargetTextures(renderTarget, colorTexture, depthTexture) {
+  void setRenderTargetTextures(
+      RenderTarget renderTarget, colorTexture, depthTexture) {
     properties.get(renderTarget.texture)["__webglTexture"] = colorTexture;
     properties.get(renderTarget.depthTexture)["__webglTexture"] = depthTexture;
 
@@ -1494,14 +1501,15 @@ class WebGLRenderer {
     }
   }
 
-  setRenderTargetFramebuffer(renderTarget, defaultFramebuffer) {
+  void setRenderTargetFramebuffer(
+      RenderTarget renderTarget, defaultFramebuffer) {
     var renderTargetProperties = properties.get(renderTarget);
     renderTargetProperties["__webglFramebuffer"] = defaultFramebuffer;
     renderTargetProperties["__useDefaultFramebuffer"] =
         defaultFramebuffer == null;
   }
 
-  setRenderTarget(RenderTarget? renderTarget,
+  void setRenderTarget(RenderTarget? renderTarget,
       [int activeCubeFace = 0, int activeMipmapLevel = 0]) {
     _currentRenderTarget = renderTarget;
     _currentActiveCubeFace = activeCubeFace;
@@ -1568,7 +1576,7 @@ class WebGLRenderer {
 
     state.viewport(_currentViewport);
     state.scissor(_currentScissor);
-    state.setScissorTest(_currentScissorTest);
+    state.setScissorTest(_currentScissorTest!);
 
     if (isCube) {
       var textureProperties = properties.get(renderTarget!.texture);
@@ -1589,8 +1597,8 @@ class WebGLRenderer {
         -1; // reset current material to ensure correct uniform bindings
   }
 
-  readRenderTargetPixels(WebGLRenderTarget renderTarget, x, y, width, height,
-      buffer, activeCubeFaceIndex) {
+  void readRenderTargetPixels(WebGLRenderTarget renderTarget, x, y, width,
+      height, buffer, activeCubeFaceIndex) {
     var framebuffer = properties.get(renderTarget)["__webglFramebuffer"];
 
     if (renderTarget.isWebGLCubeRenderTarget && activeCubeFaceIndex != null) {
@@ -1657,7 +1665,7 @@ class WebGLRenderer {
     }
   }
 
-  copyFramebufferToTexture(position, texture, {int level = 0}) {
+  void copyFramebufferToTexture(position, Texture texture, {int level = 0}) {
     if (texture is! FramebufferTexture) {
       print(
           'THREE.WebGLRenderer: copyFramebufferToTexture() can only be used with FramebufferTexture.');
@@ -1676,7 +1684,8 @@ class WebGLRenderer {
     state.unbindTexture();
   }
 
-  copyTextureToTexture(position, srcTexture, dstTexture, {int level = 0}) {
+  void copyTextureToTexture(position, Texture srcTexture, dstTexture,
+      {int level = 0}) {
     var width = srcTexture.image.width;
     var height = srcTexture.image.height;
     var glFormat = utils.convert(dstTexture.format);
@@ -1719,8 +1728,13 @@ class WebGLRenderer {
     state.unbindTexture();
   }
 
-  copyTextureToTexture3D(sourceBox, position, srcTexture, dstTexture,
-      {level = 0}) {
+  void copyTextureToTexture3D(
+    Box3 sourceBox,
+    Vector3 position,
+    Texture srcTexture,
+    Texture dstTexture, {
+    int level = 0,
+  }) {
     var width = sourceBox.max.x - sourceBox.min.x + 1;
     var height = sourceBox.max.y - sourceBox.min.y + 1;
     var depth = sourceBox.max.z - sourceBox.min.z + 1;
@@ -1788,18 +1802,18 @@ class WebGLRenderer {
     state.unbindTexture();
   }
 
-  initTexture(texture) {
+  void initTexture(Texture texture) {
     textures.setTexture2D(texture, 0);
 
     state.unbindTexture();
   }
 
-  int getRenderTargetGLTexture(renderTarget) {
+  int getRenderTargetGLTexture(RenderTarget renderTarget) {
     var textureProperties = properties.get(renderTarget.texture);
     return textureProperties["__webglTexture"];
   }
 
-  resetState() {
+  void resetState() {
     _currentActiveCubeFace = 0;
     _currentActiveMipmapLevel = 0;
     _currentRenderTarget = null;

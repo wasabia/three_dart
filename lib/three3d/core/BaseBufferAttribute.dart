@@ -18,15 +18,10 @@ abstract class BaseBufferAttribute<TData extends NativeArray> {
   int version = 0;
   Map<String, int>? updateRange;
 
-  Function? onUploadCallback;
+  void Function()? onUploadCallback;
 
   int? buffer;
   int? elementSize;
-
-  bool isGLBufferAttribute = false;
-  bool isInterleavedBufferAttribute = false;
-  bool isInstancedBufferAttribute = false;
-  bool isFloat16BufferAttribute = false;
 
   BaseBufferAttribute();
 }

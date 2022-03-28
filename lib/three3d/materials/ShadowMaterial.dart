@@ -9,7 +9,6 @@ part of three_materials;
 class ShadowMaterial extends Material {
   ShadowMaterial([parameters]) : super() {
     type = 'ShadowMaterial';
-    isShadowMaterial = true;
     color = Color.fromHex(0x000000);
     transparent = true;
 

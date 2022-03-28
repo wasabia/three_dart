@@ -95,14 +95,18 @@ class WebGLPrograms {
       envMap = cubemaps.get(material.envMap ?? environment);
     }
 
-    var cubeUVHeight = ( envMap != null ) && ( ( envMap.mapping == CubeUVReflectionMapping ) || ( envMap.mapping == CubeUVRefractionMapping ) ) ? envMap.image.height : null;
+    var cubeUVHeight = (envMap != null) &&
+            ((envMap.mapping == CubeUVReflectionMapping) ||
+                (envMap.mapping == CubeUVRefractionMapping))
+        ? envMap.image.height
+        : null;
 
     var shaderID = shaderIDs[material.shaderID];
 
     // heuristics to create shader parameters according to lights in the scene
     // (not to blow over maxLights budget)
 
-    var maxBones = object.isSkinnedMesh ? getMaxBones(object) : 0;
+    var maxBones = object is SkinnedMesh ? getMaxBones(object) : 0;
 
     if (material.precision != null) {
       precision = capabilities.getMaxPrecision(material.precision);
@@ -115,16 +119,19 @@ class WebGLPrograms {
 
     //
 
-		var morphAttribute = geometry.morphAttributes["position"] ?? geometry.morphAttributes["normal"] ?? geometry.morphAttributes["color"];
-		var morphTargetsCount = ( morphAttribute != null ) ? morphAttribute.length : 0;
+    var morphAttribute = geometry.morphAttributes["position"] ??
+        geometry.morphAttributes["normal"] ??
+        geometry.morphAttributes["color"];
+    var morphTargetsCount =
+        (morphAttribute != null) ? morphAttribute.length : 0;
 
-		var morphTextureStride = 0;
+    var morphTextureStride = 0;
 
-		if ( geometry.morphAttributes["position"] != null ) morphTextureStride = 1;
-		if ( geometry.morphAttributes["normal"] != null ) morphTextureStride = 2;
-		if ( geometry.morphAttributes["color"] != null ) morphTextureStride = 3;
+    if (geometry.morphAttributes["position"] != null) morphTextureStride = 1;
+    if (geometry.morphAttributes["normal"] != null) morphTextureStride = 2;
+    if (geometry.morphAttributes["color"] != null) morphTextureStride = 3;
 
-		//
+    //
 
     String? vertexShader, fragmentShader;
     var customVertexShaderID, customFragmentShaderID;
@@ -164,9 +171,9 @@ class WebGLPrograms {
       "isRawShaderMaterial": material is RawShaderMaterial,
       "glslVersion": material.glslVersion,
       "precision": precision,
-      "instancing": object.isInstancedMesh == true,
+      "instancing": object is InstancedMesh,
       "instancingColor":
-          object.isInstancedMesh == true && object.instanceColor != null,
+          object is InstancedMesh && object.instanceColor != null,
       "supportsVertexTextures": vertexTextures,
       "outputEncoding": (currentRenderTarget == null)
           ? renderer.outputEncoding
@@ -211,7 +218,8 @@ class WebGLPrograms {
       "thicknessMap": material.thicknessMap != null,
       "combine": material.combine,
       "vertexTangents": (material.normalMap != null &&
-          geometry != null && geometry.attributes["tangent"] != null),
+          geometry != null &&
+          geometry.attributes["tangent"] != null),
       "vertexColors": material.vertexColors,
       "vertexAlphas": material.vertexColors == true &&
           geometry != null &&
@@ -263,16 +271,17 @@ class WebGLPrograms {
       "flatShading": material.flatShading,
       "sizeAttenuation": material.sizeAttenuation,
       "logarithmicDepthBuffer": logarithmicDepthBuffer,
-      "skinning": object.isSkinnedMesh == true && maxBones > 0,
+      "skinning": object is SkinnedMesh && maxBones > 0,
       "maxBones": maxBones,
       "useVertexTexture": floatVertexTextures,
-      "morphTargets": geometry != null &&
-          geometry.morphAttributes["position"] != null,
-      "morphNormals": geometry != null &&
-          geometry.morphAttributes["normal"] != null,
-      "morphColors": geometry != null && geometry.morphAttributes["color"] != null,
+      "morphTargets":
+          geometry != null && geometry.morphAttributes["position"] != null,
+      "morphNormals":
+          geometry != null && geometry.morphAttributes["normal"] != null,
+      "morphColors":
+          geometry != null && geometry.morphAttributes["color"] != null,
       "morphTargetsCount": morphTargetsCount,
-			"morphTextureStride": morphTextureStride,
+      "morphTextureStride": morphTextureStride,
       "numDirLights": lights.directional.length,
       "numPointLights": lights.point.length,
       "numSpotLights": lights.spot.length,
@@ -414,7 +423,7 @@ class WebGLPrograms {
     if (parameters.useVertexTexture) _programLayers.enable(4);
     if (parameters.morphTargets) _programLayers.enable(5);
     if (parameters.morphNormals) _programLayers.enable(6);
-    if ( parameters.morphColors )	_programLayers.enable( 7 );
+    if (parameters.morphColors) _programLayers.enable(7);
     if (parameters.premultipliedAlpha) _programLayers.enable(8);
     if (parameters.shadowMapEnabled) _programLayers.enable(9);
     if (parameters.physicallyCorrectLights) _programLayers.enable(10);

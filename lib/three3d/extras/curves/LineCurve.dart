@@ -63,3 +63,5 @@ class LineCurve extends Curve {
     return data;
   }
 }
+
+class LineCurve3 extends Curve {}

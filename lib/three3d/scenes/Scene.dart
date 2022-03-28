@@ -4,9 +4,6 @@ class Scene extends Object3D {
   @override
   String type = 'Scene';
 
-  @override
-  bool isScene = true;
-
   FogBase? fog;
 
   @override

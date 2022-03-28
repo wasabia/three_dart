@@ -48,8 +48,6 @@ part of three_materials;
 
 class MeshPhongMaterial extends Material {
   MeshPhongMaterial([Map<String, dynamic>? parameters]) : super() {
-    isMeshPhongMaterial = true;
-
     bumpScale = 1;
     shininess = 30;
     specular = Color(0.067, 0.067, 0.067);
