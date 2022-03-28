@@ -224,7 +224,7 @@ class _MyAppState extends State<webgl_loader_obj> {
 
     object.traverse((child) {
       if (child is THREE.Mesh) {
-        child.material.uniforms["map"] = {"value": texture};
+        child.material.map = texture;
       }
     });
 
@@ -232,7 +232,7 @@ class _MyAppState extends State<webgl_loader_obj> {
     scene.add(object);
 
     // var plane = THREE.PlaneGeometry(100, 100);
-    // mesh = THREE.Mesh(plane, THREE.MeshBasicMaterial({"map": texture}));
+    // mesh = THREE.Mesh(plane, THREE.MeshPhongMaterial({"map": texture}));
     // scene.add(mesh);
 
     animate();

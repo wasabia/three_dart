@@ -61,11 +61,11 @@ class WebGLRenderer {
   int toneMapping = NoToneMapping;
   double toneMappingExposure = 1.0;
 
-  late num _width;
-  late num _height;
+  late double _width;
+  late double _height;
 
-  num get width => _width;
-  num get height => _height;
+  double get width => _width;
+  double get height => _height;
 
   late Vector4 _viewport;
   late Vector4 _scissor;
@@ -266,7 +266,7 @@ class WebGLRenderer {
     return target.set(width, height);
   }
 
-  void setSize(num width, num height, [bool updateStyle = false]) {
+  void setSize(double width, double height, [bool updateStyle = false]) {
     // if ( xr.isPresenting ) {
 
     // 	print( 'THREE.WebGLRenderer: Can\'t change size while VR device is presenting.' );
@@ -300,7 +300,7 @@ class WebGLRenderer {
     return target;
   }
 
-  void setDrawingBufferSize(num width, num height, double pixelRatio) {
+  void setDrawingBufferSize(double width, double height, double pixelRatio) {
     _width = width;
     _height = height;
 

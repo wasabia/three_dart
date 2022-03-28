@@ -620,19 +620,19 @@ class WorldUVGenerator {
   }
 
   static generateSideWallUV(
-      geometry, vertices, num indexA, num indexB, num indexC, num indexD) {
-    num aX = vertices[indexA.toInt() * 3];
-    num aY = vertices[indexA.toInt() * 3 + 1];
-    num aZ = vertices[indexA.toInt() * 3 + 2];
-    num bX = vertices[indexB.toInt() * 3];
-    num bY = vertices[indexB.toInt() * 3 + 1];
-    num bZ = vertices[indexB.toInt() * 3 + 2];
-    num cX = vertices[indexC.toInt() * 3];
-    num cY = vertices[indexC.toInt() * 3 + 1];
-    num cZ = vertices[indexC.toInt() * 3 + 2];
-    num dX = vertices[indexD.toInt() * 3];
-    num dY = vertices[indexD.toInt() * 3 + 1];
-    num dZ = vertices[indexD.toInt() * 3 + 2];
+      geometry, List<double> vertices, num indexA, num indexB, num indexC, num indexD) {
+    double aX = vertices[indexA.toInt() * 3];
+    double aY = vertices[indexA.toInt() * 3 + 1];
+    double aZ = vertices[indexA.toInt() * 3 + 2];
+    double bX = vertices[indexB.toInt() * 3];
+    double bY = vertices[indexB.toInt() * 3 + 1];
+    double bZ = vertices[indexB.toInt() * 3 + 2];
+    double cX = vertices[indexC.toInt() * 3];
+    double cY = vertices[indexC.toInt() * 3 + 1];
+    double cZ = vertices[indexC.toInt() * 3 + 2];
+    double dX = vertices[indexD.toInt() * 3];
+    double dY = vertices[indexD.toInt() * 3 + 1];
+    double dZ = vertices[indexD.toInt() * 3 + 2];
 
     if (Math.abs(aY - bY) < Math.abs(aX - bX)) {
       return [

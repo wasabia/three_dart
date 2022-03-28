@@ -126,7 +126,7 @@ class SVGLoader extends Loader {
     // Param shapePath: a shapepath as returned by the parse function of this class
     // Returns Shape object
 
-    const BIGNUMBER = 999999999;
+    const BIGNUMBER = 99999999999999.0;
 
     var IntersectionLocationType = {
       "ORIGIN": 0,
@@ -418,10 +418,10 @@ class SVGLoader extends Loader {
 
     List simplePaths = shapePath.subPaths.map((p) {
       var points = p.getPoints();
-      num maxY = -BIGNUMBER;
-      num minY = BIGNUMBER;
-      num maxX = -BIGNUMBER;
-      num minX = BIGNUMBER;
+      double maxY = -BIGNUMBER;
+      double minY = BIGNUMBER;
+      double maxX = -BIGNUMBER;
+      double minX = BIGNUMBER;
 
       //points.forEach(p => p.y *= -1);
 
