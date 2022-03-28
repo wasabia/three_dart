@@ -52,7 +52,7 @@ class WebGLMaterials {
     } else if (material is LineBasicMaterial) {
       refreshUniformsLine(uniforms, material);
 
-      if (material.isLineDashedMaterial) {
+      if (material is LineDashedMaterial) {
         refreshUniformsDash(uniforms, material);
       }
     } else if (material is PointsMaterial) {

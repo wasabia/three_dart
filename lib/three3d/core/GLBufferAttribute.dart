@@ -4,7 +4,6 @@ class GLBufferAttribute extends BaseBufferAttribute {
   GLBufferAttribute(
       int buffer, String type, int itemSize, int elementSize, int count)
       : super() {
-    isGLBufferAttribute = true;
     this.buffer = buffer;
     this.type = type;
     this.itemSize = itemSize;

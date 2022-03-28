@@ -49,7 +49,6 @@ part of three_materials;
 
 class MeshStandardMaterial extends Material {
   MeshStandardMaterial([Map<String, dynamic>? parameters]) : super() {
-    isMeshStandardMaterial = true;
     type = "MeshStandardMaterial";
     roughness = 1.0;
     metalness = 0.0;

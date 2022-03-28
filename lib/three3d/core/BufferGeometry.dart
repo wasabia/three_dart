@@ -14,7 +14,6 @@ class BufferGeometry with EventDispatcher {
   String uuid = MathUtils.generateUUID();
 
   String type = "BufferGeometry";
-  bool isBufferGeometry = true;
   Box3? boundingBox;
   String name = "";
   Map<String, dynamic> attributes = {};
@@ -36,10 +35,8 @@ class BufferGeometry with EventDispatcher {
   bool colorsNeedUpdate = false;
   bool lineDistancesNeedUpdate = false;
   bool groupsNeedUpdate = false;
-  bool isInstancedBufferGeometry = false;
 
   late List<Color> colors;
-  bool isGeometry = false;
   late List<num> lineDistances;
 
   Map<String, dynamic>? parameters;
@@ -88,7 +85,8 @@ class BufferGeometry with EventDispatcher {
 
     if (index is List) {
       final list = index.map<int>((e) => e.toInt()).toList();
-      if (arrayMax(index) > 65535) {
+      final max = arrayMax(list);
+      if (max != null && max > 65535) {
         this.index = Uint32BufferAttribute(Uint32Array.from(list), 1, false);
       } else {
         this.index = Uint16BufferAttribute(Uint16Array.from(list), 1, false);
@@ -275,7 +273,7 @@ class BufferGeometry with EventDispatcher {
     var position = attributes["position"];
     var morphAttributesPosition = morphAttributes["position"];
 
-    if (position != null && position.isGLBufferAttribute) {
+    if (position != null && position is GLBufferAttribute) {
       print(
           'THREE.BufferGeometry.computeBoundingBox(): GLBufferAttribute requires a manual bounding box. Alternatively set "mesh.frustumCulled" to "false". ${this}');
 
@@ -329,7 +327,7 @@ class BufferGeometry with EventDispatcher {
     var position = attributes["position"];
     var morphAttributesPosition = morphAttributes["position"];
 
-    if (position != null && position.isGLBufferAttribute) {
+    if (position != null && position is GLBufferAttribute) {
       boundingSphere!.set(Vector3.init(), 99999999999);
 
       return;
@@ -705,8 +703,8 @@ class BufferGeometry with EventDispatcher {
       var index = 0, index2 = 0;
 
       for (var i = 0, l = indices.length; i < l; i++) {
-        if (attribute.isInterleavedBufferAttribute) {
-          index = indices[i] * attribute.data.stride + attribute.offset;
+        if (attribute is InterleavedBufferAttribute) {
+          index = indices[i] * attribute.data!.stride + attribute.offset;
         } else {
           index = indices[i] * itemSize;
         }
@@ -826,8 +824,8 @@ class BufferGeometry with EventDispatcher {
       data["data"]["attributes"][key] = attribute.toJSON();
     }
 
-    var morphAttributes = {};
-    var hasMorphAttributes = false;
+    Map<String, List<BufferAttribute>> morphAttributes = {};
+    bool hasMorphAttributes = false;
 
     for (var key in morphAttributes.keys) {
       var attributeArray = this.morphAttributes[key]!;
@@ -839,9 +837,9 @@ class BufferGeometry with EventDispatcher {
 
         // TODO
         // var attributeData = attribute.toJSON( data["data"] );
-        var attributeData = attribute.toJSON();
+        //var attributeData = attribute.toJSON();
 
-        array.add(attributeData);
+        array.add(attribute);
       }
 
       if (array.isNotEmpty) {

@@ -10,7 +10,7 @@ int absNumericalSort(a, b) {
 
 denormalize(morph, BufferAttribute attribute) {
   var denominator = 1;
-  NativeArray array = attribute.isInterleavedBufferAttribute
+  NativeArray array = attribute is InterleavedBufferAttribute
       ? attribute.data!.array
       : attribute.array;
 
@@ -55,8 +55,11 @@ class WebGLMorphtargets {
       // instead of using attributes, the WebGL 2 code path encodes morph targets
       // into an array of data textures. Each layer represents a single morph target.
 
-      var morphAttribute = geometry.morphAttributes["position"] ?? geometry.morphAttributes["normal"] ?? geometry.morphAttributes["color"];
-			var morphTargetsCount = ( morphAttribute != null ) ? morphAttribute.length : 0;
+      var morphAttribute = geometry.morphAttributes["position"] ??
+          geometry.morphAttributes["normal"] ??
+          geometry.morphAttributes["color"];
+      var morphTargetsCount =
+          (morphAttribute != null) ? morphAttribute.length : 0;
 
       Map? entry = morphTextures.get(geometry);
 
@@ -64,19 +67,20 @@ class WebGLMorphtargets {
         if (entry != null) entry["texture"].dispose();
 
         var hasMorphPosition = geometry.morphAttributes["position"] != null;
-				var hasMorphNormals = geometry.morphAttributes["normal"] != null;
-				var hasMorphColors = geometry.morphAttributes["color"] != null;
+        var hasMorphNormals = geometry.morphAttributes["normal"] != null;
+        var hasMorphColors = geometry.morphAttributes["color"] != null;
 
-				var morphTargets = geometry.morphAttributes["position"] ?? [];
+        var morphTargets = geometry.morphAttributes["position"] ?? [];
         var morphNormals = geometry.morphAttributes["normal"] ?? [];
         var morphColors = geometry.morphAttributes["color"] ?? [];
 
         int vertexDataCount = 0;
-        if ( hasMorphPosition == true ) vertexDataCount = 1;
-				if ( hasMorphNormals == true ) vertexDataCount = 2;
-				if ( hasMorphColors == true ) vertexDataCount = 3;
+        if (hasMorphPosition) vertexDataCount = 1;
+        if (hasMorphNormals) vertexDataCount = 2;
+        if (hasMorphColors) vertexDataCount = 3;
 
-				double width = (geometry.attributes["position"].count * vertexDataCount).toDouble();
+        double width = (geometry.attributes["position"].count * vertexDataCount)
+            .toDouble();
         double height = 1;
 
         if (width > capabilities.maxTextureSize) {
@@ -84,7 +88,8 @@ class WebGLMorphtargets {
           width = capabilities.maxTextureSize.toDouble();
         }
 
-        var buffer = Float32Array((width * height * 4 * morphTargetsCount).toInt());
+        var buffer =
+            Float32Array((width * height * 4 * morphTargetsCount).toInt());
 
         var texture =
             DataArrayTexture(buffer, width, height, morphTargetsCount);
@@ -97,30 +102,29 @@ class WebGLMorphtargets {
 
         int vertexDataStride = vertexDataCount * 4;
 
-
         for (var i = 0; i < morphTargetsCount; i++) {
-          var morphTarget = morphTargets[ i ];
-					
+          var morphTarget = morphTargets[i];
+
           int offset = (width * height * 4 * i).toInt();
 
           for (var j = 0; j < morphTarget.count; j++) {
             var stride = j * vertexDataStride;
 
-						if ( hasMorphPosition == true ) {
+            if (hasMorphPosition == true) {
+              morph.fromBufferAttribute(morphTarget, j);
 
-							morph.fromBufferAttribute( morphTarget, j );
+              if (morphTarget.normalized == true) {
+                denormalize(morph, morphTarget);
+              }
 
-							if ( morphTarget.normalized == true ) denormalize( morph, morphTarget );
-
-							buffer[ offset + stride + 0 ] = morph.x.toDouble();
-							buffer[ offset + stride + 1 ] = morph.y.toDouble();
-							buffer[ offset + stride + 2 ] = morph.z.toDouble();
-							buffer[ offset + stride + 3 ] = 0;
-
-						}
+              buffer[offset + stride + 0] = morph.x.toDouble();
+              buffer[offset + stride + 1] = morph.y.toDouble();
+              buffer[offset + stride + 2] = morph.z.toDouble();
+              buffer[offset + stride + 3] = 0;
+            }
 
             if (hasMorphNormals == true) {
-              var morphNormal = morphNormals[ i ];
+              var morphNormal = morphNormals[i];
               morph.fromBufferAttribute(morphNormal, j);
 
               if (morphNormal.normalized == true) {
@@ -133,21 +137,22 @@ class WebGLMorphtargets {
               buffer[offset + stride + 7] = 0;
             }
 
-            if ( hasMorphColors == true ) {
-              var morphColor = morphColors[ i ];
-              var morphNormal = morphNormals[ i ];
-              
-							morph.fromBufferAttribute( morphColor, j );
+            if (hasMorphColors == true) {
+              var morphColor = morphColors[i];
+              var morphNormal = morphNormals[i];
 
-							if ( morphColor.normalized == true ) denormalize( morph, morphNormal );
+              morph.fromBufferAttribute(morphColor, j);
 
-							buffer[ offset + stride + 8 ] = morph.x.toDouble();
-							buffer[ offset + stride + 9 ] = morph.y.toDouble();
-							buffer[ offset + stride + 10 ] = morph.z.toDouble();
-							buffer[ offset + stride + 11 ] = (( morphColor.itemSize == 4 ) ? morph.w : 1).toDouble();
+              if (morphColor.normalized == true) {
+                denormalize(morph, morphNormal);
+              }
 
-						}
-
+              buffer[offset + stride + 8] = morph.x.toDouble();
+              buffer[offset + stride + 9] = morph.y.toDouble();
+              buffer[offset + stride + 10] = morph.z.toDouble();
+              buffer[offset + stride + 11] =
+                  ((morphColor.itemSize == 4) ? morph.w : 1).toDouble();
+            }
           }
         }
 

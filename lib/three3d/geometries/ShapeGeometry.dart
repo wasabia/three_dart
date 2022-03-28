@@ -86,9 +86,9 @@ class ShapeGeometry extends BufferGeometry {
       for (var i = 0, l = shapeVertices.length; i < l; i++) {
         var vertex = shapeVertices[i];
 
-        vertices.addAll([vertex.x, vertex.y, 0.0]);
+        vertices.addAll([vertex.x.toDouble(), vertex.y.toDouble(), 0.0]);
         normals.addAll([0.0, 0.0, 1.0]);
-        uvs.addAll([vertex.x, vertex.y]); // world uvs
+        uvs.addAll([vertex.x.toDouble(), vertex.y.toDouble()]); // world uvs
 
       }
 

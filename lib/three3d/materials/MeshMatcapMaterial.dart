@@ -28,7 +28,6 @@ part of three_materials;
 
 class MeshMatcapMaterial extends Material {
   MeshMatcapMaterial([Map<String, dynamic>? parameters]) : super() {
-    isMeshMatcapMaterial = true;
     defines = {'MATCAP': ''};
 
     type = 'MeshMatcapMaterial';

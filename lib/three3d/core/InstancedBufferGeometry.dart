@@ -4,7 +4,6 @@ class InstancedBufferGeometry extends BufferGeometry {
   InstancedBufferGeometry() : super() {
     type = 'InstancedBufferGeometry';
     instanceCount = Math.Infinity.toInt();
-    isInstancedBufferGeometry = true;
   }
 
   @override

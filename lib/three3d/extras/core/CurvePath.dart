@@ -98,8 +98,7 @@ class CurvePath extends Curve {
   List<num> getCurveLengths() {
     // We use cache values if curves and cache array are same length
 
-    if (cacheLengths != null &&
-        cacheLengths!.length == curves.length) {
+    if (cacheLengths != null && cacheLengths!.length == curves.length) {
       return cacheLengths!;
     }
 
@@ -148,7 +147,7 @@ class CurvePath extends Curve {
       var curve = curves[i];
       var resolution = (curve.isEllipseCurve)
           ? divisions * 2
-          : ((curve.isLineCurve || curve.isLineCurve3))
+          : ((curve is LineCurve || curve is LineCurve3))
               ? 1
               : (curve.isSplineCurve)
                   ? divisions * curve.points.length
