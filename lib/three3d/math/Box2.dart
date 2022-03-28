@@ -87,7 +87,7 @@ class Box2 {
     return this;
   }
 
-  Box2 expandByScalar(num scalar) {
+  Box2 expandByScalar(double scalar) {
     min.addScalar(-scalar);
     max.addScalar(scalar);
 
