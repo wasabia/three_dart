@@ -2,49 +2,48 @@ part of three_math;
 
 class Vector2 {
   String type = "Vector2";
-  num x = 0;
-  num y = 0;
+  double x = 0;
+  double y = 0;
 
   Vector2([num? x, num? y]) {
-    this.x = x ?? 0;
-    this.y = y ?? 0;
+    this.x = (x ?? 0).toDouble();
+    this.y = (y ?? 0).toDouble();
   }
-  Vector2.init({this.x = 0, this.y = 0});
 
-  Vector2.fromJSON(List<num>? json) {
+  Vector2.fromJSON(List<double>? json) {
     if (json != null) {
       x = json[0];
       y = json[1];
     }
   }
 
-  num get width => x;
-  set width(num value) => x = value;
+  double get width => x;
+  set width(double value) => x = value;
 
-  num get height => y;
-  set height(num value) => y = value;
+  double get height => y;
+  set height(double value) => y = value;
 
   Vector2 set(num x, num y) {
-    this.x = x;
-    this.y = y;
+    this.x = x.toDouble();
+    this.y = y.toDouble();
 
     return this;
   }
 
-  Vector2 setScalar(num scalar) {
+  Vector2 setScalar(double scalar) {
     x = scalar;
     y = scalar;
 
     return this;
   }
 
-  Vector2 setX(num x) {
+  Vector2 setX(double x) {
     this.x = x;
 
     return this;
   }
 
-  Vector2 setY(num y) {
+  Vector2 setY(double y) {
     this.y = y;
 
     return this;
@@ -100,7 +99,7 @@ class Vector2 {
     return this;
   }
 
-  Vector2 addScalar(num s) {
+  Vector2 addScalar(double s) {
     x += s;
     y += s;
 
@@ -155,7 +154,7 @@ class Vector2 {
     return this;
   }
 
-  Vector2 multiplyScalar(num scalar) {
+  Vector2 multiplyScalar(double scalar) {
     x *= scalar;
     y *= scalar;
 
@@ -169,7 +168,7 @@ class Vector2 {
     return this;
   }
 
-  Vector2 divideScalar(num scalar) {
+  Vector2 divideScalar(double scalar) {
     return multiplyScalar(1 / scalar);
   }
 
@@ -301,7 +300,7 @@ class Vector2 {
     return (Math.abs(x - v.x) + Math.abs(y - v.y)).toDouble();
   }
 
-  Vector2 setLength(num length) {
+  Vector2 setLength(double length) {
     return normalize().multiplyScalar(length);
   }
 
@@ -330,8 +329,8 @@ class Vector2 {
     return this;
   }
 
-  List<num> toArray([List<num>? array, int offset = 0]) {
-    array ??= List<num>.filled(2, 0.0);
+  List<num> toArray([List<double>? array, int offset = 0]) {
+    array ??= List<double>.filled(2, 0.0);
 
     array[offset] = x;
     array[offset + 1] = y;
@@ -342,10 +341,6 @@ class Vector2 {
     return [x, y];
   }
 
-  List<num> toArray2(List<num> array, int offset) {
-    return [x, y];
-  }
-
   Vector2 fromBufferAttribute(attribute, index) {
     x = attribute.getX(index);
     y = attribute.getY(index);
@@ -353,7 +348,7 @@ class Vector2 {
     return this;
   }
 
-  Vector2 rotateAround(Vector2 center, num angle) {
+  Vector2 rotateAround(Vector2 center, double angle) {
     var c = Math.cos(angle), s = Math.sin(angle);
 
     var x = this.x - center.x;
@@ -372,12 +367,13 @@ class Vector2 {
     return this;
   }
 
-  Vector2.fromJson(Map<String, dynamic> json) {
-    x = json['x'];
-    y = json['y'];
+  Vector2.fromJson(Map<String, double> json) {
+    x = json['x']!;
+    y = json['y']!;
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, double> toJson() {
     return {'x': x, 'y': y};
   }
+
 }

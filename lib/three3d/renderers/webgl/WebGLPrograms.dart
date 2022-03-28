@@ -150,12 +150,14 @@ class WebGLPrograms {
       customFragmentShaderID = _customShaders.getFragmentShaderID(material);
     }
 
-    // print(" WebGLPrograms material : ${material.type} ${material.shaderID} ${material.id} object: ${object.type} ${object.id} shaderID: ${shaderID} ");
+    // print(" WebGLPrograms material : ${material.type} ${material.shaderID} ${material.id} object: ${object.type} ${object.id} shaderID: ${shaderID} vertexColors: ${material.vertexColors} ");
 
     var currentRenderTarget = renderer.getRenderTarget();
 
     var useAlphaTest = material.alphaTest > 0;
     var useClearcoat = material.clearcoat > 0;
+
+
 
     var parameters = WebGLParameters({
       "isWebGL2": isWebGL2,
