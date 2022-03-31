@@ -1,17 +1,17 @@
 part of three_lights;
 
 class Light extends Object3D {
-  late num intensity;
+  late double intensity;
   Color? color;
-  num? distance;
+  double? distance;
   LightShadow? shadow;
   SphericalHarmonics3? sh;
 
-  num? angle;
-  num? decay;
+  double? angle;
+  double? decay;
 
   Object3D? target;
-  num? penumbra;
+  double? penumbra;
 
   num? width;
   num? height;
@@ -25,7 +25,7 @@ class Light extends Object3D {
   @override
   String type = "Light";
 
-  Light(color, num? intensity) : super() {
+  Light(color, [double? intensity]) : super() {
     if (color is Color) {
       this.color = color;
     } else if (color is int) {

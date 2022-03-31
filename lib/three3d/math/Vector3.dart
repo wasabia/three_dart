@@ -7,11 +7,11 @@ class Vector3 {
 
   String type = "Vector3";
 
-  num x = 0;
-  num y = 0;
-  num z = 0;
+  double x = 0;
+  double y = 0;
+  double z = 0;
 
-  Vector3([num? x, num? y, num? z]) {
+  Vector3([double? x, double? y, double? z]) {
     this.x = x ?? 0;
     this.y = y ?? 0;
     this.z = z ?? 0;
@@ -19,7 +19,7 @@ class Vector3 {
 
   Vector3.init({this.x = 0, this.y = 0, this.z = 0});
 
-  Vector3.fromJSON(List<num>? json) {
+  Vector3.fromJSON(List<double>? json) {
     if (json != null) {
       x = json[0];
       y = json[1];
@@ -27,7 +27,7 @@ class Vector3 {
     }
   }
 
-  Vector3 set(num x, num y, [num? z]) {
+  Vector3 set(double x, double y, [double? z]) {
     z ??= this.z; // sprite.scale.set(x,y)
 
     this.x = x;
@@ -37,7 +37,7 @@ class Vector3 {
     return this;
   }
 
-  void setP(String p, num v) {
+  void setP(String p, double v) {
     if (p == "x") {
       x = v;
     } else if (p == "y") {
@@ -57,25 +57,25 @@ class Vector3 {
     return this;
   }
 
-  Vector3 setX(x) {
+  Vector3 setX(double x) {
     this.x = x;
 
     return this;
   }
 
-  Vector3 setY(y) {
+  Vector3 setY(double y) {
     this.y = y;
 
     return this;
   }
 
-  Vector3 setZ(z) {
+  Vector3 setZ(double z) {
     this.z = z;
 
     return this;
   }
 
-  Vector3 setComponent(int index, value) {
+  Vector3 setComponent(int index, double value) {
     switch (index) {
       case 0:
         x = value;
@@ -93,7 +93,7 @@ class Vector3 {
     return this;
   }
 
-  num getComponent(int index) {
+  double getComponent(int index) {
     switch (index) {
       case 0:
         return x;
@@ -351,25 +351,25 @@ class Vector3 {
   }
 
   Vector3 floor() {
-    x = Math.floor(x);
-    y = Math.floor(y);
-    z = Math.floor(z);
+    x = Math.floor(x).toDouble();
+    y = Math.floor(y).toDouble();
+    z = Math.floor(z).toDouble();
 
     return this;
   }
 
   Vector3 ceil() {
-    x = Math.ceil(x);
-    y = Math.ceil(y);
-    z = Math.ceil(z);
+    x = Math.ceil(x).toDouble();
+    y = Math.ceil(y).toDouble();
+    z = Math.ceil(z).toDouble();
 
     return this;
   }
 
   Vector3 round() {
-    x = Math.round(x);
-    y = Math.round(y);
-    z = Math.round(z);
+    x = Math.round(x).toDouble();
+    y = Math.round(y).toDouble();
+    z = Math.round(z).toDouble();
 
     return this;
   }
@@ -518,7 +518,7 @@ class Vector3 {
     return setFromCylindricalCoords(c.radius, c.theta, c.y);
   }
 
-  Vector3 setFromCylindricalCoords(num radius, num theta, num y) {
+  Vector3 setFromCylindricalCoords(double radius, double theta, double y) {
     x = radius * Math.sin(theta);
     this.y = y;
     z = radius * Math.cos(theta);
@@ -568,10 +568,11 @@ class Vector3 {
     return ((v.x == x) && (v.y == y) && (v.z == z));
   }
 
+  // array  list | native array
   Vector3 fromArray(array, [int offset = 0]) {
-    x = array[offset]!;
-    y = array[offset + 1]!;
-    z = array[offset + 2]!;
+    x = array[offset].toDouble();
+    y = array[offset + 1].toDouble();
+    z = array[offset + 2].toDouble();
 
     return this;
   }
@@ -593,9 +594,9 @@ class Vector3 {
   }
 
   Vector3 fromBufferAttribute(BufferAttribute attribute, int index) {
-    x = attribute.getX(index)!;
-    y = attribute.getY(index)!;
-    z = attribute.getZ(index)!;
+    x = attribute.getX(index)!.toDouble();
+    y = attribute.getY(index)!.toDouble();
+    z = attribute.getZ(index)!.toDouble();
 
     return this;
   }

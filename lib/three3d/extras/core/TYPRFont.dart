@@ -6,7 +6,7 @@ class TYPRFont extends Font {
   }
 
   @override
-  List<Shape> generateShapes(text, {int size = 100}) {
+  List<Shape> generateShapes(text, {double size = 100}) {
     List<Shape> shapes = [];
     var paths = createPaths(text, size, data);
 
@@ -132,17 +132,17 @@ class TYPRFont extends Font {
 
     var path = ShapePath();
 
-    num x = 0.1;
-    num y = 0.1;
-    num cpx, cpy, cpx1, cpy1, cpx2, cpy2;
+    double x = 0.1;
+    double y = 0.1;
+    double cpx, cpy, cpx1, cpy1, cpx2, cpy2;
 
     var cmds = charPath["cmds"];
-    List<num> crds = List<num>.from(charPath["crds"]);
+    List<double> crds = List<double>.from(charPath["crds"].map((e) => e.toDouble()));
 
     // print(" charPath  before scale ....");
     // print(charPath);
 
-    crds = crds.map((n) => Math.round(n * _preScale)).toList();
+    crds = crds.map((n) => Math.round(n * _preScale).toDouble()).toList();
 
     // print(" charPath ha: ${ha} _preScale: ${_preScale} ");
     // print(cmds);
