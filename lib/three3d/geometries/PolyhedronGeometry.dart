@@ -60,9 +60,9 @@ class PolyhedronGeometry extends BufferGeometry {
     void getVertexByIndex(index, vertex) {
       var stride = index * 3;
 
-      vertex.x = vertices[stride + 0];
-      vertex.y = vertices[stride + 1];
-      vertex.z = vertices[stride + 2];
+      vertex.x = vertices[stride + 0].toDouble();
+      vertex.y = vertices[stride + 1].toDouble();
+      vertex.z = vertices[stride + 2].toDouble();
     }
 
     void subdivide(detail) {

@@ -118,8 +118,6 @@ class WebGLParameters {
   Map<String, dynamic>? uniforms;
 
   dynamic vertexAlphas;
-  late bool flipNormalScaleY;
-
   late bool opaque;
 
   late int morphTargetsCount;
@@ -246,8 +244,6 @@ class WebGLParameters {
 
     vertexAlphas = json["vertexAlphas"];
 
-    flipNormalScaleY = json["flipNormalScaleY"];
-
     decodeVideoTexture = json["decodeVideoTexture"];
     morphTargetsCount = json["morphTargetsCount"];
     opaque = json["opaque"];
@@ -357,7 +353,6 @@ class WebGLParameters {
       "customProgramCacheKey": customProgramCacheKey,
       "uniforms": uniforms,
       "vertexAlphas": vertexAlphas,
-      "flipNormalScaleY": flipNormalScaleY,
       "decodeVideoTexture": decodeVideoTexture,
       "morphTargetsCount": morphTargetsCount,
       "opaque": opaque,

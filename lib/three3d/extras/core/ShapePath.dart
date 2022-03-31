@@ -9,24 +9,24 @@ class ShapePath {
 
   ShapePath();
 
-  moveTo(num x, num y) {
+  moveTo(double x, double y) {
     currentPath = Path(null);
     subPaths.add(currentPath);
     currentPath.moveTo(x, y);
     return this;
   }
 
-  lineTo(x, y) {
+  lineTo(double x, double y) {
     currentPath.lineTo(x, y);
     return this;
   }
 
-  quadraticCurveTo(aCPx, aCPy, aX, aY) {
+  quadraticCurveTo(double aCPx, double aCPy, double aX, double aY) {
     currentPath.quadraticCurveTo(aCPx, aCPy, aX, aY);
     return this;
   }
 
-  bezierCurveTo(aCP1x, aCP1y, aCP2x, aCP2y, aX, aY) {
+  bezierCurveTo(num aCP1x, num aCP1y, num aCP2x, num aCP2y, num aX, num aY) {
     currentPath.bezierCurveTo(aCP1x, aCP1y, aCP2x, aCP2y, aX, aY);
 
     return this;

@@ -206,7 +206,7 @@ class WebGLPrograms {
       "specularMap": material.specularMap != null,
       "specularIntensityMap": material.specularIntensityMap != null,
       "specularColorMap": material.specularColorMap != null,
-      "opaque": !material.transparent && material.blending == NormalBlending,
+      "opaque": material.transparent == false && material.blending == NormalBlending,
       "alphaMap": material.alphaMap != null,
       "alphaTest": useAlphaTest,
       "gradientMap": material.gradientMap != null,

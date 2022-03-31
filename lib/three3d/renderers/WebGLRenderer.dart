@@ -794,7 +794,7 @@ class WebGLRenderer {
           }
         }
       } else if (object is Mesh || object is Line || object is Points) {
-        if (object.type == "SkinnedMesh") {
+        if (object is SkinnedMesh) {
           // update skeleton only once in a frame
           if (object.skeleton!.frame != info.render["frame"]) {
             object.skeleton!.update();

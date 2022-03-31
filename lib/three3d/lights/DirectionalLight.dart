@@ -3,7 +3,7 @@ part of three_lights;
 class DirectionalLight extends Light {
   bool isDirectionalLight = true;
 
-  DirectionalLight(color, [intensity]) : super(color, intensity) {
+  DirectionalLight(color, [double? intensity]) : super(color, intensity) {
     type = "DirectionalLight";
     position.copy(Object3D.DefaultUp);
     updateMatrix();

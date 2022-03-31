@@ -5,9 +5,9 @@ class Vector2 {
   double x = 0;
   double y = 0;
 
-  Vector2([num? x, num? y]) {
-    this.x = (x ?? 0).toDouble();
-    this.y = (y ?? 0).toDouble();
+  Vector2([double? x, double? y]) {
+    this.x = x ?? 0;
+    this.y = y ?? 0;
   }
 
   Vector2.fromJSON(List<double>? json) {
@@ -23,9 +23,9 @@ class Vector2 {
   double get height => y;
   set height(double value) => y = value;
 
-  Vector2 set(num x, num y) {
-    this.x = x.toDouble();
-    this.y = y.toDouble();
+  Vector2 set(double x, double y) {
+    this.x = x;
+    this.y = y;
 
     return this;
   }
@@ -99,7 +99,7 @@ class Vector2 {
     return this;
   }
 
-  Vector2 addScalar(double s) {
+  Vector2 addScalar(num s) {
     x += s;
     y += s;
 
@@ -133,7 +133,7 @@ class Vector2 {
     return this;
   }
 
-  Vector2 subScalar(double s) {
+  Vector2 subScalar(num s) {
     x -= s;
     y -= s;
 
@@ -154,7 +154,7 @@ class Vector2 {
     return this;
   }
 
-  Vector2 multiplyScalar(double scalar) {
+  Vector2 multiplyScalar(num scalar) {
     x *= scalar;
     y *= scalar;
 

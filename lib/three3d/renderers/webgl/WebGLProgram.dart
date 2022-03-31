@@ -129,7 +129,6 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.vertexAlphas ? '#define USE_COLOR_ALPHA' : '',
         parameters.vertexUvs ? '#define USE_UV' : '',
         parameters.uvsVertexOnly ? '#define UVS_VERTEX_ONLY' : '',
-        parameters.flipNormalScaleY ? '#define FLIP_NORMAL_SCALE_Y' : '',
         parameters.flatShading ? '#define FLAT_SHADED' : '',
         parameters.skinning ? '#define USE_SKINNING' : '',
         parameters.useVertexTexture ? '#define BONE_TEXTURE' : '',
@@ -281,7 +280,6 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.vertexAlphas ? '#define USE_COLOR_ALPHA' : '',
         parameters.vertexUvs ? '#define USE_UV' : '',
         parameters.uvsVertexOnly ? '#define UVS_VERTEX_ONLY' : '',
-        parameters.flipNormalScaleY ? '#define FLIP_NORMAL_SCALE_Y' : '',
         parameters.gradientMap ? '#define USE_GRADIENTMAP' : '',
 
         parameters.flatShading ? '#define FLAT_SHADED' : '',
@@ -385,13 +383,14 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     final vertexGlsl = versionString + prefixVertex + vertexShader;
     final fragmentGlsl = versionString + prefixFragment + fragmentShader;
 
-    // developer.log(" alphaTest: ${parameters.alphaTest} ");
+    // print(" material ${parameters.shaderName}  opaque: ${parameters.opaque } ");
     // developer.log(" 111 ================= VERTEX  ");
     // developer.log(vertexGlsl);
     // print(vertexGlsl);
     // developer.log("  111 ==================== FRAGMENT ");
     // developer.log(fragmentGlsl);
     // print( fragmentGlsl );
+
 
     final glVertexShader = WebGLShader(gl, gl.VERTEX_SHADER, vertexGlsl);
 

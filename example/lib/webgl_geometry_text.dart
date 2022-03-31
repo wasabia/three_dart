@@ -47,7 +47,7 @@ class _MyAppState extends State<webgl_geometry_text> {
 
   dynamic? sourceTexture;
 
-  num fontHeight = 20,
+  double fontHeight = 20,
       size = 70,
       hover = 30,
       curveSegments = 4,
@@ -246,7 +246,7 @@ class _MyAppState extends State<webgl_geometry_text> {
 
     // change size position fit mobile
     group.position.y = 50;
-    group.scale.set(0.2, 0.2, 0.2);
+    group.scale.set(1, 1, 1);
 
     scene.add(group);
 
@@ -258,7 +258,7 @@ class _MyAppState extends State<webgl_geometry_text> {
         THREE.PlaneGeometry(10000, 10000),
         THREE.MeshBasicMaterial(
             {"color": 0xffffff, "opacity": 0.5, "transparent": true}));
-    plane.position.y = 100;
+    plane.position.y = -100;
     plane.rotation.x = -THREE.Math.PI / 2;
     scene.add(plane);
 
@@ -268,6 +268,9 @@ class _MyAppState extends State<webgl_geometry_text> {
   loadFont() async {
     var loader = THREE_JSM.TYPRLoader(null);
     var fontJson = await loader.loadAsync("assets/pingfang.ttf");
+
+    print("loadFont successs ............ ");
+    print(fontJson);
 
     return THREE.TYPRFont(fontJson);
   }
