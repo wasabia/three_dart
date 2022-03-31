@@ -1,7 +1,7 @@
 part of three_lights;
 
 class SpotLight extends Light {
-  SpotLight(color, [intensity, num? distance, angle, penumbra, decay])
+  SpotLight(color, [intensity, double? distance, angle, penumbra, decay])
       : super(color, intensity) {
     type = "SpotLight";
     position.copy(Object3D.DefaultUp);

@@ -13,34 +13,34 @@ class Euler {
 
   String type = "Euler";
 
-  late num _x;
-  late num _y;
-  late num _z;
+  late double _x;
+  late double _y;
+  late double _z;
   late String _order;
 
   Function onChangeCallback = () {};
 
-  Euler([num? x, num? y, num? z, String? order]) {
+  Euler([double? x, double? y, double? z, String? order]) {
     _x = x ?? 0;
     _y = y ?? 0;
     _z = z ?? 0;
     _order = order ?? DefaultOrder;
   }
 
-  num get x => _x;
-  set x(num value) {
+  double get x => _x;
+  set x(double value) {
     _x = value;
     onChangeCallback();
   }
 
-  num get y => _y;
-  set y(num value) {
+  double get y => _y;
+  set y(double value) {
     _y = value;
     onChangeCallback();
   }
 
-  num get z => _z;
-  set z(num value) {
+  double get z => _z;
+  set z(double value) {
     _z = value;
     onChangeCallback();
   }
@@ -51,7 +51,7 @@ class Euler {
     onChangeCallback();
   }
 
-  Euler set(num x, num y, num z, [String? order]) {
+  Euler set(double x, double y, double z, [String? order]) {
     _x = x;
     _y = y;
     _z = z;
@@ -206,7 +206,7 @@ class Euler {
         (euler._order == _order);
   }
 
-  Euler fromArray(List<num> array) {
+  Euler fromArray(List<double> array) {
     _x = array[0];
     _y = array[1];
     _z = array[2];

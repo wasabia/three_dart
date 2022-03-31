@@ -8,9 +8,9 @@ class Plane {
   String type = "Plane";
 
   late Vector3 normal;
-  num constant = 0;
+  double constant = 0;
 
-  Plane([Vector3? normal, num? constant]) {
+  Plane([Vector3? normal, double? constant]) {
     // normal is assumed to be normalized
 
     this.normal = (normal != null) ? normal : Vector3(1, 0, 0);
@@ -24,14 +24,14 @@ class Plane {
     return _data;
   }
 
-  Plane set(Vector3 normal, num constant) {
+  Plane set(Vector3 normal, double constant) {
     this.normal.copy(normal);
     this.constant = constant;
 
     return this;
   }
 
-  Plane setComponents(num x, num y, num z, num w) {
+  Plane setComponents(double x, double y, double z, double w) {
     normal.set(x, y, z);
     constant = w;
 
@@ -40,7 +40,7 @@ class Plane {
 
   Plane setFromNormalAndCoplanarPoint(Vector3 normal, Vector3 point) {
     this.normal.copy(normal);
-    constant = -point.dot(this.normal);
+    constant = -point.dot(this.normal).toDouble();
 
     return this;
   }
@@ -152,7 +152,7 @@ class Plane {
 
     var normal = this.normal.applyMatrix3(normalMatrix).normalize();
 
-    constant = -referencePoint.dot(normal);
+    constant = -referencePoint.dot(normal).toDouble();
 
     return this;
   }

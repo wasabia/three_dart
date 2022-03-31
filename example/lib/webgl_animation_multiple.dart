@@ -396,17 +396,17 @@ class _State extends State<webgl_animation_multiple> {
 
           if (u["position"] != null) {
             clonedScene.position.set(
-                u["position"]["x"], u["position"]["y"], u["position"]["z"]);
+                u["position"]["x"].toDouble(), u["position"]["y"].toDouble(), u["position"]["z"].toDouble());
           }
 
           if (u["scale"] != null) {
-            clonedScene.scale.set(u["scale"], u["scale"], u["scale"]);
+            clonedScene.scale.set(u["scale"].toDouble(), u["scale"].toDouble(), u["scale"].toDouble());
           }
 
           if (u["rotation"] != null) {
-            clonedScene.rotation.x = u["rotation"]["x"];
-            clonedScene.rotation.y = u["rotation"]["y"];
-            clonedScene.rotation.z = u["rotation"]["z"];
+            clonedScene.rotation.x = u["rotation"]["x"].toDouble();
+            clonedScene.rotation.y = u["rotation"]["y"].toDouble();
+            clonedScene.rotation.z = u["rotation"]["z"].toDouble();
           }
         }
       } else {

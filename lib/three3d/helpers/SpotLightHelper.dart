@@ -85,7 +85,7 @@ class SpotLightHelper extends Object3D {
   update() {
     light.updateMatrixWorld(false);
 
-    var coneLength = light.distance ?? 1000;
+    double coneLength = light.distance ?? 1000;
     var coneWidth = coneLength * Math.tan(light.angle!);
 
     cone.scale.set(coneWidth, coneWidth, coneLength);

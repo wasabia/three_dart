@@ -38,7 +38,7 @@ class Box3 {
   late Vector3 min;
   late Vector3 max;
 
-  static num Infinity = Math.Infinity;
+  static double Infinity = Math.Infinity;
 
   Box3([Vector3? min, Vector3? max]) {
     this.min = min ?? Vector3(Infinity, Infinity, Infinity);
@@ -56,7 +56,7 @@ class Box3 {
     return this;
   }
 
-  Box3 setFromArray(List<num> array) {
+  Box3 setFromArray(List<double> array) {
     var minX = Infinity;
     var minY = Infinity;
     var minZ = Infinity;
@@ -86,18 +86,18 @@ class Box3 {
   }
 
   Box3 setFromBufferAttribute(BufferAttribute attribute) {
-    num minX = Infinity;
-    num minY = Infinity;
-    num minZ = Infinity;
+    double minX = Infinity;
+    double minY = Infinity;
+    double minZ = Infinity;
 
-    num maxX = -Infinity;
-    num maxY = -Infinity;
-    num maxZ = -Infinity;
+    double maxX = -Infinity;
+    double maxY = -Infinity;
+    double maxZ = -Infinity;
 
     for (var i = 0, l = attribute.count; i < l; i++) {
-      num x = attribute.getX(i)!;
-      num y = attribute.getY(i)!;
-      num z = attribute.getZ(i)!;
+      double x = attribute.getX(i)!.toDouble();
+      double y = attribute.getY(i)!.toDouble();
+      double z = attribute.getZ(i)!.toDouble();
 
       if (x < minX) minX = x;
       if (y < minY) minY = y;

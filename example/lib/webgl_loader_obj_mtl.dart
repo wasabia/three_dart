@@ -216,11 +216,9 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
     await materials.preload();
 
     var loader = THREE_JSM.OBJLoader(null);
-    // loader.setMaterials(materials);
+    loader.setMaterials(materials);
     object = await loader.loadAsync('assets/models/obj/male02/male02.obj');
 
-
-    print(" loaded success $object  ");
 
     object.scale.set(0.5, 0.5, 0.5);
     scene.add(object);
@@ -235,9 +233,9 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
 
     render();
 
-    // Future.delayed(Duration(milliseconds: 40), () {
-    //   animate();
-    // });
+    Future.delayed(Duration(milliseconds: 40), () {
+      animate();
+    });
   }
 
   @override

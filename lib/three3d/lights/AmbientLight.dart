@@ -5,7 +5,7 @@ part of three_lights;
 class AmbientLight extends Light {
   bool isAmbientLight = true;
 
-  AmbientLight(color, [intensity]) : super(color, intensity) {
+  AmbientLight(color, [double? intensity]) : super(color, intensity) {
     type = 'AmbientLight';
   }
 

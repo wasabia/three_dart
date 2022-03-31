@@ -255,8 +255,8 @@ class PMREMGenerator {
     var fov = 90;
     var aspect = 1;
     var cubeCamera = PerspectiveCamera(fov, aspect, near, far);
-    var upSign = [1, -1, 1, 1, 1, 1];
-    var forwardSign = [1, 1, 1, -1, -1, -1];
+    List<double> upSign = [1, -1, 1, 1, 1, 1];
+    List<double> forwardSign = [1, 1, 1, -1, -1, -1];
     var renderer = _renderer;
 
     var originalAutoClear = renderer.autoClear;

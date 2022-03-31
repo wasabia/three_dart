@@ -123,7 +123,7 @@ class CameraHelper extends LineSegments {
     var geometry = this.geometry;
     var pointMap = this.pointMap;
 
-    var w = 1, h = 1;
+    double w = 1, h = 1;
 
     // we need just camera projection matrix inverse
     // world matrix must be identity
@@ -177,7 +177,7 @@ class CameraHelper extends LineSegments {
   }
 }
 
-setPoint(point, pointMap, geometry, camera, x, y, z) {
+setPoint(point, pointMap, geometry, camera, double x, double y, double z) {
   _vector.set(x, y, z).unproject(camera);
 
   var points = pointMap[point];
