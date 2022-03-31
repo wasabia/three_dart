@@ -16,10 +16,10 @@ class webgl_animation_cloth extends StatefulWidget {
   createState() => _State();
 }
 
-var restDistance = 25;
+double restDistance = 25;
 
-var xSegs = 10;
-var ySegs = 10;
+int xSegs = 10;
+int ySegs = 10;
 
 var DRAG = 1 - 0.03;
 
@@ -627,7 +627,7 @@ class Cloth {
   late List<Particle> particles;
   late List<dynamic> constraints;
 
-  Cloth([w = 10, h = 10]) {
+  Cloth([int w = 10, int h = 10]) {
     this.w = w;
     this.h = h;
 
@@ -674,12 +674,12 @@ class Cloth {
 }
 
 clothFunction(u, v, target) {
-  var width = restDistance * xSegs;
-  var height = restDistance * ySegs;
+  double width = restDistance * xSegs;
+  double height = restDistance * ySegs;
 
-  var x = (u - 0.5) * width;
-  var y = (v + 0.5) * height;
-  var z = 0;
+  double x = (u - 0.5) * width;
+  double y = (v + 0.5) * height;
+  double z = 0.0;
 
   target.set(x, y, z);
 }

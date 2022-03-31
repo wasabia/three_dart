@@ -252,13 +252,13 @@ class _State extends State<webgl_clipping_advanced> {
     }
   }
 
-  cylindricalPlanes(n, innerRadius) {
+  cylindricalPlanes(n, double innerRadius) {
     var result = createPlanes(n);
 
     for (var i = 0; i != n; ++i) {
       var plane = result[i], angle = i * THREE.Math.PI * 2 / n;
 
-      plane.normal.set(THREE.Math.cos(angle), 0, THREE.Math.sin(angle));
+      plane.normal.set(THREE.Math.cos(angle), 0.0, THREE.Math.sin(angle));
 
       plane.constant = innerRadius;
     }

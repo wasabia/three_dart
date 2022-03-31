@@ -42,7 +42,7 @@ class BoxGeometry extends BufferGeometry {
     numberOfVertices = 0;
     groupStart = 0;
 
-    void buildPlane(String u, String v, String w, udir, vdir, width,
+    void buildPlane(String u, String v, String w, double udir, double vdir, width,
         height, depth, gridX, gridY, materialIndex) {
       var segmentWidth = width / gridX;
       var segmentHeight = height / gridY;

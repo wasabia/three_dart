@@ -32,9 +32,9 @@ class InterleavedBufferAttribute extends BufferAttribute {
   @override
   InterleavedBufferAttribute applyMatrix4(Matrix4 m) {
     for (var i = 0, l = data!.count; i < l; i++) {
-      _vector.x = getX(i)!;
-      _vector.y = getY(i)!;
-      _vector.z = getZ(i)!;
+      _vector.x = getX(i)!.toDouble();
+      _vector.y = getY(i)!.toDouble();
+      _vector.z = getZ(i)!.toDouble();
 
       _vector.applyMatrix4(m);
 
@@ -47,9 +47,9 @@ class InterleavedBufferAttribute extends BufferAttribute {
   @override
   InterleavedBufferAttribute applyNormalMatrix(m) {
     for (var i = 0, l = count; i < l; i++) {
-      _vector.x = getX(i)!;
-      _vector.y = getY(i)!;
-      _vector.z = getZ(i)!;
+      _vector.x = getX(i)!.toDouble();
+      _vector.y = getY(i)!.toDouble();
+      _vector.z = getZ(i)!.toDouble();
 
       _vector.applyNormalMatrix(m);
 
@@ -62,9 +62,9 @@ class InterleavedBufferAttribute extends BufferAttribute {
   @override
   InterleavedBufferAttribute transformDirection(Matrix4 m) {
     for (var i = 0, l = count; i < l; i++) {
-      _vector.x = getX(i)!;
-      _vector.y = getY(i)!;
-      _vector.z = getZ(i)!;
+      _vector.x = getX(i)!.toDouble();
+      _vector.y = getY(i)!.toDouble();
+      _vector.z = getZ(i)!.toDouble();
 
       _vector.transformDirection(m);
 

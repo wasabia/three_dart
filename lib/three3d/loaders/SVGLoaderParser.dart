@@ -147,7 +147,7 @@ class SVGLoaderParser {
   }
 
   // from https://github.com/ppvg/svg-numbers (MIT License)
-  parseFloats(input, [flags, stride]) {
+  List<double> parseFloats(input, [flags, stride]) {
     if (input is! String) {
       throw ('Invalid input: ${input.runtimeType} ');
     }
@@ -173,7 +173,7 @@ class SVGLoaderParser {
     var state = SEP;
     var seenComma = true;
     var number = '', exponent = '';
-    var result = [];
+    List<double> result = [];
 
     throwSyntaxError(current, i, partial) {
       var error =
@@ -184,9 +184,9 @@ class SVGLoaderParser {
     newNumber() {
       if (number != '') {
         if (exponent == '') {
-          result.add(num.parse(number));
+          result.add(double.parse(number));
         } else {
-          result.add(num.parse(number) * Math.pow(10, num.parse(exponent)));
+          result.add(double.parse(number) * Math.pow(10, double.parse(exponent)));
         }
       }
 
@@ -707,7 +707,7 @@ class SVGLoaderParser {
 
       switch (type) {
         case 'M':
-          var numbers = parseFloats(data);
+          List<double> numbers = parseFloats(data);
           for (var j = 0, jl = numbers.length; j < jl; j += 2) {
             point.x = numbers[j + 0];
             point.y = numbers[j + 1];

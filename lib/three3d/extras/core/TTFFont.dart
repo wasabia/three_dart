@@ -5,7 +5,7 @@ class Font {
   late Map<String, dynamic> data;
   bool isFont = true;
 
-  List<Shape> generateShapes(text, {int size = 100}) {
+  List<Shape> generateShapes(text, {double size = 100}) {
     throw ("Font generateShapes need implement .... ");
   }
 }
@@ -16,7 +16,7 @@ class TTFFont extends Font {
   }
 
   @override
-  List<Shape> generateShapes(text, {int size = 100}) {
+  List<Shape> generateShapes(text, {double size = 100}) {
     List<Shape> shapes = [];
     var paths = createPaths(text, size, data);
     for (var p = 0, pl = paths.length; p < pl; p++) {
@@ -28,20 +28,20 @@ class TTFFont extends Font {
   }
 
   List<ShapePath> createPaths(
-      String text, num size, Map<String, dynamic> data) {
+      String text, double size, Map<String, dynamic> data) {
     // var chars = Array.from ? Array.from( text ) : String( text ).split( '' ); // workaround for IE11, see #13988
     List<String> chars = text.split("");
 
-    num scale = size / data["resolution"];
-    num lineHeight = (data["boundingBox"]["yMax"] -
+    double scale = size / data["resolution"];
+    double lineHeight = (data["boundingBox"]["yMax"] -
             data["boundingBox"]["yMin"] +
             data["underlineThickness"]) *
         scale;
 
     List<ShapePath> paths = [];
 
-    num offsetX = 0.0;
-    num offsetY = 0.0;
+    double offsetX = 0.0;
+    double offsetY = 0.0;
 
     for (var i = 0; i < chars.length; i++) {
       var char = chars[i];
@@ -60,7 +60,7 @@ class TTFFont extends Font {
   }
 
   Map<String, dynamic> createPath(
-      char, num scale, num offsetX, num offsetY, data) {
+      char, double scale, double offsetX, double offsetY, data) {
     var glyph = data["glyphs"][char] ?? data["glyphs"]['?'];
 
     if (glyph == null) {
@@ -72,9 +72,9 @@ class TTFFont extends Font {
 
     var path = ShapePath();
 
-    num x = 0.1;
-    num y = 0.1;
-    num cpx, cpy, cpx1, cpy1, cpx2, cpy2;
+    double x = 0.1;
+    double y = 0.1;
+    double cpx, cpy, cpx1, cpy1, cpx2, cpy2;
 
     if (glyph["o"] != null) {
       var outline = glyph["_cachedOutline"];

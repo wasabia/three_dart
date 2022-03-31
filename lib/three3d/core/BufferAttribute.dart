@@ -137,9 +137,9 @@ abstract class BufferAttribute<TData extends NativeArray>
 
   void applyMatrix4(Matrix4 m) {
     for (var i = 0, l = count; i < l; i++) {
-      _vector.x = getX(i)!;
-      _vector.y = getY(i)!;
-      _vector.z = getZ(i)!;
+      _vector.x = getX(i)!.toDouble();
+      _vector.y = getY(i)!.toDouble();
+      _vector.z = getZ(i)!.toDouble();
 
       _vector.applyMatrix4(m);
 
@@ -149,9 +149,9 @@ abstract class BufferAttribute<TData extends NativeArray>
 
   BufferAttribute applyNormalMatrix(m) {
     for (var i = 0, l = count; i < l; i++) {
-      _vector.x = getX(i)!;
-      _vector.y = getY(i)!;
-      _vector.z = getZ(i)!;
+      _vector.x = getX(i)!.toDouble();
+      _vector.y = getY(i)!.toDouble();
+      _vector.z = getZ(i)!.toDouble();
 
       _vector.applyNormalMatrix(m);
 
@@ -163,9 +163,9 @@ abstract class BufferAttribute<TData extends NativeArray>
 
   BufferAttribute transformDirection(Matrix4 m) {
     for (var i = 0, l = count; i < l; i++) {
-      _vector.x = getX(i)!;
-      _vector.y = getY(i)!;
-      _vector.z = getZ(i)!;
+      _vector.x = getX(i)!.toDouble();
+      _vector.y = getY(i)!.toDouble();
+      _vector.z = getZ(i)!.toDouble();
 
       _vector.transformDirection(m);
 

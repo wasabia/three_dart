@@ -24,43 +24,43 @@ class Path extends CurvePath {
     return this;
   }
 
-  moveTo(x, y) {
+  moveTo(num x, num y) {
     currentPoint
-        .set(x, y); // TODO consider referencing vectors instead of copying?
+        .set(x.toDouble(), y.toDouble()); // TODO consider referencing vectors instead of copying?
 
     return this;
   }
 
-  lineTo(x, y) {
-    var curve = LineCurve(currentPoint.clone(), Vector2(x, y));
+  lineTo(num x, num y) {
+    var curve = LineCurve(currentPoint.clone(), Vector2(x.toDouble(), y.toDouble()));
     curves.add(curve);
 
-    currentPoint.set(x, y);
+    currentPoint.set(x.toDouble(), y.toDouble());
 
     return this;
   }
 
-  quadraticCurveTo(aCPx, aCPy, aX, aY) {
+  quadraticCurveTo(num aCPx, num aCPy, num aX, num aY) {
     var curve = QuadraticBezierCurve(currentPoint.clone(),
-        Vector2(aCPx, aCPy), Vector2(aX, aY));
+        Vector2(aCPx.toDouble(), aCPy.toDouble()), Vector2(aX.toDouble(), aY.toDouble()));
 
     curves.add(curve);
 
-    currentPoint.set(aX, aY);
+    currentPoint.set(aX.toDouble(), aY.toDouble());
 
     return this;
   }
 
-  bezierCurveTo(aCP1x, aCP1y, aCP2x, aCP2y, aX, aY) {
+  bezierCurveTo(num aCP1x, num aCP1y, num aCP2x, num aCP2y, num aX, num aY) {
     var curve = CubicBezierCurve(
         currentPoint.clone(),
-        Vector2(aCP1x, aCP1y),
-        Vector2(aCP2x, aCP2y),
-        Vector2(aX, aY));
+        Vector2(aCP1x.toDouble(), aCP1y.toDouble()),
+        Vector2(aCP2x.toDouble(), aCP2y.toDouble()),
+        Vector2(aX.toDouble(), aY.toDouble()));
 
     curves.add(curve);
 
-    currentPoint.set(aX, aY);
+    currentPoint.set(aX.toDouble(), aY.toDouble());
 
     return this;
   }
