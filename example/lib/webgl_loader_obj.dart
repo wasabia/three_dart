@@ -211,6 +211,7 @@ class _MyAppState extends State<webgl_loader_obj> {
     // texture
 
     var textureLoader = THREE.TextureLoader(null);
+    textureLoader.flipY = true;
     texture = await textureLoader.loadAsync(
         'assets/textures/uv_grid_opengl.jpg', null);
 
@@ -218,7 +219,7 @@ class _MyAppState extends State<webgl_loader_obj> {
     texture.minFilter = THREE.LinearMipmapLinearFilter;
     texture.generateMipmaps = true;
     texture.needsUpdate = true;
-    texture.flipY = true;
+    texture.flipY = true; // this flipY is only for web
 
     var loader = THREE_JSM.OBJLoader(null);
     object = await loader.loadAsync('assets/models/obj/male02/male02.obj');
