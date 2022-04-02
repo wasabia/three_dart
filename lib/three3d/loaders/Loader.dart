@@ -10,6 +10,9 @@ abstract class Loader {
   String responseType = "text";
   late String mimeType;
 
+  // 加载纹理时  是否需要垂直翻转
+  bool flipY = false;
+
   Loader([manager]) {
     this.manager = (manager != null) ? manager : DefaultLoadingManager;
 
