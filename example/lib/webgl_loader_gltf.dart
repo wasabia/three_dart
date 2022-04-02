@@ -175,11 +175,10 @@ class _MyAppState extends State<webgl_loader_gltf> {
     renderer = THREE.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
-    renderer!.shadowMap.enabled = false;
 
-    renderer!.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer!.toneMappingExposure = 1;
-    renderer!.outputEncoding = THREE.sRGBEncoding;
+    // renderer!.toneMapping = THREE.ACESFilmicToneMapping;
+    // renderer!.toneMappingExposure = 1;
+    // renderer!.outputEncoding = THREE.sRGBEncoding;
 
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
@@ -216,6 +215,8 @@ class _MyAppState extends State<webgl_loader_gltf> {
     scene.background = _hdrTexture;
     scene.environment = _hdrTexture;
 
+    scene.add( new THREE.AmbientLight( 0xffffff ) );
+
     var loader = THREE_JSM.GLTFLoader(null)
         .setPath('assets/models/gltf/DamagedHelmet/glTF/');
 
@@ -225,6 +226,17 @@ class _MyAppState extends State<webgl_loader_gltf> {
 
     object = result["scene"];
 
+    // var geometry = new THREE.PlaneGeometry(2, 2);
+    // var material = new THREE.MeshBasicMaterial();
+
+    // object.traverse( ( child ) {
+    //   if ( child is THREE.Mesh ) {
+    //     material.map = child.material.map;
+    //   }
+    // } );
+
+    // var mesh = new THREE.Mesh(geometry, material);
+    // scene.add(mesh);
 
     // object.traverse( ( child ) {
     //   if ( child.isMesh ) {

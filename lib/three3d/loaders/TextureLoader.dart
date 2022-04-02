@@ -1,9 +1,6 @@
 part of three_loaders;
 
 class TextureLoader extends Loader {
-  // 非web环境下加载纹理时翻转纹理
-  // https://github.com/wasabia/three_dart/issues/10
-  bool flipY = true;
 
   TextureLoader(manager) : super(manager);
 
