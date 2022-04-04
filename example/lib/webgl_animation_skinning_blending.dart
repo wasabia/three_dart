@@ -294,9 +294,9 @@ class _State extends State<webgl_animation_skinning_blending> {
 
     render();
 
-    // Future.delayed(const Duration(milliseconds: 40), () {
-    //   animate();
-    // });
+    Future.delayed(const Duration(milliseconds: 40), () {
+      animate();
+    });
   }
 
   @override

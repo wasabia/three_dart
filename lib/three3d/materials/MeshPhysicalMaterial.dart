@@ -1,34 +1,5 @@
 part of three_materials;
 
-/*
- * parameters = {
- *  clearcoat: <float>,
- *  clearcoatMap: new THREE.Texture( <Image> ),
- *  clearcoatRoughness: <float>,
- *  clearcoatRoughnessMap: new THREE.Texture( <Image> ),
- *  clearcoatNormalScale: <Vector2>,
- *  clearcoatNormalMap: new THREE.Texture( <Image> ),
- *
- *  ior: <float>,
- *  reflectivity: <float>,
- *
- *  sheenColor: <Color>,
- *
- *  transmission: <float>,
- *  transmissionMap: new THREE.Texture( <Image> ),
- *
- *  thickness: <float>,
- *  thicknessMap: new THREE.Texture( <Image> ),
- *  attenuationColor: <Color>
- *  attenuationDistance: <float>,
- * 
- *  specularIntensity: <float>,
- *  specularIntensityhMap: new THREE.Texture( <Image> ),
- *  specularColor: <Color>,
- *  specularColorMap: new THREE.Texture( <Image> )
- * }
- */
-
 class MeshPhysicalMaterial extends MeshStandardMaterial {
   MeshPhysicalMaterial([parameters]) : super(parameters) {
     clearcoatRoughness = 0.0;

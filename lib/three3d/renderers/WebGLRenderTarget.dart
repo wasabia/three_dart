@@ -88,6 +88,7 @@ class WebGLRenderTarget extends RenderTarget {
         this.options.anisotropy,
         this.options.encoding);
     texture.isRenderTargetTexture = true;
+    texture.flipY = false;
     texture.generateMipmaps = this.options.generateMipmaps;
     texture.minFilter =
         this.options.minFilter != null ? this.options.minFilter! : LinearFilter;
@@ -138,6 +139,7 @@ class WebGLRenderTarget extends RenderTarget {
     scissor.copy(source.scissor);
 
     texture = source.texture.clone();
+    texture.isRenderTargetTexture = true;
 
     // TODO Follow threejs
     //  this.texture.image = { ...this.texture.image }; // See #20328.

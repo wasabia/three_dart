@@ -93,8 +93,6 @@ class WebGLMorphtargets {
 
         var texture =
             DataArrayTexture(buffer, width, height, morphTargetsCount);
-        texture.format =
-            RGBAFormat; // using RGBA since RGB might be emulated (and is thus slower)
         texture.type = FloatType;
         texture.needsUpdate = true;
 
@@ -104,6 +102,7 @@ class WebGLMorphtargets {
 
         for (var i = 0; i < morphTargetsCount; i++) {
           var morphTarget = morphTargets[i];
+          
 
           int offset = (width * height * 4 * i).toInt();
 
@@ -139,12 +138,10 @@ class WebGLMorphtargets {
 
             if (hasMorphColors == true) {
               var morphColor = morphColors[i];
-              var morphNormal = morphNormals[i];
-
               morph.fromBufferAttribute(morphColor, j);
 
               if (morphColor.normalized == true) {
-                denormalize(morph, morphNormal);
+                denormalize(morph, morphColor);
               }
 
               buffer[offset + stride + 8] = morph.x.toDouble();

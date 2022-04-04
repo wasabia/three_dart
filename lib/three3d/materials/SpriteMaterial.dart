@@ -1,15 +1,5 @@
 part of three_materials;
 
-/*
- * parameters = {
- *  color: <hex>,
- *  map: new THREE.Texture( <Image> ),
- *  alphaMap: new THREE.Texture( <Image> ),
- *  rotation: <float>,
- *  sizeAttenuation: <bool>
- * }
- */
-
 class SpriteMaterial extends Material {
   SpriteMaterial([parameters]) : super() {
     type = 'SpriteMaterial';

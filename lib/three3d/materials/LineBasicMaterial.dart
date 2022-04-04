@@ -1,16 +1,5 @@
 part of three_materials;
 
-/*
- * parameters = {
- *  color: <hex>,
- *  opacity: <float>,
- *
- *  linewidth: <float>,
- *  linecap: "round",
- *  linejoin: "round"
- * }
- */
-
 class LineBasicMaterial extends Material {
   LineBasicMaterial([Map<String, dynamic>? parameters]) : super() {
     type = 'LineBasicMaterial';

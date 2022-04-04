@@ -12,8 +12,8 @@ class WebGLShaderCache {
     var vertexShader = material.vertexShader;
     var fragmentShader = material.fragmentShader;
 
-    var vertexShaderStage = _getShaderStage(vertexShader);
-    var fragmentShaderStage = _getShaderStage(fragmentShader);
+    var vertexShaderStage = _getShaderStage(vertexShader!);
+    var fragmentShaderStage = _getShaderStage(fragmentShader!);
 
     var materialShaders = _getShaderCacheForMaterial(material);
 
@@ -36,7 +36,7 @@ class WebGLShaderCache {
     for (var shaderStage in materialShaders) {
       shaderStage.usedTimes--;
 
-      if (shaderStage.usedTimes == 0) shaderCache.remove(shaderStage);
+      if (shaderStage.usedTimes == 0) shaderCache.remove(shaderStage.code);
     }
 
     materialCache.remove(material);
@@ -45,11 +45,11 @@ class WebGLShaderCache {
   }
 
   getVertexShaderID(Material material) {
-    return _getShaderStage(material.vertexShader).id;
+    return _getShaderStage(material.vertexShader!).id;
   }
 
   getFragmentShaderID(Material material) {
-    return _getShaderStage(material.fragmentShader).id;
+    return _getShaderStage(material.fragmentShader!).id;
   }
 
   void dispose() {
@@ -67,11 +67,11 @@ class WebGLShaderCache {
     return cache[material];
   }
 
-  _getShaderStage(code) {
+  _getShaderStage(String code) {
     var cache = shaderCache;
 
     if (cache.containsKey(code) == false) {
-      var stage = WebGLShaderStage();
+      var stage = WebGLShaderStage(code);
       cache[code] = stage;
     }
 
@@ -82,9 +82,10 @@ class WebGLShaderCache {
 class WebGLShaderStage {
   late int id;
   late int usedTimes;
-  WebGLShaderStage() {
-    id = _id++;
+  late String code;
 
+  WebGLShaderStage(this.code) {
+    id = _id++;
     usedTimes = 0;
   }
 }

@@ -125,18 +125,13 @@ class WebGLShadowMap {
       if (shadow.map == null &&
           shadow is! PointLightShadow &&
           type == VSMShadowMap) {
-        var pars = WebGLRenderTargetOptions({
-          "minFilter": LinearFilter,
-          "magFilter": LinearFilter,
-          "format": RGBAFormat
-        });
-
+       
         shadow.map = WebGLRenderTarget(
-            _shadowMapSize.x.toDouble(), _shadowMapSize.y.toDouble(), pars);
+            _shadowMapSize.x.toDouble(), _shadowMapSize.y.toDouble());
         shadow.map!.texture.name = light.name + '.shadowMap';
 
         shadow.mapPass = WebGLRenderTarget(
-            _shadowMapSize.x.toDouble(), _shadowMapSize.y.toDouble(), pars);
+            _shadowMapSize.x.toDouble(), _shadowMapSize.y.toDouble());
 
         shadow.camera!.updateProjectionMatrix();
       }

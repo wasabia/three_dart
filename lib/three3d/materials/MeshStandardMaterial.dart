@@ -1,52 +1,5 @@
 part of three_materials;
 
-/*
- * PBR物理材质，相比较高光Phong材质可以更好的模拟金属、玻璃等效果
- * parameters = {
- *  color: <hex>,
- *  roughness: <float>,
- *  metalness: <float>,
- *  opacity: <float>,
- *
- *  map: new THREE.Texture( <Image> ),
- *
- *  lightMap: new THREE.Texture( <Image> ),
- *  lightMapIntensity: <float>
- *
- *  aoMap: new THREE.Texture( <Image> ),
- *  aoMapIntensity: <float>
- *
- *  emissive: <hex>,
- *  emissiveIntensity: <float>
- *  emissiveMap: new THREE.Texture( <Image> ),
- *
- *  bumpMap: new THREE.Texture( <Image> ),
- *  bumpScale: <float>,
- *
- *  normalMap: new THREE.Texture( <Image> ),
- *  normalMapType: THREE.TangentSpaceNormalMap,
- *  normalScale: <Vector2>,
- *
- *  displacementMap: new THREE.Texture( <Image> ),
- *  displacementScale: <float>,
- *  displacementBias: <float>,
- *
- *  roughnessMap: new THREE.Texture( <Image> ),
- *
- *  metalnessMap: new THREE.Texture( <Image> ),
- *
- *  alphaMap: new THREE.Texture( <Image> ),
- *
- *  envMap: new THREE.CubeTexture( [posx, negx, posy, negy, posz, negz] ),
- *  envMapIntensity: <float>
- *
- *  refractionRatio: <float>,
- *
- *  wireframe: <boolean>,
- *  wireframeLinewidth: <float>,
- * }
- */
-
 class MeshStandardMaterial extends Material {
   MeshStandardMaterial([Map<String, dynamic>? parameters]) : super() {
     type = "MeshStandardMaterial";
@@ -93,8 +46,6 @@ class MeshStandardMaterial extends Material {
 
     // this.envMap = null;
     envMapIntensity = 1.0;
-
-    refractionRatio = 0.98;
 
     wireframe = false;
     wireframeLinewidth = 1;
@@ -150,8 +101,6 @@ class MeshStandardMaterial extends Material {
 
     envMap = source.envMap;
     envMapIntensity = source.envMapIntensity;
-
-    refractionRatio = source.refractionRatio;
 
     wireframe = source.wireframe;
     wireframeLinewidth = source.wireframeLinewidth;
