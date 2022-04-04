@@ -798,8 +798,7 @@ var TEXTURE_MAPPING = {
   "CubeRefractionMapping": CubeRefractionMapping,
   "EquirectangularReflectionMapping": EquirectangularReflectionMapping,
   "EquirectangularRefractionMapping": EquirectangularRefractionMapping,
-  "CubeUVReflectionMapping": CubeUVReflectionMapping,
-  "CubeUVRefractionMapping": CubeUVRefractionMapping
+  "CubeUVReflectionMapping": CubeUVReflectionMapping
 };
 
 var TEXTURE_WRAPPING = {

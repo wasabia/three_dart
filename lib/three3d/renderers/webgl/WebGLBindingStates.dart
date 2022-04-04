@@ -15,6 +15,8 @@ class WebGLBindingStates {
   late Map<String, dynamic> currentState;
   late Map<int, dynamic> bindingStates;
 
+  bool forceUpdate = false;
+
   WebGLBindingStates(
     this.gl,
     this.extensions,
@@ -77,7 +79,9 @@ class WebGLBindingStates {
       attributes.update(index, gl.ELEMENT_ARRAY_BUFFER);
     }
 
-    if (updateBuffers) {
+    if (updateBuffers || forceUpdate) {
+      forceUpdate = false;
+
       setupVertexAttributes(object, material, program, geometry);
 
       if (index != null) {
@@ -489,6 +493,8 @@ class WebGLBindingStates {
 
   void reset() {
     resetDefaultState();
+
+    forceUpdate = true;
 
     if (currentState == defaultState) return;
 

@@ -1,14 +1,24 @@
 part of three_webgl;
 
 class WebGLProgramExtra {
-  addLineNumbers(string) {
+  handleSource(String string, int errorLine) {
     var lines = string.split('\n');
+    var lines2 = [];
+
+    int from = Math.max( errorLine - 6, 0 );
+	  int to = Math.min( errorLine + 6, lines.length );
 
     for (var i = 0; i < lines.length; i++) {
       lines[i] = "${(i + 1)}: ${lines[i]}";
     }
 
-    return lines.join('\n');
+    for ( var i = from; i < to; i ++ ) {
+
+      lines2.add( "${(i + 1)}: ${lines[i]}" );
+
+    }
+
+    return lines2.join('\n');
   }
 
   getEncodingComponents(encoding) {
@@ -35,9 +45,14 @@ class WebGLProgramExtra {
 
   getShaderErrors(dynamic gl, WebGLShader shader, type) {
     var status = gl.getShaderParameter(shader.shader, gl.COMPILE_STATUS);
-    var log = gl.getShaderInfoLog(shader.shader).trim();
+    var errors = gl.getShaderInfoLog(shader.shader).trim();
 
-    if (status && log == '') return '';
+    if (status && errors == '') return '';
+
+    var regExp = RegExp(r"ERROR: 0:(\d+)");
+    var match = regExp.firstMatch( errors );
+    
+    int errorLine = int.parse(match!.group(1)!);
 
     // --enable-privileged-webgl-extension
     // console.log( '**' + type + '**', gl.getExtension( 'WEBGL_debug_shaders' ).getTranslatedShaderSource( shader ) );
@@ -47,8 +62,9 @@ class WebGLProgramExtra {
     return 'THREE.WebGLShader: gl.getShaderInfoLog() ' +
         type +
         '\n' +
-        log +
-        addLineNumbers(source);
+        errors +
+        '\n' +
+        handleSource(source, errorLine);
   }
 
   getTexelEncodingFunction(functionName, encoding) {
@@ -383,7 +399,6 @@ class WebGLProgramExtra {
           break;
 
         case CubeUVReflectionMapping:
-        case CubeUVRefractionMapping:
           envMapTypeDefine = 'ENVMAP_TYPE_CUBE_UV';
           break;
       }
@@ -398,7 +413,6 @@ class WebGLProgramExtra {
     if (parameters.envMap) {
       switch (parameters.envMapMode) {
         case CubeRefractionMapping:
-        case CubeUVRefractionMapping:
           envMapModeDefine = 'ENVMAP_MODE_REFRACTION';
           break;
       }

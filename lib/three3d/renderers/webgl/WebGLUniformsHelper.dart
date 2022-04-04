@@ -314,7 +314,8 @@ class WebGLUniformsHelper {
   }
 
   copyArray(Map<int, dynamic> a, b) {
-    for (var i = 0, l = b.length; i < l; i++) {
+    var l = b.length;
+    for (var i = 0; i < l; i++) {
       a[i] = b[i];
     }
   }
@@ -532,7 +533,7 @@ class WebGLUniformsHelper {
 
   // Single texture (2D / Cube)
 
-  setValueT1(gl, v, textures) {
+  setValueT1(gl, v, WebGLTextures textures) {
     var cache = this.cache;
     var unit = textures.allocateTextureUnit();
 
@@ -605,9 +606,9 @@ class WebGLUniformsHelper {
 
     if (arraysEqual(cache, v)) return;
 
-    gl.uniform2iv(addr, v);
+    gl.uniform2iv(addr, 1, v.toArray());
 
-    copyArray(cache, v);
+    copyArray(cache, v.toArray());
   }
 
   setValueV3i(gl, v, textures) {

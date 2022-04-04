@@ -1,20 +1,5 @@
 part of three_materials;
 
-/*
- * parameters = {
- *  defines: { "label" : "value" },
- *  uniforms: { "parameter1": { value: 1.0 }, "parameter2": { value2: 2 } },
- *
- *  fragmentShader: <string>,
- *  vertexShader: <string>,
- *
- *  wireframe: <boolean>,
- *  wireframeLinewidth: <float>,
- *
- *  lights: <bool>,
- * }
- */
-
 class ShaderMaterial extends Material {
   ShaderMaterial([Map<String, dynamic>? parameters]) : super() {
     type = 'ShaderMaterial';

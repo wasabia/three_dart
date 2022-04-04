@@ -16,6 +16,8 @@ class WebGLTextures {
   late int maxTextureSize;
   late int maxSamples;
 
+  bool supportsInvalidateFramenbuffer = false;
+
   final Map _videoTextures = {};
 
   final WeakMap _sources = WeakMap(); 
@@ -47,6 +49,9 @@ class WebGLTextures {
     filterToGL[LinearFilter] = gl.LINEAR;
     filterToGL[LinearMipmapNearestFilter] = gl.LINEAR_MIPMAP_NEAREST;
     filterToGL[LinearMipmapLinearFilter] = gl.LINEAR_MIPMAP_LINEAR;
+
+    // TODO FIXME when on web && is OculusBrowser
+    // supportsInvalidateFramenbuffer = kIsWeb && RegExp(r"OculusBrowser").hasMatch( navigator.userAgent );
   }
 
   resizeImage(image, needsPowerOfTwo, needsNewCanvas, maxSize) {
@@ -1043,9 +1048,9 @@ class WebGLTextures {
           if (useTexStorage) {
             if (allocateMemory) {
               state.texStorage2D(_gl.TEXTURE_2D, levels, glInternalFormat,
-                  image.width, image.height);
+                  image.width.toInt(), image.height.toInt());
             }
-
+            
             state.texSubImage2D(_gl.TEXTURE_2D, 0, 0, 0, image.width,
                 image.height, glFormat, glType, image.data);
           } else {
@@ -1166,7 +1171,7 @@ class WebGLTextures {
           if (useTexStorage) {
             if (allocateMemory) {
               state.texStorage2D(_gl.TEXTURE_2D, levels, glInternalFormat,
-                  image.width, image.height);
+                  image.width.toInt(), image.height.toInt());
             }
 
             state.texSubImage2D_IF(
@@ -2209,7 +2214,10 @@ class WebGLTextures {
 
       _gl.blitFramebuffer(
           0, 0, width, height, 0, 0, width, height, mask, _gl.NEAREST);
-      _gl.invalidateFramebuffer(_gl.READ_FRAMEBUFFER, invalidationArray);
+  
+      if ( supportsInvalidateFramenbuffer ) {
+        _gl.invalidateFramebuffer(_gl.READ_FRAMEBUFFER, invalidationArray);
+			}
 
       state.bindFramebuffer(_gl.READ_FRAMEBUFFER, null);
       state.bindFramebuffer(_gl.DRAW_FRAMEBUFFER,

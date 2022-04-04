@@ -81,8 +81,6 @@ class WebGLPrograms {
 
   WebGLParameters getParameters(
       Material material, LightState lights, shadows, scene, object) {
-    // print(" WebGLParameters.getParameters material: ${material} map: ${material.map} id: ${material.id}");
-
     var fog = scene.fog;
     var geometry = object.geometry;
     var environment =
@@ -96,8 +94,7 @@ class WebGLPrograms {
     }
 
     var cubeUVHeight = (envMap != null) &&
-            ((envMap.mapping == CubeUVReflectionMapping) ||
-                (envMap.mapping == CubeUVRefractionMapping))
+            (envMap.mapping == CubeUVReflectionMapping)
         ? envMap.image.height
         : null;
 

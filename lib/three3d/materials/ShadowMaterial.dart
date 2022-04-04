@@ -1,11 +1,5 @@
 part of three_materials;
 
-/*
- * parameters = {
- *  color: <THREE.Color>
- * }
- */
-
 class ShadowMaterial extends Material {
   ShadowMaterial([parameters]) : super() {
     type = 'ShadowMaterial';

@@ -570,7 +570,7 @@ class WebGLState {
         target, level, internalformat, width, height, border, pixels);
   }
 
-  texSubImage2D(target, level, x, y, width, height, glFormat, glType, data) {
+  texSubImage2D(int target, int level, int x, int y, width, height, int glFormat, int glType, NativeArray data) {
     // try {
 
     gl.texSubImage2D(
@@ -633,11 +633,10 @@ class WebGLState {
     // }
   }
 
-  void texStorage2D(int type, int levels, int glInternalFormat, width, height) {
+  void texStorage2D(int type, int levels, int glInternalFormat, int width, int height) {
     // try {
 
-    gl.texStorage2D(
-        type, levels, glInternalFormat, width.toInt(), height.toInt());
+    gl.texStorage2D(type, levels, glInternalFormat, width, height);
 
     // } catch ( error ) {
 
