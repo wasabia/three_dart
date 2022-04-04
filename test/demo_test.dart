@@ -5,26 +5,8 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:flutter_gl/native-array/index.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class Proxy {
-
-  @override
-  dynamic noSuchMethod(Invocation invocation) {
-    String name = invocation.memberName.toString();
-    
-    name = name.replaceFirst(RegExp(r'^Symbol\("'), "");
-    name = name.replaceFirst(RegExp(r'"\)$'), "");
-
-
-    print("noSuchMethod name: ${name}  ");
-
-
-    return super.noSuchMethod(invocation);
-  }
-
-
-}
 
 
 void main() {

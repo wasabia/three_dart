@@ -1,51 +1,5 @@
 part of three_materials;
 
-/*
- * 高光Phong材质,与光照有反应
- * parameters = {
- *  color: <hex>,
- *  specular: <hex>,
- *  shininess: <float>,
- *  opacity: <float>,
- *
- *  map: new THREE.Texture( <Image> ),
- *
- *  lightMap: new THREE.Texture( <Image> ),
- *  lightMapIntensity: <float>
- *
- *  aoMap: new THREE.Texture( <Image> ),
- *  aoMapIntensity: <float>
- *
- *  emissive: <hex>,
- *  emissiveIntensity: <float>
- *  emissiveMap: new THREE.Texture( <Image> ),
- *
- *  bumpMap: new THREE.Texture( <Image> ),
- *  bumpScale: <float>,
- *
- *  normalMap: new THREE.Texture( <Image> ),
- *  normalMapType: THREE.TangentSpaceNormalMap,
- *  normalScale: <Vector2>,
- *
- *  displacementMap: new THREE.Texture( <Image> ),
- *  displacementScale: <float>,
- *  displacementBias: <float>,
- *
- *  specularMap: new THREE.Texture( <Image> ),
- *
- *  alphaMap: new THREE.Texture( <Image> ),
- *
- *  envMap: new THREE.CubeTexture( [posx, negx, posy, negy, posz, negz] ),
- *  combine: THREE.MultiplyOperation,
- *  reflectivity: <float>,
- *  refractionRatio: <float>,
- *
- *  wireframe: <boolean>,
- *  wireframeLinewidth: <float>,
- *
- * }
- */
-
 class MeshPhongMaterial extends Material {
   MeshPhongMaterial([Map<String, dynamic>? parameters]) : super() {
     bumpScale = 1;

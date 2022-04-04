@@ -1,18 +1,5 @@
 part of three_materials;
 
-/*
- * parameters = {
- *  color: <hex>,
- *  opacity: <float>,
- *  map: new THREE.Texture( <Image> ),
- *  alphaMap: new THREE.Texture( <Image> ),
- *
- *  size: <float>,
- *  sizeAttenuation: <bool>
- *
- * }
- */
-
 class PointsMaterial extends Material {
   PointsMaterial([Map<String, dynamic>? parameters]) {
     type = "PointsMaterial";

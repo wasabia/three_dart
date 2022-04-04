@@ -16,7 +16,6 @@ class DataTexture extends Texture {
       encoding])
       : super(null, mapping, wrapS, wrapT, magFilter, minFilter, format, type,
             anisotropy, encoding) {
-    isDataTexture = true;
     image = ImageElement(data: data, width: width ?? 1, height: height ?? 1);
 
     generateMipmaps = false;

@@ -1,25 +1,5 @@
 part of three_materials;
 
-/*
- * parameters = {
- *  opacity: <float>,
- *
- *  bumpMap: new THREE.Texture( <Image> ),
- *  bumpScale: <float>,
- *
- *  normalMap: new THREE.Texture( <Image> ),
- *  normalMapType: THREE.TangentSpaceNormalMap,
- *  normalScale: <Vector2>,
- *
- *  displacementMap: new THREE.Texture( <Image> ),
- *  displacementScale: <float>,
- *  displacementBias: <float>,
- *
- *  wireframe: <boolean>,
- *  wireframeLinewidth: <float>
- *
- * }
- */
 
 class MeshNormalMaterial extends Material {
   MeshNormalMaterial([Map<String, dynamic>? parameters]) : super() {

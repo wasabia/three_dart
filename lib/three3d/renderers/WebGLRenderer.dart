@@ -211,7 +211,7 @@ class WebGLRenderer {
     clipping = WebGLClipping(properties);
     programCache = WebGLPrograms(this, cubemaps, cubeuvmaps, extensions,
         capabilities, bindingStates, clipping);
-    materials = WebGLMaterials(properties);
+    materials = WebGLMaterials(this, properties);
     renderLists = WebGLRenderLists();
     renderStates = WebGLRenderStates(extensions, capabilities);
     background = WebGLBackground(
@@ -1206,7 +1206,7 @@ class WebGLRenderer {
     bool needsProgramChange = false;
 
     if (material.version == materialProperties["__version"]) {
-      if (materialProperties["needsLights"] &&
+      if (materialProperties["needsLights"] != null &&
           (materialProperties["lightsStateVersion"] != lights.state.version)) {
         needsProgramChange = true;
       } else if (materialProperties["outputEncoding"] != encoding) {
@@ -1641,21 +1641,17 @@ class WebGLRenderer {
           return;
         }
 
-        if (_gl.checkFramebufferStatus(_gl.FRAMEBUFFER) ==
-            _gl.FRAMEBUFFER_COMPLETE) {
-          // the following if statement ensures valid read requests (no out-of-bounds pixels, see #8604)
+        
+        // the following if statement ensures valid read requests (no out-of-bounds pixels, see #8604)
 
-          if ((x >= 0 && x <= (renderTarget.width - width)) &&
-              (y >= 0 && y <= (renderTarget.height - height))) {
-            // _gl.readPixels(x, y, width, height, utils.convert(textureFormat),
-            //     utils.convert(textureType), buffer);
-            _gl.readPixels(x, y, width, height, utils.convert(textureFormat),
-                utils.convert(textureType), buffer);
-          }
-        } else {
-          print(
-              'THREE.WebGLRenderer.readRenderTargetPixels: readPixels from renderTarget failed. Framebuffer not complete.');
+        if ((x >= 0 && x <= (renderTarget.width - width)) &&
+            (y >= 0 && y <= (renderTarget.height - height))) {
+          // _gl.readPixels(x, y, width, height, utils.convert(textureFormat),
+          //     utils.convert(textureType), buffer);
+          _gl.readPixels(x, y, width, height, utils.convert(textureFormat),
+              utils.convert(textureType), buffer);
         }
+        
       } finally {
         var framebuffer = (_currentRenderTarget != null)
             ? properties.get(_currentRenderTarget)["__webglFramebuffer"]
@@ -1700,7 +1696,7 @@ class WebGLRenderer {
         _gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, dstTexture.premultiplyAlpha);
     _gl.pixelStorei(_gl.UNPACK_ALIGNMENT, dstTexture.unpackAlignment);
 
-    if (srcTexture.isDataTexture) {
+    if (srcTexture is DataTexture) {
       _gl.texSubImage2D(_gl.TEXTURE_2D, level, position.x, position.y, width,
           height, glFormat, glType, srcTexture.image.data);
     } else {
@@ -1775,7 +1771,7 @@ class WebGLRenderer {
     _gl.pixelStorei(_gl.UNPACK_SKIP_ROWS, sourceBox.min.y);
     _gl.pixelStorei(_gl.UNPACK_SKIP_IMAGES, sourceBox.min.z);
 
-    if (srcTexture.isDataTexture || srcTexture is Data3DTexture) {
+    if (srcTexture is DataTexture || srcTexture is Data3DTexture) {
       _gl.texSubImage3D(glTarget, level, position.x, position.y, position.z,
           width, height, depth, glFormat, glType, image.data);
     } else {

@@ -137,9 +137,7 @@ abstract class BufferAttribute<TData extends NativeArray>
 
   void applyMatrix4(Matrix4 m) {
     for (var i = 0, l = count; i < l; i++) {
-      _vector.x = getX(i)!.toDouble();
-      _vector.y = getY(i)!.toDouble();
-      _vector.z = getZ(i)!.toDouble();
+      _vector.fromBufferAttribute( this, i );
 
       _vector.applyMatrix4(m);
 
@@ -149,9 +147,7 @@ abstract class BufferAttribute<TData extends NativeArray>
 
   BufferAttribute applyNormalMatrix(m) {
     for (var i = 0, l = count; i < l; i++) {
-      _vector.x = getX(i)!.toDouble();
-      _vector.y = getY(i)!.toDouble();
-      _vector.z = getZ(i)!.toDouble();
+      _vector.fromBufferAttribute( this, i );
 
       _vector.applyNormalMatrix(m);
 
@@ -282,14 +278,6 @@ abstract class BufferAttribute<TData extends NativeArray>
   }
 
   Map<String, dynamic> toJSON([data]) {
-    // print(" BufferAttribute to JSON todo  ${this.array.runtimeType} ");
-
-    // return {
-    // 	"itemSize": this.itemSize,
-    // 	"type": this.array.runtimeType.toString(),
-    // 	"array": this.array.sublist(0),
-    // 	"normalized": this.normalized
-    // };
     Map<String, dynamic> result = {
       "itemSize": itemSize,
       "type": array.runtimeType.toString(), //.replaceAll('List', 'Array'),
