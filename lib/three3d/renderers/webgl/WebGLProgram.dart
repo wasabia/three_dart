@@ -171,14 +171,13 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         'uniform mat3 normalMatrix;',
         'uniform vec3 cameraPosition;',
         'uniform bool isOrthographic;',
-        'layout (location = 0) in vec3 position;',
         '#ifdef USE_INSTANCING',
         '	attribute mat4 instanceMatrix;',
         '#endif',
         '#ifdef USE_INSTANCING_COLOR',
         '	attribute vec3 instanceColor;',
         '#endif',
-        // 'attribute vec3 position;',
+        'attribute vec3 position;',
         'attribute vec3 normal;',
         'attribute vec2 uv;',
 
@@ -315,7 +314,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
             : '',
 
         parameters.dithering ? '#define DITHERING' : '',
-        parameters.opaque ? '' : '#define OPAQUE',
+        parameters.opaque ? '#define OPAQUE' : '',
 
         ShaderChunk[
             'encodings_pars_fragment'], // this code is required here because it is used by the various encoding/decoding defined below
@@ -380,16 +379,16 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
           prefixFragment;
     }
 
-    final vertexGlsl = versionString + prefixVertex + vertexShader;
-    final fragmentGlsl = versionString + prefixFragment + fragmentShader;
+    String vertexGlsl = versionString + prefixVertex + vertexShader;
+    String fragmentGlsl = versionString + prefixFragment + fragmentShader;
 
     // print(" material ${parameters.shaderName}  opaque: ${parameters.opaque } ");
     // developer.log(" 111 ================= VERTEX  ");
     // developer.log(vertexGlsl);
-    // print(vertexGlsl);
+    // developer.log(vertexGlsl);
     // developer.log("  111 ==================== FRAGMENT ");
     // developer.log(fragmentGlsl);
-    // print( fragmentGlsl );
+    // developer.log( fragmentGlsl );
 
 
     final glVertexShader = WebGLShader(gl, gl.VERTEX_SHADER, vertexGlsl);

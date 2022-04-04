@@ -532,7 +532,7 @@ class WebGLUniformsHelper {
 
   // Single texture (2D / Cube)
 
-  setValueT1(gl, v, textures) {
+  setValueT1(gl, v, WebGLTextures textures) {
     var cache = this.cache;
     var unit = textures.allocateTextureUnit();
 

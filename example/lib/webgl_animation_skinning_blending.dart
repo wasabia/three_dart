@@ -208,11 +208,14 @@ class _State extends State<webgl_animation_skinning_blending> {
   initPage() async {
     camera = THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
     camera.position.set(-1, -4, -2);
-    camera.lookAt(THREE.Vector3(0, 1, 0));
+    
 
     clock = THREE.Clock();
 
     scene = THREE.Scene();
+
+    camera.lookAt( scene.position );
+
     scene.background = THREE.Color.fromHex(0xffffff);
     scene.fog = THREE.Fog(0xa0a0a0, 10, 50);
 
@@ -239,23 +242,20 @@ class _State extends State<webgl_animation_skinning_blending> {
     var gltf = await loader.loadAsync('assets/models/gltf/Soldier.gltf');
 
     model = gltf["scene"];
+
+    print(" load model success " );
+    print(model);
+
     scene.add(model);
 
     model.traverse((object) {
       if (object is Mesh) object.castShadow = true;
     });
 
-    //
 
-    // var skeleton = THREE.SkeletonHelper(model);
-    // skeleton.visible = true;
-    // scene.add(skeleton);
-
-    //
-
-    // createPanel();
-
-    //
+    var skeleton = THREE.SkeletonHelper(model);
+    skeleton.visible = true;
+    scene.add(skeleton);
 
     var animations = gltf["animations"];
 
@@ -265,9 +265,7 @@ class _State extends State<webgl_animation_skinning_blending> {
     var walkAction = mixer.clipAction(animations[3]);
     var runAction = mixer.clipAction(animations[1]);
 
-    // var actions = [ idleAction, walkAction, runAction ];
     walkAction.play();
-    // activateAllActions();
 
     loaded = true;
 
@@ -296,9 +294,9 @@ class _State extends State<webgl_animation_skinning_blending> {
 
     render();
 
-    Future.delayed(const Duration(milliseconds: 40), () {
-      animate();
-    });
+    // Future.delayed(const Duration(milliseconds: 40), () {
+    //   animate();
+    // });
   }
 
   @override
