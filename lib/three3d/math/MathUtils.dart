@@ -8,8 +8,8 @@ class MathUtils {
 
   static String generateUUID() {
     var uuid = Uuid().v4();
-    // .toUpperCase() here flattens concatenated strings to save heap memory space.
-    return uuid.toUpperCase();
+    // .toLowerCase() here flattens concatenated strings to save heap memory space.
+    return uuid.toLowerCase();
   }
 
   static T clamp<T extends num>(T value, T min, T max) {
@@ -178,4 +178,70 @@ class MathUtils {
                 order);
     }
   }
+
+
+  static denormalize( num value, array ) {
+
+    switch ( array ) {
+
+      case Float32Array:
+
+        return value;
+
+      case Uint16Array:
+
+        return value / 65535.0;
+
+      case Uint8Array:
+
+        return value / 255.0;
+
+      case Int16Array:
+
+        return Math.max( value / 32767.0, - 1.0 );
+
+      case Int8Array:
+
+        return Math.max( value / 127.0, - 1.0 );
+
+      default:
+
+        throw( 'Invalid component type.' );
+
+    }
+
+  }
+
+  static normalize( value, array ) {
+
+    switch ( array ) {
+
+      case Float32Array:
+
+        return value;
+
+      case Uint16Array:
+
+        return Math.round( value * 65535.0 );
+
+      case Uint8Array:
+
+        return Math.round( value * 255.0 );
+
+      case Int16Array:
+
+        return Math.round( value * 32767.0 );
+
+      case Int8Array:
+
+        return Math.round( value * 127.0 );
+
+      default:
+
+        throw( 'Invalid component type.' );
+
+    }
+
+  }
+
 }

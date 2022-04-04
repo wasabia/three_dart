@@ -211,7 +211,7 @@ class WebGLRenderer {
     clipping = WebGLClipping(properties);
     programCache = WebGLPrograms(this, cubemaps, cubeuvmaps, extensions,
         capabilities, bindingStates, clipping);
-    materials = WebGLMaterials(properties);
+    materials = WebGLMaterials(this, properties);
     renderLists = WebGLRenderLists();
     renderStates = WebGLRenderStates(extensions, capabilities);
     background = WebGLBackground(
@@ -1641,21 +1641,17 @@ class WebGLRenderer {
           return;
         }
 
-        if (_gl.checkFramebufferStatus(_gl.FRAMEBUFFER) ==
-            _gl.FRAMEBUFFER_COMPLETE) {
-          // the following if statement ensures valid read requests (no out-of-bounds pixels, see #8604)
+        
+        // the following if statement ensures valid read requests (no out-of-bounds pixels, see #8604)
 
-          if ((x >= 0 && x <= (renderTarget.width - width)) &&
-              (y >= 0 && y <= (renderTarget.height - height))) {
-            // _gl.readPixels(x, y, width, height, utils.convert(textureFormat),
-            //     utils.convert(textureType), buffer);
-            _gl.readPixels(x, y, width, height, utils.convert(textureFormat),
-                utils.convert(textureType), buffer);
-          }
-        } else {
-          print(
-              'THREE.WebGLRenderer.readRenderTargetPixels: readPixels from renderTarget failed. Framebuffer not complete.');
+        if ((x >= 0 && x <= (renderTarget.width - width)) &&
+            (y >= 0 && y <= (renderTarget.height - height))) {
+          // _gl.readPixels(x, y, width, height, utils.convert(textureFormat),
+          //     utils.convert(textureType), buffer);
+          _gl.readPixels(x, y, width, height, utils.convert(textureFormat),
+              utils.convert(textureType), buffer);
         }
+        
       } finally {
         var framebuffer = (_currentRenderTarget != null)
             ? properties.get(_currentRenderTarget)["__webglFramebuffer"]

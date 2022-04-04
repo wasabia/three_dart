@@ -1,23 +1,5 @@
 part of three_materials;
 
-/*
- * parameters = {
- *
- *  referencePosition: <float>,
- *  nearDistance: <float>,
- *  farDistance: <float>,
- *
- *  map: new THREE.Texture( <Image> ),
- *
- *  alphaMap: new THREE.Texture( <Image> ),
- *
- *  displacementMap: new THREE.Texture( <Image> ),
- *  displacementScale: <float>,
- *  displacementBias: <float>
- *
- * }
- */
-
 class MeshDistanceMaterial extends Material {
   late Vector3 referencePosition;
   late num nearDistance;

@@ -62,10 +62,7 @@ class SkinnedMesh extends Mesh {
     var skinWeight = geometry!.attributes["skinWeight"];
 
     for (var i = 0, l = skinWeight.count; i < l; i++) {
-      vector.x = skinWeight.getX(i);
-      vector.y = skinWeight.getY(i);
-      vector.z = skinWeight.getZ(i);
-      vector.w = skinWeight.getW(i);
+      vector.fromBufferAttribute( skinWeight, i );
 
       var scale = 1.0 / vector.manhattanLength();
 

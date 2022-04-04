@@ -36,3 +36,4 @@ part 'interpolants/LinearInterpolant.dart';
 part 'interpolants/DiscreteInterpolant.dart';
 part 'interpolants/CubicInterpolant.dart';
 part 'interpolants/QuaternionLinearInterpolant.dart';
+part 'ColorManagement.dart';
