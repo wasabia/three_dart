@@ -37,7 +37,7 @@ class SkinnedMesh extends Mesh {
     return this;
   }
 
-  void bind(Skeleton skeleton, Matrix4? bindMatrix) {
+  void bind(Skeleton skeleton, [Matrix4? bindMatrix]) {
     this.skeleton = skeleton;
 
     if (bindMatrix == null) {

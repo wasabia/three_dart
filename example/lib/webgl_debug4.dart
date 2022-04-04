@@ -202,7 +202,18 @@ class _State extends State<webgl_debug4> {
   initPage() {
     camera = THREE.PerspectiveCamera(45, width / height, 1, 100);
     camera.position.z = 100;
+    
+    var segmentHeight = 8;
+    var segmentCount = 4;
+    var height2 = segmentHeight * segmentCount;
+    var halfHeight = height2 * 0.5;
 
+    Map<String, int> sizing = {
+      "segmentHeight": segmentHeight,
+      "segmentCount": segmentCount,
+      "height": height2,
+      "halfHeight": halfHeight.toInt()
+    };
 
     scene = THREE.Scene();
 
@@ -211,20 +222,77 @@ class _State extends State<webgl_debug4> {
 
     camera.lookAt(scene.position);
 
+    var geometry = new THREE.CylinderGeometry( 5, 5, 5, 5, 15, false, 5, 360 );
 
-    var clothMaterial = THREE.MeshBasicMaterial(
-        {"color": THREE.Color(1, 0.5, 1)});
+    // create the skin indices and skin weights manually
+    // (typically a loader would read this data from a 3D model for you)
 
-    var plane = THREE.BoxGeometry(50, 50, 50);
+    var position = geometry.attributes["position"];
 
-    mesh = THREE.Mesh(plane, clothMaterial);
-    scene.add(mesh);
+    var vertex = new THREE.Vector3();
+
+    List<int> skinIndices = [];
+    List<double> skinWeights = [];
+
+    for ( var i = 0; i < position.count; i ++ ) {
+
+      vertex.fromBufferAttribute( position, i );
+
+      // compute skinIndex and skinWeight based on some configuration data
+
+      var y = ( vertex.y + sizing["halfHeight"]! );
+
+      var skinIndex = THREE.Math.floor( y / sizing["segmentHeight"]! );
+      var skinWeight = ( y % sizing["segmentHeight"]! ) / sizing["segmentHeight"]!;
+
+      skinIndices.addAll( [skinIndex, skinIndex + 1, 0, 0] );
+      skinWeights.addAll( [1 - skinWeight, skinWeight, 0, 0] );
+
+    }
+
+    geometry.setAttribute( 'skinIndex', new THREE.Uint16BufferAttribute( Uint16Array.fromList(skinIndices), 4 ) );
+    geometry.setAttribute( 'skinWeight', new THREE.Float32BufferAttribute( Float32Array.fromList(skinWeights), 4 ) );
+
+    // create skinned mesh and skeleton
+
+    var material = new THREE.MeshBasicMaterial( {
+      "color": 0x156289,
+      "side": THREE.DoubleSide,
+      "flatShading": true
+    } );
+
+    List<THREE.Bone> bones = [];
+    var prevBone = new THREE.Bone();
+    bones.add( prevBone );
+    prevBone.position.y = - sizing["halfHeight"]!.toDouble();
+
+    for ( var i = 0; i < sizing["segmentCount"]!; i ++ ) {
+
+      var bone = new THREE.Bone();
+      bone.position.y = sizing["segmentHeight"]!.toDouble();
+      bones.add( bone );
+      prevBone.add( bone );
+      prevBone = bone;
+
+    }
+
+
+
+    var mesh = new THREE.SkinnedMesh( geometry, material );
+    var skeleton = new THREE.Skeleton( bones );
+
+
+    var rootBone = skeleton.bones[ 0 ];
+    mesh.add( rootBone );
+    mesh.bind( skeleton );
+    skeleton.bones[ 0 ].rotation.x = -0.1;
+    skeleton.bones[ 1 ].rotation.x = 0.2;
+
+    scene.add( mesh );
 
     loaded = true;
 
     animate();
-
-    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
   }
 
   clickRender() {
@@ -241,11 +309,7 @@ class _State extends State<webgl_debug4> {
       return;
     }
 
-    // mesh.rotation.x = mesh.rotation.x + 0.1;
-    // mesh.rotation.y = mesh.rotation.y + 0.05;
 
-    mesh.rotation.x += 0.1;
-    mesh.rotation.y += 0.05;
 
     render();
 

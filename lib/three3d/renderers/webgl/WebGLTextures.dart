@@ -1043,9 +1043,9 @@ class WebGLTextures {
           if (useTexStorage) {
             if (allocateMemory) {
               state.texStorage2D(_gl.TEXTURE_2D, levels, glInternalFormat,
-                  image.width, image.height);
+                  image.width.toInt(), image.height.toInt());
             }
-
+            
             state.texSubImage2D(_gl.TEXTURE_2D, 0, 0, 0, image.width,
                 image.height, glFormat, glType, image.data);
           } else {
@@ -1166,7 +1166,7 @@ class WebGLTextures {
           if (useTexStorage) {
             if (allocateMemory) {
               state.texStorage2D(_gl.TEXTURE_2D, levels, glInternalFormat,
-                  image.width, image.height);
+                  image.width.toInt(), image.height.toInt());
             }
 
             state.texSubImage2D_IF(

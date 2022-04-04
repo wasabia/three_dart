@@ -1206,7 +1206,7 @@ class WebGLRenderer {
     bool needsProgramChange = false;
 
     if (material.version == materialProperties["__version"]) {
-      if (materialProperties["needsLights"] &&
+      if (materialProperties["needsLights"] != null &&
           (materialProperties["lightsStateVersion"] != lights.state.version)) {
         needsProgramChange = true;
       } else if (materialProperties["outputEncoding"] != encoding) {
@@ -1700,7 +1700,7 @@ class WebGLRenderer {
         _gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, dstTexture.premultiplyAlpha);
     _gl.pixelStorei(_gl.UNPACK_ALIGNMENT, dstTexture.unpackAlignment);
 
-    if (srcTexture.isDataTexture) {
+    if (srcTexture is DataTexture) {
       _gl.texSubImage2D(_gl.TEXTURE_2D, level, position.x, position.y, width,
           height, glFormat, glType, srcTexture.image.data);
     } else {
@@ -1775,7 +1775,7 @@ class WebGLRenderer {
     _gl.pixelStorei(_gl.UNPACK_SKIP_ROWS, sourceBox.min.y);
     _gl.pixelStorei(_gl.UNPACK_SKIP_IMAGES, sourceBox.min.z);
 
-    if (srcTexture.isDataTexture || srcTexture is Data3DTexture) {
+    if (srcTexture is DataTexture || srcTexture is Data3DTexture) {
       _gl.texSubImage3D(glTarget, level, position.x, position.y, position.z,
           width, height, depth, glFormat, glType, image.data);
     } else {

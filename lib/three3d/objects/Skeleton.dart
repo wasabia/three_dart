@@ -92,7 +92,6 @@ class Skeleton {
 
     for (var i = 0, il = bones.length; i < il; i++) {
       // compute the offset between the current and the original transform
-      // print(" bones[ i ].matrixWorld: ${bones[ i ].matrixWorld.toJSON()} ");
 
       var matrix = bones[i] != null ? bones[i].matrixWorld : _identityMatrix;
 
@@ -127,15 +126,20 @@ class Skeleton {
 
     _boneMatrices.set(boneMatrices.toDartList()); // copy current values
 
-    var boneTexture = DataTexture(_boneMatrices, size, size,
-        RGBAFormat, FloatType, null, null, null, null, null, null, null);
-    boneTexture.name = "DataTexture from Skeleton.computeBoneTexture";
-    boneTexture.needsUpdate = true;
+
+    // andorid did not support Float Texture??? FIXME 
+    // https://github.com/wasabia/three_dart/issues/32
+    var _boneTexture = DataTexture(_boneMatrices, size, size,
+        RGBAFormat, FloatType);
+
+    _boneTexture.name = "DataTexture from Skeleton.computeBoneTexture";
+    _boneTexture.needsUpdate = true;
+
 
     boneMatrices.dispose();
 
     boneMatrices = _boneMatrices;
-    this.boneTexture = boneTexture;
+    boneTexture = _boneTexture;
     boneTextureSize = size;
 
     return this;

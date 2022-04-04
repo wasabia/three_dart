@@ -10,7 +10,6 @@ class Texture with EventDispatcher {
   bool isWebGLRenderTarget = false;
   bool isVideoTexture = false;
   bool isDepthTexture = false;
-  bool isDataTexture = false;
   bool isCompressedTexture = false;
   bool isOpenGLTexture = false;
   bool isRenderTargetTexture =

@@ -214,30 +214,28 @@ class _State extends State<webgl_animation_skinning_additive_blending> {
 
     scene = THREE.Scene();
     scene.background = THREE.Color.fromHex(0xa0a0a0);
-    scene.fog = THREE.Fog(0xa0a0a0, 10, 50);
+    // scene.fog = THREE.Fog(0xa0a0a0, 10, 50);
 
-    var hemiLight = THREE.HemisphereLight(0xffffff, 0x444444);
-    hemiLight.position.set(0, 20, 0);
-    scene.add(hemiLight);
+    // var hemiLight = THREE.HemisphereLight(0xffffff, 0x444444);
+    // hemiLight.position.set(0, 20, 0);
+    // scene.add(hemiLight);
 
-    var dirLight = THREE.DirectionalLight(0xffffff);
-    dirLight.position.set(3, 10, 10);
-    dirLight.castShadow = true;
-    dirLight.shadow!.camera!.top = 2;
-    dirLight.shadow!.camera!.bottom = -2;
-    dirLight.shadow!.camera!.left = -2;
-    dirLight.shadow!.camera!.right = 2;
-    dirLight.shadow!.camera!.near = 0.1;
-    dirLight.shadow!.camera!.far = 40;
-    scene.add(dirLight);
+    // var dirLight = THREE.DirectionalLight(0xffffff);
+    // dirLight.position.set(3, 10, 10);
+    // dirLight.castShadow = true;
+    // dirLight.shadow!.camera!.top = 2;
+    // dirLight.shadow!.camera!.bottom = -2;
+    // dirLight.shadow!.camera!.left = -2;
+    // dirLight.shadow!.camera!.right = 2;
+    // dirLight.shadow!.camera!.near = 0.1;
+    // dirLight.shadow!.camera!.far = 40;
+    // scene.add(dirLight);
 
-    // scene.add( new THREE.CameraHelper( dirLight.shadow.camera ) );
-
-    var mesh = THREE.Mesh(THREE.PlaneGeometry(100, 100),
-        THREE.MeshPhongMaterial({"color": 0x999999, "depthWrite": false}));
-    mesh.rotation.x = -THREE.Math.PI / 2;
-    mesh.receiveShadow = true;
-    scene.add(mesh);
+    // var mesh = THREE.Mesh(THREE.PlaneGeometry(100, 100),
+    //     THREE.MeshPhongMaterial({"color": 0x999999, "depthWrite": false}));
+    // mesh.rotation.x = -THREE.Math.PI / 2;
+    // mesh.receiveShadow = true;
+    // scene.add(mesh);
 
     var loader = THREE_JSM.GLTFLoader(null);
     var gltf = await loader.loadAsync('assets/models/gltf/Xbot.gltf');
@@ -246,20 +244,17 @@ class _State extends State<webgl_animation_skinning_additive_blending> {
     scene.add(model);
 
     model.traverse((object) {
-      if (object is Mesh) object.castShadow = true;
+      if (object is Mesh) {
+        object.castShadow = true;
+      }
     });
 
-    //
 
-    var skeleton = THREE.SkeletonHelper(model);
-    skeleton.visible = true;
-    scene.add(skeleton);
 
-    //
+    // var skeleton = THREE.SkeletonHelper(model);
+    // skeleton.visible = true;
+    // scene.add(skeleton);
 
-    // createPanel();
-
-    //
 
     var animations = gltf["animations"];
 
@@ -300,9 +295,9 @@ class _State extends State<webgl_animation_skinning_additive_blending> {
 
     render();
 
-    Future.delayed(const Duration(milliseconds: 40), () {
-      animate();
-    });
+    // Future.delayed(const Duration(milliseconds: 40), () {
+    //   animate();
+    // });
   }
 
   @override
