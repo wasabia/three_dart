@@ -3,6 +3,12 @@ part of three_materials;
 int materialId = 0;
 
 class Material with EventDispatcher {
+
+
+  dynamic metalnessNode;
+  dynamic roughnessNode;
+  dynamic normalNode;
+
   int id = materialId++;
   String uuid = MathUtils.generateUUID();
   String name = "";
@@ -220,6 +226,7 @@ class Material with EventDispatcher {
 
   // ( /* renderer, scene, camera, geometry, object, group */ ) {}
   Function? onBeforeRender;
+
 
   Material() {
     customProgramCacheKey = () {

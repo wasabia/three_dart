@@ -20,7 +20,7 @@ class BufferGeometry with EventDispatcher {
   Map<String, List<BufferAttribute>> morphAttributes = {};
   bool morphTargetsRelative = false;
   Sphere? boundingSphere;
-  Map<String, int> drawRange = {"start": 0, "count": 99999999999};
+  Map<String, int> drawRange = {"start": 0, "count": double.maxFinite.toInt()};
   Map<String, dynamic> userData = {};
   List<Map<String, dynamic>> groups = [];
   BufferAttribute? index;
