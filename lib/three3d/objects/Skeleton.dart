@@ -89,8 +89,8 @@ class Skeleton {
     var boneTexture = this.boneTexture;
 
     // flatten bone matrices to array
-
-    for (var i = 0, il = bones.length; i < il; i++) {
+    int il = bones.length;
+    for (var i = 0; i < il; i++) {
       // compute the offset between the current and the original transform
 
       var matrix = bones[i] != null ? bones[i].matrixWorld : _identityMatrix;
@@ -117,9 +117,11 @@ class Skeleton {
     //       32x32 pixel texture max  256 bones * 4 pixels = (32 * 32)
     //       64x64 pixel texture max 1024 bones * 4 pixels = (64 * 64)
 
-    double size = Math.sqrt(bones.length * 4); // 4 pixels needed for 1 matrix
-    size = MathUtils.ceilPowerOfTwo(size).toDouble();
-    size = Math.max(size, 4);
+    double _size = Math.sqrt(bones.length * 4); // 4 pixels needed for 1 matrix
+    _size = MathUtils.ceilPowerOfTwo(_size).toDouble();
+    _size = Math.max(_size, 4);
+
+    int size = _size.toInt();
 
     var _boneMatrices =
         Float32Array((size * size * 4).toInt()); // 4 floats per RGBA pixel

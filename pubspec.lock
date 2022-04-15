@@ -7,7 +7,7 @@ packages:
       name: archive
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.2.1"
+    version: "3.3.0"
   async:
     dependency: transitive
     description:
@@ -89,7 +89,7 @@ packages:
       name: flutter_gl
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.13"
+    version: "0.0.15"
   flutter_gl_macos:
     dependency: transitive
     description:

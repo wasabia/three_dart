@@ -196,7 +196,7 @@ class _MyAppState extends State<webgl_geometry_text> {
         "format": THREE.RGBAFormat
       });
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr), (height * dpr), pars);
+          (width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }

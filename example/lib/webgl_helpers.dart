@@ -195,7 +195,7 @@ class _State extends State<webgl_helpers> {
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr), (height * dpr), pars);
+          (width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);

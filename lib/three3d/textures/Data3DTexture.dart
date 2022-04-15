@@ -4,7 +4,7 @@ class Data3DTexture extends Texture {
   bool isDataTexture3D = true;
 
   Data3DTexture(
-      [NativeArray? data, double width = 1, double height = 1, int depth = 1])
+      [NativeArray? data, int width = 1, int height = 1, int depth = 1])
       : super(null, null, null, null, null, null, null, null, null, null) {
     image =
         ImageElement(data: data, width: width, height: height, depth: depth);

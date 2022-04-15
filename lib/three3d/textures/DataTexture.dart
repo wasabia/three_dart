@@ -3,8 +3,8 @@ part of three_textures;
 class DataTexture extends Texture {
   DataTexture(
       [data,
-      double? width,
-      double? height,
+      int? width,
+      int? height,
       format,
       type,
       mapping,

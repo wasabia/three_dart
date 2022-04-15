@@ -198,7 +198,7 @@ class _MyAppState extends State<misc_controls_arcball> {
         "format": THREE.RGBAFormat
       });
       renderTarget = THREE.WebGLRenderTarget(
-          (width * dpr), (height * dpr), pars);
+          (width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
