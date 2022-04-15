@@ -135,6 +135,9 @@ class Skeleton {
     _boneTexture.name = "DataTexture from Skeleton.computeBoneTexture";
     _boneTexture.needsUpdate = true;
 
+    // Android Float Texture need NearestFilter
+    _boneTexture.magFilter = NearestFilter;
+    _boneTexture.minFilter = NearestFilter;
 
     boneMatrices.dispose();
 
