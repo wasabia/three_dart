@@ -3,8 +3,8 @@ part of three_textures;
 class ImageElement {
   String? uuid;
   dynamic url;
-  late double width;
-  late double height;
+  late int width;
+  late int height;
   String? src;
   bool complete = true;
 

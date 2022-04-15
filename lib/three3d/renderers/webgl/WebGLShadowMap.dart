@@ -127,11 +127,11 @@ class WebGLShadowMap {
           type == VSMShadowMap) {
        
         shadow.map = WebGLRenderTarget(
-            _shadowMapSize.x.toDouble(), _shadowMapSize.y.toDouble());
+            _shadowMapSize.x.toInt(), _shadowMapSize.y.toInt());
         shadow.map!.texture.name = light.name + '.shadowMap';
 
         shadow.mapPass = WebGLRenderTarget(
-            _shadowMapSize.x.toDouble(), _shadowMapSize.y.toDouble());
+            _shadowMapSize.x.toInt(), _shadowMapSize.y.toInt());
 
         shadow.camera!.updateProjectionMatrix();
       }
@@ -144,7 +144,7 @@ class WebGLShadowMap {
         });
 
         shadow.map = WebGLRenderTarget(
-            _shadowMapSize.x.toDouble(), _shadowMapSize.y.toDouble(), pars);
+            _shadowMapSize.x.toInt(), _shadowMapSize.y.toInt(), pars);
         shadow.map!.texture.name = light.name + '.shadowMap';
 
         shadow.camera!.updateProjectionMatrix();

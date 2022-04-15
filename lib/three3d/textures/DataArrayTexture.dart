@@ -3,7 +3,7 @@ part of three_textures;
 class DataArrayTexture extends Texture {
   bool isDataTexture2DArray = true;
 
-  DataArrayTexture(data, [double width = 1, double height = 1, int depth = 1])
+  DataArrayTexture(data, [int width = 1, int height = 1, int depth = 1])
       : super(null, null, null, null, null, null, null, null, null, null) {
     image =
         ImageElement(data: data, width: width, height: height, depth: depth);

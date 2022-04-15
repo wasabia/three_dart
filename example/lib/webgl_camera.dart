@@ -243,7 +243,7 @@ class _MyAppState extends State<webgl_camera> {
         "samples": 4
       });
       renderTarget = THREE.WebGLRenderTarget(
-          (width * dpr), (height * dpr), pars);
+          (width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderer!.setRenderTarget(renderTarget);
       
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);

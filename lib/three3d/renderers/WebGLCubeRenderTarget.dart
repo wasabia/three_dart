@@ -1,7 +1,7 @@
 part of three_renderers;
 
 class WebGLCubeRenderTarget extends WebGLRenderTarget {
-  WebGLCubeRenderTarget(double size, options, dummy)
+  WebGLCubeRenderTarget(int size, options, dummy)
       : super(size, size, options) {
     isWebGLCubeRenderTarget = true;
     // By convention -- likely based on the RenderMan spec from the 1990's -- cube maps are specified by WebGL (and three.js)
