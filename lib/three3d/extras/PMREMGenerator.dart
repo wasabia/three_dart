@@ -44,7 +44,7 @@ class PMREMGenerator {
   dynamic _cubemapMaterial;
 
   late int _lodMax;
-  late double _cubeSize;
+  late int _cubeSize;
 
   PMREMGenerator(renderer) {
     // Golden Ratio
@@ -165,7 +165,7 @@ class PMREMGenerator {
 
   _setSize(cubeSize) {
     _lodMax = Math.floor(Math.log2(cubeSize));
-    _cubeSize = Math.pow(2, _lodMax).toDouble();
+    _cubeSize = Math.pow(2, _lodMax).toInt();
   }
 
   _dispose() {
@@ -207,8 +207,8 @@ class PMREMGenerator {
   }
 
   _allocateTargets() {
-    double width = 3 * Math.max(_cubeSize, 16 * 7);
-    double height = 4 * _cubeSize - 32;
+    int width = 3 * Math.max(_cubeSize, 16 * 7);
+    int height = 4 * _cubeSize - 32;
 
     var params = {
       "magFilter": LinearFilter,
@@ -544,7 +544,7 @@ class PMREMGenerator {
     return {"lodPlanes": lodPlanes, "sizeLods": sizeLods, "sigmas": sigmas};
   }
 
-  _createRenderTarget(double width, double height, params) {
+  _createRenderTarget(int width, int height, params) {
     var cubeUVRenderTarget =
         WebGLRenderTarget(width, height, WebGLRenderTargetOptions(params));
     cubeUVRenderTarget.texture.mapping = CubeUVReflectionMapping;

@@ -907,13 +907,13 @@ class WebGLRenderer {
 
     if (isWebGL2) {
       _transmissionRenderTarget!.setSize(
-        _vector2.x.toDouble(),
-        _vector2.y.toDouble(),
+        _vector2.x.toInt(),
+        _vector2.y.toInt(),
       );
     } else {
       _transmissionRenderTarget!.setSize(
-          MathUtils.floorPowerOfTwo(_vector2.x).toDouble(),
-          MathUtils.floorPowerOfTwo(_vector2.y).toDouble());
+          MathUtils.floorPowerOfTwo(_vector2.x).toInt(),
+          MathUtils.floorPowerOfTwo(_vector2.y).toInt());
     }
 
     var currentRenderTarget = getRenderTarget();

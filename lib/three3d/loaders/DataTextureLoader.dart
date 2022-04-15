@@ -26,8 +26,8 @@ class DataTextureLoader extends Loader {
       if (texData["image"] != null) {
         texture.image = texData["image"];
       } else if (texData["data"] != null) {
-        texture.image.width = texData["width"].toDouble();
-        texture.image.height = texData["height"].toDouble();
+        texture.image.width = texData["width"].toInt();
+        texture.image.height = texData["height"].toInt();
         texture.image.data = texData["data"];
       }
 

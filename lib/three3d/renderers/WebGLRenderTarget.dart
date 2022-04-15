@@ -8,8 +8,8 @@
 part of three_renderers;
 
 abstract class RenderTarget with EventDispatcher {
-  late double width;
-  late double height;
+  late int width;
+  late int height;
   int depth = 1;
 
   late bool depthBuffer;
@@ -47,7 +47,7 @@ abstract class RenderTarget with EventDispatcher {
     throw ("RenderTarget clone need implemnt ");
   }
 
-  void setSize(double width, double height, [int depth = 1]) {
+  void setSize(int width, int height, [int depth = 1]) {
     throw ("RenderTarget setSize need implemnt ");
   }
 
@@ -64,7 +64,7 @@ class WebGLRenderTarget extends RenderTarget {
   bool isWebGLRenderTarget = true;
   late WebGLRenderTargetOptions options;
 
-  WebGLRenderTarget(double width, double height, [WebGLRenderTargetOptions? options]) {
+  WebGLRenderTarget(int width, int height, [WebGLRenderTargetOptions? options]) {
     this.width = width;
     this.height = height;
     scissor = Vector4(0, 0, width, height);
@@ -108,7 +108,7 @@ class WebGLRenderTarget extends RenderTarget {
   }
 
   @override
-  void setSize(double width, double height, [int depth = 1]) {
+  void setSize(int width, int height, [int depth = 1]) {
     if (this.width != width || this.height != height || this.depth != depth) {
       this.width = width;
       this.height = height;

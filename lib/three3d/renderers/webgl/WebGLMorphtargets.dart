@@ -79,13 +79,13 @@ class WebGLMorphtargets {
         if (hasMorphNormals) vertexDataCount = 2;
         if (hasMorphColors) vertexDataCount = 3;
 
-        double width = (geometry.attributes["position"].count * vertexDataCount)
-            .toDouble();
-        double height = 1;
+        int width = (geometry.attributes["position"].count * vertexDataCount)
+            .toInt();
+        int height = 1;
 
         if (width > capabilities.maxTextureSize) {
-          height = Math.ceil(width / capabilities.maxTextureSize).toDouble();
-          width = capabilities.maxTextureSize.toDouble();
+          height = Math.ceil(width / capabilities.maxTextureSize).toInt();
+          width = capabilities.maxTextureSize.toInt();
         }
 
         var buffer =
@@ -156,7 +156,7 @@ class WebGLMorphtargets {
         entry = {
           "count": morphTargetsCount,
           "texture": texture,
-          "size": Vector2(width, height)
+          "size": Vector2(width.toDouble(), height.toDouble())
         };
 
         morphTextures.set(geometry, entry);
