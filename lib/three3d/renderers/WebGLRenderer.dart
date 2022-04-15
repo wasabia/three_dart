@@ -157,8 +157,8 @@ class WebGLRenderer {
   WebGLRenderer(Map<String, dynamic>? parameters) {
     this.parameters = parameters ?? <String, dynamic>{};
 
-    _width = this.parameters["width"];
-    _height = this.parameters["height"];
+    _width = this.parameters["width"].toDouble();
+    _height = this.parameters["height"].toDouble();
 
     depth = this.parameters["depth"] ?? true;
     stencil = this.parameters["stencil"] ?? true;
