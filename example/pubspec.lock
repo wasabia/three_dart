@@ -286,7 +286,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.9"
+    version: "0.0.10"
   three_dart_jsm:
     dependency: "direct main"
     description:
