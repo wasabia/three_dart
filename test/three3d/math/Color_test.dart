@@ -227,7 +227,7 @@ void main() {
         var res = c.getStyle();
         expect(
           res,
-          'rgb(221,160,221)',
+          'rgb(221.0,160.0,221.0)',
         );
       });
 
