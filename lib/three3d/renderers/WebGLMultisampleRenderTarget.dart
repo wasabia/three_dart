@@ -4,7 +4,7 @@ class WebGLMultisampleRenderTarget extends WebGLRenderTarget {
   @override
   int samples = 4;
 
-  WebGLMultisampleRenderTarget(double width, double height,
+  WebGLMultisampleRenderTarget(int width, int height,
       [WebGLRenderTargetOptions? options])
       : super(width, height, options) {
     isWebGLMultisampleRenderTarget = true;
