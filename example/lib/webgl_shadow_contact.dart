@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 
 import 'package:three_dart/three_dart.dart' as THREE;
-import 'package:three_dart_jsm/three_dart_jsm/shaders/HorizontalBlurShader.dart';
-import 'package:three_dart_jsm/three_dart_jsm/shaders/VerticalBlurShader.dart';
+import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
+
 
 class webgl_shadow_contact extends StatefulWidget {
   String fileName;
@@ -395,10 +395,10 @@ class _MyAppState extends State<webgl_shadow_contact> {
     depthMaterial.depthTest = false;
     depthMaterial.depthWrite = false;
 
-    horizontalBlurMaterial = THREE.ShaderMaterial(HorizontalBlurShader);
+    horizontalBlurMaterial = THREE.ShaderMaterial(THREE_JSM.HorizontalBlurShader);
     horizontalBlurMaterial.depthTest = false;
 
-    verticalBlurMaterial = THREE.ShaderMaterial(VerticalBlurShader);
+    verticalBlurMaterial = THREE.ShaderMaterial(THREE_JSM.VerticalBlurShader);
     verticalBlurMaterial.depthTest = false;
 
     inited = true;
