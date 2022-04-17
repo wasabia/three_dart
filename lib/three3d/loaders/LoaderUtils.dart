@@ -1,7 +1,7 @@
 part of three_loaders;
 
 class LoaderUtils {
-  static decodeText(array) {
+  static decodeText(List<int> array) {
     var s = convert.Utf8Decoder().convert(array);
     return s;
 

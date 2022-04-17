@@ -382,13 +382,12 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     String vertexGlsl = versionString + prefixVertex + vertexShader;
     String fragmentGlsl = versionString + prefixFragment + fragmentShader;
 
-    // print(" material ${parameters.shaderName}  opaque: ${parameters.opaque } ");
+    // print("---- material ${parameters.shaderName}  USE_SKINNING: ${parameters.skinning } ");
     // developer.log(" 111 ================= VERTEX  ");
-    // developer.log(vertexGlsl);
     // developer.log(vertexGlsl);
     // developer.log("  111 ==================== FRAGMENT ");
     // developer.log(fragmentGlsl);
-    // developer.log( fragmentGlsl );
+
 
 
     final glVertexShader = WebGLShader(gl, gl.VERTEX_SHADER, vertexGlsl);

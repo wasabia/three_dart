@@ -9,7 +9,7 @@ class Skeleton {
   late List<Matrix4> boneInverses;
   late Float32Array boneMatrices;
   DataTexture? boneTexture;
-  num boneTextureSize = 0;
+  late int boneTextureSize;
   num frame = -1;
 
   Skeleton([List<Bone>? bones, List<Matrix4>? boneInverses]) {
@@ -23,7 +23,22 @@ class Skeleton {
     var bones = this.bones;
     var boneInverses = this.boneInverses;
 
-    boneMatrices = Float32Array(bones.length * 16);
+    // layout (1 matrix = 4 pixels)
+    //      RGBA RGBA RGBA RGBA (=> column1, column2, column3, column4)
+    //  with  8x8  pixel texture max   16 bones * 4 pixels =  (8 * 8)
+    //       16x16 pixel texture max   64 bones * 4 pixels = (16 * 16)
+    //       32x32 pixel texture max  256 bones * 4 pixels = (32 * 32)
+    //       64x64 pixel texture max 1024 bones * 4 pixels = (64 * 64)
+
+    double _size = Math.sqrt(bones.length * 4); // 4 pixels needed for 1 matrix
+    _size = MathUtils.ceilPowerOfTwo(_size).toDouble();
+    _size = Math.max(_size, 4);
+
+    int size = _size.toInt();
+
+    boneTextureSize = size;
+
+    boneMatrices = Float32Array(size * size * 4);
 
     // calculate inverse bone matrices if necessary
 
@@ -96,7 +111,6 @@ class Skeleton {
       var matrix = bones[i] != null ? bones[i].matrixWorld : _identityMatrix;
 
       _offsetMatrix.multiplyMatrices(matrix, boneInverses[i]);
-
       _offsetMatrix.toArray(boneMatrices, i * 16);
     }
 
@@ -110,42 +124,16 @@ class Skeleton {
   }
 
   Skeleton computeBoneTexture() {
-    // layout (1 matrix = 4 pixels)
-    //      RGBA RGBA RGBA RGBA (=> column1, column2, column3, column4)
-    //  with  8x8  pixel texture max   16 bones * 4 pixels =  (8 * 8)
-    //       16x16 pixel texture max   64 bones * 4 pixels = (16 * 16)
-    //       32x32 pixel texture max  256 bones * 4 pixels = (32 * 32)
-    //       64x64 pixel texture max 1024 bones * 4 pixels = (64 * 64)
 
-    double _size = Math.sqrt(bones.length * 4); // 4 pixels needed for 1 matrix
-    _size = MathUtils.ceilPowerOfTwo(_size).toDouble();
-    _size = Math.max(_size, 4);
-
-    int size = _size.toInt();
-
-    var _boneMatrices =
-        Float32Array((size * size * 4).toInt()); // 4 floats per RGBA pixel
-
-    _boneMatrices.set(boneMatrices.toDartList()); // copy current values
-
-
-    // andorid did not support Float Texture??? FIXME 
-    // https://github.com/wasabia/three_dart/issues/32
-    var _boneTexture = DataTexture(_boneMatrices, size, size,
+    boneTexture = DataTexture(boneMatrices, boneTextureSize, boneTextureSize,
         RGBAFormat, FloatType);
 
-    _boneTexture.name = "DataTexture from Skeleton.computeBoneTexture";
-    _boneTexture.needsUpdate = true;
-
+    boneTexture!.name = "DataTexture from Skeleton.computeBoneTexture";
+    boneTexture!.needsUpdate = true;
+    
     // Android Float Texture need NearestFilter
-    _boneTexture.magFilter = NearestFilter;
-    _boneTexture.minFilter = NearestFilter;
-
-    boneMatrices.dispose();
-
-    boneMatrices = _boneMatrices;
-    boneTexture = _boneTexture;
-    boneTextureSize = size;
+    boneTexture!.magFilter = NearestFilter;
+    boneTexture!.minFilter = NearestFilter;
 
     return this;
   }
@@ -216,5 +204,13 @@ class Skeleton {
     }
 
     return data;
+  }
+
+  getValue(String name) {
+    if(name == "boneMatrices") {
+      return boneMatrices;
+    } else {
+      throw("Skeleton getValue name: ${name} is not support  ");
+    }
   }
 }

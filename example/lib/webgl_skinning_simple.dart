@@ -270,7 +270,7 @@ class _MyAppState extends State<webgl_skinning_simple> {
     var clip = result["animations"][0];
     if (clip != null) {
       var action = mixer!.clipAction(clip);
-      action.play();
+      action?.play();
     }
 
     scene.add(object);
