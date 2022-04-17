@@ -253,7 +253,7 @@ class _MyAppState extends State<webgl_loader_gltf_3> {
     var clip = result["animations"][1];
     if (clip != null) {
       var action = mixer!.clipAction(clip);
-      action.play();
+      action?.play();
     }
 
     scene.add(object);

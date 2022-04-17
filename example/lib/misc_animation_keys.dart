@@ -279,7 +279,7 @@ class _State extends State<misc_animation_keys> {
 
     // create a ClipAction and set it to play
     var clipAction = mixer.clipAction(clip);
-    clipAction.play();
+    clipAction!.play();
 
     //
 

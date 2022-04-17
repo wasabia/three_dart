@@ -481,6 +481,8 @@ class AnimationAction {
       if (time >= duration || time < 0) {
         // wrap around
 
+        print(" duration: ${duration} ");
+
         int loopDelta = Math.floor(time / duration); // signed
         time -= duration * loopDelta;
 

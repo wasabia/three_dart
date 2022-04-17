@@ -17,6 +17,7 @@ import 'package:example/webgl_geometry_shapes.dart';
 import 'package:example/webgl_geometry_text.dart';
 import 'package:example/webgl_helpers.dart';
 import 'package:example/webgl_instancing_performance.dart';
+import 'package:example/webgl_loader_fbx.dart';
 import 'package:example/webgl_loader_gltf.dart';
 import 'package:example/webgl_loader_gltf_test.dart';
 import 'package:example/webgl_loader_obj.dart';
@@ -132,6 +133,8 @@ class _MyAppState extends State<ExamplePage> {
       page = misc_controls_arcball(fileName: fileName);
     } else if (fileName == "misc_controls_map") {
       page = misc_controls_map(fileName: fileName);
+    } else if (fileName == "webgl_loader_fbx") {
+      page = webgl_loader_fbx(fileName: fileName);
     } else {
       throw ("ExamplePage fileName $fileName is not support yet ");
     }
