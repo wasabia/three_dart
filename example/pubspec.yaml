@@ -36,10 +36,10 @@ dependencies:
 dependency_overrides:
   three_dart:
     path: ../
-  three_dart_jsm:
-    path: ../../three_dart_plugins/three_dart_jsm/
-  flutter_gl:
-    path: ../../flutter_gl/flutter_gl
+  # three_dart_jsm:
+  #   path: ../../three_dart_plugins/three_dart_jsm/
+  # flutter_gl:
+  #   path: ../../flutter_gl/flutter_gl
 
 
 dev_dependencies:
