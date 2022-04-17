@@ -3,6 +3,8 @@ part of three_objects;
 class Group extends Object3D {
   bool isGroup = true;
 
+  dynamic animations;
+
   Group() : super() {
     type = 'Group';
   }

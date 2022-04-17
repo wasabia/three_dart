@@ -39,15 +39,15 @@ class Quaternion {
       dst, num dstOffset, src0, num srcOffset0, src1, num srcOffset1, num t) {
     // fuzz-free, array-based Quaternion SLERP operation
 
-    double x0 = src0[srcOffset0 + 0],
-        y0 = src0[srcOffset0 + 1],
-        z0 = src0[srcOffset0 + 2],
-        w0 = src0[srcOffset0 + 3];
+    double x0 = src0[srcOffset0 + 0].toDouble(),
+        y0 = src0[srcOffset0 + 1].toDouble(),
+        z0 = src0[srcOffset0 + 2].toDouble(),
+        w0 = src0[srcOffset0 + 3].toDouble();
 
-    double x1 = src1[srcOffset1 + 0],
-        y1 = src1[srcOffset1 + 1],
-        z1 = src1[srcOffset1 + 2],
-        w1 = src1[srcOffset1 + 3];
+    double x1 = src1[srcOffset1 + 0].toDouble(),
+        y1 = src1[srcOffset1 + 1].toDouble(),
+        z1 = src1[srcOffset1 + 2].toDouble(),
+        w1 = src1[srcOffset1 + 3].toDouble();
 
     if (t == 0) {
       dst[dstOffset] = x0;

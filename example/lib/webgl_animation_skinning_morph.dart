@@ -273,7 +273,7 @@ class _State extends State<webgl_animation_skinning_morph> {
     var runAction = mixer.clipAction(animations[1]);
 
     // var actions = [ idleAction, walkAction, runAction ];
-    walkAction.play();
+    walkAction!.play();
     // activateAllActions();
 
     loaded = true;

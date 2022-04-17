@@ -1,7 +1,7 @@
 part of three_animation;
 
 class PropertyMixer {
-  late dynamic binding;
+  late PropertyBinding binding;
   late int valueSize;
   late Function _mixBufferRegion;
   late Function _mixBufferRegionAdditive;
@@ -16,7 +16,7 @@ class PropertyMixer {
   late List buffer;
   late int _cacheIndex;
 
-  PropertyMixer(binding, typeName, valueSize) {
+  PropertyMixer(PropertyBinding binding, String typeName, int valueSize) {
     this.binding = binding;
     this.valueSize = valueSize;
 
@@ -167,7 +167,6 @@ class PropertyMixer {
     for (var i = stride, e = stride + stride; i != e; ++i) {
       if (buffer[i] != buffer[i + stride]) {
         // value has changed -> update scene graph
-
         binding.setValue(buffer, offset);
         break;
       }
@@ -235,7 +234,7 @@ class PropertyMixer {
     }
   }
 
-  _slerp(buffer, dstOffset, srcOffset, t) {
+  _slerp(buffer, dstOffset, srcOffset, t, stride) {
     Quaternion.slerpFlat(
         buffer, dstOffset, buffer, dstOffset, buffer, srcOffset, t);
   }

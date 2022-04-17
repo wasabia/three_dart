@@ -278,7 +278,7 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
     scene.add(model);
 
     mixer = THREE.AnimationMixer(model);
-    mixer.clipAction(result["animations"][0], null, null).play();
+    mixer.clipAction(result["animations"][0], null, null)!.play();
 
     loaded = true;
 

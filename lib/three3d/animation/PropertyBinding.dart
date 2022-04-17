@@ -411,8 +411,6 @@ class PropertyBinding {
   }
 
   setValue_fromArray_setMatrixWorldNeedsUpdate(buffer, offset) {
-    // print("PropertyBinding this.resolvedProperty: ${this.resolvedProperty} ");
-
     resolvedProperty.fromArray(buffer, offset);
     targetObject.matrixWorldNeedsUpdate = true;
   }
