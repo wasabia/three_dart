@@ -7,10 +7,10 @@ class AnimationMixer with EventDispatcher {
   dynamic _root;
   int _accuIndex = 0;
 
-  late List _actions;
+  late List<AnimationAction> _actions;
   late int _nActiveActions;
   late Map _actionsByClip;
-  late List _bindings;
+  late List<PropertyMixer> _bindings;
   late int _nActiveBindings;
   late Map _bindingsByRootAndName;
   late List _controlInterpolants;
@@ -420,7 +420,7 @@ class AnimationMixer with EventDispatcher {
   // return an action for a clip optionally using a custom root target
   // object (this method allocates a lot of dynamic memory in case a
   // previously unknown clip/root combination is specified)
-  clipAction(clip, [optionalRoot, blendMode]) {
+  AnimationAction? clipAction(clip, [optionalRoot, blendMode]) {
     var root = optionalRoot ?? _root;
     var rootUuid = root.uuid;
 
@@ -513,9 +513,6 @@ class AnimationMixer with EventDispatcher {
 
     for (var i = 0; i != nActions; ++i) {
       var action = actions[i];
-
-      // print(" i: ${i} action: ${action} ");
-
       action._update(time, deltaTime, timeDirection, accuIndex);
     }
 
@@ -525,10 +522,6 @@ class AnimationMixer with EventDispatcher {
 
     for (var i = 0; i != nBindings; ++i) {
       var _binding = bindings[i];
-
-      // print(" i: ${i} bindings: ${ _binding } ");
-      // print( _binding.buffer );
-
       _binding.apply(accuIndex);
     }
 

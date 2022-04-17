@@ -126,13 +126,7 @@ class Vector4 {
     return this;
   }
 
-  Vector4 add(Vector4 v, Vector4? w) {
-    if (w != null) {
-      print(
-          'THREE.Vector4: .add() now only accepts one argument. Use .addVectors( a, b ) instead.');
-      return addVectors(v, w);
-    }
-
+  Vector4 add(Vector4 v) {
     x += v.x;
     y += v.y;
     z += v.z;
@@ -517,7 +511,7 @@ class Vector4 {
     return ((v.x == x) && (v.y == y) && (v.z == z) && (v.w == w));
   }
 
-  Vector4 fromArray(List<num> array, {int offset = 0}) {
+  Vector4 fromArray(List<num> array, [int offset = 0]) {
     x = array[offset];
     y = array[offset + 1];
     z = array[offset + 2];
@@ -526,7 +520,7 @@ class Vector4 {
     return this;
   }
 
-  List<num> toArray(List<num> array, {int offset = 0}) {
+  List<num> toArray(List<num> array, [int offset = 0]) {
     array[offset] = x;
     array[offset + 1] = y;
     array[offset + 2] = z;

@@ -265,7 +265,7 @@ class _State extends State<webgl_animation_skinning_blending> {
     var walkAction = mixer.clipAction(animations[3]);
     var runAction = mixer.clipAction(animations[1]);
 
-    walkAction.play();
+    walkAction!.play();
 
     loaded = true;
 

@@ -236,7 +236,7 @@ class _State extends State<webgl_morphtargets_horse> {
 
     mixer = THREE.AnimationMixer(mesh);
 
-    mixer!.clipAction(gltf["animations"][0]).setDuration(1).play();
+    mixer!.clipAction(gltf["animations"][0])?.setDuration(1).play();
 
     loaded = true;
 

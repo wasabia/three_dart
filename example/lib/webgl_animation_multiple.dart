@@ -432,7 +432,7 @@ class _State extends State<webgl_animation_multiple> {
 
     if (clip != null) {
       var action = mixer.clipAction(clip);
-      action.play();
+      action!.play();
     }
 
     return mixer;

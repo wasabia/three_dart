@@ -242,7 +242,7 @@ class webgl_debugState extends State<webgl_debug> {
     scene.add(model);
 
     mixer = THREE.AnimationMixer(model);
-    mixer.clipAction(result["animations"][0], null, null).play();
+    mixer.clipAction(result["animations"][0], null, null)!.play();
 
     // console.log(model);
 
