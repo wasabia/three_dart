@@ -1,4 +1,5 @@
 import 'package:example/misc_animation_keys.dart';
+import 'package:example/multi_views.dart';
 import 'package:example/webgl_animation_cloth.dart';
 import 'package:example/webgl_animation_keyframes.dart';
 import 'package:example/webgl_animation_multiple.dart';
@@ -135,6 +136,8 @@ class _MyAppState extends State<ExamplePage> {
       page = misc_controls_map(fileName: fileName);
     } else if (fileName == "webgl_loader_fbx") {
       page = webgl_loader_fbx(fileName: fileName);
+    } else if (fileName == "multi_views") {
+      page = multi_views(fileName: fileName);
     } else {
       throw ("ExamplePage fileName $fileName is not support yet ");
     }

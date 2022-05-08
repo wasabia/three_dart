@@ -174,7 +174,7 @@ class FileLoader extends Loader {
       if (response.statusCode != 200) {
         for (var i = 0, il = callbacks.length; i < il; i++) {
           var callback = callbacks[i];
-          if (callback.onError) callback.onError(response.body);
+          if (callback["onError"] != null) callback["onError"](response.body);
         }
 
         scope.manager.itemError(url);

@@ -100,30 +100,30 @@ packages:
   flutter_gl_macos:
     dependency: transitive
     description:
-      name: flutter_gl_macos
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "../../flutter_gl/flutter_gl_macos"
+      relative: true
+    source: path
     version: "0.0.3"
   flutter_gl_platform_interface:
     dependency: transitive
     description:
-      name: flutter_gl_platform_interface
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "../../flutter_gl/flutter_gl_platform_interface"
+      relative: true
+    source: path
     version: "0.0.3"
   flutter_gl_web:
     dependency: transitive
     description:
-      name: flutter_gl_web
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "../../flutter_gl/flutter_gl_web"
+      relative: true
+    source: path
     version: "0.0.4"
   flutter_gl_windows:
     dependency: transitive
     description:
-      name: flutter_gl_windows
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "../../flutter_gl/flutter_gl_windows"
+      relative: true
+    source: path
     version: "0.0.3"
   flutter_lints:
     dependency: "direct dev"
