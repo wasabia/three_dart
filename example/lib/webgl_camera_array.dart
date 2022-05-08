@@ -49,7 +49,7 @@ class _MyAppState extends State<webgl_camera_array> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     width = screenSize!.width;
-    height = screenSize!.height;
+    height = width;
 
     three3dRender = FlutterGlPlugin();
 
@@ -64,6 +64,9 @@ class _MyAppState extends State<webgl_camera_array> {
     print("three3dRender.initialize _options: $_options ");
 
     await three3dRender.initialize(options: _options);
+
+     print("three3dRender.initialize three3dRender: ${three3dRender.textureId} ");
+
 
     setState(() {});
 
@@ -175,6 +178,9 @@ class _MyAppState extends State<webgl_camera_array> {
       "antialias": true,
       "canvas": three3dRender.element
     };
+
+    print('initRenderer  dpr: ${dpr} _options: ${_options}');
+
     renderer = THREE.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
