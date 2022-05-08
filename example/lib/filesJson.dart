@@ -36,5 +36,6 @@ var filesJson = [
   "misc_controls_trackball",
   "misc_controls_arcball",
   "misc_controls_map",
-  "webgl_loader_fbx"
+  "webgl_loader_fbx",
+  "multi_views"
 ];
