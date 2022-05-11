@@ -104,7 +104,7 @@ class Triangle {
       point, Vector3 p1, Vector3 p2, Vector3 p3, uv1, uv2, uv3, target) {
     static_getBarycoord(point, p1, p2, p3, _v3);
 
-    target.set(0, 0);
+    target.set(0.0, 0.0);
     target.addScaledVector(uv1, _v3.x);
     target.addScaledVector(uv2, _v3.y);
     target.addScaledVector(uv3, _v3.z);
