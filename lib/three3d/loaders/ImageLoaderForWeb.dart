@@ -8,6 +8,7 @@ class ImageLoaderLoader {
       {Function? imageDecoder}) {
     var completer = Completer<html.ImageElement>();
     var imageDom = html.ImageElement();
+    imageDom.crossOrigin = "";
 
     imageDom.onLoad.listen((e) {
       completer.complete(imageDom);
