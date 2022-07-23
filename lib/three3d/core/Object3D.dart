@@ -101,6 +101,9 @@ class Object3D with EventDispatcher {
   dynamic background;
   Texture? environment;
 
+  InstancedBufferAttribute? instanceMatrix;
+  BufferAttribute? instanceColor;
+
   Object3D() {
     init();
   }
@@ -628,7 +631,7 @@ class Object3D with EventDispatcher {
 
       object["type"] = 'InstancedMesh';
       object["count"] = _instanceMesh.count;
-      object["instanceMatrix"] = _instanceMesh.instanceMatrix.toJSON();
+      object["instanceMatrix"] = _instanceMesh.instanceMatrix!.toJSON();
 
       if (_instanceMesh.instanceColor != null) {
         object["instanceColor"] = _instanceMesh.instanceColor!.toJSON();
