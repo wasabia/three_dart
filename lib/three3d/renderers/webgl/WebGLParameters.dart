@@ -99,6 +99,7 @@ class WebGLParameters {
   late bool doubleSided;
   late bool flipSided;
 
+  late bool useDepthPacking;
   int? depthPacking;
 
   String? index0AttributeName;
@@ -226,6 +227,7 @@ class WebGLParameters {
     alphaTest = json["alphaTest"];
     doubleSided = json["doubleSided"];
     flipSided = json["flipSided"];
+    useDepthPacking = json["useDepthPacking"];
     depthPacking = json["depthPacking"];
     index0AttributeName = json["index0AttributeName"];
 
@@ -341,6 +343,7 @@ class WebGLParameters {
       "alphaTest": alphaTest,
       "doubleSided": doubleSided,
       "flipSided": flipSided,
+      "useDepthPacking": useDepthPacking,
       "depthPacking": depthPacking,
       "index0AttributeName": index0AttributeName,
       "extensionDerivatives": extensionDerivatives,

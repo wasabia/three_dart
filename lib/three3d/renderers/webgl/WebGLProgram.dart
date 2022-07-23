@@ -322,8 +322,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         getTexelEncodingFunction(
             'linearToOutputTexel', parameters.outputEncoding),
 
-        parameters.depthPacking != null
-            ? '#define DEPTH_PACKING ${parameters.depthPacking}'
+        parameters.useDepthPacking ? '#define DEPTH_PACKING ${parameters.depthPacking}'
             : '',
 
         '\n'
