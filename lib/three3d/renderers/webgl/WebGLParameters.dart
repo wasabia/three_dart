@@ -69,8 +69,6 @@ class WebGLParameters {
   late bool logarithmicDepthBuffer;
 
   late bool skinning;
-  late num maxBones;
-  late bool useVertexTexture;
 
   late bool morphTargets;
   late bool morphNormals;
@@ -199,8 +197,7 @@ class WebGLParameters {
     sizeAttenuation = json["sizeAttenuation"];
     logarithmicDepthBuffer = json["logarithmicDepthBuffer"];
     skinning = json["skinning"];
-    maxBones = json["maxBones"];
-    useVertexTexture = json["useVertexTexture"];
+    
     morphTargets = json["morphTargets"];
 
     morphNormals = json["morphNormals"];
@@ -319,8 +316,6 @@ class WebGLParameters {
       "sizeAttenuation": sizeAttenuation,
       "logarithmicDepthBuffer": logarithmicDepthBuffer,
       "skinning": skinning,
-      "maxBones": maxBones,
-      "useVertexTexture": useVertexTexture,
       "morphTargets": morphTargets,
       "morphNormals": morphNormals,
       "morphColors": morphColors,

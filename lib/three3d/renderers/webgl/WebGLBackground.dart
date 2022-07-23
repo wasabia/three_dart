@@ -119,6 +119,8 @@ class WebGLBackground {
         currentTonemapping = renderer.toneMapping;
       }
 
+      boxMesh!.layers.enableAll();
+
       // push to the pre-sorted opaque render list
       renderList.unshift(
           boxMesh!, boxMesh!.geometry, boxMesh!.material, 0, 0, null);
@@ -171,6 +173,8 @@ class WebGLBackground {
         currentBackgroundVersion = background.version;
         currentTonemapping = renderer.toneMapping;
       }
+
+      planeMesh!.layers.enableAll();
 
       // push to the pre-sorted opaque render list
       renderList.unshift(
