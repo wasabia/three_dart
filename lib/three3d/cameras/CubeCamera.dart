@@ -62,7 +62,6 @@ class CubeCamera extends Object3D {
     if (parent == null) updateMatrixWorld(false);
 
     var currentRenderTarget = renderer.getRenderTarget();
-    var currentOutputEncoding = renderer.outputEncoding;
 		var currentToneMapping = renderer.toneMapping;
 		var currentXrEnabled = renderer.xr.enabled;
 
@@ -95,7 +94,6 @@ class CubeCamera extends Object3D {
 
     renderer.setRenderTarget(currentRenderTarget);
     
-    renderer.outputEncoding = currentOutputEncoding;
 		renderer.toneMapping = currentToneMapping;
     renderer.xr.enabled = currentXrEnabled;
 
