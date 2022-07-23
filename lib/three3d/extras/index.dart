@@ -13,6 +13,7 @@ import 'package:three_dart/three3d/objects/index.dart';
 import 'package:three_dart/three3d/renderers/index.dart';
 import 'package:three_dart/three_dart.dart';
 import '../dartHelpers.dart';
+import 'package:three_dart/extra/console.dart';
 
 part './core/Curve.dart';
 part './core/CurvePath.dart';
