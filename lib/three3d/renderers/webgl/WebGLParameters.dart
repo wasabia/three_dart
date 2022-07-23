@@ -69,8 +69,6 @@ class WebGLParameters {
   late bool logarithmicDepthBuffer;
 
   late bool skinning;
-  late num maxBones;
-  late bool useVertexTexture;
 
   late bool morphTargets;
   late bool morphNormals;
@@ -99,6 +97,7 @@ class WebGLParameters {
   late bool doubleSided;
   late bool flipSided;
 
+  late bool useDepthPacking;
   int? depthPacking;
 
   String? index0AttributeName;
@@ -198,8 +197,7 @@ class WebGLParameters {
     sizeAttenuation = json["sizeAttenuation"];
     logarithmicDepthBuffer = json["logarithmicDepthBuffer"];
     skinning = json["skinning"];
-    maxBones = json["maxBones"];
-    useVertexTexture = json["useVertexTexture"];
+    
     morphTargets = json["morphTargets"];
 
     morphNormals = json["morphNormals"];
@@ -226,6 +224,7 @@ class WebGLParameters {
     alphaTest = json["alphaTest"];
     doubleSided = json["doubleSided"];
     flipSided = json["flipSided"];
+    useDepthPacking = json["useDepthPacking"];
     depthPacking = json["depthPacking"];
     index0AttributeName = json["index0AttributeName"];
 
@@ -317,8 +316,6 @@ class WebGLParameters {
       "sizeAttenuation": sizeAttenuation,
       "logarithmicDepthBuffer": logarithmicDepthBuffer,
       "skinning": skinning,
-      "maxBones": maxBones,
-      "useVertexTexture": useVertexTexture,
       "morphTargets": morphTargets,
       "morphNormals": morphNormals,
       "morphColors": morphColors,
@@ -341,6 +338,7 @@ class WebGLParameters {
       "alphaTest": alphaTest,
       "doubleSided": doubleSided,
       "flipSided": flipSided,
+      "useDepthPacking": useDepthPacking,
       "depthPacking": depthPacking,
       "index0AttributeName": index0AttributeName,
       "extensionDerivatives": extensionDerivatives,
