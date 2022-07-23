@@ -941,7 +941,7 @@ class WebGLTextures {
       var mipmaps = texture.mipmaps;
 
       var useTexStorage = (isWebGL2 && texture is! VideoTexture);
-      var allocateMemory = (textureProperties["__version"] == null);
+      var allocateMemory = (textureProperties["__version"] == null) || ( forceUpload == true );
       var levels = getMipLevels(texture, image, supportsMips);
 
       if (texture is DepthTexture) {
@@ -1004,14 +1004,16 @@ class WebGLTextures {
         }
 
         //
-
-        if (useTexStorage && allocateMemory) {
-          state.texStorage2D(
-              _gl.TEXTURE_2D, 1, glInternalFormat, image.width, image.height);
-        } else {
-          state.texImage2D(_gl.TEXTURE_2D, 0, glInternalFormat, image.width,
-              image.height, 0, glFormat, glType, null);
+        if(allocateMemory) {
+          if (useTexStorage) {
+            state.texStorage2D(
+                _gl.TEXTURE_2D, 1, glInternalFormat, image.width, image.height);
+          } else {
+            state.texImage2D(_gl.TEXTURE_2D, 0, glInternalFormat, image.width,
+                image.height, 0, glFormat, glType, null);
+          }
         }
+        
       } else if (texture is DataTexture) {
         // use manually created mipmaps if available
         // if there are no manual mipmaps
@@ -1134,13 +1136,24 @@ class WebGLTextures {
               image.height, image.depth, 0, glFormat, glType, image.data);
         }
       } else if (texture is FramebufferTexture) {
-        if (useTexStorage && allocateMemory) {
-          state.texStorage2D(_gl.TEXTURE_2D, levels, glInternalFormat,
-              image.width, image.height);
-        } else {
-          state.texImage2D(_gl.TEXTURE_2D, 0, glInternalFormat, image.width,
-              image.height, 0, glFormat, glType, null);
+        if(allocateMemory) {
+          if (useTexStorage) {
+            state.texStorage2D(_gl.TEXTURE_2D, levels, glInternalFormat,
+                image.width, image.height);
+          } else if (allocateMemory) {
+            var width = image.width, height = image.height;
+
+            for ( var i = 0; i < levels; i ++ ) {
+
+              state.texImage2D( _gl.TEXTURE_2D, i, glInternalFormat, width, height, 0, glFormat, glType, null );
+
+              width >>= 1;
+              height >>= 1;
+
+            }
+          }
         }
+        
       } else {
         // regular Texture (image, video, canvas)
 
