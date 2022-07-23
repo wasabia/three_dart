@@ -62,6 +62,8 @@ class ShaderMaterial extends Material {
     wireframe = source.wireframe;
     wireframeLinewidth = source.wireframeLinewidth;
 
+    fog = source.fog;
+
     lights = source.lights;
     clipping = source.clipping;
 

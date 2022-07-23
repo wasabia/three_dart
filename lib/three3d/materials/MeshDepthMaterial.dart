@@ -8,7 +8,6 @@ class MeshDepthMaterial extends Material {
     displacementBias = 0;
     wireframe = false;
     wireframeLinewidth = 1;
-    fog = false;
 
     displacementMap = null;
 

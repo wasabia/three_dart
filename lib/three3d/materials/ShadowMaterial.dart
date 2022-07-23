@@ -5,7 +5,7 @@ class ShadowMaterial extends Material {
     type = 'ShadowMaterial';
     color = Color.fromHex(0x000000);
     transparent = true;
-
+    fog = true;
     setValues(parameters);
   }
 
@@ -14,7 +14,7 @@ class ShadowMaterial extends Material {
     super.copy(source);
 
     color.copy(source.color);
-
+    fog = source.fog;
     return this;
   }
 

@@ -13,7 +13,7 @@ class Material with EventDispatcher {
   String uuid = MathUtils.generateUUID();
   String name = "";
   String type = "Material";
-  bool fog = true;
+  bool fog = false;
   int blending = NormalBlending;
   int side = FrontSide;
   bool vertexColors = false;
@@ -651,6 +651,8 @@ class Material with EventDispatcher {
 
     if (toneMapped == false) data["toneMapped"] = false;
 
+    if ( fog == false ) data["fog"] = false;
+
     if (jsonEncode(userData) != '{}') data["userData"] = userData;
 
     // TODO: Copied from Object3D.toJSON
@@ -684,8 +686,6 @@ class Material with EventDispatcher {
 
   Material copy(Material source) {
     name = source.name;
-
-    fog = source.fog;
 
     blending = source.blending;
     side = source.side;

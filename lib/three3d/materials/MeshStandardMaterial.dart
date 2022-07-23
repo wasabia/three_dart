@@ -52,6 +52,8 @@ class MeshStandardMaterial extends Material {
     wireframeLinecap = 'round';
     wireframeLinejoin = 'round';
 
+    fog = true;
+
     setValues(parameters);
   }
 
@@ -108,6 +110,8 @@ class MeshStandardMaterial extends Material {
     wireframeLinejoin = source.wireframeLinejoin;
 
     flatShading = source.flatShading;
+
+    fog = source.fog;
 
     return this;
   }

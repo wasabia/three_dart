@@ -32,43 +32,38 @@ class MeshLambertMaterial extends Material {
     wireframeLinecap = 'round';
     wireframeLinejoin = 'round';
 
+    fog = true;
+
     setValues(parameters);
   }
 
-  // copy( source ) {
+  @override
+  MeshLambertMaterial copy( Material source ) {
+    super.copy( source );
+		this.color.copy( source.color );
+		this.map = source.map;
+		this.lightMap = source.lightMap;
+		this.lightMapIntensity = source.lightMapIntensity;
+		this.aoMap = source.aoMap;
+		this.aoMapIntensity = source.aoMapIntensity;
+		this.emissive!.copy( source.emissive! );
+		this.emissiveMap = source.emissiveMap;
+		this.emissiveIntensity = source.emissiveIntensity;
+		this.specularMap = source.specularMap;
+		this.alphaMap = source.alphaMap;
+		this.envMap = source.envMap;
+		this.combine = source.combine;
+		this.reflectivity = source.reflectivity;
+		this.refractionRatio = source.refractionRatio;
+		this.wireframe = source.wireframe;
+		this.wireframeLinewidth = source.wireframeLinewidth;
+		this.wireframeLinecap = source.wireframeLinecap;
+		this.wireframeLinejoin = source.wireframeLinejoin;
 
-  //   Material.prototype.copy.call( this, source );
+		this.fog = source.fog;
 
-  //   this.color.copy( source.color );
+		return this;
 
-  //   this.map = source.map;
-
-  //   this.lightMap = source.lightMap;
-  //   this.lightMapIntensity = source.lightMapIntensity;
-
-  //   this.aoMap = source.aoMap;
-  //   this.aoMapIntensity = source.aoMapIntensity;
-
-  //   this.emissive.copy( source.emissive );
-  //   this.emissiveMap = source.emissiveMap;
-  //   this.emissiveIntensity = source.emissiveIntensity;
-
-  //   this.specularMap = source.specularMap;
-
-  //   this.alphaMap = source.alphaMap;
-
-  //   this.envMap = source.envMap;
-  //   this.combine = source.combine;
-  //   this.reflectivity = source.reflectivity;
-  //   this.refractionRatio = source.refractionRatio;
-
-  //   this.wireframe = source.wireframe;
-  //   this.wireframeLinewidth = source.wireframeLinewidth;
-  //   this.wireframeLinecap = source.wireframeLinecap;
-  //   this.wireframeLinejoin = source.wireframeLinejoin;
-
-  //   return this;
-
-  // }
+  }
 
 }
