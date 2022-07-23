@@ -297,8 +297,8 @@ class WebGLPrograms {
       "premultipliedAlpha": material.premultipliedAlpha,
       "doubleSided": material.side == DoubleSide,
       "flipSided": material.side == BackSide,
-      "depthPacking":
-          (material.depthPacking != null) ? material.depthPacking : 0,
+      "useDepthPacking": material.depthPacking != null,
+      "depthPacking": material.depthPacking ?? 0,
       "index0AttributeName": material.index0AttributeName,
       "extensionDerivatives": material.extensions != null &&
           material.extensions!["derivatives"] != null,
@@ -373,6 +373,7 @@ class WebGLPrograms {
     array.add(parameters.toneMapping);
     array.add(parameters.numClippingPlanes);
     array.add(parameters.numClipIntersection);
+    array.add(parameters.depthPacking);
   }
 
   getProgramCacheKeyBooleans(array, parameters) {
@@ -426,7 +427,7 @@ class WebGLPrograms {
     if (parameters.physicallyCorrectLights) _programLayers.enable(10);
     if (parameters.doubleSided) _programLayers.enable(11);
     if (parameters.flipSided) _programLayers.enable(12);
-    if (parameters.depthPacking != null && parameters.depthPacking > 0) {
+    if (parameters.useDepthPacking) {
       _programLayers.enable(13);
     }
     if (parameters.dithering) _programLayers.enable(14);
