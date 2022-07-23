@@ -9,6 +9,8 @@ class LineBasicMaterial extends Material {
     linecap = 'round'; // 'butt', 'round' and 'square'.
     linejoin = 'round'; // 'round', 'bevel' and 'miter'.
 
+    fog = true;
+
     setValues(parameters);
   }
 
@@ -21,6 +23,8 @@ class LineBasicMaterial extends Material {
     linewidth = source.linewidth;
     linecap = source.linecap;
     linejoin = source.linejoin;
+
+    fog = source.fog;
 
     return this;
   }

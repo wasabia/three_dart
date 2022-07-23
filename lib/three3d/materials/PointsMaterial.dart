@@ -7,6 +7,8 @@ class PointsMaterial extends Material {
     color = Color(1, 1, 1);
     size = 1;
 
+    fog = true;
+
     setValues(parameters);
   }
 
@@ -19,6 +21,9 @@ class PointsMaterial extends Material {
     alphaMap = source.alphaMap;
     size = source.size;
     sizeAttenuation = source.sizeAttenuation;
+
+    fog = source.fog;
+
     return this;
   }
 }

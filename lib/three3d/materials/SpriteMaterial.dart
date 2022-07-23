@@ -5,6 +5,7 @@ class SpriteMaterial extends Material {
     type = 'SpriteMaterial';
     transparent = true;
     color = Color(1, 1, 1);
+    fog = true;
     setValues(parameters);
   }
 
@@ -20,6 +21,7 @@ class SpriteMaterial extends Material {
     alphaMap = source.alphaMap;
     rotation = source.rotation;
     sizeAttenuation = source.sizeAttenuation;
+    fog = source.fog;
     return this;
   }
 }

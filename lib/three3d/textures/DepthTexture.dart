@@ -24,4 +24,12 @@ class DepthTexture extends Texture {
     flipY = false;
     generateMipmaps = false;
   }
+
+
+  // TODO
+  @override
+  DepthTexture clone() {
+    return super.clone() as DepthTexture; 
+  }
+ 
 }

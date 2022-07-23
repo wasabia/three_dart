@@ -8,8 +8,7 @@ List<Intersection> _instanceIntersects = [];
 var _mesh = Mesh(BufferGeometry(), Material());
 
 class InstancedMesh extends Mesh {
-  late InstancedBufferAttribute instanceMatrix;
-  late BufferAttribute? instanceColor;
+
 
   InstancedMesh(BufferGeometry? geometry, material, int count)
       : super(geometry, material) {
@@ -28,7 +27,7 @@ class InstancedMesh extends Mesh {
   InstancedMesh copy(Object3D source, [bool? recursive]) {
     super.copy(source);
     if (source is InstancedMesh) {
-      instanceMatrix.copy(source.instanceMatrix);
+      instanceMatrix!.copy(source.instanceMatrix!);
       if (source.instanceColor != null) {
         instanceColor = source.instanceColor!.clone();
       }
@@ -42,7 +41,7 @@ class InstancedMesh extends Mesh {
   }
 
   getMatrixAt(int index, matrix) {
-    return matrix.fromArray(instanceMatrix.array, index * 16);
+    return matrix.fromArray(instanceMatrix!.array, index * 16);
   }
 
   @override
@@ -83,13 +82,13 @@ class InstancedMesh extends Mesh {
 
   List<num> setColorAt(int index, Color color) {
     instanceColor ??= Float32BufferAttribute(
-        Float32Array((instanceMatrix.count * 3).toInt()), 3, false);
+        Float32Array((instanceMatrix!.count * 3).toInt()), 3, false);
 
     return color.toArray(instanceColor!.array.data, index * 3);
   }
 
   void setMatrixAt(int index, Matrix4 matrix) {
-    matrix.toArray(instanceMatrix.array, index * 16);
+    matrix.toArray(instanceMatrix!.array, index * 16);
   }
 
   @override

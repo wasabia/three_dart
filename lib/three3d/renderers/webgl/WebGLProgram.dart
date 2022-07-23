@@ -86,7 +86,6 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.instancing ? '#define USE_INSTANCING' : '',
         parameters.instancingColor ? '#define USE_INSTANCING_COLOR' : '',
         parameters.supportsVertexTextures ? '#define VERTEX_TEXTURES' : '',
-        '#define MAX_BONES ${parameters.maxBones}',
         (parameters.useFog && parameters.fog) ? '#define USE_FOG' : '',
         (parameters.useFog && parameters.fogExp2) ? '#define FOG_EXP2' : '',
         parameters.map ? '#define USE_MAP' : '',
@@ -131,7 +130,6 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.uvsVertexOnly ? '#define UVS_VERTEX_ONLY' : '',
         parameters.flatShading ? '#define FLAT_SHADED' : '',
         parameters.skinning ? '#define USE_SKINNING' : '',
-        parameters.useVertexTexture ? '#define BONE_TEXTURE' : '',
         parameters.morphTargets ? '#define USE_MORPHTARGETS' : '',
         (parameters.morphTargets && parameters.isWebGL2)
             ? '#define MORPHTARGETS_TEXTURE'
@@ -322,8 +320,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         getTexelEncodingFunction(
             'linearToOutputTexel', parameters.outputEncoding),
 
-        parameters.depthPacking != null
-            ? '#define DEPTH_PACKING ${parameters.depthPacking}'
+        parameters.useDepthPacking ? '#define DEPTH_PACKING ${parameters.depthPacking}'
             : '',
 
         '\n'

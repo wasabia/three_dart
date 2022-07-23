@@ -208,7 +208,7 @@ class PMREMGenerator {
 
   _allocateTargets() {
     int width = 3 * Math.max(_cubeSize, 16 * 7);
-    int height = 4 * _cubeSize - 32;
+    int height = 4 * _cubeSize;
 
     var params = {
       "magFilter": LinearFilter,
@@ -484,9 +484,9 @@ class PMREMGenerator {
 
       sigmas.add(sigma);
 
-      var texelSize = 1.0 / (sizeLod - 1);
-      var min = -texelSize / 2;
-      var max = 1 + texelSize / 2;
+      var texelSize = 1.0 / (sizeLod - 2);
+      var min = -texelSize;
+      var max = 1 + texelSize;
       var uv1 = [min, min, max, min, max, max, min, min, max, max, min, max];
 
       var cubeFaces = 6;

@@ -27,6 +27,8 @@ class MeshMatcapMaterial extends Material {
 
     flatShading = false;
 
+    fog = true;
+
     setValues(parameters);
   }
 
@@ -56,6 +58,8 @@ class MeshMatcapMaterial extends Material {
     alphaMap = source.alphaMap;
 
     flatShading = source.flatShading;
+
+    fog = source.fog;
 
     return this;
   }
