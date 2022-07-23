@@ -20,8 +20,6 @@ class MeshDistanceMaterial extends Material {
     displacementScale = 1;
     displacementBias = 0;
 
-    fog = false;
-
     setValues(parameters);
   }
 

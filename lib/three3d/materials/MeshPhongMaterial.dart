@@ -43,6 +43,8 @@ class MeshPhongMaterial extends Material {
     wireframeLinecap = 'round';
     wireframeLinejoin = 'round';
 
+    fog = true;
+
     setValues(parameters);
   }
 
@@ -91,6 +93,8 @@ class MeshPhongMaterial extends Material {
     wireframeLinecap = source.wireframeLinecap;
     wireframeLinejoin = source.wireframeLinejoin;
     flatShading = source.flatShading;
+
+    fog = source.fog;
 
     return this;
   }
