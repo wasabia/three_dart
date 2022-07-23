@@ -53,10 +53,10 @@ class WebGLBindingStates {
         bindVertexArrayObject(currentState["object"]);
       }
 
-      updateBuffers = needsUpdate(geometry, index);
+      updateBuffers = needsUpdate(object, geometry, program, index);
       // print("WebGLBindingStates.dart setup object: ${object}  updateBuffers: ${updateBuffers}  ");
 
-      if (updateBuffers) saveCache(geometry, index);
+      if (updateBuffers) saveCache(object, geometry, program, index);
     } else {
       var wireframe = (material.wireframe == true);
 
@@ -69,10 +69,6 @@ class WebGLBindingStates {
 
         updateBuffers = true;
       }
-    }
-
-    if (object is InstancedMesh) {
-      updateBuffers = true;
     }
 
     if (index != null) {
@@ -173,19 +169,37 @@ class WebGLBindingStates {
     };
   }
 
-  bool needsUpdate(BufferGeometry geometry, BufferAttribute? index) {
+  bool needsUpdate(Object3D object, BufferGeometry geometry, WebGLProgram program, BufferAttribute? index) {
     var cachedAttributes = currentState["attributes"];
     var geometryAttributes = geometry.attributes;
     var attributesNum = 0;
+    var programAttributes = program.getAttributes();
 
-    for (var key in geometryAttributes.keys) {
-      var cachedAttribute = cachedAttributes[key];
-      var geometryAttribute = geometryAttributes[key];
+		for ( final name in programAttributes.keys ) {
 
-      if (cachedAttribute == null) return true;
-      if (cachedAttribute["attribute"] != geometryAttribute) return true;
-      if (cachedAttribute["data"] != geometryAttribute.data) return true;
-      attributesNum++;
+			Map programAttribute = programAttributes[ name ];
+
+			if ( programAttribute["location"] >= 0 ) {
+
+				var cachedAttribute = cachedAttributes[ name ];
+				var geometryAttribute = geometryAttributes[ name ];
+
+				if ( geometryAttribute == undefined ) {
+
+					if ( name == 'instanceMatrix' && object.instanceMatrix != null ) geometryAttribute = object.instanceMatrix;
+					if ( name == 'instanceColor' && object.instanceColor != null ) geometryAttribute = object.instanceColor;
+
+				}
+
+				if ( cachedAttribute == undefined ) return true;
+
+				if ( cachedAttribute["attribute"] != geometryAttribute ) return true;
+
+				if ( geometryAttribute != null && cachedAttribute["data"] != geometryAttribute.data ) return true;
+
+				attributesNum ++;
+
+			}
     }
 
     if (currentState["attributesNum"] != attributesNum) return true;
@@ -193,24 +207,42 @@ class WebGLBindingStates {
     return false;
   }
 
-  void saveCache(BufferGeometry geometry, BufferAttribute? index) {
+  void saveCache(object, BufferGeometry geometry, WebGLProgram program, BufferAttribute? index) {
     var cache = {};
     var attributes = geometry.attributes;
     var attributesNum = 0;
 
-    for (var key in attributes.keys) {
-      var attribute = attributes[key];
+    var programAttributes = program.getAttributes();
 
-      var data = {};
-      data["attribute"] = attribute;
+    for ( final name in programAttributes.keys ) {
 
-      if (attribute.data != null) {
-        data["data"] = attribute.data;
-      }
+			Map programAttribute = programAttributes[ name ];
 
-      cache[key] = data;
+			if ( programAttribute["location"] >= 0 ) {
 
-      attributesNum++;
+				var attribute = attributes[ name ];
+
+				if ( attribute == undefined ) {
+
+					if ( name == 'instanceMatrix' && object.instanceMatrix ) attribute = object.instanceMatrix;
+					if ( name == 'instanceColor' && object.instanceColor ) attribute = object.instanceColor;
+
+				}
+
+				var data = {};
+				data["attribute"] = attribute;
+
+				if ( attribute != null && attribute.data != null ) {
+
+					data["data"] = attribute.data;
+
+				}
+
+				cache[ name ] = data;
+
+				attributesNum ++;
+
+			}
     }
 
     currentState["attributes"] = cache;
