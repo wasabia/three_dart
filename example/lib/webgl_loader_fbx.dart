@@ -280,9 +280,17 @@ class _MyAppState extends State<webgl_loader_fbx> {
     // grid.material.transparent = true;
     // scene.add( grid );
 
+    var textureLoader = THREE.TextureLoader(null);
+    textureLoader.flipY = true;
+    var diffueTexture = await textureLoader.loadAsync(
+        "assets/models/fbx/model_tex_u1_v1_diffuse.jpg", null);
+    var normalTexture = await textureLoader.loadAsync(
+        "assets/models/fbx/model_tex_u1_v1_normal.jpg", null);
+
     // model
     var loader = THREE_JSM.FBXLoader(null, width.toInt(), height.toInt());
-    var object = await loader.loadAsync( 'assets/models/fbx/Samba Dancing.fbx');
+    // var object = await loader.loadAsync( 'assets/models/fbx/Samba Dancing.fbx');
+    var object = await loader.loadAsync( 'assets/models/fbx/model.fbx');
     mixer = new THREE.AnimationMixer( object );
 
     var action = mixer!.clipAction( object.animations[ 1 ] );
