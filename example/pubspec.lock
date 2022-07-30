@@ -84,7 +84,7 @@ packages:
       name: ffi
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.1"
+    version: "1.2.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -93,37 +93,37 @@ packages:
   flutter_gl:
     dependency: "direct main"
     description:
-      path: "../../flutter_gl/flutter_gl"
-      relative: true
-    source: path
+      name: flutter_gl
+      url: "https://pub.flutter-io.cn"
+    source: hosted
     version: "0.0.15"
   flutter_gl_macos:
     dependency: transitive
     description:
-      path: "../../flutter_gl/flutter_gl_macos"
-      relative: true
-    source: path
+      name: flutter_gl_macos
+      url: "https://pub.flutter-io.cn"
+    source: hosted
     version: "0.0.3"
   flutter_gl_platform_interface:
     dependency: transitive
     description:
-      path: "../../flutter_gl/flutter_gl_platform_interface"
-      relative: true
-    source: path
+      name: flutter_gl_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
     version: "0.0.3"
   flutter_gl_web:
     dependency: transitive
     description:
-      path: "../../flutter_gl/flutter_gl_web"
-      relative: true
-    source: path
+      name: flutter_gl_web
+      url: "https://pub.flutter-io.cn"
+    source: hosted
     version: "0.0.4"
   flutter_gl_windows:
     dependency: transitive
     description:
-      path: "../../flutter_gl/flutter_gl_windows"
-      relative: true
-    source: path
+      name: flutter_gl_windows
+      url: "https://pub.flutter-io.cn"
+    source: hosted
     version: "0.0.3"
   flutter_lints:
     dependency: "direct dev"
@@ -283,17 +283,17 @@ packages:
   three_dart:
     dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
+      name: three_dart
+      url: "https://pub.flutter-io.cn"
+    source: hosted
     version: "0.0.10"
   three_dart_jsm:
     dependency: "direct main"
     description:
-      path: "../../three_dart_plugins/three_dart_jsm"
-      relative: true
-    source: path
-    version: "0.0.6"
+      name: three_dart_jsm
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.5"
   typed_data:
     dependency: transitive
     description:
@@ -344,5 +344,5 @@ packages:
     source: hosted
     version: "5.3.1"
 sdks:
-  dart: ">=2.17.0 <3.0.0"
+  dart: ">=2.17.0-0 <3.0.0"
   flutter: ">=2.5.0"

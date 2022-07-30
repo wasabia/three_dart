@@ -33,13 +33,13 @@ dependencies:
   universal_ui: ^0.0.8
   flutter_gl: ^0.0.15
 
-dependency_overrides:
-  three_dart:
-    path: ../
-  three_dart_jsm:
-    path: ../../three_dart_plugins/three_dart_jsm/
-  flutter_gl:
-    path: ../../flutter_gl/flutter_gl
+# dependency_overrides:
+#   three_dart:
+#     path: ../
+#   three_dart_jsm:
+#     path: ../../three_dart_plugins/three_dart_jsm/
+#   flutter_gl:
+#     path: ../../flutter_gl/flutter_gl
 
 
 dev_dependencies:
