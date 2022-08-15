@@ -12,7 +12,7 @@ class WebGLAttributes {
     isWebGL2 = capabilities.isWebGL2;
   }
 
-  Map<String, dynamic> createBuffer(BufferAttribute attribute, int bufferType,
+  Map<String, dynamic> createBuffer(var attribute, int bufferType,
       {String? name}) {
     final array = attribute.array;
     var usage = attribute.usage;
@@ -38,13 +38,12 @@ class WebGLAttributes {
       type = gl.FLOAT;
       bytesPerElement = Float32List.bytesPerElement;
     } else if (attribute is Float64BufferAttribute) {
-      print('THREE.WebGLAttributes: Unsupported data buffer format: Float64Array.');
-
+      print(
+          'THREE.WebGLAttributes: Unsupported data buffer format: Float64Array.');
     } else if (attribute is Float16BufferAttribute) {
       if (isWebGL2) {
         bytesPerElement = 2;
         type = gl.HALF_FLOAT;
-
       } else {
         print(
             'THREE.WebGLAttributes: Usage of Float16BufferAttribute requires WebGL2.');
@@ -145,27 +144,18 @@ class WebGLAttributes {
     }
 
     if (attribute.type == "InterleavedBufferAttribute") {
-      var data = buffers.get(attribute.data);
-
-      if (data == null) {
-        buffers.add(
-            key: attribute.data,
-            value: createBuffer(attribute.data, bufferType, name: name));
-      } else if (data["version"] < attribute.data!.version) {
-        updateBuffer(data["buffer"], attribute.data, bufferType);
-        data["version"] = attribute.data!.version;
-      }
-    } else {
-      var data = buffers.get(attribute);
-
-      if (data == null) {
-        buffers.add(
-            key: attribute,
-            value: createBuffer(attribute, bufferType, name: name));
-      } else if (data["version"] < attribute.version) {
-        updateBuffer(data["buffer"], attribute, bufferType);
-        data["version"] = attribute.version;
-      }
+      attribute = attribute.data;
     }
-  }
+
+    final data = buffers.get(attribute);
+
+    if (data == null) {
+      buffers.add(
+          key: attribute,
+          value: createBuffer(attribute, bufferType, name: name));
+    } else if (data["version"] < attribute.version) {
+      updateBuffer(data["buffer"], attribute, bufferType);
+      data["version"] = attribute.version;
+    }
+  } // */
 }

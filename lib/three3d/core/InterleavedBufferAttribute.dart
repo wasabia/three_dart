@@ -4,12 +4,12 @@ var _vector = Vector3.init();
 
 class InterleavedBufferAttribute extends BufferAttribute {
   int offset;
+  InterleavedBuffer? data;
 
   InterleavedBufferAttribute(
-      InterleavedBuffer? _data, int _itemSize, this.offset, bool _normalized)
+      this.data, int _itemSize, this.offset, bool _normalized)
       : super(Float32Array(0), _itemSize) {
     type = "InterleavedBufferAttribute";
-    data = _data;
     itemSize = _itemSize;
     normalized = _normalized;
   }
