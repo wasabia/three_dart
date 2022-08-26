@@ -80,11 +80,11 @@ class InstancedMesh extends Mesh {
     }
   }
 
-  List<num> setColorAt(int index, Color color) {
-    instanceColor ??= Float32BufferAttribute(
+  void setColorAt(int index, Color color) {
+    instanceColor ??= InstancedBufferAttribute(
         Float32Array((instanceMatrix!.count * 3).toInt()), 3, false);
 
-    return color.toArray(instanceColor!.array.data, index * 3);
+    return color.toArray(instanceColor!.array, index * 3);
   }
 
   void setMatrixAt(int index, Matrix4 matrix) {
