@@ -3,8 +3,6 @@ part of three_materials;
 int materialId = 0;
 
 class Material with EventDispatcher {
-
-
   dynamic metalnessNode;
   dynamic roughnessNode;
   dynamic normalNode;
@@ -91,7 +89,7 @@ class Material with EventDispatcher {
 
   bool isMaterial = true;
   bool flatShading = false;
-  Color color = Color(1,1,1);
+  Color color = Color(1, 1, 1);
 
   Color? specular;
   num? specularIntensity;
@@ -226,7 +224,6 @@ class Material with EventDispatcher {
 
   // ( /* renderer, scene, camera, geometry, object, group */ ) {}
   Function? onBeforeRender;
-
 
   Material() {
     customProgramCacheKey = () {
@@ -378,6 +375,12 @@ class Material with EventDispatcher {
       side = newValue;
     } else if (key == "size") {
       size = newValue;
+    } else if (key == "dashSize") {
+      dashSize = newValue;
+    } else if (key == "gapSize") {
+      gapSize = newValue;
+    } else if (key == "scale") {
+      scale = newValue;
     } else if (key == "sizeAttenuation") {
       sizeAttenuation = newValue;
     } else if (key == "stencilZFail") {
@@ -651,7 +654,7 @@ class Material with EventDispatcher {
 
     if (toneMapped == false) data["toneMapped"] = false;
 
-    if ( fog == false ) data["fog"] = false;
+    if (fog == false) data["fog"] = false;
 
     if (jsonEncode(userData) != '{}') data["userData"] = userData;
 

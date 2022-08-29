@@ -15,6 +15,7 @@ import '../textures/index.dart';
 
 part './GroupMaterial.dart';
 part './LineBasicMaterial.dart';
+part './LineDashedMaterial.dart';
 part './Material.dart';
 part './MeshBasicMaterial.dart';
 part './MeshDepthMaterial.dart';
