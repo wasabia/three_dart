@@ -150,9 +150,9 @@ class WebGLAttributes {
       if (data == null) {
         buffers.add(
             key: attribute.data,
-            value: createBuffer(attribute.data, bufferType, name: name));
+            value: createBuffer(attribute, bufferType, name: name));
       } else if (data["version"] < attribute.data!.version) {
-        updateBuffer(data["buffer"], attribute.data, bufferType);
+        updateBuffer(data["buffer"], attribute, bufferType);
         data["version"] = attribute.data!.version;
       }
     } else {

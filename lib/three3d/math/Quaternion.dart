@@ -9,7 +9,7 @@ class Quaternion {
 
   Function onChangeCallback = () {};
 
-  Quaternion({num x = 0.0, num y = 0.0, num z = 0.0, num w = 1.0})
+  Quaternion([num x = 0.0, num y = 0.0, num z = 0.0, num w = 1.0])
       : _x = x,
         _y = y,
         _z = z,
@@ -158,7 +158,7 @@ class Quaternion {
   }
 
   Quaternion clone() {
-    return Quaternion(x: _x, y: _y, z: _z, w: _w);
+    return Quaternion(_x, _y, _z, _w);
   }
 
   Quaternion copy(Quaternion quaternion) {

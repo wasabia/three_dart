@@ -873,30 +873,6 @@ class BufferGeometry with EventDispatcher {
   }
 
   BufferGeometry clone() {
-    /*
-		 // Handle primitives
-
-		 var parameters = this.parameters;
-
-		 if ( parameters != null ) {
-
-		 var values = [];
-
-		 for ( var key in parameters ) {
-
-		 values.push( parameters[ key ] );
-
-		 }
-
-		 var geometry = Object.create( this.constructor.prototype );
-		 this.constructor.apply( geometry, values );
-		 return geometry;
-
-		 }
-
-		 return new this.constructor().copy( this );
-		 */
-
     return BufferGeometry().copy(this);
   }
 
