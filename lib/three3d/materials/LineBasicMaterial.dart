@@ -35,4 +35,3 @@ class LineBasicMaterial extends Material {
   }
 }
 
-class LineDashedMaterial extends Material {}
