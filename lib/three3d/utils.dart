@@ -40,11 +40,11 @@ T? arrayMax<T extends num>(List<T> array) {
 
 NativeArray getTypedArray(String type, List buffer) {
   if (type == "Uint32Array" || type == "Uint32List") {
-    return Uint32Array.from(buffer as List<int>);
+    return Uint32Array.from(List<int>.from(buffer));
   } else if (type == "Uint16Array" || type == "Uint16List") {
-    return Uint16Array.from(buffer as List<int>);
+    return Uint16Array.from(List<int>.from(buffer));
   } else if (type == "Float32Array" || type == "Float32List") {
-    return Float32Array.from(buffer as List<double>);
+    return Float32Array.from(List<double>.from(buffer));
   } else {
     throw (" Util.dart getTypedArray type: $type is not support ");
   }

@@ -6,7 +6,7 @@ class InterleavedBufferAttribute extends BufferAttribute {
   int offset;
 
   InterleavedBufferAttribute(
-      InterleavedBuffer? _data, int _itemSize, this.offset, bool _normalized)
+      InterleavedBuffer _data, int _itemSize, this.offset, bool _normalized)
       : super(Float32Array(0), _itemSize) {
     type = "InterleavedBufferAttribute";
     data = _data;

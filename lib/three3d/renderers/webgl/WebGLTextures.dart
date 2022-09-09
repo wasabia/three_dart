@@ -395,7 +395,7 @@ class WebGLTextures {
       return;
     }
 
-    // print("WebGLTextures setTexture2D texture: ${texture.runtimeType} ${texture.version} extureProperties: ${textureProperties["__webglTexture"]} ");
+    // print("WebGLTextures setTexture2D texture: ${texture.runtimeType} v ${texture.version} textureProperties v ${textureProperties["__version"]} textureProperties: ${textureProperties["__webglTexture"]} ");
     if (texture.version > 0 &&
         textureProperties["__version"] != texture.version) {
       var image = texture.image;
@@ -903,6 +903,8 @@ class WebGLTextures {
   void uploadTexture(
       Map<String, dynamic> textureProperties, Texture texture, slot) {
     var textureType = _gl.TEXTURE_2D;
+
+    print("uploadTexture ......... texture: ${texture} textureProperties: ${textureProperties} ");
 
     if (texture is DataArrayTexture) textureType = _gl.TEXTURE_2D_ARRAY;
     if (texture is Data3DTexture) textureType = _gl.TEXTURE_3D;

@@ -491,7 +491,8 @@ class WebGLRenderer {
     // print("renderBufferDirect - 0: ${DateTime.now().millisecondsSinceEpoch} - ${DateTime.now().microsecondsSinceEpoch}  ");
     BufferAttribute? index = geometry.index;
     BufferAttribute? position = geometry.attributes["position"];
-    // print(" WebGLRenderer.renderBufferDirect geometry.index ${index?.count} - ${index} position: ${position.count} - ${position}  ");
+    
+    // print(" WebGLRenderer.renderBufferDirect geometry.index ${index?.count} - ${index} position: - ${position}  ");
     if (index == null) {
       if (position == null || position.count == 0) return;
     } else if (index.count == 0) {
@@ -541,8 +542,6 @@ class WebGLRenderer {
 
     if (drawCount == 0) return;
 
-    //
-
     if (object is Mesh) {
       if (material.wireframe == true) {
         state
@@ -567,7 +566,7 @@ class WebGLRenderer {
       }
     } else if (object is Points) {
       renderer.setMode(_gl.POINTS);
-    } else if (object.type == "Sprite") {
+    } else if (object is Sprite) {
       renderer.setMode(_gl.TRIANGLES);
     }
 
@@ -955,8 +954,8 @@ class WebGLRenderer {
 
   void renderObject(Object3D object, scene, Camera camera,
       BufferGeometry geometry, Material material, Map<String, dynamic>? group) {
-    // print(" render renderObject  type: ${object.type} material: ${material} geometry: ${geometry}");
-    // print("1 render renderObject type: ${object.type} name: ${object.name} ${DateTime.now().millisecondsSinceEpoch}");
+    // print(" render renderObject  type: ${object.type} material: ${material} name: ${object.name}  geometry: ${geometry}");
+    // print("1 render renderObject type: ${object.type} name: ${object.name}  ${DateTime.now().millisecondsSinceEpoch}");
 
     if (object.onBeforeRender != null) {
       object.onBeforeRender!(
