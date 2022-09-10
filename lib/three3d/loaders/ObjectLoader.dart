@@ -448,7 +448,7 @@ class ObjectLoader extends Loader {
 
   Object3D parseObject(
       Map<String, dynamic> data, geometries, materials, textures, animations) {
-    var object;
+    dynamic object;
 
     getGeometry(name) {
       if (geometries[name] == null) {

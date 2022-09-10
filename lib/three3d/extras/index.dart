@@ -5,15 +5,9 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three3d/cameras/index.dart';
-import 'package:three_dart/three3d/constants.dart';
-import 'package:three_dart/three3d/core/index.dart';
-import 'package:three_dart/three3d/math/index.dart';
-import 'package:three_dart/three3d/objects/index.dart';
-import 'package:three_dart/three3d/renderers/index.dart';
 import 'package:three_dart/three_dart.dart';
-import '../dartHelpers.dart';
-import 'package:three_dart/extra/console.dart';
+
+import '../math/index.dart';
 
 part './core/Curve.dart';
 part './core/CurvePath.dart';

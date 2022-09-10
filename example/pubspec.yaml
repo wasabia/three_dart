@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.12.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -33,13 +33,13 @@ dependencies:
   universal_ui: ^0.0.8
   flutter_gl: ^0.0.18
 
-# dependency_overrides:
-#   three_dart:
-#     path: ../
-#   three_dart_jsm:
-#     path: ../../three_dart_plugins/three_dart_jsm/
-#   flutter_gl:
-#     path: ../../flutter_gl/flutter_gl
+dependency_overrides:
+  three_dart:
+    path: ../
+  three_dart_jsm:
+    path: ../../three_dart_plugins/three_dart_jsm/
+  flutter_gl:
+    path: ../../flutter_gl/flutter_gl
 
 
 dev_dependencies:

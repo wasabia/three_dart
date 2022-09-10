@@ -299,7 +299,7 @@ class _MyAppState extends State<webgl_skinning_simple> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 17), () {
+    Future.delayed(const Duration(milliseconds: 17), () {
       animate();
     });
   }

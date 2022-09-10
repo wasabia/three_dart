@@ -22,6 +22,6 @@ export './constants.dart';
 
 export './WeakMap.dart';
 
-export './ThreeHelper.dart';
-export './dartHelpers.dart';
+export 'three_helper.dart';
+export 'dart_helpers.dart';
 

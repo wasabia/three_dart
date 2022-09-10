@@ -130,7 +130,7 @@ class Vector4 {
     x += v.x;
     y += v.y;
     z += v.z;
-    this.w += v.w;
+    w += v.w;
 
     return this;
   }

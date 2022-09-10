@@ -1,22 +1,22 @@
 part of three_objects;
 
-var _geometry;
+BufferGeometry? _geometry;
 
-var _intersectPoint = Vector3.init();
-var _worldScale = Vector3.init();
-var _mvPosition = Vector3.init();
+final Vector3 _intersectPoint = Vector3.init();
+final Vector3 _worldScale = Vector3.init();
+final Vector3 _mvPosition = Vector3.init();
 
-var _alignedPosition = Vector2(null, null);
-var _rotatedPosition = Vector2(null, null);
-var _viewWorldMatrix = Matrix4();
+final Vector2 _alignedPosition = Vector2(null, null);
+final Vector2 _rotatedPosition = Vector2(null, null);
+final Matrix4 _viewWorldMatrix = Matrix4();
 
-var _spritevA = Vector3.init();
-var _spritevB = Vector3.init();
-var _spritevC = Vector3.init();
+final Vector3 _spritevA = Vector3.init();
+final Vector3 _spritevB = Vector3.init();
+final Vector3 _spritevC = Vector3.init();
 
-var _spriteuvA = Vector2(null, null);
-var _spriteuvB = Vector2(null, null);
-var _spriteuvC = Vector2(null, null);
+final Vector2 _spriteuvA = Vector2(null, null);
+final Vector2 _spriteuvB = Vector2(null, null);
+final Vector2 _spriteuvC = Vector2(null, null);
 
 class Sprite extends Object3D {
   Vector2 center = Vector2(0.5, 0.5);
@@ -54,10 +54,10 @@ class Sprite extends Object3D {
 
       var interleavedBuffer = InterleavedBuffer(float32List, 5);
 
-      _geometry.setIndex([0, 1, 2, 0, 2, 3]);
-      _geometry.setAttribute('position',
+      _geometry!.setIndex([0, 1, 2, 0, 2, 3]);
+      _geometry!.setAttribute('position',
           InterleavedBufferAttribute(interleavedBuffer, 3, 0, false));
-      _geometry.setAttribute(
+      _geometry!.setAttribute(
           'uv', InterleavedBufferAttribute(interleavedBuffer, 2, 3, false));
     }
 
@@ -142,7 +142,7 @@ class Sprite extends Object3D {
     super.copy(source);
 
     if (source is Sprite) {
- center.copy(source.center);
+      center.copy(source.center);
       material = source.material;
     }
     return this;

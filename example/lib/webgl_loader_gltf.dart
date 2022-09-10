@@ -215,7 +215,7 @@ class _MyAppState extends State<webgl_loader_gltf> {
     scene.background = _hdrTexture;
     scene.environment = _hdrTexture;
 
-    scene.add( new THREE.AmbientLight( 0xffffff ) );
+    scene.add( THREE.AmbientLight( 0xffffff ) );
 
     var loader = THREE_JSM.GLTFLoader(null)
         .setPath('assets/models/gltf/DamagedHelmet/glTF/');

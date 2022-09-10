@@ -223,7 +223,7 @@ class MaterialLoader extends Loader {
 
           case 'm4':
             material.uniforms[name].value =
-                Matrix4().fromArray(uniform.value);
+                mathmath.Matrix4().fromArray(uniform.value);
             break;
 
           default:

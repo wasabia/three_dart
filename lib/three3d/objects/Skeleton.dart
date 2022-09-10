@@ -210,7 +210,7 @@ class Skeleton {
     if(name == "boneMatrices") {
       return boneMatrices;
     } else {
-      throw("Skeleton getValue name: ${name} is not support  ");
+      throw("Skeleton getValue name: $name is not support  ");
     }
   }
 }

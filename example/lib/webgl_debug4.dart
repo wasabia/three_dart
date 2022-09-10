@@ -222,14 +222,14 @@ class _State extends State<webgl_debug4> {
 
     camera.lookAt(scene.position);
 
-    var geometry = new THREE.CylinderGeometry( 5, 5, 5, 5, 15, false, 5, 360 );
+    var geometry = THREE.CylinderGeometry( 5, 5, 5, 5, 15, false, 5, 360 );
 
     // create the skin indices and skin weights manually
     // (typically a loader would read this data from a 3D model for you)
 
     var position = geometry.attributes["position"];
 
-    var vertex = new THREE.Vector3();
+    var vertex = THREE.Vector3();
 
     List<int> skinIndices = [];
     List<double> skinWeights = [];
@@ -250,25 +250,25 @@ class _State extends State<webgl_debug4> {
 
     }
 
-    geometry.setAttribute( 'skinIndex', new THREE.Uint16BufferAttribute( Uint16Array.fromList(skinIndices), 4 ) );
-    geometry.setAttribute( 'skinWeight', new THREE.Float32BufferAttribute( Float32Array.fromList(skinWeights), 4 ) );
+    geometry.setAttribute( 'skinIndex', THREE.Uint16BufferAttribute( Uint16Array.fromList(skinIndices), 4 ) );
+    geometry.setAttribute( 'skinWeight', THREE.Float32BufferAttribute( Float32Array.fromList(skinWeights), 4 ) );
 
     // create skinned mesh and skeleton
 
-    var material = new THREE.MeshBasicMaterial( {
+    var material = THREE.MeshBasicMaterial( {
       "color": 0x156289,
       "side": THREE.DoubleSide,
       "flatShading": true
     } );
 
     List<THREE.Bone> bones = [];
-    var prevBone = new THREE.Bone();
+    var prevBone = THREE.Bone();
     bones.add( prevBone );
     prevBone.position.y = - sizing["halfHeight"]!.toDouble();
 
     for ( var i = 0; i < sizing["segmentCount"]!; i ++ ) {
 
-      var bone = new THREE.Bone();
+      var bone = THREE.Bone();
       bone.position.y = sizing["segmentHeight"]!.toDouble();
       bones.add( bone );
       prevBone.add( bone );
@@ -278,8 +278,8 @@ class _State extends State<webgl_debug4> {
 
 
 
-    var mesh = new THREE.SkinnedMesh( geometry, material );
-    var skeleton = new THREE.Skeleton( bones );
+    var mesh = THREE.SkinnedMesh( geometry, material );
+    var skeleton = THREE.Skeleton( bones );
 
 
     var rootBone = skeleton.bones[ 0 ];

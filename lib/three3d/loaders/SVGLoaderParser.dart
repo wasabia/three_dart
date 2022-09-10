@@ -366,7 +366,7 @@ class SVGLoaderParser {
 
           switch (transformType) {
             case 'translate':
-              if (array.length >= 1) {
+              if (array.isNotEmpty) {
                 var tx = array[0];
                 var ty = tx;
 
@@ -380,7 +380,7 @@ class SVGLoaderParser {
               break;
 
             case 'rotate':
-              if (array.length >= 1) {
+              if (array.isNotEmpty) {
                 double angle = 0;
                 double cx = 0;
                 double cy = 0;
@@ -406,7 +406,7 @@ class SVGLoaderParser {
               break;
 
             case 'scale':
-              if (array.length >= 1) {
+              if (array.isNotEmpty) {
                 var scaleX = array[0];
                 var scaleY = scaleX;
 
@@ -1152,7 +1152,7 @@ class SVGLoaderParser {
 
     var index = 0;
 
-    Function iterator = (match, a, b) {
+    iterator(match, a, b) {
       var x = parseFloatWithUnits(a);
       var y = parseFloatWithUnits(b);
 
@@ -1163,7 +1163,7 @@ class SVGLoaderParser {
       }
 
       index++;
-    };
+    }
 
     node.getAttribute('points').replace(regex, iterator);
 
@@ -1230,11 +1230,11 @@ class SVGLoaderParser {
   }
 
   transformPath(path, m) {
-    Function transfVec2 = (v2) {
+    transfVec2(v2) {
       tempV3.set(v2.x, v2.y, 1).applyMatrix3(m);
 
       v2.set(tempV3.x, tempV3.y);
-    };
+    }
 
     var isRotated = isTransformRotated(m);
 

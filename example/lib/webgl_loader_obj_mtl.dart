@@ -233,7 +233,7 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }

@@ -49,8 +49,7 @@ class WebGLBufferRenderer extends BaseWebGLBufferRenderer {
     var extension, methodName;
 
     if (isWebGL2) {
-      extension = gl;
-      methodName = 'drawArraysInstanced';
+	  gl.drawArraysInstanced(mode, start, count, primcount);
     } else {
       extension = extensions.get('ANGLE_instanced_arrays');
       methodName = 'drawArraysInstancedANGLE';
@@ -60,9 +59,9 @@ class WebGLBufferRenderer extends BaseWebGLBufferRenderer {
             'THREE.WebGLBufferRenderer: using THREE.InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays.');
         return;
       }
+      extension[methodName](mode, start, count, primcount);
     }
 
-    extension[methodName](mode, start, count, primcount);
 
     info.update(count, mode, primcount);
   }

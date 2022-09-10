@@ -3,9 +3,8 @@ library three_math;
 import 'dart:math' as math;
 
 import 'package:flutter_gl/flutter_gl.dart';
-
-import '../dartHelpers.dart';
 import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/dart_helpers.dart';
 import '../constants.dart';
 import 'Uuid.dart';
 

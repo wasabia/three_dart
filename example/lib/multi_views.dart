@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:example/webgl_camera_array.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Matrix4;
 
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class multi_views extends StatefulWidget {
   String fileName;
@@ -319,7 +317,7 @@ class _multi_views1_State extends State<multi_views1> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }
@@ -425,7 +423,7 @@ class _multi_views2_State extends State<multi_views2> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: width,
       height: height,
       child: Builder(
@@ -576,7 +574,7 @@ class _multi_views2_State extends State<multi_views2> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }
