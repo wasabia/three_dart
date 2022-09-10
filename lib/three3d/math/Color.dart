@@ -602,7 +602,7 @@ class Color {
 		if ( colorSpace != SRGBColorSpace ) {
 
 			// Requires CSS Color Module Level 4 (https://www.w3.org/TR/css-color-4/).
-			return "color(${ colorSpace } ${ _rgb["r"] } ${ _rgb["g"] } ${ _rgb["b"] })";
+			return "color($colorSpace  ${ _rgb["r"] } ${ _rgb["g"] } ${ _rgb["b"] })";
 
 		}
 
@@ -716,8 +716,10 @@ class Color {
 
   /// dart array can not expand default
   /// so have to set array length enough first.
-  List<num> toArray([List<num>? array, int offset = 0]) {
-    array ??= List<num>.filled(3, 0.0);
+  // It's working, but ugly. consider to adds a new function: 
+  // toBufferAttribute(BufferAttribute attribute, int index) ???
+  toArray([array, int offset = 0]) {
+    array ??= List<double>.filled(3, 0.0);
 
     array[offset] = r;
     array[offset + 1] = g;

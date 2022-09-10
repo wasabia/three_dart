@@ -1,13 +1,10 @@
 import 'dart:async';
 
-import 'dart:typed_data';
 
-import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 
 import 'package:three_dart/three_dart.dart' as THREE;
@@ -17,6 +14,7 @@ class webgl_loader_fbx extends StatefulWidget {
   String fileName;
   webgl_loader_fbx({Key? key, required this.fileName}) : super(key: key);
 
+  @override
   _MyAppState createState() => _MyAppState();
 }
 
@@ -79,7 +77,7 @@ class _MyAppState extends State<webgl_loader_fbx> {
     setState(() {});
 
     // TODO web wait dom ok!!!
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
       initScene();
@@ -112,7 +110,7 @@ class _MyAppState extends State<webgl_loader_fbx> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("render"),
+        child: const Text("render"),
         onPressed: () {
           render();
         },
@@ -183,7 +181,7 @@ class _MyAppState extends State<webgl_loader_fbx> {
     // print(" --------------pixels............. ");
     // print(pixels);
 
-    if (verbose) print(" render: sourceTexture: ${sourceTexture} ");
+    if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -223,21 +221,21 @@ class _MyAppState extends State<webgl_loader_fbx> {
   }
 
   initPage() async {
-    var ASPECT_RATIO = width / height;
+    var ASPECTRATIO = width / height;
 
     var WIDTH = (width / AMOUNT) * dpr;
     var HEIGHT = (height / AMOUNT) * dpr;
 
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xcccccc);
-    scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
+    scene = THREE.Scene();
+    scene.background = THREE.Color(0xcccccc);
+    scene.fog = THREE.FogExp2(0xcccccc, 0.002);
 
-    camera = new THREE.PerspectiveCamera(60, width / height, 1, 2000);
+    camera = THREE.PerspectiveCamera(60, width / height, 1, 2000);
     camera.position.set( 100, 200, 300 );
 
     // controls
 
-    controls = new THREE_JSM.OrbitControls(camera, _globalKey);
+    controls = THREE_JSM.OrbitControls(camera, _globalKey);
 
     controls.enableDamping =
         true; // an animation loop is required when either damping or auto-rotation are enabled
@@ -250,15 +248,15 @@ class _MyAppState extends State<webgl_loader_fbx> {
 
     controls.maxPolarAngle = THREE.Math.PI / 2;
 
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color( 0xa0a0a0 );
-    scene.fog = new THREE.Fog( 0xa0a0a0, 200, 1000 );
+    scene = THREE.Scene();
+    scene.background = THREE.Color( 0xa0a0a0 );
+    scene.fog = THREE.Fog( 0xa0a0a0, 200, 1000 );
 
-    var hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444 );
+    var hemiLight = THREE.HemisphereLight( 0xffffff, 0x444444 );
     hemiLight.position.set( 0, 200, 0 );
     scene.add( hemiLight );
 
-    var dirLight = new THREE.DirectionalLight( 0xffffff );
+    var dirLight = THREE.DirectionalLight( 0xffffff );
     dirLight.position.set( 0, 200, 100 );
     dirLight.castShadow = true;
     dirLight.shadow!.camera!.top = 180;
@@ -291,7 +289,7 @@ class _MyAppState extends State<webgl_loader_fbx> {
     var loader = THREE_JSM.FBXLoader(null, width.toInt(), height.toInt());
     // var object = await loader.loadAsync( 'assets/models/fbx/Samba Dancing.fbx');
     var object = await loader.loadAsync( 'assets/models/fbx/model.fbx');
-    mixer = new THREE.AnimationMixer( object );
+    mixer = THREE.AnimationMixer( object );
 
     var action = mixer!.clipAction( object.animations[ 1 ] );
     action!.play();
@@ -318,7 +316,7 @@ class _MyAppState extends State<webgl_loader_fbx> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }

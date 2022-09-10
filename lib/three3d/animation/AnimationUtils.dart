@@ -47,9 +47,9 @@ class AnimationUtils {
 
   // returns an array by which times and values can be sorted
   static getKeyframeOrder(times) {
-    Function compareTime = (i, j) {
+    compareTime(i, j) {
       return times[i] - times[j];
-    };
+    }
 
     var n = times.length;
     var result = List<int>.filled(n, 0);

@@ -40,27 +40,27 @@ class MeshLambertMaterial extends Material {
   @override
   MeshLambertMaterial copy( Material source ) {
     super.copy( source );
-		this.color.copy( source.color );
-		this.map = source.map;
-		this.lightMap = source.lightMap;
-		this.lightMapIntensity = source.lightMapIntensity;
-		this.aoMap = source.aoMap;
-		this.aoMapIntensity = source.aoMapIntensity;
-		this.emissive!.copy( source.emissive! );
-		this.emissiveMap = source.emissiveMap;
-		this.emissiveIntensity = source.emissiveIntensity;
-		this.specularMap = source.specularMap;
-		this.alphaMap = source.alphaMap;
-		this.envMap = source.envMap;
-		this.combine = source.combine;
-		this.reflectivity = source.reflectivity;
-		this.refractionRatio = source.refractionRatio;
-		this.wireframe = source.wireframe;
-		this.wireframeLinewidth = source.wireframeLinewidth;
-		this.wireframeLinecap = source.wireframeLinecap;
-		this.wireframeLinejoin = source.wireframeLinejoin;
+		color.copy( source.color );
+		map = source.map;
+		lightMap = source.lightMap;
+		lightMapIntensity = source.lightMapIntensity;
+		aoMap = source.aoMap;
+		aoMapIntensity = source.aoMapIntensity;
+		emissive!.copy( source.emissive! );
+		emissiveMap = source.emissiveMap;
+		emissiveIntensity = source.emissiveIntensity;
+		specularMap = source.specularMap;
+		alphaMap = source.alphaMap;
+		envMap = source.envMap;
+		combine = source.combine;
+		reflectivity = source.reflectivity;
+		refractionRatio = source.refractionRatio;
+		wireframe = source.wireframe;
+		wireframeLinewidth = source.wireframeLinewidth;
+		wireframeLinecap = source.wireframeLinecap;
+		wireframeLinejoin = source.wireframeLinejoin;
 
-		this.fog = source.fog;
+		fog = source.fog;
 
 		return this;
 

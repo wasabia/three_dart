@@ -904,7 +904,7 @@ class WebGLTextures {
       Map<String, dynamic> textureProperties, Texture texture, slot) {
     var textureType = _gl.TEXTURE_2D;
 
-    print("uploadTexture ......... texture: ${texture} textureProperties: ${textureProperties} ");
+    print("uploadTexture ......... texture: $texture textureProperties: $textureProperties ");
 
     if (texture is DataArrayTexture) textureType = _gl.TEXTURE_2D_ARRAY;
     if (texture is Data3DTexture) textureType = _gl.TEXTURE_3D;

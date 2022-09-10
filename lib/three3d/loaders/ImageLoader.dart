@@ -1,6 +1,7 @@
 part of three_loaders;
 
 class ImageLoader extends Loader {
+  @override
   bool flipY = true;
 
   ImageLoader(manager) : super(manager);

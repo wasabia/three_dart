@@ -4,9 +4,7 @@ var _SpotLightHelpervector = /*@__PURE__*/ Vector3.init();
 
 class SpotLightHelper extends Object3D {
   late Light light;
-  @override
-  late Matrix4 matrix;
-
+  
   /**
 	 * @default false
 	 */

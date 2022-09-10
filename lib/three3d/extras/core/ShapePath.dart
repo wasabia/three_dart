@@ -39,7 +39,7 @@ class ShapePath {
   }
 
   List<Shape> toShapes(bool isCCW, bool noHoles) {
-    Function toShapesNoHoles = (inSubpaths) {
+    toShapesNoHoles(inSubpaths) {
       List<Shape> shapes = [];
 
       for (var i = 0, l = inSubpaths.length; i < l; i++) {
@@ -52,9 +52,9 @@ class ShapePath {
       }
 
       return shapes;
-    };
+    }
 
-    Function isPointInsidePolygon = (inPt, inPolygon) {
+    isPointInsidePolygon(inPt, inPolygon) {
       var polyLen = inPolygon.length;
 
       // inPt on polygon contour => immediate success    or
@@ -106,7 +106,7 @@ class ShapePath {
       }
 
       return inside;
-    };
+    }
 
     var isClockWise = ShapeUtils.isClockWise;
 

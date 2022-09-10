@@ -179,7 +179,7 @@ class _MyAppState extends State<webgl_camera_array> {
       "canvas": three3dRender.element
     };
 
-    print('initRenderer  dpr: ${dpr} _options: ${_options}');
+    print('initRenderer  dpr: $dpr _options: $_options');
 
     renderer = THREE.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);

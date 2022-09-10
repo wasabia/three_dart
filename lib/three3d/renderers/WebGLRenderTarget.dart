@@ -141,12 +141,12 @@ class WebGLRenderTarget extends RenderTarget {
     texture = source.texture.clone();
     texture.isRenderTargetTexture = true;
 
-		this.texture.source = new Source( source.texture.image );
+		texture.source = Source( source.texture.image );
 
     depthBuffer = source.depthBuffer;
     stencilBuffer = source.stencilBuffer;
     if (source.depthTexture != null) {
-      depthTexture = source.depthTexture!.clone() as DepthTexture;
+      depthTexture = source.depthTexture!.clone();
     }
 
     samples = source.samples;

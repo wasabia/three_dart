@@ -584,7 +584,7 @@ void main() {
 
 			expect( copy != geometry && geometry.id != copy.id, true, reason: 'new object was created' );
 
-			geometry.attributes.keys.forEach( ( key ) {
+			for (var key in geometry.attributes.keys) {
 
 				var attribute = geometry.attributes[ key ];
 				expect( attribute != null, true, reason: 'all attributes where copied' );
@@ -595,7 +595,7 @@ void main() {
 
 				}
 
-			} );
+			}
 
 		} );
 

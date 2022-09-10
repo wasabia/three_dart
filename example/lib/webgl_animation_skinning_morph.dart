@@ -303,7 +303,7 @@ class _State extends State<webgl_animation_skinning_morph> {
 
     render();
 
-    Future.delayed(Duration(milliseconds: 40), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
   }

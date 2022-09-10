@@ -213,8 +213,7 @@ class AnimationClip {
       return null;
     }
 
-    Function addNonemptyTrack =
-        (String trackType, trackName, animationKeys, propertyName, destTracks) {
+    addNonemptyTrack(String trackType, trackName, animationKeys, propertyName, destTracks) {
       // only return track if there are actually keys.
       if (animationKeys.length != 0) {
         const times = [];
@@ -234,7 +233,7 @@ class AnimationClip {
           }
         }
       }
-    };
+    }
 
     var tracks = [];
 

@@ -249,10 +249,10 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
         .fromScene(THREE_JSM.RoomEnvironment(), 0.04)
         .texture;
 
-    var ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 );
+    var ambientLight = THREE.AmbientLight( 0xcccccc, 0.4 );
     scene.add( ambientLight );
 
-    var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
+    var pointLight = THREE.PointLight( 0xffffff, 0.8 );
     camera.add( pointLight );
 
     scene.add(camera);

@@ -10,7 +10,7 @@ void main() {
 
     // PUBLIC STUFF
     test('set', () {
-      var a = new Layers();
+      var a = Layers();
 
       a.set(0);
       expect(a.mask, 1, reason: 'Set channel 0');
@@ -23,7 +23,7 @@ void main() {
     });
 
     test('enable', () {
-      var a = new Layers();
+      var a = Layers();
 
       a.set(0);
       a.enable(0);
@@ -47,7 +47,7 @@ void main() {
     });
 
     test('toggle', () {
-      var a = new Layers();
+      var a = Layers();
 
       a.set(0);
       a.toggle(0);
@@ -116,7 +116,7 @@ void main() {
     });
 
     test('isEnabled', () {
-      var a = new Layers();
+      var a = Layers();
 
       a.enable(1);
       // 'Enable channel 1 and pass the QUnit.test'

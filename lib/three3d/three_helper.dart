@@ -1,4 +1,5 @@
-import 'package:three_dart/three_dart.dart';
+
+import 'package:three_dart/three3d/math/index.dart';
 
 class ThreeHelper {
   // 绕某个点旋转

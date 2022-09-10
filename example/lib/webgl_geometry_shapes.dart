@@ -287,7 +287,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
 
     var roundedRectShape = THREE.Shape(null);
 
-    Function roundedRect = (ctx, num x, num y, num width, num height, num radius) {
+    roundedRect(ctx, num x, num y, num width, num height, num radius) {
       ctx.moveTo(x, y + radius);
       ctx.lineTo(x, y + height - radius);
       ctx.quadraticCurveTo(x, y + height, x + radius, y + height);
@@ -298,7 +298,7 @@ class _MyAppState extends State<webgl_geometry_shapes> {
       ctx.quadraticCurveTo(x + width, y, x + width - radius, y);
       ctx.lineTo(x + radius, y);
       ctx.quadraticCurveTo(x, y, x, y + radius);
-    };
+    }
     roundedRect(roundedRectShape, 0, 0, 50, 50, 20);
 
     // Track

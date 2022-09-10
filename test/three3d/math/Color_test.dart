@@ -32,7 +32,7 @@ void main() {
         expect(a.isColor, true);
 
         var b = Object();
-        expect(!(b is Color), true);
+        expect(b is! Color, true);
       });
 
       group("set", () {
