@@ -49,7 +49,7 @@ class Object3D with EventDispatcher {
   bool receiveShadow = false;
 
   bool frustumCulled = true;
-  double renderOrder = 0.0;
+  int renderOrder = 0;
 
   // List<AnimationClip> animations = [];
 
