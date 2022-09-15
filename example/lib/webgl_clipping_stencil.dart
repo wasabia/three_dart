@@ -206,7 +206,7 @@ class _State extends State<webgl_clipping_stencil> {
     initPage();
   }
 
-  createPlaneStencilGroup(geometry, plane, double renderOrder) {
+  createPlaneStencilGroup(geometry, plane, int renderOrder) {
     var group = THREE.Group();
     var baseMat = THREE.MeshBasicMaterial({
       "depthWrite": false,
@@ -339,7 +339,7 @@ class _State extends State<webgl_clipping_stencil> {
 
       // };
 
-      po.renderOrder = i + 1.1;
+      po.renderOrder = i + 1;
 
       // object.add(stencilGroup);
       poGroup.add(po);
