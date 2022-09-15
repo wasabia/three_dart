@@ -233,9 +233,6 @@ class _MyAppState extends State<webgl_loader_svg> {
     loader.load(url, (data) {
       var paths = data["paths"];
 
-      print(" paths................ ");
-      print(paths);
-
       var group = THREE.Group();
       group.scale.multiplyScalar(0.25);
       group.position.x = -70;
