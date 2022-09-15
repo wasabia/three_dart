@@ -1,14 +1,14 @@
 part of three_webgl;
 
 class RenderItem {
-  num? id;
+  int id = 0;
   Object3D? object;
   BufferGeometry? geometry;
   Material? material;
   dynamic? program;
-  num? groupOrder;
-  num? renderOrder;
-  num? z;
+  int groupOrder = 0;
+  int renderOrder = 0;
+  double z = 0;
   Map<String, dynamic>? group;
 
   RenderItem(Map<String, dynamic> json) {
@@ -47,7 +47,7 @@ class WebGLRenderList {
   WebGLRenderList();
 
   Map<int, RenderItem> renderItems = {};
-  var renderItemsIndex = 0;
+  int renderItemsIndex = 0;
 
   List<RenderItem> opaque = [];
   List<RenderItem> transmissive = [];
@@ -63,8 +63,13 @@ class WebGLRenderList {
     transparent.length = 0;
   }
 
-  RenderItem getNextRenderItem(Object3D object, BufferGeometry? geometry,
-      Material? material, double groupOrder, num z, Map<String, dynamic>? group) {
+  RenderItem getNextRenderItem(
+      Object3D object,
+      BufferGeometry? geometry,
+      Material? material,
+      int groupOrder,
+      double z,
+      Map<String, dynamic>? group) {
     var renderItem = renderItems[renderItemsIndex];
 
     if (renderItem == null) {
@@ -96,8 +101,8 @@ class WebGLRenderList {
     return renderItem;
   }
 
-  void push(Object3D object, BufferGeometry geometry, material, double groupOrder,
-      num z, Map<String, dynamic>? group) {
+  void push(Object3D object, BufferGeometry geometry, material, int groupOrder,
+      double z, Map<String, dynamic>? group) {
     var renderItem =
         getNextRenderItem(object, geometry, material, groupOrder, z, group);
 
@@ -113,7 +118,7 @@ class WebGLRenderList {
   }
 
   void unshift(Object3D object, BufferGeometry? geometry, Material material,
-      double groupOrder, num z, Map<String, dynamic>? group) {
+      int groupOrder, double z, Map<String, dynamic>? group) {
     var renderItem =
         getNextRenderItem(object, geometry, material, groupOrder, z, group);
 
@@ -128,7 +133,7 @@ class WebGLRenderList {
     }
   }
 
-  sort(customOpaqueSort, customTransparentSort) {
+  void sort(customOpaqueSort, customTransparentSort) {
     if (opaque.length > 1) {
       opaque.sort(customOpaqueSort ?? painterSortStable);
     }
@@ -142,15 +147,15 @@ class WebGLRenderList {
     }
   }
 
-  finish() {
+  void finish() {
     // Clear references from inactive renderItems in the list
 
     for (var i = renderItemsIndex, il = renderItems.length; i < il; i++) {
       var renderItem = renderItems[i]!;
 
-      if (renderItem.id == null) break;
+      if (renderItem.id == 0) break;
 
-      renderItem.id = null;
+      renderItem.id = 0;
       renderItem.object = null;
       renderItem.geometry = null;
       renderItem.material = null;
@@ -159,7 +164,7 @@ class WebGLRenderList {
     }
   }
 
-  int painterSortStable(a, b) {
+  int painterSortStable(RenderItem a, RenderItem b) {
     if (a.groupOrder != b.groupOrder) {
       return a.groupOrder - b.groupOrder;
     } else if (a.renderOrder != b.renderOrder) {
@@ -175,13 +180,13 @@ class WebGLRenderList {
     }
   }
 
-  int reversePainterSortStable(a, b) {
+  int reversePainterSortStable(RenderItem a, RenderItem b) {
     // print("3 reversePainterSortStable ${a.id} ${b.id} ");
 
     if (a.groupOrder != b.groupOrder) {
       return a.groupOrder - b.groupOrder;
     } else if (a.renderOrder != b.renderOrder) {
-      return (a.renderOrder - b.renderOrder).toInt();
+      return a.renderOrder - b.renderOrder;
     } else if (a.z != b.z) {
       final _v = b.z - a.z;
       return _v > 0 ? 1 : -1;

@@ -755,7 +755,7 @@ class WebGLRenderer {
   }
 
   void projectObject(
-      Object3D object, Camera camera, double groupOrder, bool sortObjects) {
+      Object3D object, Camera camera, int groupOrder, bool sortObjects) {
     // print("projectObject object: ${object} name: ${object.name} tag: ${object.tag}  ${object.visible} ${object.scale.toJSON()} ${object.children.length}  ");
 
     if (object.visible == false) return;
