@@ -31,7 +31,7 @@ dependencies:
   three_dart: ^0.0.11
   three_dart_jsm: ^0.0.6
   universal_ui: ^0.0.8
-  flutter_gl: ^0.0.18
+  flutter_gl: ^0.0.19
 
 dependency_overrides:
   three_dart:
