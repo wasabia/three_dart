@@ -224,8 +224,8 @@ class WebGLBindingStates {
 
 				if ( attribute == undefined ) {
 
-					if ( name == 'instanceMatrix' && object.instanceMatrix ) attribute = object.instanceMatrix;
-					if ( name == 'instanceColor' && object.instanceColor ) attribute = object.instanceColor;
+					if ( name == 'instanceMatrix' && object.instanceMatrix != null) attribute = object.instanceMatrix;
+					if ( name == 'instanceColor' && object.instanceColor != null) attribute = object.instanceColor;
 
 				}
 
