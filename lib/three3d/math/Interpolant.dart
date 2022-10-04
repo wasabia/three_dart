@@ -221,4 +221,5 @@ class Interpolant {
   intervalChanged(v1, v2, v3) {
     // empty
   }
+
 }
