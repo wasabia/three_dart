@@ -13,7 +13,7 @@ class DepthTexture extends Texture {
       throw ('DepthTexture format must be either THREE.DepthFormat or THREE.DepthStencilFormat');
     }
 
-    if (type == null && format == DepthFormat) type = UnsignedShortType;
+    if (type == null && format == DepthFormat) type = UnsignedIntType;
     if (type == null && format == DepthStencilFormat) type = UnsignedInt248Type;
 
     image = ImageElement(width: width, height: height);

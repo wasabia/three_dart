@@ -483,12 +483,12 @@ class WebGLRenderer {
     // renderBufferDirect second parameter used to be fog (could be null)
     scene ??= _emptyScene;
     var frontFaceCW = (object is Mesh && object.matrixWorld.determinant() < 0);
-    // print("renderBufferDirect object: ${object} name: ${object.name} tag: ${object.tag} frontFaceCW: ${frontFaceCW} ");
-    // print("${DateTime.now().millisecondsSinceEpoch} - ${DateTime.now().microsecondsSinceEpoch}  WebGLRenderer.renderBufferDirect object: ${object.type} ${object.id} material: ${material.type} map: ${material.map} id: ${material.id} geometry: ${geometry.type} ${geometry.id} object.isMesh: ${object.isMesh} frontFaceCW: ${frontFaceCW} ");
-    WebGLProgram program =
-        setProgram(camera, scene, geometry, material, object);
+    
+
+    WebGLProgram program = setProgram(camera, scene, geometry, material, object);
+
     state.setMaterial(material, frontFaceCW);
-    // print("renderBufferDirect - 0: ${DateTime.now().millisecondsSinceEpoch} - ${DateTime.now().microsecondsSinceEpoch}  ");
+
     BufferAttribute? index = geometry.index;
     BufferAttribute? position = geometry.attributes["position"];
     
@@ -937,7 +937,6 @@ class WebGLRenderer {
   void renderObjects(
       List<RenderItem> renderList, Object3D scene, Camera camera) {
     final overrideMaterial = scene is Scene ? scene.overrideMaterial : null;
-
     for (int i = 0, l = renderList.length; i < l; i++) {
       final renderItem = renderList[i];
 
@@ -1001,25 +1000,24 @@ class WebGLRenderer {
     // print("2 render renderObject type: ${object.type} name: ${object.name} ${DateTime.now().millisecondsSinceEpoch}");
   }
 
-  WebGLProgram getProgram(Material material, Object3D? scene, Object3D object) {
+  WebGLProgram? getProgram(Material material, Object3D? scene, Object3D object) {
     if (scene is! Scene) scene = _emptyScene;
     // scene could be a Mesh, Line, Points, ...
-
+   
     var materialProperties = properties.get(material);
-
+    
     var lights = currentRenderState!.state.lights;
     var shadowsArray = currentRenderState!.state.shadowsArray;
 
     var lightsStateVersion = lights.state.version;
-
+    
     var parameters = programCache.getParameters(
         material, lights.state, shadowsArray, scene, object);
     var programCacheKey = programCache.getProgramCacheKey(parameters);
-
+   
     Map? programs = materialProperties["programs"];
 
     // always update environment and fog - changing these trigger an getProgram call, but it's possible that the program doesn't change
-
     materialProperties["environment"] =
         material is MeshStandardMaterial ? scene.environment : null;
     materialProperties["fog"] = scene.fog;
@@ -1048,7 +1046,6 @@ class WebGLRenderer {
 
     if (program != null) {
       // early out if program and light state is identical
-
       if (materialProperties["currentProgram"] == program &&
           materialProperties["lightsStateVersion"] == lightsStateVersion) {
         updateCommonMaterialProperties(material, parameters);
@@ -1252,8 +1249,6 @@ class WebGLRenderer {
       materialProperties["__version"] = material.version;
     }
 
-    //
-
     WebGLProgram? program = materialProperties["currentProgram"];
 
     if (needsProgramChange) {
@@ -1264,8 +1259,8 @@ class WebGLRenderer {
     bool refreshMaterial = false;
     bool refreshLights = false;
 
-    var pUniforms = program!.getUniforms(),
-        mUniforms = materialProperties["uniforms"];
+    var pUniforms = program!.getUniforms();
+    Map<String, dynamic> mUniforms = materialProperties["uniforms"];
 
     if (state.useProgram(program.program)) {
       refreshProgram = true;
@@ -1397,18 +1392,13 @@ class WebGLRenderer {
       }
 
       // refresh uniforms common to several materials
-
+      
       if (fog != null && material.fog) {
         materials.refreshFogUniforms(mUniforms, fog);
       }
 
       materials.refreshMaterialUniforms(
           mUniforms, material, _pixelRatio, _height, _transmissionRenderTarget);
-
-      // print("m_uniforms  ");
-      // print(m_uniforms);
-      // print(m_uniforms["ambientLightColor"]["value"].runtimeType);
-
       WebGLUniforms.upload(
           _gl, materialProperties["uniformsList"], mUniforms, textures);
     }

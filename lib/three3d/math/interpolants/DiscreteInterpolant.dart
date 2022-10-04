@@ -11,6 +11,6 @@ class DiscreteInterpolant extends Interpolant {
 
   @override
   interpolate(i1, t0, t, t1) {
-    return copySampleValue(i1 - 1);
+    return copySampleValue_(i1 - 1);
   }
 }

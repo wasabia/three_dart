@@ -44,6 +44,11 @@ class _MyAppState extends State<webgl_loader_gltf> {
 
   dynamic? sourceTexture;
 
+  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey =
+    GlobalKey<THREE_JSM.DomLikeListenableState>();
+
+  late THREE_JSM.OrbitControls controls;
+
   @override
   void initState() {
     super.initState();
@@ -116,22 +121,27 @@ class _MyAppState extends State<webgl_loader_gltf> {
         Container(
           child: Stack(
             children: [
-              Container(
-                  width: width,
-                  height: height,
-                  color: Colors.black,
-                  child: Builder(builder: (BuildContext context) {
-                    if (kIsWeb) {
-                      return three3dRender.isInitialized
-                          ? HtmlElementView(
-                              viewType: three3dRender.textureId!.toString())
-                          : Container();
-                    } else {
-                      return three3dRender.isInitialized
-                          ? Texture(textureId: three3dRender.textureId!)
-                          : Container();
-                    }
-                  })),
+              THREE_JSM.DomLikeListenable(
+                  key: _globalKey,
+                  builder: (BuildContext context) {
+                    return Container(
+                        width: width,
+                        height: height,
+                        color: Colors.black,
+                        child: Builder(builder: (BuildContext context) {
+                          if (kIsWeb) {
+                            return three3dRender.isInitialized
+                                ? HtmlElementView(
+                                    viewType:
+                                        three3dRender.textureId!.toString())
+                                : Container();
+                          } else {
+                            return three3dRender.isInitialized
+                                ? Texture(textureId: three3dRender.textureId!)
+                                : Container();
+                          }
+                        }));
+                  }),
             ],
           ),
         ),
@@ -176,9 +186,9 @@ class _MyAppState extends State<webgl_loader_gltf> {
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
 
-    // renderer!.toneMapping = THREE.ACESFilmicToneMapping;
-    // renderer!.toneMappingExposure = 1;
-    // renderer!.outputEncoding = THREE.sRGBEncoding;
+    renderer!.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer!.toneMappingExposure = 1;
+    renderer!.outputEncoding = THREE.sRGBEncoding;
 
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
@@ -226,29 +236,35 @@ class _MyAppState extends State<webgl_loader_gltf> {
 
     object = result["scene"];
 
-    // var geometry = new THREE.PlaneGeometry(2, 2);
-    // var material = new THREE.MeshBasicMaterial();
-
-    // object.traverse( ( child ) {
-    //   if ( child is THREE.Mesh ) {
-    //     material.map = child.material.map;
-    //   }
-    // } );
-
-    // var mesh = new THREE.Mesh(geometry, material);
-    // scene.add(mesh);
-
-    // object.traverse( ( child ) {
-    //   if ( child.isMesh ) {
-    // child.material.map = texture;
-    //   }
-    // } );
-
 
 
     scene.add(object);
 
     // scene.overrideMaterial = new THREE.MeshBasicMaterial();
+
+
+    // controls
+    controls = THREE_JSM.OrbitControls(camera, _globalKey);
+    // controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
+    
+    // controls.enableDamping =
+    //     true; // an animation loop is required when either damping or auto-rotation are enabled
+
+    // controls.minDistance = 2;
+    // controls.maxDistance = 10;
+    // controls.target.set( 0, 0, - 0.2 );
+
+    controls.enableDamping =
+        true; // an animation loop is required when either damping or auto-rotation are enabled
+    controls.dampingFactor = 0.05;
+
+    controls.screenSpacePanning = false;
+
+    controls.minDistance = 0.1;
+    controls.maxDistance = 500;
+
+    controls.maxPolarAngle = THREE.Math.PI / 2;
+    
 
     animate();
   }
@@ -260,9 +276,9 @@ class _MyAppState extends State<webgl_loader_gltf> {
 
     render();
 
-    // Future.delayed(Duration(milliseconds: 40), () {
-    //   animate();
-    // });
+    Future.delayed(Duration(milliseconds: 40), () {
+      animate();
+    });
   }
 
   @override

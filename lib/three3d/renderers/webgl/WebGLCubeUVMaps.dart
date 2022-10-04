@@ -3,7 +3,7 @@ part of three_webgl;
 class WebGLCubeUVMaps {
   var cubeUVmaps = WeakMap();
   WebGLRenderer renderer;
-  dynamic pmremGenerator;
+  PMREMGenerator? pmremGenerator;
 
   WebGLCubeUVMaps(this.renderer);
 
@@ -26,8 +26,8 @@ class WebGLCubeUVMaps {
           pmremGenerator ??= PMREMGenerator(renderer);
 
           renderTarget = isEquirectMap
-              ? pmremGenerator.fromEquirectangular(texture, renderTarget)
-              : pmremGenerator.fromCubemap(texture, renderTarget);
+              ? pmremGenerator!.fromEquirectangular(texture, renderTarget)
+              : pmremGenerator!.fromCubemap(texture, renderTarget);
           cubeUVmaps.add(key: texture, value: renderTarget);
 
           return renderTarget.texture;
@@ -42,8 +42,8 @@ class WebGLCubeUVMaps {
               pmremGenerator ??= PMREMGenerator(renderer);
 
               var renderTarget = isEquirectMap
-                  ? pmremGenerator.fromEquirectangular(texture)
-                  : pmremGenerator.fromCubemap(texture);
+                  ? pmremGenerator!.fromEquirectangular(texture)
+                  : pmremGenerator!.fromCubemap(texture);
               cubeUVmaps.add(key: texture, value: renderTarget);
 
               texture.addEventListener('dispose', onTextureDispose);
@@ -75,7 +75,6 @@ class WebGLCubeUVMaps {
 
   onTextureDispose(event) {
     var texture = event.target;
-
     texture.removeEventListener('dispose', onTextureDispose);
 
     var cubemapUV = cubeUVmaps.get(texture);
@@ -90,7 +89,7 @@ class WebGLCubeUVMaps {
     cubeUVmaps = WeakMap();
 
     if (pmremGenerator != null) {
-      pmremGenerator.dispose();
+      pmremGenerator!.dispose();
       pmremGenerator = null;
     }
   }

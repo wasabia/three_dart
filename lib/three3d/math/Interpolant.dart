@@ -70,7 +70,7 @@ class Interpolant {
 
                 i1 = pp.length;
                 _cachedIndex = i1;
-                return afterEnd(i1 - 1, t, t0);
+                return copySampleValue_(i1 - 1);
               }
 
               if (i1 == giveUpAt) break; // this loop
@@ -115,7 +115,7 @@ class Interpolant {
                 // before start
 
                 _cachedIndex = 0;
-                return beforeStart(0, t, t1);
+                return copySampleValue_(0);
               }
 
               if (i1 == giveUpAt) break; // this loop
@@ -174,13 +174,13 @@ class Interpolant {
 
         if (t0 == null) {
           _cachedIndex = 0;
-          return beforeStart(0, t, t1);
+          return copySampleValue_(0);
         }
 
         if (t1 == null) {
           i1 = pp.length;
           _cachedIndex = i1;
-          return afterEnd(i1 - 1, t0, t);
+          return copySampleValue_(i1 - 1);
         }
       } // seek
 
@@ -196,7 +196,7 @@ class Interpolant {
     return settings ?? DefaultSettings;
   }
 
-  copySampleValue(num index) {
+  copySampleValue_(num index) {
     // copies a sample value to the result buffer
 
     var result = resultBuffer,
@@ -222,14 +222,4 @@ class Interpolant {
     // empty
   }
 
-  beforeStart(v1, v2, v3) {
-    // return copySampleValue_(v1, v2, v3);
-  }
-
-  //( N-1, tN-1, t ), returns this.resultBuffer
-  // afterEnd_: Interpolant.prototype.copySampleValue_,
-
-  afterEnd(v1, v2, v3) {
-    // return copySampleValue_(v1, v2, v3);
-  }
 }

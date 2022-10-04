@@ -62,7 +62,7 @@ class WebGLUniforms with WebGLUniform {
     }
   }
 
-  setValue(gl, name, value, [WebGLTextures? textures]) {
+  void setValue(gl, name, value, [WebGLTextures? textures]) {
     var u = map[name];
     if (u != null) u.setValue(gl, value, textures);
   }
@@ -72,7 +72,7 @@ class WebGLUniforms with WebGLUniform {
     if (v != null) setValue(gl, name, v);
   }
 
-  static upload(gl, seq, values, textures) {
+  static void upload(gl, List seq, Map<String, dynamic> values, textures) {
     for (var i = 0, n = seq.length; i != n; ++i) {
       var u = seq[i];
       var v = values[u.id];
@@ -100,6 +100,7 @@ class WebGLUniforms with WebGLUniform {
       //   print(value);
       // }
 
+
       if (v["needsUpdate"] != false) {
         // note: always updating when .needsUpdate is null
         u.setValue(gl, v["value"], textures);
@@ -115,7 +116,7 @@ class WebGLUniforms with WebGLUniform {
 
       // print("seqWithValue  u.id: ${u.id} ");
 
-      if (values.keys.toList().contains(u.id)) {
+      if (values.keys.contains(u.id)) {
         r.add(u);
       } else {
         // print("seqWithValue  u.id: ${u.id} is not add ");

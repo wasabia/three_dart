@@ -354,10 +354,18 @@ class WebGLMaterials {
     if (material.metalnessMap != null) {
       uniforms["metalnessMap"]["value"] = material.metalnessMap;
     }
+
+    var envMap = properties.get( material )["envMap"];
+
+		if ( envMap != null ) {
+
+			//uniforms.envMap.value = material.envMap; // part of uniforms common
+			uniforms["envMapIntensity"]["value"] = material.envMapIntensity;
+
+		}
   }
 
   refreshUniformsPhysical(uniforms, material, transmissionRenderTarget) {
-    refreshUniformsStandard(uniforms, material);
 
     uniforms["ior"]["value"] = material.ior; // also part of uniforms common
 
