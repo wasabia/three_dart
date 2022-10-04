@@ -264,9 +264,9 @@ class _MyAppState extends State<misc_controls_arcball> {
 
     render();
 
-    Future.delayed(const Duration(milliseconds: 40), () {
-      animate();
-    });
+    // Future.delayed(const Duration(milliseconds: 40), () {
+    //   animate();
+    // });
   }
 
   @override

@@ -126,6 +126,11 @@ class WebGLParameters {
   late int morphTextureStride;
 
 
+  WebGLParameters.create() {
+    
+  }
+
+
   WebGLParameters(Map<String, dynamic> json) {
     isWebGL2 = json["isWebGL2"];
     shaderID = json["shaderID"];
