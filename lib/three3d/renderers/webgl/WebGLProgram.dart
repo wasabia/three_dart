@@ -87,7 +87,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.instancingColor ? '#define USE_INSTANCING_COLOR' : '',
         parameters.supportsVertexTextures ? '#define VERTEX_TEXTURES' : '',
         (parameters.useFog && parameters.fog) ? '#define USE_FOG' : '',
-        (parameters.useFog && parameters.fogExp2) ? '#define FOG_EXP2' : '',
+        (parameters.useFog && parameters.fogExp2) ? '#define FOG_EXP2' : '',  
         parameters.map ? '#define USE_MAP' : '',
         parameters.envMap ? '#define USE_ENVMAP' : '',
         parameters.envMap ? '#define ' + envMapModeDefine : '',
@@ -380,11 +380,12 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     String fragmentGlsl = versionString + prefixFragment + fragmentShader;
 
     // print("---- material ${parameters.shaderName}  USE_SKINNING: ${parameters.skinning } ");
-    // developer.log(" 111 ================= VERTEX  ");
-    // developer.log(vertexGlsl);
-    // developer.log("  111 ==================== FRAGMENT ");
-    // developer.log(fragmentGlsl);
+    // print(" 111 ================= VERTEX  ");
+    // print(vertexGlsl);
+    // print("  111 ==================== FRAGMENT ");
+    // print(fragmentGlsl);
 
+    
 
 
     final glVertexShader = WebGLShader(gl, gl.VERTEX_SHADER, vertexGlsl);
