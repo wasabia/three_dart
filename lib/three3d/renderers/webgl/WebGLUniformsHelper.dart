@@ -153,12 +153,12 @@ var RePathPart = RegExp(r"(\w+)(\])?(\[|\.)?"); //g;
 // allow straightforward parsing of the hierarchy that WebGL encodes
 // in the uniform names.
 
-addUniform(WebGLUniform container, uniformObject) {
+void addUniform(WebGLUniform container, uniformObject) {
   container.seq.add(uniformObject);
   container.map[uniformObject.id] = uniformObject;
 }
 
-parseUniform(activeInfo, addr, WebGLUniform container) {
+void parseUniform(activeInfo, addr, WebGLUniform container) {
   var path = activeInfo.name;
   var pathLength = path.length;
 
@@ -315,6 +315,7 @@ class WebGLUniformsHelper {
 
   copyArray(Map<int, dynamic> a, b) {
     var l = b.length;
+    a.clear();
     for (var i = 0; i < l; i++) {
       a[i] = b[i];
     }
@@ -783,6 +784,8 @@ class WebGLUniformsHelper {
 
   setValueV4fArray(gl, v, textures) {
     var data = flatten(v, size, 4);
+
+    print("uniform4fv data: ${data.toDartList()} ");
 
     gl.uniform4fv(addr, data);
   }

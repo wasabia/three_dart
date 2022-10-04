@@ -77,7 +77,6 @@ class PMREMGenerator {
 
     _blurMaterial = null;
 
-    // this._blurMaterial = _getBlurShader(MAX_SAMPLES);
     _equirectMaterial = null;
     _cubemapMaterial = null;
 
@@ -497,7 +496,7 @@ class PMREMGenerator {
 
       var position = Float32Array(positionSize * vertices * cubeFaces);
       var uv = Float32Array(uvSize * vertices * cubeFaces);
-      var faceIndex = Int32Array(faceIndexSize * vertices * cubeFaces);
+      var faceIndex = Float32Array(faceIndexSize * vertices * cubeFaces);
 
       for (var face = 0; face < cubeFaces; face++) {
         double x = (face % 3) * 2 / 3 - 1;
@@ -524,7 +523,7 @@ class PMREMGenerator {
         ];
         position.set(coordinates, positionSize * vertices * face);
         uv.set(uv1, uvSize * vertices * face);
-        final faces = [face, face, face, face, face, face];
+        List<double> faces = [face.toDouble(), face.toDouble(), face.toDouble(), face.toDouble(), face.toDouble(), face.toDouble()];
         faceIndex.set(faces, faceIndexSize * vertices * face);
       }
 
@@ -533,7 +532,7 @@ class PMREMGenerator {
           'position', Float32BufferAttribute(position, positionSize, false));
       planes.setAttribute('uv', Float32BufferAttribute(uv, uvSize, false));
       planes.setAttribute(
-          'faceIndex', Int32BufferAttribute(faceIndex, faceIndexSize, false));
+          'faceIndex', Float32BufferAttribute(faceIndex, faceIndexSize, false));
       lodPlanes.add(planes);
 
       if (lod > LOD_MIN) {

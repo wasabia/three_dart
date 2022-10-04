@@ -234,8 +234,8 @@ class _MyAppState extends State<misc_controls_orbit> {
 
     controls.screenSpacePanning = false;
 
-    controls.minDistance = 100;
-    controls.maxDistance = 500;
+    controls.minDistance = 10;
+    controls.maxDistance = 1000;
 
     controls.maxPolarAngle = THREE.Math.PI / 2;
 

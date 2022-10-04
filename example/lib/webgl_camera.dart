@@ -332,7 +332,7 @@ class _MyAppState extends State<webgl_camera> {
         'position', THREE.Float32BufferAttribute(Float32Array.fromList(vertices), 3));
 
     var particles = THREE.Points(
-        geometry, THREE.PointsMaterial({"color": 0x888888}));
+        geometry, THREE.PointsMaterial({"color": 0x888888, "size": 1}));
     scene.add(particles);
 
     animate();

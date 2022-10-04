@@ -89,7 +89,7 @@ packages:
       name: flutter_gl
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.18"
+    version: "0.0.20"
   flutter_gl_macos:
     dependency: transitive
     description:
