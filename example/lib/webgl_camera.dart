@@ -345,15 +345,9 @@ class _MyAppState extends State<webgl_camera> {
 
     render();
 
-<<<<<<< HEAD
     Future.delayed(const Duration(milliseconds: 40), () {
       animate();
     });
-=======
-    // Future.delayed(const Duration(milliseconds: 40), () {
-    //   animate();
-    // });
->>>>>>> dev
   }
 
   @override
