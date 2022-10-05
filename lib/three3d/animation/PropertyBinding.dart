@@ -122,7 +122,7 @@ class PropertyBinding {
 
   static create(root, path, parsedPath) {
     if (!(root != null &&
-        root.runtimeType.toString() == "AnimationObjectGroup")) {
+        root is AnimationObjectGroup)) {
       return PropertyBinding(root, path, parsedPath);
     } else {
       return Composite(root, path, parsedPath);
@@ -406,7 +406,8 @@ class PropertyBinding {
   }
 
   setValue_fromArray_setNeedsUpdate(buffer, offset) {
-    resolvedProperty.fromArray(List<double>.from(buffer.map((e) => e.toDouble())), offset);
+    resolvedProperty.fromArray(
+        List<double>.from(buffer.map((e) => e.toDouble())), offset);
     targetObject.needsUpdate = true;
   }
 
@@ -437,7 +438,7 @@ class PropertyBinding {
     var parsedPath = this.parsedPath;
 
     var objectName = parsedPath["objectName"];
-    var propertyName = parsedPath["propertyName"];
+    propertyName = parsedPath["propertyName"];
     var propertyIndex = parsedPath["propertyIndex"];
 
     if (targetObject == null) {
@@ -542,8 +543,7 @@ class PropertyBinding {
 
     this.targetObject = targetObject;
 
-    // if ( targetObject.needsUpdate != null ) { // material
-    if (targetObject.runtimeType.toString().endsWith("Material")) {
+    if (targetObject.needsUpdate != null) { // material
       versioning = Versioning["NeedsUpdate"];
     } else if (targetObject.matrixWorldNeedsUpdate != null) {
       // node transform
@@ -589,9 +589,7 @@ class PropertyBinding {
       resolvedProperty = nodeProperty;
       this.propertyIndex = propertyIndex;
 
-      // } else if ( nodeProperty.fromArray != null && nodeProperty.toArray != null ) {
-    } else if (["Color", "Vector3", "Quaternion"]
-        .contains(nodeProperty.runtimeType.toString())) {
+    } else if (nodeProperty is Color || nodeProperty is Vector3 || nodeProperty is Quaternion) {
       // must use copy for Object3D.Euler/Quaternion
 
       bindingType = BindingType["HasFromToArray"];

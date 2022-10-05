@@ -107,7 +107,7 @@ serializeImage( image ) {
 				"data": image.data.sublist(0),
 				"width": image.width,
 				"height": image.height,
-				"type": image.data.runtimeType.toString()
+				"type": image.data.runtimeType.toString(), // TODO remove runtimeType for web release mode
 			};
 
 		} else {

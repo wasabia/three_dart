@@ -17,10 +17,6 @@ class WebGLAttributes {
     final array = attribute.array;
     var usage = attribute.usage;
 
-    // dynamic arrayType = attribute.runtimeType;
-    // print(" WebGLAttributes.createBuffer attribute: ${attribute.runtimeType} arrayType: ${attribute.runtimeType} array: ${array.length} ${array.runtimeType} name: ${name} ");
-    // print(array.toDartList());
-
     var type = gl.FLOAT;
     int bytesPerElement = 4;
 
@@ -129,8 +125,6 @@ class WebGLAttributes {
   }
 
   update(attribute, bufferType, {String? name}) {
-    // print(" WebGLAttributes.update attribute: ${attribute.type} ${attribute.runtimeType} name: ${name} ");
-
     if (attribute.type == "GLBufferAttribute") {
       var cached = buffers.get(attribute);
 

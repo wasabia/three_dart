@@ -395,7 +395,6 @@ class WebGLTextures {
       return;
     }
 
-    // print("WebGLTextures setTexture2D texture: ${texture.runtimeType} v ${texture.version} textureProperties v ${textureProperties["__version"]} textureProperties: ${textureProperties["__webglTexture"]} ");
     if (texture.version > 0 &&
         textureProperties["__version"] != texture.version) {
       var image = texture.image;

@@ -216,9 +216,9 @@ class WebGLUniformsHelper {
   Float32Array flatten(List array, int nBlocks, int blockSize) {
     var firstElem = array[0];
 
-    if (firstElem.runtimeType == num ||
-        firstElem.runtimeType == double ||
-        firstElem.runtimeType == int) {
+    if (firstElem is num ||
+        firstElem is double ||
+        firstElem is int) {
       List<double> array2 = [];
 
       for (var element in array) {
@@ -289,18 +289,6 @@ class WebGLUniformsHelper {
     }
 
     return r;
-
-    // List<num> r = [];
-    // if(array.runtimeType == List) {
-    //   for ( var i = 0; i < nBlocks; i++ ) {
-    //     r.addAll(array[ i ].toJSON());
-    //   }
-    // } else {
-    //   for ( var i = 0; i < nBlocks; i++ ) {
-    //     r.addAll(array[ i.toString() ].toJSON());
-    //   }
-    // }
-    // return r;
   }
 
   arraysEqual(Map<int, dynamic> a, b) {
@@ -416,7 +404,7 @@ class WebGLUniformsHelper {
   setValueV4f(gl, v, [WebGLTextures? textures]) {
     var cache = this.cache;
 
-    if (v.runtimeType == Vector4) {
+    if (v is Vector4) {
       if (cache[0] != v.x ||
           cache[1] != v.y ||
           cache[2] != v.z ||
@@ -589,7 +577,7 @@ class WebGLUniformsHelper {
 
     if (cache[0] == v) return;
 
-    if (v.runtimeType == bool) {
+    if (v is bool) {
       if (v) {
         gl.uniform1i(addr, 1);
       } else {
@@ -784,9 +772,6 @@ class WebGLUniformsHelper {
 
   setValueV4fArray(gl, v, textures) {
     var data = flatten(v, size, 4);
-
-    print("uniform4fv data: ${data.toDartList()} ");
-
     gl.uniform4fv(addr, data);
   }
 

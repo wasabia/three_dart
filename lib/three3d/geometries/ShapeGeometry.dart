@@ -114,7 +114,7 @@ class ShapeGeometry extends BufferGeometry {
       groupCount = 0;
     }
 
-    // if(shapes.runtimeType == List) {
+    // if(shapes is List) {
     //   for ( var i = 0; i < shapes.length; i ++ ) {
 
     //     addShape( shapes[ i ] );

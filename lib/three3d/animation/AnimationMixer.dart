@@ -475,7 +475,7 @@ class AnimationMixer with EventDispatcher {
     var root = optionalRoot ?? _root;
     var rootUuid = root.uuid;
 
-    var clipObject = clip.runtimeType.toString() == 'String'
+    var clipObject = clip is String
             ? AnimationClip.findByName(root, clip)
             : clip,
         clipUuid = clipObject ? clipObject.uuid : clip,

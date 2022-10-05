@@ -15,14 +15,14 @@ Map<String, dynamic> cloneUniforms(Map<String, dynamic> src) {
       var property = src[u][p];
 
       if (property != null &&
-          (property.runtimeType == Color ||
-              property.runtimeType == Matrix3 ||
-              property.runtimeType == Matrix4 ||
-              property.runtimeType == Vector2 ||
-              property.runtimeType == Vector3 ||
-              property.runtimeType == Vector4 ||
-              property.runtimeType == Texture ||
-              property.runtimeType == Quaternion)) {
+          (property is Color ||
+              property is Matrix3 ||
+              property is Matrix4 ||
+              property is Vector2 ||
+              property is Vector3 ||
+              property is Vector4 ||
+              property is Texture ||
+              property is Quaternion)) {
         dst[u][p] = property.clone();
       } else if (property is List) {
         dst[u][p] = property.sublist(0);

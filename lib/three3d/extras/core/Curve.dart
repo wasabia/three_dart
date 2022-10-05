@@ -246,7 +246,7 @@ class Curve {
     var pt2 = getPoint(t2, null);
 
     var tangent = optionalTarget ??
-        ((pt1.runtimeType == Vector2)
+        ((pt1 is Vector2)
             ? Vector2(null, null)
             : Vector3.init());
 

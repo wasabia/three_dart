@@ -280,7 +280,7 @@ abstract class BufferAttribute<TData extends NativeArray>
   Map<String, dynamic> toJSON([data]) {
     Map<String, dynamic> result = {
       "itemSize": itemSize,
-      "type": array.runtimeType.toString(), //.replaceAll('List', 'Array'),
+      "type": array.runtimeType.toString(), // TODO remove runtimeType for on web release mode type minification
       "array": array.sublist(0),
       "normalized": normalized
     };

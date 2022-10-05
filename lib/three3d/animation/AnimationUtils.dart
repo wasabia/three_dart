@@ -4,9 +4,9 @@ class AnimationUtils {
   // same as Array.prototype.slice, but also works on typed arrays
   static arraySlice(array, [int? from, int? to]) {
     // if ( AnimationUtils.isTypedArray( array ) ) {
-    if (array.runtimeType.toString() != "List<num>") {
+    if (array !is List) {
       print(
-          " AnimationUtils.arraySlice array: ${array.runtimeType.toString()} ");
+          " AnimationUtils.arraySlice array: ${array} ");
 
       // 	// in ios9 array.subarray(from, null) will return empty array
       // 	// but array.subarray(from) or array.subarray(from, len) is correct
@@ -20,11 +20,12 @@ class AnimationUtils {
   // converts an array to a specific type
   static convertArray(array, String type, [bool forceClone = false]) {
     // var 'null' and 'null' pass
+    // TODO runtimeType on web release mode will not same as debug
     if (array == null || !forceClone && array.runtimeType.toString() == type) {
       return array;
     }
 
-    if (array is NativeArray && type == 'List<num>') {
+    if (array is NativeArray && type is List) {
       return array.toDartList();
     }
 
@@ -38,7 +39,7 @@ class AnimationUtils {
 
   static isTypedArray(object) {
     print(
-        "AnimationUtils isTypedArray object: ${object.runtimeType.toString()}");
+        "AnimationUtils isTypedArray object: ${object}");
     return false;
 
     // return ArrayBuffer.isView( object ) &&
@@ -93,8 +94,8 @@ class AnimationUtils {
     var value = key[valuePropertyName];
     if (value == null) return; // no data
 
-    // if ( Array.isArray( value ) ) {
-    if (value.runtimeType.toString() == "List<num>") {
+
+    if (value is List) {
       do {
         value = key[valuePropertyName];
 

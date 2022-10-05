@@ -809,7 +809,7 @@ class BufferGeometry with EventDispatcher {
     if (index != null) {
       // TODO
       data["data"]["index"] = {
-        "type": index.array.runtimeType.toString(),
+        "type": index.array.runtimeType.toString(), // TODO remove runtimeType
         "array": index.array.sublist(0)
       };
     }

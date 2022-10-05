@@ -214,7 +214,7 @@ class InterleavedBufferAttribute extends BufferAttribute {
 
       return {
         "itemSize": itemSize,
-        "type": this.array.runtimeType.toString(),
+        "type": this.array.runtimeType.toString(), // TODO remove runtimeType
         "array": array,
         "normalized": normalized
       };

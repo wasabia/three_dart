@@ -870,7 +870,7 @@ class Object3D with EventDispatcher {
     }
   }
 
-  Object3D setProperty(String propertyName, value) {
+  void setProperty(String propertyName, value) {
     if (propertyName == "id") {
       id = value;
     } else if (propertyName == "castShadow") {
@@ -886,8 +886,6 @@ class Object3D with EventDispatcher {
     } else {
       throw ("Object3D.setProperty type: $type propertyName: $propertyName is not support ");
     }
-
-    return this;
   }
 
   void dispose() {}

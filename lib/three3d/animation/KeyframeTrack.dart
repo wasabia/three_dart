@@ -221,7 +221,7 @@ class KeyframeTrack {
     for (var i = 0; i != nKeys; i++) {
       var currTime = times[i];
 
-      if (currTime.runtimeType.toString() == 'num' && currTime == null) {
+      if (currTime == null) {
         print(
             'THREE.KeyframeTrack: Time is not a valid number. ${this} i: $i $currTime');
         valid = false;

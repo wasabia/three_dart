@@ -290,7 +290,7 @@ class Material with EventDispatcher {
     } else if (key == "clipShadows") {
       clipShadows = newValue;
     } else if (key == "color") {
-      if (newValue.runtimeType == Color) {
+      if (newValue is Color) {
         color = newValue;
       } else {
         color = Color(0, 0, 0).setHex(newValue);
@@ -308,7 +308,7 @@ class Material with EventDispatcher {
     } else if (key == "dithering") {
       dithering = newValue;
     } else if (key == "emissive") {
-      if (newValue.runtimeType == Color) {
+      if (newValue is Color) {
         emissive = newValue;
       } else {
         emissive = Color(0, 0, 0).setHex(newValue);
@@ -415,7 +415,7 @@ class Material with EventDispatcher {
     } else if (key == "shadowSide") {
       shadowSide = newValue;
     } else if (key == "specular") {
-      if (newValue.runtimeType == Color) {
+      if (newValue is Color) {
         specular = newValue;
       } else {
         specular = Color(0, 0, 0).setHex(newValue);

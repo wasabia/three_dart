@@ -98,7 +98,7 @@ class SVGLoaderParser {
 
     var theUnit = 'px';
 
-    // print("SvgLoader.parseFloatWithUnits ${string} runtimeType: ${string.runtimeType} ");
+    // print("SvgLoader.parseFloatWithUnits ${string}  ");
 
     if (string is String) {
       for (var i = 0, n = units.length; i < n; i++) {

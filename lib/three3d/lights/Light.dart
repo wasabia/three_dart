@@ -105,13 +105,11 @@ class Light extends Object3D {
   }
 
   @override
-  setProperty(String propertyName, value) {
+  void setProperty(String propertyName, value) {
     if (propertyName == "intensity") {
       intensity = value;
     } else {
       super.setProperty(propertyName, value);
     }
-
-    return this;
   }
 }

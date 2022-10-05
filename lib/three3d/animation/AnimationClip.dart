@@ -153,7 +153,7 @@ class AnimationClip {
   static findByName(List<AnimationClip> objectOrClipArray, name) {
     var clipArray = objectOrClipArray;
 
-    if (objectOrClipArray.runtimeType.toString() != "List<AnimationClip>") {
+    if (objectOrClipArray is List<AnimationClip>) {
       print("AnimationClip.findByName todo  ");
       // var o = objectOrClipArray;
       // clipArray = o.geometry && o.geometry.animations || o.animations;
