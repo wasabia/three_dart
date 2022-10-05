@@ -151,7 +151,7 @@ const Map<String, int> _colorKeywords = {
   'yellowgreen': 0x9ACD32
 };
 
-class _HslData {
+class HslData {
   double h = 0, s = 0, l = 0;
 }
 
@@ -160,8 +160,8 @@ class _RgbData {
 }
 
 _RgbData _rgb = _RgbData();
-_HslData _hslA = _HslData();
-_HslData _hslB = _HslData();
+HslData _hslA = HslData();
+HslData _hslB = HslData();
 
 double hue2rgb(double p, double q, double t) {
   if (t < 0) t += 1;
@@ -554,13 +554,13 @@ class Color {
   }
 
   // target map target = { "h": 0, "s": 0, "l": 0 };
-  _HslData getHSL(_HslData target, [String colorSpace = LinearSRGBColorSpace]) {
+  HslData getHSL(HslData target, [String colorSpace = LinearSRGBColorSpace]) {
     // h,s,l ranges are in 0.0 - 1.0
     ColorManagement.fromWorkingColorSpace(toComponents(this, _rgb), colorSpace);
 
     double r = _rgb.r, g = _rgb.g, b = _rgb.b;
 
-    double max = Math.max3(r!, g!, b!).toDouble();
+    double max = Math.max3(r, g, b).toDouble();
     double min = Math.min3(r, g, b).toDouble();
 
     double hue, saturation;

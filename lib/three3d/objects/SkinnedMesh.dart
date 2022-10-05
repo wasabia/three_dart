@@ -49,7 +49,7 @@ class SkinnedMesh extends Mesh {
     }
 
     this.bindMatrix!.copy(bindMatrix);
-    bindMatrixInverse.copy(bindMatrix!).invert();
+    bindMatrixInverse.copy(bindMatrix).invert();
   }
 
   void pose() {
