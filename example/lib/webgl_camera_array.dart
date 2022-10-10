@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 
@@ -27,7 +26,6 @@ class _MyAppState extends State<webgl_camera_array> {
   late THREE.Scene scene;
   late THREE.Camera camera;
   late THREE.Mesh mesh;
-
 
   double dpr = 1.0;
 
@@ -65,8 +63,8 @@ class _MyAppState extends State<webgl_camera_array> {
 
     await three3dRender.initialize(options: _options);
 
-     print("three3dRender.initialize three3dRender: ${three3dRender.textureId} ");
-
+    print(
+        "three3dRender.initialize three3dRender: ${three3dRender.textureId} ");
 
     setState(() {});
 
@@ -127,7 +125,9 @@ class _MyAppState extends State<webgl_camera_array> {
                       return three3dRender.isInitialized
                           ? HtmlElementView(
                               viewType: three3dRender.textureId!.toString())
-                          : Container(color: Colors.red,);
+                          : Container(
+                              color: Colors.red,
+                            );
                     } else {
                       return three3dRender.isInitialized
                           ? Texture(textureId: three3dRender.textureId!)
@@ -163,7 +163,9 @@ class _MyAppState extends State<webgl_camera_array> {
     // print(" --------------pixels............. ");
     // print(pixels);
 
-    if (verbose) print(" render: sourceTexture: $sourceTexture three3dRender.textureId! ${three3dRender.textureId!}");
+    if (verbose)
+      print(
+          " render: sourceTexture: $sourceTexture three3dRender.textureId! ${three3dRender.textureId!}");
 
     if (!kIsWeb) {
       three3dRender.updateTexture(sourceTexture);
@@ -187,14 +189,12 @@ class _MyAppState extends State<webgl_camera_array> {
     renderer!.shadowMap.enabled = false;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({
-        "format": THREE.RGBAFormat
-      });
+      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
       renderTarget = THREE.WebGLRenderTarget(
           (width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
-     
+
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }
   }
@@ -236,9 +236,6 @@ class _MyAppState extends State<webgl_camera_array> {
 
     scene = THREE.Scene();
 
-    
-
-
     var ambientLight = THREE.AmbientLight(0xcccccc, 0.4);
     scene.add(ambientLight);
 
@@ -257,15 +254,27 @@ class _MyAppState extends State<webgl_camera_array> {
     background.receiveShadow = true;
     background.position.set(0, 0, -1);
     scene.add(background);
-
-    var geometryCylinder = THREE.CylinderGeometry(0.5, 0.5, 1, 32);
+    var curve = THREE.QuadraticBezierCurve(
+      THREE.Vector2(
+        -1.5,
+        0,
+      ),
+      THREE.Vector2(
+        0,
+        0,
+      ),
+      THREE.Vector2(
+        1.5,
+        0,
+      ),
+    );
+    var geometryCylinder = THREE.TubeGeometry(curve, 25, 1, 8, false);
     var materialCylinder = THREE.MeshPhongMaterial({"color": 0xff0000});
 
     mesh = THREE.Mesh(geometryCylinder, materialCylinder);
     // mesh.castShadow = true;
     // mesh.receiveShadow = true;
     scene.add(mesh);
-     
 
     loaded = true;
     animate();
