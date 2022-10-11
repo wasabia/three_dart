@@ -20,7 +20,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_gl/ios"
 
 SPEC CHECKSUMS:
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_gl: 5a5603f35db897697f064027864a32b15d0c421d
   three3d_egl: de2cd4950ad2d5f2122166c36583bde4c812e7b5
 
