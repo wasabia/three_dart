@@ -1,6 +1,5 @@
 import 'dart:async';
-
-
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 
 import 'package:three_dart/three_dart.dart' as THREE;
-
 
 class webgl_debug_for_macos extends StatefulWidget {
   String fileName;
@@ -72,7 +70,7 @@ class _MyAppState extends State<webgl_debug_for_macos> {
 
     three3dRender = FlutterGlPlugin();
 
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "antialias": true,
       "alpha": false,
       "width": width.toInt(),
@@ -80,7 +78,7 @@ class _MyAppState extends State<webgl_debug_for_macos> {
       "dpr": dpr
     };
 
-    await three3dRender.initialize(options: _options);
+    await three3dRender.initialize(options: options);
 
     setState(() {});
 
@@ -139,13 +137,10 @@ class _MyAppState extends State<webgl_debug_for_macos> {
                   child: Builder(builder: (BuildContext context) {
                     if (kIsWeb) {
                       return three3dRender.isInitialized
-                          ? HtmlElementView(
-                              viewType: three3dRender.textureId!.toString())
+                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                           : Container();
                     } else {
-                      return three3dRender.isInitialized
-                          ? Texture(textureId: three3dRender.textureId!)
-                          : Container();
+                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
                     }
                   })),
             ],
@@ -162,25 +157,25 @@ class _MyAppState extends State<webgl_debug_for_macos> {
   }
 
   render() {
-    int _t = DateTime.now().millisecondsSinceEpoch;
+    int t = DateTime.now().millisecondsSinceEpoch;
 
-    final _gl = three3dRender.gl;
+    final gl = three3dRender.gl;
 
-    print(_gl.getString(_gl.VENDOR));
-    print(_gl.getString(_gl.RENDERER));
+    print(gl.getString(gl.VENDOR));
+    print(gl.getString(gl.RENDERER));
 
     renderer!.render(scene, camera);
 
-    int _t1 = DateTime.now().millisecondsSinceEpoch;
+    int t1 = DateTime.now().millisecondsSinceEpoch;
 
     if (verbose) {
-      print("render cost: ${_t1 - _t} ");
+      print("render cost: ${t1 - t} ");
       print(renderer!.info.memory);
       print(renderer!.info.render);
     }
 
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
-    _gl.flush();
+    gl.flush();
 
     // var pixels = _gl.readCurrentPixels(0, 0, 10, 10);
     // print(" --------------pixels............. ");
@@ -209,27 +204,23 @@ class _MyAppState extends State<webgl_debug_for_macos> {
   }
 
   initRenderer() {
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "width": width,
       "height": height,
       "gl": three3dRender.gl,
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = THREE.WebGLRenderer(options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = true;
     renderer!.shadowMap.type = THREE.BasicShadowMap;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({
-        "minFilter": THREE.LinearFilter,
-        "magFilter": THREE.LinearFilter,
-        "format": THREE.RGBAFormat
-      });
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = THREE.WebGLRenderTargetOptions(
+          {"minFilter": THREE.LinearFilter, "magFilter": THREE.LinearFilter, "format": THREE.RGBAFormat});
+      renderTarget = THREE.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }

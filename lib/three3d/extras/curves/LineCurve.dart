@@ -3,7 +3,7 @@ part of three_extra;
 class LineCurve extends Curve {
   @override
   bool isLineCurve = true;
-  
+
   late Vector2 v1;
   late Vector2 v2;
 
@@ -69,27 +69,33 @@ class LineCurve extends Curve {
 }
 
 class LineCurve3 extends Curve {
-    @override
+  @override
   bool isLineCurve = true;
 
-  LineCurve3(Vector3 v1, Vector3 v2) {
-    type = 'LineCurve3';
+  late Vector3 vec1;
+  late Vector3 vec2;
 
-    this.v1 = v1;
-    this.v2 = v2;
+  LineCurve3(this.vec1, this.vec2) {
+    type = 'LineCurve3';
   }
 
-  LineCurve.fromJSON(Map<String, dynamic> json) : super.fromJSON(json);
+  LineCurve3.fromJSON(Map<String, dynamic> json) {
+    arcLengthDivisions = json["arcLengthDivisions"];
+    type = json["type"];
+
+    vec1 = Vector3.fromJSON(json['vec1']);
+    vec2 = Vector3.fromJSON(json['vec2']);
+  }
 
   @override
   getPoint(t, optionalTarget) {
     var point = optionalTarget ?? Vector3(null, null, null);
 
     if (t == 1) {
-      point.copy(v2);
+      point.copy(vec2);
     } else {
-      point.copy(v2).sub(v1);
-      point.multiplyScalar(t).add(v1);
+      point.copy(vec2).sub(vec1);
+      point.multiplyScalar(t).add(vec1);
     }
 
     return point;
@@ -106,7 +112,7 @@ class LineCurve3 extends Curve {
   getTangent(t, [optionalTarget]) {
     var tangent = optionalTarget ?? Vector3(null, null, null);
 
-    tangent.copy(v2).sub(v1).normalize();
+    tangent.copy(vec2).sub(vec1).normalize();
 
     return tangent;
   }
@@ -115,8 +121,8 @@ class LineCurve3 extends Curve {
   copy(source) {
     super.copy(source);
 
-    v1.copy(source.v1);
-    v2.copy(source.v2);
+    vec1.copy(source.vec1);
+    vec2.copy(source.vec2);
 
     return this;
   }
@@ -125,8 +131,8 @@ class LineCurve3 extends Curve {
   toJSON() {
     var data = super.toJSON();
 
-    data["v1"] = v1.toArray();
-    data["v2"] = v2.toArray();
+    data["vec1"] = vec1.toArray();
+    data["vec2"] = vec2.toArray();
 
     return data;
   }
