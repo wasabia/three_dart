@@ -246,7 +246,9 @@ class Curve {
     var pt2 = getPoint(t2, null);
 
     var tangent = optionalTarget ??
-        ((pt1 is Vector2) ? Vector2(null, null) : Vector3.init());
+        ((pt1 is Vector2)
+            ? Vector2(null, null)
+            : Vector3.init());
 
     tangent.copy(pt2).sub(pt1).normalize();
 
