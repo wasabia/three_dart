@@ -38,7 +38,15 @@ class Mesh extends Object3D {
 
   @override
   Mesh clone([bool? recursive = true]) {
-    return Mesh(geometry!.clone(), material.clone()).copy(this, recursive);
+    final materials = <Material>[];
+
+    if (material is Material) {
+      materials.add((material as Material).clone());
+    } else if (material is Iterable) {
+      materials.addAll((material as Iterable).map((e) => (e as Material).clone()));
+    }
+
+    return Mesh(geometry!.clone(), materials).copy(this, recursive);
   }
 
   @override
