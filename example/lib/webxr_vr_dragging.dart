@@ -32,7 +32,7 @@
 
 //   double dpr = 1.0;
 
-//   var AMOUNT = 4;
+//   var amount = 4;
 
 //   bool verbose = true;
 //   bool disposed = false;
@@ -43,7 +43,7 @@
 
 //   late three.WebGLRenderTarget renderTarget;
 
-//   dynamic? sourceTexture;
+//   dynamic sourceTexture;
 
 //   final GlobalKey<three_jsm.DomLikeListenableState> _globalKey =
 //       GlobalKey<three_jsm.DomLikeListenableState>();
@@ -86,7 +86,7 @@
 
 //     setState(() {});
 
-//     // TODO web wait dom ok!!!
+//     // Wait for web
 //     Future.delayed(const Duration(milliseconds: 100), () async {
 //       await three3dRender.prepareContext();
 

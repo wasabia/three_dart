@@ -7,15 +7,15 @@ import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
-class webgl_loader_gltf_3 extends StatefulWidget {
-  String fileName;
-  webgl_loader_gltf_3({Key? key, required this.fileName}) : super(key: key);
+class WebGlLoaderGltf3 extends StatefulWidget {
+  final String fileName;
+  const WebGlLoaderGltf3({Key? key, required this.fileName}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<WebGlLoaderGltf3> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<webgl_loader_gltf_3> {
+class _MyAppState extends State<WebGlLoaderGltf3> {
   late FlutterGlPlugin three3dRender;
   three.WebGLRenderer? renderer;
 
@@ -31,7 +31,7 @@ class _MyAppState extends State<webgl_loader_gltf_3> {
 
   double dpr = 1.0;
 
-  var AMOUNT = 4;
+  var amount = 4;
 
   bool verbose = true;
   bool disposed = false;
@@ -47,7 +47,7 @@ class _MyAppState extends State<webgl_loader_gltf_3> {
   three.AnimationMixer? mixer;
   three.Clock clock = three.Clock();
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   @override
   void initState() {
@@ -73,7 +73,7 @@ class _MyAppState extends State<webgl_loader_gltf_3> {
 
     setState(() {});
 
-    // TODO web wait dom ok!!!
+    // Wait for web
     Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
@@ -118,24 +118,22 @@ class _MyAppState extends State<webgl_loader_gltf_3> {
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Stack(
-            children: [
-              Container(
-                  width: width,
-                  height: height,
-                  color: Colors.black,
-                  child: Builder(builder: (BuildContext context) {
-                    if (kIsWeb) {
-                      return three3dRender.isInitialized
-                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
-                          : Container();
-                    } else {
-                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
-                    }
-                  })),
-            ],
-          ),
+        Stack(
+          children: [
+            Container(
+                width: width,
+                height: height,
+                color: Colors.black,
+                child: Builder(builder: (BuildContext context) {
+                  if (kIsWeb) {
+                    return three3dRender.isInitialized
+                        ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                        : Container();
+                  } else {
+                    return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
+                  }
+                })),
+          ],
         ),
       ],
     );

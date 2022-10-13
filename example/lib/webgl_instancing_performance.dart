@@ -35,7 +35,7 @@ class _MyAppState extends State<WebglInstancingPerformance> {
 
   double dpr = 1.0;
 
-  var AMOUNT = 4;
+  var amount = 4;
 
   bool verbose = true;
   bool disposed = false;
@@ -70,7 +70,7 @@ class _MyAppState extends State<WebglInstancingPerformance> {
 
     setState(() {});
 
-    // TODO web wait dom ok!!!
+    // Wait for web
     Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
@@ -115,24 +115,22 @@ class _MyAppState extends State<WebglInstancingPerformance> {
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Stack(
-            children: [
-              Container(
-                  width: width,
-                  height: height,
-                  color: Colors.black,
-                  child: Builder(builder: (BuildContext context) {
-                    if (kIsWeb) {
-                      return three3dRender.isInitialized
-                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
-                          : Container();
-                    } else {
-                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
-                    }
-                  })),
-            ],
-          ),
+        Stack(
+          children: [
+            Container(
+                width: width,
+                height: height,
+                color: Colors.black,
+                child: Builder(builder: (BuildContext context) {
+                  if (kIsWeb) {
+                    return three3dRender.isInitialized
+                        ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                        : Container();
+                  } else {
+                    return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
+                  }
+                })),
+          ],
         ),
       ],
     );
@@ -197,10 +195,10 @@ class _MyAppState extends State<WebglInstancingPerformance> {
     scene = three.Scene();
     scene.background = three.Color.fromHex(0xffffff);
 
-    var loader = three.BufferGeometryLoader(null);
+    // var loader = three.BufferGeometryLoader(null);
     material = three.MeshNormalMaterial();
 
-    // var geometry = await _loader.loadAsync("assets/models/json/suzanne_buffergeometry.json", null);
+    // var geometry = await loader.loadAsync("assets/models/json/suzanne_buffergeometry.json", null);
     // geometry.computeVertexNormals();
 
     var geometry = three.BoxGeometry(5, 5, 5);

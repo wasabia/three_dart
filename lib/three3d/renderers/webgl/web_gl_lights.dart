@@ -488,8 +488,8 @@ class LightState {
   late List pointShadowMap;
   late List pointShadowMatrix;
   late List hemi;
-  dynamic? rectAreaLTC1;
-  dynamic? rectAreaLTC2;
+  dynamic rectAreaLTC1;
+  dynamic rectAreaLTC2;
 
   LightState(Map<String, dynamic> json) {
     version = json["version"];

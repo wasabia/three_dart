@@ -7,16 +7,16 @@ import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
-class webgl_morphtargets extends StatefulWidget {
-  String fileName;
+class WebGlMorphtargets extends StatefulWidget {
+  final String fileName;
 
-  webgl_morphtargets({Key? key, required this.fileName}) : super(key: key);
+  const WebGlMorphtargets({Key? key, required this.fileName}) : super(key: key);
 
   @override
-  createState() => _State();
+  State<WebGlMorphtargets> createState() => _State();
 }
 
-class _State extends State<webgl_morphtargets> {
+class _State extends State<WebGlMorphtargets> {
   late FlutterGlPlugin three3dRender;
   three.WebGLRenderer? renderer;
 
@@ -36,7 +36,7 @@ class _State extends State<webgl_morphtargets> {
 
   double dpr = 1.0;
 
-  var AMOUNT = 4;
+  var amount = 4;
 
   bool verbose = true;
   bool disposed = false;
@@ -52,7 +52,7 @@ class _State extends State<webgl_morphtargets> {
 
   late three.WebGLMultisampleRenderTarget renderTarget;
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   bool loaded = false;
 
@@ -70,7 +70,7 @@ class _State extends State<webgl_morphtargets> {
 
     three3dRender = FlutterGlPlugin();
 
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "antialias": true,
       "alpha": false,
       "width": width.toInt(),
@@ -78,11 +78,11 @@ class _State extends State<webgl_morphtargets> {
       "dpr": dpr
     };
 
-    await three3dRender.initialize(options: _options);
+    await three3dRender.initialize(options: options);
 
     setState(() {});
 
-    // TODO web wait dom ok!!!
+    // Wait for web
     Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
@@ -127,49 +127,44 @@ class _State extends State<webgl_morphtargets> {
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Stack(
-            children: [
-              Container(
-                  child: Container(
-                      width: width,
-                      height: height,
-                      color: Colors.black,
-                      child: Builder(builder: (BuildContext context) {
-                        if (kIsWeb) {
-                          return three3dRender.isInitialized
-                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
-                              : Container();
-                        } else {
-                          return three3dRender.isInitialized
-                              ? Texture(textureId: three3dRender.textureId!)
-                              : Container();
-                        }
-                      }))),
-            ],
-          ),
+        Stack(
+          children: [
+            Container(
+                width: width,
+                height: height,
+                color: Colors.black,
+                child: Builder(builder: (BuildContext context) {
+                  if (kIsWeb) {
+                    return three3dRender.isInitialized
+                        ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                        : Container();
+                  } else {
+                    return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
+                  }
+                })),
+          ],
         ),
       ],
     );
   }
 
   render() {
-    int _t = DateTime.now().millisecondsSinceEpoch;
+    int t = DateTime.now().millisecondsSinceEpoch;
 
-    final _gl = three3dRender.gl;
+    final gl = three3dRender.gl;
 
     renderer!.render(scene, camera);
 
-    int _t1 = DateTime.now().millisecondsSinceEpoch;
+    int t1 = DateTime.now().millisecondsSinceEpoch;
 
     if (verbose) {
-      print("render cost: ${_t1 - _t} ");
+      print("render cost: ${t1 - t} ");
       print(renderer!.info.memory);
       print(renderer!.info.render);
     }
 
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
-    _gl.flush();
+    gl.flush();
 
     if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
@@ -179,14 +174,14 @@ class _State extends State<webgl_morphtargets> {
   }
 
   initRenderer() {
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "width": width,
       "height": height,
       "gl": three3dRender.gl,
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = three.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
@@ -293,15 +288,15 @@ class _State extends State<webgl_morphtargets> {
       return;
     }
 
-    num _t = (DateTime.now().millisecondsSinceEpoch * 0.0005);
+    num t = (DateTime.now().millisecondsSinceEpoch * 0.0005);
 
-    var _v0 = (three.Math.sin(_t) + 1.0) / 2.0;
-    var _v1 = (three.Math.sin(_t + 0.3) + 1.0) / 2.0;
+    var v0 = (three.Math.sin(t) + 1.0) / 2.0;
+    var v1 = (three.Math.sin(t + 0.3) + 1.0) / 2.0;
 
     // print(" _v0: ${_v0} _v1: ${_v1} ");
 
-    mesh.morphTargetInfluences![0] = _v0;
-    mesh.morphTargetInfluences![1] = _v1;
+    mesh.morphTargetInfluences![0] = v0;
+    mesh.morphTargetInfluences![1] = v1;
 
     // mesh.morphTargetInfluences![0] = 0.2;
 

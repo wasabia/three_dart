@@ -30,7 +30,7 @@ class _MyAppState extends State<WebglCameraArray> {
 
   double dpr = 1.0;
 
-  var AMOUNT = 4;
+  var amount = 4;
 
   bool verbose = true;
   bool disposed = false;
@@ -41,7 +41,7 @@ class _MyAppState extends State<WebglCameraArray> {
 
   late three.WebGLRenderTarget renderTarget;
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   bool loaded = false;
 
@@ -68,7 +68,7 @@ class _MyAppState extends State<WebglCameraArray> {
 
     setState(() {});
 
-    // TODO web wait dom ok!!!
+    // Wait for web
     Future.delayed(const Duration(milliseconds: 200), () async {
       await three3dRender.prepareContext();
 
@@ -113,28 +113,26 @@ class _MyAppState extends State<WebglCameraArray> {
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Stack(
-            children: [
-              Container(
-                  width: width,
-                  height: height,
-                  color: Colors.red,
-                  child: Builder(builder: (BuildContext context) {
-                    if (kIsWeb) {
-                      return three3dRender.isInitialized
-                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
-                          : Container(
-                              color: Colors.red,
-                            );
-                    } else {
-                      return three3dRender.isInitialized
-                          ? Texture(textureId: three3dRender.textureId!)
-                          : Container(color: Colors.red);
-                    }
-                  })),
-            ],
-          ),
+        Stack(
+          children: [
+            Container(
+                width: width,
+                height: height,
+                color: Colors.red,
+                child: Builder(builder: (BuildContext context) {
+                  if (kIsWeb) {
+                    return three3dRender.isInitialized
+                        ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                        : Container(
+                            color: Colors.red,
+                          );
+                  } else {
+                    return three3dRender.isInitialized
+                        ? Texture(textureId: three3dRender.textureId!)
+                        : Container(color: Colors.red);
+                  }
+                })),
+          ],
         ),
       ],
     );
@@ -201,20 +199,20 @@ class _MyAppState extends State<WebglCameraArray> {
   }
 
   initPage() {
-    var ASPECTRATIO = width / height;
+    var aspectRatio = width / height;
 
-    var WIDTH = (width / AMOUNT) * dpr;
-    var HEIGHT = (height / AMOUNT) * dpr;
+    var w = (width / amount) * dpr;
+    var h = (height / amount) * dpr;
 
     List<three.Camera> cameras = [];
 
-    for (var y = 0; y < AMOUNT; y++) {
-      for (var x = 0; x < AMOUNT; x++) {
-        var subcamera = three.PerspectiveCamera(40, ASPECTRATIO, 0.1, 10);
-        subcamera.viewport = three.Vector4(
-            three.Math.floor(x * WIDTH), three.Math.floor(y * HEIGHT), three.Math.ceil(WIDTH), three.Math.ceil(HEIGHT));
-        subcamera.position.x = (x / AMOUNT) - 0.5;
-        subcamera.position.y = 0.5 - (y / AMOUNT);
+    for (var y = 0; y < amount; y++) {
+      for (var x = 0; x < amount; x++) {
+        var subcamera = three.PerspectiveCamera(40, aspectRatio, 0.1, 10);
+        subcamera.viewport =
+            three.Vector4(three.Math.floor(x * w), three.Math.floor(y * h), three.Math.ceil(w), three.Math.ceil(h));
+        subcamera.position.x = (x / amount) - 0.5;
+        subcamera.position.y = 0.5 - (y / amount);
         subcamera.position.z = 1.5;
         subcamera.position.multiplyScalar(2);
         subcamera.lookAt(three.Vector3(0, 0, 0));

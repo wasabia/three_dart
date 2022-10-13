@@ -4,10 +4,10 @@ part of three_core;
 
 class Event {
   late String? type;
-  late dynamic? target;
-  late dynamic? attachment;
-  late dynamic? action;
-  late dynamic? direction;
+  late dynamic target;
+  late dynamic attachment;
+  late dynamic action;
+  late dynamic direction;
   String? mode;
 
   Event(Map<String, dynamic> json) {

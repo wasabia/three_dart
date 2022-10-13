@@ -6,16 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
 
-class webgl_clipping_advanced extends StatefulWidget {
-  String fileName;
+class WebGlClippingAdvanced extends StatefulWidget {
+  final String fileName;
 
-  webgl_clipping_advanced({Key? key, required this.fileName}) : super(key: key);
+  const WebGlClippingAdvanced({Key? key, required this.fileName}) : super(key: key);
 
   @override
-  createState() => _State();
+  State<WebGlClippingAdvanced> createState() => _State();
 }
 
-class _State extends State<webgl_clipping_advanced> {
+class _State extends State<WebGlClippingAdvanced> {
   late FlutterGlPlugin three3dRender;
   three.WebGLRenderer? renderer;
 
@@ -34,7 +34,7 @@ class _State extends State<webgl_clipping_advanced> {
 
   double dpr = 1.0;
 
-  var AMOUNT = 4;
+  var amount = 4;
 
   bool verbose = true;
   bool disposed = false;
@@ -45,7 +45,7 @@ class _State extends State<webgl_clipping_advanced> {
 
   late three.WebGLMultisampleRenderTarget renderTarget;
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   bool loaded = false;
 
@@ -57,12 +57,10 @@ class _State extends State<webgl_clipping_advanced> {
 
   dynamic volumeVisualization, globalClippingPlanes;
 
-  final Map<String, List<Function>> _listeners = {};
+  late List<three.Plane> _planes;
 
-  late List<three.Plane> _Planes;
-
-  late List<three.Matrix4> _PlaneMatrices;
-  late List<three.Plane> GlobalClippingPlanes;
+  late List<three.Matrix4> _planeMatrices;
+  late List<three.Plane> _clippingPlanes;
 
   @override
   void initState() {
@@ -76,7 +74,7 @@ class _State extends State<webgl_clipping_advanced> {
 
     three3dRender = FlutterGlPlugin();
 
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "antialias": true,
       "alpha": false,
       "width": width.toInt(),
@@ -84,11 +82,11 @@ class _State extends State<webgl_clipping_advanced> {
       "dpr": dpr
     };
 
-    await three3dRender.initialize(options: _options);
+    await three3dRender.initialize(options: options);
 
     setState(() {});
 
-    // TODO web wait dom ok!!!
+    // Wait for web
     Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
@@ -133,49 +131,44 @@ class _State extends State<webgl_clipping_advanced> {
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Stack(
-            children: [
-              Container(
-                  child: Container(
-                      width: width,
-                      height: height,
-                      color: Colors.black,
-                      child: Builder(builder: (BuildContext context) {
-                        if (kIsWeb) {
-                          return three3dRender.isInitialized
-                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
-                              : Container();
-                        } else {
-                          return three3dRender.isInitialized
-                              ? Texture(textureId: three3dRender.textureId!)
-                              : Container();
-                        }
-                      }))),
-            ],
-          ),
+        Stack(
+          children: [
+            Container(
+                width: width,
+                height: height,
+                color: Colors.black,
+                child: Builder(builder: (BuildContext context) {
+                  if (kIsWeb) {
+                    return three3dRender.isInitialized
+                        ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                        : Container();
+                  } else {
+                    return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
+                  }
+                })),
+          ],
         ),
       ],
     );
   }
 
   render() {
-    int _t = DateTime.now().millisecondsSinceEpoch;
+    int t = DateTime.now().millisecondsSinceEpoch;
 
-    final _gl = three3dRender.gl;
+    final gl = three3dRender.gl;
 
     renderer!.render(scene, camera);
 
-    int _t1 = DateTime.now().millisecondsSinceEpoch;
+    int t1 = DateTime.now().millisecondsSinceEpoch;
 
     if (verbose) {
-      print("render cost: ${_t1 - _t} ");
+      print("render cost: ${t1 - t} ");
       print(renderer!.info.memory);
       print(renderer!.info.render);
     }
 
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
-    _gl.flush();
+    gl.flush();
 
     if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
@@ -185,14 +178,14 @@ class _State extends State<webgl_clipping_advanced> {
   }
 
   initRenderer() {
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "width": width,
       "height": height,
       "gl": three3dRender.gl,
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = three.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = true;
@@ -284,21 +277,19 @@ class _State extends State<webgl_clipping_advanced> {
   }
 
   initPage() async {
-    var Vertices = [
-          three.Vector3(1, 0, three.Math.SQRT1_2),
-          three.Vector3(-1, 0, three.Math.SQRT1_2),
-          three.Vector3(0, 1, -three.Math.SQRT1_2),
-          three.Vector3(0, -1, -three.Math.SQRT1_2)
-        ],
-        Indices = [0, 1, 2, 0, 2, 3, 0, 3, 1, 1, 3, 2];
+    var vertices = [
+      three.Vector3(1, 0, three.Math.SQRT1_2),
+      three.Vector3(-1, 0, three.Math.SQRT1_2),
+      three.Vector3(0, 1, -three.Math.SQRT1_2),
+      three.Vector3(0, -1, -three.Math.SQRT1_2)
+    ];
+    var indices = [0, 1, 2, 0, 2, 3, 0, 3, 1, 1, 3, 2];
 
-    _Planes = planesFromMesh(Vertices, Indices);
+    _planes = planesFromMesh(vertices, indices);
 
-    _PlaneMatrices = _Planes.map(planeToMatrix).toList();
+    _planeMatrices = _planes.map(planeToMatrix).toList();
 
-    GlobalClippingPlanes = cylindricalPlanes(5, 2.5);
-
-    var Empty = [];
+    _clippingPlanes = cylindricalPlanes(5, 2.5);
 
     camera = three.PerspectiveCamera(45, width / height, 0.25, 16);
 
@@ -345,7 +336,7 @@ class _State extends State<webgl_clipping_advanced> {
       "shininess": 100,
       "side": three.DoubleSide,
       // Clipping setup:
-      "clippingPlanes": createPlanes(_Planes.length),
+      "clippingPlanes": createPlanes(_planes.length),
       "clipShadows": true
     });
 
@@ -353,7 +344,7 @@ class _State extends State<webgl_clipping_advanced> {
 
     var geometry = three.BoxGeometry(0.18, 0.18, 0.18);
 
-    for (var z = -2; z <= 2; ++z)
+    for (var z = -2; z <= 2; ++z) {
       for (var y = -2; y <= 2; ++y) {
         for (var x = -2; x <= 2; ++x) {
           var mesh = three.Mesh(geometry, clipMaterial);
@@ -362,6 +353,7 @@ class _State extends State<webgl_clipping_advanced> {
           object.add(mesh);
         }
       }
+    }
 
     scene.add(object);
 
@@ -370,12 +362,12 @@ class _State extends State<webgl_clipping_advanced> {
     volumeVisualization = three.Group();
     volumeVisualization.visible = true;
 
-    for (var i = 0, n = _Planes.length; i != n; ++i) {
-      List<three.Plane> __clippingPlanes = [];
+    for (var i = 0, n = _planes.length; i != n; ++i) {
+      List<three.Plane> clippingPlanes = [];
 
       clipMaterial.clippingPlanes!.asMap().forEach((index, elm) {
         if (index != i) {
-          __clippingPlanes.add(elm);
+          clippingPlanes.add(elm);
         }
       });
 
@@ -388,7 +380,7 @@ class _State extends State<webgl_clipping_advanced> {
 
         // clip to the others to show the volume (wildly
         // intersecting transparent planes look bad)
-        "clippingPlanes": __clippingPlanes
+        "clippingPlanes": clippingPlanes
 
         // no need to enable shadow clipping - the plane
         // visualization does not cast shadows
@@ -408,7 +400,7 @@ class _State extends State<webgl_clipping_advanced> {
     ground.receiveShadow = true;
     scene.add(ground);
 
-    globalClippingPlanes = createPlanes(GlobalClippingPlanes.length);
+    globalClippingPlanes = createPlanes(_clippingPlanes.length);
 
     startTime = DateTime.now().millisecondsSinceEpoch;
 
@@ -456,19 +448,19 @@ class _State extends State<webgl_clipping_advanced> {
     var bouncy = three.Math.cos(time * .5) * 0.5 + 0.7;
     transform.multiply(tmpMatrix.makeScale(bouncy, bouncy, bouncy));
 
-    assignTransformedPlanes(clipMaterial.clippingPlanes, _Planes, transform);
+    assignTransformedPlanes(clipMaterial.clippingPlanes, _planes, transform);
 
     var planeMeshes = volumeVisualization.children;
     var n = planeMeshes.length;
 
     for (var i = 0; i < n; ++i) {
-      tmpMatrix.multiplyMatrices(transform, _PlaneMatrices[i]);
+      tmpMatrix.multiplyMatrices(transform, _planeMatrices[i]);
       setObjectWorldMatrix(planeMeshes[i], tmpMatrix);
     }
 
     transform.makeRotationY(time * 0.1);
 
-    assignTransformedPlanes(globalClippingPlanes, GlobalClippingPlanes, transform);
+    assignTransformedPlanes(globalClippingPlanes, _clippingPlanes, transform);
 
     render();
 

@@ -7,16 +7,16 @@ import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
-class webgl_animation_keyframes extends StatefulWidget {
-  String fileName;
+class WebGlAnimationKeyframes extends StatefulWidget {
+  final String fileName;
 
-  webgl_animation_keyframes({Key? key, required this.fileName}) : super(key: key);
+  const WebGlAnimationKeyframes({Key? key, required this.fileName}) : super(key: key);
 
   @override
-  createState() => webgl_animation_keyframesState();
+  State<WebGlAnimationKeyframes> createState() => WebGlAnimationKeyframesState();
 }
 
-class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
+class WebGlAnimationKeyframesState extends State<WebGlAnimationKeyframes> {
   late FlutterGlPlugin three3dRender;
   three.WebGLRenderer? renderer;
 
@@ -36,7 +36,7 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
 
   double dpr = 1.0;
 
-  var AMOUNT = 4;
+  var amount = 4;
 
   bool verbose = true;
   bool disposed = false;
@@ -47,7 +47,7 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
 
   late three.WebGLMultisampleRenderTarget renderTarget;
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   bool loaded = false;
 
@@ -93,7 +93,6 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
 
     setState(() {});
 
-    // TODO web wait dom ok!!!
     Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
@@ -149,30 +148,28 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Stack(
-            children: [
-              three_jsm.DomLikeListenable(
-                  key: _globalKey,
-                  builder: (BuildContext conetxt) {
-                    return Container(
-                        width: width,
-                        height: height,
-                        color: Colors.black,
-                        child: Builder(builder: (BuildContext context) {
-                          if (kIsWeb) {
-                            return three3dRender.isInitialized
-                                ? HtmlElementView(viewType: three3dRender.textureId!.toString())
-                                : Container();
-                          } else {
-                            return three3dRender.isInitialized
-                                ? Texture(textureId: three3dRender.textureId!)
-                                : Container();
-                          }
-                        }));
-                  }),
-            ],
-          ),
+        Stack(
+          children: [
+            three_jsm.DomLikeListenable(
+                key: _globalKey,
+                builder: (BuildContext conetxt) {
+                  return Container(
+                      width: width,
+                      height: height,
+                      color: Colors.black,
+                      child: Builder(builder: (BuildContext context) {
+                        if (kIsWeb) {
+                          return three3dRender.isInitialized
+                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                              : Container();
+                        } else {
+                          return three3dRender.isInitialized
+                              ? Texture(textureId: three3dRender.textureId!)
+                              : Container();
+                        }
+                      }));
+                }),
+          ],
         ),
       ],
     );

@@ -7,13 +7,13 @@ import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
-class webgl_animation_cloth extends StatefulWidget {
-  String fileName;
+class WebGlAnimationCloth extends StatefulWidget {
+  final String fileName;
 
-  webgl_animation_cloth({Key? key, required this.fileName}) : super(key: key);
+  const WebGlAnimationCloth({Key? key, required this.fileName}) : super(key: key);
 
   @override
-  createState() => _State();
+  State<WebGlAnimationCloth> createState() => _State();
 }
 
 double restDistance = 25;
@@ -21,12 +21,11 @@ double restDistance = 25;
 int xSegs = 10;
 int ySegs = 10;
 
-var DRAG = 1 - 0.03;
+var drag = 1 - 0.03;
+var damping = 0.03;
+var mass = 0.1;
 
-var DAMPING = 0.03;
-var MASS = 0.1;
-
-class _State extends State<webgl_animation_cloth> {
+class _State extends State<WebGlAnimationCloth> {
   late FlutterGlPlugin three3dRender;
   three.WebGLRenderer? renderer;
 
@@ -46,7 +45,7 @@ class _State extends State<webgl_animation_cloth> {
 
   double dpr = 1.0;
 
-  var AMOUNT = 4;
+  var amount = 4;
 
   int startTime = 0;
 
@@ -59,7 +58,7 @@ class _State extends State<webgl_animation_cloth> {
 
   late three.WebGLMultisampleRenderTarget renderTarget;
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   bool loaded = false;
 
@@ -81,13 +80,13 @@ class _State extends State<webgl_animation_cloth> {
 
   late Cloth cloth;
 
-  var GRAVITY = 981 * 1.4;
+  var grav = 981 * 1.4;
   var gravity = three.Vector3(0, -981 * 1.4, 0).multiplyScalar(0.1);
 
-  var TIMESTEP = 18 / 1000;
-  var TIMESTEP_SQ = (18 / 1000) * (18 / 1000);
+  var timestep = 18 / 1000;
+  var trimstepSq = (18 / 1000) * (18 / 1000);
 
-  var sphere;
+  three.Mesh? sphere;
 
   @override
   void initState() {
@@ -101,7 +100,7 @@ class _State extends State<webgl_animation_cloth> {
 
     three3dRender = FlutterGlPlugin();
 
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "antialias": true,
       "alpha": false,
       "width": width.toInt(),
@@ -109,11 +108,10 @@ class _State extends State<webgl_animation_cloth> {
       "dpr": dpr
     };
 
-    await three3dRender.initialize(options: _options);
+    await three3dRender.initialize(options: options);
 
     setState(() {});
 
-    // TODO web wait dom ok!!!
     Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
@@ -158,49 +156,44 @@ class _State extends State<webgl_animation_cloth> {
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Stack(
-            children: [
-              Container(
-                  child: Container(
-                      width: width,
-                      height: height,
-                      color: Colors.black,
-                      child: Builder(builder: (BuildContext context) {
-                        if (kIsWeb) {
-                          return three3dRender.isInitialized
-                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
-                              : Container();
-                        } else {
-                          return three3dRender.isInitialized
-                              ? Texture(textureId: three3dRender.textureId!)
-                              : Container();
-                        }
-                      }))),
-            ],
-          ),
+        Stack(
+          children: [
+            Container(
+                width: width,
+                height: height,
+                color: Colors.black,
+                child: Builder(builder: (BuildContext context) {
+                  if (kIsWeb) {
+                    return three3dRender.isInitialized
+                        ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                        : Container();
+                  } else {
+                    return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
+                  }
+                })),
+          ],
         ),
       ],
     );
   }
 
   render() {
-    int _t = DateTime.now().millisecondsSinceEpoch;
+    int t = DateTime.now().millisecondsSinceEpoch;
 
-    final _gl = three3dRender.gl;
+    final gl = three3dRender.gl;
 
     renderer!.render(scene, camera);
 
-    int _t1 = DateTime.now().millisecondsSinceEpoch;
+    int t1 = DateTime.now().millisecondsSinceEpoch;
 
     if (verbose) {
-      print("render cost: ${_t1 - _t} ");
+      print("render cost: ${t1 - t} ");
       print(renderer!.info.memory);
       print(renderer!.info.render);
     }
 
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
-    _gl.flush();
+    gl.flush();
 
     if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
@@ -210,14 +203,14 @@ class _State extends State<webgl_animation_cloth> {
   }
 
   initRenderer() {
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "width": width,
       "height": height,
       "gl": three3dRender.gl,
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = three.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = true;
@@ -292,7 +285,7 @@ class _State extends State<webgl_animation_cloth> {
       var particle = particles[i];
       particle.addForce(gravity);
 
-      particle.integrate(TIMESTEP_SQ);
+      particle.integrate(trimstepSq);
     }
 
     // Start Constraints
@@ -311,7 +304,7 @@ class _State extends State<webgl_animation_cloth> {
     ballPosition.x = three.Math.cos(now / 400) * 70;
 
     if (params["showBall"]) {
-      sphere.visible = true;
+      sphere?.visible = true;
 
       for (var i = 0, il = particles.length; i < il; i++) {
         var particle = particles[i];
@@ -324,7 +317,7 @@ class _State extends State<webgl_animation_cloth> {
         }
       }
     } else {
-      sphere.visible = false;
+      sphere?.visible = false;
     }
 
     // Floor Constraints
@@ -370,10 +363,6 @@ class _State extends State<webgl_animation_cloth> {
     pinsFormation.add(pins);
 
     pins = pinsFormation[1];
-
-    togglePins() {
-      // pins = pinsFormation[ ~ ~ ( three.Math.random() * pinsFormation.length ) ];
-    }
 
     // scene
 
@@ -438,9 +427,9 @@ class _State extends State<webgl_animation_cloth> {
     var ballMaterial = three.MeshLambertMaterial();
 
     sphere = three.Mesh(ballGeo, ballMaterial);
-    sphere.castShadow = true;
-    sphere.receiveShadow = true;
-    sphere.visible = false;
+    sphere?.castShadow = true;
+    sphere?.receiveShadow = true;
+    sphere?.visible = false;
     scene.add(sphere);
 
     // ground
@@ -522,8 +511,6 @@ class _State extends State<webgl_animation_cloth> {
       return;
     }
 
-    var delta = clock.getDelta();
-
     var currentTime = DateTime.now().millisecondsSinceEpoch;
 
     simulate(currentTime - startTime);
@@ -540,7 +527,7 @@ class _State extends State<webgl_animation_cloth> {
 
     clothGeometry.computeVertexNormals();
 
-    sphere.position.copy(ballPosition);
+    sphere?.position.copy(ballPosition);
 
     render();
 
@@ -572,12 +559,12 @@ class Particle {
   late three.Vector3 tmp;
   late three.Vector3 tmp2;
 
-  Particle(x, y, z, mass) {
+  Particle(x, y, z, this.mass) {
     position = three.Vector3();
     previous = three.Vector3();
     original = three.Vector3();
     a = three.Vector3(0, 0, 0); // acceleration
-    this.mass = mass;
+
     invMass = 1 / mass;
     tmp = three.Vector3();
     tmp2 = three.Vector3();
@@ -599,7 +586,7 @@ class Particle {
 
   integrate(timesq) {
     var newPos = tmp.subVectors(position, previous);
-    newPos.multiplyScalar(DRAG).add(position);
+    newPos.multiplyScalar(drag).add(position);
     newPos.add(a.multiplyScalar(timesq));
 
     tmp = previous;
@@ -617,10 +604,7 @@ class Cloth {
   late List<Particle> particles;
   late List<dynamic> constraints;
 
-  Cloth([int w = 10, int h = 10]) {
-    this.w = w;
-    this.h = h;
-
+  Cloth([this.w = 10, this.h = 10]) {
     List<Particle> particles = [];
     List<dynamic> constraints = [];
 
@@ -628,7 +612,7 @@ class Cloth {
 
     for (var v = 0; v <= h; v++) {
       for (var u = 0; u <= w; u++) {
-        particles.add(Particle(u / w, v / h, 0, MASS));
+        particles.add(Particle(u / w, v / h, 0, mass));
       }
     }
 

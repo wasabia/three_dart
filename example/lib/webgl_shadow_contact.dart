@@ -8,15 +8,15 @@ import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
-class webgl_shadow_contact extends StatefulWidget {
-  String fileName;
-  webgl_shadow_contact({Key? key, required this.fileName}) : super(key: key);
+class WebGlShadowContact extends StatefulWidget {
+  final String fileName;
+  const WebGlShadowContact({Key? key, required this.fileName}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<WebGlShadowContact> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<webgl_shadow_contact> {
+class _MyAppState extends State<WebGlShadowContact> {
   late FlutterGlPlugin three3dRender;
   three.WebGLRenderer? renderer;
 
@@ -36,7 +36,7 @@ class _MyAppState extends State<webgl_shadow_contact> {
 
   double dpr = 1.0;
 
-  var AMOUNT = 4;
+  var amount = 4;
 
   bool verbose = true;
   bool disposed = false;
@@ -52,9 +52,9 @@ class _MyAppState extends State<webgl_shadow_contact> {
 
   var meshes = [];
 
-  var PLANE_WIDTH = 2.5;
-  var PLANE_HEIGHT = 2.5;
-  var CAMERA_HEIGHT = 0.3;
+  var planeWidth = 2.5;
+  var planeHeight = 2.5;
+  var cameraHeight = 0.3;
 
   bool inited = false;
 
@@ -65,7 +65,7 @@ class _MyAppState extends State<webgl_shadow_contact> {
   late three.Material horizontalBlurMaterial;
   late three.Material verticalBlurMaterial;
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   Map<String, dynamic> state = {
     "shadow": {
@@ -104,7 +104,7 @@ class _MyAppState extends State<webgl_shadow_contact> {
 
     setState(() {});
 
-    // TODO web wait dom ok!!!
+    // Wait for web
     Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
@@ -149,24 +149,22 @@ class _MyAppState extends State<webgl_shadow_contact> {
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Stack(
-            children: [
-              Container(
-                  width: width,
-                  height: height,
-                  color: Colors.black,
-                  child: Builder(builder: (BuildContext context) {
-                    if (kIsWeb) {
-                      return three3dRender.isInitialized
-                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
-                          : Container();
-                    } else {
-                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
-                    }
-                  })),
-            ],
-          ),
+        Stack(
+          children: [
+            Container(
+                width: width,
+                height: height,
+                color: Colors.black,
+                child: Builder(builder: (BuildContext context) {
+                  if (kIsWeb) {
+                    return three3dRender.isInitialized
+                        ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                        : Container();
+                  } else {
+                    return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
+                  }
+                })),
+          ],
         ),
       ],
     );
@@ -334,7 +332,7 @@ class _MyAppState extends State<webgl_shadow_contact> {
     renderTargetBlur.texture.generateMipmaps = false;
 
     // make a plane and make it face up
-    var planeGeometry = three.PlaneGeometry(PLANE_WIDTH, PLANE_HEIGHT).rotateX(three.Math.PI / 2);
+    var planeGeometry = three.PlaneGeometry(planeWidth, planeHeight).rotateX(three.Math.PI / 2);
     var planeMaterial = three.MeshBasicMaterial({
       "map": renderTarget2.texture,
       "opacity": state["shadow"]!["opacity"]!,
@@ -366,8 +364,8 @@ class _MyAppState extends State<webgl_shadow_contact> {
     shadowGroup.add(fillPlane);
 
     // the camera to render the depth material from
-    shadowCamera = three.OrthographicCamera(
-        -PLANE_WIDTH / 2, PLANE_WIDTH / 2, PLANE_HEIGHT / 2, -PLANE_HEIGHT / 2, 0, CAMERA_HEIGHT);
+    shadowCamera =
+        three.OrthographicCamera(-planeWidth / 2, planeWidth / 2, planeHeight / 2, -planeHeight / 2, 0, cameraHeight);
     shadowCamera.rotation.x = three.Math.PI / 2; // get the camera to look up
     shadowGroup.add(shadowCamera);
 

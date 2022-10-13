@@ -7,19 +7,18 @@ import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
-GlobalKey<webgl_animation_keyframesState> webgl_animation_keyframesGlobalKey =
-    GlobalKey<webgl_animation_keyframesState>();
+final webGlAnimationKeyframesGlobalKey = GlobalKey<_WebGlDebug3State>();
 
-class webgl_debug3 extends StatefulWidget {
-  String fileName;
+class WebGlDebug3 extends StatefulWidget {
+  final String fileName;
 
-  webgl_debug3({Key? key, required this.fileName}) : super(key: key);
+  const WebGlDebug3({Key? key, required this.fileName}) : super(key: key);
 
   @override
-  createState() => webgl_animation_keyframesState();
+  State<WebGlDebug3> createState() => _WebGlDebug3State();
 }
 
-class webgl_animation_keyframesState extends State<webgl_debug3> {
+class _WebGlDebug3State extends State<WebGlDebug3> {
   late FlutterGlPlugin three3dRender;
   three.WebGLRenderer? renderer;
 
@@ -39,7 +38,7 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
 
   double dpr = 1.0;
 
-  var AMOUNT = 4;
+  var amount = 4;
 
   bool verbose = true;
   bool disposed = false;
@@ -50,13 +49,11 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
 
   late three.WebGLMultisampleRenderTarget renderTarget;
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   bool loaded = false;
 
   late three.Object3D model;
-
-  final Map<String, List<Function>> _listeners = {};
 
   @override
   void initState() {
@@ -70,7 +67,7 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
 
     three3dRender = FlutterGlPlugin();
 
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "antialias": true,
       "alpha": false,
       "width": width.toInt(),
@@ -78,11 +75,11 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
       "dpr": dpr
     };
 
-    await three3dRender.initialize(options: _options);
+    await three3dRender.initialize(options: options);
 
     setState(() {});
 
-    // TODO web wait dom ok!!!
+    // Wait for web
     Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
@@ -127,49 +124,44 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Stack(
-            children: [
-              Container(
-                  child: Container(
-                      width: width,
-                      height: height,
-                      color: Colors.black,
-                      child: Builder(builder: (BuildContext context) {
-                        if (kIsWeb) {
-                          return three3dRender.isInitialized
-                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
-                              : Container();
-                        } else {
-                          return three3dRender.isInitialized
-                              ? Texture(textureId: three3dRender.textureId!)
-                              : Container();
-                        }
-                      }))),
-            ],
-          ),
+        Stack(
+          children: [
+            Container(
+                width: width,
+                height: height,
+                color: Colors.black,
+                child: Builder(builder: (BuildContext context) {
+                  if (kIsWeb) {
+                    return three3dRender.isInitialized
+                        ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                        : Container();
+                  } else {
+                    return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
+                  }
+                })),
+          ],
         ),
       ],
     );
   }
 
   render() {
-    int _t = DateTime.now().millisecondsSinceEpoch;
+    int t = DateTime.now().millisecondsSinceEpoch;
 
-    final _gl = three3dRender.gl;
+    final gl = three3dRender.gl;
 
     renderer!.render(scene, camera);
 
-    int _t1 = DateTime.now().millisecondsSinceEpoch;
+    int t1 = DateTime.now().millisecondsSinceEpoch;
 
     if (verbose) {
-      print("render cost: ${_t1 - _t} ");
+      print("render cost: ${t1 - t} ");
       print(renderer!.info.memory);
       print(renderer!.info.render);
     }
 
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
-    _gl.flush();
+    gl.flush();
 
     if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
@@ -179,14 +171,14 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
   }
 
   initRenderer() {
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "width": width,
       "height": height,
       "gl": three3dRender.gl,
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = three.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
@@ -228,8 +220,8 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
 
     var plane = three.PlaneGeometry(50, 50);
 
-    var _mesh = three.Mesh(plane, clothMaterial);
-    scene.add(_mesh);
+    var mesh = three.Mesh(plane, clothMaterial);
+    scene.add(mesh);
 
     loaded = true;
 
@@ -251,8 +243,6 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
     if (!loaded) {
       return;
     }
-
-    var delta = clock.getDelta();
 
     render();
 

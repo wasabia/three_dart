@@ -4,20 +4,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three3d/objects/index.dart';
 import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
-class webgl_animation_multiple extends StatefulWidget {
-  String fileName;
+class WebGlAnimationMultiple extends StatefulWidget {
+  final String fileName;
 
-  webgl_animation_multiple({Key? key, required this.fileName}) : super(key: key);
+  const WebGlAnimationMultiple({Key? key, required this.fileName}) : super(key: key);
 
   @override
-  createState() => _State();
+  State<WebGlAnimationMultiple> createState() => _State();
 }
 
-class _State extends State<webgl_animation_multiple> {
+class _State extends State<WebGlAnimationMultiple> {
   late FlutterGlPlugin three3dRender;
   three.WebGLRenderer? renderer;
 
@@ -41,7 +40,7 @@ class _State extends State<webgl_animation_multiple> {
 
   double dpr = 1.0;
 
-  var AMOUNT = 4;
+  var amount = 4;
 
   bool verbose = true;
   bool disposed = false;
@@ -50,26 +49,21 @@ class _State extends State<webgl_animation_multiple> {
 
   late three.Texture texture;
 
-  late List<Map<String, dynamic>> MODELS;
-  late List<Map<String, dynamic>> UNITS;
+  late List<Map<String, dynamic>> models;
+  late List<Map<String, dynamic>> units;
   var mixers = []; // All the THREE.AnimationMixer objects for all the animations in the scene
 
   var numLoadedModels = 0;
 
   late three.WebGLMultisampleRenderTarget renderTarget;
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   bool loaded = false;
 
   late three.Object3D model;
 
   final GlobalKey<three_jsm.DomLikeListenableState> _globalKey = GlobalKey<three_jsm.DomLikeListenableState>();
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
@@ -78,7 +72,7 @@ class _State extends State<webgl_animation_multiple> {
 
     three3dRender = FlutterGlPlugin();
 
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "antialias": true,
       "alpha": false,
       "width": width.toInt(),
@@ -86,11 +80,10 @@ class _State extends State<webgl_animation_multiple> {
       "dpr": dpr
     };
 
-    await three3dRender.initialize(options: _options);
+    await three3dRender.initialize(options: options);
 
     setState(() {});
 
-    // TODO web wait dom ok!!!
     Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
@@ -135,53 +128,49 @@ class _State extends State<webgl_animation_multiple> {
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Stack(
-            children: [
-              three_jsm.DomLikeListenable(
-                key: _globalKey,
-                builder: (BuildContext context) {
-                  return Container(
-                      width: width,
-                      height: height,
-                      color: Colors.black,
-                      child: Builder(builder: (BuildContext context) {
-                        if (kIsWeb) {
-                          return three3dRender.isInitialized
-                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
-                              : Container();
-                        } else {
-                          return three3dRender.isInitialized
-                              ? Texture(textureId: three3dRender.textureId!)
-                              : Container();
-                        }
-                      }));
-                },
-              )
-            ],
-          ),
+        Stack(
+          children: [
+            three_jsm.DomLikeListenable(
+              key: _globalKey,
+              builder: (BuildContext context) {
+                return Container(
+                    width: width,
+                    height: height,
+                    color: Colors.black,
+                    child: Builder(builder: (BuildContext context) {
+                      if (kIsWeb) {
+                        return three3dRender.isInitialized
+                            ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                            : Container();
+                      } else {
+                        return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
+                      }
+                    }));
+              },
+            )
+          ],
         ),
       ],
     );
   }
 
   render() {
-    int _t = DateTime.now().millisecondsSinceEpoch;
+    int t = DateTime.now().millisecondsSinceEpoch;
 
-    final _gl = three3dRender.gl;
+    final gl = three3dRender.gl;
 
     renderer!.render(worldScene, camera);
 
-    int _t1 = DateTime.now().millisecondsSinceEpoch;
+    int t1 = DateTime.now().millisecondsSinceEpoch;
 
     if (verbose) {
-      print("render cost: ${_t1 - _t} ");
+      print("render cost: ${t1 - t} ");
       print(renderer!.info.memory);
       print(renderer!.info.render);
     }
 
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
-    _gl.flush();
+    gl.flush();
 
     if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
@@ -191,14 +180,14 @@ class _State extends State<webgl_animation_multiple> {
   }
 
   initRenderer() {
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "width": width,
       "height": height,
       "gl": three3dRender.gl,
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = three.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = true;
@@ -228,14 +217,14 @@ class _State extends State<webgl_animation_multiple> {
     // A model may have multiple SkinnedMesh objects as well as several rigs (armatures). Units will define which
     // meshes, armatures and animations to use. We will load the whole scene for each object and clone it for each unit.
     // Models are from https://www.mixamo.com/
-    MODELS = [
+    models = [
       {"name": "Soldier"},
       {"name": "Parrot"},
     ];
 
     // Here we define instances of the models that we want to place in the scene, their position, scale and the animations
     // that must be played.
-    UNITS = [
+    units = [
       {
         "modelName": "Soldier", // Will use the 3D model from file models/gltf/Soldier.glb
         "meshName": "vanguard_Mesh", // Name of the main mesh to animate
@@ -314,8 +303,6 @@ class _State extends State<webgl_animation_multiple> {
     dirLight.shadow!.camera!.far = 40;
     worldScene.add(dirLight);
 
-    var controls = three_jsm.OrbitControls(camera, _globalKey);
-
     // ground
     var groundMesh =
         three.Mesh(three.PlaneGeometry(40, 40), three.MeshPhongMaterial({"color": 0x999999, "depthWrite": false}));
@@ -328,19 +315,18 @@ class _State extends State<webgl_animation_multiple> {
   //////////////////////////////
   // Function implementations
   //////////////////////////////
-  /**
-     * Function that starts loading process for the next model in the queue. The loading process is
-     * asynchronous: it happens "in the background". Therefore we don't load all the models at once. We load one,
-     * wait until it is done, then load the next one. When all models are loaded, we call loadUnits().
-     */
+
+  /// Function that starts loading process for the next model in the queue. The loading process is
+  /// asynchronous: it happens "in the background". Therefore we don't load all the models at once. We load one,
+  /// wait until it is done, then load the next one. When all models are loaded, we call loadUnits().
   loadModels() {
-    for (var i = 0; i < MODELS.length; ++i) {
-      var m = MODELS[i];
+    for (var i = 0; i < models.length; ++i) {
+      var m = models[i];
 
       loadGltfModel(m, () {
         ++numLoadedModels;
 
-        if (numLoadedModels == MODELS.length) {
+        if (numLoadedModels == models.length) {
           print("All models loaded, time to instantiate units...");
           instantiateUnits();
         }
@@ -348,15 +334,13 @@ class _State extends State<webgl_animation_multiple> {
     }
   }
 
-  /**
-     * Look at UNITS configuration, clone necessary 3D model scenes, place the armatures and meshes in the scene and
-     * launch necessary animations
-     */
+  /// Look at UNITS configuration, clone necessary 3D model scenes, place the armatures and meshes in the scene and
+  /// launch necessary animations
   instantiateUnits() {
     var numSuccess = 0;
 
-    for (var i = 0; i < UNITS.length; ++i) {
-      var u = UNITS[i];
+    for (var i = 0; i < units.length; ++i) {
+      var u = units[i];
       var model = getModelByName(u["modelName"]);
 
       if (model != null) {
@@ -406,14 +390,16 @@ class _State extends State<webgl_animation_multiple> {
     animate();
   }
 
-  /**
-     * Start animation for a specific mesh object. Find the animation by name in the 3D model's animation array
-     * @param skinnedMesh {THREE.SkinnedMesh} The mesh to animate
-     * @param animations {Array} Array containing all the animations for this model
-     * @param animationName {string} Name of the animation to launch
-     * @return {THREE.AnimationMixer} Mixer to be used in the render loop
-     */
-  startAnimation(skinnedMesh, animations, animationName) {
+  /// Start animation for a specific mesh object. Find the animation by name in the 3D model's animation array
+  /// @param skinnedMesh {THREE.SkinnedMesh} The mesh to animate
+  /// @param animations {Array} Array containing all the animations for this model
+  /// @param animationName {string} Name of the animation to launch
+  /// @return {THREE.AnimationMixer} Mixer to be used in the render loop
+  startAnimation(
+    three.SkinnedMesh skinnedMesh,
+    List<three.AnimationClip> animations,
+    String animationName,
+  ) {
     var mixer = three.AnimationMixer(skinnedMesh);
     var clip = three.AnimationClip.findByName(animations, animationName);
 
@@ -425,29 +411,25 @@ class _State extends State<webgl_animation_multiple> {
     return mixer;
   }
 
-  /**
-     * Find a model object by name
-     * @param name
-     * @returns {object|null}
-     */
+  /// Find a model object by name
+  /// @param name
+  /// @returns {object|null}
   getModelByName(name) {
-    for (var i = 0; i < MODELS.length; ++i) {
-      if (MODELS[i]["name"] == name) {
-        return MODELS[i];
+    for (var i = 0; i < models.length; ++i) {
+      if (models[i]["name"] == name) {
+        return models[i];
       }
     }
 
     return null;
   }
 
-  /**
-     * Load a 3D model from a GLTF file. Use the GLTFLoader.
-     * @param model {object} Model config, one item from the MODELS array. It will be updated inside the function!
-     * @param onLoaded {function} A callback function that will be called when the model is loaded
-     */
+  /// Load a 3D model from a GLTF file. Use the GLTFLoader.
+  /// @param model {object} Model config, one item from the MODELS array. It will be updated inside the function!
+  /// @param onLoaded {function} A callback function that will be called when the model is loaded
   loadGltfModel(model, onLoaded) {
     var loader = three_jsm.GLTFLoader(null);
-    var modelName = "assets/models/gltf/" + model["name"] + ".gltf";
+    var modelName = "assets/models/gltf/${model["name"]}.gltf";
 
     loader.load(modelName, (gltf) {
       var scene = gltf["scene"];
@@ -458,7 +440,7 @@ class _State extends State<webgl_animation_multiple> {
       // Enable Shadows
 
       gltf["scene"].traverse((object) {
-        if (object is Mesh) {
+        if (object is three.Mesh) {
           object.castShadow = true;
         }
       });

@@ -93,7 +93,7 @@ class Object3D with EventDispatcher {
 	 */
   Material? customDepthMaterial;
 
-  // onBeforeRender({WebGLRenderer? renderer, scene, Camera? camera, RenderTarget? renderTarget, dynamic? geometry, Material? material, dynamic group}) {
+  // onBeforeRender({WebGLRenderer? renderer, scene, Camera? camera, RenderTarget? renderTarget, dynamic geometry, Material? material, dynamic group}) {
   // print(" Object3D.onBeforeRender ${type} ${id} ");
   // }
   Function? onBeforeRender;
