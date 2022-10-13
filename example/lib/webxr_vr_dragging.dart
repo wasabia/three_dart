@@ -6,7 +6,7 @@
 // import 'package:flutter_gl/flutter_gl.dart';
 // import 'package:three_dart/three3d/objects/index.dart';
 // import 'package:three_dart/three_dart.dart' as three;
-// import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
+// import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
 // class webxr_vr_dragging extends StatefulWidget {
 //   String fileName;
@@ -45,10 +45,10 @@
 
 //   dynamic? sourceTexture;
 
-//   final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey =
-//       GlobalKey<THREE_JSM.DomLikeListenableState>();
+//   final GlobalKey<three_jsm.DomLikeListenableState> _globalKey =
+//       GlobalKey<three_jsm.DomLikeListenableState>();
 
-//   late THREE_JSM.OrbitControls controls;
+//   late three_jsm.OrbitControls controls;
 
 //   dynamic controller1;
 //   dynamic controller2;
@@ -134,7 +134,7 @@
 //         Container(
 //           child: Stack(
 //             children: [
-//               THREE_JSM.DomLikeListenable(
+//               three_jsm.DomLikeListenable(
 //                   key: _globalKey,
 //                   builder: (BuildContext context) {
 //                     return Container(
@@ -223,7 +223,7 @@
 //     camera = new three.PerspectiveCamera( 50, width / height, 0.1, 10 );
 //     camera.position.set( 0, 1.6, 3 );
 
-//     controls = new THREE_JSM.OrbitControls( camera, _globalKey );
+//     controls = new three_jsm.OrbitControls( camera, _globalKey );
 //     controls.target.set( 0, 1.6, 0 );
 //     controls.update();
 

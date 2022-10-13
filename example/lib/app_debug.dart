@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class app_debug extends StatefulWidget {
-  String fileName;
+class AppDebug extends StatefulWidget {
+  final String fileName;
 
-  app_debug({Key? key, required this.fileName}) : super(key: key);
+  const AppDebug({Key? key, required this.fileName}) : super(key: key);
 
   @override
-  createState() => webgl_debugState();
+  State<AppDebug> createState() => AppDebugState();
 }
 
-class webgl_debugState extends State<app_debug> {
+class AppDebugState extends State<AppDebug> {
   @override
   void initState() {
     super.initState();
@@ -129,16 +129,10 @@ class Interpolant {
   int _cachedIndex = 0;
   late dynamic resultBuffer;
   late dynamic sampleValues;
-  late dynamic valueSize;
+  late dynamic sampleSize;
   late dynamic settings;
 
-  Interpolant(parameterPositions, sampleValues, sampleSize, resultBuffer) {
-    this.parameterPositions = parameterPositions;
-
-    this.resultBuffer = resultBuffer;
-    this.sampleValues = sampleValues;
-    valueSize = sampleSize;
-  }
+  Interpolant(this.parameterPositions, this.sampleValues, this.sampleSize, this.resultBuffer);
 
   evaluate(double t) {
     var pp = parameterPositions;
@@ -183,10 +177,10 @@ class Interpolant {
 
               t0 = t1;
 
-              int _idx = ++i1;
+              int idx = ++i1;
 
-              if (_idx < pp.length) {
-                t1 = pp[_idx];
+              if (idx < pp.length) {
+                t1 = pp[idx];
               } else {
                 t1 = null;
               }
@@ -217,13 +211,6 @@ class Interpolant {
             // linear reverse scan
 
             for (var giveUpAt = i1 - 2;;) {
-              if (t0 == null) {
-                // before start
-
-                _cachedIndex = 0;
-                return beforeStart(0, t, t1);
-              }
-
               if (i1 == giveUpAt) break; // this loop
 
               t1 = t0;
@@ -278,11 +265,6 @@ class Interpolant {
 
         // check boundary cases, again
 
-        if (t0 == null) {
-          _cachedIndex = 0;
-          return beforeStart(0, t, t1);
-        }
-
         if (t1 == null) {
           i1 = pp.length;
           _cachedIndex = i1;
@@ -300,14 +282,7 @@ class Interpolant {
 
   interpolate(int i1, num t0, num t, num t1) {
     var result = resultBuffer;
-    var values = sampleValues;
-    var stride = valueSize;
-
-    double _v0 = t + (t0 * -1);
-    double _v1 = t1 + (t0 * -1);
-
-    double alpha = _v0 / _v1;
-
+    var stride = sampleSize;
     var offset = i1 * stride;
 
     for (var end = offset + stride; offset < end; offset += 4) {}

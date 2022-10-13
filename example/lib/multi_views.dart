@@ -6,21 +6,21 @@ import 'package:flutter/material.dart' hide Matrix4;
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
 
-class multi_views extends StatefulWidget {
-  String fileName;
-  multi_views({Key? key, required this.fileName}) : super(key: key);
+class MultiViews extends StatefulWidget {
+  final String fileName;
+
+  const MultiViews({Key? key, required this.fileName}) : super(key: key);
 
   @override
-  createState() => _MyAppState();
+  State<MultiViews> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<multi_views> {
+class _MyAppState extends State<MultiViews> {
   three.WebGLRenderer? renderer;
   bool show = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     if (!kIsWeb) {
@@ -33,13 +33,13 @@ class _MyAppState extends State<multi_views> {
     await three3dRender.initialize(options: {"width": 1024, "height": 1024, "dpr": 1.0});
     await three3dRender.prepareContext();
 
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "width": 1024,
       "height": 1024,
       "gl": three3dRender.gl,
       "antialias": true,
     };
-    renderer = three.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(options);
     renderer!.autoClear = true;
 
     setState(() {});
@@ -58,27 +58,27 @@ class _MyAppState extends State<multi_views> {
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        multi_views1(renderer: renderer),
+        MultiViews1(renderer: renderer),
         Container(
           height: 2,
           color: Colors.red,
         ),
-        multi_views2(renderer: renderer)
+        MultiViews2(renderer: renderer)
       ],
     );
   }
 }
 
-class multi_views1 extends StatefulWidget {
-  three.WebGLRenderer? renderer;
+class MultiViews1 extends StatefulWidget {
+  final three.WebGLRenderer? renderer;
 
-  multi_views1({Key? key, this.renderer}) : super(key: key);
+  const MultiViews1({Key? key, this.renderer}) : super(key: key);
 
   @override
-  createState() => _multi_views1_State();
+  State<MultiViews1> createState() => _MultiViews1State();
 }
 
-class _multi_views1_State extends State<multi_views1> {
+class _MultiViews1State extends State<MultiViews1> {
   three.WebGLRenderer? renderer;
 
   double width = 300;
@@ -92,7 +92,7 @@ class _multi_views1_State extends State<multi_views1> {
 
   double dpr = 1.0;
 
-  var AMOUNT = 4;
+  var amount = 4;
 
   bool verbose = true;
   bool disposed = false;
@@ -108,7 +108,7 @@ class _multi_views1_State extends State<multi_views1> {
   three.AnimationMixer? mixer;
   three.Clock clock = three.Clock();
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   late FlutterGlPlugin three3dRender;
 
@@ -118,7 +118,7 @@ class _multi_views1_State extends State<multi_views1> {
 
     three3dRender = FlutterGlPlugin();
 
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "antialias": true,
       "alpha": false,
       "width": width.toInt(),
@@ -126,11 +126,10 @@ class _multi_views1_State extends State<multi_views1> {
       "dpr": dpr
     };
 
-    await three3dRender.initialize(options: _options);
+    await three3dRender.initialize(options: options);
 
     setState(() {});
 
-    // TODO web wait dom ok!!!
     Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
@@ -153,37 +152,33 @@ class _multi_views1_State extends State<multi_views1> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Builder(
-        builder: (BuildContext context) {
-          initSize(context);
-          return SingleChildScrollView(child: _build(context));
-        },
-      ),
+    return Builder(
+      builder: (BuildContext context) {
+        initSize(context);
+        return SingleChildScrollView(child: _build(context));
+      },
     );
   }
 
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Stack(
-            children: [
-              Container(
-                  width: 300,
-                  height: 300,
-                  color: Colors.black,
-                  child: Builder(builder: (BuildContext context) {
-                    if (kIsWeb) {
-                      return three3dRender.isInitialized
-                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
-                          : Container();
-                    } else {
-                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
-                    }
-                  })),
-            ],
-          ),
+        Stack(
+          children: [
+            Container(
+                width: 300,
+                height: 300,
+                color: Colors.black,
+                child: Builder(builder: (BuildContext context) {
+                  if (kIsWeb) {
+                    return three3dRender.isInitialized
+                        ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                        : Container();
+                  } else {
+                    return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
+                  }
+                })),
+          ],
         ),
       ],
     );
@@ -195,14 +190,10 @@ class _multi_views1_State extends State<multi_views1> {
   }
 
   render() {
-    int _t = DateTime.now().millisecondsSinceEpoch;
-
-    final _gl = three3dRender.gl;
+    final gl = three3dRender.gl;
 
     if (!kIsWeb) renderer!.setRenderTarget(renderTarget);
     renderer!.render(scene, camera);
-
-    int _t1 = DateTime.now().millisecondsSinceEpoch;
 
     if (verbose) {
       // print("render cost: ${_t1 - _t} ");
@@ -211,7 +202,7 @@ class _multi_views1_State extends State<multi_views1> {
     }
 
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
-    _gl.flush();
+    gl.flush();
 
     // print("three3dRender 1: ${three3dRender.textureId} render: sourceTexture: $sourceTexture ");
 
@@ -224,13 +215,13 @@ class _multi_views1_State extends State<multi_views1> {
     renderer = widget.renderer;
 
     if (renderer == null) {
-      Map<String, dynamic> _options = {
+      Map<String, dynamic> options = {
         "width": width,
         "height": height,
         "gl": three3dRender.gl,
         "antialias": true,
       };
-      renderer = three.WebGLRenderer(_options);
+      renderer = three.WebGLRenderer(options);
       renderer!.autoClear = true;
     }
 
@@ -311,16 +302,16 @@ class _multi_views1_State extends State<multi_views1> {
   }
 }
 
-class multi_views2 extends StatefulWidget {
-  three.WebGLRenderer? renderer;
+class MultiViews2 extends StatefulWidget {
+  final three.WebGLRenderer? renderer;
 
-  multi_views2({Key? key, this.renderer}) : super(key: key);
+  const MultiViews2({Key? key, this.renderer}) : super(key: key);
 
   @override
-  createState() => _multi_views2_State();
+  State<MultiViews2> createState() => _MultiViews2State();
 }
 
-class _multi_views2_State extends State<multi_views2> {
+class _MultiViews2State extends State<MultiViews2> {
   three.WebGLRenderer? renderer;
   late FlutterGlPlugin three3dRender;
   int? fboId;
@@ -335,7 +326,7 @@ class _multi_views2_State extends State<multi_views2> {
 
   double dpr = 1.0;
 
-  var AMOUNT = 4;
+  var amount = 4;
 
   bool verbose = true;
   bool disposed = false;
@@ -351,7 +342,7 @@ class _multi_views2_State extends State<multi_views2> {
   three.AnimationMixer? mixer;
   three.Clock clock = three.Clock();
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   @override
   void initState() {
@@ -364,7 +355,7 @@ class _multi_views2_State extends State<multi_views2> {
     height = width;
     three3dRender = FlutterGlPlugin();
 
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "antialias": true,
       "alpha": false,
       "width": width.toInt(),
@@ -372,11 +363,10 @@ class _multi_views2_State extends State<multi_views2> {
       "dpr": dpr
     };
 
-    await three3dRender.initialize(options: _options);
+    await three3dRender.initialize(options: options);
 
     setState(() {});
 
-    // TODO web wait dom ok!!!
     Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
@@ -414,28 +404,26 @@ class _multi_views2_State extends State<multi_views2> {
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Stack(
-            children: [
-              Container(
-                  width: width,
-                  height: height,
-                  color: Colors.black,
-                  child: Builder(builder: (BuildContext context) {
-                    if (kIsWeb) {
-                      return three3dRender.isInitialized
-                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
-                          : Container();
-                    } else {
-                      return three3dRender.isInitialized
-                          ? Texture(textureId: three3dRender.textureId!)
-                          : Container(
-                              color: Colors.yellow,
-                            );
-                    }
-                  })),
-            ],
-          ),
+        Stack(
+          children: [
+            Container(
+                width: width,
+                height: height,
+                color: Colors.black,
+                child: Builder(builder: (BuildContext context) {
+                  if (kIsWeb) {
+                    return three3dRender.isInitialized
+                        ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                        : Container();
+                  } else {
+                    return three3dRender.isInitialized
+                        ? Texture(textureId: three3dRender.textureId!)
+                        : Container(
+                            color: Colors.yellow,
+                          );
+                  }
+                })),
+          ],
         ),
       ],
     );
@@ -447,22 +435,22 @@ class _multi_views2_State extends State<multi_views2> {
   }
 
   render() {
-    int _t = DateTime.now().millisecondsSinceEpoch;
+    int t = DateTime.now().millisecondsSinceEpoch;
 
-    final _gl = three3dRender.gl;
+    final gl = three3dRender.gl;
     if (!kIsWeb) renderer!.setRenderTarget(renderTarget);
     renderer!.render(scene, camera);
 
-    int _t1 = DateTime.now().millisecondsSinceEpoch;
+    int t1 = DateTime.now().millisecondsSinceEpoch;
 
     if (verbose) {
-      print("render cost: ${_t1 - _t} ");
+      print("render cost: ${t1 - t} ");
       print(renderer!.info.memory);
       print(renderer!.info.render);
     }
 
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
-    _gl.flush();
+    gl.flush();
 
     print("three3dRender 2: ${three3dRender.textureId} render: sourceTexture: $sourceTexture ");
 
@@ -475,13 +463,13 @@ class _multi_views2_State extends State<multi_views2> {
     renderer = widget.renderer;
 
     if (renderer == null) {
-      Map<String, dynamic> _options = {
+      Map<String, dynamic> options = {
         "width": width,
         "height": height,
         "gl": three3dRender.gl,
         "antialias": true,
       };
-      renderer = three.WebGLRenderer(_options);
+      renderer = three.WebGLRenderer(options);
       renderer!.autoClear = true;
     }
 

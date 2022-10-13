@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 
 import 'package:three_dart/three_dart.dart' as three;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
+import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
 class webgl_loader_fbx extends StatefulWidget {
   String fileName;
@@ -45,9 +45,9 @@ class _MyAppState extends State<webgl_loader_fbx> {
 
   dynamic? sourceTexture;
 
-  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey = GlobalKey<THREE_JSM.DomLikeListenableState>();
+  final GlobalKey<three_jsm.DomLikeListenableState> _globalKey = GlobalKey<three_jsm.DomLikeListenableState>();
 
-  late THREE_JSM.OrbitControls controls;
+  late three_jsm.OrbitControls controls;
 
   @override
   void initState() {
@@ -121,7 +121,7 @@ class _MyAppState extends State<webgl_loader_fbx> {
         Container(
           child: Stack(
             children: [
-              THREE_JSM.DomLikeListenable(
+              three_jsm.DomLikeListenable(
                   key: _globalKey,
                   builder: (BuildContext context) {
                     return Container(
@@ -226,7 +226,7 @@ class _MyAppState extends State<webgl_loader_fbx> {
 
     // controls
 
-    controls = THREE_JSM.OrbitControls(camera, _globalKey);
+    controls = three_jsm.OrbitControls(camera, _globalKey);
 
     controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
     controls.dampingFactor = 0.05;
@@ -276,7 +276,7 @@ class _MyAppState extends State<webgl_loader_fbx> {
     //     "assets/models/fbx/model_tex_u1_v1_normal.jpg", null);
 
     // model
-    var loader = THREE_JSM.FBXLoader(null, width.toInt(), height.toInt());
+    var loader = three_jsm.FBXLoader(null, width.toInt(), height.toInt());
     var object = await loader.loadAsync('assets/models/fbx/Samba Dancing.fbx');
     // var object = await loader.loadAsync( 'assets/models/fbx/model.fbx');
     // var object = await loader.loadAsync( 'assets/models/fbx/Twist-Dance.fbx');

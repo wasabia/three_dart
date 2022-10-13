@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
+import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
 class webgl_loader_glb extends StatefulWidget {
   String fileName;
@@ -218,7 +218,7 @@ class _MyAppState extends State<webgl_loader_glb> {
 
     camera.lookAt(scene.position);
 
-    var loader = THREE_JSM.GLTFLoader(null).setPath('assets/models/gltf/');
+    var loader = three_jsm.GLTFLoader(null).setPath('assets/models/gltf/');
 
     var result = await loader.loadAsync('coffeemat.glb');
     // var result = await loader.loadAsync( 'BoomBox.glb' );

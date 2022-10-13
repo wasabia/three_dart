@@ -7,15 +7,17 @@ import 'package:flutter_gl/flutter_gl.dart';
 
 import 'package:three_dart/three_dart.dart' as three;
 
-class webgl_instancing_performance extends StatefulWidget {
-  String fileName;
-  webgl_instancing_performance({Key? key, required this.fileName}) : super(key: key);
+@immutable
+class WebglInstancingPerformance extends StatefulWidget {
+  final String fileName;
+
+  const WebglInstancingPerformance({Key? key, required this.fileName}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<WebglInstancingPerformance> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<webgl_instancing_performance> {
+class _MyAppState extends State<WebglInstancingPerformance> {
   late FlutterGlPlugin three3dRender;
   three.WebGLRenderer? renderer;
 
@@ -42,7 +44,7 @@ class _MyAppState extends State<webgl_instancing_performance> {
 
   late three.WebGLRenderTarget renderTarget;
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   @override
   void initState() {

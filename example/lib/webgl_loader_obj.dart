@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
+import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
 class webgl_loader_obj extends StatefulWidget {
   String fileName;
@@ -215,7 +215,7 @@ class _MyAppState extends State<webgl_loader_obj> {
     texture.needsUpdate = true;
     texture.flipY = true; // this flipY is only for web
 
-    var loader = THREE_JSM.OBJLoader(null);
+    var loader = three_jsm.OBJLoader(null);
     object = await loader.loadAsync('assets/models/obj/male02/male02.obj');
 
     object.traverse((child) {

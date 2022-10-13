@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
+import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
 class webgl_helpers extends StatefulWidget {
   String fileName;
@@ -32,7 +32,7 @@ class _State extends State<webgl_helpers> {
 
   late three.AnimationMixer mixer;
   three.Clock clock = three.Clock();
-  THREE_JSM.OrbitControls? controls;
+  three_jsm.OrbitControls? controls;
 
   double dpr = 1.0;
 
@@ -47,8 +47,8 @@ class _State extends State<webgl_helpers> {
 
   late three.PointLight light;
 
-  THREE_JSM.VertexNormalsHelper? vnh;
-  THREE_JSM.VertexTangentsHelper? vth;
+  three_jsm.VertexNormalsHelper? vnh;
+  three_jsm.VertexTangentsHelper? vth;
 
   late three.WebGLMultisampleRenderTarget renderTarget;
 
@@ -231,7 +231,7 @@ class _State extends State<webgl_helpers> {
 
     camera.lookAt(scene.position);
 
-    var loader = THREE_JSM.GLTFLoader(null).setPath('assets/models/gltf/');
+    var loader = three_jsm.GLTFLoader(null).setPath('assets/models/gltf/');
 
     var result = await loader.loadAsync('LeePerrySmith.gltf');
     // var result = await loader.loadAsync( 'animate7.gltf', null);
@@ -257,10 +257,10 @@ class _State extends State<webgl_helpers> {
 
     group.add(mesh);
 
-    vnh = THREE_JSM.VertexNormalsHelper(mesh, 5);
+    vnh = three_jsm.VertexNormalsHelper(mesh, 5);
     scene.add(vnh!);
 
-    vth = THREE_JSM.VertexTangentsHelper(mesh, 5);
+    vth = three_jsm.VertexTangentsHelper(mesh, 5);
     scene.add(vth!);
 
     scene.add(three.BoxHelper(mesh));

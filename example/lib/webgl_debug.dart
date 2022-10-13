@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
+import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
 GlobalKey<webgl_debugState> webgl_animation_keyframesGlobalKey = GlobalKey<webgl_debugState>();
 
@@ -34,7 +34,7 @@ class webgl_debugState extends State<webgl_debug> {
 
   late three.AnimationMixer mixer;
   three.Clock clock = three.Clock();
-  THREE_JSM.OrbitControls? controls;
+  three_jsm.OrbitControls? controls;
 
   double dpr = 1.0;
 
@@ -217,7 +217,7 @@ class webgl_debugState extends State<webgl_debug> {
 
     camera.lookAt(scene.position);
 
-    var loader = THREE_JSM.GLTFLoader(null).setPath('assets/models/gltf/test/');
+    var loader = three_jsm.GLTFLoader(null).setPath('assets/models/gltf/test/');
 
     // var result = await loader.loadAsync( 'tokyo.gltf', null );
     var result = await loader.loadAsync('animate7.gltf', null);

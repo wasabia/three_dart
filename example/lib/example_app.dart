@@ -6,7 +6,7 @@ class ExampleApp extends StatefulWidget {
   const ExampleApp({Key? key}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<ExampleApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<ExampleApp> {
@@ -51,15 +51,15 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
   }
 
   @override
-  RouteInformation? restoreRouteInformation(AppRoutePath path) {
-    if (path.isUnknown) {
+  RouteInformation? restoreRouteInformation(AppRoutePath configuration) {
+    if (configuration.isUnknown) {
       return const RouteInformation(location: '/404');
     }
-    if (path.isHomePage) {
+    if (configuration.isHomePage) {
       return const RouteInformation(location: '/');
     }
-    if (path.isDetailsPage) {
-      return RouteInformation(location: '/examples/${path.id}');
+    if (configuration.isDetailsPage) {
+      return RouteInformation(location: '/examples/${configuration.id}');
     }
     return null;
   }
@@ -95,7 +95,7 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
           }),
         ),
         if (show404)
-          MaterialPage(key: const ValueKey('UnknownPage'), child: UnknownScreen())
+          const MaterialPage(key: ValueKey('UnknownPage'), child: UnknownScreen())
         else if (_selectedExample != null)
           MaterialPage(
               key: const ValueKey('ExamplePage'),
@@ -121,20 +121,20 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
   }
 
   @override
-  Future<void> setNewRoutePath(AppRoutePath path) async {
-    if (path.isUnknown) {
+  Future<void> setNewRoutePath(AppRoutePath configuration) async {
+    if (configuration.isUnknown) {
       _selectedExample = null;
       show404 = true;
       return;
     }
 
-    if (path.isDetailsPage) {
-      if (path.id == null) {
+    if (configuration.isDetailsPage) {
+      if (configuration.id == null) {
         show404 = true;
         return;
       }
 
-      _selectedExample = path.id;
+      _selectedExample = configuration.id;
     } else {
       _selectedExample = null;
     }
@@ -165,6 +165,8 @@ class AppRoutePath {
 }
 
 class UnknownScreen extends StatelessWidget {
+  const UnknownScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

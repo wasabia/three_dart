@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 
 import 'package:three_dart/three_dart.dart' as three;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
+import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
 class webgl_geometry_text extends StatefulWidget {
   String fileName;
@@ -249,7 +249,7 @@ class _MyAppState extends State<webgl_geometry_text> {
   }
 
   loadFont() async {
-    var loader = THREE_JSM.TYPRLoader(null);
+    var loader = three_jsm.TYPRLoader(null);
     var fontJson = await loader.loadAsync("assets/pingfang.ttf");
 
     print("loadFont successs ............ ");

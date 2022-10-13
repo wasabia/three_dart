@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
+import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
 class webgl_loader_gltf_3 extends StatefulWidget {
   String fileName;
@@ -218,14 +218,14 @@ class _MyAppState extends State<webgl_loader_gltf_3> {
 
     camera.lookAt(scene.position);
 
-    var loader = THREE_JSM.GLTFLoader(null).setPath('assets/models/gltf/');
+    var loader = three_jsm.GLTFLoader(null).setPath('assets/models/gltf/');
 
     // var result = await loader.loadAsync( 'Parrot.gltf', null);
     var result = await loader.loadAsync('Xbot.gltf', null);
 
     print(" gltf load sucess result: $result  ");
 
-    object = THREE_JSM.SkeletonUtils.clone(result["scene"]);
+    object = three_jsm.SkeletonUtils.clone(result["scene"]);
 
     print(" object: $object  ");
 

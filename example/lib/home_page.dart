@@ -2,12 +2,12 @@ import 'files_json.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  Function chooseExample;
+  final Function chooseExample;
 
-  HomePage({Key? key, required this.chooseExample}) : super(key: key);
+  const HomePage({Key? key, required this.chooseExample}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<HomePage> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<HomePage> {
@@ -49,20 +49,18 @@ class _MyAppState extends State<HomePage> {
     var name = getName(fileName);
 
     return TextButton(
-        onPressed: () {
-          widget.chooseExample(fileName);
-        },
-        child: Container(
-            child: Column(
-          children: [
-            Container(
-              constraints: const BoxConstraints(minHeight: 50),
-              child: Image.asset(assetFile),
-            ),
-            Container(
-              child: Text(name),
-            )
-          ],
-        )));
+      onPressed: () {
+        widget.chooseExample(fileName);
+      },
+      child: Column(
+        children: [
+          Container(
+            constraints: const BoxConstraints(minHeight: 50),
+            child: Image.asset(assetFile),
+          ),
+          Text(name)
+        ],
+      ),
+    );
   }
 }

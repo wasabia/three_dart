@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
+import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
 class webgl_morphtargets_horse extends StatefulWidget {
   String fileName;
@@ -32,7 +32,7 @@ class _State extends State<webgl_morphtargets_horse> {
 
   three.AnimationMixer? mixer;
   three.Clock clock = three.Clock();
-  THREE_JSM.OrbitControls? controls;
+  three_jsm.OrbitControls? controls;
 
   double dpr = 1.0;
 
@@ -49,8 +49,8 @@ class _State extends State<webgl_morphtargets_horse> {
 
   late three.PointLight light;
 
-  THREE_JSM.VertexNormalsHelper? vnh;
-  THREE_JSM.VertexTangentsHelper? vth;
+  three_jsm.VertexNormalsHelper? vnh;
+  three_jsm.VertexTangentsHelper? vth;
 
   late three.WebGLMultisampleRenderTarget renderTarget;
 
@@ -224,7 +224,7 @@ class _State extends State<webgl_morphtargets_horse> {
     light2.position.set(-1, -1, -1).normalize();
     scene.add(light2);
 
-    var loader = THREE_JSM.GLTFLoader(null);
+    var loader = three_jsm.GLTFLoader(null);
     var gltf = await loader.loadAsync('assets/models/gltf/Horse.gltf');
 
     mesh = gltf["scene"].children[0];

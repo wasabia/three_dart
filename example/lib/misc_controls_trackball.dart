@@ -8,15 +8,16 @@ import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
-class misc_controls_trackball extends StatefulWidget {
-  String fileName;
-  misc_controls_trackball({Key? key, required this.fileName}) : super(key: key);
+class MiscControlsTrackball extends StatefulWidget {
+  final String fileName;
+
+  const MiscControlsTrackball({Key? key, required this.fileName}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MiscControlsTrackball> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<misc_controls_trackball> {
+class _MyAppState extends State<MiscControlsTrackball> {
   late FlutterGlPlugin three3dRender;
   three.WebGLRenderer? renderer;
 
@@ -32,14 +33,14 @@ class _MyAppState extends State<misc_controls_trackball> {
 
   double dpr = 1.0;
 
-  var AMOUNT = 4;
+  var amount = 4;
 
   bool verbose = true;
   bool disposed = false;
 
   late three.WebGLRenderTarget renderTarget;
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   final GlobalKey<three_jsm.DomLikeListenableState> _globalKey = GlobalKey<three_jsm.DomLikeListenableState>();
 
@@ -69,7 +70,6 @@ class _MyAppState extends State<misc_controls_trackball> {
 
     setState(() {});
 
-    // TODO web wait dom ok!!!
     Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
@@ -114,30 +114,28 @@ class _MyAppState extends State<misc_controls_trackball> {
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Stack(
-            children: [
-              three_jsm.DomLikeListenable(
-                  key: _globalKey,
-                  builder: (BuildContext context) {
-                    return Container(
-                        width: width,
-                        height: height,
-                        color: Colors.black,
-                        child: Builder(builder: (BuildContext context) {
-                          if (kIsWeb) {
-                            return three3dRender.isInitialized
-                                ? HtmlElementView(viewType: three3dRender.textureId!.toString())
-                                : Container();
-                          } else {
-                            return three3dRender.isInitialized
-                                ? Texture(textureId: three3dRender.textureId!)
-                                : Container();
-                          }
-                        }));
-                  }),
-            ],
-          ),
+        Stack(
+          children: [
+            three_jsm.DomLikeListenable(
+                key: _globalKey,
+                builder: (BuildContext context) {
+                  return Container(
+                      width: width,
+                      height: height,
+                      color: Colors.black,
+                      child: Builder(builder: (BuildContext context) {
+                        if (kIsWeb) {
+                          return three3dRender.isInitialized
+                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                              : Container();
+                        } else {
+                          return three3dRender.isInitialized
+                              ? Texture(textureId: three3dRender.textureId!)
+                              : Container();
+                        }
+                      }));
+                }),
+          ],
         ),
       ],
     );
@@ -202,11 +200,6 @@ class _MyAppState extends State<misc_controls_trackball> {
   }
 
   initPage() {
-    var ASPECTRATIO = width / height;
-
-    var WIDTH = (width / AMOUNT) * dpr;
-    var HEIGHT = (height / AMOUNT) * dpr;
-
     scene = three.Scene();
     scene.background = three.Color(0xcccccc);
     scene.fog = three.FogExp2(0xcccccc, 0.002);

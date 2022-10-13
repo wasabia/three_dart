@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
+import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
 class webgl_animation_keyframes extends StatefulWidget {
   String fileName;
@@ -32,7 +32,7 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
 
   late three.AnimationMixer mixer;
   three.Clock clock = three.Clock();
-  THREE_JSM.OrbitControls? controls;
+  three_jsm.OrbitControls? controls;
 
   double dpr = 1.0;
 
@@ -55,7 +55,7 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
 
   final Map<String, List<Function>> _listeners = {};
 
-  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey = GlobalKey<THREE_JSM.DomLikeListenableState>();
+  final GlobalKey<three_jsm.DomLikeListenableState> _globalKey = GlobalKey<three_jsm.DomLikeListenableState>();
 
   @override
   void initState() {
@@ -152,7 +152,7 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
         Container(
           child: Stack(
             children: [
-              THREE_JSM.DomLikeListenable(
+              three_jsm.DomLikeListenable(
                   key: _globalKey,
                   builder: (BuildContext conetxt) {
                     return Container(
@@ -240,7 +240,7 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
 
     var pmremGenerator = three.PMREMGenerator(renderer);
     scene.background = three.Color.fromHex(0xbfe3dd);
-    scene.environment = pmremGenerator.fromScene(THREE_JSM.RoomEnvironment(), 0.04).texture;
+    scene.environment = pmremGenerator.fromScene(three_jsm.RoomEnvironment(), 0.04).texture;
 
     var ambientLight = three.AmbientLight(0xcccccc, 0.4);
     scene.add(ambientLight);
@@ -252,7 +252,7 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
 
     camera.lookAt(scene.position);
 
-    var loader = THREE_JSM.GLTFLoader(null).setPath('assets/models/gltf/test/');
+    var loader = three_jsm.GLTFLoader(null).setPath('assets/models/gltf/test/');
 
     var result = await loader.loadAsync('tokyo.gltf');
     // var result = await loader.loadAsync( 'animate7.gltf', null);

@@ -41,11 +41,12 @@ import 'misc_controls_trackball.dart';
 import 'webgl_loader_svg.dart';
 
 class ExamplePage extends StatefulWidget {
-  String? id;
-  ExamplePage({Key? key, this.id}) : super(key: key);
+  final String? id;
+
+  const ExamplePage({Key? key, this.id}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<ExamplePage> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<ExamplePage> {
@@ -61,7 +62,7 @@ class _MyAppState extends State<ExamplePage> {
     String fileName = widget.id!;
 
     if (fileName == "webgl_camera_array") {
-      page = webgl_camera_array(fileName: fileName);
+      page = WebglCameraArray(fileName: fileName);
     } else if (fileName == "webgl_loader_obj") {
       page = webgl_loader_obj(fileName: fileName);
     } else if (fileName == "webgl_materials_browser") {
@@ -73,7 +74,7 @@ class _MyAppState extends State<ExamplePage> {
     } else if (fileName == "webgl_geometry_shapes") {
       page = webgl_geometry_shapes(fileName: fileName);
     } else if (fileName == "webgl_instancing_performance") {
-      page = webgl_instancing_performance(fileName: fileName);
+      page = WebglInstancingPerformance(fileName: fileName);
     } else if (fileName == "webgl_shadowmap_viewer") {
       page = webgl_shadowmap_viewer(fileName: fileName);
     } else if (fileName == "webgl_loader_gltf") {
@@ -91,7 +92,7 @@ class _MyAppState extends State<ExamplePage> {
     } else if (fileName == "webgl_skinning_simple") {
       page = webgl_skinning_simple(fileName: fileName);
     } else if (fileName == "misc_animation_keys") {
-      page = misc_animation_keys(fileName: fileName);
+      page = MiscAnimationKeys(fileName: fileName);
     } else if (fileName == "webgl_clipping_intersection") {
       page = webgl_clipping_intersection(fileName: fileName);
     } else if (fileName == "webgl_clipping_advanced") {
@@ -127,17 +128,17 @@ class _MyAppState extends State<ExamplePage> {
     } else if (fileName == "webgl_morphtargets_horse") {
       page = webgl_morphtargets_horse(fileName: fileName);
     } else if (fileName == "misc_controls_orbit") {
-      page = misc_controls_orbit(fileName: fileName);
+      page = MiscControlsOrbit(fileName: fileName);
     } else if (fileName == "misc_controls_trackball") {
-      page = misc_controls_trackball(fileName: fileName);
+      page = MiscControlsTrackball(fileName: fileName);
     } else if (fileName == "misc_controls_arcball") {
-      page = misc_controls_arcball(fileName: fileName);
+      page = MiscControlsArcball(fileName: fileName);
     } else if (fileName == "misc_controls_map") {
-      page = misc_controls_map(fileName: fileName);
+      page = MiscControlsMap(fileName: fileName);
     } else if (fileName == "webgl_loader_fbx") {
       page = webgl_loader_fbx(fileName: fileName);
     } else if (fileName == "multi_views") {
-      page = multi_views(fileName: fileName);
+      page = MultiViews(fileName: fileName);
     } else {
       throw ("ExamplePage fileName $fileName is not support yet ");
     }

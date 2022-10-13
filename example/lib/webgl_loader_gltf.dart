@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
+import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
 class webgl_loader_gltf extends StatefulWidget {
   String fileName;
@@ -44,9 +44,9 @@ class _MyAppState extends State<webgl_loader_gltf> {
 
   dynamic? sourceTexture;
 
-  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey = GlobalKey<THREE_JSM.DomLikeListenableState>();
+  final GlobalKey<three_jsm.DomLikeListenableState> _globalKey = GlobalKey<three_jsm.DomLikeListenableState>();
 
-  late THREE_JSM.OrbitControls controls;
+  late three_jsm.OrbitControls controls;
 
   @override
   void initState() {
@@ -120,7 +120,7 @@ class _MyAppState extends State<webgl_loader_gltf> {
         Container(
           child: Stack(
             children: [
-              THREE_JSM.DomLikeListenable(
+              three_jsm.DomLikeListenable(
                   key: _globalKey,
                   builder: (BuildContext context) {
                     return Container(
@@ -211,7 +211,7 @@ class _MyAppState extends State<webgl_loader_gltf> {
 
     camera.lookAt(scene.position);
 
-    var _loader = THREE_JSM.RGBELoader(null);
+    var _loader = three_jsm.RGBELoader(null);
     _loader.setPath('assets/textures/equirectangular/');
     var _hdrTexture = await _loader.loadAsync('royal_esplanade_1k.hdr');
 
@@ -222,7 +222,7 @@ class _MyAppState extends State<webgl_loader_gltf> {
 
     scene.add(three.AmbientLight(0xffffff));
 
-    var loader = THREE_JSM.GLTFLoader(null).setPath('assets/models/gltf/DamagedHelmet/glTF/');
+    var loader = three_jsm.GLTFLoader(null).setPath('assets/models/gltf/DamagedHelmet/glTF/');
 
     var result = await loader.loadAsync('DamagedHelmet.gltf');
 
@@ -235,7 +235,7 @@ class _MyAppState extends State<webgl_loader_gltf> {
     // scene.overrideMaterial = new three.MeshBasicMaterial();
 
     // controls
-    controls = THREE_JSM.OrbitControls(camera, _globalKey);
+    controls = three_jsm.OrbitControls(camera, _globalKey);
     // controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
 
     // controls.enableDamping =

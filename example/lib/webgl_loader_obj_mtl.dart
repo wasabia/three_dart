@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
+import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
 class webgl_loader_obj_mtl extends StatefulWidget {
   String fileName;
@@ -206,12 +206,12 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
     // texture
     var manager = three.LoadingManager();
 
-    var mtlLoader = THREE_JSM.MTLLoader(manager);
+    var mtlLoader = three_jsm.MTLLoader(manager);
     mtlLoader.setPath('assets/models/obj/male02/');
     var materials = await mtlLoader.loadAsync('male02.mtl');
     await materials.preload();
 
-    var loader = THREE_JSM.OBJLoader(null);
+    var loader = three_jsm.OBJLoader(null);
     loader.setMaterials(materials);
     object = await loader.loadAsync('assets/models/obj/male02/male02.obj');
 

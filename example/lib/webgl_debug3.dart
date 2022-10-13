@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three_dart.dart' as three;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
+import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
 GlobalKey<webgl_animation_keyframesState> webgl_animation_keyframesGlobalKey =
     GlobalKey<webgl_animation_keyframesState>();
@@ -35,7 +35,7 @@ class webgl_animation_keyframesState extends State<webgl_debug3> {
 
   late three.AnimationMixer mixer;
   three.Clock clock = three.Clock();
-  THREE_JSM.OrbitControls? controls;
+  three_jsm.OrbitControls? controls;
 
   double dpr = 1.0;
 
