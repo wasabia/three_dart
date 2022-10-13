@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three3d/objects/index.dart';
+import 'package:three_dart/three/objects/index.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
@@ -129,13 +129,10 @@ class _MyAppState extends State<webgl_skinning_simple> {
                   child: Builder(builder: (BuildContext context) {
                     if (kIsWeb) {
                       return three3dRender.isInitialized
-                          ? HtmlElementView(
-                              viewType: three3dRender.textureId!.toString())
+                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                           : Container();
                     } else {
-                      return three3dRender.isInitialized
-                          ? Texture(textureId: three3dRender.textureId!)
-                          : Container();
+                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
                     }
                   })),
             ],
@@ -190,8 +187,7 @@ class _MyAppState extends State<webgl_skinning_simple> {
 
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      renderTarget = THREE.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -216,8 +212,7 @@ class _MyAppState extends State<webgl_skinning_simple> {
     // ground
 
     var geometry = THREE.PlaneGeometry(500, 500);
-    var material =
-        THREE.MeshPhongMaterial({"color": 0x999999, "depthWrite": false});
+    var material = THREE.MeshPhongMaterial({"color": 0x999999, "depthWrite": false});
 
     var ground = THREE.Mesh(geometry, material);
     ground.position.set(0, -5, 0);

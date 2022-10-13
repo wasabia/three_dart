@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three3d/objects/index.dart';
+import 'package:three_dart/three/objects/index.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 
 class webgl_geometries extends StatefulWidget {
@@ -138,8 +138,7 @@ class _State extends State<webgl_geometries> {
                       child: Builder(builder: (BuildContext context) {
                         if (kIsWeb) {
                           return three3dRender.isInitialized
-                              ? HtmlElementView(
-                                  viewType: three3dRender.textureId!.toString())
+                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                               : Container();
                         } else {
                           return three3dRender.isInitialized
@@ -195,8 +194,7 @@ class _State extends State<webgl_geometries> {
 
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      renderTarget = THREE.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -224,13 +222,11 @@ class _State extends State<webgl_geometries> {
     scene.add(camera);
 
     var _loader = THREE.TextureLoader(null);
-    var map =
-        await _loader.loadAsync('assets/textures/uv_grid_opengl.jpg', null);
+    var map = await _loader.loadAsync('assets/textures/uv_grid_opengl.jpg', null);
     map.wrapS = map.wrapT = THREE.RepeatWrapping;
     map.anisotropy = 16;
 
-    var material =
-        THREE.MeshPhongMaterial({"map": map, "side": THREE.DoubleSide});
+    var material = THREE.MeshPhongMaterial({"map": map, "side": THREE.DoubleSide});
 
     //
 
@@ -261,17 +257,11 @@ class _State extends State<webgl_geometries> {
     scene.add(object);
 
     object = THREE.Mesh(
-        THREE.CircleGeometry(
-            radius: 50,
-            segments: 20,
-            thetaStart: 0,
-            thetaLength: THREE.Math.PI * 2),
-        material);
+        THREE.CircleGeometry(radius: 50, segments: 20, thetaStart: 0, thetaLength: THREE.Math.PI * 2), material);
     object.position.set(100, 0, 0);
     scene.add(object);
 
-    object = THREE.Mesh(
-        THREE.RingGeometry(10, 50, 20, 5, 0, THREE.Math.PI * 2), material);
+    object = THREE.Mesh(THREE.RingGeometry(10, 50, 20, 5, 0, THREE.Math.PI * 2), material);
     object.position.set(300, 0, 0);
     scene.add(object);
 
@@ -284,9 +274,7 @@ class _State extends State<webgl_geometries> {
     var points = [];
 
     for (var i = 0; i < 50; i++) {
-      points.add(THREE.Vector2(
-          THREE.Math.sin(i * 0.2) * THREE.Math.sin(i * 0.1) * 15 + 50,
-          (i - 5) * 2));
+      points.add(THREE.Vector2(THREE.Math.sin(i * 0.2) * THREE.Math.sin(i * 0.1) * 15 + 50, (i - 5) * 2));
     }
 
     object = THREE.Mesh(THREE.LatheGeometry(points, segments: 20), material);

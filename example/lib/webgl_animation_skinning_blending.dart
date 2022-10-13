@@ -4,15 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three3d/objects/index.dart';
+import 'package:three_dart/three/objects/index.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_animation_skinning_blending extends StatefulWidget {
   String fileName;
 
-  webgl_animation_skinning_blending({Key? key, required this.fileName})
-      : super(key: key);
+  webgl_animation_skinning_blending({Key? key, required this.fileName}) : super(key: key);
 
   @override
   createState() => _State();
@@ -135,8 +134,7 @@ class _State extends State<webgl_animation_skinning_blending> {
                       child: Builder(builder: (BuildContext context) {
                         if (kIsWeb) {
                           return three3dRender.isInitialized
-                              ? HtmlElementView(
-                                  viewType: three3dRender.textureId!.toString())
+                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                               : Container();
                         } else {
                           return three3dRender.isInitialized
@@ -192,8 +190,7 @@ class _State extends State<webgl_animation_skinning_blending> {
 
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      renderTarget = THREE.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -208,13 +205,12 @@ class _State extends State<webgl_animation_skinning_blending> {
   initPage() async {
     camera = THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
     camera.position.set(-1, -4, -2);
-    
 
     clock = THREE.Clock();
 
     scene = THREE.Scene();
 
-    camera.lookAt( scene.position );
+    camera.lookAt(scene.position);
 
     scene.background = THREE.Color.fromHex(0xffffff);
     scene.fog = THREE.Fog(0xa0a0a0, 10, 50);
@@ -243,7 +239,7 @@ class _State extends State<webgl_animation_skinning_blending> {
 
     model = gltf["scene"];
 
-    print(" load model success " );
+    print(" load model success ");
     print(model);
 
     scene.add(model);
@@ -251,7 +247,6 @@ class _State extends State<webgl_animation_skinning_blending> {
     model.traverse((object) {
       if (object is Mesh) object.castShadow = true;
     });
-
 
     var skeleton = THREE.SkeletonHelper(model);
     skeleton.visible = true;
