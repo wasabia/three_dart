@@ -4,14 +4,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three/objects/index.dart';
+import 'package:three_dart/three3d/objects/index.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_animation_skinning_morph extends StatefulWidget {
   String fileName;
 
-  webgl_animation_skinning_morph({Key? key, required this.fileName}) : super(key: key);
+  webgl_animation_skinning_morph({Key? key, required this.fileName})
+      : super(key: key);
 
   @override
   createState() => _State();
@@ -136,7 +137,8 @@ class _State extends State<webgl_animation_skinning_morph> {
                       child: Builder(builder: (BuildContext context) {
                         if (kIsWeb) {
                           return three3dRender.isInitialized
-                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                              ? HtmlElementView(
+                                  viewType: three3dRender.textureId!.toString())
                               : Container();
                         } else {
                           return three3dRender.isInitialized
@@ -192,7 +194,8 @@ class _State extends State<webgl_animation_skinning_morph> {
 
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
+      renderTarget = THREE.WebGLMultisampleRenderTarget(
+          (width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -228,8 +231,8 @@ class _State extends State<webgl_animation_skinning_morph> {
 
     // ground
 
-    var mesh =
-        THREE.Mesh(THREE.PlaneGeometry(2000, 2000), THREE.MeshPhongMaterial({"color": 0x999999, "depthWrite": false}));
+    var mesh = THREE.Mesh(THREE.PlaneGeometry(2000, 2000),
+        THREE.MeshPhongMaterial({"color": 0x999999, "depthWrite": false}));
     mesh.rotation.x = -THREE.Math.PI / 2;
     scene.add(mesh);
 
@@ -239,7 +242,8 @@ class _State extends State<webgl_animation_skinning_morph> {
     scene.add(grid);
 
     var loader = THREE_JSM.GLTFLoader(null);
-    var gltf = await loader.loadAsync('assets/models/gltf/RobotExpressive/RobotExpressive2.gltf');
+    var gltf = await loader
+        .loadAsync('assets/models/gltf/RobotExpressive/RobotExpressive2.gltf');
 
     model = gltf["scene"];
     scene.add(model);

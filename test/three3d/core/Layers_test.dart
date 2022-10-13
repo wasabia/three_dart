@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:three_dart/three/core/index.dart';
+import 'package:three_dart/three3d/core/index.dart';
 
 void main() {
   group('Layers', () {

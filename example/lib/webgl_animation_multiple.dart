@@ -4,14 +4,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three/objects/index.dart';
+import 'package:three_dart/three3d/objects/index.dart';
 import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_animation_multiple extends StatefulWidget {
   String fileName;
 
-  webgl_animation_multiple({Key? key, required this.fileName}) : super(key: key);
+  webgl_animation_multiple({Key? key, required this.fileName})
+      : super(key: key);
 
   @override
   createState() => _State();
@@ -52,7 +53,8 @@ class _State extends State<webgl_animation_multiple> {
 
   late List<Map<String, dynamic>> MODELS;
   late List<Map<String, dynamic>> UNITS;
-  var mixers = []; // All the THREE.AnimationMixer objects for all the animations in the scene
+  var mixers =
+      []; // All the THREE.AnimationMixer objects for all the animations in the scene
 
   var numLoadedModels = 0;
 
@@ -64,7 +66,8 @@ class _State extends State<webgl_animation_multiple> {
 
   late THREE.Object3D model;
 
-  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey = GlobalKey<THREE_JSM.DomLikeListenableState>();
+  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey =
+      GlobalKey<THREE_JSM.DomLikeListenableState>();
 
   @override
   void initState() {
@@ -148,7 +151,8 @@ class _State extends State<webgl_animation_multiple> {
                       child: Builder(builder: (BuildContext context) {
                         if (kIsWeb) {
                           return three3dRender.isInitialized
-                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                              ? HtmlElementView(
+                                  viewType: three3dRender.textureId!.toString())
                               : Container();
                         } else {
                           return three3dRender.isInitialized
@@ -205,7 +209,8 @@ class _State extends State<webgl_animation_multiple> {
 
     if (!kIsWeb) {
       var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
+      renderTarget = THREE.WebGLMultisampleRenderTarget(
+          (width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -237,10 +242,16 @@ class _State extends State<webgl_animation_multiple> {
     // that must be played.
     UNITS = [
       {
-        "modelName": "Soldier", // Will use the 3D model from file models/gltf/Soldier.glb
+        "modelName":
+            "Soldier", // Will use the 3D model from file models/gltf/Soldier.glb
         "meshName": "vanguard_Mesh", // Name of the main mesh to animate
-        "position": {"x": 0, "y": 0, "z": 0}, // Where to put the unit in the scene
-        "scale": 1, // Scaling of the unit. 1.0 means: use original size, 0.1 means "10 times smaller", etc.
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }, // Where to put the unit in the scene
+        "scale":
+            1, // Scaling of the unit. 1.0 means: use original size, 0.1 means "10 times smaller", etc.
         "animationName": "Idle" // Name of animation to run
       },
       {
@@ -317,8 +328,8 @@ class _State extends State<webgl_animation_multiple> {
     var controls = THREE_JSM.OrbitControls(camera, _globalKey);
 
     // ground
-    var groundMesh =
-        THREE.Mesh(THREE.PlaneGeometry(40, 40), THREE.MeshPhongMaterial({"color": 0x999999, "depthWrite": false}));
+    var groundMesh = THREE.Mesh(THREE.PlaneGeometry(40, 40),
+        THREE.MeshPhongMaterial({"color": 0x999999, "depthWrite": false}));
 
     groundMesh.rotation.x = -THREE.Math.PI / 2;
     groundMesh.receiveShadow = true;
@@ -367,8 +378,10 @@ class _State extends State<webgl_animation_multiple> {
           var clonedMesh = clonedScene.getObjectByName(u["meshName"]);
 
           if (clonedMesh != null) {
-            var mixer =
-                startAnimation(clonedMesh, List<THREE.AnimationClip>.from(model["animations"]), u["animationName"]);
+            var mixer = startAnimation(
+                clonedMesh,
+                List<THREE.AnimationClip>.from(model["animations"]),
+                u["animationName"]);
 
             // Save the animation mixer in the list, will need it in the animation loop
             mixers.add(mixer);
@@ -382,8 +395,8 @@ class _State extends State<webgl_animation_multiple> {
           worldScene.add(clonedScene);
 
           if (u["position"] != null) {
-            clonedScene.position
-                .set(u["position"]["x"].toDouble(), u["position"]["y"].toDouble(), u["position"]["z"].toDouble());
+            clonedScene.position.set(
+                u["position"]["x"].toDouble(), u["position"]["y"].toDouble(), u["position"]["z"].toDouble());
           }
 
           if (u["scale"] != null) {
