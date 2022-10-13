@@ -61,7 +61,7 @@ class AnimationObjectGroup {
     _bindings = []; // inside: Array< PropertyBinding >
     _bindingsIndicesByPath = {}; // inside: indices in these arrays
 
-    var scope = this;
+    // var scope = this;
 
     // this.stats = {
 

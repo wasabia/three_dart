@@ -8,16 +8,12 @@ class AnimationClip {
   late List<KeyframeTrack> tracks;
   late List results;
 
-  AnimationClip(name, [num duration = -1, tracks, int blendMode = NormalAnimationBlendMode]) {
-    this.name = name;
-    this.tracks = tracks;
-    this.duration = duration;
-    this.blendMode = blendMode;
-
+  AnimationClip(this.name,
+      [this.duration = -1, this.tracks = const <KeyframeTrack>[], this.blendMode = NormalAnimationBlendMode]) {
     uuid = MathUtils.generateUUID();
 
     // this means it should figure out its duration by scanning the tracks
-    if (this.duration < 0) {
+    if (duration < 0) {
       resetDuration();
     }
   }
@@ -64,7 +60,7 @@ class AnimationClip {
   }
 
   clone() {
-    const tracks = [];
+    const tracks = <KeyframeTrack>[];
 
     for (var i = 0; i < this.tracks.length; i++) {
       tracks.add(this.tracks[i].clone());
@@ -74,11 +70,11 @@ class AnimationClip {
   }
 
   toJSON() {
-    return AnimationClip.toJSON_static(this);
+    return AnimationClip.toJSONStatic(this);
   }
 
   static parse(json) {
-    var tracks = [];
+    var tracks = <KeyframeTrack>[];
 
     var jsonTracks = json.tracks, frameTime = 1.0 / (json.fps ?? 1.0);
 
@@ -92,7 +88,7 @@ class AnimationClip {
     return clip;
   }
 
-  static toJSON_static(clip) {
+  static toJSONStatic(clip) {
     var tracks = [], clipTracks = clip.tracks;
 
     var json = {
@@ -110,9 +106,9 @@ class AnimationClip {
     return json;
   }
 
-  static CreateFromMorphTargetSequence(name, morphTargetSequence, fps, noLoop) {
+  static AnimationClip createFromMorphTargetSequence(name, morphTargetSequence, fps, noLoop) {
     var numMorphTargets = morphTargetSequence.length;
-    var tracks = [];
+    var tracks = <KeyframeTrack>[];
 
     for (var i = 0; i < numMorphTargets; i++) {
       List<num> times = [];
@@ -140,16 +136,7 @@ class AnimationClip {
     return AnimationClip(name, -1, tracks);
   }
 
-  static findByName(List<AnimationClip> objectOrClipArray, name) {
-    var clipArray = objectOrClipArray;
-
-    if (objectOrClipArray is List<AnimationClip>) {
-      print("AnimationClip.findByName todo  ");
-      // var o = objectOrClipArray;
-      // clipArray = o.geometry && o.geometry.animations || o.animations;
-
-    }
-
+  static AnimationClip? findByName(List<AnimationClip> clipArray, name) {
     for (var i = 0; i < clipArray.length; i++) {
       if (clipArray[i].name == name) {
         return clipArray[i];
@@ -159,7 +146,7 @@ class AnimationClip {
     return null;
   }
 
-  static CreateClipsFromMorphTargetSequences(morphTargets, fps, noLoop) {
+  static List<AnimationClip> ceateClipsFromMorphTargetSequences(morphTargets, fps, noLoop) {
     var animationToMorphTargets = {};
 
     // tested with https://regex101.com/ on trick sequences
@@ -185,11 +172,11 @@ class AnimationClip {
       }
     }
 
-    var clips = [];
+    var clips = <AnimationClip>[];
 
     // for ( var name in animationToMorphTargets ) {
     animationToMorphTargets.forEach((name, value) {
-      clips.add(AnimationClip.CreateFromMorphTargetSequence(name, animationToMorphTargets[name], fps, noLoop));
+      clips.add(AnimationClip.createFromMorphTargetSequence(name, animationToMorphTargets[name], fps, noLoop));
     });
 
     return clips;
@@ -223,7 +210,7 @@ class AnimationClip {
       }
     }
 
-    var tracks = [];
+    var tracks = <KeyframeTrack>[];
 
     var clipName = animation.name ?? 'default';
     var fps = animation.fps ?? 30;
