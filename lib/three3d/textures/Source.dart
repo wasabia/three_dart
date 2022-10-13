@@ -1,122 +1,85 @@
 part of three_textures;
 
 class Source {
-
   late String uuid;
   dynamic data;
   late int version;
 
   int currentVersion = 0;
 
-	Source( [data] ) {
-
+  Source([data]) {
     uuid = MathUtils.generateUUID();
 
-		this.data = data;
+    this.data = data;
 
     version = 0;
+  }
 
-	}
-
-	set needsUpdate( value ) {
-
+  set needsUpdate(value) {
     if (value == true) version++;
+  }
 
-	}
-
-	toJSON( meta ) {
-
-		var isRootObject = ( meta == null || meta is String );
+  toJSON(meta) {
+    var isRootObject = (meta == null || meta is String);
 
     if (!isRootObject && meta.images[uuid] != null) {
-
       return meta.images[uuid];
+    }
 
-		}
+    var output = {"uuid": uuid, "url": ''};
 
-		var output = {
-			"uuid": uuid,
-			"url": ''
-		};
+    var data = this.data;
 
-		var data = this.data;
+    if (data != null) {
+      var url;
 
-		if ( data != null ) {
+      if (data is List) {
+        // cube texture
 
-			var url;
+        url = [];
 
-			if ( data is List ) {
+        for (var i = 0, l = data.length; i < l; i++) {
+          if (data[i].isDataTexture) {
+            url.add(serializeImage(data[i].image));
+          } else {
+            url.add(serializeImage(data[i]));
+          }
+        }
+      } else {
+        // texture
 
-				// cube texture
+        url = serializeImage(data);
+      }
 
-				url = [];
+      output["url"] = url;
+    }
 
-				for ( var i = 0, l = data.length; i < l; i ++ ) {
-
-					if ( data[ i ].isDataTexture ) {
-
-						url.add( serializeImage( data[ i ].image ) );
-
-					} else {
-
-						url.add( serializeImage( data[ i ] ) );
-
-					}
-
-				}
-
-			} else {
-
-				// texture
-
-				url = serializeImage( data );
-
-			}
-
-			output["url"] = url;
-
-		}
-
-		if ( ! isRootObject ) {
-
+    if (!isRootObject) {
       meta.images[uuid] = output;
+    }
 
-		}
-
-		return output;
-
-	}
-
+    return output;
+  }
 }
 
-serializeImage( image ) {
+serializeImage(image) {
+  if (image is ImageElement) {
+    // default images
 
-	if ( image is ImageElement ) {
+    return ImageUtils.getDataURL(image);
+  } else {
+    if (image.data != null) {
+      // images of DataTexture
 
-		// default images
-
-		return ImageUtils.getDataURL( image );
-
-	} else {
-
-		if ( image.data != null ) {
-
-			// images of DataTexture
-
-			return {
-				"data": image.data.sublist(0),
-				"width": image.width,
-				"height": image.height,
-				"type": image.data.runtimeType.toString(), // TODO remove runtimeType for web release mode
-			};
-
-		} else {
-
-			print( 'THREE.Texture: Unable to serialize Texture.' );
-			return {};
-
-		}
-
-	}
-
+      return {
+        "data": image.data.sublist(0),
+        "width": image.width,
+        "height": image.height,
+        "type": image.data.runtimeType.toString(), // TODO remove runtimeType for web release mode
+      };
+    } else {
+      print('three.Texture: Unable to serialize Texture.');
+      return {};
+    }
+  }
 }

@@ -164,8 +164,7 @@ class Vector4 {
 
   Vector4 sub(Vector4 v, Vector4? w) {
     if (w != null) {
-      print(
-          'THREE.Vector4: .sub() now only accepts one argument. Use .subVectors( a, b ) instead.');
+      print('three.Vector4: .sub() now only accepts one argument. Use .subVectors( a, b ) instead.');
       return subVectors(v, w);
     }
 
@@ -199,7 +198,7 @@ class Vector4 {
 
   Vector4 multiply(Vector4 v) {
     // if ( w != null ) {
-    // 	print( 'THREE.Vector4: .multiply() now only accepts one argument. Use .multiplyVectors( a, b ) instead.' );
+    // 	print( 'three.Vector4: .multiply() now only accepts one argument. Use .multiplyVectors( a, b ) instead.' );
     // 	return this.multiplyVectors( v, w );
     // }
 
@@ -282,9 +281,7 @@ class Vector4 {
     double m32 = te[6];
     double m33 = te[10];
 
-    if ((Math.abs(m12 - m21) < epsilon) &&
-        (Math.abs(m13 - m31) < epsilon) &&
-        (Math.abs(m23 - m32) < epsilon)) {
+    if ((Math.abs(m12 - m21) < epsilon) && (Math.abs(m13 - m31) < epsilon) && (Math.abs(m23 - m32) < epsilon)) {
       // singularity found
       // first check for identity matrix which must have +1 for all terms
       // in leading diagonal and zero in other terms
@@ -358,9 +355,8 @@ class Vector4 {
 
     // as we have reached here there are no singularities so we can handle normally
 
-    var s = Math.sqrt((m32 - m23) * (m32 - m23) +
-        (m13 - m31) * (m13 - m31) +
-        (m21 - m12) * (m21 - m12)); // used to normalize
+    var s = Math.sqrt(
+        (m32 - m23) * (m32 - m23) + (m13 - m31) * (m13 - m31) + (m21 - m12) * (m21 - m12)); // used to normalize
 
     if (Math.abs(s) < 0.001) s = 1;
 
@@ -416,8 +412,7 @@ class Vector4 {
   Vector4 clampLength(num min, num max) {
     var length = this.length();
 
-    return divideScalar(length)
-        .multiplyScalar(Math.max(min, Math.min(max, length)));
+    return divideScalar(length).multiplyScalar(Math.max(min, Math.min(max, length)));
   }
 
   Vector4 floor() {

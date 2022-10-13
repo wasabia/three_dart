@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 
 class webgl_clipping extends StatefulWidget {
   String fileName;
@@ -17,7 +17,7 @@ class webgl_clipping extends StatefulWidget {
 
 class _State extends State<webgl_clipping> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -25,12 +25,12 @@ class _State extends State<webgl_clipping> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
-  late THREE.AnimationMixer mixer;
-  THREE.Clock clock = THREE.Clock();
+  late three.AnimationMixer mixer;
+  three.Clock clock = three.Clock();
 
   double dpr = 1.0;
 
@@ -39,23 +39,23 @@ class _State extends State<webgl_clipping> {
   bool verbose = true;
   bool disposed = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
   int startTime = 0;
 
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late three.WebGLMultisampleRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
   bool loaded = false;
 
-  late THREE.Object3D model;
+  late three.Object3D model;
 
-  late List<THREE.Plane> planes;
-  late List<THREE.PlaneHelper> planeHelpers;
-  late List<THREE.Mesh> planeObjects;
+  late List<three.Plane> planes;
+  late List<three.PlaneHelper> planeHelpers;
+  late List<three.Mesh> planeObjects;
 
   @override
   void initState() {
@@ -137,8 +137,7 @@ class _State extends State<webgl_clipping> {
                       child: Builder(builder: (BuildContext context) {
                         if (kIsWeb) {
                           return three3dRender.isInitialized
-                              ? HtmlElementView(
-                                  viewType: three3dRender.textureId!.toString())
+                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                               : Container();
                         } else {
                           return three3dRender.isInitialized
@@ -186,16 +185,15 @@ class _State extends State<webgl_clipping> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = true;
     renderer!.localClippingEnabled = true;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -208,18 +206,18 @@ class _State extends State<webgl_clipping> {
   }
 
   initPage() async {
-    camera = THREE.PerspectiveCamera(36, width / height, 0.25, 16);
+    camera = three.PerspectiveCamera(36, width / height, 0.25, 16);
 
     camera.position.set(0, 1.3, 3);
 
-    scene = THREE.Scene();
+    scene = three.Scene();
 
     // Lights
 
-    scene.add(THREE.AmbientLight(0x505050, 1));
+    scene.add(three.AmbientLight(0x505050, 1));
 
-    var spotLight = THREE.SpotLight(0xffffff);
-    spotLight.angle = THREE.Math.PI / 5;
+    var spotLight = three.SpotLight(0xffffff);
+    spotLight.angle = three.Math.PI / 5;
     spotLight.penumbra = 0.2;
     spotLight.position.set(2, 3, 3);
     spotLight.castShadow = true;
@@ -229,7 +227,7 @@ class _State extends State<webgl_clipping> {
     spotLight.shadow!.mapSize.height = 1024;
     scene.add(spotLight);
 
-    var dirLight = THREE.DirectionalLight(0x55505a, 1);
+    var dirLight = three.DirectionalLight(0x55505a, 1);
     dirLight.position.set(0, 3, 0);
     dirLight.castShadow = true;
     dirLight.shadow!.camera!.near = 1;
@@ -246,31 +244,31 @@ class _State extends State<webgl_clipping> {
 
     // ***** Clipping planes: *****
 
-    var localPlane = THREE.Plane(THREE.Vector3(0, -1, 0), 0.8);
-    var globalPlane = THREE.Plane(THREE.Vector3(-1, 0, 0), 0.1);
+    var localPlane = three.Plane(three.Vector3(0, -1, 0), 0.8);
+    var globalPlane = three.Plane(three.Vector3(-1, 0, 0), 0.1);
 
     // Geometry
 
-    var material = THREE.MeshPhongMaterial({
+    var material = three.MeshPhongMaterial({
       "color": 0x80ee10,
       "shininess": 100,
-      "side": THREE.DoubleSide,
+      "side": three.DoubleSide,
 
       // ***** Clipping setup (material): *****
       "clippingPlanes": [localPlane],
       "clipShadows": true
     });
 
-    var geometry = THREE.TorusKnotGeometry(0.4, 0.08, 95, 20);
+    var geometry = three.TorusKnotGeometry(0.4, 0.08, 95, 20);
 
-    object = THREE.Mesh(geometry, material);
+    object = three.Mesh(geometry, material);
     object.castShadow = true;
     scene.add(object);
 
-    var ground = THREE.Mesh(THREE.PlaneGeometry(9, 9, 1, 1),
-        THREE.MeshPhongMaterial({"color": 0xa0adaf, "shininess": 150}));
+    var ground =
+        three.Mesh(three.PlaneGeometry(9, 9, 1, 1), three.MeshPhongMaterial({"color": 0xa0adaf, "shininess": 150}));
 
-    ground.rotation.x = -THREE.Math.PI / 2; // rotates X/Y to X/Z
+    ground.rotation.x = -three.Math.PI / 2; // rotates X/Y to X/Z
     ground.receiveShadow = true;
     scene.add(ground);
 
@@ -279,7 +277,7 @@ class _State extends State<webgl_clipping> {
 
     animate();
 
-    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
+    // scene.overrideMaterial = new three.MeshBasicMaterial();
   }
 
   clickRender() {
@@ -302,7 +300,7 @@ class _State extends State<webgl_clipping> {
     object.position.y = 0.8;
     object.rotation.x = time * 0.5;
     object.rotation.y = time * 0.2;
-    object.scale.setScalar(THREE.Math.cos(time) * 0.125 + 0.875);
+    object.scale.setScalar(three.Math.cos(time) * 0.125 + 0.875);
 
     render();
 

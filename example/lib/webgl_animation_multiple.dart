@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/objects/index.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
-import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
+import 'package:three_dart/three_dart.dart' as three;
+import 'package:three_dart_jsm/three_dart_jsm.dart' as three_jsm;
 
 class webgl_animation_multiple extends StatefulWidget {
   String fileName;
 
-  webgl_animation_multiple({Key? key, required this.fileName})
-      : super(key: key);
+  webgl_animation_multiple({Key? key, required this.fileName}) : super(key: key);
 
   @override
   createState() => _State();
@@ -20,7 +19,7 @@ class webgl_animation_multiple extends StatefulWidget {
 
 class _State extends State<webgl_animation_multiple> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -28,17 +27,17 @@ class _State extends State<webgl_animation_multiple> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
   //////////////////////////////
   // Global objects
   //////////////////////////////
-  late THREE.Scene worldScene; // THREE.Scene where it all will be rendered
+  late three.Scene worldScene; // THREE.Scene where it all will be rendered
 
-  THREE.Clock clock = THREE.Clock();
-  THREE_JSM.OrbitControls? controls;
+  three.Clock clock = three.Clock();
+  three_jsm.OrbitControls? controls;
 
   double dpr = 1.0;
 
@@ -47,27 +46,25 @@ class _State extends State<webgl_animation_multiple> {
   bool verbose = true;
   bool disposed = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
   late List<Map<String, dynamic>> MODELS;
   late List<Map<String, dynamic>> UNITS;
-  var mixers =
-      []; // All the THREE.AnimationMixer objects for all the animations in the scene
+  var mixers = []; // All the THREE.AnimationMixer objects for all the animations in the scene
 
   var numLoadedModels = 0;
 
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late three.WebGLMultisampleRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
   bool loaded = false;
 
-  late THREE.Object3D model;
+  late three.Object3D model;
 
-  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey =
-      GlobalKey<THREE_JSM.DomLikeListenableState>();
+  final GlobalKey<three_jsm.DomLikeListenableState> _globalKey = GlobalKey<three_jsm.DomLikeListenableState>();
 
   @override
   void initState() {
@@ -141,7 +138,7 @@ class _State extends State<webgl_animation_multiple> {
         Container(
           child: Stack(
             children: [
-              THREE_JSM.DomLikeListenable(
+              three_jsm.DomLikeListenable(
                 key: _globalKey,
                 builder: (BuildContext context) {
                   return Container(
@@ -151,8 +148,7 @@ class _State extends State<webgl_animation_multiple> {
                       child: Builder(builder: (BuildContext context) {
                         if (kIsWeb) {
                           return three3dRender.isInitialized
-                              ? HtmlElementView(
-                                  viewType: three3dRender.textureId!.toString())
+                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                               : Container();
                         } else {
                           return three3dRender.isInitialized
@@ -202,15 +198,14 @@ class _State extends State<webgl_animation_multiple> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = true;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -242,16 +237,10 @@ class _State extends State<webgl_animation_multiple> {
     // that must be played.
     UNITS = [
       {
-        "modelName":
-            "Soldier", // Will use the 3D model from file models/gltf/Soldier.glb
+        "modelName": "Soldier", // Will use the 3D model from file models/gltf/Soldier.glb
         "meshName": "vanguard_Mesh", // Name of the main mesh to animate
-        "position": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        }, // Where to put the unit in the scene
-        "scale":
-            1, // Scaling of the unit. 1.0 means: use original size, 0.1 means "10 times smaller", etc.
+        "position": {"x": 0, "y": 0, "z": 0}, // Where to put the unit in the scene
+        "scale": 1, // Scaling of the unit. 1.0 means: use original size, 0.1 means "10 times smaller", etc.
         "animationName": "Idle" // Name of animation to run
       },
       {
@@ -272,7 +261,7 @@ class _State extends State<webgl_animation_multiple> {
         "modelName": "Parrot",
         "meshName": "mesh_0",
         "position": {"x": -4, "y": 0, "z": 0},
-        "rotation": {"x": 0, "y": THREE.Math.PI, "z": 0},
+        "rotation": {"x": 0, "y": three.Math.PI, "z": 0},
         "scale": 0.01,
         "animationName": "parrot_A_"
       },
@@ -280,7 +269,7 @@ class _State extends State<webgl_animation_multiple> {
         "modelName": "Parrot",
         "meshName": "mesh_0",
         "position": {"x": -2, "y": 0, "z": 0},
-        "rotation": {"x": 0, "y": THREE.Math.PI / 2, "z": 0},
+        "rotation": {"x": 0, "y": three.Math.PI / 2, "z": 0},
         "scale": 0.02,
         "animationName": null
       },
@@ -300,21 +289,21 @@ class _State extends State<webgl_animation_multiple> {
   }
 
   initScene2() {
-    camera = THREE.PerspectiveCamera(45, width / height, 1, 10000);
+    camera = three.PerspectiveCamera(45, width / height, 1, 10000);
     camera.position.set(3, 6, -10);
-    camera.lookAt(THREE.Vector3(0, 1, 0));
+    camera.lookAt(three.Vector3(0, 1, 0));
 
-    clock = THREE.Clock();
+    clock = three.Clock();
 
-    worldScene = THREE.Scene();
-    worldScene.background = THREE.Color.fromHex(0xa0a0a0);
-    worldScene.fog = THREE.Fog(0xa0a0a0, 10, 22);
+    worldScene = three.Scene();
+    worldScene.background = three.Color.fromHex(0xa0a0a0);
+    worldScene.fog = three.Fog(0xa0a0a0, 10, 22);
 
-    var hemiLight = THREE.HemisphereLight(0xffffff, 0x444444);
+    var hemiLight = three.HemisphereLight(0xffffff, 0x444444);
     hemiLight.position.set(0, 20, 0);
     worldScene.add(hemiLight);
 
-    var dirLight = THREE.DirectionalLight(0xffffff);
+    var dirLight = three.DirectionalLight(0xffffff);
     dirLight.position.set(-3, 10, -10);
     dirLight.castShadow = true;
     dirLight.shadow!.camera!.top = 10;
@@ -325,13 +314,13 @@ class _State extends State<webgl_animation_multiple> {
     dirLight.shadow!.camera!.far = 40;
     worldScene.add(dirLight);
 
-    var controls = THREE_JSM.OrbitControls(camera, _globalKey);
+    var controls = three_jsm.OrbitControls(camera, _globalKey);
 
     // ground
-    var groundMesh = THREE.Mesh(THREE.PlaneGeometry(40, 40),
-        THREE.MeshPhongMaterial({"color": 0x999999, "depthWrite": false}));
+    var groundMesh =
+        three.Mesh(three.PlaneGeometry(40, 40), three.MeshPhongMaterial({"color": 0x999999, "depthWrite": false}));
 
-    groundMesh.rotation.x = -THREE.Math.PI / 2;
+    groundMesh.rotation.x = -three.Math.PI / 2;
     groundMesh.receiveShadow = true;
     worldScene.add(groundMesh);
   }
@@ -371,17 +360,15 @@ class _State extends State<webgl_animation_multiple> {
       var model = getModelByName(u["modelName"]);
 
       if (model != null) {
-        var clonedScene = THREE_JSM.SkeletonUtils.clone(model["scene"]);
+        var clonedScene = three_jsm.SkeletonUtils.clone(model["scene"]);
 
         if (clonedScene != null) {
           // THREE.Scene is cloned properly, let's find one mesh and launch animation for it
           var clonedMesh = clonedScene.getObjectByName(u["meshName"]);
 
           if (clonedMesh != null) {
-            var mixer = startAnimation(
-                clonedMesh,
-                List<THREE.AnimationClip>.from(model["animations"]),
-                u["animationName"]);
+            var mixer =
+                startAnimation(clonedMesh, List<three.AnimationClip>.from(model["animations"]), u["animationName"]);
 
             // Save the animation mixer in the list, will need it in the animation loop
             mixers.add(mixer);
@@ -395,8 +382,8 @@ class _State extends State<webgl_animation_multiple> {
           worldScene.add(clonedScene);
 
           if (u["position"] != null) {
-            clonedScene.position.set(
-                u["position"]["x"].toDouble(), u["position"]["y"].toDouble(), u["position"]["z"].toDouble());
+            clonedScene.position
+                .set(u["position"]["x"].toDouble(), u["position"]["y"].toDouble(), u["position"]["z"].toDouble());
           }
 
           if (u["scale"] != null) {
@@ -427,8 +414,8 @@ class _State extends State<webgl_animation_multiple> {
      * @return {THREE.AnimationMixer} Mixer to be used in the render loop
      */
   startAnimation(skinnedMesh, animations, animationName) {
-    var mixer = THREE.AnimationMixer(skinnedMesh);
-    var clip = THREE.AnimationClip.findByName(animations, animationName);
+    var mixer = three.AnimationMixer(skinnedMesh);
+    var clip = three.AnimationClip.findByName(animations, animationName);
 
     if (clip != null) {
       var action = mixer.clipAction(clip);
@@ -459,7 +446,7 @@ class _State extends State<webgl_animation_multiple> {
      * @param onLoaded {function} A callback function that will be called when the model is loaded
      */
   loadGltfModel(model, onLoaded) {
-    var loader = THREE_JSM.GLTFLoader(null);
+    var loader = three_jsm.GLTFLoader(null);
     var modelName = "assets/models/gltf/" + model["name"] + ".gltf";
 
     loader.load(modelName, (gltf) {

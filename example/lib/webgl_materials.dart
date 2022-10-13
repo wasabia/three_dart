@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 
 class webgl_materials extends StatefulWidget {
   String fileName;
@@ -16,7 +16,7 @@ class webgl_materials extends StatefulWidget {
 
 class _MyAppState extends State<webgl_materials> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -24,11 +24,11 @@ class _MyAppState extends State<webgl_materials> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
-  late THREE.PointLight pointLight;
+  late three.PointLight pointLight;
 
   var objects = [], materials = [];
 
@@ -41,14 +41,14 @@ class _MyAppState extends State<webgl_materials> {
 
   bool loaded = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late three.WebGLMultisampleRenderTarget renderTarget;
 
-  THREE.AnimationMixer? mixer;
-  THREE.Clock clock = THREE.Clock();
+  three.AnimationMixer? mixer;
+  three.Clock clock = three.Clock();
 
   dynamic? sourceTexture;
 
@@ -131,13 +131,10 @@ class _MyAppState extends State<webgl_materials> {
                   child: Builder(builder: (BuildContext context) {
                     if (kIsWeb) {
                       return three3dRender.isInitialized
-                          ? HtmlElementView(
-                              viewType: three3dRender.textureId!.toString())
+                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                           : Container();
                     } else {
-                      return three3dRender.isInitialized
-                          ? Texture(textureId: three3dRender.textureId!)
-                          : Container();
+                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
                     }
                   })),
             ],
@@ -185,15 +182,14 @@ class _MyAppState extends State<webgl_materials> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = true;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -206,53 +202,38 @@ class _MyAppState extends State<webgl_materials> {
   }
 
   initPage() async {
-    camera = THREE.PerspectiveCamera(45, width / height, 1, 2000);
+    camera = three.PerspectiveCamera(45, width / height, 1, 2000);
     camera.position.set(0, 200, 800);
 
-    scene = THREE.Scene();
+    scene = three.Scene();
 
     // Grid
 
-    var helper = THREE.GridHelper(1000, 40, 0x303030, 0x303030);
+    var helper = three.GridHelper(1000, 40, 0x303030, 0x303030);
     helper.position.y = -75;
     scene.add(helper);
 
     // Materials
 
-    var texture = THREE.DataTexture(generateTexture().data, 256, 256, null,
-        null, null, null, null, null, null, null, null);
+    var texture =
+        three.DataTexture(generateTexture().data, 256, 256, null, null, null, null, null, null, null, null, null);
     texture.needsUpdate = true;
 
-    materials.add(
-        THREE.MeshLambertMaterial({"map": texture, "transparent": true}));
-    materials.add(THREE.MeshLambertMaterial({"color": 0xdddddd}));
-    materials.add(THREE.MeshPhongMaterial({
-      "color": 0xdddddd,
-      "specular": 0x009900,
-      "shininess": 30,
-      "flatShading": true
-    }));
-    materials.add(THREE.MeshNormalMaterial());
-    materials.add(THREE.MeshBasicMaterial({
-      "color": 0xffaa00,
-      "transparent": true,
-      "blending": THREE.AdditiveBlending
-    }));
-    materials.add(THREE.MeshLambertMaterial({"color": 0xdddddd}));
-    materials.add(THREE.MeshPhongMaterial({
-      "color": 0xdddddd,
-      "specular": 0x009900,
-      "shininess": 30,
-      "map": texture,
-      "transparent": true
-    }));
-    materials.add(THREE.MeshNormalMaterial({"flatShading": true}));
-    materials.add(
-        THREE.MeshBasicMaterial({"color": 0xffaa00, "wireframe": true}));
-    materials.add(THREE.MeshDepthMaterial());
-    materials.add(THREE.MeshLambertMaterial(
-        {"color": 0x666666, "emissive": 0xff0000}));
-    materials.add(THREE.MeshPhongMaterial({
+    materials.add(three.MeshLambertMaterial({"map": texture, "transparent": true}));
+    materials.add(three.MeshLambertMaterial({"color": 0xdddddd}));
+    materials
+        .add(three.MeshPhongMaterial({"color": 0xdddddd, "specular": 0x009900, "shininess": 30, "flatShading": true}));
+    materials.add(three.MeshNormalMaterial());
+    materials
+        .add(three.MeshBasicMaterial({"color": 0xffaa00, "transparent": true, "blending": three.AdditiveBlending}));
+    materials.add(three.MeshLambertMaterial({"color": 0xdddddd}));
+    materials.add(three.MeshPhongMaterial(
+        {"color": 0xdddddd, "specular": 0x009900, "shininess": 30, "map": texture, "transparent": true}));
+    materials.add(three.MeshNormalMaterial({"flatShading": true}));
+    materials.add(three.MeshBasicMaterial({"color": 0xffaa00, "wireframe": true}));
+    materials.add(three.MeshDepthMaterial());
+    materials.add(three.MeshLambertMaterial({"color": 0x666666, "emissive": 0xff0000}));
+    materials.add(three.MeshPhongMaterial({
       "color": 0x000000,
       "specular": 0x666666,
       "emissive": 0xff0000,
@@ -260,12 +241,11 @@ class _MyAppState extends State<webgl_materials> {
       "opacity": 0.9,
       "transparent": true
     }));
-    materials.add(
-        THREE.MeshBasicMaterial({"map": texture, "transparent": true}));
+    materials.add(three.MeshBasicMaterial({"map": texture, "transparent": true}));
 
     // Spheres geometry
 
-    var geometry = THREE.SphereGeometry(70, 32, 16);
+    var geometry = three.SphereGeometry(70, 32, 16);
 
     for (var i = 0, l = materials.length; i < l; i++) {
       addMesh(geometry, materials[i]);
@@ -273,26 +253,25 @@ class _MyAppState extends State<webgl_materials> {
 
     // Lights
 
-    scene.add(THREE.AmbientLight(0x111111, 1));
+    scene.add(three.AmbientLight(0x111111, 1));
 
-    var directionalLight = THREE.DirectionalLight(0xffffff, 0.125);
+    var directionalLight = three.DirectionalLight(0xffffff, 0.125);
 
-    directionalLight.position.x = THREE.Math.random() - 0.5;
-    directionalLight.position.y = THREE.Math.random() - 0.5;
-    directionalLight.position.z = THREE.Math.random() - 0.5;
+    directionalLight.position.x = three.Math.random() - 0.5;
+    directionalLight.position.y = three.Math.random() - 0.5;
+    directionalLight.position.z = three.Math.random() - 0.5;
     directionalLight.position.normalize();
 
     scene.add(directionalLight);
 
-    pointLight = THREE.PointLight(0xffffff, 1);
+    pointLight = three.PointLight(0xffffff, 1);
     scene.add(pointLight);
 
-    pointLight.add(THREE.Mesh(THREE.SphereGeometry(4, 8, 8),
-        THREE.MeshBasicMaterial({"color": 0xffffff})));
+    pointLight.add(three.Mesh(three.SphereGeometry(4, 8, 8), three.MeshBasicMaterial({"color": 0xffffff})));
 
     //
 
-    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
+    // scene.overrideMaterial = new three.MeshBasicMaterial();
 
     loaded = true;
 
@@ -311,21 +290,21 @@ class _MyAppState extends State<webgl_materials> {
       pixels[i] = 255;
       pixels[i + 1] = 255;
       pixels[i + 2] = 255;
-      pixels[i + 3] = THREE.Math.floor(x ^ y);
+      pixels[i + 3] = three.Math.floor(x ^ y);
     }
 
-    return THREE.ImageElement(data: pixels, width: 256, height: 256);
+    return three.ImageElement(data: pixels, width: 256, height: 256);
   }
 
   addMesh(geometry, material) {
-    var mesh = THREE.Mesh(geometry, material);
+    var mesh = three.Mesh(geometry, material);
 
     mesh.position.x = (objects.length % 4) * 200 - 400;
-    mesh.position.z = THREE.Math.floor(objects.length / 4) * 200 - 200;
+    mesh.position.z = three.Math.floor(objects.length / 4) * 200 - 200;
 
-    mesh.rotation.x = THREE.Math.random() * 200 - 100;
-    mesh.rotation.y = THREE.Math.random() * 200 - 100;
-    mesh.rotation.z = THREE.Math.random() * 200 - 100;
+    mesh.rotation.x = three.Math.random() * 200 - 100;
+    mesh.rotation.y = three.Math.random() * 200 - 100;
+    mesh.rotation.z = three.Math.random() * 200 - 100;
 
     objects.add(mesh);
 
@@ -349,8 +328,8 @@ class _MyAppState extends State<webgl_materials> {
 
     var timer = 0.0001 * DateTime.now().millisecondsSinceEpoch;
 
-    camera.position.x = THREE.Math.cos(timer) * 1000;
-    camera.position.z = THREE.Math.sin(timer) * 1000;
+    camera.position.x = three.Math.cos(timer) * 1000;
+    camera.position.z = three.Math.sin(timer) * 1000;
 
     camera.lookAt(scene.position);
 
@@ -361,16 +340,12 @@ class _MyAppState extends State<webgl_materials> {
       object.rotation.y += 0.005;
     }
 
-    materials[materials.length - 2]
-        .emissive
-        .setHSL(0.54, 1.0, 0.35 * (0.5 + 0.5 * THREE.Math.sin(35 * timer)));
-    materials[materials.length - 3]
-        .emissive
-        .setHSL(0.04, 1.0, 0.35 * (0.5 + 0.5 * THREE.Math.cos(35 * timer)));
+    materials[materials.length - 2].emissive.setHSL(0.54, 1.0, 0.35 * (0.5 + 0.5 * three.Math.sin(35 * timer)));
+    materials[materials.length - 3].emissive.setHSL(0.04, 1.0, 0.35 * (0.5 + 0.5 * three.Math.cos(35 * timer)));
 
-    pointLight.position.x = THREE.Math.sin(timer * 7) * 300;
-    pointLight.position.y = THREE.Math.cos(timer * 5) * 400;
-    pointLight.position.z = THREE.Math.cos(timer * 3) * 300;
+    pointLight.position.x = three.Math.sin(timer * 7) * 300;
+    pointLight.position.y = three.Math.cos(timer * 5) * 400;
+    pointLight.position.z = three.Math.cos(timer * 3) * 300;
 
     render();
 

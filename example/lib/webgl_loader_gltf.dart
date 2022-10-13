@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_loader_gltf extends StatefulWidget {
@@ -17,7 +17,7 @@ class webgl_loader_gltf extends StatefulWidget {
 
 class _MyAppState extends State<webgl_loader_gltf> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -25,9 +25,9 @@ class _MyAppState extends State<webgl_loader_gltf> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
   double dpr = 1.0;
 
@@ -36,16 +36,15 @@ class _MyAppState extends State<webgl_loader_gltf> {
   bool verbose = true;
   bool disposed = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
-  late THREE.WebGLRenderTarget renderTarget;
+  late three.WebGLRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
-  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey =
-    GlobalKey<THREE_JSM.DomLikeListenableState>();
+  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey = GlobalKey<THREE_JSM.DomLikeListenableState>();
 
   late THREE_JSM.OrbitControls controls;
 
@@ -131,9 +130,7 @@ class _MyAppState extends State<webgl_loader_gltf> {
                         child: Builder(builder: (BuildContext context) {
                           if (kIsWeb) {
                             return three3dRender.isInitialized
-                                ? HtmlElementView(
-                                    viewType:
-                                        three3dRender.textureId!.toString())
+                                ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                                 : Container();
                           } else {
                             return three3dRender.isInitialized
@@ -182,18 +179,17 @@ class _MyAppState extends State<webgl_loader_gltf> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
 
-    renderer!.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer!.toneMapping = three.ACESFilmicToneMapping;
     renderer!.toneMappingExposure = 1;
-    renderer!.outputEncoding = THREE.sRGBEncoding;
+    renderer!.outputEncoding = three.sRGBEncoding;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -206,13 +202,12 @@ class _MyAppState extends State<webgl_loader_gltf> {
   }
 
   initPage() async {
-    camera = THREE.PerspectiveCamera(45, width / height, 0.25, 20);
-    camera.position.set( - 0, 0, 2.7 );
+    camera = three.PerspectiveCamera(45, width / height, 0.25, 20);
+    camera.position.set(-0, 0, 2.7);
 
     // scene
 
-    scene = THREE.Scene();
-
+    scene = three.Scene();
 
     camera.lookAt(scene.position);
 
@@ -220,15 +215,14 @@ class _MyAppState extends State<webgl_loader_gltf> {
     _loader.setPath('assets/textures/equirectangular/');
     var _hdrTexture = await _loader.loadAsync('royal_esplanade_1k.hdr');
 
-    _hdrTexture.mapping = THREE.EquirectangularReflectionMapping;
+    _hdrTexture.mapping = three.EquirectangularReflectionMapping;
 
     scene.background = _hdrTexture;
     scene.environment = _hdrTexture;
 
-    scene.add( THREE.AmbientLight( 0xffffff ) );
+    scene.add(three.AmbientLight(0xffffff));
 
-    var loader = THREE_JSM.GLTFLoader(null)
-        .setPath('assets/models/gltf/DamagedHelmet/glTF/');
+    var loader = THREE_JSM.GLTFLoader(null).setPath('assets/models/gltf/DamagedHelmet/glTF/');
 
     var result = await loader.loadAsync('DamagedHelmet.gltf');
 
@@ -236,17 +230,14 @@ class _MyAppState extends State<webgl_loader_gltf> {
 
     object = result["scene"];
 
-
-
     scene.add(object);
 
-    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
-
+    // scene.overrideMaterial = new three.MeshBasicMaterial();
 
     // controls
     controls = THREE_JSM.OrbitControls(camera, _globalKey);
     // controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
-    
+
     // controls.enableDamping =
     //     true; // an animation loop is required when either damping or auto-rotation are enabled
 
@@ -254,8 +245,7 @@ class _MyAppState extends State<webgl_loader_gltf> {
     // controls.maxDistance = 10;
     // controls.target.set( 0, 0, - 0.2 );
 
-    controls.enableDamping =
-        true; // an animation loop is required when either damping or auto-rotation are enabled
+    controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
     controls.dampingFactor = 0.05;
 
     controls.screenSpacePanning = false;
@@ -263,8 +253,7 @@ class _MyAppState extends State<webgl_loader_gltf> {
     controls.minDistance = 0.1;
     controls.maxDistance = 500;
 
-    controls.maxPolarAngle = THREE.Math.PI / 2;
-    
+    controls.maxPolarAngle = three.Math.PI / 2;
 
     animate();
   }

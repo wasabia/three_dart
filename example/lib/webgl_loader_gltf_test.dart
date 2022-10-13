@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_loader_gltf_test extends StatefulWidget {
@@ -17,7 +17,7 @@ class webgl_loader_gltf_test extends StatefulWidget {
 
 class _MyAppState extends State<webgl_loader_gltf_test> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -25,9 +25,9 @@ class _MyAppState extends State<webgl_loader_gltf_test> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
   double dpr = 1.0;
 
@@ -36,11 +36,11 @@ class _MyAppState extends State<webgl_loader_gltf_test> {
   bool verbose = true;
   bool disposed = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
-  late THREE.WebGLRenderTarget renderTarget;
+  late three.WebGLRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
@@ -123,13 +123,10 @@ class _MyAppState extends State<webgl_loader_gltf_test> {
                   child: Builder(builder: (BuildContext context) {
                     if (kIsWeb) {
                       return three3dRender.isInitialized
-                          ? HtmlElementView(
-                              viewType: three3dRender.textureId!.toString())
+                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                           : Container();
                     } else {
-                      return three3dRender.isInitialized
-                          ? Texture(textureId: three3dRender.textureId!)
-                          : Container();
+                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
                     }
                   })),
             ],
@@ -172,18 +169,17 @@ class _MyAppState extends State<webgl_loader_gltf_test> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
 
-    renderer!.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer!.toneMapping = three.ACESFilmicToneMapping;
     renderer!.toneMappingExposure = 1;
-    renderer!.outputEncoding = THREE.sRGBEncoding;
+    renderer!.outputEncoding = three.sRGBEncoding;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -195,16 +191,15 @@ class _MyAppState extends State<webgl_loader_gltf_test> {
     initPage();
   }
 
-  late THREE.Texture hdrTexture;
+  late three.Texture hdrTexture;
 
   initPage() async {
-    camera = THREE.PerspectiveCamera(45, width / height, 0.25, 20);
-    camera.position.set( - 0, 0, 2.7 );
+    camera = three.PerspectiveCamera(45, width / height, 0.25, 20);
+    camera.position.set(-0, 0, 2.7);
 
     // scene
 
-    scene = THREE.Scene();
-
+    scene = three.Scene();
 
     camera.lookAt(scene.position);
 
@@ -212,17 +207,16 @@ class _MyAppState extends State<webgl_loader_gltf_test> {
     _loader.setPath('assets/textures/equirectangular/');
     hdrTexture = await _loader.loadAsync('royal_esplanade_1k.hdr');
 
-    hdrTexture.mapping = THREE.EquirectangularReflectionMapping;
+    hdrTexture.mapping = three.EquirectangularReflectionMapping;
 
     scene.background = hdrTexture;
     scene.environment = hdrTexture;
 
-    scene.add( THREE.AmbientLight( 0xffffff ) );
+    scene.add(three.AmbientLight(0xffffff));
 
     renderer!.render(scene, camera);
 
-    var loader = THREE_JSM.GLTFLoader(null)
-        .setPath('assets/models/gltf/DamagedHelmet/glTF/');
+    var loader = THREE_JSM.GLTFLoader(null).setPath('assets/models/gltf/DamagedHelmet/glTF/');
     var result = await loader.loadAsync('DamagedHelmet.gltf');
     print(" gltf load sucess result: $result  ");
     object = result["scene"];

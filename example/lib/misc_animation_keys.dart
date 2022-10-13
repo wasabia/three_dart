@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 
 class misc_animation_keys extends StatefulWidget {
   String fileName;
@@ -17,7 +17,7 @@ class misc_animation_keys extends StatefulWidget {
 
 class _State extends State<misc_animation_keys> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -25,12 +25,12 @@ class _State extends State<misc_animation_keys> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
-  late THREE.AnimationMixer mixer;
-  THREE.Clock clock = THREE.Clock();
+  late three.AnimationMixer mixer;
+  three.Clock clock = three.Clock();
 
   double dpr = 1.0;
 
@@ -38,17 +38,17 @@ class _State extends State<misc_animation_keys> {
 
   bool verbose = true;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late three.WebGLMultisampleRenderTarget renderTarget;
 
   dynamic sourceTexture;
 
   bool loaded = false;
 
-  late THREE.Object3D model;
+  late three.Object3D model;
 
   @override
   void initState() {
@@ -131,8 +131,7 @@ class _State extends State<misc_animation_keys> {
                       child: Builder(builder: (BuildContext context) {
                         if (kIsWeb) {
                           return three3dRender.isInitialized
-                              ? HtmlElementView(
-                                  viewType: three3dRender.textureId!.toString())
+                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                               : Container();
                         } else {
                           return three3dRender.isInitialized
@@ -180,15 +179,14 @@ class _State extends State<misc_animation_keys> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -201,48 +199,45 @@ class _State extends State<misc_animation_keys> {
   }
 
   initPage() async {
-    scene = THREE.Scene();
+    scene = three.Scene();
 
     //
 
-    camera = THREE.PerspectiveCamera(40, width / height, 1, 1000);
+    camera = three.PerspectiveCamera(40, width / height, 1, 1000);
     camera.position.set(25, 25, 50);
     camera.lookAt(scene.position);
 
     //
 
-    var axesHelper = THREE.AxesHelper(10);
+    var axesHelper = three.AxesHelper(10);
     scene.add(axesHelper);
 
     //
 
-    var geometry = THREE.BoxGeometry(5, 5, 5);
-    var material =
-        THREE.MeshBasicMaterial({"color": 0xffffff, "transparent": true});
-    var mesh = THREE.Mesh(geometry, material);
+    var geometry = three.BoxGeometry(5, 5, 5);
+    var material = three.MeshBasicMaterial({"color": 0xffffff, "transparent": true});
+    var mesh = three.Mesh(geometry, material);
     scene.add(mesh);
 
     // create a keyframe track (i.e. a timed sequence of keyframes) for each animated property
     // Note: the keyframe track type should correspond to the type of the property being animated
 
     // POSITION
-    var positionKF = THREE.VectorKeyframeTrack(
-        '.position', [0, 1, 2], [0, 0, 0, 30, 0, 0, 0, 0, 0], null);
+    var positionKF = three.VectorKeyframeTrack('.position', [0, 1, 2], [0, 0, 0, 30, 0, 0, 0, 0, 0], null);
 
     // SCALE
-    var scaleKF = THREE.VectorKeyframeTrack(
-        '.scale', [0, 1, 2], [1, 1, 1, 2, 2, 2, 1, 1, 1], null);
+    var scaleKF = three.VectorKeyframeTrack('.scale', [0, 1, 2], [1, 1, 1, 2, 2, 2, 1, 1, 1], null);
 
     // ROTATION
-    // Rotation should be performed using quaternions, using a THREE.QuaternionKeyframeTrack
+    // Rotation should be performed using quaternions, using a three.QuaternionKeyframeTrack
     // Interpolating Euler angles (.rotation property) can be problematic and is currently not supported
 
     // set up rotation about x axis
-    var xAxis = THREE.Vector3(1, 0, 0);
+    var xAxis = three.Vector3(1, 0, 0);
 
-    var qInitial = THREE.Quaternion().setFromAxisAngle(xAxis, 0);
-    var qFinal = THREE.Quaternion().setFromAxisAngle(xAxis, THREE.Math.PI);
-    var quaternionKF = THREE.QuaternionKeyframeTrack(
+    var qInitial = three.Quaternion().setFromAxisAngle(xAxis, 0);
+    var qFinal = three.Quaternion().setFromAxisAngle(xAxis, three.Math.PI);
+    var quaternionKF = three.QuaternionKeyframeTrack(
         '.quaternion',
         [0, 1, 2],
         [
@@ -262,20 +257,18 @@ class _State extends State<misc_animation_keys> {
         null);
 
     // COLOR
-    var colorKF = THREE.ColorKeyframeTrack('.material.color', [0, 1, 2],
-        [1, 0, 0, 0, 1, 0, 0, 0, 1], THREE.InterpolateDiscrete);
+    var colorKF =
+        three.ColorKeyframeTrack('.material.color', [0, 1, 2], [1, 0, 0, 0, 1, 0, 0, 0, 1], three.InterpolateDiscrete);
 
     // OPACITY
-    var opacityKF = THREE.NumberKeyframeTrack(
-        '.material.opacity', [0, 1, 2], [1, 0, 1], null);
+    var opacityKF = three.NumberKeyframeTrack('.material.opacity', [0, 1, 2], [1, 0, 1], null);
 
     // create an animation sequence with the tracks
     // If a negative time value is passed, the duration will be calculated from the times of the passed tracks array
-    var clip = THREE.AnimationClip(
-        'Action', 3, [scaleKF, positionKF, quaternionKF, colorKF, opacityKF]);
+    var clip = three.AnimationClip('Action', 3, [scaleKF, positionKF, quaternionKF, colorKF, opacityKF]);
 
-    // setup the THREE.AnimationMixer
-    mixer = THREE.AnimationMixer(mesh);
+    // setup the three.AnimationMixer
+    mixer = three.AnimationMixer(mesh);
 
     // create a ClipAction and set it to play
     var clipAction = mixer.clipAction(clip);
@@ -287,7 +280,7 @@ class _State extends State<misc_animation_keys> {
 
     animate();
 
-    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
+    // scene.overrideMaterial = new three.MeshBasicMaterial();
   }
 
   clickRender() {

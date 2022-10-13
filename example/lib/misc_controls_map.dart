@@ -1,13 +1,11 @@
 import 'dart:async';
 
-
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class misc_controls_map extends StatefulWidget {
@@ -20,7 +18,7 @@ class misc_controls_map extends StatefulWidget {
 
 class _MyAppState extends State<misc_controls_map> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -28,9 +26,9 @@ class _MyAppState extends State<misc_controls_map> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
   double dpr = 1.0;
 
@@ -39,12 +37,11 @@ class _MyAppState extends State<misc_controls_map> {
   bool verbose = true;
   bool disposed = false;
 
-  late THREE.WebGLRenderTarget renderTarget;
+  late three.WebGLRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
-  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey =
-      GlobalKey<THREE_JSM.DomLikeListenableState>();
+  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey = GlobalKey<THREE_JSM.DomLikeListenableState>();
 
   late THREE_JSM.MapControls controls;
 
@@ -130,9 +127,7 @@ class _MyAppState extends State<misc_controls_map> {
                         child: Builder(builder: (BuildContext context) {
                           if (kIsWeb) {
                             return three3dRender.isInitialized
-                                ? HtmlElementView(
-                                    viewType:
-                                        three3dRender.textureId!.toString())
+                                ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                                 : Container();
                           } else {
                             return three3dRender.isInitialized
@@ -186,19 +181,15 @@ class _MyAppState extends State<misc_controls_map> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({
-        "minFilter": THREE.LinearFilter,
-        "magFilter": THREE.LinearFilter,
-        "format": THREE.RGBAFormat
-      });
-      renderTarget = THREE.WebGLRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions(
+          {"minFilter": three.LinearFilter, "magFilter": three.LinearFilter, "format": three.RGBAFormat});
+      renderTarget = three.WebGLRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -216,11 +207,11 @@ class _MyAppState extends State<misc_controls_map> {
     var WIDTH = (width / AMOUNT) * dpr;
     var HEIGHT = (height / AMOUNT) * dpr;
 
-    scene = THREE.Scene();
-    scene.background = THREE.Color(0xcccccc);
-    scene.fog = THREE.FogExp2(0xcccccc, 0.002);
+    scene = three.Scene();
+    scene.background = three.Color(0xcccccc);
+    scene.fog = three.FogExp2(0xcccccc, 0.002);
 
-    camera = THREE.PerspectiveCamera(60, width / height, 1, 1000);
+    camera = three.PerspectiveCamera(60, width / height, 1, 1000);
     camera.position.set(400, 200, 0);
     camera.lookAt(scene.position);
 
@@ -228,8 +219,7 @@ class _MyAppState extends State<misc_controls_map> {
 
     controls = THREE_JSM.MapControls(camera, _globalKey);
 
-    controls.enableDamping =
-        true; // an animation loop is required when either damping or auto-rotation are enabled
+    controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
     controls.dampingFactor = 0.05;
 
     controls.screenSpacePanning = false;
@@ -237,21 +227,20 @@ class _MyAppState extends State<misc_controls_map> {
     controls.minDistance = 100;
     controls.maxDistance = 500;
 
-    controls.maxPolarAngle = THREE.Math.PI / 2;
+    controls.maxPolarAngle = three.Math.PI / 2;
 
     // world
-    var geometry = THREE.BoxGeometry(1, 1, 1);
+    var geometry = three.BoxGeometry(1, 1, 1);
     geometry.translate(0, 0.5, 0);
-    var material =
-        THREE.MeshPhongMaterial({'color': 0xffffff, 'flatShading': true});
+    var material = three.MeshPhongMaterial({'color': 0xffffff, 'flatShading': true});
 
     for (var i = 0; i < 500; i++) {
-      var mesh = THREE.Mesh(geometry, material);
-      mesh.position.x = THREE.Math.random() * 1600 - 800;
+      var mesh = three.Mesh(geometry, material);
+      mesh.position.x = three.Math.random() * 1600 - 800;
       mesh.position.y = 0;
-      mesh.position.z = THREE.Math.random() * 1600 - 800;
+      mesh.position.z = three.Math.random() * 1600 - 800;
       mesh.scale.x = 20;
-      mesh.scale.y = THREE.Math.random() * 80 + 10;
+      mesh.scale.y = three.Math.random() * 80 + 10;
       mesh.scale.z = 20;
       mesh.updateMatrix();
       mesh.matrixAutoUpdate = false;
@@ -259,15 +248,15 @@ class _MyAppState extends State<misc_controls_map> {
     }
     // lights
 
-    var dirLight1 = THREE.DirectionalLight(0xffffff);
+    var dirLight1 = three.DirectionalLight(0xffffff);
     dirLight1.position.set(1, 1, 1);
     scene.add(dirLight1);
 
-    var dirLight2 = THREE.DirectionalLight(0x002288);
+    var dirLight2 = three.DirectionalLight(0x002288);
     dirLight2.position.set(-1, -1, -1);
     scene.add(dirLight2);
 
-    var ambientLight = THREE.AmbientLight(0x222222);
+    var ambientLight = three.AmbientLight(0x222222);
     scene.add(ambientLight);
 
     animate();

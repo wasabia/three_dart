@@ -7,9 +7,9 @@ import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 import 'package:three_dart/three3d/renderers/index.dart';
 
-part './ArrayCamera.dart';
-part './Camera.dart';
-part './CubeCamera.dart';
-part './OrthographicCamera.dart';
-part './PerspectiveCamera.dart';
-part './StereoCamera.dart';
+part 'array_camera.dart';
+part 'camera.dart';
+part 'cube_camera.dart';
+part 'orthographic_camera.dart';
+part 'perspective_camera.dart';
+part 'stereo_camera.dart';

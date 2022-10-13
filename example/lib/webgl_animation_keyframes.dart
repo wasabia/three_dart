@@ -4,15 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
-
 
 class webgl_animation_keyframes extends StatefulWidget {
   String fileName;
 
-  webgl_animation_keyframes({Key? key, required this.fileName})
-      : super(key: key);
+  webgl_animation_keyframes({Key? key, required this.fileName}) : super(key: key);
 
   @override
   createState() => webgl_animation_keyframesState();
@@ -20,7 +18,7 @@ class webgl_animation_keyframes extends StatefulWidget {
 
 class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -28,12 +26,12 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
-  late THREE.AnimationMixer mixer;
-  THREE.Clock clock = THREE.Clock();
+  late three.AnimationMixer mixer;
+  three.Clock clock = three.Clock();
   THREE_JSM.OrbitControls? controls;
 
   double dpr = 1.0;
@@ -43,22 +41,21 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
   bool verbose = true;
   bool disposed = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late three.WebGLMultisampleRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
   bool loaded = false;
 
-  late THREE.Object3D model;
+  late three.Object3D model;
 
   final Map<String, List<Function>> _listeners = {};
 
-  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey =
-      GlobalKey<THREE_JSM.DomLikeListenableState>();
+  final GlobalKey<THREE_JSM.DomLikeListenableState> _globalKey = GlobalKey<THREE_JSM.DomLikeListenableState>();
 
   @override
   void initState() {
@@ -66,15 +63,15 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
   }
 
   addEventListener(String name, Function callback, [bool flag = false]) {
-    var _cls = _listeners[name] ?? [];
-    _cls.add(callback);
-    _listeners[name] = _cls;
+    var cls = _listeners[name] ?? [];
+    cls.add(callback);
+    _listeners[name] = cls;
   }
 
   removeEventListener(String name, Function callback, [bool flag = false]) {
-    var _cls = _listeners[name] ?? [];
-    _cls.remove(callback);
-    _listeners[name] = _cls;
+    var cls = _listeners[name] ?? [];
+    cls.remove(callback);
+    _listeners[name] = cls;
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -84,7 +81,7 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
 
     three3dRender = FlutterGlPlugin();
 
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "antialias": true,
       "alpha": false,
       "width": width.toInt(),
@@ -92,7 +89,7 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
       "dpr": dpr
     };
 
-    await three3dRender.initialize(options: _options);
+    await three3dRender.initialize(options: options);
 
     setState(() {});
 
@@ -139,12 +136,12 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
   }
 
   emit(String name, event) {
-    var _callbacks = _listeners[name];
-    if (_callbacks != null && _callbacks.isNotEmpty) {
-      var _len = _callbacks.length;
-      for (int i = 0; i < _len; i++) {
-        var _cb = _callbacks[i];
-        _cb(event);
+    var callbacks = _listeners[name];
+    if (callbacks != null && callbacks.isNotEmpty) {
+      var len = callbacks.length;
+      for (int i = 0; i < len; i++) {
+        var cb = callbacks[i];
+        cb(event);
       }
     }
   }
@@ -156,25 +153,24 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
           child: Stack(
             children: [
               THREE_JSM.DomLikeListenable(
-                key: _globalKey,
-                builder: (BuildContext conetxt) {
-                  return Container(
-                    width: width,
-                    height: height,
-                    color: Colors.black,
-                    child: Builder(builder: (BuildContext context) {
-                      if (kIsWeb) {
-                        return three3dRender.isInitialized
-                            ? HtmlElementView(
-                                viewType: three3dRender.textureId!.toString())
-                            : Container();
-                      } else {
-                        return three3dRender.isInitialized
-                            ? Texture(textureId: three3dRender.textureId!)
-                            : Container();
-                      }
-                    }));
-                }),
+                  key: _globalKey,
+                  builder: (BuildContext conetxt) {
+                    return Container(
+                        width: width,
+                        height: height,
+                        color: Colors.black,
+                        child: Builder(builder: (BuildContext context) {
+                          if (kIsWeb) {
+                            return three3dRender.isInitialized
+                                ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                                : Container();
+                          } else {
+                            return three3dRender.isInitialized
+                                ? Texture(textureId: three3dRender.textureId!)
+                                : Container();
+                          }
+                        }));
+                  }),
             ],
           ),
         ),
@@ -183,22 +179,22 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
   }
 
   render() {
-    int _t = DateTime.now().millisecondsSinceEpoch;
+    int t = DateTime.now().millisecondsSinceEpoch;
 
-    final _gl = three3dRender.gl;
+    final gl = three3dRender.gl;
 
     renderer!.render(scene, camera);
 
-    int _t1 = DateTime.now().millisecondsSinceEpoch;
+    int t1 = DateTime.now().millisecondsSinceEpoch;
 
     if (verbose) {
-      print("render cost: ${_t1 - _t} ");
+      print("render cost: ${t1 - t} ");
       print(renderer!.info.memory);
       print(renderer!.info.render);
     }
 
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
-    _gl.flush();
+    gl.flush();
 
     if (verbose) print(" render: sourceTexture: $sourceTexture ");
 
@@ -208,22 +204,21 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
   }
 
   initRenderer() {
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "width": width,
       "height": height,
       "gl": three3dRender.gl,
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -236,24 +231,22 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
   }
 
   initPage() async {
-    camera = THREE.PerspectiveCamera(45, width / height, 1, 100);
+    camera = three.PerspectiveCamera(45, width / height, 1, 100);
     camera.position.set(8, 4, 12);
 
     // scene
 
-    scene = THREE.Scene();
+    scene = three.Scene();
 
-    var pmremGenerator = THREE.PMREMGenerator(renderer);
-    scene.background = THREE.Color.fromHex(0xbfe3dd);
-    scene.environment = pmremGenerator
-        .fromScene(THREE_JSM.RoomEnvironment(), 0.04)
-        .texture;
+    var pmremGenerator = three.PMREMGenerator(renderer);
+    scene.background = three.Color.fromHex(0xbfe3dd);
+    scene.environment = pmremGenerator.fromScene(THREE_JSM.RoomEnvironment(), 0.04).texture;
 
-    var ambientLight = THREE.AmbientLight( 0xcccccc, 0.4 );
-    scene.add( ambientLight );
+    var ambientLight = three.AmbientLight(0xcccccc, 0.4);
+    scene.add(ambientLight);
 
-    var pointLight = THREE.PointLight( 0xffffff, 0.8 );
-    camera.add( pointLight );
+    var pointLight = three.PointLight(0xffffff, 0.8);
+    camera.add(pointLight);
 
     scene.add(camera);
 
@@ -277,14 +270,14 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
     model.scale.set(0.01, 0.01, 0.01);
     scene.add(model);
 
-    mixer = THREE.AnimationMixer(model);
+    mixer = three.AnimationMixer(model);
     mixer.clipAction(result["animations"][0], null, null)!.play();
 
     loaded = true;
 
     animate();
 
-    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
+    // scene.overrideMaterial = new three.MeshBasicMaterial();
   }
 
   clickRender() {
@@ -300,7 +293,6 @@ class webgl_animation_keyframesState extends State<webgl_animation_keyframes> {
     if (!loaded) {
       return;
     }
-
 
     var delta = clock.getDelta();
 

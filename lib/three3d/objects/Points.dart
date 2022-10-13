@@ -15,8 +15,7 @@ class Points extends Object3D {
     updateMorphTargets();
   }
 
-  Points.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON) {
+  Points.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) : super.fromJSON(json, rootJSON) {
     type = 'Points';
   }
 
@@ -61,27 +60,23 @@ class Points extends Object3D {
 
     if (index != null) {
       var start = Math.max(0, drawRange["start"]!);
-      var end =
-          Math.min(index.count, (drawRange["start"]! + drawRange["count"]!));
+      var end = Math.min(index.count, (drawRange["start"]! + drawRange["count"]!));
 
       for (var i = start, il = end; i < il; i++) {
         var a = index.getX(i)!;
 
         _position.fromBufferAttribute(positionAttribute, a.toInt());
 
-        testPoint(_position, a, localThresholdSq, matrixWorld, raycaster,
-            intersects, this);
+        testPoint(_position, a, localThresholdSq, matrixWorld, raycaster, intersects, this);
       }
     } else {
       var start = Math.max(0, drawRange["start"]!);
-      var end = Math.min<int>(
-          positionAttribute.count, (drawRange["start"]! + drawRange["count"]!));
+      var end = Math.min<int>(positionAttribute.count, (drawRange["start"]! + drawRange["count"]!));
 
       for (var i = start, l = end; i < l; i++) {
         _position.fromBufferAttribute(positionAttribute, i);
 
-        testPoint(_position, i, localThresholdSq, matrixWorld, raycaster,
-            intersects, this);
+        testPoint(_position, i, localThresholdSq, matrixWorld, raycaster, intersects, this);
       }
     }
   }
@@ -114,20 +109,14 @@ class Points extends Object3D {
 
     //   if (morphTargets != null && morphTargets.length > 0) {
     //     print(
-    //         'THREE.Points.updateMorphTargets() does not support THREE.Geometry. Use THREE.BufferGeometry instead.');
+    //         'three.Points.updateMorphTargets() does not support three.Geometry. Use three.BufferGeometry instead.');
     //   }
     // }
   }
 }
 
-void testPoint(
-    Vector3 point,
-    num index,
-    num localThresholdSq,
-    Matrix4 matrixWorld,
-    Raycaster raycaster,
-    List<Intersection> intersects,
-    Object3D object) {
+void testPoint(Vector3 point, num index, num localThresholdSq, Matrix4 matrixWorld, Raycaster raycaster,
+    List<Intersection> intersects, Object3D object) {
   var rayPointDistanceSq = _pointsray.distanceSqToPoint(point);
 
   if (rayPointDistanceSq < localThresholdSq) {

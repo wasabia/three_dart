@@ -14,8 +14,7 @@ class Line extends Object3D {
     updateMorphTargets();
   }
 
-  Line.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON) {
+  Line.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) : super.fromJSON(json, rootJSON) {
     type = "Line";
   }
 
@@ -56,16 +55,15 @@ class Line extends Object3D {
           lineDistances[i] += _start.distanceTo(_end);
         }
 
-        geometry.setAttribute(
-            'lineDistance', Float32BufferAttribute(lineDistances, 1, false));
+        geometry.setAttribute('lineDistance', Float32BufferAttribute(lineDistances, 1, false));
       }
       // else {
       //   print(
-      //       'THREE.Line.computeLineDistances(): Computation only possible with non-indexed BufferGeometry.');
+      //       'three.Line.computeLineDistances(): Computation only possible with non-indexed BufferGeometry.');
       // }
     }
     // else if (geometry.isGeometry) {
-    //   throw ('THREE.Line.computeLineDistances() no longer supports THREE.Geometry. Use THREE.BufferGeometry instead.');
+    //   throw ('three.Line.computeLineDistances() no longer supports three.Geometry. Use three.BufferGeometry instead.');
     // }
 
     return this;
@@ -120,13 +118,11 @@ class Line extends Object3D {
         vStart.fromBufferAttribute(positionAttribute, a.toInt());
         vEnd.fromBufferAttribute(positionAttribute, b.toInt());
 
-        var distSq =
-            _ray.distanceSqToSegment(vStart, vEnd, interRay, interSegment);
+        var distSq = _ray.distanceSqToSegment(vStart, vEnd, interRay, interSegment);
 
         if (distSq > localThresholdSq) continue;
 
-        interRay.applyMatrix4(this
-            .matrixWorld); //Move back to world space for distance calculation
+        interRay.applyMatrix4(this.matrixWorld); //Move back to world space for distance calculation
 
         var distance = raycaster.ray.origin.distanceTo(interRay);
 
@@ -154,13 +150,11 @@ class Line extends Object3D {
         vStart.fromBufferAttribute(positionAttribute, i);
         vEnd.fromBufferAttribute(positionAttribute, i + 1);
 
-        var distSq =
-            _ray.distanceSqToSegment(vStart, vEnd, interRay, interSegment);
+        var distSq = _ray.distanceSqToSegment(vStart, vEnd, interRay, interSegment);
 
         if (distSq > localThresholdSq) continue;
 
-        interRay.applyMatrix4(this
-            .matrixWorld); //Move back to world space for distance calculation
+        interRay.applyMatrix4(this.matrixWorld); //Move back to world space for distance calculation
 
         var distance = raycaster.ray.origin.distanceTo(interRay);
 
@@ -207,7 +201,7 @@ class Line extends Object3D {
 
     //   if (morphTargets != null && morphTargets.length > 0) {
     //     print(
-    //         'THREE.Line.updateMorphTargets() does not support THREE.Geometry. Use THREE.BufferGeometry instead.');
+    //         'three.Line.updateMorphTargets() does not support three.Geometry. Use three.BufferGeometry instead.');
     //   }
     // }
   }

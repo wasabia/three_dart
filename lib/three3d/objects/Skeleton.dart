@@ -48,8 +48,7 @@ class Skeleton {
       // handle special case
 
       if (bones.length != boneInverses.length) {
-        print(
-            'THREE.Skeleton: Number of inverse bone matrices does not match amount of bones.');
+        print('three.Skeleton: Number of inverse bone matrices does not match amount of bones.');
 
         this.boneInverses = [];
 
@@ -124,13 +123,11 @@ class Skeleton {
   }
 
   Skeleton computeBoneTexture() {
-
-    boneTexture = DataTexture(boneMatrices, boneTextureSize, boneTextureSize,
-        RGBAFormat, FloatType);
+    boneTexture = DataTexture(boneMatrices, boneTextureSize, boneTextureSize, RGBAFormat, FloatType);
 
     boneTexture!.name = "DataTexture from Skeleton.computeBoneTexture";
     boneTexture!.needsUpdate = true;
-    
+
     // Android Float Texture need NearestFilter
     boneTexture!.magFilter = NearestFilter;
     boneTexture!.minFilter = NearestFilter;
@@ -166,7 +163,7 @@ class Skeleton {
       var bone = bones[uuid];
 
       if (bone == null) {
-        print('THREE.Skeleton: No bone found with UUID: $uuid');
+        print('three.Skeleton: No bone found with UUID: $uuid');
         bone = Bone();
       }
 
@@ -181,11 +178,7 @@ class Skeleton {
 
   Map<String, dynamic> toJSON() {
     Map<String, dynamic> data = {
-      "metadata": {
-        "version": 4.5,
-        "type": 'Skeleton',
-        "generator": 'Skeleton.toJSON'
-      },
+      "metadata": {"version": 4.5, "type": 'Skeleton', "generator": 'Skeleton.toJSON'},
       "bones": [],
       "boneInverses": []
     };
@@ -207,10 +200,10 @@ class Skeleton {
   }
 
   getValue(String name) {
-    if(name == "boneMatrices") {
+    if (name == "boneMatrices") {
       return boneMatrices;
     } else {
-      throw("Skeleton getValue name: $name is not support  ");
+      throw ("Skeleton getValue name: $name is not support  ");
     }
   }
 }

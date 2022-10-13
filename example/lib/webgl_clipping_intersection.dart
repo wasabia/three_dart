@@ -4,13 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 
 class webgl_clipping_intersection extends StatefulWidget {
   String fileName;
 
-  webgl_clipping_intersection({Key? key, required this.fileName})
-      : super(key: key);
+  webgl_clipping_intersection({Key? key, required this.fileName}) : super(key: key);
 
   @override
   createState() => _State();
@@ -18,7 +17,7 @@ class webgl_clipping_intersection extends StatefulWidget {
 
 class _State extends State<webgl_clipping_intersection> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -26,12 +25,12 @@ class _State extends State<webgl_clipping_intersection> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
-  late THREE.AnimationMixer mixer;
-  THREE.Clock clock = THREE.Clock();
+  late three.AnimationMixer mixer;
+  three.Clock clock = three.Clock();
 
   double dpr = 1.0;
 
@@ -40,17 +39,17 @@ class _State extends State<webgl_clipping_intersection> {
   bool verbose = true;
   bool disposed = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late three.WebGLMultisampleRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
   bool loaded = false;
 
-  late THREE.Object3D model;
+  late three.Object3D model;
 
   final Map<String, List<Function>> _listeners = {};
 
@@ -134,8 +133,7 @@ class _State extends State<webgl_clipping_intersection> {
                       child: Builder(builder: (BuildContext context) {
                         if (kIsWeb) {
                           return three3dRender.isInitialized
-                              ? HtmlElementView(
-                                  viewType: three3dRender.textureId!.toString())
+                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                               : Container();
                         } else {
                           return three3dRender.isInitialized
@@ -183,16 +181,15 @@ class _State extends State<webgl_clipping_intersection> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
     renderer!.localClippingEnabled = true;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -205,58 +202,54 @@ class _State extends State<webgl_clipping_intersection> {
   }
 
   initPage() async {
-    Map<String, dynamic> params = {
-      "clipIntersection": true,
-      "planeConstant": 0,
-      "showHelpers": false
-    };
+    Map<String, dynamic> params = {"clipIntersection": true, "planeConstant": 0, "showHelpers": false};
 
     var clipPlanes = [
-      THREE.Plane(THREE.Vector3(1, 0, 0), 0),
-      THREE.Plane(THREE.Vector3(0, -1, 0), 0),
-      THREE.Plane(THREE.Vector3(0, 0, -1), 0)
+      three.Plane(three.Vector3(1, 0, 0), 0),
+      three.Plane(three.Vector3(0, -1, 0), 0),
+      three.Plane(three.Vector3(0, 0, -1), 0)
     ];
 
-    scene = THREE.Scene();
+    scene = three.Scene();
 
-    camera = THREE.PerspectiveCamera(40, width / height, 1, 200);
+    camera = three.PerspectiveCamera(40, width / height, 1, 200);
 
     camera.position.set(-1.5, 2.5, 3.0);
 
     camera.lookAt(scene.position);
 
-    var light = THREE.HemisphereLight(0xffffff, 0x080808, 1.5);
+    var light = three.HemisphereLight(0xffffff, 0x080808, 1.5);
     light.position.set(-1.25, 1, 1.25);
     scene.add(light);
 
-    // const helper = new THREE.CameraHelper( light.shadow.camera );
+    // const helper = new three.CameraHelper( light.shadow.camera );
     // scene.add( helper );
 
     //
 
-    var group = THREE.Group();
+    var group = three.Group();
 
     for (var i = 1; i <= 30; i += 2) {
-      var geometry = THREE.SphereGeometry(i / 30, 48, 24);
+      var geometry = three.SphereGeometry(i / 30, 48, 24);
 
-      var material = THREE.MeshLambertMaterial({
-        "color": THREE.Color(0, 0, 0).setHSL(THREE.Math.random(), 0.5, 0.5),
-        "side": THREE.DoubleSide,
+      var material = three.MeshLambertMaterial({
+        "color": three.Color(0, 0, 0).setHSL(three.Math.random(), 0.5, 0.5),
+        "side": three.DoubleSide,
         "clippingPlanes": clipPlanes,
         "clipIntersection": params["clipIntersection"]
       });
 
-      group.add(THREE.Mesh(geometry, material));
+      group.add(three.Mesh(geometry, material));
     }
 
     scene.add(group);
 
     // helpers
 
-    var helpers = THREE.Group();
-    helpers.add(THREE.PlaneHelper(clipPlanes[0], 2, 0xff0000));
-    helpers.add(THREE.PlaneHelper(clipPlanes[1], 2, 0x00ff00));
-    helpers.add(THREE.PlaneHelper(clipPlanes[2], 2, 0x0000ff));
+    var helpers = three.Group();
+    helpers.add(three.PlaneHelper(clipPlanes[0], 2, 0xff0000));
+    helpers.add(three.PlaneHelper(clipPlanes[1], 2, 0x00ff00));
+    helpers.add(three.PlaneHelper(clipPlanes[2], 2, 0x0000ff));
     helpers.visible = params["showHelpers"]!;
     scene.add(helpers);
 
@@ -267,7 +260,7 @@ class _State extends State<webgl_clipping_intersection> {
 
     animate();
 
-    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
+    // scene.overrideMaterial = new three.MeshBasicMaterial();
   }
 
   clickRender() {

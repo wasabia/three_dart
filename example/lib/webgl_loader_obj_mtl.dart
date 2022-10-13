@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_loader_obj_mtl extends StatefulWidget {
@@ -17,7 +17,7 @@ class webgl_loader_obj_mtl extends StatefulWidget {
 
 class _MyAppState extends State<webgl_loader_obj_mtl> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -25,9 +25,9 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
   double dpr = 1.0;
 
@@ -36,11 +36,11 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
   bool verbose = true;
   bool disposed = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late three.WebGLMultisampleRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
@@ -123,13 +123,10 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
                   child: Builder(builder: (BuildContext context) {
                     if (kIsWeb) {
                       return three3dRender.isInitialized
-                          ? HtmlElementView(
-                              viewType: three3dRender.textureId!.toString())
+                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                           : Container();
                     } else {
-                      return three3dRender.isInitialized
-                          ? Texture(textureId: three3dRender.textureId!)
-                          : Container();
+                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
                     }
                   })),
             ],
@@ -172,15 +169,14 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -193,22 +189,22 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
   }
 
   initPage() async {
-    camera = THREE.PerspectiveCamera(45, width / height, 1, 2000);
+    camera = three.PerspectiveCamera(45, width / height, 1, 2000);
     camera.position.z = 250;
 
     // scene
 
-    scene = THREE.Scene();
+    scene = three.Scene();
 
-    var ambientLight = THREE.AmbientLight(0xcccccc, 0.4);
+    var ambientLight = three.AmbientLight(0xcccccc, 0.4);
     scene.add(ambientLight);
 
-    var pointLight = THREE.PointLight(0xffffff, 0.8);
+    var pointLight = three.PointLight(0xffffff, 0.8);
     camera.add(pointLight);
     scene.add(camera);
 
     // texture
-    var manager = THREE.LoadingManager();
+    var manager = three.LoadingManager();
 
     var mtlLoader = THREE_JSM.MTLLoader(manager);
     mtlLoader.setPath('assets/models/obj/male02/');
@@ -218,7 +214,6 @@ class _MyAppState extends State<webgl_loader_obj_mtl> {
     var loader = THREE_JSM.OBJLoader(null);
     loader.setMaterials(materials);
     object = await loader.loadAsync('assets/models/obj/male02/male02.obj');
-
 
     object.scale.set(0.5, 0.5, 0.5);
     scene.add(object);

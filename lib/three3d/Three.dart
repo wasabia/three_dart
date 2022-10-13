@@ -20,8 +20,7 @@ export './scenes/index.dart';
 export './textures/index.dart';
 export './constants.dart';
 
-export './WeakMap.dart';
+export './weak_map.dart';
 
 export 'three_helper.dart';
 export 'dart_helpers.dart';
-

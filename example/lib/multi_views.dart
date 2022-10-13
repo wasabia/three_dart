@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Matrix4;
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 
 class multi_views extends StatefulWidget {
   String fileName;
@@ -14,10 +14,8 @@ class multi_views extends StatefulWidget {
   createState() => _MyAppState();
 }
 
-
 class _MyAppState extends State<multi_views> {
-  
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
   bool show = false;
 
   @override
@@ -25,7 +23,7 @@ class _MyAppState extends State<multi_views> {
     // TODO: implement initState
     super.initState();
 
-    if(!kIsWeb) {
+    if (!kIsWeb) {
       init();
     }
   }
@@ -41,12 +39,10 @@ class _MyAppState extends State<multi_views> {
       "gl": three3dRender.gl,
       "antialias": true,
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.autoClear = true;
 
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   @override
@@ -57,25 +53,24 @@ class _MyAppState extends State<multi_views> {
       ),
       body: SingleChildScrollView(child: _build(context)),
     );
-
   }
 
   Widget _build(BuildContext context) {
     return Column(
       children: [
         multi_views1(renderer: renderer),
-        Container(height: 2, color: Colors.red,),
+        Container(
+          height: 2,
+          color: Colors.red,
+        ),
         multi_views2(renderer: renderer)
       ],
     );
   }
-
 }
 
-
-
 class multi_views1 extends StatefulWidget {
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   multi_views1({Key? key, this.renderer}) : super(key: key);
 
@@ -84,17 +79,16 @@ class multi_views1 extends StatefulWidget {
 }
 
 class _multi_views1_State extends State<multi_views1> {
- 
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   double width = 300;
   double height = 300;
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
   double dpr = 1.0;
 
@@ -105,14 +99,14 @@ class _multi_views1_State extends State<multi_views1> {
 
   bool loaded = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late three.WebGLMultisampleRenderTarget renderTarget;
 
-  THREE.AnimationMixer? mixer;
-  THREE.Clock clock = THREE.Clock();
+  three.AnimationMixer? mixer;
+  three.Clock clock = three.Clock();
 
   dynamic? sourceTexture;
 
@@ -160,7 +154,6 @@ class _multi_views1_State extends State<multi_views1> {
   @override
   Widget build(BuildContext context) {
     return Container(
-     
       child: Builder(
         builder: (BuildContext context) {
           initSize(context);
@@ -183,21 +176,15 @@ class _multi_views1_State extends State<multi_views1> {
                   child: Builder(builder: (BuildContext context) {
                     if (kIsWeb) {
                       return three3dRender.isInitialized
-                          ? HtmlElementView(
-                              viewType: three3dRender.textureId!.toString())
+                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                           : Container();
                     } else {
-                      return three3dRender.isInitialized
-                          ? Texture(textureId: three3dRender.textureId!)
-                          : Container();
+                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
                     }
                   })),
             ],
           ),
         ),
-
-
-        
       ],
     );
   }
@@ -208,11 +195,9 @@ class _multi_views1_State extends State<multi_views1> {
   }
 
   render() {
-    
     int _t = DateTime.now().millisecondsSinceEpoch;
 
     final _gl = three3dRender.gl;
-
 
     if (!kIsWeb) renderer!.setRenderTarget(renderTarget);
     renderer!.render(scene, camera);
@@ -236,26 +221,22 @@ class _multi_views1_State extends State<multi_views1> {
   }
 
   initRenderer() {
-
-    
     renderer = widget.renderer;
 
-    if(renderer == null) {
+    if (renderer == null) {
       Map<String, dynamic> _options = {
         "width": width,
         "height": height,
         "gl": three3dRender.gl,
         "antialias": true,
       };
-      renderer = THREE.WebGLRenderer(_options);
+      renderer = three.WebGLRenderer(_options);
       renderer!.autoClear = true;
     }
-    
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -268,17 +249,17 @@ class _multi_views1_State extends State<multi_views1> {
   }
 
   initPage() async {
-    camera = THREE.PerspectiveCamera(45, width / height, 1, 2200);
+    camera = three.PerspectiveCamera(45, width / height, 1, 2200);
     camera.position.set(3, 6, 100);
 
     // scene
 
-    scene = THREE.Scene();
+    scene = three.Scene();
 
-    var ambientLight = THREE.AmbientLight(0xffffff, 0.9);
+    var ambientLight = three.AmbientLight(0xffffff, 0.9);
     scene.add(ambientLight);
 
-    var pointLight = THREE.PointLight(0xffffff, 0.8);
+    var pointLight = three.PointLight(0xffffff, 0.8);
 
     pointLight.position.set(0, 0, 0);
 
@@ -287,20 +268,18 @@ class _multi_views1_State extends State<multi_views1> {
 
     camera.lookAt(scene.position);
 
-    var geometry = THREE.BoxGeometry(20, 20, 20);
-    var material = THREE.MeshBasicMaterial({"color": 0xff0000});
+    var geometry = three.BoxGeometry(20, 20, 20);
+    var material = three.MeshBasicMaterial({"color": 0xff0000});
 
-    object = THREE.Mesh(geometry, material);
+    object = three.Mesh(geometry, material);
 
     scene.add(object);
 
-    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
+    // scene.overrideMaterial = new three.MeshBasicMaterial();
 
     loaded = true;
 
-    setState(() {
-      
-    });
+    setState(() {});
 
     animate();
   }
@@ -332,11 +311,8 @@ class _multi_views1_State extends State<multi_views1> {
   }
 }
 
-
-
-
 class multi_views2 extends StatefulWidget {
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   multi_views2({Key? key, this.renderer}) : super(key: key);
 
@@ -345,7 +321,7 @@ class multi_views2 extends StatefulWidget {
 }
 
 class _multi_views2_State extends State<multi_views2> {
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
   late FlutterGlPlugin three3dRender;
   int? fboId;
   double width = 300;
@@ -353,9 +329,9 @@ class _multi_views2_State extends State<multi_views2> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
   double dpr = 1.0;
 
@@ -366,14 +342,14 @@ class _multi_views2_State extends State<multi_views2> {
 
   bool loaded = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late three.WebGLMultisampleRenderTarget renderTarget;
 
-  THREE.AnimationMixer? mixer;
-  THREE.Clock clock = THREE.Clock();
+  three.AnimationMixer? mixer;
+  three.Clock clock = three.Clock();
 
   dynamic? sourceTexture;
 
@@ -448,13 +424,14 @@ class _multi_views2_State extends State<multi_views2> {
                   child: Builder(builder: (BuildContext context) {
                     if (kIsWeb) {
                       return three3dRender.isInitialized
-                          ? HtmlElementView(
-                              viewType: three3dRender.textureId!.toString())
+                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                           : Container();
                     } else {
                       return three3dRender.isInitialized
                           ? Texture(textureId: three3dRender.textureId!)
-                          : Container(color: Colors.yellow,);
+                          : Container(
+                              color: Colors.yellow,
+                            );
                     }
                   })),
             ],
@@ -470,7 +447,6 @@ class _multi_views2_State extends State<multi_views2> {
   }
 
   render() {
-    
     int _t = DateTime.now().millisecondsSinceEpoch;
 
     final _gl = three3dRender.gl;
@@ -498,21 +474,20 @@ class _multi_views2_State extends State<multi_views2> {
   initRenderer() {
     renderer = widget.renderer;
 
-    if(renderer == null) {
+    if (renderer == null) {
       Map<String, dynamic> _options = {
         "width": width,
         "height": height,
         "gl": three3dRender.gl,
         "antialias": true,
       };
-      renderer = THREE.WebGLRenderer(_options);
+      renderer = three.WebGLRenderer(_options);
       renderer!.autoClear = true;
     }
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -525,19 +500,19 @@ class _multi_views2_State extends State<multi_views2> {
   }
 
   initPage() async {
-    camera = THREE.PerspectiveCamera(45, width / height, 1, 2200);
+    camera = three.PerspectiveCamera(45, width / height, 1, 2200);
     camera.position.set(3, 6, 100);
 
     // scene
 
-    scene = THREE.Scene();
+    scene = three.Scene();
 
-    scene.background = THREE.Color(1, 1, 0);
+    scene.background = three.Color(1, 1, 0);
 
-    var ambientLight = THREE.AmbientLight(0xffffff, 0.9);
+    var ambientLight = three.AmbientLight(0xffffff, 0.9);
     scene.add(ambientLight);
 
-    var pointLight = THREE.PointLight(0xffffff, 0.8);
+    var pointLight = three.PointLight(0xffffff, 0.8);
 
     pointLight.position.set(0, 0, 0);
 
@@ -546,16 +521,12 @@ class _multi_views2_State extends State<multi_views2> {
 
     camera.lookAt(scene.position);
 
+    var geometry = three.BoxGeometry(10, 10, 20);
+    var material = three.MeshBasicMaterial();
 
-
-    var geometry = THREE.BoxGeometry(10, 10, 20);
-    var material = THREE.MeshBasicMaterial();
-
-    object = THREE.Mesh(geometry, material);
-
+    object = three.Mesh(geometry, material);
 
     scene.add(object);
-
 
     loaded = true;
 
@@ -563,12 +534,10 @@ class _multi_views2_State extends State<multi_views2> {
   }
 
   animate() {
-   
     var delta = clock.getDelta();
 
     object.rotation.y = object.rotation.y + 0.02;
     object.rotation.x = object.rotation.x + 0.01;
-
 
     mixer?.update(delta);
 

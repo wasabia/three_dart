@@ -4,14 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_morphtargets_sphere extends StatefulWidget {
   String fileName;
 
-  webgl_morphtargets_sphere({Key? key, required this.fileName})
-      : super(key: key);
+  webgl_morphtargets_sphere({Key? key, required this.fileName}) : super(key: key);
 
   @override
   createState() => _State();
@@ -19,7 +18,7 @@ class webgl_morphtargets_sphere extends StatefulWidget {
 
 class _State extends State<webgl_morphtargets_sphere> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -27,12 +26,12 @@ class _State extends State<webgl_morphtargets_sphere> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
-  late THREE.AnimationMixer mixer;
-  THREE.Clock clock = THREE.Clock();
+  late three.AnimationMixer mixer;
+  three.Clock clock = three.Clock();
   THREE_JSM.OrbitControls? controls;
 
   double dpr = 1.0;
@@ -45,22 +44,22 @@ class _State extends State<webgl_morphtargets_sphere> {
   bool verbose = true;
   bool disposed = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
-  late THREE.PointLight light;
+  late three.PointLight light;
 
   THREE_JSM.VertexNormalsHelper? vnh;
   THREE_JSM.VertexTangentsHelper? vth;
 
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late three.WebGLMultisampleRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
   bool loaded = false;
 
-  late THREE.Object3D model;
+  late three.Object3D model;
 
   @override
   void initState() {
@@ -142,8 +141,7 @@ class _State extends State<webgl_morphtargets_sphere> {
                       child: Builder(builder: (BuildContext context) {
                         if (kIsWeb) {
                           return three3dRender.isInitialized
-                              ? HtmlElementView(
-                                  viewType: three3dRender.textureId!.toString())
+                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                               : Container();
                         } else {
                           return three3dRender.isInitialized
@@ -191,15 +189,14 @@ class _State extends State<webgl_morphtargets_sphere> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -212,48 +209,42 @@ class _State extends State<webgl_morphtargets_sphere> {
   }
 
   initPage() async {
-    camera = THREE.PerspectiveCamera(45, width / height, 0.2, 100);
+    camera = three.PerspectiveCamera(45, width / height, 0.2, 100);
     camera.position.set(0, 5, 5);
 
-    scene = THREE.Scene();
+    scene = three.Scene();
 
     camera.lookAt(scene.position);
 
-    clock = THREE.Clock();
+    clock = three.Clock();
 
-    var light1 = THREE.PointLight(0xff2200, 0.7);
+    var light1 = three.PointLight(0xff2200, 0.7);
     light1.position.set(100, 100, 100);
     scene.add(light1);
 
-    var light2 = THREE.PointLight(0x22ff00, 0.7);
+    var light2 = three.PointLight(0x22ff00, 0.7);
     light2.position.set(-100, -100, -100);
     scene.add(light2);
 
-    scene.add(THREE.AmbientLight(0x111111, 1));
+    scene.add(three.AmbientLight(0x111111, 1));
 
     var loader = THREE_JSM.GLTFLoader(null);
 
-    var gltf = await loader.loadAsync(
-        'assets/models/gltf/AnimatedMorphSphere/glTF/AnimatedMorphSphere.gltf');
+    var gltf = await loader.loadAsync('assets/models/gltf/AnimatedMorphSphere/glTF/AnimatedMorphSphere.gltf');
 
     mesh = gltf["scene"].getObjectByName('AnimatedMorphSphere');
-    mesh.rotation.z = THREE.Math.PI / 2;
+    mesh.rotation.z = three.Math.PI / 2;
     scene.add(mesh);
 
     print(" load sucess mesh: $mesh  ");
     print(mesh.geometry!.morphAttributes);
 
-    var _texture = await THREE.TextureLoader(null)
-        .loadAsync('assets/textures/sprites/disc.png');
+    var _texture = await three.TextureLoader(null).loadAsync('assets/textures/sprites/disc.png');
 
-    var pointsMaterial = THREE.PointsMaterial({
-      "size": 10,
-      "sizeAttenuation": false,
-      "map": _texture,
-      "alphaTest": 0.5
-    });
+    var pointsMaterial =
+        three.PointsMaterial({"size": 10, "sizeAttenuation": false, "map": _texture, "alphaTest": 0.5});
 
-    var points = THREE.Points(mesh.geometry!, pointsMaterial);
+    var points = three.Points(mesh.geometry!, pointsMaterial);
     points.morphTargetInfluences = mesh.morphTargetInfluences;
     points.morphTargetDictionary = mesh.morphTargetDictionary;
     mesh.add(points);
@@ -262,7 +253,7 @@ class _State extends State<webgl_morphtargets_sphere> {
 
     animate();
 
-    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
+    // scene.overrideMaterial = new three.MeshBasicMaterial();
   }
 
   clickRender() {
@@ -287,11 +278,9 @@ class _State extends State<webgl_morphtargets_sphere> {
 
     print(" mesh.morphTargetInfluences: ${mesh.morphTargetInfluences} ");
 
-    mesh.morphTargetInfluences![1] =
-        mesh.morphTargetInfluences![1] + step * sign;
+    mesh.morphTargetInfluences![1] = mesh.morphTargetInfluences![1] + step * sign;
 
-    if (mesh.morphTargetInfluences![1] <= 0 ||
-        mesh.morphTargetInfluences![1] >= 1) {
+    if (mesh.morphTargetInfluences![1] <= 0 || mesh.morphTargetInfluences![1] >= 1) {
       sign *= -1;
     }
 

@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/objects/index.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_animation_skinning_morph extends StatefulWidget {
   String fileName;
 
-  webgl_animation_skinning_morph({Key? key, required this.fileName})
-      : super(key: key);
+  webgl_animation_skinning_morph({Key? key, required this.fileName}) : super(key: key);
 
   @override
   createState() => _State();
@@ -20,7 +19,7 @@ class webgl_animation_skinning_morph extends StatefulWidget {
 
 class _State extends State<webgl_animation_skinning_morph> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -28,12 +27,12 @@ class _State extends State<webgl_animation_skinning_morph> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
-  late THREE.AnimationMixer mixer;
-  late THREE.Clock clock;
+  late three.AnimationMixer mixer;
+  late three.Clock clock;
   THREE_JSM.OrbitControls? controls;
 
   double dpr = 1.0;
@@ -43,17 +42,17 @@ class _State extends State<webgl_animation_skinning_morph> {
   bool verbose = true;
   bool disposed = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late three.WebGLMultisampleRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
   bool loaded = false;
 
-  late THREE.Object3D model;
+  late three.Object3D model;
 
   final Map<String, List<Function>> _listeners = {};
 
@@ -137,8 +136,7 @@ class _State extends State<webgl_animation_skinning_morph> {
                       child: Builder(builder: (BuildContext context) {
                         if (kIsWeb) {
                           return three3dRender.isInitialized
-                              ? HtmlElementView(
-                                  viewType: three3dRender.textureId!.toString())
+                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                               : Container();
                         } else {
                           return three3dRender.isInitialized
@@ -186,16 +184,15 @@ class _State extends State<webgl_animation_skinning_morph> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = true;
-    renderer!.outputEncoding = THREE.sRGBEncoding;
+    renderer!.outputEncoding = three.sRGBEncoding;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -208,42 +205,41 @@ class _State extends State<webgl_animation_skinning_morph> {
   }
 
   initPage() async {
-    camera = THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+    camera = three.PerspectiveCamera(45, width / height, 0.1, 1000);
     camera.position.set(-5, 3, 10);
-    camera.lookAt(THREE.Vector3(0, 2, 0));
+    camera.lookAt(three.Vector3(0, 2, 0));
 
-    clock = THREE.Clock();
+    clock = three.Clock();
 
-    scene = THREE.Scene();
-    scene.background = THREE.Color.fromHex(0xffffff);
-    scene.fog = THREE.Fog(0xa0a0a0, 10, 50);
+    scene = three.Scene();
+    scene.background = three.Color.fromHex(0xffffff);
+    scene.fog = three.Fog(0xa0a0a0, 10, 50);
 
-    var hemiLight = THREE.HemisphereLight(0xffffff, 0x444444);
+    var hemiLight = three.HemisphereLight(0xffffff, 0x444444);
     hemiLight.position.set(0, 20, 0);
     scene.add(hemiLight);
 
-    var dirLight = THREE.DirectionalLight(0xffffff);
+    var dirLight = three.DirectionalLight(0xffffff);
     dirLight.position.set(0, 20, 10);
 
     scene.add(dirLight);
 
-    // scene.add( new THREE.CameraHelper( dirLight.shadow.camera ) );
+    // scene.add( new three.CameraHelper( dirLight.shadow.camera ) );
 
     // ground
 
-    var mesh = THREE.Mesh(THREE.PlaneGeometry(2000, 2000),
-        THREE.MeshPhongMaterial({"color": 0x999999, "depthWrite": false}));
-    mesh.rotation.x = -THREE.Math.PI / 2;
+    var mesh =
+        three.Mesh(three.PlaneGeometry(2000, 2000), three.MeshPhongMaterial({"color": 0x999999, "depthWrite": false}));
+    mesh.rotation.x = -three.Math.PI / 2;
     scene.add(mesh);
 
-    var grid = THREE.GridHelper(200, 40, 0x000000, 0x000000);
+    var grid = three.GridHelper(200, 40, 0x000000, 0x000000);
     grid.material.opacity = 0.2;
     grid.material.transparent = true;
     scene.add(grid);
 
     var loader = THREE_JSM.GLTFLoader(null);
-    var gltf = await loader
-        .loadAsync('assets/models/gltf/RobotExpressive/RobotExpressive2.gltf');
+    var gltf = await loader.loadAsync('assets/models/gltf/RobotExpressive/RobotExpressive2.gltf');
 
     model = gltf["scene"];
     scene.add(model);
@@ -254,7 +250,7 @@ class _State extends State<webgl_animation_skinning_morph> {
 
     //
 
-    var skeleton = THREE.SkeletonHelper(model);
+    var skeleton = three.SkeletonHelper(model);
     skeleton.visible = true;
     scene.add(skeleton);
 
@@ -266,7 +262,7 @@ class _State extends State<webgl_animation_skinning_morph> {
 
     var animations = gltf["animations"];
 
-    mixer = THREE.AnimationMixer(model);
+    mixer = three.AnimationMixer(model);
 
     var idleAction = mixer.clipAction(animations[0]);
     var walkAction = mixer.clipAction(animations[3]);
@@ -280,7 +276,7 @@ class _State extends State<webgl_animation_skinning_morph> {
 
     animate();
 
-    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
+    // scene.overrideMaterial = new three.MeshBasicMaterial();
   }
 
   clickRender() {

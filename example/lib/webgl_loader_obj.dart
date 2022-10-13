@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_loader_obj extends StatefulWidget {
@@ -17,7 +17,7 @@ class webgl_loader_obj extends StatefulWidget {
 
 class _MyAppState extends State<webgl_loader_obj> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -25,9 +25,9 @@ class _MyAppState extends State<webgl_loader_obj> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
   double dpr = 1.0;
 
@@ -36,11 +36,11 @@ class _MyAppState extends State<webgl_loader_obj> {
   bool verbose = true;
   bool disposed = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
-  late THREE.WebGLRenderTarget renderTarget;
+  late three.WebGLRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
@@ -123,13 +123,10 @@ class _MyAppState extends State<webgl_loader_obj> {
                   child: Builder(builder: (BuildContext context) {
                     if (kIsWeb) {
                       return three3dRender.isInitialized
-                          ? HtmlElementView(
-                              viewType: three3dRender.textureId!.toString())
+                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                           : Container();
                     } else {
-                      return three3dRender.isInitialized
-                          ? Texture(textureId: three3dRender.textureId!)
-                          : Container();
+                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
                     }
                   })),
             ],
@@ -172,15 +169,14 @@ class _MyAppState extends State<webgl_loader_obj> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget =
-          THREE.WebGLRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -193,29 +189,28 @@ class _MyAppState extends State<webgl_loader_obj> {
   }
 
   initPage() async {
-    camera = THREE.PerspectiveCamera(45, width / height, 1, 2000);
+    camera = three.PerspectiveCamera(45, width / height, 1, 2000);
     camera.position.z = 250;
 
     // scene
 
-    scene = THREE.Scene();
+    scene = three.Scene();
 
-    var ambientLight = THREE.AmbientLight(0xcccccc, 0.4);
+    var ambientLight = three.AmbientLight(0xcccccc, 0.4);
     scene.add(ambientLight);
 
-    var pointLight = THREE.PointLight(0xffffff, 0.8);
+    var pointLight = three.PointLight(0xffffff, 0.8);
     camera.add(pointLight);
     scene.add(camera);
 
     // texture
 
-    var textureLoader = THREE.TextureLoader(null);
+    var textureLoader = three.TextureLoader(null);
     textureLoader.flipY = true;
-    texture = await textureLoader.loadAsync(
-        'assets/textures/uv_grid_opengl.jpg', null);
+    texture = await textureLoader.loadAsync('assets/textures/uv_grid_opengl.jpg', null);
 
-    texture.magFilter = THREE.LinearFilter;
-    texture.minFilter = THREE.LinearMipmapLinearFilter;
+    texture.magFilter = three.LinearFilter;
+    texture.minFilter = three.LinearMipmapLinearFilter;
     texture.generateMipmaps = true;
     texture.needsUpdate = true;
     texture.flipY = true; // this flipY is only for web
@@ -224,7 +219,7 @@ class _MyAppState extends State<webgl_loader_obj> {
     object = await loader.loadAsync('assets/models/obj/male02/male02.obj');
 
     object.traverse((child) {
-      if (child is THREE.Mesh) {
+      if (child is three.Mesh) {
         child.material.map = texture;
       }
     });
@@ -232,8 +227,8 @@ class _MyAppState extends State<webgl_loader_obj> {
     object.scale.set(0.5, 0.5, 0.5);
     scene.add(object);
 
-    // var plane = THREE.PlaneGeometry(100, 100);
-    // mesh = THREE.Mesh(plane, THREE.MeshPhongMaterial({"map": texture}));
+    // var plane = three.PlaneGeometry(100, 100);
+    // mesh = three.Mesh(plane, three.MeshPhongMaterial({"map": texture}));
     // scene.add(mesh);
 
     animate();

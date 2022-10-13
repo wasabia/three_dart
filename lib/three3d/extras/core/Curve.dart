@@ -9,23 +9,23 @@ part of three_extra;
 /// .getLength()
 /// .updateArcLengths()
 ///
-/// This following curves inherit from THREE.Curve:
+/// This following curves inherit from three.Curve:
 ///
 /// -- 2D curves --
-/// THREE.ArcCurve
-/// THREE.CubicBezierCurve
-/// THREE.EllipseCurve
-/// THREE.LineCurve
-/// THREE.QuadraticBezierCurve
-/// THREE.SplineCurve
+/// three.ArcCurve
+/// three.CubicBezierCurve
+/// three.EllipseCurve
+/// three.LineCurve
+/// three.QuadraticBezierCurve
+/// three.SplineCurve
 ///
 /// -- 3D curves --
-/// THREE.CatmullRomCurve3
-/// THREE.CubicBezierCurve3
-/// THREE.LineCurve3
-/// THREE.QuadraticBezierCurve3
+/// three.CatmullRomCurve3
+/// three.CubicBezierCurve3
+/// three.LineCurve3
+/// three.QuadraticBezierCurve3
 ///
-/// A series of curves can be represented as a THREE.CurvePath.
+/// A series of curves can be represented as a three.CurvePath.
 ///
 ///*/
 
@@ -85,7 +85,7 @@ class Curve {
   //	- t [0 .. 1]
 
   getPoint(num t, optionalTarget) {
-    print('THREE.Curve: .getPoint() not implemented.');
+    print('three.Curve: .getPoint() not implemented.');
     return null;
   }
 
@@ -133,9 +133,7 @@ class Curve {
   getLengths(divisions) {
     divisions ??= arcLengthDivisions;
 
-    if (cacheArcLengths != null &&
-        (cacheArcLengths!.length == divisions + 1) &&
-        !needsUpdate) {
+    if (cacheArcLengths != null && (cacheArcLengths!.length == divisions + 1) && !needsUpdate) {
       return cacheArcLengths;
     }
 
@@ -245,8 +243,7 @@ class Curve {
     var pt1 = getPoint(t1, null);
     var pt2 = getPoint(t2, null);
 
-    var tangent = optionalTarget ??
-        ((pt1 is Vector2) ? Vector2(null, null) : Vector3.init());
+    var tangent = optionalTarget ?? ((pt1 is Vector2) ? Vector2(null, null) : Vector3.init());
 
     tangent.copy(pt2).sub(pt1).normalize();
 
@@ -320,8 +317,7 @@ class Curve {
       if (vec.length() > Math.EPSILON) {
         vec.normalize();
 
-        var theta = Math.acos(MathUtils.clamp(tangents[i - 1].dot(tangents[i]),
-            -1, 1)); // clamp for floating pt errors
+        var theta = Math.acos(MathUtils.clamp(tangents[i - 1].dot(tangents[i]), -1, 1)); // clamp for floating pt errors
 
         normals[i].applyMatrix4(mat.makeRotationAxis(vec, theta));
       }
@@ -332,12 +328,10 @@ class Curve {
     // if the curve is closed, postprocess the vectors so the first and last normal vectors are the same
 
     if (closed == true) {
-      var theta =
-          Math.acos(MathUtils.clamp(normals[0].dot(normals[segments]), -1, 1));
+      var theta = Math.acos(MathUtils.clamp(normals[0].dot(normals[segments]), -1, 1));
       theta /= segments;
 
-      if (tangents[0].dot(vec.crossVectors(normals[0], normals[segments])) >
-          0) {
+      if (tangents[0].dot(vec.crossVectors(normals[0], normals[segments])) > 0) {
         theta = -theta;
       }
 

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_morphtargets extends StatefulWidget {
@@ -18,7 +18,7 @@ class webgl_morphtargets extends StatefulWidget {
 
 class _State extends State<webgl_morphtargets> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -26,12 +26,12 @@ class _State extends State<webgl_morphtargets> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
-  late THREE.AnimationMixer mixer;
-  THREE.Clock clock = THREE.Clock();
+  late three.AnimationMixer mixer;
+  three.Clock clock = three.Clock();
   THREE_JSM.OrbitControls? controls;
 
   double dpr = 1.0;
@@ -41,22 +41,22 @@ class _State extends State<webgl_morphtargets> {
   bool verbose = true;
   bool disposed = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
-  late THREE.PointLight light;
+  late three.PointLight light;
 
   THREE_JSM.VertexNormalsHelper? vnh;
   THREE_JSM.VertexTangentsHelper? vth;
 
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late three.WebGLMultisampleRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
   bool loaded = false;
 
-  late THREE.Object3D model;
+  late three.Object3D model;
 
   @override
   void initState() {
@@ -138,8 +138,7 @@ class _State extends State<webgl_morphtargets> {
                       child: Builder(builder: (BuildContext context) {
                         if (kIsWeb) {
                           return three3dRender.isInitialized
-                              ? HtmlElementView(
-                                  viewType: three3dRender.textureId!.toString())
+                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                               : Container();
                         } else {
                           return three3dRender.isInitialized
@@ -187,15 +186,14 @@ class _State extends State<webgl_morphtargets> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -208,37 +206,36 @@ class _State extends State<webgl_morphtargets> {
   }
 
   initPage() async {
-    scene = THREE.Scene();
-    scene.background = THREE.Color(0x8FBCD4);
+    scene = three.Scene();
+    scene.background = three.Color(0x8FBCD4);
 
-    camera = THREE.PerspectiveCamera(45, width / height, 1, 20);
+    camera = three.PerspectiveCamera(45, width / height, 1, 20);
     camera.position.z = 10;
     scene.add(camera);
 
     camera.lookAt(scene.position);
 
-    scene.add(THREE.AmbientLight(0x8FBCD4, 0.4));
+    scene.add(three.AmbientLight(0x8FBCD4, 0.4));
 
-    var pointLight = THREE.PointLight(0xffffff, 1);
+    var pointLight = three.PointLight(0xffffff, 1);
     camera.add(pointLight);
 
     var geometry = createGeometry();
 
-    var material =
-        THREE.MeshPhongMaterial({"color": 0xff0000, "flatShading": true});
+    var material = three.MeshPhongMaterial({"color": 0xff0000, "flatShading": true});
 
-    mesh = THREE.Mesh(geometry, material);
+    mesh = three.Mesh(geometry, material);
     scene.add(mesh);
 
     loaded = true;
 
     animate();
 
-    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
+    // scene.overrideMaterial = new three.MeshBasicMaterial();
   }
 
   createGeometry() {
-    var geometry = THREE.BoxGeometry(2, 2, 2, 32, 32, 32);
+    var geometry = three.BoxGeometry(2, 2, 2, 32, 32, 32);
 
     // create an empty array to  hold targets for the attribute we want to morph
     // morphing positions and normals is supported
@@ -252,8 +249,8 @@ class _State extends State<webgl_morphtargets> {
 
     // for the second morph target, we'll twist the cubes vertices
     List<double> twistPositions = [];
-    var direction = THREE.Vector3(1, 0, 0);
-    var vertex = THREE.Vector3();
+    var direction = three.Vector3(1, 0, 0);
+    var vertex = three.Vector3();
 
     for (var i = 0; i < positionAttribute.count; i++) {
       var x = positionAttribute.getX(i);
@@ -261,31 +258,23 @@ class _State extends State<webgl_morphtargets> {
       var z = positionAttribute.getZ(i);
 
       spherePositions.addAll([
-        x *
-            THREE.Math.sqrt(
-                1 - (y * y / 2) - (z * z / 2) + (y * y * z * z / 3)),
-        y *
-            THREE.Math.sqrt(
-                1 - (z * z / 2) - (x * x / 2) + (z * z * x * x / 3)),
-        z * THREE.Math.sqrt(1 - (x * x / 2) - (y * y / 2) + (x * x * y * y / 3))
+        x * three.Math.sqrt(1 - (y * y / 2) - (z * z / 2) + (y * y * z * z / 3)),
+        y * three.Math.sqrt(1 - (z * z / 2) - (x * x / 2) + (z * z * x * x / 3)),
+        z * three.Math.sqrt(1 - (x * x / 2) - (y * y / 2) + (x * x * y * y / 3))
       ]);
 
       // stretch along the x-axis so we can see the twist better
       vertex.set(x * 2, y, z);
 
-      vertex
-          .applyAxisAngle(direction, THREE.Math.PI * x / 2)
-          .toArray(twistPositions, twistPositions.length);
+      vertex.applyAxisAngle(direction, three.Math.PI * x / 2).toArray(twistPositions, twistPositions.length);
     }
 
     // add the spherical positions as the first morph target
-    // geometry.morphAttributes["position"][ 0 ] = new THREE.Float32BufferAttribute( spherePositions, 3 );
-    geometry.morphAttributes["position"]!
-        .add(THREE.Float32BufferAttribute(Float32Array.fromList(spherePositions), 3));
+    // geometry.morphAttributes["position"][ 0 ] = new three.Float32BufferAttribute( spherePositions, 3 );
+    geometry.morphAttributes["position"]!.add(three.Float32BufferAttribute(Float32Array.fromList(spherePositions), 3));
 
     // add the twisted positions as the second morph target
-    geometry.morphAttributes["position"]!
-        .add(THREE.Float32BufferAttribute(Float32Array.fromList(twistPositions), 3));
+    geometry.morphAttributes["position"]!.add(three.Float32BufferAttribute(Float32Array.fromList(twistPositions), 3));
 
     return geometry;
   }
@@ -306,8 +295,8 @@ class _State extends State<webgl_morphtargets> {
 
     num _t = (DateTime.now().millisecondsSinceEpoch * 0.0005);
 
-    var _v0 = (THREE.Math.sin(_t) + 1.0) / 2.0;
-    var _v1 = (THREE.Math.sin(_t + 0.3) + 1.0) / 2.0;
+    var _v0 = (three.Math.sin(_t) + 1.0) / 2.0;
+    var _v1 = (three.Math.sin(_t + 0.3) + 1.0) / 2.0;
 
     // print(" _v0: ${_v0} _v1: ${_v1} ");
 

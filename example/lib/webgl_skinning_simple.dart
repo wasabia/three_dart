@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/objects/index.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_skinning_simple extends StatefulWidget {
@@ -18,7 +18,7 @@ class webgl_skinning_simple extends StatefulWidget {
 
 class _MyAppState extends State<webgl_skinning_simple> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -26,9 +26,9 @@ class _MyAppState extends State<webgl_skinning_simple> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
   double dpr = 1.0;
 
@@ -39,14 +39,14 @@ class _MyAppState extends State<webgl_skinning_simple> {
 
   bool loaded = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late three.WebGLMultisampleRenderTarget renderTarget;
 
-  THREE.AnimationMixer? mixer;
-  THREE.Clock clock = THREE.Clock();
+  three.AnimationMixer? mixer;
+  three.Clock clock = three.Clock();
 
   dynamic? sourceTexture;
 
@@ -129,13 +129,10 @@ class _MyAppState extends State<webgl_skinning_simple> {
                   child: Builder(builder: (BuildContext context) {
                     if (kIsWeb) {
                       return three3dRender.isInitialized
-                          ? HtmlElementView(
-                              viewType: three3dRender.textureId!.toString())
+                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                           : Container();
                     } else {
-                      return three3dRender.isInitialized
-                          ? Texture(textureId: three3dRender.textureId!)
-                          : Container();
+                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
                     }
                   })),
             ],
@@ -183,15 +180,14 @@ class _MyAppState extends State<webgl_skinning_simple> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = true;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -204,28 +200,27 @@ class _MyAppState extends State<webgl_skinning_simple> {
   }
 
   initPage() async {
-    camera = THREE.PerspectiveCamera(45, width / height, 1, 1000);
+    camera = three.PerspectiveCamera(45, width / height, 1, 1000);
     camera.position.set(18, 6, 18);
 
-    scene = THREE.Scene();
-    scene.background = THREE.Color.fromHex(0xa0a0a0);
-    scene.fog = THREE.Fog(0xa0a0a0, 70, 100);
+    scene = three.Scene();
+    scene.background = three.Color.fromHex(0xa0a0a0);
+    scene.fog = three.Fog(0xa0a0a0, 70, 100);
 
-    clock = THREE.Clock();
+    clock = three.Clock();
 
     // ground
 
-    var geometry = THREE.PlaneGeometry(500, 500);
-    var material =
-        THREE.MeshPhongMaterial({"color": 0x999999, "depthWrite": false});
+    var geometry = three.PlaneGeometry(500, 500);
+    var material = three.MeshPhongMaterial({"color": 0x999999, "depthWrite": false});
 
-    var ground = THREE.Mesh(geometry, material);
+    var ground = three.Mesh(geometry, material);
     ground.position.set(0, -5, 0);
-    ground.rotation.x = -THREE.Math.PI / 2;
+    ground.rotation.x = -three.Math.PI / 2;
     ground.receiveShadow = true;
     scene.add(ground);
 
-    var grid = THREE.GridHelper(500, 100, 0x000000, 0x000000);
+    var grid = three.GridHelper(500, 100, 0x000000, 0x000000);
     grid.position.y = -5;
     grid.material.opacity = 0.2;
     grid.material.transparent = true;
@@ -233,11 +228,11 @@ class _MyAppState extends State<webgl_skinning_simple> {
 
     // lights
 
-    var hemiLight = THREE.HemisphereLight(0xffffff, 0x444444, 0.6);
+    var hemiLight = three.HemisphereLight(0xffffff, 0x444444, 0.6);
     hemiLight.position.set(0, 200, 0);
     scene.add(hemiLight);
 
-    var dirLight = THREE.DirectionalLight(0xffffff, 0.8);
+    var dirLight = three.DirectionalLight(0xffffff, 0.8);
     dirLight.position.set(0, 20, 10);
     dirLight.castShadow = true;
     dirLight.shadow!.camera!.top = 18;
@@ -261,11 +256,11 @@ class _MyAppState extends State<webgl_skinning_simple> {
       if (child is SkinnedMesh) child.castShadow = true;
     });
 
-    var skeleton = THREE.SkeletonHelper(object);
+    var skeleton = three.SkeletonHelper(object);
     skeleton.visible = true;
     scene.add(skeleton);
 
-    mixer = THREE.AnimationMixer(object);
+    mixer = three.AnimationMixer(object);
 
     var clip = result["animations"][0];
     if (clip != null) {
@@ -275,7 +270,7 @@ class _MyAppState extends State<webgl_skinning_simple> {
 
     scene.add(object);
 
-    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
+    // scene.overrideMaterial = new three.MeshBasicMaterial();
 
     loaded = true;
 

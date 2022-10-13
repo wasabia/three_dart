@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_helpers extends StatefulWidget {
@@ -18,7 +18,7 @@ class webgl_helpers extends StatefulWidget {
 
 class _State extends State<webgl_helpers> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -26,12 +26,12 @@ class _State extends State<webgl_helpers> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
-  late THREE.AnimationMixer mixer;
-  THREE.Clock clock = THREE.Clock();
+  late three.AnimationMixer mixer;
+  three.Clock clock = three.Clock();
   THREE_JSM.OrbitControls? controls;
 
   double dpr = 1.0;
@@ -41,22 +41,22 @@ class _State extends State<webgl_helpers> {
   bool verbose = true;
   bool disposed = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
-  late THREE.PointLight light;
+  late three.PointLight light;
 
   THREE_JSM.VertexNormalsHelper? vnh;
   THREE_JSM.VertexTangentsHelper? vth;
 
-  late THREE.WebGLMultisampleRenderTarget renderTarget;
+  late three.WebGLMultisampleRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
   bool loaded = false;
 
-  late THREE.Object3D model;
+  late three.Object3D model;
 
   @override
   void initState() {
@@ -138,8 +138,7 @@ class _State extends State<webgl_helpers> {
                       child: Builder(builder: (BuildContext context) {
                         if (kIsWeb) {
                           return three3dRender.isInitialized
-                              ? HtmlElementView(
-                                  viewType: three3dRender.textureId!.toString())
+                              ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                               : Container();
                         } else {
                           return three3dRender.isInitialized
@@ -187,15 +186,14 @@ class _State extends State<webgl_helpers> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -208,26 +206,25 @@ class _State extends State<webgl_helpers> {
   }
 
   initPage() async {
-    camera = THREE.PerspectiveCamera(70, width / height, 1, 1000);
+    camera = three.PerspectiveCamera(70, width / height, 1, 1000);
     camera.position.z = 400;
 
     // scene
 
-    scene = THREE.Scene();
+    scene = three.Scene();
 
-    light = THREE.PointLight(0xffffff);
+    light = three.PointLight(0xffffff);
     light.position.set(200, 100, 150);
     scene.add(light);
 
-    scene.add(THREE.PointLightHelper(light, 15, THREE.Color(0xffffff)));
+    scene.add(three.PointLightHelper(light, 15, three.Color(0xffffff)));
 
-    var gridHelper = THREE.GridHelper(400, 40, 0x0000ff, 0x808080);
+    var gridHelper = three.GridHelper(400, 40, 0x0000ff, 0x808080);
     gridHelper.position.y = -150;
     gridHelper.position.x = -150;
     scene.add(gridHelper);
 
-    var polarGridHelper =
-        THREE.PolarGridHelper(200, 16, 8, 64, 0x0000ff, 0x808080);
+    var polarGridHelper = three.PolarGridHelper(200, 16, 8, 64, 0x0000ff, 0x808080);
     polarGridHelper.position.y = -150;
     polarGridHelper.position.x = 200;
     scene.add(polarGridHelper);
@@ -249,10 +246,9 @@ class _State extends State<webgl_helpers> {
 
     print(" load gltf success mesh: $mesh  ");
 
-    mesh.geometry!
-        .computeTangents(); // generates bad data due to degenerate UVs
+    mesh.geometry!.computeTangents(); // generates bad data due to degenerate UVs
 
-    var group = THREE.Group();
+    var group = three.Group();
     group.scale.multiplyScalar(50);
     scene.add(group);
 
@@ -267,36 +263,36 @@ class _State extends State<webgl_helpers> {
     vth = THREE_JSM.VertexTangentsHelper(mesh, 5);
     scene.add(vth!);
 
-    scene.add(THREE.BoxHelper(mesh));
+    scene.add(three.BoxHelper(mesh));
 
-    var wireframe = THREE.WireframeGeometry(mesh.geometry!);
+    var wireframe = three.WireframeGeometry(mesh.geometry!);
 
-    var line = THREE.LineSegments(wireframe, null);
+    var line = three.LineSegments(wireframe, null);
 
     line.material.depthTest = false;
     line.material.opacity = 0.25;
     line.material.transparent = true;
     line.position.x = 4;
     group.add(line);
-    scene.add(THREE.BoxHelper(line));
+    scene.add(three.BoxHelper(line));
 
-    var edges = THREE.EdgesGeometry(mesh.geometry!, null);
-    line = THREE.LineSegments(edges, null);
+    var edges = three.EdgesGeometry(mesh.geometry!, null);
+    line = three.LineSegments(edges, null);
     line.material.depthTest = false;
     line.material.opacity = 0.25;
     line.material.transparent = true;
     line.position.x = -4;
     group.add(line);
-    scene.add(THREE.BoxHelper(line));
+    scene.add(three.BoxHelper(line));
 
-    scene.add(THREE.BoxHelper(group));
-    scene.add(THREE.BoxHelper(scene));
+    scene.add(three.BoxHelper(group));
+    scene.add(three.BoxHelper(scene));
 
     loaded = true;
 
     animate();
 
-    // scene.overrideMaterial = new THREE.MeshBasicMaterial();
+    // scene.overrideMaterial = new three.MeshBasicMaterial();
   }
 
   clickRender() {
@@ -317,13 +313,13 @@ class _State extends State<webgl_helpers> {
 
     var time = -DateTime.now().millisecondsSinceEpoch * 0.00003;
 
-    camera.position.x = 400 * THREE.Math.cos(time);
-    camera.position.z = 400 * THREE.Math.sin(time);
+    camera.position.x = 400 * three.Math.cos(time);
+    camera.position.z = 400 * three.Math.sin(time);
     camera.lookAt(scene.position);
 
-    light.position.x = THREE.Math.sin(time * 1.7) * 300;
-    light.position.y = THREE.Math.cos(time * 1.5) * 400;
-    light.position.z = THREE.Math.cos(time * 1.3) * 300;
+    light.position.x = three.Math.sin(time * 1.7) * 300;
+    light.position.y = three.Math.cos(time * 1.5) * 400;
+    light.position.z = three.Math.cos(time * 1.3) * 300;
 
     if (vnh != null) vnh!.update();
     if (vth != null) vth!.update();

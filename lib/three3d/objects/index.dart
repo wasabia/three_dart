@@ -9,15 +9,14 @@ import 'package:three_dart/three3d/materials/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 import 'package:three_dart/three3d/textures/index.dart';
 
-
-part './Bone.dart';
-part './Group.dart';
-part './InstancedMesh.dart';
-part './Line.dart';
-part './LineLoop.dart';
-part './LineSegments.dart';
-part './Mesh.dart';
-part './Points.dart';
-part './Skeleton.dart';
-part './SkinnedMesh.dart';
-part './Sprite.dart';
+part 'bone.dart';
+part 'group.dart';
+part 'instanced_mesh.dart';
+part 'line.dart';
+part 'line_loop.dart';
+part 'line_segments.dart';
+part 'mesh.dart';
+part 'points.dart';
+part 'skeleton.dart';
+part 'skinned_mesh.dart';
+part 'sprite.dart';

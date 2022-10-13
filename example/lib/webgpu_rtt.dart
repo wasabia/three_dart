@@ -5,7 +5,7 @@
 
 // import 'package:flutter/widgets.dart';
 
-// import 'package:three_dart/three_dart.dart' as THREE;
+// import 'package:three_dart/three_dart.dart' as three;
 // import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 // class webgpu_rtt extends StatefulWidget {
@@ -16,7 +16,7 @@
 // }
 
 // class _MyAppState extends State<webgpu_rtt> {
-//   THREE.WebGPURenderer? renderer;
+//   three.WebGPURenderer? renderer;
 
 //   int? fboId;
 //   late double width;
@@ -24,9 +24,9 @@
 
 //   Size? screenSize;
 
-//   late THREE.Scene scene;
-//   late THREE.Camera camera;
-//   late THREE.Mesh mesh;
+//   late three.Scene scene;
+//   late three.Camera camera;
+//   late three.Mesh mesh;
 
 //   num dpr = 1.0;
 
@@ -36,11 +36,11 @@
 
 //   bool loaded = false;
 
-//   late THREE.Object3D box;
+//   late three.Object3D box;
 
-//   late THREE.Texture texture;
+//   late three.Texture texture;
 
-//   late THREE.WebGLMultisampleRenderTarget renderTarget;
+//   late three.WebGLMultisampleRenderTarget renderTarget;
 
 //   @override
 //   void initState() {
@@ -108,22 +108,22 @@
 //   }
 
 //   init() {
-//     camera = new THREE.PerspectiveCamera( 70, width / height, 0.1, 10 );
+//     camera = new three.PerspectiveCamera( 70, width / height, 0.1, 10 );
 //     camera.position.z = 4;
 
-//     scene = new THREE.Scene();
-//     scene.background = new THREE.Color( 0x222222 );
+//     scene = new three.Scene();
+//     scene.background = new three.Color( 0x222222 );
 
 //     // textured mesh
 
-//     var geometryBox = new THREE.BoxGeometry();
-//     var materialBox = new THREE.MeshBasicNodeMaterial(null);
-//     materialBox.colorNode = new THREE.ColorNode( new THREE.Color(1.0, 1.0, 0.5) );
+//     var geometryBox = new three.BoxGeometry();
+//     var materialBox = new three.MeshBasicNodeMaterial(null);
+//     materialBox.colorNode = new three.ColorNode( new three.Color(1.0, 1.0, 0.5) );
 
-//     box = new THREE.Mesh( geometryBox, materialBox );
+//     box = new three.Mesh( geometryBox, materialBox );
 //     scene.add( box );
 
-//     renderer = new THREE.WebGPURenderer({
+//     renderer = new three.WebGPURenderer({
 //       "width": 300,
 //       "height": 300,
 //       "antialias": true
@@ -132,8 +132,8 @@
 //     renderer!.setSize( width.toInt(), height.toInt() );
 //     renderer!.init();
 
-//     var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-//     renderTarget = THREE.WebGLMultisampleRenderTarget(
+//     var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+//     renderTarget = three.WebGLMultisampleRenderTarget(
 //         (width * dpr), (height * dpr), pars);
 //     renderTarget.samples = 4;
 //     renderer!.setRenderTarget(renderTarget);

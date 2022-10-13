@@ -1,13 +1,11 @@
 import 'dart:async';
 
-
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class webgl_geometry_text extends StatefulWidget {
@@ -20,7 +18,7 @@ class webgl_geometry_text extends StatefulWidget {
 
 class _MyAppState extends State<webgl_geometry_text> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -28,11 +26,11 @@ class _MyAppState extends State<webgl_geometry_text> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
-  late THREE.Group group;
-  late List<THREE.Material> materials;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
+  late three.Group group;
+  late List<three.Material> materials;
 
   double dpr = 1.0;
 
@@ -43,16 +41,11 @@ class _MyAppState extends State<webgl_geometry_text> {
 
   String text = "Three Dart";
 
-  late THREE.WebGLRenderTarget renderTarget;
+  late three.WebGLRenderTarget renderTarget;
 
   dynamic? sourceTexture;
 
-  double fontHeight = 20,
-      size = 70,
-      hover = 30,
-      curveSegments = 4,
-      bevelThickness = 2,
-      bevelSize = 1.5;
+  double fontHeight = 20, size = 70, hover = 30, curveSegments = 4, bevelThickness = 2, bevelSize = 1.5;
   bool bevelEnabled = true;
   bool mirror = true;
 
@@ -135,13 +128,10 @@ class _MyAppState extends State<webgl_geometry_text> {
                   child: Builder(builder: (BuildContext context) {
                     if (kIsWeb) {
                       return three3dRender.isInitialized
-                          ? HtmlElementView(
-                              viewType: three3dRender.textureId!.toString())
+                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                           : Container();
                     } else {
-                      return three3dRender.isInitialized
-                          ? Texture(textureId: three3dRender.textureId!)
-                          : Container();
+                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
                     }
                   })),
             ],
@@ -184,19 +174,15 @@ class _MyAppState extends State<webgl_geometry_text> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(_options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({
-        "minFilter": THREE.LinearFilter,
-        "magFilter": THREE.LinearFilter,
-        "format": THREE.RGBAFormat
-      });
-      renderTarget = THREE.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions(
+          {"minFilter": three.LinearFilter, "magFilter": three.LinearFilter, "format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }
@@ -210,39 +196,38 @@ class _MyAppState extends State<webgl_geometry_text> {
   initPage() async {
     // CAMERA
 
-    camera = THREE.PerspectiveCamera(30, width / height, 1, 1500);
+    camera = three.PerspectiveCamera(30, width / height, 1, 1500);
     camera.position.set(0, 400, 700);
 
-    var cameraTarget = THREE.Vector3(0, 50, 0);
+    var cameraTarget = three.Vector3(0, 50, 0);
     camera.lookAt(cameraTarget);
 
     // SCENE
 
-    scene = THREE.Scene();
-    scene.background = THREE.Color.fromHex(0x000000);
-    scene.fog = THREE.Fog(THREE.Color.fromHex(0x000000), 250, 1400);
+    scene = three.Scene();
+    scene.background = three.Color.fromHex(0x000000);
+    scene.fog = three.Fog(three.Color.fromHex(0x000000), 250, 1400);
     // LIGHTS
 
-    var dirLight = THREE.DirectionalLight(0xffffff, 0.125);
+    var dirLight = three.DirectionalLight(0xffffff, 0.125);
     dirLight.position.set(0, 0, 1).normalize();
     scene.add(dirLight);
 
-    var pointLight = THREE.PointLight(0xffffff, 1.5);
+    var pointLight = three.PointLight(0xffffff, 1.5);
     pointLight.position.set(0, 100, 90);
     scene.add(pointLight);
 
     // Get text from hash
 
-    pointLight.color!.setHSL(THREE.Math.random(), 1, 0.5);
+    pointLight.color!.setHSL(three.Math.random(), 1, 0.5);
     // hex = decimalToHex( pointLight.color!.getHex() );
 
     materials = [
-      THREE.MeshPhongMaterial(
-          {"color": 0xffffff, "flatShading": true}), // front
-      THREE.MeshPhongMaterial({"color": 0xffffff}) // side
+      three.MeshPhongMaterial({"color": 0xffffff, "flatShading": true}), // front
+      three.MeshPhongMaterial({"color": 0xffffff}) // side
     ];
 
-    group = THREE.Group();
+    group = three.Group();
 
     // change size position fit mobile
     group.position.y = 50;
@@ -254,12 +239,10 @@ class _MyAppState extends State<webgl_geometry_text> {
 
     createText(font);
 
-    var plane = THREE.Mesh(
-        THREE.PlaneGeometry(10000, 10000),
-        THREE.MeshBasicMaterial(
-            {"color": 0xffffff, "opacity": 0.5, "transparent": true}));
+    var plane = three.Mesh(three.PlaneGeometry(10000, 10000),
+        three.MeshBasicMaterial({"color": 0xffffff, "opacity": 0.5, "transparent": true}));
     plane.position.y = -100;
-    plane.rotation.x = -THREE.Math.PI / 2;
+    plane.rotation.x = -three.Math.PI / 2;
     scene.add(plane);
 
     animate();
@@ -272,11 +255,11 @@ class _MyAppState extends State<webgl_geometry_text> {
     print("loadFont successs ............ ");
     print(fontJson);
 
-    return THREE.TYPRFont(fontJson);
+    return three.TYPRFont(fontJson);
   }
 
   createText(font) {
-    var textGeo = THREE.TextGeometry(text, {
+    var textGeo = three.TextGeometry(text, {
       "font": font,
       "size": size,
       "height": fontHeight,
@@ -288,29 +271,28 @@ class _MyAppState extends State<webgl_geometry_text> {
 
     textGeo.computeBoundingBox();
 
-    var centerOffset =
-        -0.5 * (textGeo.boundingBox!.max.x - textGeo.boundingBox!.min.x);
+    var centerOffset = -0.5 * (textGeo.boundingBox!.max.x - textGeo.boundingBox!.min.x);
 
-    var textMesh1 = THREE.Mesh(textGeo, materials);
+    var textMesh1 = three.Mesh(textGeo, materials);
 
     textMesh1.position.x = centerOffset;
     textMesh1.position.y = hover;
     textMesh1.position.z = 0;
 
     textMesh1.rotation.x = 0;
-    textMesh1.rotation.y = THREE.Math.PI * 2;
+    textMesh1.rotation.y = three.Math.PI * 2;
 
     group.add(textMesh1);
 
     if (mirror) {
-      var textMesh2 = THREE.Mesh(textGeo, materials);
+      var textMesh2 = three.Mesh(textGeo, materials);
 
       textMesh2.position.x = centerOffset;
       textMesh2.position.y = -hover;
       textMesh2.position.z = height;
 
-      textMesh2.rotation.x = THREE.Math.PI;
-      textMesh2.rotation.y = THREE.Math.PI * 2;
+      textMesh2.rotation.x = three.Math.PI;
+      textMesh2.rotation.y = three.Math.PI * 2;
 
       group.add(textMesh2);
     }
