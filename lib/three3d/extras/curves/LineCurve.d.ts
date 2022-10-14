@@ -12,12 +12,12 @@ export class LineCurve extends Curve<Vector2> {
 
 
 	/**
-	 * @default new THREE.Vector2()
+	 * @default new three.Vector2()
 	 */
 	v1: Vector2;
 
 	/**
-	 * @default new THREE.Vector2()
+	 * @default new three.Vector2()
 	 */
 	v2: Vector2;
 

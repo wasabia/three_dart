@@ -1,25 +1,24 @@
 import 'dart:async';
 
-
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 
-class webgl_camera extends StatefulWidget {
-  String fileName;
-  webgl_camera({Key? key, required this.fileName}) : super(key: key);
+class WebGlCamera extends StatefulWidget {
+  final String fileName;
+
+  const WebGlCamera({Key? key, required this.fileName}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<WebGlCamera> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<webgl_camera> {
+class _MyAppState extends State<WebGlCamera> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -27,20 +26,20 @@ class _MyAppState extends State<webgl_camera> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
-  late THREE.Camera cameraPerspective;
-  late THREE.Camera cameraOrtho;
+  late three.Camera cameraPerspective;
+  late three.Camera cameraOrtho;
 
-  late THREE.Group cameraRig;
+  late three.Group cameraRig;
 
-  late THREE.Camera activeCamera;
-  late THREE.CameraHelper activeHelper;
+  late three.Camera activeCamera;
+  late three.CameraHelper activeHelper;
 
-  late THREE.CameraHelper cameraOrthoHelper;
-  late THREE.CameraHelper cameraPerspectiveHelper;
+  late three.CameraHelper cameraOrthoHelper;
+  late three.CameraHelper cameraPerspectiveHelper;
 
   int frustumSize = 600;
 
@@ -48,14 +47,14 @@ class _MyAppState extends State<webgl_camera> {
 
   num aspect = 1.0;
 
-  var AMOUNT = 4;
+  var amount = 4;
 
   bool verbose = true;
   bool disposed = false;
 
-  late THREE.WebGLRenderTarget renderTarget;
+  late three.WebGLRenderTarget renderTarget;
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   @override
   void initState() {
@@ -69,7 +68,7 @@ class _MyAppState extends State<webgl_camera> {
 
     three3dRender = FlutterGlPlugin();
 
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "antialias": true,
       "alpha": false,
       "width": width.toInt(),
@@ -77,11 +76,11 @@ class _MyAppState extends State<webgl_camera> {
       "dpr": dpr
     };
 
-    await three3dRender.initialize(options: _options);
+    await three3dRender.initialize(options: options);
 
     setState(() {});
 
-    // TODO web wait dom ok!!!
+    // Wait for web
     Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
@@ -126,48 +125,43 @@ class _MyAppState extends State<webgl_camera> {
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Stack(
-            children: [
-              Container(
-                  width: width,
-                  height: height,
-                  color: Colors.black,
-                  child: Builder(builder: (BuildContext context) {
-                    if (kIsWeb) {
-                      return three3dRender.isInitialized
-                          ? HtmlElementView(
-                              viewType: three3dRender.textureId!.toString())
-                          : Container();
-                    } else {
-                      return three3dRender.isInitialized
-                          ? Texture(textureId: three3dRender.textureId!)
-                          : Container();
-                    }
-                  })),
-            ],
-          ),
+        Stack(
+          children: [
+            Container(
+                width: width,
+                height: height,
+                color: Colors.black,
+                child: Builder(builder: (BuildContext context) {
+                  if (kIsWeb) {
+                    return three3dRender.isInitialized
+                        ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                        : Container();
+                  } else {
+                    return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
+                  }
+                })),
+          ],
         ),
       ],
     );
   }
 
   render() {
-    int _t = DateTime.now().millisecondsSinceEpoch;
+    int t = DateTime.now().millisecondsSinceEpoch;
 
-    final _gl = three3dRender.gl;
+    final gl = three3dRender.gl;
 
     var r = DateTime.now().millisecondsSinceEpoch * 0.0005;
 
-    mesh.position.x = 700 * THREE.Math.cos(r);
-    mesh.position.z = 700 * THREE.Math.sin(r);
-    mesh.position.y = 700 * THREE.Math.sin(r);
+    mesh.position.x = 700 * three.Math.cos(r);
+    mesh.position.z = 700 * three.Math.sin(r);
+    mesh.position.y = 700 * three.Math.sin(r);
 
-    mesh.children[0].position.x = 70 * THREE.Math.cos(2 * r);
-    mesh.children[0].position.z = 70 * THREE.Math.sin(r);
+    mesh.children[0].position.x = 70 * three.Math.cos(2 * r);
+    mesh.children[0].position.z = 70 * three.Math.sin(r);
 
     if (activeCamera == cameraPerspective) {
-      cameraPerspective.fov = 35 + 30 * THREE.Math.sin(0.5 * r);
+      cameraPerspective.fov = 35 + 30 * three.Math.sin(0.5 * r);
       cameraPerspective.far = mesh.position.length();
       cameraPerspective.updateProjectionMatrix();
 
@@ -199,16 +193,16 @@ class _MyAppState extends State<webgl_camera> {
     renderer!.setViewport(width / 2, 0, width / 2, height);
     renderer!.render(scene, camera);
 
-    int _t1 = DateTime.now().millisecondsSinceEpoch;
+    int t1 = DateTime.now().millisecondsSinceEpoch;
 
     if (verbose) {
-      print("render cost: ${_t1 - _t} ");
+      print("render cost: ${t1 - t} ");
       print(renderer!.info.memory);
       print(renderer!.info.render);
     }
 
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
-    _gl.flush();
+    gl.flush();
 
     // var pixels = _gl.readCurrentPixels(0, 0, 10, 10);
     // print(" --------------pixels............. ");
@@ -222,30 +216,25 @@ class _MyAppState extends State<webgl_camera> {
   }
 
   initRenderer() {
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "width": width,
       "height": height,
       "gl": three3dRender.gl,
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
     renderer!.autoClear = false;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({
-        "minFilter": THREE.LinearFilter,
-        "magFilter": THREE.LinearFilter,
-        "format": THREE.RGBAFormat,
-        "samples": 4
-      });
-      renderTarget = THREE.WebGLRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions(
+          {"minFilter": three.LinearFilter, "magFilter": three.LinearFilter, "format": three.RGBAFormat, "samples": 4});
+      renderTarget = three.WebGLRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderer!.setRenderTarget(renderTarget);
-      
+
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }
   }
@@ -258,29 +247,23 @@ class _MyAppState extends State<webgl_camera> {
   initPage() {
     aspect = width / height;
 
-    scene = THREE.Scene();
+    scene = three.Scene();
 
     //
 
-    camera = THREE.PerspectiveCamera(50, 0.5 * aspect, 1, 10000);
+    camera = three.PerspectiveCamera(50, 0.5 * aspect, 1, 10000);
     camera.position.z = 2500;
 
-    cameraPerspective =
-        THREE.PerspectiveCamera(50, 0.5 * aspect, 150, 1000);
+    cameraPerspective = three.PerspectiveCamera(50, 0.5 * aspect, 150, 1000);
 
-    cameraPerspectiveHelper = THREE.CameraHelper(cameraPerspective);
+    cameraPerspectiveHelper = three.CameraHelper(cameraPerspective);
     scene.add(cameraPerspectiveHelper);
 
     //
-    cameraOrtho = THREE.OrthographicCamera(
-        0.5 * frustumSize * aspect / -2,
-        0.5 * frustumSize * aspect / 2,
-        frustumSize / 2,
-        frustumSize / -2,
-        150,
-        1000);
+    cameraOrtho = three.OrthographicCamera(
+        0.5 * frustumSize * aspect / -2, 0.5 * frustumSize * aspect / 2, frustumSize / 2, frustumSize / -2, 150, 1000);
 
-    cameraOrthoHelper = THREE.CameraHelper(cameraOrtho);
+    cameraOrthoHelper = three.CameraHelper(cameraOrtho);
     scene.add(cameraOrthoHelper);
 
     //
@@ -290,10 +273,10 @@ class _MyAppState extends State<webgl_camera> {
 
     // counteract different front orientation of cameras vs rig
 
-    cameraOrtho.rotation.y = THREE.Math.PI;
-    cameraPerspective.rotation.y = THREE.Math.PI;
+    cameraOrtho.rotation.y = three.Math.PI;
+    cameraPerspective.rotation.y = three.Math.PI;
 
-    cameraRig = THREE.Group();
+    cameraRig = three.Group();
 
     cameraRig.add(cameraPerspective);
     cameraRig.add(cameraOrtho);
@@ -302,37 +285,35 @@ class _MyAppState extends State<webgl_camera> {
 
     //
 
-    mesh = THREE.Mesh(THREE.SphereGeometry(100, 16, 8),
-        THREE.MeshBasicMaterial({"color": 0xffffff, "wireframe": true}));
+    mesh =
+        three.Mesh(three.SphereGeometry(100, 16, 8), three.MeshBasicMaterial({"color": 0xffffff, "wireframe": true}));
     scene.add(mesh);
 
-    var mesh2 = THREE.Mesh(THREE.SphereGeometry(50, 16, 8),
-        THREE.MeshBasicMaterial({"color": 0x00ff00, "wireframe": true}));
+    var mesh2 =
+        three.Mesh(three.SphereGeometry(50, 16, 8), three.MeshBasicMaterial({"color": 0x00ff00, "wireframe": true}));
     mesh2.position.y = 150;
     mesh.add(mesh2);
 
-    var mesh3 = THREE.Mesh(THREE.SphereGeometry(5, 16, 8),
-        THREE.MeshBasicMaterial({"color": 0x0000ff, "wireframe": true}));
+    var mesh3 =
+        three.Mesh(three.SphereGeometry(5, 16, 8), three.MeshBasicMaterial({"color": 0x0000ff, "wireframe": true}));
     mesh3.position.z = 150;
     cameraRig.add(mesh3);
 
     //
 
-    var geometry = THREE.BufferGeometry();
+    var geometry = three.BufferGeometry();
     List<double> vertices = [];
 
     for (var i = 0; i < 10000; i++) {
-      vertices.add(THREE.MathUtils.randFloatSpread(2000)); // x
-      vertices.add(THREE.MathUtils.randFloatSpread(2000)); // y
-      vertices.add(THREE.MathUtils.randFloatSpread(2000)); // z
+      vertices.add(three.MathUtils.randFloatSpread(2000)); // x
+      vertices.add(three.MathUtils.randFloatSpread(2000)); // y
+      vertices.add(three.MathUtils.randFloatSpread(2000)); // z
 
     }
 
-    geometry.setAttribute(
-        'position', THREE.Float32BufferAttribute(Float32Array.fromList(vertices), 3));
+    geometry.setAttribute('position', three.Float32BufferAttribute(Float32Array.fromList(vertices), 3));
 
-    var particles = THREE.Points(
-        geometry, THREE.PointsMaterial({"color": 0x888888, "size": 1}));
+    var particles = three.Points(geometry, three.PointsMaterial({"color": 0x888888, "size": 1}));
     scene.add(particles);
 
     animate();

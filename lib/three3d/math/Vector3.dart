@@ -154,8 +154,7 @@ class Vector3 {
 
   Vector3 sub(v, {Vector3? w}) {
     if (w != null) {
-      print(
-          'THREE.Vector3: .sub() now only accepts one argument. Use .subVectors( a, b ) instead.');
+      print('three.Vector3: .sub() now only accepts one argument. Use .subVectors( a, b ) instead.');
       return subVectors(v as Vector3, w);
     }
 
@@ -209,8 +208,7 @@ class Vector3 {
 
   Vector3 applyEuler(Euler? euler) {
     if (!(euler != null && euler.type == "Euler")) {
-      print(
-          'THREE.Vector3: .applyEuler() now expects an Euler rotation rather than a Vector3 and order.');
+      print('three.Vector3: .applyEuler() now expects an Euler rotation rather than a Vector3 and order.');
     }
 
     return applyQuaternion(_quaternion.setFromEuler(euler!, false));
@@ -274,17 +272,15 @@ class Vector3 {
   }
 
   Vector3 project(camera) {
-    return applyMatrix4(camera.matrixWorldInverse)
-        .applyMatrix4(camera.projectionMatrix);
+    return applyMatrix4(camera.matrixWorldInverse).applyMatrix4(camera.projectionMatrix);
   }
 
   Vector3 unproject(camera) {
-    return applyMatrix4(camera.projectionMatrixInverse)
-        .applyMatrix4(camera.matrixWorld);
+    return applyMatrix4(camera.projectionMatrixInverse).applyMatrix4(camera.matrixWorld);
   }
 
   Vector3 transformDirection(Matrix4 m) {
-    // input: THREE.Matrix4 affine matrix
+    // input: three.Matrix4 affine matrix
     // vector interpreted as a direction
 
     var x = this.x, y = this.y, z = this.z;
@@ -346,8 +342,7 @@ class Vector3 {
   Vector3 clampLength<T extends num>(T min, T max) {
     var length = this.length();
 
-    return divideScalar(length)
-        .multiplyScalar(Math.max(min, Math.min(max, length)));
+    return divideScalar(length).multiplyScalar(Math.max(min, Math.min(max, length)));
   }
 
   Vector3 floor() {
@@ -432,8 +427,7 @@ class Vector3 {
 
   Vector3 cross(Vector3 v, {Vector3? w}) {
     if (w != null) {
-      print(
-          'THREE.Vector3: .cross() now only accepts one argument. Use .crossVectors( a, b ) instead.');
+      print('three.Vector3: .cross() now only accepts one argument. Use .crossVectors( a, b ) instead.');
       return crossVectors(v, w);
     }
 

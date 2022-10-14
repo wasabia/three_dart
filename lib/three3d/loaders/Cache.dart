@@ -7,7 +7,7 @@ class Cache {
   static add(key, file) {
     if (enabled == false) return;
 
-    // console.log( 'THREE.Cache', 'Adding key:', key );
+    // console.log( 'three.Cache', 'Adding key:', key );
 
     files[key] = file;
   }
@@ -15,7 +15,7 @@ class Cache {
   static get(key) {
     if (enabled == false) return;
 
-    // console.log( 'THREE.Cache', 'Checking key:', key );
+    // console.log( 'three.Cache', 'Checking key:', key );
 
     return files[key];
   }

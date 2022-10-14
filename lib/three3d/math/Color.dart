@@ -202,10 +202,10 @@ class Color {
   /// var color = Color(0xff00ff);
   /// var color = Color(1.0, 0.0, 1.0);
   /// var color = Color("#ff00ee");
-  /// r is THREE.Color, hex or string
+  /// r is three.Color, hex or string
   Color([r, double? g, double? b]) {
     if (g == null && b == null) {
-      // r is THREE.Color, hex or string
+      // r is three.Color, hex or string
       set(r);
     } else {
       setRGB(r.toDouble(), g, b);
@@ -279,11 +279,7 @@ class Color {
     return this;
   }
 
-  Color setRGB(
-      [double? r,
-      double? g,
-      double? b,
-      String colorSpace = LinearSRGBColorSpace]) {
+  Color setRGB([double? r, double? g, double? b, String colorSpace = LinearSRGBColorSpace]) {
     this.r = r ?? 1.0;
     this.g = g ?? 1.0;
     this.b = b ?? 1.0;
@@ -293,8 +289,7 @@ class Color {
     return this;
   }
 
-  Color setHSL(double h, double s, double l,
-      [String colorSpace = LinearSRGBColorSpace]) {
+  Color setHSL(double h, double s, double l, [String colorSpace = LinearSRGBColorSpace]) {
     // h,s,l ranges are in 0.0 - 1.0
     h = MathUtils.euclideanModulo(h, 1).toDouble();
     s = MathUtils.clamp(s, 0, 1);
@@ -320,7 +315,7 @@ class Color {
     void handleAlpha(String? string) {
       if (string == null) return;
       if (double.parse(string) < 1) {
-        print('THREE.Color: Alpha component of $style will be ignored.');
+        print('three.Color: Alpha component of $style will be ignored.');
       }
     }
 
@@ -360,8 +355,7 @@ class Color {
         switch (name) {
           case 'rgb':
           case 'rgba':
-            var _colorReg1 = RegExp(
-                r"^(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d*\.?\d+)\s*)?$");
+            var _colorReg1 = RegExp(r"^(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d*\.?\d+)\s*)?$");
             if (_colorReg1.hasMatch(components)) {
               var match1 = _colorReg1.firstMatch(components)!;
 
@@ -380,8 +374,7 @@ class Color {
 
               return this;
             } else {
-              var _colorReg2 = RegExp(
-                  r"^(\d+)\%\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$");
+              var _colorReg2 = RegExp(r"^(\d+)\%\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$");
               if (_colorReg2.hasMatch(components)) {
                 var match2 = _colorReg2.firstMatch(components)!;
 
@@ -407,8 +400,7 @@ class Color {
 
           case 'hsl':
           case 'hsla':
-            var _colorReg3 = RegExp(
-                r"^(\d*\.?\d+)\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$");
+            var _colorReg3 = RegExp(r"^(\d*\.?\d+)\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$");
             if (_colorReg3.hasMatch(components)) {
               var match3 = _colorReg3.firstMatch(components)!;
 
@@ -456,7 +448,7 @@ class Color {
       setHex(hex, colorSpace);
     } else {
       // unknown color
-      print('THREE.Color: Unknown color ' + style);
+      print('three.Color: Unknown color ' + style);
     }
 
     return this;
@@ -543,9 +535,7 @@ class Color {
   int getHex([String colorSpace = SRGBColorSpace]) {
     ColorManagement.fromWorkingColorSpace(toComponents(this, _rgb), colorSpace);
 
-    return (r * 255).toInt() << 16 ^
-        (g * 255).toInt() << 8 ^
-        (b * 255).toInt() << 0;
+    return (r * 255).toInt() << 16 ^ (g * 255).toInt() << 8 ^ (b * 255).toInt() << 0;
   }
 
   String getHexString([String colorSpace = SRGBColorSpace]) {
@@ -572,8 +562,7 @@ class Color {
     } else {
       double delta = max - min;
 
-      saturation =
-          lightness <= 0.5 ? delta / (max + min) : delta / (2 - max - min);
+      saturation = lightness <= 0.5 ? delta / (max + min) : delta / (2 - max - min);
 
       if (max == r) {
         hue = (g - b) / delta + (g < b ? 6 : 0);

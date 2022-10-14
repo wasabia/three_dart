@@ -155,8 +155,7 @@ class Material with EventDispatcher {
 
   Texture? normalMap;
   Texture? bumpMap;
-  Texture? get envMap =>
-      (uniforms["envMap"] == null ? null : uniforms["envMap"]["value"]);
+  Texture? get envMap => (uniforms["envMap"] == null ? null : uniforms["envMap"]["value"]);
   set envMap(value) {
     uniforms["envMap"] = {"value": value};
   }
@@ -248,7 +247,7 @@ class Material with EventDispatcher {
       var newValue = values[key];
 
       if (newValue == null) {
-        print('THREE.Material setValues: $key parameter is null.');
+        print('three.Material setValues: $key parameter is null.');
         continue;
       }
 
@@ -364,9 +363,7 @@ class Material with EventDispatcher {
       roughnessMap = newValue;
     } else if (key == "shading") {
       //   // for backward compatability if shading is set in the constructor
-      throw ('THREE.' +
-          type +
-          ': .shading has been removed. Use the boolean .flatShading instead.');
+      throw ('three.' + type + ': .shading has been removed. Use the boolean .flatShading instead.');
       //   this.flatShading = ( newValue == FlatShading ) ? true : false;
 
     } else if (key == "shininess") {
@@ -433,11 +430,7 @@ class Material with EventDispatcher {
     }
 
     Map<String, dynamic> data = {
-      "metadata": {
-        "version": 4.5,
-        "type": 'Material',
-        "generator": 'Material.toJSON'
-      }
+      "metadata": {"version": 4.5, "type": 'Material', "generator": 'Material.toJSON'}
     };
 
     // standard Material serialization
@@ -486,8 +479,7 @@ class Material with EventDispatcher {
     }
 
     if (clearcoatRoughnessMap != null && clearcoatRoughnessMap is Texture) {
-      data["clearcoatRoughnessMap"] =
-          clearcoatRoughnessMap!.toJSON(meta)['uuid'];
+      data["clearcoatRoughnessMap"] = clearcoatRoughnessMap!.toJSON(meta)['uuid'];
     }
 
     if (clearcoatNormalMap != null && clearcoatNormalMap is Texture) {

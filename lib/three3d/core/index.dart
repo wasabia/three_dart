@@ -7,23 +7,21 @@ import 'package:three_dart/extra/console.dart';
 import 'package:three_dart/three_dart.dart';
 import 'package:three_dart/three3d/utils.dart';
 
-import '../math/index.dart';
+part 'base_buffer_attribute.dart';
+part 'buffer_attribute.dart';
+part 'buffer_geometry.dart';
+part 'clock.dart';
 
-part './BaseBufferAttribute.dart';
-part './BufferAttribute.dart';
-part './BufferGeometry.dart';
-part './Clock.dart';
+part 'event_dispatcher.dart';
 
-part './EventDispatcher.dart';
+part 'gl_buffer_attribute.dart';
 
-part './GLBufferAttribute.dart';
+part 'instanced_buffer_attribute.dart';
+part 'instanced_buffer_geometry.dart';
 
-part './InstancedBufferAttribute.dart';
-part './InstancedBufferGeometry.dart';
-
-part './InterleavedBuffer.dart';
-part './InterleavedBufferAttribute.dart';
-part './InstancedInterleavedBuffer.dart';
-part './Layers.dart';
-part './Object3D.dart';
-part './Raycaster.dart';
+part 'interleaved_buffer.dart';
+part 'interleaved_buffer_attribute.dart';
+part 'instanced_interleaved_buffer.dart';
+part 'layers.dart';
+part 'object_3d.dart';
+part 'raycaster.dart';

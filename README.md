@@ -28,19 +28,19 @@ TODO
 check example project
 
 ```
-camera = new THREE.PerspectiveCamera( 40, 1, 0.1, 10 );
+camera = new three.PerspectiveCamera( 40, 1, 0.1, 10 );
 camera.position.z = 3;
 
-scene = new THREE.Scene();
+scene = new three.Scene();
 camera.lookAt(scene.position);
 
-scene.background = THREE.Color(1.0, 1.0, 1.0);
-scene.add( new THREE.AmbientLight( 0x222244, null ) );
+scene.background = three.Color(1.0, 1.0, 1.0);
+scene.add( new three.AmbientLight( 0x222244, null ) );
 
-var geometryCylinder = new THREE.CylinderGeometry( 0.5, 0.5, 1, 32 );
-var materialCylinder = new THREE.MeshPhongMaterial( { "color": 0xff0000 } );
+var geometryCylinder = new three.CylinderGeometry( 0.5, 0.5, 1, 32 );
+var materialCylinder = new three.MeshPhongMaterial( { "color": 0xff0000 } );
 
-mesh = new THREE.Mesh( geometryCylinder, materialCylinder );
+mesh = new three.Mesh( geometryCylinder, materialCylinder );
 scene.add( mesh );
 ```
 

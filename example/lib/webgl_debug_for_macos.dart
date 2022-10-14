@@ -6,19 +6,20 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
 
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 
-class webgl_debug_for_macos extends StatefulWidget {
-  String fileName;
-  webgl_debug_for_macos({Key? key, required this.fileName}) : super(key: key);
+class WebGlDebugForMacos extends StatefulWidget {
+  final String fileName;
+
+  const WebGlDebugForMacos({Key? key, required this.fileName}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<WebGlDebugForMacos> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<webgl_debug_for_macos> {
+class _MyAppState extends State<WebGlDebugForMacos> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -26,23 +27,23 @@ class _MyAppState extends State<webgl_debug_for_macos> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
-  late THREE.Light spotLight;
-  late THREE.Light dirLight;
-  late THREE.Light pointLight;
-  late THREE.Mesh torusKnot;
-  late THREE.Mesh cube;
+  late three.Light spotLight;
+  late three.Light dirLight;
+  late three.Light pointLight;
+  late three.Mesh torusKnot;
+  late three.Mesh cube;
 
   int delta = 0;
 
-  late THREE.Material material;
+  late three.Material material;
 
   double dpr = 1.0;
 
-  var AMOUNT = 4;
+  var amount = 4;
 
   bool verbose = true;
   bool disposed = false;
@@ -53,9 +54,9 @@ class _MyAppState extends State<webgl_debug_for_macos> {
 
   Uint8List? resultImage;
 
-  late THREE.WebGLRenderTarget renderTarget;
+  late three.WebGLRenderTarget renderTarget;
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   @override
   void initState() {
@@ -82,7 +83,7 @@ class _MyAppState extends State<webgl_debug_for_macos> {
 
     setState(() {});
 
-    // TODO web wait dom ok!!!
+    // Wait for web
     Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
@@ -127,24 +128,22 @@ class _MyAppState extends State<webgl_debug_for_macos> {
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Stack(
-            children: [
-              Container(
-                  width: width,
-                  height: height,
-                  color: Colors.black,
-                  child: Builder(builder: (BuildContext context) {
-                    if (kIsWeb) {
-                      return three3dRender.isInitialized
-                          ? HtmlElementView(viewType: three3dRender.textureId!.toString())
-                          : Container();
-                    } else {
-                      return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
-                    }
-                  })),
-            ],
-          ),
+        Stack(
+          children: [
+            Container(
+                width: width,
+                height: height,
+                color: Colors.black,
+                child: Builder(builder: (BuildContext context) {
+                  if (kIsWeb) {
+                    return three3dRender.isInitialized
+                        ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                        : Container();
+                  } else {
+                    return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
+                  }
+                })),
+          ],
         ),
         if (resultImage != null)
           Image.memory(
@@ -211,16 +210,16 @@ class _MyAppState extends State<webgl_debug_for_macos> {
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(options);
+    renderer = three.WebGLRenderer(options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = true;
-    renderer!.shadowMap.type = THREE.BasicShadowMap;
+    renderer!.shadowMap.type = three.BasicShadowMap;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions(
-          {"minFilter": THREE.LinearFilter, "magFilter": THREE.LinearFilter, "format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions(
+          {"minFilter": three.LinearFilter, "magFilter": three.LinearFilter, "format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }
@@ -236,23 +235,23 @@ class _MyAppState extends State<webgl_debug_for_macos> {
   }
 
   _initScene() {
-    camera = THREE.PerspectiveCamera(45, width / height, 1, 1000);
+    camera = three.PerspectiveCamera(45, width / height, 1, 1000);
     camera.position.set(0, 15, 70);
 
-    scene = THREE.Scene();
-    scene.background = THREE.Color(1.0, 0.0, 0.0);
+    scene = three.Scene();
+    scene.background = three.Color(1.0, 0.0, 0.0);
 
     camera.lookAt(scene.position);
 
-    dirLight = THREE.DirectionalLight(0xffffff, 1);
+    dirLight = three.DirectionalLight(0xffffff, 1);
     dirLight.name = 'Dir. Light';
     dirLight.position.set(0, 20, 40);
     scene.add(dirLight);
 
-    var geometry = THREE.BoxGeometry(10, 10, 10);
-    var material = THREE.MeshLambertMaterial({"color": 0xffffff});
+    var geometry = three.BoxGeometry(10, 10, 10);
+    var material = three.MeshLambertMaterial({"color": 0xffffff});
 
-    var box = THREE.Mesh(geometry, material);
+    var box = three.Mesh(geometry, material);
 
     scene.add(box);
 

@@ -15,8 +15,8 @@ void main  {
 
     print(matches!.group(0));
 
-    var _reg = RegExp(r"\bvoid\s+main\s*{");
+    var reg = RegExp(r"\bvoid\s+main\s*{");
 
-    print(_reg.hasMatch("""void main{"""));
+    print(reg.hasMatch("""void main{"""));
   });
 }

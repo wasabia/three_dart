@@ -14,7 +14,7 @@ export class Path extends CurvePath<Vector2> {
 	type: string;
 
 	/**
-	 * @default new THREE.Vector2()
+	 * @default new three.Vector2()
 	 */
 	currentPoint: Vector2;
 

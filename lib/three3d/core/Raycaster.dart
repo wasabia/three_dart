@@ -29,8 +29,7 @@ class Raycaster {
     return a.distance - b.distance >= 0 ? 1 : -1;
   }
 
-  void intersectObject4(Object3D object, Raycaster raycaster,
-      List<Intersection> intersects, bool recursive) {
+  void intersectObject4(Object3D object, Raycaster raycaster, List<Intersection> intersects, bool recursive) {
     if (object.layers.test(raycaster.layers)) {
       object.raycast(raycaster, intersects);
     }
@@ -53,28 +52,20 @@ class Raycaster {
   void setFromCamera(Vector2 coords, Camera camera) {
     if (camera is PerspectiveCamera) {
       ray.origin.setFromMatrixPosition(camera.matrixWorld);
-      ray
-          .direction
-          .set(coords.x, coords.y, 0.5)
-          .unproject(camera)
-          .sub(ray.origin)
-          .normalize();
+      ray.direction.set(coords.x, coords.y, 0.5).unproject(camera).sub(ray.origin).normalize();
       this.camera = camera;
     } else if (camera is OrthographicCamera) {
-      ray
-          .origin
-          .set(coords.x, coords.y,
-              (camera.near + camera.far) / (camera.near - camera.far))
+      ray.origin
+          .set(coords.x, coords.y, (camera.near + camera.far) / (camera.near - camera.far))
           .unproject(camera); // set origin in plane of camera
       ray.direction.set(0, 0, -1).transformDirection(camera.matrixWorld);
       this.camera = camera;
     } else {
-      print('THREE.Raycaster: Unsupported camera type: ' + camera.type);
+      print('three.Raycaster: Unsupported camera type: ' + camera.type);
     }
   }
 
-  List<Intersection> intersectObject(Object3D object, bool recursive,
-      [List<Intersection>? intersects]) {
+  List<Intersection> intersectObject(Object3D object, bool recursive, [List<Intersection>? intersects]) {
     List<Intersection> _intersects = intersects ?? [];
 
     intersectObject4(object, this, _intersects, recursive);
@@ -84,8 +75,7 @@ class Raycaster {
     return _intersects;
   }
 
-  List<Intersection> intersectObjects(List<Object3D> objects, bool recursive,
-      [List<Intersection>? intersects]) {
+  List<Intersection> intersectObjects(List<Object3D> objects, bool recursive, [List<Intersection>? intersects]) {
     intersects = intersects ?? List<Intersection>.from([]);
 
     for (var i = 0, l = objects.length; i < l; i++) {

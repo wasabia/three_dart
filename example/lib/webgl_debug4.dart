@@ -4,21 +4,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three_dart.dart' as THREE;
+import 'package:three_dart/three_dart.dart' as three;
 
+class WebGlDebug4 extends StatefulWidget {
+  final String fileName;
 
-class webgl_debug4 extends StatefulWidget {
-  String fileName;
-
-  webgl_debug4({Key? key, required this.fileName}) : super(key: key);
+  const WebGlDebug4({Key? key, required this.fileName}) : super(key: key);
 
   @override
-  createState() => _State();
+  State<WebGlDebug4> createState() => _State();
 }
 
-class _State extends State<webgl_debug4> {
+class _State extends State<WebGlDebug4> {
   late FlutterGlPlugin three3dRender;
-  THREE.WebGLRenderer? renderer;
+  three.WebGLRenderer? renderer;
 
   int? fboId;
   late double width;
@@ -26,25 +25,24 @@ class _State extends State<webgl_debug4> {
 
   Size? screenSize;
 
-  late THREE.Scene scene;
-  late THREE.Camera camera;
-  late THREE.Mesh mesh;
-
+  late three.Scene scene;
+  late three.Camera camera;
+  late three.Mesh mesh;
 
   double dpr = 1.0;
 
-  var AMOUNT = 4;
+  var amount = 4;
 
   bool verbose = true;
   bool disposed = false;
 
-  late THREE.Object3D object;
+  late three.Object3D object;
 
-  late THREE.Texture texture;
+  late three.Texture texture;
 
-  late THREE.WebGLRenderTarget renderTarget;
+  late three.WebGLRenderTarget renderTarget;
 
-  dynamic? sourceTexture;
+  dynamic sourceTexture;
 
   bool loaded = false;
 
@@ -53,7 +51,6 @@ class _State extends State<webgl_debug4> {
     super.initState();
   }
 
-
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     width = screenSize!.width;
@@ -61,7 +58,7 @@ class _State extends State<webgl_debug4> {
 
     three3dRender = FlutterGlPlugin();
 
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "antialias": true,
       "alpha": false,
       "width": width.toInt(),
@@ -69,11 +66,11 @@ class _State extends State<webgl_debug4> {
       "dpr": dpr
     };
 
-    await three3dRender.initialize(options: _options);
+    await three3dRender.initialize(options: options);
 
     setState(() {});
 
-    // TODO web wait dom ok!!!
+    // Wait for web
     Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
 
@@ -118,51 +115,44 @@ class _State extends State<webgl_debug4> {
   Widget _build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Stack(
-            children: [
-              Container(
-                  
-                  child: Container(
-                      width: width,
-                      height: height,
-                      color: Colors.black,
-                      child: Builder(builder: (BuildContext context) {
-                        if (kIsWeb) {
-                          return three3dRender.isInitialized
-                              ? HtmlElementView(
-                                  viewType: three3dRender.textureId!.toString())
-                              : Container();
-                        } else {
-                          return three3dRender.isInitialized
-                              ? Texture(textureId: three3dRender.textureId!)
-                              : Container();
-                        }
-                      }))),
-            ],
-          ),
+        Stack(
+          children: [
+            Container(
+                width: width,
+                height: height,
+                color: Colors.black,
+                child: Builder(builder: (BuildContext context) {
+                  if (kIsWeb) {
+                    return three3dRender.isInitialized
+                        ? HtmlElementView(viewType: three3dRender.textureId!.toString())
+                        : Container();
+                  } else {
+                    return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
+                  }
+                })),
+          ],
         ),
       ],
     );
   }
 
   render() {
-    int _t = DateTime.now().millisecondsSinceEpoch;
+    int t = DateTime.now().millisecondsSinceEpoch;
 
-    final _gl = three3dRender.gl;
+    final gl = three3dRender.gl;
 
     renderer!.render(scene, camera);
 
-    int _t1 = DateTime.now().millisecondsSinceEpoch;
+    int t1 = DateTime.now().millisecondsSinceEpoch;
 
     if (verbose) {
-      print("render cost: ${_t1 - _t} ");
+      print("render cost: ${t1 - t} ");
       print(renderer!.info.memory);
       print(renderer!.info.render);
     }
 
     // 重要 更新纹理之前一定要调用 确保gl程序执行完毕
-    _gl.flush();
+    gl.flush();
 
     if (verbose) print(" render: sourceTexture: $sourceTexture three3dRender.textureId! ${three3dRender.textureId!} ");
 
@@ -172,22 +162,21 @@ class _State extends State<webgl_debug4> {
   }
 
   initRenderer() {
-    Map<String, dynamic> _options = {
+    Map<String, dynamic> options = {
       "width": width,
       "height": height,
       "gl": three3dRender.gl,
       "antialias": true,
       "canvas": three3dRender.element
     };
-    renderer = THREE.WebGLRenderer(_options);
+    renderer = three.WebGLRenderer(options);
     renderer!.setPixelRatio(dpr);
     renderer!.setSize(width, height, false);
     renderer!.shadowMap.enabled = false;
 
     if (!kIsWeb) {
-      var pars = THREE.WebGLRenderTargetOptions({"format": THREE.RGBAFormat});
-      renderTarget = THREE.WebGLRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions({"format": three.RGBAFormat});
+      renderTarget = three.WebGLRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderTarget.samples = 4;
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
@@ -200,9 +189,9 @@ class _State extends State<webgl_debug4> {
   }
 
   initPage() {
-    camera = THREE.PerspectiveCamera(45, width / height, 1, 100);
+    camera = three.PerspectiveCamera(45, width / height, 1, 100);
     camera.position.z = 100;
-    
+
     var segmentHeight = 8;
     var segmentCount = 4;
     var height2 = segmentHeight * segmentCount;
@@ -215,80 +204,69 @@ class _State extends State<webgl_debug4> {
       "halfHeight": halfHeight.toInt()
     };
 
-    scene = THREE.Scene();
+    scene = three.Scene();
 
-    var ambientLight = THREE.AmbientLight(0xcccccc, 0.4);
+    var ambientLight = three.AmbientLight(0xcccccc, 0.4);
     scene.add(ambientLight);
 
     camera.lookAt(scene.position);
 
-    var geometry = THREE.CylinderGeometry( 5, 5, 5, 5, 15, false, 5, 360 );
+    var geometry = three.CylinderGeometry(5, 5, 5, 5, 15, false, 5, 360);
 
     // create the skin indices and skin weights manually
     // (typically a loader would read this data from a 3D model for you)
 
     var position = geometry.attributes["position"];
 
-    var vertex = THREE.Vector3();
+    var vertex = three.Vector3();
 
     List<int> skinIndices = [];
     List<double> skinWeights = [];
 
-    for ( var i = 0; i < position.count; i ++ ) {
-
-      vertex.fromBufferAttribute( position, i );
+    for (var i = 0; i < position.count; i++) {
+      vertex.fromBufferAttribute(position, i);
 
       // compute skinIndex and skinWeight based on some configuration data
 
-      var y = ( vertex.y + sizing["halfHeight"]! );
+      var y = (vertex.y + sizing["halfHeight"]!);
 
-      var skinIndex = THREE.Math.floor( y / sizing["segmentHeight"]! );
-      var skinWeight = ( y % sizing["segmentHeight"]! ) / sizing["segmentHeight"]!;
+      var skinIndex = three.Math.floor(y / sizing["segmentHeight"]!);
+      var skinWeight = (y % sizing["segmentHeight"]!) / sizing["segmentHeight"]!;
 
-      skinIndices.addAll( [skinIndex, skinIndex + 1, 0, 0] );
-      skinWeights.addAll( [1 - skinWeight, skinWeight, 0, 0] );
-
+      skinIndices.addAll([skinIndex, skinIndex + 1, 0, 0]);
+      skinWeights.addAll([1 - skinWeight, skinWeight, 0, 0]);
     }
 
-    geometry.setAttribute( 'skinIndex', THREE.Uint16BufferAttribute( Uint16Array.fromList(skinIndices), 4 ) );
-    geometry.setAttribute( 'skinWeight', THREE.Float32BufferAttribute( Float32Array.fromList(skinWeights), 4 ) );
+    geometry.setAttribute('skinIndex', three.Uint16BufferAttribute(Uint16Array.fromList(skinIndices), 4));
+    geometry.setAttribute('skinWeight', three.Float32BufferAttribute(Float32Array.fromList(skinWeights), 4));
 
     // create skinned mesh and skeleton
 
-    var material = THREE.MeshBasicMaterial( {
-      "color": 0x156289,
-      "side": THREE.DoubleSide,
-      "flatShading": true
-    } );
+    var material = three.MeshBasicMaterial({"color": 0x156289, "side": three.DoubleSide, "flatShading": true});
 
-    List<THREE.Bone> bones = [];
-    var prevBone = THREE.Bone();
-    bones.add( prevBone );
-    prevBone.position.y = - sizing["halfHeight"]!.toDouble();
+    List<three.Bone> bones = [];
+    var prevBone = three.Bone();
+    bones.add(prevBone);
+    prevBone.position.y = -sizing["halfHeight"]!.toDouble();
 
-    for ( var i = 0; i < sizing["segmentCount"]!; i ++ ) {
-
-      var bone = THREE.Bone();
+    for (var i = 0; i < sizing["segmentCount"]!; i++) {
+      var bone = three.Bone();
       bone.position.y = sizing["segmentHeight"]!.toDouble();
-      bones.add( bone );
-      prevBone.add( bone );
+      bones.add(bone);
+      prevBone.add(bone);
       prevBone = bone;
-
     }
 
+    var mesh = three.SkinnedMesh(geometry, material);
+    var skeleton = three.Skeleton(bones);
 
+    var rootBone = skeleton.bones[0];
+    mesh.add(rootBone);
+    mesh.bind(skeleton);
+    skeleton.bones[0].rotation.x = -0.1;
+    skeleton.bones[1].rotation.x = 0.2;
 
-    var mesh = THREE.SkinnedMesh( geometry, material );
-    var skeleton = THREE.Skeleton( bones );
-
-
-    var rootBone = skeleton.bones[ 0 ];
-    mesh.add( rootBone );
-    mesh.bind( skeleton );
-    skeleton.bones[ 0 ].rotation.x = -0.1;
-    skeleton.bones[ 1 ].rotation.x = 0.2;
-
-    scene.add( mesh );
+    scene.add(mesh);
 
     loaded = true;
 
@@ -308,8 +286,6 @@ class _State extends State<webgl_debug4> {
     if (!loaded) {
       return;
     }
-
-
 
     render();
 
