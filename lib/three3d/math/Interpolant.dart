@@ -17,8 +17,6 @@
 /// 		http://www.oodesign.com/template-method-pattern.html
 ///
 
-part of three_math;
-
 class Interpolant {
   late dynamic parameterPositions;
   int _cachedIndex = 0;

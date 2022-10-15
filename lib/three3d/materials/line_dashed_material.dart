@@ -1,4 +1,5 @@
-part of three_materials;
+import 'package:three_dart/three3d/materials/line_basic_material.dart';
+import 'package:three_dart/three3d/materials/material.dart';
 
 class LineDashedMaterial extends LineBasicMaterial {
   LineDashedMaterial([Map<String, dynamic>? parameters]) : super() {

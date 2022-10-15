@@ -18,13 +18,16 @@ class AnimationUtils {
 
   // converts an array to a specific type
   static convertArray(array, String type, [bool forceClone = false]) {
+
+    print(" convert Array to ${type} ");
+
     // var 'null' and 'null' pass
     // TODO runtimeType on web release mode will not same as debug
     if (array == null || !forceClone && array.runtimeType.toString() == type) {
       return array;
     }
 
-    if (array is NativeArray && type is List) {
+    if (array is NativeArray && type == 'List<num>') {
       return array.toDartList();
     }
 

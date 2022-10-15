@@ -1,4 +1,3 @@
-part of three_webgl;
 
 class WebGLInfo {
   dynamic gl;

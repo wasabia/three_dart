@@ -1,4 +1,6 @@
-part of three_extra;
+
+import 'package:three_dart/three3d/extras/core/shape_path.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 double DEGS_TO_RADS = Math.PI / 180;
 num DIGIT_0 = 48, DIGIT_9 = 57, COMMA = 44, SPACE = 32, PERIOD = 46, MINUS = 45;

@@ -1,4 +1,16 @@
-part of three_webgl;
+
+import 'package:flutter/foundation.dart';
+import 'package:three_dart/extra/console.dart';
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/core/event_dispatcher.dart';
+import 'package:three_dart/three3d/extras/image_utils.dart';
+import 'package:three_dart/three3d/math/index.dart';
+import 'package:three_dart/three3d/renderers/web_gl_3d_render_target.dart';
+import 'package:three_dart/three3d/renderers/web_gl_array_render_target.dart';
+import 'package:three_dart/three3d/renderers/web_gl_render_target.dart';
+import 'package:three_dart/three3d/renderers/webgl/index.dart';
+import 'package:three_dart/three3d/textures/index.dart';
+import 'package:three_dart/three3d/weak_map.dart';
 
 class WebGLTextures {
   dynamic gl;

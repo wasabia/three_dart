@@ -1,4 +1,8 @@
-part of three_objects;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
+import 'package:three_dart/three3d/objects/line.dart';
 
 var _lsstart = Vector3.init();
 var _lsend = Vector3.init();

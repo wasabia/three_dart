@@ -220,9 +220,9 @@ class _MyAppState extends State<WebGlLoaderGtlf> {
 
     scene.add(three.AmbientLight(0xffffff));
 
-    loader = three_jsm.GLTFLoader(null).setPath('assets/models/gltf/DamagedHelmet/glTF/');
+    var gltfLoader = three_jsm.GLTFLoader(null).setPath('assets/models/gltf/DamagedHelmet/glTF/');
 
-    var result = await loader.loadAsync('DamagedHelmet.gltf');
+    var result = await gltfLoader.loadAsync('DamagedHelmet.gltf');
 
     print(" gltf load sucess result: $result  ");
 

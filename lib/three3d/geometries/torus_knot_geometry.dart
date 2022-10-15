@@ -1,4 +1,7 @@
-part of three_geometries;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 class TorusKnotGeometry extends BufferGeometry {
   @override

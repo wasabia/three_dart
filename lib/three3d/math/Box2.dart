@@ -1,4 +1,6 @@
-part of three_math;
+
+
+import 'package:three_dart/three3d/math/index.dart';
 
 var _vector = Vector2(null, null);
 

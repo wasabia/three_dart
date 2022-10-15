@@ -1,4 +1,3 @@
-part of three_webgl;
 
 /*
  * Uniforms of a program.
@@ -44,6 +43,8 @@ part of three_webgl;
  */
 
 // Root Container
+
+import 'package:three_dart/three3d/renderers/webgl/index.dart';
 
 class WebGLUniforms with WebGLUniform {
   dynamic gl;

@@ -1,5 +1,6 @@
-part of three_textures;
 
+import 'package:three_dart/three3d/textures/texture.dart';
+import 'package:three_dart/three3d/constants.dart';
 class OpenGLTexture extends Texture {
   dynamic openGLTexture;
 

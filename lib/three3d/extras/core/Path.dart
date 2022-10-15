@@ -1,4 +1,8 @@
-part of three_extra;
+
+import 'package:three_dart/three3d/extras/core/curve_path.dart';
+import 'package:three_dart/three3d/extras/curves/line_curve.dart';
+import 'package:three_dart/three3d/extras/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 class Path extends CurvePath {
   @override

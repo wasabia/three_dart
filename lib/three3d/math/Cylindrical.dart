@@ -2,7 +2,9 @@
  * Ref: https://en.wikipedia.org/wiki/Cylindrical_coordinate_system
  */
 
-part of three_math;
+
+import 'package:three_dart/three3d/math/math.dart';
+import 'package:three_dart/three3d/math/vector3.dart';
 
 class Cylindrical {
   late num radius;

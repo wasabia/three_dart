@@ -1,4 +1,11 @@
-part of three_math;
+
+import 'package:three_dart/three3d/core/buffer_attribute.dart';
+import 'package:three_dart/three3d/math/euler.dart';
+import 'package:three_dart/three3d/math/math.dart';
+import 'package:three_dart/three3d/math/math_utils.dart';
+import 'package:three_dart/three3d/math/matrix3.dart';
+import 'package:three_dart/three3d/math/matrix4.dart';
+import 'package:three_dart/three3d/math/quaternion.dart';
 
 var _vector3 = Vector3(0, 0, 0);
 
@@ -551,9 +558,9 @@ class Vector3 {
   }
 
   Vector3 setFromEuler(Euler e) {
-    x = e._x;
-    y = e._y;
-    z = e._z;
+    x = e.x;
+    y = e.y;
+    z = e.z;
 
     return this;
   }

@@ -1,4 +1,11 @@
-part of three_webgl;
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/materials/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
+import 'package:three_dart/three3d/renderers/webgl/index.dart';
+import 'package:three_dart/three3d/weak_map.dart';
 
 class WebGLState {
   bool isWebGL2 = true;

@@ -1,5 +1,4 @@
-part of three_math;
-
+import 'dart:math' as math;
 class Math {
   static double Infinity = double.maxFinite;
   static const double PI = math.pi;

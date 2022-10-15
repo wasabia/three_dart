@@ -1,4 +1,9 @@
-part of three_webgl;
+
+import 'package:three_dart/extra/console.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/materials/index.dart';
+import 'package:three_dart/three3d/objects/index.dart';
+import 'package:three_dart/three3d/renderers/webgl/index.dart';
 
 class WebGLBindingStates {
   dynamic gl;

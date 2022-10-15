@@ -1,4 +1,6 @@
-part of three_webgl;
+
+import 'package:three_dart/three3d/renderers/webgl/index.dart';
+import 'package:three_dart/three3d/weak_map.dart';
 
 class WebGLRenderLists {
   WebGLRenderLists();

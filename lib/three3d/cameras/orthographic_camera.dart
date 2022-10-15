@@ -1,4 +1,8 @@
-part of three_camera;
+
+import 'dart:convert';
+
+import 'package:three_dart/three3d/cameras/camera.dart';
+import 'package:three_dart/three3d/core/index.dart';
 
 class OrthographicCamera extends Camera {
   OrthographicCamera(

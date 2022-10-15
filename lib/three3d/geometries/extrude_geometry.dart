@@ -1,30 +1,8 @@
-part of three_geometries;
 
-/// Creates extruded geometry from a path shape.
-///
-/// parameters = {
-///
-///  curveSegments: <int>, // number of points on the curves
-///  steps: <int>, // number of points for z-side extrusions / used for subdividing segments of extrude spline too
-///  depth: <float>, // Depth to extrude the shape
-///
-///  bevelEnabled: <bool>, // turn on bevel
-///  bevelThickness: <float>, // how deep into the original shape bevel goes
-///  bevelSize: <float>, // how far from shape outline (including bevelOffset) is bevel
-///  bevelOffset: <float>, // how far from shape outline does bevel start
-///  bevelSegments: <int>, // number of bevel layers
-///
-///  extrudePath: <three.Curve> // curve to extrude shape along
-///
-///  UVGenerator: <Object> // object that provides UV generator functions
-///
-/// }
-
-// import { BufferGeometry } from '../core/BufferGeometry.js';
-// import { Float32BufferAttribute } from '../core/BufferAttribute.js';
-// import { Vector2 } from '../math/Vector2.js';
-// import { Vector3 } from '../math/Vector3.js';
-// import { ShapeUtils } from '../extras/ShapeUtils.js';
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/extras/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 class ExtrudeGeometry extends BufferGeometry {
   @override

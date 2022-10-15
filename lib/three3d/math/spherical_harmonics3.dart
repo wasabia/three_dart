@@ -1,4 +1,5 @@
-part of three_math;
+
+import 'package:three_dart/three3d/math/vector3.dart';
 
 /// Primary reference:
 ///   https://graphics.stanford.edu/papers/envmap/envmap.pdf

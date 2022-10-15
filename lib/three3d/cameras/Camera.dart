@@ -1,4 +1,6 @@
-part of three_camera;
+
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 class Camera extends Object3D {
   @override

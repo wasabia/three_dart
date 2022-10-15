@@ -1,4 +1,5 @@
-part of three_webgl;
+
+import 'package:three_dart/three3d/renderers/webgl/web_gl_extensions.dart';
 
 class WebGLCapabilities {
   bool isWebGL2 = true;

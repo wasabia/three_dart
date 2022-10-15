@@ -1,4 +1,11 @@
-part of three_webgl;
+
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/materials/index.dart';
+import 'package:three_dart/three3d/materials/material.dart';
+import 'package:three_dart/three3d/math/index.dart';
+import 'package:three_dart/three3d/renderers/web_gl_renderer.dart';
+import 'package:three_dart/three3d/renderers/webgl/web_gl_properties.dart';
+import 'package:three_dart/three3d/textures/index.dart';
 
 class WebGLMaterials {
    WebGLRenderer renderer;

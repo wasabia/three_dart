@@ -1,4 +1,13 @@
-part of three_renderers;
+
+import 'package:three_dart/three3d/cameras/index.dart';
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/geometries/index.dart';
+import 'package:three_dart/three3d/materials/index.dart';
+import 'package:three_dart/three3d/objects/index.dart';
+import 'package:three_dart/three3d/renderers/shaders/index.dart';
+import 'package:three_dart/three3d/renderers/web_gl_render_target.dart';
+import 'package:three_dart/three3d/renderers/web_gl_renderer.dart';
+import 'package:three_dart/three3d/textures/index.dart';
 
 class WebGLCubeRenderTarget extends WebGLRenderTarget {
   WebGLCubeRenderTarget(int size, options, dummy)

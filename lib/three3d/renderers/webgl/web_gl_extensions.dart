@@ -1,4 +1,5 @@
-part of three_webgl;
+
+import 'package:flutter/foundation.dart';
 
 class WebGLExtensions {
   Map<String, dynamic> extensions = {};

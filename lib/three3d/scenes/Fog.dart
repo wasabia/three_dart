@@ -1,4 +1,5 @@
-part of three_scenes;
+
+import 'package:three_dart/three3d/math/index.dart';
 
 class FogBase {
   String name = "";

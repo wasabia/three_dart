@@ -1,4 +1,3 @@
-part of three_extra;
 
 var _canvas;
 

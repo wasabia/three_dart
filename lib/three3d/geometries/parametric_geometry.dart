@@ -1,7 +1,8 @@
-part of three_geometries;
 
-/// Parametric Surfaces Geometry
-/// based on the brilliant article by @prideout https://prideout.net/blog/old/blog/index.html@p=44.html
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
+
 
 class ParametricGeometry extends BufferGeometry {
   @override

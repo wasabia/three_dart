@@ -1,5 +1,6 @@
-part of three_materials;
-
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/materials/material.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 class MeshNormalMaterial extends Material {
   MeshNormalMaterial([Map<String, dynamic>? parameters]) : super() {

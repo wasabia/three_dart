@@ -1,4 +1,3 @@
-part of three_textures;
 
 class ImageElement {
   String? uuid;

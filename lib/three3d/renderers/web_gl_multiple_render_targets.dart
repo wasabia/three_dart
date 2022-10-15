@@ -1,4 +1,5 @@
-part of three_renderers;
+
+import 'package:three_dart/three3d/renderers/web_gl_render_target.dart';
 
 class WebGLMultipleRenderTargets extends WebGLRenderTarget {
   WebGLMultipleRenderTargets(

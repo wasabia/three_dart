@@ -1,4 +1,5 @@
-part of three_webgl;
+
+import 'package:three_dart/three3d/materials/index.dart';
 
 int _id = 0;
 

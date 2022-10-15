@@ -1,27 +1,21 @@
-library three_core;
+library core;
 
-import 'dart:convert';
 
-import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/extra/console.dart';
-import 'package:three_dart/three_dart.dart';
-import 'package:three_dart/three3d/utils.dart';
+export 'base_buffer_attribute.dart';
+export 'buffer_attribute.dart';
+export 'buffer_geometry.dart';
+export 'clock.dart';
 
-part 'base_buffer_attribute.dart';
-part 'buffer_attribute.dart';
-part 'buffer_geometry.dart';
-part 'clock.dart';
+export 'event_dispatcher.dart';
 
-part 'event_dispatcher.dart';
+export 'gl_buffer_attribute.dart';
 
-part 'gl_buffer_attribute.dart';
+export 'instanced_buffer_attribute.dart';
+export 'instanced_buffer_geometry.dart';
 
-part 'instanced_buffer_attribute.dart';
-part 'instanced_buffer_geometry.dart';
-
-part 'interleaved_buffer.dart';
-part 'interleaved_buffer_attribute.dart';
-part 'instanced_interleaved_buffer.dart';
-part 'layers.dart';
-part 'object_3d.dart';
-part 'raycaster.dart';
+export 'interleaved_buffer.dart';
+export 'interleaved_buffer_attribute.dart';
+export 'instanced_interleaved_buffer.dart';
+export 'layers.dart';
+export 'object_3d.dart';
+export 'raycaster.dart';

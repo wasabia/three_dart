@@ -1,4 +1,10 @@
-part of three_objects;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/core/buffer_geometry.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/core/object_3d.dart';
+import 'package:three_dart/three3d/materials/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 var _start = Vector3.init();
 var _end = Vector3.init();

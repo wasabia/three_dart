@@ -1,4 +1,9 @@
-part of three_math;
+
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/math/euler.dart';
+import 'package:three_dart/three3d/math/math.dart';
+import 'package:three_dart/three3d/math/math_utils.dart';
+import 'package:three_dart/three3d/math/vector3.dart';
 
 class Quaternion {
   String type = "Quaternion";

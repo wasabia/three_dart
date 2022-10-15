@@ -1,4 +1,5 @@
-part of three_core;
+
+import 'package:three_dart/three3d/core/base_buffer_attribute.dart';
 
 class GLBufferAttribute extends BaseBufferAttribute {
   GLBufferAttribute(

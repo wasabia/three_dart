@@ -1,4 +1,6 @@
-part of three_extra;
+
+
+import 'package:three_dart/three3d/math/index.dart';
 
 /// Port from https://github.com/mapbox/earcut (v2.2.2)
 

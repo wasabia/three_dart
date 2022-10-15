@@ -1,4 +1,6 @@
-part of three_core;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/core/buffer_attribute.dart';
 
 class InstancedBufferAttribute extends BufferAttribute {
   late int meshPerAttribute;

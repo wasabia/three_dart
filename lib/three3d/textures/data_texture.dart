@@ -1,4 +1,6 @@
-part of three_textures;
+
+import 'package:three_dart/three3d/textures/texture.dart';
+import 'package:three_dart/three3d/textures/image_element.dart';
 
 class DataTexture extends Texture {
   DataTexture(

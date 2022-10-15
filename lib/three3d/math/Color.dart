@@ -1,4 +1,8 @@
-part of three_math;
+
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/dart_helpers.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 const Map<String, int> _colorKeywords = {
   'aliceblue': 0xF0F8FF,

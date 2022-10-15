@@ -1,4 +1,8 @@
-part of three_math;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/math/math.dart';
+import 'package:three_dart/three3d/math/matrix4.dart';
+import 'package:three_dart/three3d/math/vector3.dart';
 
 class Matrix3 {
   String type = "Matrix3";

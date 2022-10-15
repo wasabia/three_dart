@@ -1,4 +1,10 @@
-part of three_math;
+
+import 'package:three_dart/three3d/math/box3.dart';
+import 'package:three_dart/three3d/math/math.dart';
+import 'package:three_dart/three3d/math/matrix4.dart';
+import 'package:three_dart/three3d/math/plane.dart';
+import 'package:three_dart/three3d/math/sphere.dart';
+import 'package:three_dart/three3d/math/vector3.dart';
 
 class Ray {
   final _vector = /*@__PURE__*/ Vector3.init();
