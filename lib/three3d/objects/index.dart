@@ -1,22 +1,14 @@
-library three_objects;
+library objects;
 
-import 'dart:convert';
 
-import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three3d/constants.dart';
-import 'package:three_dart/three3d/core/index.dart';
-import 'package:three_dart/three3d/materials/index.dart';
-import 'package:three_dart/three3d/math/index.dart';
-import 'package:three_dart/three3d/textures/index.dart';
-
-part 'bone.dart';
-part 'group.dart';
-part 'instanced_mesh.dart';
-part 'line.dart';
-part 'line_loop.dart';
-part 'line_segments.dart';
-part 'mesh.dart';
-part 'points.dart';
-part 'skeleton.dart';
-part 'skinned_mesh.dart';
-part 'sprite.dart';
+export 'bone.dart';
+export 'group.dart';
+export 'instanced_mesh.dart';
+export 'line.dart';
+export 'line_loop.dart';
+export 'line_segments.dart';
+export 'mesh.dart';
+export 'points.dart';
+export 'skeleton.dart';
+export 'skinned_mesh.dart';
+export 'sprite.dart';

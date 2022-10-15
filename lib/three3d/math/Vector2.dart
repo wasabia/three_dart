@@ -1,4 +1,7 @@
-part of three_math;
+
+
+import 'package:three_dart/three3d/math/math.dart';
+import 'package:three_dart/three3d/math/matrix3.dart';
 
 class Vector2 {
   String type = "Vector2";

@@ -1,4 +1,7 @@
-part of three_extra;
+
+import 'package:three_dart/three3d/core/object_3d.dart';
+import 'package:three_dart/three3d/extras/core/path.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 class Shape extends Path {
   late String uuid;

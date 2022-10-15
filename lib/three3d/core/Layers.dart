@@ -1,4 +1,3 @@
-part of three_core;
 
 class Layers {
   int mask = 1 | 0;

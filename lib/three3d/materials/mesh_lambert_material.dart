@@ -1,4 +1,7 @@
-part of three_materials;
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/materials/material.dart';
+import 'package:three_dart/three3d/math/color.dart';
+
 
 class MeshLambertMaterial extends Material {
   MeshLambertMaterial([parameters]) : super() {

@@ -1,4 +1,8 @@
-part of three_webgl;
+
+import 'package:three_dart/three3d/cameras/camera.dart';
+import 'package:three_dart/three3d/materials/material.dart';
+import 'package:three_dart/three3d/math/index.dart';
+import 'package:three_dart/three3d/renderers/webgl/web_gl_properties.dart';
 
 class WebGLClipping {
   WebGLProperties properties;

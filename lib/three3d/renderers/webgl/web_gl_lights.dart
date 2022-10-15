@@ -1,4 +1,14 @@
-part of three_webgl;
+
+import 'package:three_dart/three3d/dart_helpers.dart';
+import 'package:three_dart/three3d/lights/index.dart';
+import 'package:three_dart/three3d/math/color.dart';
+import 'package:three_dart/three3d/math/index.dart';
+import 'package:three_dart/three3d/math/matrix4.dart';
+import 'package:three_dart/three3d/math/vector2.dart';
+import 'package:three_dart/three3d/math/vector3.dart';
+import 'package:three_dart/three3d/renderers/shaders/index.dart';
+import 'package:three_dart/three3d/renderers/webgl/web_gl_capabilities.dart';
+import 'package:three_dart/three3d/renderers/webgl/web_gl_extensions.dart';
 
 class UniformsCache {
   UniformsCache();

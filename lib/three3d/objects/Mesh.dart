@@ -1,4 +1,12 @@
-part of three_objects;
+
+import 'dart:convert';
+
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/core/object_3d.dart';
+import 'package:three_dart/three3d/materials/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
+import 'package:three_dart/three3d/objects/skinned_mesh.dart';
 
 var _meshinverseMatrix = Matrix4();
 var _meshray = Ray(null, null);

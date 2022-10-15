@@ -1,4 +1,7 @@
-part of three_webgl;
+
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/renderers/webgl/index.dart';
+import 'package:three_dart/extra/console.dart';
 
 class WebGLUtils {
   bool isWebGL2 = true;

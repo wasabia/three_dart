@@ -1,4 +1,9 @@
-part of three_extra;
+
+import 'package:three_dart/three3d/dart_helpers.dart';
+import 'package:three_dart/three3d/extras/core/path.dart';
+import 'package:three_dart/three3d/extras/core/shape.dart';
+import 'package:three_dart/three3d/extras/shape_utils.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 class ShapePath {
   String type = "ShapePath";

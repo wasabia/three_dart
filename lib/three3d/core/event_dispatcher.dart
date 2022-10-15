@@ -1,4 +1,3 @@
-part of three_core;
 
 /// https://github.com/mrdoob/eventdispatcher.js/
 

@@ -1,4 +1,7 @@
-part of three_math;
+
+import 'package:three_dart/three3d/core/buffer_geometry.dart';
+import 'package:three_dart/three3d/core/object_3d.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 /// Ported from: https://github.com/maurizzzio/quickhull3d/ by Mauricio Poppe (https://github.com/maurizzzio)
 

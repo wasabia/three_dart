@@ -1,4 +1,13 @@
-part of three_core;
+
+import 'dart:convert';
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/extras/index.dart';
+import 'package:three_dart/three3d/geometries/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
+import 'package:three_dart/three3d/utils.dart';
+import 'package:three_dart/extra/console.dart';
 
 int _bufferGeometryId = 1; // BufferGeometry uses odd numbers as Id
 
@@ -8,6 +17,8 @@ var _bufferGeometryoffset = Vector3.init();
 var _bufferGeometrybox = Box3(null, null);
 var _bufferGeometryboxMorphTargets = Box3(null, null);
 var _bufferGeometryvector = Vector3.init();
+
+Matrix4 _m1 = Matrix4();
 
 class BufferGeometry with EventDispatcher {
   int id = _bufferGeometryId += 2;

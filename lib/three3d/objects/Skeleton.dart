@@ -1,4 +1,9 @@
-part of three_objects;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/math/index.dart';
+import 'package:three_dart/three3d/objects/bone.dart';
+import 'package:three_dart/three3d/textures/data_texture.dart';
 
 var _offsetMatrix = Matrix4();
 var _identityMatrix = Matrix4();

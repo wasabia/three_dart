@@ -1,4 +1,13 @@
-part of three_webgl;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/core/buffer_attribute.dart';
+import 'package:three_dart/three3d/core/buffer_geometry.dart';
+import 'package:three_dart/three3d/core/event_dispatcher.dart';
+import 'package:three_dart/three3d/core/instanced_buffer_geometry.dart';
+import 'package:three_dart/three3d/renderers/webgl/index.dart';
+import 'package:three_dart/three3d/renderers/webgl/web_gl_binding_states.dart';
+import 'package:three_dart/three3d/utils.dart';
+import 'package:three_dart/three3d/weak_map.dart';
 
 class WebGLGeometries {
   dynamic gl;

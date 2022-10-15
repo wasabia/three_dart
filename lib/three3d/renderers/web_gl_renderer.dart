@@ -1,4 +1,17 @@
-part of three_renderers;
+
+import 'package:three_dart/three3d/cameras/index.dart';
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/lights/index.dart';
+import 'package:three_dart/three3d/materials/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
+import 'package:three_dart/three3d/objects/index.dart';
+import 'package:three_dart/three3d/renderers/web_gl_render_target.dart';
+import 'package:three_dart/three3d/renderers/webgl/index.dart';
+import 'package:three_dart/three3d/renderers/webxr/web_xr_manager.dart';
+import 'package:three_dart/three3d/scenes/index.dart';
+import 'package:three_dart/three3d/textures/index.dart';
+import 'package:three_dart/extra/console.dart';
 
 class WebGLRenderer {
   late Map<String, dynamic> parameters;
@@ -686,7 +699,7 @@ class WebGLRenderer {
     currentRenderState!.setupLights(physicallyCorrectLights);
 
     if (camera is ArrayCamera) {
-      var cameras = camera.cameras;
+      var cameras = (camera as ArrayCamera).cameras;
 
       for (var i = 0, l = cameras.length; i < l; i++) {
         var camera2 = cameras[i];

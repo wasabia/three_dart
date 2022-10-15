@@ -1,4 +1,3 @@
-part of three_core;
 
 class Clock {
   late bool autoStart;

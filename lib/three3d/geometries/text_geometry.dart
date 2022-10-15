@@ -1,19 +1,11 @@
-part of three_geometries;
 
-/// Text = 3D Text
-///
-/// parameters = {
-///  font: <three.Font>, // font
-///
-///  size: <float>, // size of the text
-///  height: <float>, // thickness to extrude text
-///  curveSegments: <int>, // number of points on the curves
-///
-///  bevelEnabled: <bool>, // turn on bevel
-///  bevelThickness: <float>, // how deep into text bevel goes
-///  bevelSize: <float>, // how far from text outline (including bevelOffset) is bevel
-///  bevelOffset: <float> // how far from text outline does bevel start
-/// }
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/extras/core/shape.dart';
+import 'package:three_dart/three3d/extras/core/ttf_font.dart';
+import 'package:three_dart/three3d/geometries/extrude_geometry.dart';
+import 'package:three_dart/three3d/math/index.dart';
+
 
 class TextGeometry extends ExtrudeGeometry {
   @override

@@ -1,4 +1,5 @@
-part of three_math;
+
+import 'package:three_dart/three3d/math/interpolant.dart';
 
 ///
 /// Interpolant that evaluates to the sample value at the position preceeding

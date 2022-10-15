@@ -1,13 +1,8 @@
-part of three_geometries;
 
-// radiusTop — 顶部圆柱体的半径。默认值为1.
-// radiusBottom — 底部圆柱体的半径。默认值为1.
-// height — 圆柱体的高度。默认值为1.
-// radialSegments — 圆柱周围的分段面数。默认值为8
-// heightSegments — 沿圆柱体高度的面的行数。默认值为1.
-// openEnded — 圆柱体的两端是否显示，默认值是false，显示。
-// thetaStart — 第一段的起始角度，默认值是0（Three.js的0度位置）。
-// thetaLength — 圆形扇形的中心角，通常称为theta。默认值是2 * Pi，画出一个整圆
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
+
 
 class CylinderGeometry extends BufferGeometry {
   @override

@@ -1,4 +1,5 @@
-part of three_textures;
+
+import 'package:three_dart/three3d/textures/texture.dart';
 
 class CanvasTexture extends Texture {
   bool isCanvasTexture = true;

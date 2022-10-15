@@ -1,6 +1,7 @@
-// import { Vector3 } from '../../math/Vector3.js';
-// import { Curve } from '../core/Curve.js';
-part of three_extra;
+
+
+import 'package:three_dart/three3d/extras/core/curve.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 /// Centripetal CatmullRom Curve - which is useful for avoiding
 /// cusps and self-intersections in non-uniform catmull rom curves.

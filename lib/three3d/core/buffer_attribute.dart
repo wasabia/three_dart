@@ -1,4 +1,8 @@
-part of three_core;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/core/base_buffer_attribute.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 abstract class BufferAttribute<TData extends NativeArray>
     extends BaseBufferAttribute<TData> {

@@ -1,4 +1,6 @@
-part of three_math;
+
+import 'package:three_dart/three3d/math/interpolant.dart';
+import 'package:three_dart/three3d/math/quaternion.dart';
 
 /// Spherical linear unit quaternion interpolant.
 

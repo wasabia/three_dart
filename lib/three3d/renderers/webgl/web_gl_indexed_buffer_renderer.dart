@@ -1,4 +1,8 @@
-part of three_webgl;
+
+import 'package:three_dart/three3d/renderers/webgl/web_gl_buffer_renderer.dart';
+import 'package:three_dart/three3d/renderers/webgl/web_gl_capabilities.dart';
+import 'package:three_dart/three3d/renderers/webgl/web_gl_extensions.dart';
+import 'package:three_dart/three3d/renderers/webgl/web_gl_info.dart';
 
 class WebGLIndexedBufferRenderer extends BaseWebGLBufferRenderer {
   bool isWebGL2 = false;

@@ -5,7 +5,13 @@
 */
 // import "package:universal_html/html.dart";
 
-part of three_renderers;
+
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/core/event_dispatcher.dart';
+import 'package:three_dart/three3d/math/vector4.dart';
+import 'package:three_dart/three3d/textures/index.dart';
+
+
 
 abstract class RenderTarget with EventDispatcher {
   late int width;

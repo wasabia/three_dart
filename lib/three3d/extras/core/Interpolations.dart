@@ -1,4 +1,3 @@
-part of three_extra;
 
 /// Bezier Curves formulas obtained from
 /// http://en.wikipedia.org/wiki/Bézier_curve

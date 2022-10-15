@@ -1,4 +1,7 @@
-part of three_textures;
+
+import 'package:three_dart/three3d/textures/texture.dart';
+import 'package:three_dart/three3d/textures/image_element.dart';
+import 'package:three_dart/three3d/constants.dart';
 
 class DepthTexture extends Texture {
   DepthTexture(int width, int height, type, mapping, wrapS, wrapT, magFilter, minFilter, anisotropy, format)

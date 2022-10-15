@@ -1,4 +1,10 @@
-part of three_math;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/math/euler.dart';
+import 'package:three_dart/three3d/math/math.dart';
+import 'package:three_dart/three3d/math/matrix3.dart';
+import 'package:three_dart/three3d/math/quaternion.dart';
+import 'package:three_dart/three3d/math/vector3.dart';
 
 var _matrix4v1 = Vector3.init();
 var _matrix4m1 = Matrix4();

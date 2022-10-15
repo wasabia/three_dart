@@ -1,4 +1,6 @@
-part of three_extra;
+
+
+import 'dart:typed_data';
 
 var _floatView = Float32List(1);
 var _int32View = Int32List.view(_floatView.buffer);

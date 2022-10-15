@@ -1,4 +1,6 @@
-part of three_math;
+
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/math/interpolant.dart';
 
 /// Fast and simple cubic spline interpolant.
 ///

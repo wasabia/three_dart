@@ -1,4 +1,9 @@
-part of three_webgl;
+
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/extras/pmrem_generator.dart';
+import 'package:three_dart/three3d/renderers/web_gl_renderer.dart';
+import 'package:three_dart/three3d/textures/index.dart';
+import 'package:three_dart/three3d/weak_map.dart';
 
 class WebGLCubeUVMaps {
   var cubeUVmaps = WeakMap();

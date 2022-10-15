@@ -1,4 +1,8 @@
-part of three_scenes;
+
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/extras/index.dart';
+import 'package:three_dart/three3d/materials/index.dart';
+import 'package:three_dart/three3d/scenes/fog.dart';
 
 class Scene extends Object3D {
   @override

@@ -1,4 +1,5 @@
-part of three_objects;
+
+import 'package:three_dart/three3d/core/object_3d.dart';
 
 class Group extends Object3D {
   bool isGroup = true;

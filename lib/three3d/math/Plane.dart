@@ -1,4 +1,10 @@
-part of three_math;
+
+import 'package:three_dart/three3d/math/box3.dart';
+import 'package:three_dart/three3d/math/line3.dart';
+import 'package:three_dart/three3d/math/matrix3.dart';
+import 'package:three_dart/three3d/math/matrix4.dart';
+import 'package:three_dart/three3d/math/sphere.dart';
+import 'package:three_dart/three3d/math/vector3.dart';
 
 var _vector1 = Vector3.init();
 var _vector2 = Vector3.init();

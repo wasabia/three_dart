@@ -1,4 +1,5 @@
-part of three_extra;
+
+import 'package:three_dart/three3d/extras/earcut.dart';
 
 class ShapeUtils {
   // calculate area of the contour polygon

@@ -1,4 +1,7 @@
-part of three_core;
+
+import 'package:three_dart/three3d/core/buffer_geometry.dart';
+import 'package:three_dart/three3d/core/object_3d.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 class InstancedBufferGeometry extends BufferGeometry {
   InstancedBufferGeometry() : super() {

@@ -1,4 +1,8 @@
-part of three_extra;
+
+
+import 'package:three_dart/three3d/extras/core/curve.dart';
+import 'package:three_dart/three3d/extras/core/interpolations.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 class CubicBezierCurve extends Curve {
   @override

@@ -1,4 +1,8 @@
-part of three_geometries;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/dart_helpers.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 class PolyhedronGeometry extends BufferGeometry {
   PolyhedronGeometry(vertices, indices, [radius = 1, detail = 0]) : super() {

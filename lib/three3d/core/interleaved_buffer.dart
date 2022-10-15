@@ -1,4 +1,7 @@
-part of three_core;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 class InterleavedBuffer {
   NativeArray array;

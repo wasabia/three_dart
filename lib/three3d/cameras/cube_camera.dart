@@ -1,4 +1,10 @@
-part of three_camera;
+
+
+import 'package:three_dart/three3d/cameras/perspective_camera.dart';
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
+import 'package:three_dart/three3d/renderers/index.dart';
 
 class CubeCamera extends Object3D {
   late WebGLCubeRenderTarget renderTarget;
