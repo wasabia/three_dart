@@ -1,4 +1,14 @@
-part of three_lights;
+
+import 'package:three_dart/three3d/cameras/camera.dart';
+import 'package:three_dart/three3d/cameras/perspective_camera.dart';
+import 'package:three_dart/three3d/core/object_3d.dart';
+import 'package:three_dart/three3d/lights/light_shadow.dart';
+import 'package:three_dart/three3d/math/index.dart';
+
+final Matrix4 _projScreenMatrix = Matrix4();
+final Vector3 _lightPositionWorld = Vector3.init();
+final Vector3 _lookTarget = Vector3.init();
+final Frustum _frustum = Frustum(null, null, null, null, null, null);
 
 class PointLightShadow extends LightShadow {
   late List<Vector3> _cubeDirections;

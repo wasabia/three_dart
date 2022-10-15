@@ -1,4 +1,9 @@
-part of three_helpers;
+
+import 'package:three_dart/three3d/geometries/sphere_geometry.dart';
+import 'package:three_dart/three3d/lights/index.dart';
+import 'package:three_dart/three3d/materials/mesh_basic_material.dart';
+import 'package:three_dart/three3d/math/color.dart';
+import 'package:three_dart/three3d/objects/index.dart';
 
 class PointLightHelper extends Mesh {
   @override

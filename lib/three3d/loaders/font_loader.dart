@@ -1,6 +1,9 @@
-part of three_loaders;
 
 // loader font from typeface json
+import 'dart:convert' as convert;
+import 'package:three_dart/three3d/extras/core/ttf_font.dart';
+import 'package:three_dart/three3d/loaders/file_loader.dart';
+import 'package:three_dart/three3d/loaders/loader.dart';
 
 class FontLoader extends Loader {
   FontLoader(manager) : super(manager);

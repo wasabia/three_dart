@@ -1,4 +1,10 @@
-part of three_animation;
+
+import 'package:three_dart/three3d/animation/animation_utils.dart';
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/math/interpolants/cubic_interpolant.dart';
+import 'package:three_dart/three3d/math/interpolants/discrete_interpolant.dart';
+import 'package:three_dart/three3d/math/interpolants/linear_interpolant.dart';
+import 'package:three_dart/three3d/math/math.dart';
 
 class KeyframeTrack {
   late String name;

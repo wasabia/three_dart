@@ -1,4 +1,6 @@
-part of three_animation;
+
+import 'package:three_dart/three3d/animation/property_binding.dart';
+import 'package:three_dart/three3d/math/quaternion.dart';
 
 class PropertyMixer {
   late PropertyBinding binding;
@@ -14,7 +16,7 @@ class PropertyMixer {
   late int cumulativeWeight;
   late int cumulativeWeightAdditive;
   late List buffer;
-  late int _cacheIndex;
+  late int cacheIndex;
 
   PropertyMixer(PropertyBinding binding, String typeName, int valueSize) {
     this.binding = binding;

@@ -1,4 +1,9 @@
-part of three_animation;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/animation/index.dart';
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/dart_helpers.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 class AnimationUtils {
   // same as Array.prototype.slice, but also works on typed arrays
@@ -18,9 +23,6 @@ class AnimationUtils {
 
   // converts an array to a specific type
   static convertArray(array, String type, [bool forceClone = false]) {
-
-    print(" convert Array to ${type} ");
-
     // var 'null' and 'null' pass
     // TODO runtimeType on web release mode will not same as debug
     if (array == null || !forceClone && array.runtimeType.toString() == type) {

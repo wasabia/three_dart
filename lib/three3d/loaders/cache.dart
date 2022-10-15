@@ -1,4 +1,3 @@
-part of three_loaders;
 
 class Cache {
   static bool enabled = false;

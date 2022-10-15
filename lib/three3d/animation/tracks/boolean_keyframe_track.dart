@@ -1,4 +1,6 @@
-part of three_animation;
+
+import 'package:three_dart/three3d/animation/keyframe_track.dart';
+import 'package:three_dart/three3d/constants.dart';
 
 /// A Track of Boolean keyframe values.
 

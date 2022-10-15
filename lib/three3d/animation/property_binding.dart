@@ -1,6 +1,10 @@
-part of three_animation;
 
 // Characters [].:/ are reserved for track binding syntax.
+import 'package:three_dart/three3d/animation/animation_object_group.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/materials/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
+
 var _RESERVED_CHARS_RE = '\\[\\]\\.:\\/';
 var _reservedRe = RegExp("[$_RESERVED_CHARS_RE]");
 

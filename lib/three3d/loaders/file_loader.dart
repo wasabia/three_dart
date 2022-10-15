@@ -1,4 +1,13 @@
-part of three_loaders;
+
+import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:three_dart/three3d/loaders/cache.dart';
+import 'package:three_dart/three3d/loaders/loader.dart';
 
 var loading = {};
 

@@ -1,4 +1,12 @@
-part of three_helpers;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/geometries/octahedron_geometry.dart';
+import 'package:three_dart/three3d/lights/light.dart';
+import 'package:three_dart/three3d/materials/index.dart';
+import 'package:three_dart/three3d/math/color.dart';
+import 'package:three_dart/three3d/math/index.dart';
+import 'package:three_dart/three3d/objects/index.dart';
 
 var _vectorHemisphereLightHelper = /*@__PURE__*/ Vector3.init();
 var _color1 = /*@__PURE__*/ Color(0, 0, 0);

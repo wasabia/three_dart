@@ -1,4 +1,12 @@
-part of three_helpers;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/core/object_3d.dart';
+import 'package:three_dart/three3d/geometries/index.dart';
+import 'package:three_dart/three3d/materials/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
+import 'package:three_dart/three3d/objects/line.dart';
+import 'package:three_dart/three3d/objects/mesh.dart';
 
 var _axis = /*@__PURE__*/ Vector3.init();
 var _lineGeometry, _coneGeometry;

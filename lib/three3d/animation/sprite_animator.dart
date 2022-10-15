@@ -1,4 +1,6 @@
-part of three_animation;
+
+import 'package:three_dart/three3d/dart_helpers.dart';
+import 'package:three_dart/three3d/math/math.dart';
 
 class SpriteAnimator {
   List animations = [];

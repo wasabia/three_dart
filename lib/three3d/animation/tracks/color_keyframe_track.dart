@@ -1,4 +1,5 @@
-part of three_animation;
+
+import 'package:three_dart/three3d/animation/keyframe_track.dart';
 
 /// A Track of keyframe values that represent color.
 

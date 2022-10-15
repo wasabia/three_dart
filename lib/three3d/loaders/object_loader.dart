@@ -1,4 +1,26 @@
-part of three_loaders;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/animation/index.dart';
+import 'package:three_dart/three3d/cameras/index.dart';
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/extras/index.dart';
+import 'package:three_dart/three3d/geometries/index.dart';
+import 'package:three_dart/three3d/lights/index.dart';
+import 'package:three_dart/three3d/loaders/buffer_geometry_loader.dart';
+import 'package:three_dart/three3d/loaders/file_loader.dart';
+import 'package:three_dart/three3d/loaders/image_loader.dart';
+import 'package:three_dart/three3d/loaders/loader.dart';
+import 'package:three_dart/three3d/loaders/loader_utils.dart';
+import 'package:three_dart/three3d/loaders/loading_manager.dart';
+import 'package:three_dart/three3d/loaders/material_loader.dart';
+import 'package:three_dart/three3d/math/index.dart';
+import 'dart:convert' as convert;
+
+import 'package:three_dart/three3d/objects/index.dart';
+import 'package:three_dart/three3d/scenes/index.dart';
+import 'package:three_dart/three3d/textures/index.dart';
+import 'package:three_dart/three3d/utils.dart';
 
 class ObjectLoader extends Loader {
   ObjectLoader(manager) : super(manager);

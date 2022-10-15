@@ -1,4 +1,8 @@
-part of three_animation;
+
+import 'package:three_dart/three3d/animation/index.dart';
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/math/math.dart';
+import 'package:three_dart/three3d/math/math_utils.dart';
 
 class AnimationClip {
   late String name;

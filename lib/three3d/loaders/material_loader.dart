@@ -1,4 +1,8 @@
-part of three_loaders;
+import 'dart:convert' as convert;
+import 'package:three_dart/three3d/loaders/file_loader.dart';
+import 'package:three_dart/three3d/loaders/loader.dart';
+import 'package:three_dart/three3d/materials/index.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 class MaterialLoader extends Loader {
   late Map textures;
@@ -217,7 +221,7 @@ class MaterialLoader extends Loader {
             break;
 
           case 'm4':
-            material.uniforms[name].value = mathmath.Matrix4().fromArray(uniform.value);
+            material.uniforms[name].value = Matrix4().fromArray(uniform.value);
             break;
 
           default:
