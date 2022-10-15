@@ -2,8 +2,6 @@
 
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
-import 'package:three_dart/three3d/math/sphere.dart';
-import 'package:three_dart/three3d/math/vector3.dart';
 
 var _points = [
   /*@__PURE__*/ Vector3.init(),
