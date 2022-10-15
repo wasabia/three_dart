@@ -1,4 +1,6 @@
-part of three_shaders;
+
+import 'shader_chunk/index.dart';
+import 'shader_lib/index.dart';
 
 Map<String, String> ShaderChunk = {
   "alphamap_fragment": alphamap_fragment,

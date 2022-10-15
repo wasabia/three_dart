@@ -1,4 +1,5 @@
-part of three_loaders;
+
+import 'package:three_dart/three3d/loaders/loader.dart';
 
 class LoadingManager {
   bool isLoading = false;

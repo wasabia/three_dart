@@ -1,4 +1,5 @@
-part of three_loaders;
+import 'dart:convert' as convert;
+
 
 class LoaderUtils {
   static decodeText(List<int> array) {

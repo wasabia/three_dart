@@ -1,4 +1,7 @@
-part of three_lights;
+
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/lights/light_probe.dart';
+import 'package:three_dart/three3d/math/index.dart';
 
 class HemisphereLightProbe extends LightProbe {
   HemisphereLightProbe(Color skyColor, Color groundColor, num intensity)

@@ -19,7 +19,7 @@
 
 class Interpolant {
   late dynamic parameterPositions;
-  int _cachedIndex = 0;
+  int cachedIndex = 0;
   late dynamic resultBuffer;
   late dynamic sampleValues;
   late dynamic valueSize;
@@ -34,7 +34,7 @@ class Interpolant {
 
   evaluate(double t) {
     var pp = parameterPositions;
-    int i1 = _cachedIndex;
+    int i1 = cachedIndex;
 
     num? t1;
     num? t0;
@@ -67,7 +67,7 @@ class Interpolant {
                 // after end
 
                 i1 = pp.length;
-                _cachedIndex = i1;
+                cachedIndex = i1;
                 return copySampleValue_(i1 - 1);
               }
 
@@ -112,7 +112,7 @@ class Interpolant {
               if (t0 == null) {
                 // before start
 
-                _cachedIndex = 0;
+                cachedIndex = 0;
                 return copySampleValue_(0);
               }
 
@@ -171,18 +171,18 @@ class Interpolant {
         // check boundary cases, again
 
         if (t0 == null) {
-          _cachedIndex = 0;
+          cachedIndex = 0;
           return copySampleValue_(0);
         }
 
         if (t1 == null) {
           i1 = pp.length;
-          _cachedIndex = i1;
+          cachedIndex = i1;
           return copySampleValue_(i1 - 1);
         }
       } // seek
 
-      _cachedIndex = i1;
+      cachedIndex = i1;
 
       intervalChanged(i1, t0, t1);
     } // validate_interval

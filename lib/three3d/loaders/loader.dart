@@ -1,4 +1,5 @@
-part of three_loaders;
+
+import 'package:three_dart/three3d/loaders/loading_manager.dart';
 
 abstract class Loader {
   late LoadingManager manager;

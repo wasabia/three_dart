@@ -1,4 +1,6 @@
-part of three_lights;
+
+import 'package:three_dart/three3d/cameras/orthographic_camera.dart';
+import 'package:three_dart/three3d/lights/light_shadow.dart';
 
 class DirectionalLightShadow extends LightShadow {
   bool isDirectionalLightShadow = true;

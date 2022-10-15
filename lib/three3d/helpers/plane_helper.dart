@@ -1,4 +1,12 @@
-part of three_helpers;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/constants.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/materials/line_basic_material.dart';
+import 'package:three_dart/three3d/materials/mesh_basic_material.dart';
+import 'package:three_dart/three3d/math/index.dart';
+import 'package:three_dart/three3d/objects/line.dart';
+import 'package:three_dart/three3d/objects/mesh.dart';
 
 class PlaneHelper extends Line {
   @override

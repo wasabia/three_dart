@@ -1,4 +1,8 @@
-part of three_lights;
+
+import 'package:three_dart/three3d/cameras/perspective_camera.dart';
+import 'package:three_dart/three3d/lights/light.dart';
+import 'package:three_dart/three3d/lights/light_shadow.dart';
+import 'package:three_dart/three3d/math/math_utils.dart';
 
 class SpotLightShadow extends LightShadow {
   SpotLightShadow() : super(PerspectiveCamera(50, 1, 0.5, 500)) {

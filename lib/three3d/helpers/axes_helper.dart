@@ -1,4 +1,9 @@
-part of three_helpers;
+
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/materials/index.dart';
+import 'package:three_dart/three3d/math/color.dart';
+import 'package:three_dart/three3d/objects/line_segments.dart';
 
 class AxesHelper extends LineSegments {
   @override

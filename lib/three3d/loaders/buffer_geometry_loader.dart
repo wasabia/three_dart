@@ -1,4 +1,12 @@
-part of three_loaders;
+
+import 'dart:async';
+import 'dart:convert' as convert;
+import 'package:flutter_gl/flutter_gl.dart';
+import 'package:three_dart/three3d/core/index.dart';
+import 'package:three_dart/three3d/loaders/file_loader.dart';
+import 'package:three_dart/three3d/loaders/loader.dart';
+import 'package:three_dart/three3d/math/index.dart';
+import 'package:three_dart/three3d/utils.dart';
 
 class BufferGeometryLoader extends Loader {
   BufferGeometryLoader(manager) : super(manager);
