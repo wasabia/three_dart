@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/animation/index.dart';
 import 'package:three_dart/three3d/constants.dart';
@@ -10,7 +9,7 @@ class AnimationUtils {
   static arraySlice(array, [int? from, int? to]) {
     // if ( AnimationUtils.isTypedArray( array ) ) {
     if (array! is List) {
-      print(" AnimationUtils.arraySlice array: ${array} ");
+      print(" AnimationUtils.arraySlice array: $array ");
 
       // 	// in ios9 array.subarray(from, null) will return empty array
       // 	// but array.subarray(from) or array.subarray(from, len) is correct
@@ -42,7 +41,7 @@ class AnimationUtils {
   }
 
   static isTypedArray(object) {
-    print("AnimationUtils isTypedArray object: ${object}");
+    print("AnimationUtils isTypedArray object: $object");
     return false;
 
     // return ArrayBuffer.isView( object ) &&
@@ -206,7 +205,7 @@ class AnimationUtils {
     // Make each track's values relative to the values at the reference frame
     for (var i = 0; i < numTracks; ++i) {
       var referenceTrack = referenceClip.tracks[i];
-      var referenceTrackType = referenceTrack.ValueTypeName;
+      var referenceTrackType = referenceTrack.valueTypeName;
 
       // Skip this track if it's non-numeric
       if (referenceTrackType == 'bool' || referenceTrackType == 'string') {
@@ -214,9 +213,9 @@ class AnimationUtils {
       }
 
       // Find the track in the target clip whose name and type matches the reference track
-      var targetTrack = targetClip.tracks.firstWhere((track) {
-        return track.name == referenceTrack.name && track.ValueTypeName == referenceTrackType;
-      });
+      var targetTrack = targetClip.tracks.cast<KeyframeTrack?>().firstWhere((track) {
+        return track?.name == referenceTrack.name && track?.valueTypeName == referenceTrackType;
+      }, orElse: () => null);
 
       if (targetTrack == null) continue;
 
@@ -237,7 +236,7 @@ class AnimationUtils {
       // }
 
       var lastIndex = referenceTrack.times.length - 1;
-      var referenceValue;
+      List<num> referenceValue;
 
       // Find the value to subtract out of the track
       if (referenceTime <= referenceTrack.times[0]) {

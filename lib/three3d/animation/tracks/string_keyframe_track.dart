@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/animation/keyframe_track.dart';
 import 'package:three_dart/three3d/constants.dart';
 
@@ -6,19 +5,18 @@ import 'package:three_dart/three3d/constants.dart';
 
 class StringKeyframeTrack extends KeyframeTrack {
   @override
-  var ValueTypeName = 'string';
+  var valueTypeName = 'string';
   @override
-  var ValueBufferType = "Array";
+  var valueBufferType = "Array";
 
   @override
-  var DefaultInterpolation = InterpolateDiscrete;
+  var defaultInterpolation = InterpolateDiscrete;
 
-  StringKeyframeTrack(name, times, values, interpolation)
-      : super(name, times, values, interpolation);
-
-  @override
-  InterpolantFactoryMethodLinear(result) {}
+  StringKeyframeTrack(name, times, values, interpolation) : super(name, times, values, interpolation);
 
   @override
-  InterpolantFactoryMethodSmooth(result) {}
+  interpolantFactoryMethodLinear(result) {}
+
+  @override
+  interpolantFactoryMethodSmooth(result) {}
 }
