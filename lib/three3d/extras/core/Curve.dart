@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/extras/core/shape.dart';
 import 'package:three_dart/three3d/extras/curves/line_curve.dart';
 import 'package:three_dart/three3d/math/index.dart';
@@ -369,9 +368,8 @@ class Curve {
     return data;
   }
 
-  fromJSON(json) {
+  Curve fromJSON(json) {
     arcLengthDivisions = json.arcLengthDivisions;
-
     return this;
   }
 }

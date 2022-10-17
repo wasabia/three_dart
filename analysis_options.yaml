@@ -2,5 +2,6 @@ include: package:lints/recommended.yaml
 
 analyzer:
   errors:
+    prefer_typing_uninitialized_variables: ignore
     undefined_prefixed_name: ignore
     todo: ignore

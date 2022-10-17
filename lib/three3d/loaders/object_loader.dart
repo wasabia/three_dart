@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/animation/index.dart';
 import 'package:three_dart/three3d/cameras/index.dart';
@@ -138,7 +137,7 @@ class ObjectLoader extends Loader {
 
     if (json != null) {
       for (var i = 0, l = json.length; i < l; i++) {
-        var shape = Shape(null).fromJSON(json[i]);
+        var shape = Shape.fromJSON(json[i]);
 
         shapes[shape.uuid] = shape;
       }

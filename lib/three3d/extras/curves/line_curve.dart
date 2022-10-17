@@ -1,24 +1,23 @@
-
 import 'package:three_dart/three3d/extras/core/curve.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class LineCurve extends Curve {
-  @override
-  bool isLineCurve = true;
-
-  @override
-  late Vector2 v1;
-  @override
-  late Vector2 v2;
-
-  LineCurve(this.v1, this.v2) {
+  LineCurve(Vector2 v1, Vector2 v2) {
     type = 'LineCurve';
+    isLineCurve = true;
+
+    this.v1 = v1;
+    this.v2 = v2;
   }
 
   LineCurve.fromJSON(Map<String, dynamic> json) {
     super.fromJSON(json);
-    v1.fromArray(json["v1"]);
-    v2.fromArray(json["v2"]);
+
+    type = 'LineCurve';
+    isLineCurve = true;
+
+    v1 = Vector2().fromArray(json["v1"]);
+    v2 = Vector2().fromArray(json["v2"]);
   }
 
   @override

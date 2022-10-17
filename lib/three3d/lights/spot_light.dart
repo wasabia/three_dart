@@ -1,14 +1,12 @@
-
 import 'package:three_dart/three3d/core/object_3d.dart';
 import 'package:three_dart/three3d/lights/light.dart';
 import 'package:three_dart/three3d/lights/spot_light_shadow.dart';
 import 'package:three_dart/three3d/math/math.dart';
 
 class SpotLight extends Light {
-  SpotLight(color, [intensity, double? distance, angle, penumbra, decay])
-      : super(color, intensity) {
+  SpotLight(color, [intensity, double? distance, angle, penumbra, decay]) : super(color, intensity) {
     type = "SpotLight";
-    position.copy(Object3D.DefaultUp);
+    position.copy(Object3D.defaultUp);
     updateMatrix();
 
     target = Object3D();

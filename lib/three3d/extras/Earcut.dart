@@ -1,5 +1,3 @@
-
-
 import 'package:three_dart/three3d/math/index.dart';
 
 /// Port from https://github.com/mapbox/earcut (v2.2.2)
@@ -124,8 +122,7 @@ earcutLinked(Node? ear, triangles, dim, minX, minY, num? invSize, num? pass) {
     if (ear == stop) {
       // try filtering points and slicing again
       if (pass == null || pass == 0) {
-        earcutLinked(
-            filterPoints(ear, null), triangles, dim, minX, minY, invSize, 1);
+        earcutLinked(filterPoints(ear, null), triangles, dim, minX, minY, invSize, 1);
 
         // if this didn't work, try curing all small self-intersections locally
 
@@ -154,8 +151,7 @@ isEar(ear) {
   var p = ear.next.next;
 
   while (p != ear.prev) {
-    if (pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, p.x, p.y) &&
-        area(p.prev, p, p.next) >= 0) return false;
+    if (pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
     p = p.next;
   }
 
@@ -174,8 +170,7 @@ isEarHashed(ear, minX, minY, invSize) {
       maxTY = a.y > b.y ? (a.y > c.y ? a.y : c.y) : (b.y > c.y ? b.y : c.y);
 
   // z-order range for the current triangle bbox;
-  var minZ = zOrder(minTX, minTY, minX, minY, invSize),
-      maxZ = zOrder(maxTX, maxTY, minX, minY, invSize);
+  var minZ = zOrder(minTX, minTY, minX, minY, invSize), maxZ = zOrder(maxTX, maxTY, minX, minY, invSize);
 
   var p = ear.prevZ, n = ear.nextZ;
 
@@ -221,10 +216,7 @@ cureLocalIntersections(start, triangles, dim) {
   do {
     var a = p.prev, b = p.next.next;
 
-    if (!equals(a, b) &&
-        intersects(a, p, p.next, b) &&
-        locallyInside(a, b) &&
-        locallyInside(b, a)) {
+    if (!equals(a, b) && intersects(a, p, p.next, b) && locallyInside(a, b) && locallyInside(b, a)) {
       triangles.add(a.i / dim);
       triangles.add(p.i / dim);
       triangles.add(b.i / dim);
@@ -273,7 +265,7 @@ splitEarcut(start, triangles, dim, minX, minY, invSize) {
 // link every hole into the outer loop, producing a single-ring polygon without holes
 eliminateHoles(data, holeIndices, outerNode, dim) {
   var queue = [];
-  var len, start, end, list;
+  var start, end, list;
 
   for (var i = 0, len = holeIndices.length; i < len; i++) {
     start = holeIndices[i] * dim;
@@ -360,14 +352,11 @@ findHoleBridge(hole, outerNode) {
     if (hx >= p.x &&
         p.x >= mx &&
         hx != p.x &&
-        pointInTriangle(
-            hy < my ? hx : qx, hy, mx, my, hy < my ? qx : hx, hy, p.x, p.y)) {
+        pointInTriangle(hy < my ? hx : qx, hy, mx, my, hy < my ? qx : hx, hy, p.x, p.y)) {
       tan = Math.abs(hy - p.y) / (hx - p.x); // tangential
 
       if (locallyInside(p, hole) &&
-          (tan < tanMin ||
-              (tan == tanMin &&
-                  (p.x > m.x || (p.x == m.x && sectorContainsSector(m, p)))))) {
+          (tan < tanMin || (tan == tanMin && (p.x > m.x || (p.x == m.x && sectorContainsSector(m, p)))))) {
         m = p;
         tanMin = tan;
       }
@@ -574,11 +563,7 @@ int sign(num num) {
 intersectsPolygon(a, b) {
   var p = a;
   do {
-    if (p.i != a.i &&
-        p.next.i != a.i &&
-        p.i != b.i &&
-        p.next.i != b.i &&
-        intersects(p, p.next, a, b)) return true;
+    if (p.i != a.i && p.next.i != a.i && p.i != b.i && p.next.i != b.i && intersects(p, p.next, a, b)) return true;
     p = p.next;
   } while (p != a);
 
@@ -612,10 +597,7 @@ middleInside(a, b) {
 // link two polygon vertices with a bridge; if the vertices belong to the same ring, it splits polygon into two;
 // if one belongs to the outer ring and another to a hole, it merges it into a single ring
 splitPolygon(a, b) {
-  var a2 = Node(a.i, a.x, a.y),
-      b2 = Node(b.i, b.x, b.y),
-      an = a.next,
-      bp = b.prev;
+  var a2 = Node(a.i, a.x, a.y), b2 = Node(b.i, b.x, b.y), an = a.next, bp = b.prev;
 
   a.next = b;
   b.prev = a;

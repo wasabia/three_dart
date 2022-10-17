@@ -430,7 +430,7 @@ class _State extends State<WebGlAnimationCloth> {
     sphere?.castShadow = true;
     sphere?.receiveShadow = true;
     sphere?.visible = false;
-    scene.add(sphere);
+    scene.add(sphere!);
 
     // ground
 
