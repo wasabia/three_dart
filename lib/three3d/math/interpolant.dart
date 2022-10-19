@@ -27,10 +27,9 @@ class Interpolant {
 
   // --- Protected interface
 
-  dynamic DefaultSettings = {};
+  dynamic defaultSettings = {};
 
-  Interpolant(this.parameterPositions, this.sampleValues, this.valueSize,
-      this.resultBuffer);
+  Interpolant(this.parameterPositions, this.sampleValues, this.valueSize, this.resultBuffer);
 
   evaluate(double t) {
     var pp = parameterPositions;
@@ -191,16 +190,13 @@ class Interpolant {
   }
 
   getSettings() {
-    return settings ?? DefaultSettings;
+    return settings ?? defaultSettings;
   }
 
   copySampleValue_(num index) {
     // copies a sample value to the result buffer
 
-    var result = resultBuffer,
-        values = sampleValues,
-        stride = valueSize,
-        offset = index * stride;
+    var result = resultBuffer, values = sampleValues, stride = valueSize, offset = index * stride;
 
     for (var i = 0; i != stride; ++i) {
       result[i] = values[offset + i];
@@ -219,5 +215,4 @@ class Interpolant {
   intervalChanged(v1, v2, v3) {
     // empty
   }
-
 }

@@ -1,4 +1,4 @@
-String shadowmap_pars_fragment = """
+String shadowmapParsFragment = """
 #ifdef USE_SHADOWMAP
 
 	#if NUM_DIR_LIGHT_SHADOWS > 0

@@ -1,4 +1,4 @@
-String linedashed_vert = """
+String linedashedVert = """
 uniform float scale;
 attribute float lineDistance;
 

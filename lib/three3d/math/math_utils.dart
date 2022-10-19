@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/math/math.dart';
 import 'package:three_dart/three3d/math/uuid.dart';
@@ -6,8 +5,8 @@ import 'package:three_dart/three3d/math/uuid.dart';
 var _seed = 1234567;
 
 class MathUtils {
-  static num DEG2RAD = Math.PI / 180.0;
-  static num RAD2DEG = 180.0 / Math.PI;
+  static num deg2rad = Math.pi / 180.0;
+  static num rad2deg = 180.0 / Math.pi;
 
   static String generateUUID() {
     var uuid = Uuid().v4();
@@ -108,11 +107,11 @@ class MathUtils {
   }
 
   static num degToRad(num degrees) {
-    return degrees * MathUtils.DEG2RAD;
+    return degrees * MathUtils.deg2rad;
   }
 
   static num radToDeg(num radians) {
-    return radians * MathUtils.RAD2DEG;
+    return radians * MathUtils.rad2deg;
   }
 
   static bool isPowerOfTwo(int value) {
@@ -120,11 +119,11 @@ class MathUtils {
   }
 
   static num ceilPowerOfTwo<T extends num>(T value) {
-    return Math.pow(2, Math.ceil(Math.log(value) / Math.LN2).toDouble());
+    return Math.pow(2, Math.ceil(Math.log(value) / Math.ln2).toDouble());
   }
 
   static num floorPowerOfTwo<T extends num>(T value) {
-    return Math.pow(2, Math.floor(Math.log(value) / Math.LN2).toDouble());
+    return Math.pow(2, Math.floor(Math.log(value) / Math.ln2).toDouble());
   }
 
   static void setQuaternionFromProperEuler(q, num a, num b, num c, String order) {

@@ -1,4 +1,4 @@
-String specularmap_fragment = """
+String specularmapFragment = """
 float specularStrength;
 
 #ifdef USE_SPECULARMAP

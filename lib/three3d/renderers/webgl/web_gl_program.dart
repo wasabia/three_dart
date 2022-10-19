@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -6,10 +5,6 @@ import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/renderers/shaders/index.dart';
 import 'package:three_dart/three3d/renderers/web_gl_renderer.dart';
 import 'package:three_dart/three3d/renderers/webgl/index.dart';
-import 'package:three_dart/three3d/renderers/webgl/web_gl_binding_states.dart';
-import 'package:three_dart/three3d/renderers/webgl/web_gl_parameters.dart';
-import 'package:three_dart/three3d/renderers/webgl/web_gl_program_extra.dart';
-import 'package:three_dart/three3d/renderers/webgl/web_gl_uniforms.dart';
 
 int programIdCount = 0;
 
@@ -18,8 +13,6 @@ class DefaultProgram {
 }
 
 class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
-  @override
-  int id = -1;
   late String name;
   WebGLRenderer renderer;
   String cacheKey;
@@ -267,14 +260,14 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
         (parameters.toneMapping != NoToneMapping) ? '#define TONE_MAPPING' : '',
         (parameters.toneMapping != NoToneMapping)
-            ? ShaderChunk['tonemapping_pars_fragment']
+            ? shaderChunk['tonemapping_pars_fragment']
             : '', // this code is required here because it is used by the toneMapping() defined below
         (parameters.toneMapping != NoToneMapping) ? getToneMappingFunction('toneMapping', parameters.toneMapping) : '',
 
         parameters.dithering ? '#define DITHERING' : '',
         parameters.opaque ? '#define OPAQUE' : '',
 
-        ShaderChunk[
+        shaderChunk[
             'encodings_pars_fragment'], // this code is required here because it is used by the various encoding/decoding defined below
 
         getTexelEncodingFunction('linearToOutputTexel', parameters.outputEncoding),

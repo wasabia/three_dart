@@ -1,14 +1,10 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
-
 class ParametricGeometry extends BufferGeometry {
-  @override
-  String type = "ParametricGeometry";
-
   ParametricGeometry(func, slices, stacks) : super() {
+    type = "ParametricGeometry";
     parameters = {"func": func, "slices": slices, "stacks": stacks};
 
     // buffers
@@ -18,8 +14,7 @@ class ParametricGeometry extends BufferGeometry {
     List<double> normals = [];
     List<double> uvs = [];
 
-    var EPS = 0.00001;
-
+    var eps = 0.00001;
     var normal = Vector3();
 
     var p0 = Vector3(), p1 = Vector3();
@@ -50,19 +45,19 @@ class ParametricGeometry extends BufferGeometry {
 
         // approximate tangent vectors via finite differences
 
-        if (u - EPS >= 0) {
-          func(u - EPS, v, p1);
+        if (u - eps >= 0) {
+          func(u - eps, v, p1);
           pu.subVectors(p0, p1);
         } else {
-          func(u + EPS, v, p1);
+          func(u + eps, v, p1);
           pu.subVectors(p1, p0);
         }
 
-        if (v - EPS >= 0) {
-          func(u, v - EPS, p1);
+        if (v - eps >= 0) {
+          func(u, v - eps, p1);
           pv.subVectors(p0, p1);
         } else {
-          func(u, v + EPS, p1);
+          func(u, v + eps, p1);
           pv.subVectors(p1, p0);
         }
 

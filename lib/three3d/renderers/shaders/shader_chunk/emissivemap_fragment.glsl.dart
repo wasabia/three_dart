@@ -1,4 +1,4 @@
-String emissivemap_fragment = """
+String emissivemapFragment = """
 #ifdef USE_EMISSIVEMAP
 
 	vec4 emissiveColor = texture2D( emissiveMap, vUv );

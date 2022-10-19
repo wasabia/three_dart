@@ -1,4 +1,3 @@
-
 class Layers {
   int mask = 1 | 0;
 

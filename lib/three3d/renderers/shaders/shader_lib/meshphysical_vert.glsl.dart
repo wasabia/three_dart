@@ -1,4 +1,4 @@
-String meshphysical_vert = """
+String meshphysicalVert = """
 #define STANDARD
 
 varying vec3 vViewPosition;

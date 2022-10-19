@@ -444,7 +444,7 @@ class _State extends State<WebGlAnimationCloth> {
 
     var mesh = three.Mesh(three.PlaneGeometry(20000, 20000), groundMaterial);
     mesh.position.y = -250;
-    mesh.rotation.x = -three.Math.PI / 2;
+    mesh.rotation.x = -three.Math.pi / 2;
     mesh.receiveShadow = true;
     scene.add(mesh);
 

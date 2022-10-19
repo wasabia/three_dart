@@ -1,4 +1,4 @@
-String lights_physical_fragment = """
+String lightsPhysicalFragment = """
 PhysicalMaterial material;
 material.diffuseColor = diffuseColor.rgb * ( 1.0 - metalnessFactor );
 

@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/renderers/web_gl_cube_render_target.dart';
 import 'package:three_dart/three3d/renderers/web_gl_renderer.dart';
@@ -21,12 +20,10 @@ class WebGLCubeMaps {
   }
 
   Texture? get(Texture? texture) {
-    if (texture != null &&
-        texture.isRenderTargetTexture == false) {
+    if (texture != null && texture.isRenderTargetTexture == false) {
       var mapping = texture.mapping;
 
-      if (mapping == EquirectangularReflectionMapping ||
-          mapping == EquirectangularRefractionMapping) {
+      if (mapping == EquirectangularReflectionMapping || mapping == EquirectangularRefractionMapping) {
         if (cubemaps.has(texture)) {
           var cubemap = cubemaps.get(texture).texture;
           return mapTextureMapping(cubemap, texture.mapping);
@@ -34,8 +31,7 @@ class WebGLCubeMaps {
           var image = texture.image;
 
           if (image != null && image.height > 0) {
-            var renderTarget =
-                WebGLCubeRenderTarget(image.height ~/ 2, null, null);
+            var renderTarget = WebGLCubeRenderTarget(image.height ~/ 2, null, null);
             renderTarget.fromEquirectangularTexture(renderer, texture);
             cubemaps.add(key: texture, value: renderTarget);
 

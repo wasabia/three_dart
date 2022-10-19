@@ -1,4 +1,4 @@
-String meshphong_vert = """
+String meshphongVert = """
 #define PHONG
 
 varying vec3 vViewPosition;

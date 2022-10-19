@@ -1,4 +1,4 @@
-String sprite_frag = """
+String spriteFrag = """
 uniform vec3 diffuse;
 uniform float opacity;
 

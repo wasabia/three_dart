@@ -72,19 +72,19 @@ class LineCurve extends Curve {
 }
 
 class LineCurve3 extends Curve {
-  @override
-  bool isLineCurve = true;
-
   late Vector3 vec1;
   late Vector3 vec2;
 
   LineCurve3(this.vec1, this.vec2) {
+    isLineCurve = true;
     type = 'LineCurve3';
   }
 
   LineCurve3.fromJSON(Map<String, dynamic> json) {
     arcLengthDivisions = json["arcLengthDivisions"];
-    type = json["type"];
+
+    isLineCurve = true;
+    type = 'LineCurve3';
 
     vec1 = Vector3.fromJSON(json['vec1']);
     vec2 = Vector3.fromJSON(json['vec2']);
@@ -123,6 +123,8 @@ class LineCurve3 extends Curve {
   @override
   copy(source) {
     super.copy(source);
+
+    isLineCurve = true;
 
     vec1.copy(source.vec1);
     vec2.copy(source.vec2);

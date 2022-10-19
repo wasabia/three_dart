@@ -1,4 +1,4 @@
-String lights_physical_pars_fragment = """
+String lightsPhysicalParsFragment = """
 struct PhysicalMaterial {
 
 	vec3 diffuseColor;

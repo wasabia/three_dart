@@ -1,4 +1,4 @@
-String defaultnormal_vertex = """
+String defaultnormalVertex = """
 vec3 transformedNormal = objectNormal;
 
 #ifdef USE_INSTANCING

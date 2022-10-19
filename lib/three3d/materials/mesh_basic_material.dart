@@ -2,7 +2,6 @@ import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/materials/material.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
-
 class MeshBasicMaterial extends Material {
   MeshBasicMaterial([Map<String, dynamic>? parameters]) : super() {
     type = 'MeshBasicMaterial';

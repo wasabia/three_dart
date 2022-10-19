@@ -1,4 +1,3 @@
-
 class WebGLShader {
   dynamic gl;
   dynamic shader;

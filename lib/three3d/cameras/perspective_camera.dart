@@ -167,7 +167,7 @@ class PerspectiveCamera extends Camera {
   @override
   void updateProjectionMatrix() {
     num near = this.near;
-    num top = near * Math.tan(MathUtils.DEG2RAD * 0.5 * fov) / zoom;
+    num top = near * Math.tan(MathUtils.deg2rad * 0.5 * fov) / zoom;
     num height = 2 * top;
     num width = aspect * height;
     num left = -0.5 * width;

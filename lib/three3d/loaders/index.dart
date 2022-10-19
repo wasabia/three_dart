@@ -24,7 +24,6 @@ library three_loaders;
 // // for MaterialLoader Matrix4. why conflicts with flutter Matrix4 ???
 // import 'package:three_dart/three3d/math/index.dart' as mathmath;
 
-
 export 'loading_manager.dart';
 export 'loader.dart';
 export 'file_loader.dart';

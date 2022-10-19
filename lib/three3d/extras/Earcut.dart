@@ -314,7 +314,7 @@ findHoleBridge(hole, outerNode) {
   var p = outerNode;
   var hx = hole.x;
   var hy = hole.y;
-  var qx = -Math.Infinity, m;
+  var qx = -Math.infinity, m;
 
   // find a segment intersected by a ray from the hole's leftmost point to the left;
   // segment's endpoint with lesser x will be potential connection point
@@ -344,7 +344,7 @@ findHoleBridge(hole, outerNode) {
   // otherwise choose the point of the minimum angle with the ray as connection point
 
   var stop = m, mx = m.x, my = m.y;
-  var tanMin = Math.Infinity, tan;
+  var tanMin = Math.infinity, tan;
 
   p = m;
 
@@ -640,9 +640,9 @@ removeNode(p) {
 }
 
 class Node {
-  late num i;
-  late num x;
-  late num y;
+  num i;
+  num x;
+  num y;
   late Node? prev;
   late Node? next;
   late num? z;
@@ -650,14 +650,7 @@ class Node {
   late Node? nextZ;
   late bool steiner;
 
-  Node(i, x, y) {
-    // vertex index in coordinates array
-    this.i = i;
-
-    // vertex coordinates
-    this.x = x;
-    this.y = y;
-
+  Node(this.i, this.x, this.y) {
     // previous and next vertex nodes in a polygon ring
     prev = null;
     next = null;

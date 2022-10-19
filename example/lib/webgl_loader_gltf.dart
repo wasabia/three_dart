@@ -251,7 +251,7 @@ class _MyAppState extends State<WebGlLoaderGtlf> {
     controls.minDistance = 0.1;
     controls.maxDistance = 500;
 
-    controls.maxPolarAngle = three.Math.PI / 2;
+    controls.maxPolarAngle = three.Math.pi / 2;
 
     animate();
   }

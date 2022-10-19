@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/math/math.dart';
 import 'package:three_dart/three3d/math/matrix4.dart';
@@ -13,8 +12,8 @@ class Matrix3 {
     elements = Float32Array.from([1, 0, 0, 0, 1, 0, 0, 0, 1]);
   }
 
-  Matrix3 set(double n11, double n12, double n13, double n21, double n22,
-      double n23, double n31, double n32, double n33) {
+  Matrix3 set(
+      double n11, double n12, double n13, double n21, double n22, double n23, double n31, double n32, double n33) {
     var te = elements;
 
     te[0] = n11;
@@ -128,22 +127,9 @@ class Matrix3 {
   num determinant() {
     var te = elements;
 
-    var a = te[0],
-        b = te[1],
-        c = te[2],
-        d = te[3],
-        e = te[4],
-        f = te[5],
-        g = te[6],
-        h = te[7],
-        i = te[8];
+    var a = te[0], b = te[1], c = te[2], d = te[3], e = te[4], f = te[5], g = te[6], h = te[7], i = te[8];
 
-    return a * e * i -
-        a * f * h -
-        b * d * i +
-        b * f * g +
-        c * d * h -
-        c * e * g;
+    return a * e * i - a * f * h - b * d * i + b * f * g + c * d * h - c * e * g;
   }
 
   Matrix3 invert() {
@@ -218,13 +204,12 @@ class Matrix3 {
     return this;
   }
 
-  Matrix3 setUvTransform(
-      num tx, num ty, num sx, num sy, num rotation, num cx, num cy) {
+  Matrix3 setUvTransform(num tx, num ty, num sx, num sy, num rotation, num cx, num cy) {
     final c = Math.cos(rotation);
     final s = Math.sin(rotation);
 
-    set(sx * c, sx * s, -sx * (c * cx + s * cy) + cx + tx, -sy * s, sy * c,
-        -sy * (-s * cx + c * cy) + cy + ty, 0, 0, 1);
+    set(sx * c, sx * s, -sx * (c * cx + s * cy) + cx + tx, -sy * s, sy * c, -sy * (-s * cx + c * cy) + cy + ty, 0, 0,
+        1);
 
     return this;
   }

@@ -283,7 +283,7 @@ class Curve {
 
     normals.add(Vector3.init());
     binormals.add(Vector3.init());
-    var min = Math.MAX_VALUE;
+    var min = Math.maxValue;
     final tx = Math.abs(tangents[0].x).toDouble();
     final ty = Math.abs(tangents[0].y).toDouble();
     final tz = Math.abs(tangents[0].z).toDouble();
@@ -316,7 +316,7 @@ class Curve {
 
       vec.crossVectors(tangents[i - 1], tangents[i]);
 
-      if (vec.length() > Math.EPSILON) {
+      if (vec.length() > Math.epsilon) {
         vec.normalize();
 
         var theta = Math.acos(MathUtils.clamp(tangents[i - 1].dot(tangents[i]), -1, 1)); // clamp for floating pt errors
@@ -353,6 +353,7 @@ class Curve {
 
   copy(source) {
     arcLengthDivisions = source.arcLengthDivisions;
+    type = source.type;
 
     return this;
   }

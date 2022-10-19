@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
@@ -25,13 +24,8 @@ class ConvexGeometry extends BufferGeometry {
       do {
         var point = edge!.head().point;
 
-        vertices.addAll(
-            [point.x.toDouble(), point.y.toDouble(), point.z.toDouble()]);
-        normals.addAll([
-          face.normal.x.toDouble(),
-          face.normal.y.toDouble(),
-          face.normal.z.toDouble()
-        ]);
+        vertices.addAll([point.x.toDouble(), point.y.toDouble(), point.z.toDouble()]);
+        normals.addAll([face.normal.x.toDouble(), face.normal.y.toDouble(), face.normal.z.toDouble()]);
 
         edge = edge.next;
       } while (edge != face.edge);
@@ -39,9 +33,7 @@ class ConvexGeometry extends BufferGeometry {
 
     // build geometry
 
-    setAttribute('position',
-        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
-    setAttribute('normal',
-        Float32BufferAttribute(Float32Array.from(normals), 3, false));
+    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    setAttribute('normal', Float32BufferAttribute(Float32Array.from(normals), 3, false));
   }
 }

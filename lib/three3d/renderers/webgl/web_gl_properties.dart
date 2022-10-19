@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/weak_map.dart';
 
 class WebGLProperties {

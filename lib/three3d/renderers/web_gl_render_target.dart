@@ -5,13 +5,10 @@
 */
 // import "package:universal_html/html.dart";
 
-
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/core/event_dispatcher.dart';
 import 'package:three_dart/three3d/math/vector4.dart';
 import 'package:three_dart/three3d/textures/index.dart';
-
-
 
 abstract class RenderTarget with EventDispatcher {
   late int width;
@@ -80,27 +77,16 @@ class WebGLRenderTarget extends RenderTarget {
 
     this.options = options ?? WebGLRenderTargetOptions({});
 
-    var image = ImageElement( width: width, height: height, depth: 1 );
+    var image = ImageElement(width: width, height: height, depth: 1);
 
-    texture = Texture(
-        image,
-        this.options.mapping,
-        this.options.wrapS,
-        this.options.wrapT,
-        this.options.magFilter,
-        this.options.minFilter,
-        this.options.format,
-        this.options.type,
-        this.options.anisotropy,
-        this.options.encoding);
+    texture = Texture(image, this.options.mapping, this.options.wrapS, this.options.wrapT, this.options.magFilter,
+        this.options.minFilter, this.options.format, this.options.type, this.options.anisotropy, this.options.encoding);
     texture.isRenderTargetTexture = true;
     texture.flipY = false;
     texture.generateMipmaps = this.options.generateMipmaps;
-    texture.minFilter =
-        this.options.minFilter != null ? this.options.minFilter! : LinearFilter;
+    texture.minFilter = this.options.minFilter != null ? this.options.minFilter! : LinearFilter;
 
-    depthBuffer =
-        this.options.depthBuffer != null ? this.options.depthBuffer! : true;
+    depthBuffer = this.options.depthBuffer != null ? this.options.depthBuffer! : true;
     stencilBuffer = this.options.stencilBuffer;
     depthTexture = this.options.depthTexture;
 
@@ -109,8 +95,7 @@ class WebGLRenderTarget extends RenderTarget {
     useMultisampleRenderToTexture = false;
     useMultisampleRenderbuffer = false;
 
-    _samples  =
-        (options != null && options.samples != null) ? options.samples! : 0;
+    _samples = (options != null && options.samples != null) ? options.samples! : 0;
   }
 
   @override
@@ -147,7 +132,7 @@ class WebGLRenderTarget extends RenderTarget {
     texture = source.texture.clone();
     texture.isRenderTargetTexture = true;
 
-		texture.source = Source( source.texture.image );
+    texture.source = Source(source.texture.image);
 
     depthBuffer = source.depthBuffer;
     stencilBuffer = source.stencilBuffer;

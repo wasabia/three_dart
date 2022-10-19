@@ -1,4 +1,4 @@
-String equirect_frag = """
+String equirectFrag = """
 uniform sampler2D tEquirect;
 
 varying vec3 vWorldDirection;

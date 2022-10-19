@@ -241,7 +241,7 @@ class _MyAppState extends State<WebGlGeometryText> {
     var plane = three.Mesh(three.PlaneGeometry(10000, 10000),
         three.MeshBasicMaterial({"color": 0xffffff, "opacity": 0.5, "transparent": true}));
     plane.position.y = -100;
-    plane.rotation.x = -three.Math.PI / 2;
+    plane.rotation.x = -three.Math.pi / 2;
     scene.add(plane);
 
     animate();
@@ -279,7 +279,7 @@ class _MyAppState extends State<WebGlGeometryText> {
     textMesh1.position.z = 0;
 
     textMesh1.rotation.x = 0;
-    textMesh1.rotation.y = three.Math.PI * 2;
+    textMesh1.rotation.y = three.Math.pi * 2;
 
     group.add(textMesh1);
 
@@ -290,8 +290,8 @@ class _MyAppState extends State<WebGlGeometryText> {
       textMesh2.position.y = -hover;
       textMesh2.position.z = height;
 
-      textMesh2.rotation.x = three.Math.PI;
-      textMesh2.rotation.y = three.Math.PI * 2;
+      textMesh2.rotation.x = three.Math.pi;
+      textMesh2.rotation.y = three.Math.pi * 2;
 
       group.add(textMesh2);
     }

@@ -212,7 +212,7 @@ class _State extends State<WebGlClipping> {
     scene.add(three.AmbientLight(0x505050, 1));
 
     var spotLight = three.SpotLight(0xffffff);
-    spotLight.angle = three.Math.PI / 5;
+    spotLight.angle = three.Math.pi / 5;
     spotLight.penumbra = 0.2;
     spotLight.position.set(2, 3, 3);
     spotLight.castShadow = true;
@@ -262,7 +262,7 @@ class _State extends State<WebGlClipping> {
     var ground =
         three.Mesh(three.PlaneGeometry(9, 9, 1, 1), three.MeshPhongMaterial({"color": 0xa0adaf, "shininess": 150}));
 
-    ground.rotation.x = -three.Math.PI / 2; // rotates X/Y to X/Z
+    ground.rotation.x = -three.Math.pi / 2; // rotates X/Y to X/Z
     ground.receiveShadow = true;
     scene.add(ground);
 

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_gl/flutter_gl.dart';
@@ -150,11 +149,9 @@ class PMREMGenerator {
     }
   }
 
-  /**
-	 * Disposes of the PMREMGenerator's internal memory. Note that PMREMGenerator is a static class,
-	 * so you should not need more than one PMREMGenerator object. If you do, calling dispose() on
-	 * one of them will cause any others to also become unusable.
-	 */
+  /// Disposes of the PMREMGenerator's internal memory. Note that PMREMGenerator is a static class,
+  /// so you should not need more than one PMREMGenerator object. If you do, calling dispose() on
+  /// one of them will cause any others to also become unusable.
   dispose() {
     _dispose();
 
@@ -358,22 +355,44 @@ class PMREMGenerator {
     renderer.autoClear = autoClear;
   }
 
-  /**
-	 * This is a two-pass Gaussian blur for a cubemap. Normally this is done
-	 * vertically and horizontally, but this breaks down on a cube. Here we apply
-	 * the blur latitudinally (around the poles), and then longitudinally (towards
-	 * the poles) to approximate the orthogonally-separable blur. It is least
-	 * accurate at the poles, but still does a decent job.
-	 */
+  /// This is a two-pass Gaussian blur for a cubemap. Normally this is done
+  /// vertically and horizontally, but this breaks down on a cube. Here we apply
+  /// the blur latitudinally (around the poles), and then longitudinally (towards
+  /// the poles) to approximate the orthogonally-separable blur. It is least
+  /// accurate at the poles, but still does a decent job.
   _blur(cubeUVRenderTarget, lodIn, lodOut, sigma, poleAxis) {
     var pingPongRenderTarget = _pingPongRenderTarget;
 
-    _halfBlur(cubeUVRenderTarget, pingPongRenderTarget, lodIn, lodOut, sigma, 'latitudinal', poleAxis);
+    _halfBlur(
+      cubeUVRenderTarget,
+      pingPongRenderTarget,
+      lodIn,
+      lodOut,
+      sigma,
+      'latitudinal',
+      poleAxis,
+    );
 
-    _halfBlur(pingPongRenderTarget, cubeUVRenderTarget, lodOut, lodOut, sigma, 'longitudinal', poleAxis);
+    _halfBlur(
+      pingPongRenderTarget,
+      cubeUVRenderTarget,
+      lodOut,
+      lodOut,
+      sigma,
+      'longitudinal',
+      poleAxis,
+    );
   }
 
-  _halfBlur(targetIn, targetOut, lodIn, lodOut, sigmaRadians, direction, poleAxis) {
+  _halfBlur(
+    targetIn,
+    targetOut,
+    lodIn,
+    lodOut,
+    sigmaRadians,
+    direction,
+    poleAxis,
+  ) {
     var renderer = _renderer;
     var blurMaterial = _blurMaterial;
 
@@ -382,7 +401,7 @@ class PMREMGenerator {
     }
 
     // Number of standard deviations at which to cut off the discrete approximation.
-    var STANDARDDEVIATIONS = 3;
+    var stddev = 3;
 
     BufferGeometry? _geometry;
 
@@ -394,9 +413,9 @@ class PMREMGenerator {
     var blurUniforms = blurMaterial.uniforms;
 
     var pixels = _sizeLods[lodIn] - 1;
-    var radiansPerPixel = isFinite(sigmaRadians) ? Math.PI / (2 * pixels) : 2 * Math.PI / (2 * maxSamples - 1);
+    var radiansPerPixel = isFinite(sigmaRadians) ? Math.pi / (2 * pixels) : 2 * Math.pi / (2 * maxSamples - 1);
     var sigmaPixels = sigmaRadians / radiansPerPixel;
-    var samples = isFinite(sigmaRadians) ? 1 + Math.floor(STANDARDDEVIATIONS * sigmaPixels) : maxSamples;
+    var samples = isFinite(sigmaRadians) ? 1 + Math.floor(stddev * sigmaPixels) : maxSamples;
 
     if (samples > maxSamples) {
       print(

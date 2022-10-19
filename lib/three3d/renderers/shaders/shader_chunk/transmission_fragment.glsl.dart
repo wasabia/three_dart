@@ -1,4 +1,4 @@
-String transmission_fragment = """
+String transmissionFragment = """
 #ifdef USE_TRANSMISSION
 
   float transmissionAlpha = 1.0;

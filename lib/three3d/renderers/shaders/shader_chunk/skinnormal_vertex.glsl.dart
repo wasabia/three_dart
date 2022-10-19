@@ -1,4 +1,4 @@
-String skinnormal_vertex = """
+String skinnormalVertex = """
 #ifdef USE_SKINNING
 
 	mat4 skinMatrix = mat4( 0.0 );

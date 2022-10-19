@@ -1,4 +1,4 @@
-String shadowmask_pars_fragment = """
+String shadowmaskParsFragment = """
 float getShadowMask() {
 
 	float shadow = 1.0;

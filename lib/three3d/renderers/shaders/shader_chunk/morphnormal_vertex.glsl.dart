@@ -1,4 +1,4 @@
-String morphnormal_vertex = """
+String morphnormalVertex = """
 #ifdef USE_MORPHNORMALS
 
 	// morphTargetBaseInfluence is set based on BufferGeometry.morphTargetsRelative value:

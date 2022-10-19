@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/core/index.dart';
@@ -9,12 +8,12 @@ import 'package:three_dart/three3d/objects/line.dart';
 import 'package:three_dart/three3d/objects/mesh.dart';
 
 class PlaneHelper extends Line {
-  @override
-  String type = "PlaneHelper";
   num size = 1.0;
   Plane? plane;
 
-  PlaneHelper.create(geometry, material) : super(geometry, material);
+  PlaneHelper.create(geometry, material) : super(geometry, material) {
+    type = "PlaneHelper";
+  }
 
   factory PlaneHelper(plane, [size = 1, hex = 0xffff00]) {
     var color = hex;
@@ -54,53 +53,43 @@ class PlaneHelper extends Line {
 
     var geometry = BufferGeometry();
     geometry.setAttribute(
-        'position',
-        Float32BufferAttribute(Float32Array.from(positions), 3, false));
+      'position',
+      Float32BufferAttribute(Float32Array.from(positions), 3, false),
+    );
     geometry.computeBoundingSphere();
 
     var planeHelper = PlaneHelper.create(
-        geometry, LineBasicMaterial({"color": color, "toneMapped": false}));
+      geometry,
+      LineBasicMaterial({"color": color, "toneMapped": false}),
+    );
 
     planeHelper.plane = plane;
 
     planeHelper.size = size;
 
-    List<double> positions2 = [
-      1,
-      1,
-      1,
-      -1,
-      1,
-      1,
-      -1,
-      -1,
-      1,
-      1,
-      1,
-      1,
-      -1,
-      -1,
-      1,
-      1,
-      -1,
-      1
-    ];
+    List<double> positions2 = [1, 1, 1, -1, 1, 1, -1, -1, 1, 1, 1, 1, -1, -1, 1, 1, -1, 1];
 
     var geometry2 = BufferGeometry();
     geometry2.setAttribute(
-        'position',
-        Float32BufferAttribute(Float32Array.from(positions2), 3, false));
+      'position',
+      Float32BufferAttribute(Float32Array.from(positions2), 3, false),
+    );
     geometry2.computeBoundingSphere();
 
-    planeHelper.add(Mesh(
+    planeHelper.add(
+      Mesh(
         geometry2,
-        MeshBasicMaterial({
-          "color": color,
-          "opacity": 0.2,
-          "transparent": true,
-          "depthWrite": false,
-          "toneMapped": false
-        })));
+        MeshBasicMaterial(
+          {
+            "color": color,
+            "opacity": 0.2,
+            "transparent": true,
+            "depthWrite": false,
+            "toneMapped": false,
+          },
+        ),
+      ),
+    );
 
     return planeHelper;
   }
@@ -113,9 +102,8 @@ class PlaneHelper extends Line {
 
     this.scale.set(0.5 * size, 0.5 * size, scale);
 
-    children[0].material.side = (scale < 0)
-        ? BackSide
-        : FrontSide; // renderer flips side when determinant < 0; flipping not wanted here
+    children[0].material.side =
+        (scale < 0) ? BackSide : FrontSide; // renderer flips side when determinant < 0; flipping not wanted here
 
     lookAt(plane!.normal);
 

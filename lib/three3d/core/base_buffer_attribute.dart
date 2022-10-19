@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/core/interleaved_buffer.dart';

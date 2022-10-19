@@ -1,4 +1,3 @@
-
 class WebGLParameters {
   late bool isWebGL2;
 
@@ -124,11 +123,7 @@ class WebGLParameters {
 
   late int morphTextureStride;
 
-
-  WebGLParameters.create() {
-    
-  }
-
+  WebGLParameters.create();
 
   WebGLParameters(Map<String, dynamic> json) {
     isWebGL2 = json["isWebGL2"];
@@ -201,7 +196,7 @@ class WebGLParameters {
     sizeAttenuation = json["sizeAttenuation"];
     logarithmicDepthBuffer = json["logarithmicDepthBuffer"];
     skinning = json["skinning"];
-    
+
     morphTargets = json["morphTargets"];
 
     morphNormals = json["morphNormals"];
@@ -239,8 +234,7 @@ class WebGLParameters {
 
     rendererExtensionFragDepth = json["rendererExtensionFragDepth"];
     rendererExtensionDrawBuffers = json["rendererExtensionDrawBuffers"];
-    rendererExtensionShaderTextureLod =
-        json["rendererExtensionShaderTextureLod"];
+    rendererExtensionShaderTextureLod = json["rendererExtensionShaderTextureLod"];
     customProgramCacheKey = json["customProgramCacheKey"] ?? "";
 
     uniforms = json["uniforms"];
@@ -308,7 +302,6 @@ class WebGLParameters {
       "transmissionMap": transmissionMap,
       "thicknessMap": thicknessMap,
       "combine": combine,
-      "sheenColorMap": sheenColorMap,
       "vertexTangents": vertexTangents,
       "vertexColors": vertexColors,
       "vertexUvs": vertexUvs,

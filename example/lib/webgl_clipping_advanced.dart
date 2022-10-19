@@ -245,7 +245,7 @@ class _State extends State<WebGlClippingAdvanced> {
     var result = createPlanes(n);
 
     for (var i = 0; i != n; ++i) {
-      var plane = result[i], angle = i * three.Math.PI * 2 / n;
+      var plane = result[i], angle = i * three.Math.pi * 2 / n;
 
       plane.normal.set(three.Math.cos(angle), 0.0, three.Math.sin(angle));
 
@@ -278,10 +278,10 @@ class _State extends State<WebGlClippingAdvanced> {
 
   initPage() async {
     var vertices = [
-      three.Vector3(1, 0, three.Math.SQRT1_2),
-      three.Vector3(-1, 0, three.Math.SQRT1_2),
-      three.Vector3(0, 1, -three.Math.SQRT1_2),
-      three.Vector3(0, -1, -three.Math.SQRT1_2)
+      three.Vector3(1, 0, three.Math.sqrt1_2),
+      three.Vector3(-1, 0, three.Math.sqrt1_2),
+      three.Vector3(0, 1, -three.Math.sqrt1_2),
+      three.Vector3(0, -1, -three.Math.sqrt1_2)
     ];
     var indices = [0, 1, 2, 0, 2, 3, 0, 3, 1, 1, 3, 2];
 
@@ -304,7 +304,7 @@ class _State extends State<WebGlClippingAdvanced> {
     scene.add(three.AmbientLight(0xffffff, 0.3));
 
     var spotLight = three.SpotLight(0xffffff, 0.5);
-    spotLight.angle = three.Math.PI / 5;
+    spotLight.angle = three.Math.pi / 5;
     spotLight.penumbra = 0.2;
     spotLight.position.set(2, 3, 3);
     spotLight.castShadow = true;
@@ -395,7 +395,7 @@ class _State extends State<WebGlClippingAdvanced> {
     scene.add(volumeVisualization);
 
     var ground = three.Mesh(planeGeometry, three.MeshPhongMaterial({"color": 0xa0adaf, "shininess": 10}));
-    ground.rotation.x = -three.Math.PI / 2;
+    ground.rotation.x = -three.Math.pi / 2;
     ground.scale.multiplyScalar(3);
     ground.receiveShadow = true;
     scene.add(ground);

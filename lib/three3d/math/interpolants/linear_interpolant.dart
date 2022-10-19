@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/math/interpolant.dart';
 
 class LinearInterpolant extends Interpolant {

@@ -1,7 +1,6 @@
 import 'package:three_dart/three3d/materials/material.dart';
 import 'package:three_dart/three3d/math/color.dart';
 
-
 class LineBasicMaterial extends Material {
   LineBasicMaterial([Map<String, dynamic>? parameters]) : super() {
     type = 'LineBasicMaterial';
@@ -36,4 +35,3 @@ class LineBasicMaterial extends Material {
     return LineBasicMaterial({}).copy(this);
   }
 }
-

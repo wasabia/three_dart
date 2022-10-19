@@ -1,4 +1,4 @@
-String color_pars_vertex = """
+String colorParsVertex = """
 #if defined( USE_COLOR_ALPHA )
 
 	varying vec4 vColor;

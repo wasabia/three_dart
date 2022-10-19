@@ -14,7 +14,7 @@ class SpotLight extends Light {
     // remove default 0  for js 0 is false  but for dart 0 is not.
     // SpotLightShadow.updateMatrices  far value
     this.distance = distance;
-    this.angle = angle ?? Math.PI / 3;
+    this.angle = angle ?? Math.pi / 3;
     this.penumbra = penumbra ?? 0;
     this.decay = decay ?? 1; // for physically correct lights, should be 2.
 
@@ -22,11 +22,11 @@ class SpotLight extends Light {
   }
 
   double get power {
-    return intensity * Math.PI;
+    return intensity * Math.pi;
   }
 
   set power(double value) {
-    intensity = value / Math.PI;
+    intensity = value / Math.pi;
   }
 
   @override

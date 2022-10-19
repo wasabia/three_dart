@@ -1,5 +1,4 @@
-
-var _canvas;
+// var _canvas;
 
 class ImageUtils {
   static getDataURL(image) {

@@ -1,9 +1,8 @@
-
 import 'package:three_dart/three3d/math/index.dart';
 
 /// Uniforms library for shared webgl shaders
 
-Map<String, dynamic> UniformsLib = {
+Map<String, dynamic> uniformsLib = {
   "common": {
     "diffuse": {"value": Color.fromHex(0xffffff)},
     "opacity": {"value": 1.0},
@@ -66,12 +65,7 @@ Map<String, dynamic> UniformsLib = {
 
     "directionalLightShadows": {
       "value": [],
-      "properties": {
-        "shadowBias": {},
-        "shadowNormalBias": {},
-        "shadowRadius": {},
-        "shadowMapSize": {}
-      }
+      "properties": {"shadowBias": {}, "shadowNormalBias": {}, "shadowRadius": {}, "shadowMapSize": {}}
     },
 
     "directionalShadowMap": {"value": []},
@@ -92,12 +86,7 @@ Map<String, dynamic> UniformsLib = {
 
     "spotLightShadows": {
       "value": [],
-      "properties": {
-        "shadowBias": {},
-        "shadowNormalBias": {},
-        "shadowRadius": {},
-        "shadowMapSize": {}
-      }
+      "properties": {"shadowBias": {}, "shadowNormalBias": {}, "shadowRadius": {}, "shadowMapSize": {}}
     },
 
     "spotShadowMap": {"value": []},

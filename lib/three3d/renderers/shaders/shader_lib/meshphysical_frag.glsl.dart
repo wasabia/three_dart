@@ -1,4 +1,4 @@
-String meshphysical_frag = """
+String meshphysicalFrag = """
 #define STANDARD
 
 #ifdef PHYSICAL

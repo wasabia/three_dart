@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:convert' as convert;
 import 'package:flutter_gl/flutter_gl.dart';
@@ -80,9 +79,7 @@ class BufferGeometryLoader extends Loader {
       return ib;
     }
 
-    var geometry = json["isInstancedBufferGeometry"] == true
-        ? InstancedBufferGeometry()
-        : BufferGeometry();
+    var geometry = json["isInstancedBufferGeometry"] == true ? InstancedBufferGeometry() : BufferGeometry();
 
     var index = json["data"]["index"];
 
@@ -98,22 +95,16 @@ class BufferGeometryLoader extends Loader {
       BaseBufferAttribute bufferAttribute;
 
       if (attribute["isInterleavedBufferAttribute"] == true) {
-        var interleavedBuffer =
-            getInterleavedBuffer(json["data"], attribute["data"]);
+        var interleavedBuffer = getInterleavedBuffer(json["data"], attribute["data"]);
         bufferAttribute = InterleavedBufferAttribute(
-            interleavedBuffer,
-            attribute["itemSize"],
-            attribute["offset"],
-            attribute["normalized"]);
+            interleavedBuffer, attribute["itemSize"], attribute["offset"], attribute["normalized"]);
       } else {
         var typedArray = getTypedArray(attribute["type"], attribute["array"]);
         // var bufferAttributeConstr = attribute.isInstancedBufferAttribute ? InstancedBufferAttribute : BufferAttribute;
         if (attribute["isInstancedBufferAttribute"] == true) {
-          bufferAttribute = InstancedBufferAttribute(
-              typedArray, attribute["itemSize"], attribute["normalized"]);
+          bufferAttribute = InstancedBufferAttribute(typedArray, attribute["itemSize"], attribute["normalized"]);
         } else {
-          bufferAttribute = getTypedAttribute(typedArray, attribute["itemSize"],
-              attribute["normalized"] == true);
+          bufferAttribute = getTypedAttribute(typedArray, attribute["itemSize"], attribute["normalized"] == true);
         }
       }
 
@@ -126,10 +117,8 @@ class BufferGeometryLoader extends Loader {
 
       if (attribute["updateRange"] != null) {
         if (bufferAttribute is InterleavedBufferAttribute) {
-          bufferAttribute.updateRange?['offset'] =
-              attribute["updateRange"]["offset"];
-          bufferAttribute.updateRange?['count'] =
-              attribute["updateRange"]["count"];
+          bufferAttribute.updateRange?['offset'] = attribute["updateRange"]["offset"];
+          bufferAttribute.updateRange?['count'] = attribute["updateRange"]["count"];
         }
       }
 
@@ -149,14 +138,12 @@ class BufferGeometryLoader extends Loader {
           BufferAttribute bufferAttribute;
 
           if (attribute is InterleavedBufferAttribute) {
-            var interleavedBuffer =
-                getInterleavedBuffer(json["data"], attribute.data);
-            bufferAttribute = InterleavedBufferAttribute(interleavedBuffer,
-                attribute.itemSize, attribute.offset, attribute.normalized);
+            var interleavedBuffer = getInterleavedBuffer(json["data"], attribute.data);
+            bufferAttribute = InterleavedBufferAttribute(
+                interleavedBuffer, attribute.itemSize, attribute.offset, attribute.normalized);
           } else {
             var typedArray = getTypedArray(attribute.type, attribute.array);
-            bufferAttribute = getTypedAttribute(
-                typedArray, attribute.itemSize, attribute.normalized);
+            bufferAttribute = getTypedAttribute(typedArray, attribute.itemSize, attribute.normalized);
           }
 
           if (attribute.name != null) bufferAttribute.name = attribute.name;
@@ -173,16 +160,13 @@ class BufferGeometryLoader extends Loader {
       geometry.morphTargetsRelative = true;
     }
 
-    var groups = json["data"]["groups"] ??
-        json["data"]["drawcalls"] ??
-        json["data"]["offsets"];
+    var groups = json["data"]["groups"] ?? json["data"]["drawcalls"] ?? json["data"]["offsets"];
 
     if (groups != null) {
       for (var i = 0, n = groups.length; i != n; ++i) {
         var group = groups[i];
 
-        geometry.addGroup(
-            group["start"], group["count"], group["materialIndex"]);
+        geometry.addGroup(group["start"], group["count"], group["materialIndex"]);
       }
     }
 

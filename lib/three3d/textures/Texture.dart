@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -10,8 +9,8 @@ import 'package:three_dart/three3d/constants.dart';
 int textureId = 0;
 
 class Texture with EventDispatcher {
-  static String? DEFAULT_IMAGE;
-  static int DEFAULT_MAPPING = UVMapping;
+  static String? defaultImage;
+  static int defaultMapping = UVMapping;
 
   bool isTexture = true;
   bool isWebGLRenderTarget = false;
@@ -79,7 +78,7 @@ class Texture with EventDispatcher {
       int? anisotropy,
       int? encoding]) {
     source = Source(image);
-    this.mapping = mapping ?? Texture.DEFAULT_MAPPING;
+    this.mapping = mapping ?? Texture.defaultMapping;
 
     this.wrapS = wrapS ?? ClampToEdgeWrapping;
     this.wrapT = wrapT ?? ClampToEdgeWrapping;

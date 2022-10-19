@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 
 import 'package:flutter_gl/flutter_gl.dart';
@@ -27,13 +26,12 @@ var mat2array = Float32Array(4);
 // --- Uniform Classes ---
 
 class SingleUniform with WebGLUniformsHelper {
-  @override
-  late dynamic id;
   late Function setValue;
   late int activeInfoType;
   late dynamic activeInfo;
 
-  SingleUniform(this.id, this.activeInfo, addr) {
+  SingleUniform(id, this.activeInfo, addr) {
+    this.id = id;
     this.addr = addr;
     activeInfoType = activeInfo.type;
     setValue = getSingularSetter(id, activeInfo);
@@ -67,13 +65,12 @@ class SingleUniform with WebGLUniformsHelper {
 }
 
 class PureArrayUniform with WebGLUniformsHelper {
-  @override
-  late dynamic id;
   late Function setValue;
   late int activeInfoType;
   late dynamic activeInfo;
 
-  PureArrayUniform(this.id, this.activeInfo, addr) {
+  PureArrayUniform(id, this.activeInfo, addr) {
+    this.id = id;
     this.addr = addr;
     cache = {};
     size = activeInfo.size;
@@ -123,11 +120,10 @@ class WebGLUniform {
 }
 
 class StructuredUniform with WebGLUniformsHelper, WebGLUniform {
-  @override
-  late dynamic id;
   late int activeInfoType;
 
-  StructuredUniform(this.id) {
+  StructuredUniform(id) {
+    this.id = id;
     seq = [];
     map = {};
   }
@@ -146,7 +142,7 @@ class StructuredUniform with WebGLUniformsHelper, WebGLUniform {
 
 // Parser - builds up the property tree from the path strings
 
-var RePathPart = RegExp(r"(\w+)(\])?(\[|\.)?"); //g;
+var rePathPart = RegExp(r"(\w+)(\])?(\[|\.)?"); //g;
 
 // extracts
 // 	- the identifier (member name or array index)
@@ -170,9 +166,8 @@ void parseUniform(activeInfo, addr, WebGLUniform container) {
 
   // reset RegExp object, because of the early exit of a previous run
   // RePathPart.lastIndex = 0;
-  int _lastIndex = 0;
 
-  var matches = RePathPart.allMatches(path);
+  var matches = rePathPart.allMatches(path);
 
   for (var match in matches) {
     dynamic id = match.group(1);
@@ -490,24 +485,16 @@ class WebGLUniformsHelper {
     var cache = this.cache;
     var elements = v.elements;
 
-    if (elements == null) {
-      if (arraysEqual(cache, v)) return;
-
-      gl.uniformMatrix4fv(addr, false, v);
-
-      copyArray(cache, v);
-    } else {
-      if (arraysEqual(cache, elements)) {
-        return;
-      }
-
-      // TODO
-      // mat4array.set( elements );
-
-      gl.uniformMatrix4fv(addr, false, elements);
-
-      copyArray(cache, elements);
+    if (arraysEqual(cache, elements)) {
+      return;
     }
+
+    // TODO
+    // mat4array.set( elements );
+
+    gl.uniformMatrix4fv(addr, false, elements);
+
+    copyArray(cache, elements);
   }
 
   // Single texture (2D / Cube)

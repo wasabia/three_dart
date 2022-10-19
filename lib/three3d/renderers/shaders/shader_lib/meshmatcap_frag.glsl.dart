@@ -1,4 +1,4 @@
-String meshmatcap_frag = """
+String meshmatcapFrag = """
 #define MATCAP
 
 uniform vec3 diffuse;

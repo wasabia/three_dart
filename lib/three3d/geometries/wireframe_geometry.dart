@@ -1,13 +1,10 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class WireframeGeometry extends BufferGeometry {
-  @override
-  String type = "WireframeGeometry";
-
   WireframeGeometry(BufferGeometry geometry) : super() {
+    type = "WireframeGeometry";
     // buffer
 
     List<double> vertices = [];
@@ -48,10 +45,8 @@ class WireframeGeometry extends BufferGeometry {
             end.fromBufferAttribute(position, index2);
 
             if (isUniqueEdge(start, end, edges) == true) {
-              vertices.addAll(
-                  [start.x.toDouble(), start.y.toDouble(), start.z.toDouble()]);
-              vertices.addAll(
-                  [end.x.toDouble(), end.y.toDouble(), end.z.toDouble()]);
+              vertices.addAll([start.x.toDouble(), start.y.toDouble(), start.z.toDouble()]);
+              vertices.addAll([end.x.toDouble(), end.y.toDouble(), end.z.toDouble()]);
             }
           }
         }
@@ -73,10 +68,8 @@ class WireframeGeometry extends BufferGeometry {
           end.fromBufferAttribute(position, index2);
 
           if (isUniqueEdge(start, end, edges) == true) {
-            vertices.addAll(
-                [start.x.toDouble(), start.y.toDouble(), start.z.toDouble()]);
-            vertices
-                .addAll([end.x.toDouble(), end.y.toDouble(), end.z.toDouble()]);
+            vertices.addAll([start.x.toDouble(), start.y.toDouble(), start.z.toDouble()]);
+            vertices.addAll([end.x.toDouble(), end.y.toDouble(), end.z.toDouble()]);
           }
         }
       }
@@ -84,15 +77,13 @@ class WireframeGeometry extends BufferGeometry {
 
     // build geometry
 
-    setAttribute('position',
-        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
   }
 }
 
 isUniqueEdge(start, end, edges) {
   var hash1 = "${start.x},${start.y},${start.z}-${end.x},${end.y},${end.z}";
-  var hash2 =
-      "${end.x},${end.y},${end.z}-${start.x},${start.y},${start.z}"; // coincident edge
+  var hash2 = "${end.x},${end.y},${end.z}-${start.x},${start.y},${start.z}"; // coincident edge
 
   if (edges.contains(hash1) == true || edges.contains(hash2) == true) {
     return false;

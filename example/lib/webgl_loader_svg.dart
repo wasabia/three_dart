@@ -218,7 +218,7 @@ class _MyAppState extends State<WebGlLoaderSvg> {
     //
 
     var helper = three.GridHelper(160, 10);
-    helper.rotation.x = three.Math.PI / 2;
+    helper.rotation.x = three.Math.pi / 2;
     scene.add(helper);
 
     //

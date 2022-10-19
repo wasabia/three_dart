@@ -1,4 +1,4 @@
-String lights_fragment_begin = """
+String lightsFragmentBegin = """
 /**
  * This is a template that can be used to light a material, it uses pluggable
  * RenderEquations (RE)for specific lighting scenarios.

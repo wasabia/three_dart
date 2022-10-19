@@ -1,4 +1,4 @@
-String uv2_pars_vertex = """
+String uv2ParsVertex = """
 #if defined( USE_LIGHTMAP ) || defined( USE_AOMAP )
 
 	attribute vec2 uv2;

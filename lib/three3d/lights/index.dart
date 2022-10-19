@@ -1,6 +1,5 @@
 library lights;
 
-
 export 'ambient_light.dart';
 export 'directional_light.dart';
 export 'directional_light_shadow.dart';

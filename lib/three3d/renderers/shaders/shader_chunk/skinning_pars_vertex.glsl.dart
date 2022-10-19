@@ -1,4 +1,4 @@
-String skinning_pars_vertex = """
+String skinningParsVertex = """
 #ifdef USE_SKINNING
 
 	uniform mat4 bindMatrix;

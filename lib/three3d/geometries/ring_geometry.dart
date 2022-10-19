@@ -1,27 +1,24 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class RingGeometry extends BufferGeometry {
-  @override
-  String type = 'RingGeometry';
-
-  RingGeometry(
-      [innerRadius = 0.5,
-      outerRadius = 1,
-      thetaSegments = 8,
-      phiSegments = 1,
-      thetaStart = 0,
-      thetaLength = Math.PI * 2])
-      : super() {
+  RingGeometry([
+    innerRadius = 0.5,
+    outerRadius = 1,
+    thetaSegments = 8,
+    phiSegments = 1,
+    thetaStart = 0,
+    thetaLength = Math.pi * 2,
+  ]) : super() {
+    type = 'RingGeometry';
     parameters = {
       "innerRadius": innerRadius,
       "outerRadius": outerRadius,
       "thetaSegments": thetaSegments,
       "phiSegments": phiSegments,
       "thetaStart": thetaStart,
-      "thetaLength": thetaLength
+      "thetaLength": thetaLength,
     };
 
     thetaSegments = Math.max<num>(3, thetaSegments);
@@ -54,8 +51,7 @@ class RingGeometry extends BufferGeometry {
         vertex.x = radius * Math.cos(segment);
         vertex.y = radius * Math.sin(segment);
 
-        vertices.addAll(
-            [vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
+        vertices.addAll([vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
 
         // normal
 
@@ -97,20 +93,13 @@ class RingGeometry extends BufferGeometry {
     // build geometry
 
     setIndex(indices);
-    setAttribute(
-        'position', Float32BufferAttribute(Float32Array.from(vertices), 3));
-    setAttribute(
-        'normal', Float32BufferAttribute(Float32Array.from(normals), 3));
+    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3));
+    setAttribute('normal', Float32BufferAttribute(Float32Array.from(normals), 3));
     setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvs), 2));
   }
 
   static fromJSON(data) {
     return RingGeometry(
-        data.innerRadius,
-        data.outerRadius,
-        data.thetaSegments,
-        data.phiSegments,
-        data.thetaStart,
-        data.thetaLength);
+        data.innerRadius, data.outerRadius, data.thetaSegments, data.phiSegments, data.thetaStart, data.thetaLength);
   }
 }

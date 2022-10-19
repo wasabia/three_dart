@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/extras/earcut.dart';
 
 class ShapeUtils {
@@ -20,11 +19,9 @@ class ShapeUtils {
   }
 
   static triangulateShape(contour, holes) {
-    var vertices =
-        []; // flat array of vertices like [ x0,y0, x1,y1, x2,y2, ... ]
+    var vertices = []; // flat array of vertices like [ x0,y0, x1,y1, x2,y2, ... ]
     List<num> holeIndices = []; // array of hole indices
-    var faces =
-        []; // final array of vertex indices like [ [ a,b,d ], [ b,c,d ] ]
+    var faces = []; // final array of vertex indices like [ [ a,b,d ], [ b,c,d ] ]
 
     removeDupEndPts(contour);
     addContour(vertices, contour);

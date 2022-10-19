@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/loaders/file_loader.dart';
 import 'package:three_dart/three3d/loaders/loader.dart';
@@ -35,18 +34,13 @@ class DataTextureLoader extends Loader {
         texture.image.data = texData["data"];
       }
 
-      texture.wrapS =
-          texData["wrapS"] ?? ClampToEdgeWrapping;
-      texture.wrapT =
-          texData["wrapT"] ?? ClampToEdgeWrapping;
+      texture.wrapS = texData["wrapS"] ?? ClampToEdgeWrapping;
+      texture.wrapT = texData["wrapT"] ?? ClampToEdgeWrapping;
 
-      texture.magFilter =
-          texData["magFilter"] ?? LinearFilter;
-      texture.minFilter =
-          texData["minFilter"] ?? LinearFilter;
+      texture.magFilter = texData["magFilter"] ?? LinearFilter;
+      texture.minFilter = texData["minFilter"] ?? LinearFilter;
 
-      texture.anisotropy =
-          texData["anisotropy"] ?? 1;
+      texture.anisotropy = texData["anisotropy"] ?? 1;
 
       if (texData["encoding"] != null) {
         texture.encoding = texData["encoding"];
@@ -80,7 +74,7 @@ class DataTextureLoader extends Loader {
 
       texture.needsUpdate = true;
 
- onLoad(texture, texData);
+      onLoad(texture, texData);
     }, onProgress, onError);
 
     return texture;

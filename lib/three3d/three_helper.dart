@@ -55,7 +55,7 @@ class ThreeHelper {
     var matrix = Matrix4();
 
     // Define the rotation in radians:
-    var radians = angle * Math.PI / 180.0;
+    var radians = angle * Math.pi / 180.0;
 
     // Rotate the matrix:
     matrix.makeRotationAxis(axis, radians);

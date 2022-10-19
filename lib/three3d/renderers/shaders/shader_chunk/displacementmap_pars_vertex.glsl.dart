@@ -1,4 +1,4 @@
-String displacementmap_pars_vertex = """
+String displacementmapParsVertex = """
 #ifdef USE_DISPLACEMENTMAP
 
 	uniform sampler2D displacementMap;

@@ -1,4 +1,4 @@
-String meshnormal_frag = """
+String meshnormalFrag = """
 #define NORMAL
 
 uniform float opacity;

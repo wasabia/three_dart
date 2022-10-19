@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/math/interpolant.dart';
 
@@ -21,21 +20,21 @@ class CubicInterpolant extends Interpolant {
     _weightNext = -0;
     _offsetNext = -0;
 
-    DefaultSettings = {"endingStart": ZeroCurvatureEnding, "endingEnd": ZeroCurvatureEnding};
+    defaultSettings = {"endingStart": ZeroCurvatureEnding, "endingEnd": ZeroCurvatureEnding};
   }
 
   @override
-  intervalChanged(i1, t0, t1) {
+  intervalChanged(v1, v2, v3) {
     var pp = parameterPositions;
-    var iPrev = i1 - 2, iNext = i1 + 1, tPrev = pp[iPrev], tNext = pp[iNext];
+    var iPrev = v1 - 2, iNext = v1 + 1, tPrev = pp[iPrev], tNext = pp[iNext];
 
     if (tPrev == null) {
       switch (getSettings().endingStart) {
         case ZeroSlopeEnding:
 
           // f'(t0) = 0
-          iPrev = i1;
-          tPrev = 2 * t0 - t1;
+          iPrev = v1;
+          tPrev = 2 * v2 - v3;
 
           break;
 
@@ -43,15 +42,15 @@ class CubicInterpolant extends Interpolant {
 
           // use the other end of the curve
           iPrev = pp.length - 2;
-          tPrev = t0 + pp[iPrev] - pp[iPrev + 1];
+          tPrev = v2 + pp[iPrev] - pp[iPrev + 1];
 
           break;
 
         default: // ZeroCurvatureEnding
 
           // f''(t0) = 0 a.k.a. Natural Spline
-          iPrev = i1;
-          tPrev = t1;
+          iPrev = v1;
+          tPrev = v3;
       }
     }
 
@@ -60,8 +59,8 @@ class CubicInterpolant extends Interpolant {
         case ZeroSlopeEnding:
 
           // f'(tN) = 0
-          iNext = i1;
-          tNext = 2 * t1 - t0;
+          iNext = v1;
+          tNext = 2 * v3 - v2;
 
           break;
 
@@ -69,22 +68,22 @@ class CubicInterpolant extends Interpolant {
 
           // use the other end of the curve
           iNext = 1;
-          tNext = t1 + pp[1] - pp[0];
+          tNext = v3 + pp[1] - pp[0];
 
           break;
 
         default: // ZeroCurvatureEnding
 
           // f''(tN) = 0, a.k.a. Natural Spline
-          iNext = i1 - 1;
-          tNext = t0;
+          iNext = v1 - 1;
+          tNext = v2;
       }
     }
 
-    var halfDt = (t1 - t0) * 0.5, stride = valueSize;
+    var halfDt = (v3 - v2) * 0.5, stride = valueSize;
 
-    _weightPrev = halfDt / (t0 - tPrev);
-    _weightNext = halfDt / (tNext - t1);
+    _weightPrev = halfDt / (v2 - tPrev);
+    _weightNext = halfDt / (tNext - v3);
     _offsetPrev = iPrev * stride;
     _offsetNext = iNext * stride;
   }
