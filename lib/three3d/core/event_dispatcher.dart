@@ -1,4 +1,3 @@
-
 /// https://github.com/mrdoob/eventdispatcher.js/
 
 class Event {

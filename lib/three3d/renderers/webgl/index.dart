@@ -1,6 +1,5 @@
 library webgl;
 
-
 export 'web_gl_animation.dart';
 export 'web_gl_attributes.dart';
 export 'web_gl_background.dart';

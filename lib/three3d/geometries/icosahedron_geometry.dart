@@ -1,15 +1,20 @@
-
-import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/geometries/polyhedron_geometry.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class IcosahedronGeometry extends PolyhedronGeometry {
-  @override
-  String type = "IcosahedronGeometry";
-
-  IcosahedronGeometry.create(vertices, indices, [radius = 1, detail = 0])
-      : super(vertices, indices, radius, detail);
+  IcosahedronGeometry.create(
+    vertices,
+    indices, [
+    radius = 1,
+    detail = 0,
+  ]) : super(
+          vertices,
+          indices,
+          radius,
+          detail,
+        ) {
+    type = "IcosahedronGeometry";
+  }
 
   factory IcosahedronGeometry([radius = 1, detail = 0]) {
     var t = (1 + Math.sqrt(5)) / 2;
@@ -116,8 +121,7 @@ class IcosahedronGeometry extends PolyhedronGeometry {
       1
     ];
 
-    IcosahedronGeometry ibg =
-        IcosahedronGeometry.create(vertices, indices, radius, detail);
+    IcosahedronGeometry ibg = IcosahedronGeometry.create(vertices, indices, radius, detail);
 
     ibg.parameters = {"radius": radius, "detail": detail};
 

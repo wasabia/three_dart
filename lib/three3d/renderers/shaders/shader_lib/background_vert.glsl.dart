@@ -1,4 +1,4 @@
-String background_vert = """
+String backgroundVert = """
 varying vec2 vUv;
 uniform mat3 uvTransform;
 

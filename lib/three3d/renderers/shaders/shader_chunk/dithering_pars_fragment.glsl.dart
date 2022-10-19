@@ -1,4 +1,4 @@
-String dithering_pars_fragment = """
+String ditheringParsFragment = """
 #ifdef DITHERING
 
 	// based on https://www.shadertoy.com/view/MslGR8

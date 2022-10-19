@@ -1,5 +1,3 @@
-
-
 import 'package:three_dart/three3d/math/math.dart';
 import 'package:three_dart/three3d/math/matrix3.dart';
 
@@ -282,7 +280,7 @@ class Vector2 {
   double angle() {
     // computes the angle in radians with respect to the positive x-axis
 
-    var angle = Math.atan2(-y, -x) + Math.PI;
+    var angle = Math.atan2(-y, -x) + Math.pi;
 
     return angle;
   }

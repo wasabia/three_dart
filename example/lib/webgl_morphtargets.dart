@@ -261,7 +261,7 @@ class _State extends State<WebGlMorphtargets> {
       // stretch along the x-axis so we can see the twist better
       vertex.set(x * 2, y, z);
 
-      vertex.applyAxisAngle(direction, three.Math.PI * x / 2).toArray(twistPositions, twistPositions.length);
+      vertex.applyAxisAngle(direction, three.Math.pi * x / 2).toArray(twistPositions, twistPositions.length);
     }
 
     // add the spherical positions as the first morph target

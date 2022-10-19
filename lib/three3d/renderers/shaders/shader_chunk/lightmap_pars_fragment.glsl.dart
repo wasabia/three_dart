@@ -1,4 +1,4 @@
-String lightmap_pars_fragment = """
+String lightmapParsFragment = """
 #ifdef USE_LIGHTMAP
 
 	uniform sampler2D lightMap;

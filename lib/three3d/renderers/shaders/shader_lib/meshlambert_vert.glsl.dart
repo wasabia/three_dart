@@ -1,4 +1,4 @@
-String meshlambert_vert = """
+String meshlambertVert = """
 #define LAMBERT
 
 varying vec3 vLightFront;

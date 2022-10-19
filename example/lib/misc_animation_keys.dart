@@ -230,7 +230,7 @@ class _State extends State<MiscAnimationKeys> {
     var xAxis = three.Vector3(1, 0, 0);
 
     var qInitial = three.Quaternion().setFromAxisAngle(xAxis, 0);
-    var qFinal = three.Quaternion().setFromAxisAngle(xAxis, three.Math.PI);
+    var qFinal = three.Quaternion().setFromAxisAngle(xAxis, three.Math.pi);
     var quaternionKF = three.QuaternionKeyframeTrack(
         '.quaternion',
         [0, 1, 2],

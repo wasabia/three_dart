@@ -1,4 +1,4 @@
-String envmap_fragment = """
+String envmapFragment = """
 #ifdef USE_ENVMAP
 
 	#ifdef ENV_WORLDPOS

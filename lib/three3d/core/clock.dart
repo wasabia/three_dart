@@ -1,4 +1,3 @@
-
 class Clock {
   late bool autoStart;
   late num startTime;

@@ -1,4 +1,4 @@
-String output_fragment = """
+String outputFragment = """
 #ifdef OPAQUE
 diffuseColor.a = 1.0;
 #endif

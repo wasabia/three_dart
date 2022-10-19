@@ -1,4 +1,4 @@
-String envmap_common_pars_fragment = """
+String envmapCommonParsFragment = """
 #ifdef USE_ENVMAP
 
 	uniform float envMapIntensity;

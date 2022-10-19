@@ -1,4 +1,4 @@
-String meshmatcap_vert = """
+String meshmatcapVert = """
 #define MATCAP
 
 varying vec3 vViewPosition;

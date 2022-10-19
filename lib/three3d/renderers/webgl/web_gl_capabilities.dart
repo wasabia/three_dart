@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/renderers/webgl/web_gl_extensions.dart';
 
 class WebGLCapabilities {
@@ -56,7 +55,7 @@ class WebGLCapabilities {
     floatFragmentTextures = isWebGL2;
     floatVertexTextures = vertexTextures && floatFragmentTextures;
 
-    maxSamples = isWebGL2 ? gl.getParameter(gl.MAX_SAMPLES) : 0;
+    maxSamples = isWebGL2 ? gl.getParameter(gl.maxSamples) : 0;
   }
 
   num getMaxAnisotropy() {

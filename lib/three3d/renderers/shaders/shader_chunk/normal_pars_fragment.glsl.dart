@@ -1,4 +1,4 @@
-String normal_pars_fragment = """
+String normalParsFragment = """
 #ifndef FLAT_SHADED
 
 	varying vec3 vNormal;

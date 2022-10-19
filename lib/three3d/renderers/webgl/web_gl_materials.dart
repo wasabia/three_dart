@@ -1,14 +1,12 @@
-
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/materials/index.dart';
-import 'package:three_dart/three3d/materials/material.dart';
 import 'package:three_dart/three3d/math/index.dart';
 import 'package:three_dart/three3d/renderers/web_gl_renderer.dart';
 import 'package:three_dart/three3d/renderers/webgl/web_gl_properties.dart';
 import 'package:three_dart/three3d/textures/index.dart';
 
 class WebGLMaterials {
-   WebGLRenderer renderer;
+  WebGLRenderer renderer;
   WebGLProperties properties;
 
   WebGLMaterials(this.renderer, this.properties);
@@ -24,8 +22,7 @@ class WebGLMaterials {
     }
   }
 
-  refreshMaterialUniforms(uniforms, Material material, pixelRatio, height,
-      transmissionRenderTarget) {
+  refreshMaterialUniforms(uniforms, Material material, pixelRatio, height, transmissionRenderTarget) {
     if (material is MeshBasicMaterial) {
       refreshUniformsCommon(uniforms, material);
     } else if (material is MeshLambertMaterial) {
@@ -38,7 +35,7 @@ class WebGLMaterials {
       refreshUniformsPhong(uniforms, material);
     } else if (material is MeshStandardMaterial) {
       refreshUniformsCommon(uniforms, material);
-      refreshUniformsStandard( uniforms, material );
+      refreshUniformsStandard(uniforms, material);
       if (material is MeshPhysicalMaterial) {
         refreshUniformsPhysical(uniforms, material, transmissionRenderTarget);
       }
@@ -77,9 +74,7 @@ class WebGLMaterials {
     uniforms["diffuse"]["value"].copy(material.color);
 
     if (material.emissive != null) {
-      uniforms["emissive"]["value"]
-          .copy(material.emissive)
-          .multiplyScalar(material.emissiveIntensity);
+      uniforms["emissive"]["value"].copy(material.emissive).multiplyScalar(material.emissiveIntensity);
     }
 
     if (material.map != null) {
@@ -90,34 +85,27 @@ class WebGLMaterials {
       uniforms["alphaMap"]["value"] = material.alphaMap;
     }
 
-    if ( material.bumpMap != null ) {
+    if (material.bumpMap != null) {
+      uniforms["bumpMap"]["value"] = material.bumpMap;
+      uniforms["bumpScale"]["value"] = material.bumpScale;
+      if (material.side == BackSide) uniforms["bumpScale"]["value"] *= -1;
+    }
 
-			uniforms["bumpMap"]["value"] = material.bumpMap;
-			uniforms["bumpScale"]["value"] = material.bumpScale;
-			if ( material.side == BackSide ) uniforms["bumpScale"]["value"] *= - 1;
+    if (material.displacementMap != null) {
+      uniforms["displacementMap"]["value"] = material.displacementMap;
+      uniforms["displacementScale"]["value"] = material.displacementScale;
+      uniforms["displacementBias"]["value"] = material.displacementBias;
+    }
 
-		}
+    if (material.emissiveMap != null) {
+      uniforms["emissiveMap"]["value"] = material.emissiveMap;
+    }
 
-		if ( material.displacementMap != null ) {
-
-			uniforms["displacementMap"]["value"] = material.displacementMap;
-			uniforms["displacementScale"]["value"] = material.displacementScale;
-			uniforms["displacementBias"]["value"] = material.displacementBias;
-
-		}
-
-		if ( material.emissiveMap != null ) {
-
-			uniforms["emissiveMap"]["value"] = material.emissiveMap;
-
-		}
-
-		if ( material.normalMap != null ) {
-
-			uniforms["normalMap"]["value"] = material.normalMap;
-			uniforms["normalScale"]["value"].copy( material.normalScale );
-			if ( material.side == BackSide ) uniforms["normalScale"]["value"].negate();
-		}
+    if (material.normalMap != null) {
+      uniforms["normalMap"]["value"] = material.normalMap;
+      uniforms["normalScale"]["value"].copy(material.normalScale);
+      if (material.side == BackSide) uniforms["normalScale"]["value"].negate();
+    }
 
     if (material.specularMap != null) {
       uniforms["specularMap"]["value"] = material.specularMap;
@@ -132,10 +120,8 @@ class WebGLMaterials {
     if (envMap != null) {
       uniforms["envMap"]["value"] = envMap;
 
-      uniforms["flipEnvMap"]["value"] = (envMap.type == "CubeTexture" &&
-              envMap.isRenderTargetTexture == false)
-          ? -1
-          : 1;
+      uniforms["flipEnvMap"]["value"] =
+          (envMap.type == "CubeTexture" && envMap.isRenderTargetTexture == false) ? -1 : 1;
 
       uniforms["reflectivity"]["value"] = material.reflectivity;
       uniforms["ior"]["value"] = material.ior;
@@ -144,11 +130,11 @@ class WebGLMaterials {
 
     if (material.lightMap != null) {
       uniforms["lightMap"]["value"] = material.lightMap;
- 
-			// artist-friendly light intensity scaling factor
-			var scaleFactor = ( renderer.physicallyCorrectLights != true ) ? Math.PI : 1;
 
-			uniforms["lightMapIntensity"]["value"] = material.lightMapIntensity! * scaleFactor;
+      // artist-friendly light intensity scaling factor
+      var scaleFactor = (renderer.physicallyCorrectLights != true) ? Math.pi : 1;
+
+      uniforms["lightMapIntensity"]["value"] = material.lightMapIntensity! * scaleFactor;
     }
 
     if (material.aoMap != null) {
@@ -339,8 +325,7 @@ class WebGLMaterials {
 
   refreshUniformsPhong(uniforms, material) {
     uniforms["specular"]["value"].copy(material.specular);
-    uniforms["shininess"]["value"] =
-        Math.max<num>(material.shininess, 1e-4); // to prevent pow( 0.0, 0.0 )
+    uniforms["shininess"]["value"] = Math.max<num>(material.shininess, 1e-4); // to prevent pow( 0.0, 0.0 )
   }
 
   refreshUniformsToon(uniforms, material) {
@@ -361,18 +346,15 @@ class WebGLMaterials {
       uniforms["metalnessMap"]["value"] = material.metalnessMap;
     }
 
-    var envMap = properties.get( material )["envMap"];
+    var envMap = properties.get(material)["envMap"];
 
-		if ( envMap != null ) {
-
-			//uniforms.envMap.value = material.envMap; // part of uniforms common
-			uniforms["envMapIntensity"]["value"] = material.envMapIntensity;
-
-		}
+    if (envMap != null) {
+      //uniforms.envMap.value = material.envMap; // part of uniforms common
+      uniforms["envMapIntensity"]["value"] = material.envMapIntensity;
+    }
   }
 
   refreshUniformsPhysical(uniforms, material, transmissionRenderTarget) {
-
     uniforms["ior"]["value"] = material.ior; // also part of uniforms common
 
     if (material.sheen > 0) {
@@ -398,13 +380,11 @@ class WebGLMaterials {
       }
 
       if (material.clearcoatRoughnessMap != null) {
-        uniforms["clearcoatRoughnessMap"]["value"] =
-            material.clearcoatRoughnessMap;
+        uniforms["clearcoatRoughnessMap"]["value"] = material.clearcoatRoughnessMap;
       }
 
       if (material.clearcoatNormalMap != null) {
-        uniforms["clearcoatNormalScale"]["value"]
-            .copy(material.clearcoatNormalScale);
+        uniforms["clearcoatNormalScale"]["value"].copy(material.clearcoatNormalScale);
         uniforms["clearcoatNormalMap"]["value"] = material.clearcoatNormalMap;
 
         if (material.side == BackSide) {
@@ -415,10 +395,8 @@ class WebGLMaterials {
 
     if (material.transmission > 0) {
       uniforms["transmission"]["value"] = material.transmission;
-      uniforms["transmissionSamplerMap"]["value"] =
-          transmissionRenderTarget.texture;
-      uniforms["transmissionSamplerSize"]["value"]
-          .set(transmissionRenderTarget.width, transmissionRenderTarget.height);
+      uniforms["transmissionSamplerMap"]["value"] = transmissionRenderTarget.texture;
+      uniforms["transmissionSamplerSize"]["value"].set(transmissionRenderTarget.width, transmissionRenderTarget.height);
 
       if (material.transmissionMap != null) {
         uniforms["transmissionMap"]["value"] = material.transmissionMap;
@@ -457,5 +435,4 @@ class WebGLMaterials {
     uniforms["nearDistance"]["value"] = material.nearDistance;
     uniforms["farDistance"]["value"] = material.farDistance;
   }
-
 }

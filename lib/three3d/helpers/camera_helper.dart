@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/cameras/index.dart';
 import 'package:three_dart/three3d/core/buffer_attribute.dart';
@@ -16,17 +15,20 @@ var _camera = /*@__PURE__*/ Camera();
 ///		http://evanw.github.com/lightgl.js/tests/shadowmap.html
 
 class CameraHelper extends LineSegments {
-  @override
-  String type = "CameraHelper";
   late Camera camera;
   late Map<String, dynamic> pointMap;
 
-  CameraHelper.create(geometry, material) : super(geometry, material);
+  CameraHelper.create(geometry, material) : super(geometry, material) {
+    type = "CameraHelper";
+  }
 
   factory CameraHelper(camera) {
     var geometry = BufferGeometry();
-    var material = LineBasicMaterial(
-        {"color": 0xffffff, "vertexColors": true, "toneMapped": false});
+    var material = LineBasicMaterial({
+      "color": 0xffffff,
+      "vertexColors": true,
+      "toneMapped": false,
+    });
 
     List<double> vertices = [];
     List<double> colors = [];
@@ -104,12 +106,8 @@ class CameraHelper extends LineSegments {
     addLine('cf1', 'cf2', colorCross);
     addLine('cf3', 'cf4', colorCross);
 
-    geometry.setAttribute(
-        'position',
-        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
-    geometry.setAttribute(
-        'color',
-        Float32BufferAttribute(Float32Array.from(colors), 3, false));
+    geometry.setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    geometry.setAttribute('color', Float32BufferAttribute(Float32Array.from(colors), 3, false));
 
     CameraHelper cameraHelper = CameraHelper.create(geometry, material);
     cameraHelper.camera = camera;

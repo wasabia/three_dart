@@ -1,4 +1,4 @@
-String uv2_pars_fragment = """
+String uv2ParsFragment = """
 #if defined( USE_LIGHTMAP ) || defined( USE_AOMAP )
 
 	varying vec2 vUv2;

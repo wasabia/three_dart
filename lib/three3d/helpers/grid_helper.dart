@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/buffer_attribute.dart';
 import 'package:three_dart/three3d/core/buffer_geometry.dart';
@@ -7,13 +6,16 @@ import 'package:three_dart/three3d/math/color.dart';
 import 'package:three_dart/three3d/objects/line_segments.dart';
 
 class GridHelper extends LineSegments {
-  @override
-  String type = 'GridHelper';
+  GridHelper.create(geometry, material) : super(geometry, material) {
+    type = 'GridHelper';
+  }
 
-  GridHelper.create(geometry, material) : super(geometry, material);
-
-  factory GridHelper(
-      [size = 10, int divisions = 10, color1 = 0x444444, color2 = 0x888888]) {
+  factory GridHelper([
+    size = 10,
+    int divisions = 10,
+    color1 = 0x444444,
+    color2 = 0x888888,
+  ]) {
     var color_1 = Color.fromHex(color1);
     var color_2 = Color.fromHex(color2);
 
@@ -41,14 +43,10 @@ class GridHelper extends LineSegments {
     }
 
     var geometry = BufferGeometry();
-    geometry.setAttribute(
-        'position',
-        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
-    geometry.setAttribute('color',
-        Float32BufferAttribute(Float32Array.from(colors), 3, false));
+    geometry.setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    geometry.setAttribute('color', Float32BufferAttribute(Float32Array.from(colors), 3, false));
 
-    var material =
-        LineBasicMaterial({"vertexColors": true, "toneMapped": false});
+    var material = LineBasicMaterial({"vertexColors": true, "toneMapped": false});
 
     return GridHelper.create(geometry, material);
   }

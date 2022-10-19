@@ -1,4 +1,4 @@
-String morphtarget_vertex = """
+String morphtargetVertex = """
 #ifdef USE_MORPHTARGETS
 
 	// morphTargetBaseInfluence is set based on BufferGeometry.morphTargetsRelative value:

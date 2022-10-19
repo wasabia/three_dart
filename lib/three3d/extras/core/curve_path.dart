@@ -1,5 +1,3 @@
-
-
 import 'package:three_dart/three3d/extras/core/curve.dart';
 import 'package:three_dart/three3d/extras/curves/line_curve.dart';
 
@@ -9,16 +7,15 @@ import 'package:three_dart/three3d/extras/curves/line_curve.dart';
 ///*************************************************************/
 
 class CurvePath extends Curve {
-  @override
-  String type = 'CurvePath';
-
   CurvePath() : super() {
+    type = 'CurvePath';
     curves = [];
     autoClose = false; // Automatically closes the path
   }
 
   CurvePath.fromJSON(Map<String, dynamic> json) : super.fromJSON(json) {
     autoClose = json["autoClose"];
+    type = 'CurvePath';
     curves = [];
 
     for (var i = 0, l = json["curves"].length; i < l; i++) {
@@ -207,23 +204,5 @@ class CurvePath extends Curve {
     }
 
     return data;
-  }
-
-  @override
-  fromJSON(json) {
-    super.fromJSON(json);
-
-    autoClose = json.autoClose;
-    curves = [];
-
-    for (var i = 0, l = json.curves.length; i < l; i++) {
-      var curve = json.curves[i];
-
-      throw (" CurvePath fromJSON todo ");
-      // this.curves.add( new Curves[ curve.type ]().fromJSON( curve ) );
-
-    }
-
-    return this;
   }
 }

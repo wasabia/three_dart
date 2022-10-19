@@ -1,4 +1,4 @@
-String map_particle_pars_fragment = """
+String mapParticleParsFragment = """
 #if defined( USE_MAP ) || defined( USE_ALPHAMAP )
 
 	uniform mat3 uvTransform;

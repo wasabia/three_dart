@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/extras/core/curve.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
@@ -16,11 +15,18 @@ class EllipseCurve extends Curve {
   late num aRotation;
 
   @override
-  bool isEllipseCurve = true;
-
   EllipseCurve(
-      aX, aY, xRadius, yRadius, [aStartAngle, aEndAngle, aClockwise, aRotation]) {
+    aX,
+    aY,
+    xRadius,
+    yRadius, [
+    aStartAngle,
+    aEndAngle,
+    aClockwise,
+    aRotation,
+  ]) {
     type = 'EllipseCurve';
+    isEllipseCurve = true;
 
     this.aX = aX ?? 0;
     this.aY = aY ?? 0;
@@ -29,7 +35,7 @@ class EllipseCurve extends Curve {
     this.yRadius = yRadius ?? 1;
 
     this.aStartAngle = aStartAngle ?? 0;
-    this.aEndAngle = aEndAngle ?? 2 * Math.PI;
+    this.aEndAngle = aEndAngle ?? 2 * Math.pi;
 
     this.aClockwise = aClockwise ?? false;
 
@@ -37,6 +43,9 @@ class EllipseCurve extends Curve {
   }
 
   EllipseCurve.fromJSON(Map<String, dynamic> json) : super.fromJSON(json) {
+    type = 'EllipseCurve';
+    isEllipseCurve = true;
+
     aX = json["aX"];
     aY = json["aY"];
 
@@ -55,9 +64,9 @@ class EllipseCurve extends Curve {
   getPoint(t, optionalTarget) {
     var point = optionalTarget ?? Vector2(null, null);
 
-    var twoPi = Math.PI * 2;
+    var twoPi = Math.pi * 2;
     var deltaAngle = aEndAngle - aStartAngle;
-    var samePoints = Math.abs(deltaAngle) < Math.EPSILON;
+    var samePoints = Math.abs(deltaAngle) < Math.epsilon;
 
     // ensures that deltaAngle is 0 .. 2 PI
     while (deltaAngle < 0) {
@@ -67,7 +76,7 @@ class EllipseCurve extends Curve {
       deltaAngle -= twoPi;
     }
 
-    if (deltaAngle < Math.EPSILON) {
+    if (deltaAngle < Math.epsilon) {
       if (samePoints) {
         deltaAngle = 0;
       } else {

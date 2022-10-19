@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/core/event_dispatcher.dart';
 
 class WebXRManager with EventDispatcher {

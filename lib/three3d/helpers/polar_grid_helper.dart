@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/buffer_attribute.dart';
 import 'package:three_dart/three3d/core/buffer_geometry.dart';
@@ -10,12 +9,7 @@ class PolarGridHelper extends LineSegments {
   PolarGridHelper.create(geomertey, material) : super(geomertey, material);
 
   factory PolarGridHelper(
-      [radius = 10,
-      radials = 16,
-      circles = 8,
-      divisions = 64,
-      color1 = 0x444444,
-      color2 = 0x888888]) {
+      [radius = 10, radials = 16, circles = 8, divisions = 64, color1 = 0x444444, color2 = 0x888888]) {
     color1 = Color(color1);
     color2 = Color(color2);
 
@@ -25,7 +19,7 @@ class PolarGridHelper extends LineSegments {
     // create the radials
 
     for (var i = 0; i <= radials; i++) {
-      var v = (i / radials) * (Math.PI * 2);
+      var v = (i / radials) * (Math.pi * 2);
 
       var x = Math.sin(v) * radius;
       var z = Math.cos(v) * radius;
@@ -49,7 +43,7 @@ class PolarGridHelper extends LineSegments {
       for (var j = 0; j < divisions; j++) {
         // first vertex
 
-        var v = (j / divisions) * (Math.PI * 2);
+        var v = (j / divisions) * (Math.pi * 2);
 
         var x = Math.sin(v) * r;
         var z = Math.cos(v) * r;
@@ -59,7 +53,7 @@ class PolarGridHelper extends LineSegments {
 
         // second vertex
 
-        v = ((j + 1) / divisions) * (Math.PI * 2);
+        v = ((j + 1) / divisions) * (Math.pi * 2);
 
         x = Math.sin(v) * r;
         z = Math.cos(v) * r;
@@ -70,13 +64,10 @@ class PolarGridHelper extends LineSegments {
     }
 
     var geometry = BufferGeometry();
-    geometry.setAttribute(
-        'position', Float32BufferAttribute(Float32Array.from(vertices), 3));
-    geometry.setAttribute(
-        'color', Float32BufferAttribute(Float32Array.from(colors), 3));
+    geometry.setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3));
+    geometry.setAttribute('color', Float32BufferAttribute(Float32Array.from(colors), 3));
 
-    var material =
-        LineBasicMaterial({"vertexColors": true, "toneMapped": false});
+    var material = LineBasicMaterial({"vertexColors": true, "toneMapped": false});
 
     var pgh = PolarGridHelper.create(geometry, material);
 

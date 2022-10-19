@@ -234,19 +234,19 @@ class _MyAppState extends State<WebGlGeometryColors> {
 
     shadowMesh = three.Mesh(shadowGeo, shadowMaterial);
     shadowMesh.position.y = -250;
-    shadowMesh.rotation.x = -three.Math.PI / 2;
+    shadowMesh.rotation.x = -three.Math.pi / 2;
     scene.add(shadowMesh);
 
     shadowMesh = three.Mesh(shadowGeo, shadowMaterial);
     shadowMesh.position.y = -250;
     shadowMesh.position.x = -400;
-    shadowMesh.rotation.x = -three.Math.PI / 2;
+    shadowMesh.rotation.x = -three.Math.pi / 2;
     scene.add(shadowMesh);
 
     shadowMesh = three.Mesh(shadowGeo, shadowMaterial);
     shadowMesh.position.y = -250;
     shadowMesh.position.x = 400;
-    shadowMesh.rotation.x = -three.Math.PI / 2;
+    shadowMesh.rotation.x = -three.Math.pi / 2;
     scene.add(shadowMesh);
 
     var radius = 200;

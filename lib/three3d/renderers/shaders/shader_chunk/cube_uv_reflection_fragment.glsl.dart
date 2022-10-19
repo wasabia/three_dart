@@ -1,4 +1,4 @@
-String cube_uv_reflection_fragment = """
+String cubeUvReflectionFragment = """
 #ifdef ENVMAP_TYPE_CUBE_UV
 
 	#define cubeUV_minMipLevel 4.0

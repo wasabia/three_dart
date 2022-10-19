@@ -1,7 +1,5 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/index.dart';
-import 'package:three_dart/three3d/core/raycaster.dart';
 import 'package:three_dart/three3d/materials/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 import 'package:three_dart/three3d/objects/mesh.dart';
@@ -14,10 +12,7 @@ List<Intersection> _instanceIntersects = [];
 var _mesh = Mesh(BufferGeometry(), Material());
 
 class InstancedMesh extends Mesh {
-
-
-  InstancedMesh(BufferGeometry? geometry, material, int count)
-      : super(geometry, material) {
+  InstancedMesh(BufferGeometry? geometry, material, int count) : super(geometry, material) {
     type = "InstancedMesh";
 
     var dl = Float32Array(count * 16);
@@ -86,9 +81,8 @@ class InstancedMesh extends Mesh {
     }
   }
 
-  void setColorAt(int index, Color color) {
-    instanceColor ??= InstancedBufferAttribute(
-        Float32Array((instanceMatrix!.count * 3).toInt()), 3, false);
+  List setColorAt(int index, Color color) {
+    instanceColor ??= InstancedBufferAttribute(Float32Array((instanceMatrix!.count * 3).toInt()), 3, false);
 
     return color.toArray(instanceColor!.array, index * 3);
   }

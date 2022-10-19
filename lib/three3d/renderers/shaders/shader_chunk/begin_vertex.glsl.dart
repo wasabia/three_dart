@@ -1,3 +1,3 @@
-String begin_vertex = """
+String beginVertex = """
 vec3 transformed = vec3( position );
 """;

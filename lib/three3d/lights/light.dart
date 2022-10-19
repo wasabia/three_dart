@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/core/object_3d.dart';
 import 'package:three_dart/three3d/lights/light_shadow.dart';
 import 'package:three_dart/three3d/math/color.dart';
@@ -26,10 +25,9 @@ class Light extends Object3D {
 
   Color? groundColor;
 
-  @override
-  String type = "Light";
-
   Light(color, [double? intensity]) : super() {
+    type = "Light";
+
     if (color is Color) {
       this.color = color;
     } else if (color is int) {
@@ -41,8 +39,7 @@ class Light extends Object3D {
     this.intensity = intensity ?? 1.0;
   }
 
-  Light.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON) {
+  Light.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) : super.fromJSON(json, rootJSON) {
     if (json["color"] != null) {
       color = Color(0, 0, 0).setHex(json["color"]);
     }

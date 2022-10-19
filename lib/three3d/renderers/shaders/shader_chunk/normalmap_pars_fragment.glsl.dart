@@ -1,4 +1,4 @@
-String normalmap_pars_fragment = """
+String normalmapParsFragment = """
 #ifdef USE_NORMALMAP
 
 	uniform sampler2D normalMap;

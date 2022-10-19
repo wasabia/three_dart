@@ -1,4 +1,4 @@
-String roughnessmap_pars_fragment = """
+String roughnessmapParsFragment = """
 #ifdef USE_ROUGHNESSMAP
 
 	uniform sampler2D roughnessMap;

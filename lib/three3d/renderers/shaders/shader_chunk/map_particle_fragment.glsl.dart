@@ -1,4 +1,4 @@
-String map_particle_fragment = """
+String mapParticleFragment = """
 #if defined( USE_MAP ) || defined( USE_ALPHAMAP )
 
 	vec2 uv = ( uvTransform * vec3( gl_PointCoord.x, 1.0 - gl_PointCoord.y, 1 ) ).xy;

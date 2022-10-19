@@ -1,19 +1,29 @@
-
-import 'package:flutter_gl/flutter_gl.dart';
-import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/geometries/polyhedron_geometry.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class DodecahedronGeometry extends PolyhedronGeometry {
-  @override
-  String type = "DodecahedronGeometry";
-
-  DodecahedronGeometry.create(vertices, indices, radius, detail)
-      : super(vertices, indices, radius, detail) {
-    parameters = {"radius": radius, "detail": detail};
+  DodecahedronGeometry.create(
+    vertices,
+    indices,
+    radius,
+    detail,
+  ) : super(
+          vertices,
+          indices,
+          radius,
+          detail,
+        ) {
+    type = "DodecahedronGeometry";
+    parameters = {
+      "radius": radius,
+      "detail": detail,
+    };
   }
 
-  factory DodecahedronGeometry([num radius = 1, int detail = 0]) {
+  factory DodecahedronGeometry([
+    num radius = 1,
+    int detail = 0,
+  ]) {
     var t = (1 + Math.sqrt(5)) / 2;
     var r = 1 / t;
 
@@ -148,8 +158,7 @@ class DodecahedronGeometry extends PolyhedronGeometry {
       9
     ];
 
-    DodecahedronGeometry _dbg =
-        DodecahedronGeometry.create(vertices, indices, radius, detail);
+    DodecahedronGeometry _dbg = DodecahedronGeometry.create(vertices, indices, radius, detail);
 
     return _dbg;
   }

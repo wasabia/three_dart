@@ -1,4 +1,4 @@
-String aomap_fragment = """
+String aomapFragment = """
 #ifdef USE_AOMAP
 
 	// reads channel R, compatible with a combined OcclusionRoughnessMetallic (RGB) texture

@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/cameras/index.dart';
 import 'package:three_dart/three3d/core/layers.dart';
 import 'package:three_dart/three3d/core/object_3d.dart';

@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/extras/core/shape.dart';
 import 'package:three_dart/three3d/extras/core/shape_path.dart';
 

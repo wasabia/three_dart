@@ -23,7 +23,7 @@ void main() {
 
       // EXPOSED CONSTANTS
       test("Exposed Color.NAMES", () {
-        expect(Color.NAMES["aliceblue"], 0xF0F8FF);
+        expect(Color.names["aliceblue"], 0xF0F8FF);
       });
 
       // PUBLIC STUFF

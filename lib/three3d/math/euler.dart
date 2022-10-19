@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/math/math.dart';
 import 'package:three_dart/three3d/math/math_utils.dart';
 import 'package:three_dart/three3d/math/matrix4.dart';
@@ -6,8 +5,8 @@ import 'package:three_dart/three3d/math/quaternion.dart';
 import 'package:three_dart/three3d/math/vector3.dart';
 
 class Euler {
-  static const String DefaultOrder = 'XYZ';
-  static const List<String> RotationOrders = ['XYZ', 'YZX', 'ZXY', 'XZY', 'YXZ', 'ZYX'];
+  static const String defaultOrder = 'XYZ';
+  static const List<String> rotationOrders = ['XYZ', 'YZX', 'ZXY', 'XZY', 'YXZ', 'ZYX'];
 
   String type = "Euler";
 
@@ -22,7 +21,7 @@ class Euler {
     _x = x ?? 0;
     _y = y ?? 0;
     _z = z ?? 0;
-    _order = order ?? DefaultOrder;
+    _order = order ?? defaultOrder;
   }
 
   double get x => _x;
@@ -203,7 +202,7 @@ class Euler {
     _x = array[0];
     _y = array[1];
     _z = array[2];
-    if (array.length > 3) _order = RotationOrders[array[3].toInt()];
+    if (array.length > 3) _order = rotationOrders[array[3].toInt()];
 
     onChangeCallback();
 
@@ -211,7 +210,7 @@ class Euler {
   }
 
   List<num> toJSON() {
-    int orderNo = RotationOrders.indexOf(_order);
+    int orderNo = rotationOrders.indexOf(_order);
     return [_x, _y, _z, orderNo];
   }
 
@@ -221,7 +220,7 @@ class Euler {
     array[offset] = _x;
     array[offset + 1] = _y;
     array[offset + 2] = _z;
-    array[offset + 3] = RotationOrders.indexOf(_order);
+    array[offset + 3] = rotationOrders.indexOf(_order);
 
     return array;
   }

@@ -1,4 +1,4 @@
-String cube_frag = """
+String cubeFrag = """
 #include <envmap_common_pars_fragment>
 uniform float opacity;
 

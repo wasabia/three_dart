@@ -1,5 +1,3 @@
-
-
 import 'package:three_dart/three3d/cameras/perspective_camera.dart';
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/core/index.dart';

@@ -1,4 +1,4 @@
-String skinbase_vertex = """
+String skinbaseVertex = """
 #ifdef USE_SKINNING
 
 	mat4 boneMatX = getBoneMatrix( skinIndex.x );

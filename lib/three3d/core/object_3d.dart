@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:three_dart/three3d/cameras/index.dart';
@@ -31,8 +30,8 @@ Event _addedEvent = Event({"type": "added"});
 Event _removedEvent = Event({"type": "removed"});
 
 class Object3D with EventDispatcher {
-  static Vector3 DefaultUp = Vector3(0.0, 1.0, 0.0);
-  static bool DefaultMatrixAutoUpdate = true;
+  static Vector3 defaultUp = Vector3(0.0, 1.0, 0.0);
+  static bool defaultMatrixAutoUpdate = true;
 
   int id = _object3DId++;
 
@@ -53,7 +52,7 @@ class Object3D with EventDispatcher {
   Matrix4 matrix = Matrix4();
   Matrix4 matrixWorld = Matrix4();
 
-  bool matrixAutoUpdate = Object3D.DefaultMatrixAutoUpdate;
+  bool matrixAutoUpdate = Object3D.defaultMatrixAutoUpdate;
   bool matrixWorldNeedsUpdate = false;
 
   Layers layers = Layers();
@@ -73,7 +72,7 @@ class Object3D with EventDispatcher {
 
   BufferGeometry? geometry;
 
-  Vector3 up = Object3D.DefaultUp.clone();
+  Vector3 up = Object3D.defaultUp.clone();
 
   Vector3 position = Vector3(0, 0, 0);
   Euler rotation = Euler(0, 0, 0);
@@ -97,12 +96,10 @@ class Object3D with EventDispatcher {
   Material? overrideMaterial;
   Material? customDistanceMaterial;
 
-  /**
-	 * Custom depth material to be used when rendering to the depth map. Can only be used in context of meshes.
-	 * When shadow-casting with a DirectionalLight or SpotLight, if you are (a) modifying vertex positions in
-	 * the vertex shader, (b) using a displacement map, (c) using an alpha map with alphaTest, or (d) using a
-	 * transparent texture with alphaTest, you must specify a customDepthMaterial for proper shadows.
-	 */
+  /// Custom depth material to be used when rendering to the depth map. Can only be used in context of meshes.
+  /// When shadow-casting with a DirectionalLight or SpotLight, if you are (a) modifying vertex positions in
+  /// the vertex shader, (b) using a displacement map, (c) using an alpha map with alphaTest, or (d) using a
+  /// transparent texture with alphaTest, you must specify a customDepthMaterial for proper shadows.
   Material? customDepthMaterial;
 
   // onBeforeRender({WebGLRenderer? renderer, scene, Camera? camera, RenderTarget? renderTarget, dynamic geometry, Material? material, dynamic group}) {
@@ -353,24 +350,20 @@ class Object3D with EventDispatcher {
     return this;
   }
 
-  Object3D add(Object3D? object) {
+  Object3D add(Object3D object) {
     if (object == this) {
       print('three.Object3D.add: object can\'t be added as a child of itself. $object');
       return this;
     }
 
-    if (object != null && object is Object3D) {
-      if (object.parent != null) {
-        object.parent!.remove(object);
-      }
-
-      object.parent = this;
-      children.add(object);
-
-      object.dispatchEvent(_addedEvent);
-    } else {
-      print('three.Object3D.add: object not an instance of three.Object3D. $object');
+    if (object.parent != null) {
+      object.parent!.remove(object);
     }
+
+    object.parent = this;
+    children.add(object);
+
+    object.dispatchEvent(_addedEvent);
 
     return this;
   }

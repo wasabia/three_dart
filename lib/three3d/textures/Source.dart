@@ -1,7 +1,5 @@
-
 import 'package:three_dart/three3d/extras/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
-import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/textures/image_element.dart';
 
 class Source {
@@ -11,11 +9,8 @@ class Source {
 
   int currentVersion = 0;
 
-  Source([data]) {
+  Source([this.data]) {
     uuid = MathUtils.generateUUID();
-
-    this.data = data;
-
     version = 0;
   }
 

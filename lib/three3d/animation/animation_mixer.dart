@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/animation/animation_action.dart';
 import 'package:three_dart/three3d/animation/animation_clip.dart';
 import 'package:three_dart/three3d/animation/property_binding.dart';
@@ -71,7 +70,7 @@ class AnimationMixer with EventDispatcher {
         var path = prototypeAction != null ? prototypeAction.propertyBindings[i].binding.parsedPath : null;
 
         binding =
-            PropertyMixer(PropertyBinding.create(_root, trackName, path), track.ValueTypeName, track.getValueSize());
+            PropertyMixer(PropertyBinding.create(_root, trackName, path), track.valueTypeName, track.getValueSize());
 
         ++binding.referenceCount;
         _addInactiveBinding(binding, rootUuid, trackName);

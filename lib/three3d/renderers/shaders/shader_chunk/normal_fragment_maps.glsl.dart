@@ -1,4 +1,4 @@
-String normal_fragment_maps = """
+String normalFragmentMaps = """
 
 #ifdef OBJECTSPACE_NORMALMAP
 

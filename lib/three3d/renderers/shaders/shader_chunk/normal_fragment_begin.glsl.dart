@@ -1,4 +1,4 @@
-String normal_fragment_begin = """
+String normalFragmentBegin = """
 float faceDirection = gl_FrontFacing ? 1.0 : - 1.0;
 
 #ifdef FLAT_SHADED

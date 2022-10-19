@@ -1,4 +1,4 @@
-String lights_toon_fragment = """
+String lightsToonFragment = """
 ToonMaterial material;
 material.diffuseColor = diffuseColor.rgb;
 """;

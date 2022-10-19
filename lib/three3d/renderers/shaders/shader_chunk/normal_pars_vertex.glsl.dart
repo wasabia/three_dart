@@ -1,4 +1,4 @@
-String normal_pars_vertex = """
+String normalParsVertex = """
 #ifndef FLAT_SHADED
 
 	varying vec3 vNormal;

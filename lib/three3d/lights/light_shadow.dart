@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:three_dart/three3d/cameras/camera.dart';
 import 'package:three_dart/three3d/lights/light.dart';

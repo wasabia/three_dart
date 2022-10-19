@@ -1,4 +1,4 @@
-String shadow_frag = """
+String shadowFrag = """
 uniform vec3 color;
 uniform float opacity;
 

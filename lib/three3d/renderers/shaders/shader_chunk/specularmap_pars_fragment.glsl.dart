@@ -1,4 +1,4 @@
-String specularmap_pars_fragment = """
+String specularmapParsFragment = """
 #ifdef USE_SPECULARMAP
 
 	uniform sampler2D specularMap;

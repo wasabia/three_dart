@@ -1,14 +1,12 @@
-
 import 'package:three_dart/three3d/core/object_3d.dart';
 import 'package:three_dart/three3d/lights/light.dart';
 import 'package:three_dart/three3d/math/color.dart';
 
 class HemisphereLight extends Light {
-  HemisphereLight(skyColor, groundColor, [double intensity = 1.0])
-      : super(skyColor, intensity) {
+  HemisphereLight(skyColor, groundColor, [double intensity = 1.0]) : super(skyColor, intensity) {
     type = 'HemisphereLight';
 
-    position.copy(Object3D.DefaultUp);
+    position.copy(Object3D.defaultUp);
 
     isHemisphereLight = true;
     updateMatrix();

@@ -256,9 +256,9 @@ class _MyAppState extends State<WebglInstancingPerformance> {
     position.y = three.Math.random() * 40 - 20;
     position.z = three.Math.random() * 40 - 20;
 
-    rotation.x = three.Math.random() * 2 * three.Math.PI;
-    rotation.y = three.Math.random() * 2 * three.Math.PI;
-    rotation.z = three.Math.random() * 2 * three.Math.PI;
+    rotation.x = three.Math.random() * 2 * three.Math.pi;
+    rotation.y = three.Math.random() * 2 * three.Math.pi;
+    rotation.z = three.Math.random() * 2 * three.Math.pi;
 
     quaternion.setFromEuler(rotation, false);
 

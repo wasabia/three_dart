@@ -1,4 +1,4 @@
-String envmap_pars_fragment = """
+String envmapParsFragment = """
 #ifdef USE_ENVMAP
 
 	uniform float reflectivity;

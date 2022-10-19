@@ -1,4 +1,4 @@
-String vsm_frag = /* glsl */ """
+String vsmFrag = /* glsl */ """
 uniform sampler2D shadow_pass;
 uniform vec2 resolution;
 uniform float radius;

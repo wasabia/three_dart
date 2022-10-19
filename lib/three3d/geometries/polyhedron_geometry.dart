@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/dart_helpers.dart';
@@ -113,7 +112,7 @@ class PolyhedronGeometry extends BufferGeometry {
       }
 
       if ((vector.x == 0) && (vector.z == 0)) {
-        uvBuffer[stride] = azimuth / 2 / Math.PI + 0.5;
+        uvBuffer[stride] = azimuth / 2 / Math.pi + 0.5;
       }
     }
 
@@ -126,8 +125,7 @@ class PolyhedronGeometry extends BufferGeometry {
     // Angle above the XZ plane.
 
     inclination(vector) {
-      return Math.atan2(
-          -vector.y, Math.sqrt((vector.x * vector.x) + (vector.z * vector.z)));
+      return Math.atan2(-vector.y, Math.sqrt((vector.x * vector.x) + (vector.z * vector.z)));
     }
 
     correctUVs() {
@@ -191,8 +189,8 @@ class PolyhedronGeometry extends BufferGeometry {
         vertex.y = vertexBuffer[i + 1];
         vertex.z = vertexBuffer[i + 2];
 
-        var u = azimuth(vertex) / 2 / Math.PI + 0.5;
-        double v = inclination(vertex) / Math.PI + 0.5;
+        var u = azimuth(vertex) / 2 / Math.pi + 0.5;
+        double v = inclination(vertex) / Math.pi + 0.5;
         uvBuffer.addAll([u, 1 - v]);
       }
 
@@ -203,12 +201,7 @@ class PolyhedronGeometry extends BufferGeometry {
 
     // helper functions ----------------- end
 
-    parameters = {
-      "vertices": vertices,
-      "indices": indices,
-      "radius": radius,
-      "detail": detail
-    };
+    parameters = {"vertices": vertices, "indices": indices, "radius": radius, "detail": detail};
 
     // the subdivision creates the vertex buffer data
 
@@ -224,14 +217,9 @@ class PolyhedronGeometry extends BufferGeometry {
 
     // build non-indexed geometry
 
-    setAttribute('position',
-        Float32BufferAttribute(Float32Array.from(vertexBuffer), 3, false));
-    setAttribute(
-        'normal',
-        Float32BufferAttribute(
-            Float32Array.from(slice<double>(vertexBuffer, 0)), 3, false));
-    setAttribute(
-        'uv', Float32BufferAttribute(Float32Array.from(uvBuffer), 2, false));
+    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertexBuffer), 3, false));
+    setAttribute('normal', Float32BufferAttribute(Float32Array.from(slice<double>(vertexBuffer, 0)), 3, false));
+    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvBuffer), 2, false));
 
     if (detail == 0) {
       computeVertexNormals(); // flat normals

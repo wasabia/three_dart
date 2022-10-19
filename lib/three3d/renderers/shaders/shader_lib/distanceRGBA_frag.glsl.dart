@@ -1,4 +1,4 @@
-String distanceRGBA_frag = """
+String distanceRgbeFrag = """
 #define DISTANCE
 
 uniform vec3 referencePosition;

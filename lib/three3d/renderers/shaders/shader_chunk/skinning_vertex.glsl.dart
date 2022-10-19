@@ -1,4 +1,4 @@
-String skinning_vertex = """
+String skinningVertex = """
 #ifdef USE_SKINNING
 
 	vec4 skinVertex = bindMatrix * vec4( transformed, 1.0 );

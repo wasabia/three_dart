@@ -1,9 +1,7 @@
-
 import 'dart:convert';
 
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/core/index.dart';
-import 'package:three_dart/three3d/core/object_3d.dart';
 import 'package:three_dart/three3d/materials/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 import 'package:three_dart/three3d/objects/skinned_mesh.dart';
@@ -313,7 +311,7 @@ Intersection? checkBufferGeometryIntersection(Object3D object, Material material
       _uvB.fromBufferAttribute(uv, b);
       _uvC.fromBufferAttribute(uv, c);
 
-      intersection.uv = Triangle.static_getUV(_intersectionPoint, _vA, _vB, _vC, _uvA, _uvB, _uvC, Vector2(null, null));
+      intersection.uv = Triangle.staticGetUV(_intersectionPoint, _vA, _vB, _vC, _uvA, _uvB, _uvC, Vector2(null, null));
     }
 
     if (uv2 != null) {
@@ -321,13 +319,12 @@ Intersection? checkBufferGeometryIntersection(Object3D object, Material material
       _uvB.fromBufferAttribute(uv2, b);
       _uvC.fromBufferAttribute(uv2, c);
 
-      intersection.uv2 =
-          Triangle.static_getUV(_intersectionPoint, _vA, _vB, _vC, _uvA, _uvB, _uvC, Vector2(null, null));
+      intersection.uv2 = Triangle.staticGetUV(_intersectionPoint, _vA, _vB, _vC, _uvA, _uvB, _uvC, Vector2(null, null));
     }
 
     var face = Face.fromJSON({"a": a, "b": b, "c": c, "normal": Vector3.init(), "materialIndex": 0});
 
-    Triangle.static_getNormal(_vA, _vB, _vC, face.normal);
+    Triangle.staticGetNormal(_vA, _vB, _vC, face.normal);
 
     intersection.face = face;
   }

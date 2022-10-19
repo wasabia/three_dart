@@ -1,4 +1,4 @@
-String lights_fragment_end = """
+String lightsFragmentEnd = """
 #if defined( RE_IndirectDiffuse )
 
 	RE_IndirectDiffuse( irradiance, geometry, material, reflectedLight );

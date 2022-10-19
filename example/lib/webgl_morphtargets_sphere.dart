@@ -228,7 +228,7 @@ class _State extends State<WebGlMorphtargetsSphere> {
     var gltf = await loader.loadAsync('assets/models/gltf/AnimatedMorphSphere/glTF/AnimatedMorphSphere.gltf');
 
     mesh = gltf["scene"].getObjectByName('AnimatedMorphSphere');
-    mesh.rotation.z = three.Math.PI / 2;
+    mesh.rotation.z = three.Math.pi / 2;
     scene.add(mesh);
 
     print(" load sucess mesh: $mesh  ");

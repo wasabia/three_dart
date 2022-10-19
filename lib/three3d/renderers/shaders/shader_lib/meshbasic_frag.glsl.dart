@@ -1,4 +1,4 @@
-String meshbasic_frag = """
+String meshbasicFrag = """
 uniform vec3 diffuse;
 uniform float opacity;
 

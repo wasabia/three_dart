@@ -1,23 +1,19 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
-
 class CylinderGeometry extends BufferGeometry {
-  @override
-  String type = "CylinderGeometry";
-
-  CylinderGeometry(
-      [radiusTop = 1,
-      radiusBottom = 1,
-      height = 1,
-      radialSegments = 8,
-      heightSegments = 1,
-      bool openEnded = false,
-      thetaStart = 0,
-      thetaLength = Math.PI * 2])
-      : super() {
+  CylinderGeometry([
+    radiusTop = 1,
+    radiusBottom = 1,
+    height = 1,
+    radialSegments = 8,
+    heightSegments = 1,
+    bool openEnded = false,
+    thetaStart = 0,
+    thetaLength = Math.pi * 2,
+  ]) : super() {
+    type = "CylinderGeometry";
     parameters = {
       "radiusTop": radiusTop,
       "radiusBottom": radiusBottom,
@@ -83,14 +79,12 @@ class CylinderGeometry extends BufferGeometry {
           vertex.x = radius * sinTheta;
           vertex.y = -v * height + halfHeight;
           vertex.z = radius * cosTheta;
-          vertices.addAll(
-              [vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
+          vertices.addAll([vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
 
           // normal
 
           normal.set(sinTheta, slope, cosTheta).normalize();
-          normals.addAll(
-              [normal.x.toDouble(), normal.y.toDouble(), normal.z.toDouble()]);
+          normals.addAll([normal.x.toDouble(), normal.y.toDouble(), normal.z.toDouble()]);
 
           // uv
 
@@ -188,8 +182,7 @@ class CylinderGeometry extends BufferGeometry {
         vertex.x = radius * sinTheta;
         vertex.y = halfHeight * sign;
         vertex.z = radius * cosTheta;
-        vertices.addAll(
-            [vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
+        vertices.addAll([vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
 
         // normal
 
@@ -227,8 +220,7 @@ class CylinderGeometry extends BufferGeometry {
 
       // add a group to the geometry. this will ensure multi material support
 
-      scope.addGroup(groupStart, groupCount,
-          top == true ? 1 : 2);
+      scope.addGroup(groupStart, groupCount, top == true ? 1 : 2);
 
       // calculate new start value for groups
 
@@ -245,23 +237,21 @@ class CylinderGeometry extends BufferGeometry {
     // build geometry
 
     setIndex(indices);
-    setAttribute('position',
-        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
-    setAttribute('normal',
-        Float32BufferAttribute(Float32Array.from(normals), 3, false));
-    setAttribute(
-        'uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
+    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    setAttribute('normal', Float32BufferAttribute(Float32Array.from(normals), 3, false));
+    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
   }
 
   static CylinderGeometry fromJSON(data) {
     return CylinderGeometry(
-        data["radiusTop"],
-        data["radiusBottom"],
-        data["height"],
-        data["radialSegments"],
-        data["heightSegments"],
-        data["openEnded"],
-        data["thetaStart"],
-        data["thetaLength"]);
+      data["radiusTop"],
+      data["radiusBottom"],
+      data["height"],
+      data["radialSegments"],
+      data["heightSegments"],
+      data["openEnded"],
+      data["thetaStart"],
+      data["thetaLength"],
+    );
   }
 }

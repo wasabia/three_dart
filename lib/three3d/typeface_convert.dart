@@ -77,10 +77,8 @@ class TypefaceConvert {
     result["familyName"] = font.familyName;
     result["ascender"] = Math.round(font.ascender * scale);
     result["descender"] = Math.round(font.descender * scale);
-    result["underlinePosition"] =
-        Math.round(font.tables.post.underlinePosition * scale);
-    result["underlineThickness"] =
-        Math.round(font.tables.post.underlineThickness * scale);
+    result["underlinePosition"] = Math.round(font.tables.post.underlinePosition * scale);
+    result["underlineThickness"] = Math.round(font.tables.post.underlineThickness * scale);
     result["boundingBox"] = {
       "yMin": Math.round(font.tables.head.yMin * scale),
       "xMin": Math.round(font.tables.head.xMin * scale),
@@ -119,11 +117,7 @@ class TypefaceConvert {
 
     var reversed = [];
     for (var p in paths) {
-      var result = {
-        "type": "m",
-        "x": p[p.length - 1].x,
-        "y": p[p.length - 1].y
-      };
+      var result = {"type": "m", "x": p[p.length - 1].x, "y": p[p.length - 1].y};
       reversed.add(result);
 
       for (var i = p.length - 1; i > 0; i--) {

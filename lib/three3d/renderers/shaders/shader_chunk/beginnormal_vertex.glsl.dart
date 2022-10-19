@@ -1,4 +1,4 @@
-String beginnormal_vertex = """
+String beginnormalCertex = """
 vec3 objectNormal = vec3( normal );
 
 #ifdef USE_TANGENT

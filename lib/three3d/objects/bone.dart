@@ -1,5 +1,3 @@
-
-
 import 'package:three_dart/three3d/core/object_3d.dart';
 
 class Bone extends Object3D {

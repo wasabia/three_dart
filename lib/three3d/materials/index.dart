@@ -1,6 +1,5 @@
 library materials;
 
-
 export 'group_material.dart';
 export 'line_basic_material.dart';
 export 'line_dashed_material.dart';

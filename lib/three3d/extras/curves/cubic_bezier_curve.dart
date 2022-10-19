@@ -1,23 +1,13 @@
-
-
 import 'package:three_dart/three3d/extras/core/curve.dart';
 import 'package:three_dart/three3d/extras/core/interpolations.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class CubicBezierCurve extends Curve {
-  @override
-  late Vector2 v0;
-  @override
-  late Vector2 v1;
-  @override
-  late Vector2 v2;
   late Vector2 v3;
-
-  @override
-  bool isCubicBezierCurve = true;
 
   CubicBezierCurve(Vector2? v0, Vector2? v1, Vector2? v2, Vector2? v3) {
     type = 'CubicBezierCurve';
+    isCubicBezierCurve = true;
 
     this.v0 = v0 ?? Vector2(null, null);
     this.v1 = v1 ?? Vector2(null, null);
@@ -26,6 +16,9 @@ class CubicBezierCurve extends Curve {
   }
 
   CubicBezierCurve.fromJSON(Map<String, dynamic> json) : super.fromJSON(json) {
+    type = 'CubicBezierCurve';
+    isCubicBezierCurve = true;
+
     v0.fromArray(json["v0"]);
     v1.fromArray(json["v1"]);
     v2.fromArray(json["v2"]);
@@ -38,8 +31,10 @@ class CubicBezierCurve extends Curve {
 
     var v0 = this.v0, v1 = this.v1, v2 = this.v2, v3 = this.v3;
 
-    point.set(CubicBezier(t, v0.x, v1.x, v2.x, v3.x),
-        CubicBezier(t, v0.y, v1.y, v2.y, v3.y));
+    point.set(
+      cubicBezier(t, v0.x, v1.x, v2.x, v3.x),
+      cubicBezier(t, v0.y, v1.y, v2.y, v3.y),
+    );
 
     return point;
   }

@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/cameras/index.dart';
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/core/index.dart';
@@ -39,10 +38,8 @@ class WebGLRenderer {
 
   // Debug configuration container
   Map<String, dynamic> debug = {
-    /**
-		 * Enables error checking and reporting when shader programs are being compiled
-		 * @type {boolean}
-		 */
+    /// Enables error checking and reporting when shader programs are being compiled
+    /// @type {boolean}
     "checkShaderErrors": true
   };
 
@@ -699,7 +696,7 @@ class WebGLRenderer {
     currentRenderState!.setupLights(physicallyCorrectLights);
 
     if (camera is ArrayCamera) {
-      var cameras = (camera as ArrayCamera).cameras;
+      var cameras = (camera).cameras;
 
       for (var i = 0, l = cameras.length; i < l; i++) {
         var camera2 = cameras[i];
@@ -1222,7 +1219,7 @@ class WebGLRenderer {
       pUniforms.setValue(_gl, 'projectionMatrix', camera.projectionMatrix, textures);
 
       if (capabilities.logarithmicDepthBuffer) {
-        pUniforms.setValue(_gl, 'logDepthBufFC', 2.0 / (Math.log(camera.far + 1.0) / Math.LN2), textures);
+        pUniforms.setValue(_gl, 'logDepthBufFC', 2.0 / (Math.log(camera.far + 1.0) / Math.ln2), textures);
       }
 
       if (_currentCamera != camera) {

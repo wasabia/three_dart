@@ -1,4 +1,4 @@
-String meshtoon_vert = """
+String meshtoonVert = """
 #define TOON
 
 varying vec3 vViewPosition;

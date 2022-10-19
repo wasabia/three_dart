@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/animation/animation_clip.dart';
 import 'package:three_dart/three3d/animation/animation_mixer.dart';
 import 'package:three_dart/three3d/animation/property_mixer.dart';

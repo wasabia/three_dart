@@ -1,11 +1,7 @@
-
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class Camera extends Object3D {
-  @override
-  String type = "Camera";
-
   Matrix4 matrixWorldInverse = Matrix4();
 
   Matrix4 projectionMatrix = Matrix4();
@@ -30,10 +26,13 @@ class Camera extends Object3D {
 
   late Vector4 viewport;
 
-  Camera() : super();
+  Camera() : super() {
+    type = "Camera";
+  }
 
-  Camera.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON);
+  Camera.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) : super.fromJSON(json, rootJSON) {
+    type = "Camera";
+  }
 
   updateProjectionMatrix() {
     print(" Camera.updateProjectionMatrix ");

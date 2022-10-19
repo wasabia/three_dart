@@ -273,8 +273,8 @@ class _MyAppState extends State<WebGlCamera> {
 
     // counteract different front orientation of cameras vs rig
 
-    cameraOrtho.rotation.y = three.Math.PI;
-    cameraPerspective.rotation.y = three.Math.PI;
+    cameraOrtho.rotation.y = three.Math.pi;
+    cameraPerspective.rotation.y = three.Math.pi;
 
     cameraRig = three.Group();
 

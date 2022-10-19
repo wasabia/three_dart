@@ -218,7 +218,7 @@ class _MyAppState extends State<WebGlShadowmapViewer> {
 
     spotLight = three.SpotLight(0xffffff);
     spotLight.name = 'Spot Light';
-    spotLight.angle = three.Math.PI / 5;
+    spotLight.angle = three.Math.pi / 5;
     spotLight.penumbra = 0.3;
     spotLight.position.set(10, 10, 5);
     spotLight.castShadow = true;

@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/core/object_3d.dart';
 import 'package:three_dart/three3d/extras/core/path.dart';
 import 'package:three_dart/three3d/math/index.dart';
@@ -6,15 +5,15 @@ import 'package:three_dart/three3d/math/index.dart';
 class Shape extends Path {
   late String uuid;
   late List<Path> holes;
-  @override
-  String type = "Shape";
 
   Shape(points) : super(points) {
+    type = "Shape";
     uuid = MathUtils.generateUUID();
     holes = [];
   }
 
   Shape.fromJSON(Map<String, dynamic> json) : super.fromJSON(json) {
+    type = "Shape";
     uuid = json["uuid"];
     holes = [];
 
@@ -37,10 +36,7 @@ class Shape extends Path {
   // get points of shape and holes (keypoints based on segments parameter)
 
   Map<String, dynamic> extractPoints(divisions) {
-    return {
-      "shape": getPoints(divisions),
-      "holes": getPointsHoles(divisions)
-    };
+    return {"shape": getPoints(divisions), "holes": getPointsHoles(divisions)};
   }
 
   @override
@@ -82,7 +78,7 @@ class Shape extends Path {
 
     for (var i = 0, l = json.holes.length; i < l; i++) {
       var hole = json.holes[i];
-      holes.add(Path(null).fromJSON(hole));
+      holes.add(Path.fromJSON(hole));
     }
 
     return this;

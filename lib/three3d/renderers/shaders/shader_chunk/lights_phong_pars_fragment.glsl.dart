@@ -1,4 +1,4 @@
-String lights_phong_pars_fragment = """
+String lightsPhongParsFragment = """
 varying vec3 vViewPosition;
 
 struct BlinnPhongMaterial {
