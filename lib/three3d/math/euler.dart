@@ -166,7 +166,7 @@ class Euler {
         break;
 
       default:
-        print('three.Euler: .setFromRotationMatrix() encountered an unknown order: ' + order);
+        print('three.Euler: .setFromRotationMatrix() encountered an unknown order: $order');
     }
 
     _order = order;

@@ -863,14 +863,14 @@ class WebGLRenderer {
     bool isWebGL2 = capabilities.isWebGL2;
 
     if (_transmissionRenderTarget == null) {
-      var _opts = WebGLRenderTargetOptions({
+      var opts = WebGLRenderTargetOptions({
         "generateMipmaps": true,
         "type": utils.convert(HalfFloatType) != null ? HalfFloatType : UnsignedByteType,
         "minFilter": LinearMipmapLinearFilter,
         "samples": (isWebGL2 && _antialias == true) ? 4 : 0
       });
 
-      _transmissionRenderTarget = WebGLRenderTarget(1, 1, _opts);
+      _transmissionRenderTarget = WebGLRenderTarget(1, 1, opts);
     }
 
     // set size of transmission render target to half size of drawing buffer
@@ -985,14 +985,14 @@ class WebGLRenderer {
     materialProperties["environment"] = material is MeshStandardMaterial ? scene.environment : null;
     materialProperties["fog"] = scene.fog;
 
-    Texture? _envMap;
+    Texture? envMap;
     if (material is MeshStandardMaterial) {
-      _envMap = cubeuvmaps.get(material.envMap ?? materialProperties["environment"]);
+      envMap = cubeuvmaps.get(material.envMap ?? materialProperties["environment"]);
     } else {
-      _envMap = cubemaps.get(material.envMap ?? materialProperties["environment"]);
+      envMap = cubemaps.get(material.envMap ?? materialProperties["environment"]);
     }
 
-    materialProperties["envMap"] = _envMap;
+    materialProperties["envMap"] = envMap;
 
     if (programs == null) {
       // new material
@@ -1454,16 +1454,16 @@ class WebGLRenderer {
         isRenderTarget3D = true;
       }
 
-      var __webglFramebuffer = properties.get(renderTarget)["__webglFramebuffer"];
+      var webglFramebuffer = properties.get(renderTarget)["__webglFramebuffer"];
 
       if (renderTarget.isWebGLCubeRenderTarget) {
-        framebuffer = __webglFramebuffer[activeCubeFace];
+        framebuffer = webglFramebuffer[activeCubeFace];
         isCube = true;
       } else if ((capabilities.isWebGL2 && renderTarget.samples > 0) &&
           textures.useMultisampledRenderToTexture(renderTarget) == false) {
         framebuffer = properties.get(renderTarget)["__webglMultisampledFramebuffer"];
       } else {
-        framebuffer = __webglFramebuffer;
+        framebuffer = webglFramebuffer;
       }
 
       _currentViewport.copy(renderTarget.viewport);

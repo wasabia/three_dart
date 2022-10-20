@@ -246,11 +246,11 @@ class WebGLUniformsHelper {
       for (int i = 0; i < nBlocks; i++) {
         // print(" i: ${i} this: ${this} nBlocks: ${nBlocks} ");
 
-        List<num> _data = array[i].toJSON();
+        List<num> data = array[i].toJSON();
 
-        _data.asMap().forEach((index, element) {
-          int _idx = i * blockSize + index;
-          r![_idx] = element.toDouble();
+        data.asMap().forEach((index, element) {
+          int idx = i * blockSize + index;
+          r![idx] = element.toDouble();
         });
       }
 

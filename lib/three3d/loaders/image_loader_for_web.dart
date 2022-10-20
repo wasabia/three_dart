@@ -19,7 +19,7 @@ class ImageLoaderLoader {
     } else {
       // flutter web for assets need add assets TODO
       if (url.startsWith("assets")) {
-        imageDom.src = "assets/" + url;
+        imageDom.src = "assets/$url";
       } else {
         imageDom.src = url;
       }

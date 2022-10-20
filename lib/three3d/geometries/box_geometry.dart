@@ -26,9 +26,9 @@ class BoxGeometry extends BufferGeometry {
 
     // segments
 
-    int _widthSegments = Math.floor(widthSegments);
-    int _heightSegments = Math.floor(heightSegments);
-    int _depthSegments = Math.floor(depthSegments);
+    int wSeg = Math.floor(widthSegments);
+    int hSeg = Math.floor(heightSegments);
+    int dSeg = Math.floor(depthSegments);
 
     // buffers
 
@@ -160,12 +160,12 @@ class BoxGeometry extends BufferGeometry {
 
     // build each side of the box geometry
 
-    buildPlane('z', 'y', 'x', -1, -1, depth, height, width, _depthSegments, _heightSegments, 0); // px
-    buildPlane('z', 'y', 'x', 1, -1, depth, height, -width, _depthSegments, _heightSegments, 1); // nx
-    buildPlane('x', 'z', 'y', 1, 1, width, depth, height, _widthSegments, _depthSegments, 2); // py
-    buildPlane('x', 'z', 'y', 1, -1, width, depth, -height, _widthSegments, _depthSegments, 3); // ny
-    buildPlane('x', 'y', 'z', 1, -1, width, height, depth, _widthSegments, _heightSegments, 4); // pz
-    buildPlane('x', 'y', 'z', -1, -1, width, height, -depth, _widthSegments, _heightSegments, 5); // nz
+    buildPlane('z', 'y', 'x', -1, -1, depth, height, width, dSeg, hSeg, 0); // px
+    buildPlane('z', 'y', 'x', 1, -1, depth, height, -width, dSeg, hSeg, 1); // nx
+    buildPlane('x', 'z', 'y', 1, 1, width, depth, height, wSeg, dSeg, 2); // py
+    buildPlane('x', 'z', 'y', 1, -1, width, depth, -height, wSeg, dSeg, 3); // ny
+    buildPlane('x', 'y', 'z', 1, -1, width, height, depth, wSeg, hSeg, 4); // pz
+    buildPlane('x', 'y', 'z', -1, -1, width, height, -depth, wSeg, hSeg, 5); // nz
 
     // build geometry
 

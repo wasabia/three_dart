@@ -460,13 +460,17 @@ class ConvexHull {
       }
     }
 
-    List<Face2> _faces = [];
+    List<Face2> faces = [];
 
     if (plane.distanceToPoint(v3.point) < 0) {
       // the face is not able to see the point so 'plane.normal' is pointing outside the tetrahedron
 
-      _faces.addAll(
-          [Face2.create(v0, v1, v2), Face2.create(v3, v1, v0), Face2.create(v3, v2, v1), Face2.create(v3, v0, v2)]);
+      faces.addAll([
+        Face2.create(v0, v1, v2),
+        Face2.create(v3, v1, v0),
+        Face2.create(v3, v2, v1),
+        Face2.create(v3, v0, v2),
+      ]);
 
       // set the twin edge
 
@@ -475,16 +479,16 @@ class ConvexHull {
 
         // join face[ i ] i > 0, with the first face
 
-        _faces[i + 1].getEdge(2)!.setTwin(_faces[0].getEdge(j));
+        faces[i + 1].getEdge(2)!.setTwin(faces[0].getEdge(j));
 
         // join face[ i ] with face[ i + 1 ], 1 <= i <= 3
 
-        _faces[i + 1].getEdge(1)!.setTwin(_faces[j + 1].getEdge(0));
+        faces[i + 1].getEdge(1)!.setTwin(faces[j + 1].getEdge(0));
       }
     } else {
       // the face is able to see the point so 'plane.normal' is pointing inside the tetrahedron
 
-      _faces.addAll(
+      faces.addAll(
           [Face2.create(v0, v2, v1), Face2.create(v3, v0, v1), Face2.create(v3, v1, v2), Face2.create(v3, v2, v0)]);
 
       // set the twin edge
@@ -494,18 +498,18 @@ class ConvexHull {
 
         // join face[ i ] i > 0, with the first face
 
-        _faces[i + 1].getEdge(2)!.setTwin(_faces[0].getEdge((3 - i) % 3));
+        faces[i + 1].getEdge(2)!.setTwin(faces[0].getEdge((3 - i) % 3));
 
         // join face[ i ] with face[ i + 1 ]
 
-        _faces[i + 1].getEdge(0)!.setTwin(_faces[j + 1].getEdge(1));
+        faces[i + 1].getEdge(0)!.setTwin(faces[j + 1].getEdge(1));
       }
     }
 
     // the initial hull is the tetrahedron
 
     for (i = 0; i < 4; i++) {
-      faces.add(_faces[i]);
+      faces.add(faces[i]);
     }
 
     // initial assignment of vertices to the faces of the tetrahedron

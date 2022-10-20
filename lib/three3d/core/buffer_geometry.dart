@@ -65,16 +65,16 @@ class BufferGeometry with EventDispatcher {
   }
 
   static BufferGeometry castJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) {
-    String _type = json["type"];
+    String type = json["type"];
 
-    if (_type == "BufferGeometry") {
+    if (type == "BufferGeometry") {
       return BufferGeometry.fromJSON(json, rootJSON);
-    } else if (_type == "ShapeBufferGeometry") {
+    } else if (type == "ShapeBufferGeometry") {
       return ShapeGeometry.fromJSON(json, rootJSON);
-    } else if (_type == "ExtrudeBufferGeometry") {
+    } else if (type == "ExtrudeBufferGeometry") {
       return ExtrudeGeometry.fromJSON(json, rootJSON);
     } else {
-      throw (" BufferGeometry castJSON _type: $_type is not support yet ");
+      throw (" BufferGeometry castJSON _type: $type is not support yet ");
     }
   }
 

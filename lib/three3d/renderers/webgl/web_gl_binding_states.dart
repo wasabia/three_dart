@@ -83,8 +83,8 @@ class WebGLBindingStates {
       setupVertexAttributes(object, material, program, geometry);
 
       if (index != null) {
-        var _buffer = attributes.get(index)["buffer"];
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, _buffer);
+        var buf = attributes.get(index)["buffer"];
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buf);
       }
     }
   }

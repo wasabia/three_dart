@@ -166,7 +166,7 @@ class FileLoader extends Loader {
     } else {
       // load assets file TODO
       if (url.startsWith("assets")) {
-        url = "assets/" + url;
+        url = "assets/$url";
       }
 
       http.Response response = await http.get(Uri.parse(url));

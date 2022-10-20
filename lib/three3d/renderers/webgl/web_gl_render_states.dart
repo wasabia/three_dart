@@ -15,8 +15,7 @@ class WebGLRenderState {
   }
 
   RenderState get state {
-    RenderState _state = RenderState(lights, lightsArray, shadowsArray);
-    return _state;
+    return RenderState(lights, lightsArray, shadowsArray);
   }
 
   void init() {

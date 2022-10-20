@@ -75,7 +75,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
     } else {
       prefixVertex = [
         generatePrecision(parameters),
-        '#define SHADER_NAME ' + parameters.shaderName,
+        '#define SHADER_NAME ${parameters.shaderName}',
         customDefines,
         parameters.instancing ? '#define USE_INSTANCING' : '',
         parameters.instancingColor ? '#define USE_INSTANCING_COLOR' : '',
@@ -84,7 +84,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         (parameters.useFog && parameters.fogExp2) ? '#define FOG_EXP2' : '',
         parameters.map ? '#define USE_MAP' : '',
         parameters.envMap ? '#define USE_ENVMAP' : '',
-        parameters.envMap ? '#define ' + envMapModeDefine : '',
+        parameters.envMap ? '#define $envMapModeDefine' : '',
         parameters.lightMap ? '#define USE_LIGHTMAP' : '',
         parameters.aoMap ? '#define USE_AOMAP' : '',
         parameters.emissiveMap ? '#define USE_EMISSIVEMAP' : '',
@@ -131,7 +131,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.doubleSided ? '#define DOUBLE_SIDED' : '',
         parameters.flipSided ? '#define FLIP_SIDED' : '',
         parameters.shadowMapEnabled ? '#define USE_SHADOWMAP' : '',
-        parameters.shadowMapEnabled ? '#define ' + shadowMapTypeDefine : '',
+        parameters.shadowMapEnabled ? '#define $shadowMapTypeDefine' : '',
         parameters.sizeAttenuation ? '#define USE_SIZEATTENUATION' : '',
         parameters.logarithmicDepthBuffer ? '#define USE_LOGDEPTHBUF' : '',
         (parameters.logarithmicDepthBuffer && parameters.rendererExtensionFragDepth)
@@ -190,7 +190,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
 
         generatePrecision(parameters),
 
-        '#define SHADER_NAME ' + parameters.shaderName,
+        '#define SHADER_NAME ${parameters.shaderName}',
 
         customDefines,
         (parameters.useFog && parameters.fog) ? '#define USE_FOG' : '',
@@ -199,12 +199,12 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.map ? '#define USE_MAP' : '',
         parameters.matcap ? '#define USE_MATCAP' : '',
         parameters.envMap ? '#define USE_ENVMAP' : '',
-        parameters.envMap ? '#define ' + envMapTypeDefine : '',
-        parameters.envMap ? '#define ' + envMapModeDefine : '',
-        parameters.envMap ? '#define ' + envMapBlendingDefine : '',
+        parameters.envMap ? '#define $envMapTypeDefine' : '',
+        parameters.envMap ? '#define $envMapModeDefine' : '',
+        parameters.envMap ? '#define $envMapBlendingDefine' : '',
         cubeUVSize != null ? '#define CUBEUV_TEXEL_WIDTH ${cubeUVSize["texelWidth"]}' : '',
         cubeUVSize != null ? '#define CUBEUV_TEXEL_HEIGHT ${cubeUVSize["texelHeight"]}' : '',
-        cubeUVSize != null ? '#define CUBEUV_MAX_MIP ' + cubeUVSize["maxMip"].toString() + '.0' : '',
+        cubeUVSize != null ? '#define CUBEUV_MAX_MIP ${cubeUVSize["maxMip"].toString()}.0' : '',
 
         parameters.lightMap ? '#define USE_LIGHTMAP' : '',
         parameters.aoMap ? '#define USE_AOMAP' : '',
@@ -243,7 +243,7 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
         parameters.flipSided ? '#define FLIP_SIDED' : '',
 
         parameters.shadowMapEnabled ? '#define USE_SHADOWMAP' : '',
-        parameters.shadowMapEnabled ? '#define ' + shadowMapTypeDefine : '',
+        parameters.shadowMapEnabled ? '#define $shadowMapTypeDefine' : '',
 
         parameters.premultipliedAlpha ? '#define PREMULTIPLIED_ALPHA' : '',
 
@@ -293,32 +293,28 @@ class WebGLProgram extends DefaultProgram with WebGLProgramExtra {
       // GLSL 3.0 conversion for built-in materials and ShaderMaterial
       versionString = (!kIsWeb && (Platform.isMacOS || Platform.isWindows)) ? "#version 410\n" : "#version 300 es\n";
 
-      prefixVertex = [
-            'precision mediump sampler2DArray;',
-            '#define attribute in',
-            '#define varying out',
-            '#define texture2D texture'
-          ].join('\n') +
-          '\n' +
-          prefixVertex;
+      prefixVertex = '${[
+        'precision mediump sampler2DArray;',
+        '#define attribute in',
+        '#define varying out',
+        '#define texture2D texture'
+      ].join('\n')}\n$prefixVertex';
 
-      prefixFragment = [
-            '#define varying in',
-            (parameters.glslVersion == GLSL3) ? '' : 'layout(location = 0) out highp vec4 pc_fragColor;',
-            (parameters.glslVersion == GLSL3) ? '' : '#define gl_FragColor pc_fragColor',
-            '#define gl_FragDepthEXT gl_FragDepth',
-            '#define texture2D texture',
-            '#define textureCube texture',
-            '#define texture2DProj textureProj',
-            '#define texture2DLodEXT textureLod',
-            '#define texture2DProjLodEXT textureProjLod',
-            '#define textureCubeLodEXT textureLod',
-            '#define texture2DGradEXT textureGrad',
-            '#define texture2DProjGradEXT textureProjGrad',
-            '#define textureCubeGradEXT textureGrad'
-          ].join('\n') +
-          '\n' +
-          prefixFragment;
+      prefixFragment = '${[
+        '#define varying in',
+        (parameters.glslVersion == GLSL3) ? '' : 'layout(location = 0) out highp vec4 pc_fragColor;',
+        (parameters.glslVersion == GLSL3) ? '' : '#define gl_FragColor pc_fragColor',
+        '#define gl_FragDepthEXT gl_FragDepth',
+        '#define texture2D texture',
+        '#define textureCube texture',
+        '#define texture2DProj textureProj',
+        '#define texture2DLodEXT textureLod',
+        '#define texture2DProjLodEXT textureProjLod',
+        '#define textureCubeLodEXT textureLod',
+        '#define texture2DGradEXT textureGrad',
+        '#define texture2DProjGradEXT textureProjGrad',
+        '#define textureCubeGradEXT textureGrad'
+      ].join('\n')}\n$prefixFragment';
     }
 
     String vertexGlsl = versionString + prefixVertex + vertexShader;

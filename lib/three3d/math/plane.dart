@@ -23,10 +23,10 @@ class Plane {
   }
 
   List<num> toJSON() {
-    List<num> _data = normal.toJSON();
-    _data.add(constant);
+    List<num> data = normal.toJSON();
+    data.add(constant);
 
-    return _data;
+    return data;
   }
 
   Plane set(Vector3 normal, double constant) {

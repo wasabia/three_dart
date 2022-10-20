@@ -369,7 +369,7 @@ class Material with EventDispatcher {
       roughnessMap = newValue;
     } else if (key == "shading") {
       //   // for backward compatability if shading is set in the constructor
-      throw ('three.' + type + ': .shading has been removed. Use the boolean .flatShading instead.');
+      throw ('three.$type: .shading has been removed. Use the boolean .flatShading instead.');
       //   this.flatShading = ( newValue == FlatShading ) ? true : false;
 
     } else if (key == "shininess") {

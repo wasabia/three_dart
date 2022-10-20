@@ -67,15 +67,13 @@ class WebGLAttributes {
       type = gl.UNSIGNED_BYTE;
     }
 
-    final _v = {
+    return {
       "buffer": buffer,
       "type": type,
       "bytesPerElement": bytesPerElement,
       "array": array,
       "version": attribute.version
     };
-
-    return _v;
   }
 
   updateBuffer(buffer, attribute, bufferType) {

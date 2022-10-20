@@ -158,8 +158,6 @@ class DodecahedronGeometry extends PolyhedronGeometry {
       9
     ];
 
-    DodecahedronGeometry _dbg = DodecahedronGeometry.create(vertices, indices, radius, detail);
-
-    return _dbg;
+    return DodecahedronGeometry.create(vertices, indices, radius, detail);
   }
 }

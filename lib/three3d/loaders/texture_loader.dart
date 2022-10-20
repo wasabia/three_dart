@@ -45,11 +45,11 @@ class TextureLoader extends Loader {
         imageElement = ImageElement(
             url: url is Blob ? "" : url, data: image, width: image.width!.toDouble(), height: image.height!.toDouble());
       } else {
-        var _pixels = image.getBytes(format: Format.rgba);
+        var pixels = image.getBytes(format: Format.rgba);
 
         // print(" _pixels : ${_pixels.length} ");
         // print(" ------------------------------------------- ");
-        imageElement = ImageElement(url: url, data: Uint8Array.from(_pixels), width: image.width, height: image.height);
+        imageElement = ImageElement(url: url, data: Uint8Array.from(pixels), width: image.width, height: image.height);
       }
 
       // print(" image.width: ${image.width} image.height: ${image.height} isJPEG: ${isJPEG} ");

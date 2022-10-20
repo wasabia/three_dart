@@ -223,9 +223,7 @@ class ExtrudeGeometry extends BufferGeometry {
         //  (j)---(i)---(k)
         // console.log('i,j,k', i, j , k)
 
-        var _v = getBevelVec(contour[i], contour[j], contour[k]);
-
-        contourMovements.add(_v);
+        contourMovements.add(getBevelVec(contour[i], contour[j], contour[k]));
       }
 
       var holesMovements = [];

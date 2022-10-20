@@ -13,10 +13,10 @@ class QuaternionLinearInterpolant extends Interpolant {
     var values = sampleValues;
     var stride = valueSize;
 
-    double _v0 = t + (t0 * -1);
-    double _v1 = t1 + (t0 * -1);
+    double v0 = t + (t0 * -1);
+    double v1 = t1 + (t0 * -1);
 
-    double alpha = _v0 / _v1;
+    double alpha = v0 / v1;
 
     var offset = i1 * stride;
 

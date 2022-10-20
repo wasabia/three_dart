@@ -33,11 +33,11 @@ class Skeleton {
     //       32x32 pixel texture max  256 bones * 4 pixels = (32 * 32)
     //       64x64 pixel texture max 1024 bones * 4 pixels = (64 * 64)
 
-    double _size = Math.sqrt(bones.length * 4); // 4 pixels needed for 1 matrix
-    _size = MathUtils.ceilPowerOfTwo(_size).toDouble();
-    _size = Math.max(_size, 4);
+    double s = Math.sqrt(bones.length * 4); // 4 pixels needed for 1 matrix
+    s = MathUtils.ceilPowerOfTwo(s).toDouble();
+    s = Math.max(s, 4);
 
-    int size = _size.toInt();
+    int size = s.toInt();
 
     boneTextureSize = size;
 

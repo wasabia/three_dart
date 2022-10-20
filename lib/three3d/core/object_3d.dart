@@ -133,8 +133,7 @@ class Object3D with EventDispatcher {
       List<BufferGeometry>? geometries = rootJSON["geometries"];
 
       if (geometries != null) {
-        BufferGeometry _geometry = geometries.firstWhere((element) => element.uuid == json["geometry"]);
-        geometry = _geometry;
+        geometry = geometries.firstWhere((element) => element.uuid == json["geometry"]);
       }
     }
 
@@ -142,17 +141,17 @@ class Object3D with EventDispatcher {
       List<Material>? materials = rootJSON["materials"];
 
       if (materials != null) {
-        Material _material = materials.firstWhere((element) => element.uuid == json["material"]);
-        material = _material;
+        Material material = materials.firstWhere((element) => element.uuid == json["material"]);
+        material = material;
       }
     }
 
     init();
 
     if (json["children"] != null) {
-      List<Map<String, dynamic>> _children = json["children"];
-      for (var _child in _children) {
-        final obj = Object3D.castJSON(_child, rootJSON);
+      List<Map<String, dynamic>> jsonChildren = json["children"];
+      for (var child in jsonChildren) {
+        final obj = Object3D.castJSON(child, rootJSON);
         if (obj is Object3D) children.add(obj);
       }
     }
@@ -165,43 +164,43 @@ class Object3D with EventDispatcher {
   }
 
   static EventDispatcher castJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) {
-    String? _type = json["type"];
+    String? type = json["type"];
 
-    if (_type == null) {
-      Map<String, dynamic>? _object = json["object"];
-      if (_object != null) {
-        _type = _object["type"];
-        json = _object;
-        print(" object is not null use object as json type: $_type ");
+    if (type == null) {
+      Map<String, dynamic>? object = json["object"];
+      if (object != null) {
+        type = object["type"];
+        json = object;
+        print(" object is not null use object as json type: $type ");
       }
     }
 
-    if (_type == "Camera") {
+    if (type == "Camera") {
       return Camera.fromJSON(json, rootJSON);
-    } else if (_type == "PerspectiveCamera") {
+    } else if (type == "PerspectiveCamera") {
       return PerspectiveCamera.fromJSON(json, rootJSON);
-    } else if (_type == "Scene") {
+    } else if (type == "Scene") {
       return Scene.fromJSON(json, rootJSON);
-    } else if (_type == "PointLight") {
+    } else if (type == "PointLight") {
       return PointLight.fromJSON(json, rootJSON);
-    } else if (_type == "Group") {
+    } else if (type == "Group") {
       return Group.fromJSON(json, rootJSON);
-    } else if (_type == "Mesh") {
+    } else if (type == "Mesh") {
       return Mesh.fromJSON(json, rootJSON);
-    } else if (_type == "Line") {
+    } else if (type == "Line") {
       return Line.fromJSON(json, rootJSON);
-    } else if (_type == "Points") {
+    } else if (type == "Points") {
       return Points.fromJSON(json, rootJSON);
-    } else if (_type == "AmbientLight") {
+    } else if (type == "AmbientLight") {
       return AmbientLight.fromJSON(json, rootJSON);
-    } else if (_type == "Sprite") {
+    } else if (type == "Sprite") {
       return Sprite.fromJSON(json, rootJSON);
-    } else if (_type == "SpriteMaterial") {
+    } else if (type == "SpriteMaterial") {
       return SpriteMaterial.fromJSON(json, rootJSON);
-    } else if (_type == "ShapeGeometry") {
+    } else if (type == "ShapeGeometry") {
       return ShapeGeometry.fromJSON(json, rootJSON);
     } else {
-      throw " type: $_type Object3D.castJSON is not support yet... ";
+      throw " type: $type Object3D.castJSON is not support yet... ";
     }
   }
 
@@ -623,14 +622,14 @@ class Object3D with EventDispatcher {
     // object specific properties
 
     if (type == "InstancedMesh") {
-      InstancedMesh _instanceMesh = this as InstancedMesh;
+      InstancedMesh instanceMesh = this as InstancedMesh;
 
       object["type"] = 'InstancedMesh';
-      object["count"] = _instanceMesh.count;
-      object["instanceMatrix"] = _instanceMesh.instanceMatrix!.toJSON();
+      object["count"] = instanceMesh.count;
+      object["instanceMatrix"] = instanceMesh.instanceMatrix!.toJSON();
 
-      if (_instanceMesh.instanceColor != null) {
-        object["instanceColor"] = _instanceMesh.instanceColor!.toJSON();
+      if (instanceMesh.instanceColor != null) {
+        object["instanceColor"] = instanceMesh.instanceColor!.toJSON();
       }
     }
 
@@ -699,13 +698,13 @@ class Object3D with EventDispatcher {
     }
 
     if (children.isNotEmpty) {
-      List<Map<String, dynamic>> _childrenJSON = [];
+      List<Map<String, dynamic>> childrenJSON = [];
 
       for (var i = 0; i < children.length; i++) {
-        _childrenJSON.add(children[i].toJSON(meta: meta)["object"]);
+        childrenJSON.add(children[i].toJSON(meta: meta)["object"]);
       }
 
-      object["children"] = _childrenJSON;
+      object["children"] = childrenJSON;
     }
 
     // //

@@ -99,22 +99,22 @@ class SVGLoaderParser {
       }
     }
 
-    String _str = "$string";
+    String str = "$string";
     // if(_str.startsWith("-.")) {
     //   _str = _str.replaceFirst("-.", "-0.");
     // }
 
-    List<String> _strs = _str.split(".");
+    List<String> strs = str.split(".");
 
-    if (_strs.length >= 3) {
-      _strs = _strs.sublist(0, 2);
+    if (strs.length >= 3) {
+      strs = strs.sublist(0, 2);
 
-      _str = _strs.join(".");
+      str = strs.join(".");
     }
 
     // print(" string: ${_str} ");
 
-    return scale * num.parse(_str);
+    return scale * num.parse(str);
   }
 
   // from https://github.com/ppvg/svg-numbers (MIT License)
@@ -147,7 +147,7 @@ class SVGLoaderParser {
     List<double> result = [];
 
     throwSyntaxError(current, i, partial) {
-      var error = ('Unexpected character "' + current + '" at index ' + i + '.');
+      var error = ('Unexpected character "$current" at index $i.');
       throw (error);
     }
 
@@ -442,8 +442,8 @@ class SVGLoaderParser {
 
       if (stylesheet.type != 1) continue;
 
-      RegExp _reg = RegExp(r",", multiLine: true);
-      var selectorList = stylesheet.selectorText.split(_reg).map((i) => i.trim()).toList();
+      RegExp reg = RegExp(r",", multiLine: true);
+      var selectorList = stylesheet.selectorText.split(reg).map((i) => i.trim()).toList();
 
       // var selectorList = stylesheet.selectorText
       // 	.split( /,/gm )
@@ -451,12 +451,12 @@ class SVGLoaderParser {
       // 	.map( i => i.trim() );
 
       for (var j = 0; j < selectorList.length; j++) {
-        var _sj = selectorList[j];
+        var sj = selectorList[j];
 
-        if (stylesheets[_sj] == null) {
-          stylesheets[_sj] = {};
+        if (stylesheets[sj] == null) {
+          stylesheets[sj] = {};
         }
-        stylesheets[_sj].addAll(stylesheet.style);
+        stylesheets[sj].addAll(stylesheet.style);
         // stylesheets[ selectorList[ j ] ] = Object.assign(
         // 	stylesheets[ selectorList[ j ] ] || {},
         // 	stylesheet.style
@@ -475,24 +475,24 @@ class SVGLoaderParser {
     var stylesheetStyles = {};
 
     if (node.hasAttribute('class')) {
-      var _reg = RegExp(r"\s");
+      var reg = RegExp(r"\s");
       var classSelectors = node
           .getAttribute('class')
-          .split(_reg)
+          .split(reg)
           // .filter( Boolean )
           .map((i) => i.trim())
           .toList();
 
       for (var i = 0; i < classSelectors.length; i++) {
         // stylesheetStyles = Object.assign( stylesheetStyles, stylesheets[ '.' + classSelectors[ i ] ] );
-        stylesheetStyles.addAll(stylesheets['.' + classSelectors[i]] ?? {});
+        stylesheetStyles.addAll(stylesheets['.${classSelectors[i]}'] ?? {});
       }
     }
 
     if (node.hasAttribute('id')) {
       // stylesheetStyles = Object.assign( stylesheetStyles, stylesheets[ '#' + node.getAttribute( 'id' ) ] );
 
-      stylesheetStyles.addAll(stylesheets['#' + node.getAttribute('id')] ?? {});
+      stylesheetStyles.addAll(stylesheets['#${node.getAttribute('id')}'] ?? {});
     }
 
     void addStyle(svgName, jsName, [adjustFunction]) {
@@ -512,11 +512,11 @@ class SVGLoaderParser {
       }
 
       if (node.style != null) {
-        var _style = node.style;
-        var _value = _style.getPropertyValue(svgName);
-        if (_value != "") {
+        var st = node.style;
+        var val = st.getPropertyValue(svgName);
+        if (val != "") {
           // print("svgName: ${svgName} value: ${_value} ");
-          style2[jsName] = adjustFunction(_value);
+          style2[jsName] = adjustFunction(val);
         }
       }
     }
@@ -629,8 +629,8 @@ class SVGLoaderParser {
     var isFirstPoint = true;
     var doSetFirstPoint = false;
 
-    var _reg = RegExp(r"[a-df-z][^a-df-z]*", caseSensitive: false);
-    var commands = _reg.allMatches(d);
+    var reg = RegExp(r"[a-df-z][^a-df-z]*", caseSensitive: false);
+    var commands = reg.allMatches(d);
 
     // var commands = d.match( /[a-df-z][^a-df-z]*/ig );
 
@@ -1034,8 +1034,8 @@ class SVGLoaderParser {
     // };
     // node.getAttribute('points').replace(regex, iterator);
 
-    String _points = node.getAttribute('points');
-    var matches = regex.allMatches(_points);
+    String points = node.getAttribute('points');
+    var matches = regex.allMatches(points);
 
     // print(" _points: ${_points} ");
 

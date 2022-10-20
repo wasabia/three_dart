@@ -16,17 +16,17 @@ class PointLightHelper extends Mesh {
     var geometry = SphereGeometry(sphereSize, 4, 2);
     var material = MeshBasicMaterial({"wireframe": true, "fog": false, "toneMapped": false});
 
-    var _plh = PointLightHelper.create(geometry, material);
+    var plh = PointLightHelper.create(geometry, material);
 
-    _plh.light = light;
-    _plh.light.updateMatrixWorld(false);
+    plh.light = light;
+    plh.light.updateMatrixWorld(false);
 
-    _plh.color = color;
-    _plh.matrix = _plh.light.matrixWorld;
-    _plh.matrixAutoUpdate = false;
+    plh.color = color;
+    plh.matrix = plh.light.matrixWorld;
+    plh.matrixAutoUpdate = false;
 
-    _plh.update();
-    return _plh;
+    plh.update();
+    return plh;
 
     /*
 	// TODO: delete this comment?

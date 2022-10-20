@@ -250,13 +250,13 @@ class WebGLParameters {
   }
 
   getValue(String name) {
-    Map<String, dynamic> _json = toJSON();
+    Map<String, dynamic> json = toJSON();
 
-    return _json[name];
+    return json[name];
   }
 
   toJSON() {
-    Map<String, dynamic> _json = {
+    Map<String, dynamic> json = {
       "isWebGL2": isWebGL2,
       "shaderID": shaderID,
       "customVertexShaderID": customVertexShaderID,
@@ -355,6 +355,6 @@ class WebGLParameters {
       "morphTextureStride": morphTextureStride
     };
 
-    return _json;
+    return json;
   }
 }

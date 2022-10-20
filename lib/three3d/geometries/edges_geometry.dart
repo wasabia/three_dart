@@ -91,9 +91,9 @@ class EdgesGeometry extends BufferGeometry {
     // iterate over all remaining, unmatched edges and add them to the vertex array
     for (var key in edgeData.keys) {
       if (edgeData[key] != null) {
-        var _ed = edgeData[key];
-        var index0 = _ed["index0"];
-        var index1 = _ed["index1"];
+        var ed = edgeData[key];
+        var index0 = ed["index0"];
+        var index1 = ed["index1"];
         _v0.fromBufferAttribute(positionAttr, index0);
         _v1.fromBufferAttribute(positionAttr, index1);
 
