@@ -1,14 +1,11 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/extras/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class ExtrudeGeometry extends BufferGeometry {
-  @override
-  String type = "ExtrudeGeometry";
-
   ExtrudeGeometry(List<Shape> shapes, Map<String, dynamic> options) : super() {
+    type = "ExtrudeGeometry";
     parameters = {"shapes": shapes, "options": options};
 
     this.shapes = shapes;
@@ -146,7 +143,7 @@ class ExtrudeGeometry extends BufferGeometry {
         // check for collinear edges
         var collinear0 = (vPrevX * vNextY - vPrevY * vNextX);
 
-        if (Math.abs(collinear0) > Math.EPSILON) {
+        if (Math.abs(collinear0) > Math.epsilon) {
           // not collinear
 
           // length of vectors for normalizing
@@ -185,13 +182,13 @@ class ExtrudeGeometry extends BufferGeometry {
 
           var directionEq = false; // assumes: opposite
 
-          if (vPrevX > Math.EPSILON) {
-            if (vNextX > Math.EPSILON) {
+          if (vPrevX > Math.epsilon) {
+            if (vNextX > Math.epsilon) {
               directionEq = true;
             }
           } else {
-            if (vPrevX < -Math.EPSILON) {
-              if (vNextX < -Math.EPSILON) {
+            if (vPrevX < -Math.epsilon) {
+              if (vNextX < -Math.epsilon) {
                 directionEq = true;
               }
             } else {
@@ -263,8 +260,8 @@ class ExtrudeGeometry extends BufferGeometry {
         //for ( b = bevelSegments; b > 0; b -- ) {
 
         var t = b / bevelSegments;
-        var z = bevelThickness * Math.cos(t * Math.PI / 2);
-        var bs = bevelSize * Math.sin(t * Math.PI / 2) + bevelOffset;
+        var z = bevelThickness * Math.cos(t * Math.pi / 2);
+        var bs = bevelSize * Math.sin(t * Math.pi / 2) + bevelOffset;
 
         // contract shape
 
@@ -336,8 +333,8 @@ class ExtrudeGeometry extends BufferGeometry {
       //for ( b = 1; b <= bevelSegments; b ++ ) {
       for (var b = bevelSegments - 1; b >= 0; b--) {
         var t = b / bevelSegments;
-        var z = bevelThickness * Math.cos(t * Math.PI / 2);
-        var bs = bevelSize * Math.sin(t * Math.PI / 2) + bevelOffset;
+        var z = bevelThickness * Math.cos(t * Math.pi / 2);
+        var bs = bevelSize * Math.sin(t * Math.pi / 2) + bevelOffset;
 
         // contract shape
 

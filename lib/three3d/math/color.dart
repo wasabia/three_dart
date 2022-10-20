@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/dart_helpers.dart';
@@ -199,7 +198,7 @@ class Color {
   double g = 1.0;
   double b = 1.0;
 
-  static const Map<String, int> NAMES = _colorKeywords;
+  static const Map<String, int> names = _colorKeywords;
 
   /// Color class.
   /// r g b value range (0.0 ~ 1.0)
@@ -509,17 +508,17 @@ class Color {
   }
 
   Color copySRGBToLinear(Color color) {
-    r = SRGBToLinear(color.r);
-    g = SRGBToLinear(color.g);
-    b = SRGBToLinear(color.b);
+    r = sRGBToLinear(color.r);
+    g = sRGBToLinear(color.g);
+    b = sRGBToLinear(color.b);
 
     return this;
   }
 
   Color copyLinearToSRGB(Color color) {
-    r = LinearToSRGB(color.r);
-    g = LinearToSRGB(color.g);
-    b = LinearToSRGB(color.b);
+    r = linearToSRGB(color.r);
+    g = linearToSRGB(color.g);
+    b = linearToSRGB(color.b);
 
     return this;
   }
@@ -717,7 +716,7 @@ class Color {
   /// so have to set array length enough first.
   // It's working, but ugly. consider to adds a new function:
   // toBufferAttribute(BufferAttribute attribute, int index) ???
-  toArray([array, int offset = 0]) {
+  List<double> toArray([array, int offset = 0]) {
     array ??= List<double>.filled(3, 0.0);
 
     array[offset] = r;

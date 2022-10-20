@@ -1,4 +1,4 @@
-String alphamap_pars_fragment = """
+String alphamapParsFragment = """
 #ifdef USE_ALPHAMAP
 
 	uniform sampler2D alphaMap;

@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/buffer_attribute.dart';
 import 'package:three_dart/three3d/core/buffer_geometry.dart';
@@ -8,21 +7,16 @@ import 'package:three_dart/three3d/materials/line_basic_material.dart';
 import 'package:three_dart/three3d/math/index.dart';
 import 'package:three_dart/three3d/objects/line_segments.dart';
 
-var _SpotLightHelpervector = /*@__PURE__*/ Vector3.init();
+var _spotLightHelpervector = Vector3.init();
 
 class SpotLightHelper extends Object3D {
   late Light light;
-  
-  /**
-	 * @default false
-	 */
-  @override
-  bool matrixAutoUpdate = false;
 
   late Color? color;
   late LineSegments cone;
 
   SpotLightHelper(this.light, this.color) : super() {
+    matrixAutoUpdate = false;
     light.updateMatrixWorld(false);
 
     matrix = light.matrixWorld;
@@ -63,16 +57,13 @@ class SpotLightHelper extends Object3D {
     ];
 
     for (var i = 0, j = 1, l = 32; i < l; i++, j++) {
-      var p1 = (i / l) * Math.PI * 2;
-      var p2 = (j / l) * Math.PI * 2;
+      var p1 = (i / l) * Math.pi * 2;
+      var p2 = (j / l) * Math.pi * 2;
 
-      positions.addAll(
-          [Math.cos(p1), Math.sin(p1), 1, Math.cos(p2), Math.sin(p2), 1]);
+      positions.addAll([Math.cos(p1), Math.sin(p1), 1, Math.cos(p2), Math.sin(p2), 1]);
     }
 
-    geometry.setAttribute(
-        'position',
-        Float32BufferAttribute(Float32Array.from(positions), 3, false));
+    geometry.setAttribute('position', Float32BufferAttribute(Float32Array.from(positions), 3, false));
 
     var material = LineBasicMaterial({"fog": false, "toneMapped": false});
 
@@ -96,10 +87,9 @@ class SpotLightHelper extends Object3D {
 
     cone.scale.set(coneWidth, coneWidth, coneLength);
 
-    _SpotLightHelpervector.setFromMatrixPosition(
-        light.target!.matrixWorld);
+    _spotLightHelpervector.setFromMatrixPosition(light.target!.matrixWorld);
 
-    cone.lookAt(_SpotLightHelpervector);
+    cone.lookAt(_spotLightHelpervector);
 
     if (color != null) {
       cone.material.color.copy(color);

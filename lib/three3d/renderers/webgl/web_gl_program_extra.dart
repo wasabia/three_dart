@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/math/math.dart';
 import 'package:three_dart/three3d/renderers/shaders/index.dart';
@@ -208,14 +207,12 @@ class WebGLProgramExtra {
 
     // Loop through all matches.
     for (var match in includePattern.allMatches(string)) {
-      /**
-       * Returns the string matched by the given [group].
-       *
-       * If [group] is 0, returns the match of the pattern.
-       *
-       * The result may be `null` if the pattern didn't assign a value to it
-       * as part of this match.
-       */
+      /// Returns the string matched by the given [group].
+      ///
+      /// If [group] is 0, returns the match of the pattern.
+      ///
+      /// The result may be `null` if the pattern didn't assign a value to it
+      /// as part of this match.
       // print(" resolveIncludes ");
       // print(match.group(0)); // 15, then 20
 
@@ -223,7 +220,7 @@ class WebGLProgramExtra {
 
       // print(" includeString: ${includeString} ");
 
-      String targetString = ShaderChunk[includeString]!;
+      String targetString = shaderChunk[includeString]!;
 
       String targetString2 = resolveIncludes(targetString);
 
@@ -236,7 +233,7 @@ class WebGLProgramExtra {
   }
 
   includeReplacer(match, include) {
-    var string = ShaderChunk[include];
+    var string = shaderChunk[include];
 
     if (string == null) {
       throw ('Can not resolve #include <$include>');

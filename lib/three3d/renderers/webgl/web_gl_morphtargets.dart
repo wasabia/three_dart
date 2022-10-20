@@ -1,5 +1,5 @@
+import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/extra/console.dart';
 import 'package:three_dart/three3d/constants.dart';
@@ -218,7 +218,7 @@ class WebGLMorphtargets {
           workInfluences[i][0] = influences[i][0];
           workInfluences[i][1] = influences[i][1];
         } else {
-          workInfluences[i][0] = Math.MAX_SAFE_INTEGER;
+          workInfluences[i][0] = Math.maxSafeInteger;
           workInfluences[i][1] = 0;
         }
       }
@@ -235,7 +235,7 @@ class WebGLMorphtargets {
         var index = influence[0].toInt();
         var value = influence[1];
 
-        if (index != Math.MAX_SAFE_INTEGER && value != 0) {
+        if (index != Math.maxSafeInteger && value != 0) {
           if (morphTargets != null && geometry.getAttribute('morphTarget$i') != morphTargets[index]) {
             geometry.setAttribute('morphTarget$i', morphTargets[index]);
           }

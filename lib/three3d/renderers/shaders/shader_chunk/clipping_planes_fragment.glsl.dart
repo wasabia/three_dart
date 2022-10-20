@@ -1,4 +1,4 @@
-String clipping_planes_fragment = """
+String clippingPlanesFragment = """
 #if NUM_CLIPPING_PLANES > 0
 
 	vec4 plane;

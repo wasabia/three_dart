@@ -353,7 +353,7 @@ class _State extends State<WebGlClippingStencil> {
     var ground = three.Mesh(
         three.PlaneGeometry(9, 9, 1, 1), three.ShadowMaterial({"color": 0, "opacity": 0.25, "side": three.DoubleSide}));
 
-    ground.rotation.x = -three.Math.PI / 2; // rotates X/Y to X/Z
+    ground.rotation.x = -three.Math.pi / 2; // rotates X/Y to X/Z
     ground.position.y = -1;
     ground.receiveShadow = true;
     scene.add(ground);

@@ -1,4 +1,4 @@
-String fog_pars_fragment = """
+String fogParsFragment = """
 #ifdef USE_FOG
 
 	uniform vec3 fogColor;

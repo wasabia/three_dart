@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/math/box3.dart';
 import 'package:three_dart/three3d/math/math.dart';
 import 'package:three_dart/three3d/math/plane.dart';
@@ -51,8 +50,7 @@ class Triangle {
     }
   }
 
-  static Vector3 static_getNormal(
-      Vector3 a, Vector3 b, Vector3 c, Vector3 target) {
+  static Vector3 staticGetNormal(Vector3 a, Vector3 b, Vector3 c, Vector3 target) {
     target.subVectors(c, b);
     _v0.subVectors(a, b);
     target.cross(_v0);
@@ -69,8 +67,7 @@ class Triangle {
 
   // static/instance method to calculate barycentric coordinates
   // based on: http://www.blackpawn.com/texts/pointinpoly/default.html
-  static Vector3 static_getBarycoord(
-      point, Vector3 a, Vector3 b, Vector3 c, Vector3 target) {
+  static Vector3 staticGetBarycoord(point, Vector3 a, Vector3 b, Vector3 c, Vector3 target) {
     _v0.subVectors(c, a);
     _v1.subVectors(b, a);
     _v2.subVectors(point, a);
@@ -98,15 +95,14 @@ class Triangle {
     return target.set(1 - u - v, v, u);
   }
 
-  static bool static_containsPoint(point, Vector3 a, Vector3 b, Vector3 c) {
-    static_getBarycoord(point, a, b, c, _v3);
+  static bool staticContainsPoint(point, Vector3 a, Vector3 b, Vector3 c) {
+    staticGetBarycoord(point, a, b, c, _v3);
 
     return (_v3.x >= 0) && (_v3.y >= 0) && ((_v3.x + _v3.y) <= 1);
   }
 
-  static static_getUV(
-      point, Vector3 p1, Vector3 p2, Vector3 p3, uv1, uv2, uv3, target) {
-    static_getBarycoord(point, p1, p2, p3, _v3);
+  static staticGetUV(point, Vector3 p1, Vector3 p2, Vector3 p3, uv1, uv2, uv3, target) {
+    staticGetBarycoord(point, p1, p2, p3, _v3);
 
     target.set(0.0, 0.0);
     target.addScaledVector(uv1, _v3.x);
@@ -116,8 +112,7 @@ class Triangle {
     return target;
   }
 
-  static bool static_isFrontFacing(
-      Vector3 a, Vector3 b, Vector3 c, Vector3 direction) {
+  static bool staticIsFrontFacing(Vector3 a, Vector3 b, Vector3 c, Vector3 direction) {
     _v0.subVectors(c, b);
     _v1.subVectors(a, b);
 
@@ -165,7 +160,7 @@ class Triangle {
   }
 
   Vector3 getNormal(Vector3 target) {
-    return Triangle.static_getNormal(a, b, c, target);
+    return Triangle.staticGetNormal(a, b, c, target);
   }
 
   Plane getPlane(Plane target) {
@@ -173,19 +168,19 @@ class Triangle {
   }
 
   Vector3 getBarycoord(point, Vector3 target) {
-    return Triangle.static_getBarycoord(point, a, b, c, target);
+    return Triangle.staticGetBarycoord(point, a, b, c, target);
   }
 
   dynamic getUV(point, uv1, uv2, uv3, target) {
-    return Triangle.static_getUV(point, a, b, c, uv1, uv2, uv3, target);
+    return Triangle.staticGetUV(point, a, b, c, uv1, uv2, uv3, target);
   }
 
   bool containsPoint(point) {
-    return Triangle.static_containsPoint(point, a, b, c);
+    return Triangle.staticContainsPoint(point, a, b, c);
   }
 
   bool isFrontFacing(Vector3 direction) {
-    return Triangle.static_isFrontFacing(a, b, c, direction);
+    return Triangle.staticIsFrontFacing(a, b, c, direction);
   }
 
   intersectsBox(Box3 box) {

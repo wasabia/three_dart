@@ -1,5 +1,3 @@
-
-
 import 'dart:typed_data';
 
 var _floatView = Float32List(1);

@@ -1,4 +1,4 @@
-String meshtoon_frag = """
+String meshtoonFrag = """
 #define TOON
 
 uniform vec3 diffuse;

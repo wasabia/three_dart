@@ -238,7 +238,7 @@ class _MyAppState extends State<WebGlLoaderGltf2> {
     // scene.add( skeleton );
 
     object.scale.set(2, 2, 2);
-    object.rotation.set(0, 180 * three.Math.PI / 180.0, 0);
+    object.rotation.set(0, 180 * three.Math.pi / 180.0, 0);
 
     // var clonedMesh = object.getObjectByName( "vanguard_Mesh" );
 

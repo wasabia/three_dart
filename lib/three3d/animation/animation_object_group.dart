@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/animation/property_binding.dart';
 import 'package:three_dart/three3d/dart_helpers.dart';
 import 'package:three_dart/three3d/math/math_utils.dart';
@@ -98,7 +97,9 @@ class AnimationObjectGroup {
         bindings = _bindings,
         nBindings = bindings.length;
 
-    var knownObject, nObjects = objects.length, nCachedObjects = nCachedObjects_;
+    Mesh? knownObject;
+    var nObjects = objects.length;
+    var nCachedObjects = nCachedObjects_;
 
     for (var i = 0, n = items.length; i != n; ++i) {
       var object = items[i], uuid = object.uuid;

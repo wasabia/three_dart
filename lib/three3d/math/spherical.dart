@@ -5,7 +5,6 @@
  * The azimuthal angle (theta) is measured from the positive z-axis.
  */
 
-
 import 'package:three_dart/three3d/math/math.dart';
 import 'package:three_dart/three3d/math/math_utils.dart';
 
@@ -38,8 +37,8 @@ class Spherical {
 
   // restrict phi to be betwee EPS and PI-EPS
   Spherical makeSafe() {
-    const EPS = 0.000001;
-    phi = Math.max(EPS, Math.min(Math.PI - EPS, phi)).toDouble();
+    const eps = 0.000001;
+    phi = Math.max(eps, Math.min(Math.pi - eps, phi)).toDouble();
 
     return this;
   }

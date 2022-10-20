@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/math/index.dart';
@@ -6,7 +5,6 @@ import 'package:three_dart/three3d/objects/bone.dart';
 import 'package:three_dart/three3d/textures/data_texture.dart';
 
 var _offsetMatrix = Matrix4();
-var _identityMatrix = Matrix4();
 
 class Skeleton {
   String uuid = MathUtils.generateUUID();
@@ -17,8 +15,8 @@ class Skeleton {
   late int boneTextureSize;
   num frame = -1;
 
-  Skeleton([List<Bone>? bones, List<Matrix4>? boneInverses]) {
-    this.bones = bones!.sublist(0);
+  Skeleton([List<Bone> bones = const [], List<Matrix4>? boneInverses]) {
+    this.bones = bones.sublist(0);
     this.boneInverses = boneInverses ?? [];
 
     init();
@@ -112,7 +110,7 @@ class Skeleton {
     for (var i = 0; i < il; i++) {
       // compute the offset between the current and the original transform
 
-      var matrix = bones[i] != null ? bones[i].matrixWorld : _identityMatrix;
+      var matrix = bones[i].matrixWorld;
 
       _offsetMatrix.multiplyMatrices(matrix, boneInverses[i]);
       _offsetMatrix.toArray(boneMatrices, i * 16);

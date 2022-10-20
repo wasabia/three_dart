@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/renderers/web_gl_render_target.dart';
 
 class WebGLMultipleRenderTargets extends WebGLRenderTarget {
@@ -51,7 +50,7 @@ class WebGLMultipleRenderTargets extends WebGLRenderTarget {
 
     depthBuffer = source.depthBuffer;
     stencilBuffer = source.stencilBuffer;
-    if ( source.depthTexture != null ) {
+    if (source.depthTexture != null) {
       depthTexture = source.depthTexture!.clone();
     }
 

@@ -47,8 +47,7 @@ class WeakMap<K, V> {
       : _map = {},
         _expando = Expando();
 
-  static bool _allowedInExpando(Object? value) =>
-      value is! String && value is! num && value is! bool && value != null;
+  static bool _allowedInExpando(Object? value) => value is! String && value is! num && value is! bool && value != null;
 
   void operator []=(K key, V value) => add(key: key, value: value);
 

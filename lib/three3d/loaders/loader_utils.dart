@@ -1,6 +1,5 @@
 import 'dart:convert' as convert;
 
-
 class LoaderUtils {
   static decodeText(List<int> array) {
     var s = convert.Utf8Decoder().convert(array);
@@ -49,8 +48,7 @@ class LoaderUtils {
 
     // Host Relative URL
     final _reg1 = RegExp("^https?://", caseSensitive: false);
-    if (_reg1.hasMatch(path) &&
-        RegExp("^/", caseSensitive: false).hasMatch(url)) {
+    if (_reg1.hasMatch(path) && RegExp("^/", caseSensitive: false).hasMatch(url)) {
       final _reg2 = RegExp("(^https?://[^/]+).*", caseSensitive: false);
 
       final matches = _reg2.allMatches(path);

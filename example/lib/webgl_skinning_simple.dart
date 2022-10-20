@@ -214,7 +214,7 @@ class _MyAppState extends State<WebGlSkinningSimple> {
 
     var ground = three.Mesh(geometry, material);
     ground.position.set(0, -5, 0);
-    ground.rotation.x = -three.Math.PI / 2;
+    ground.rotation.x = -three.Math.pi / 2;
     ground.receiveShadow = true;
     scene.add(ground);
 

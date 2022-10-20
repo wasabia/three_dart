@@ -1,8 +1,6 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/extras/index.dart';
-import 'package:three_dart/three3d/math/index.dart';
 
 class ShapeGeometry extends BufferGeometry {
   ShapeGeometry(shapes, {num curveSegments = 12}) : super() {
@@ -19,9 +17,11 @@ class ShapeGeometry extends BufferGeometry {
   }
 
   ShapeGeometry.fromJSON(
-      Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON) {
+    Map<String, dynamic> json,
+    Map<String, dynamic> rootJSON,
+  ) : super.fromJSON(json, rootJSON) {
     curveSegments = json["curveSegments"];
+    type = 'ShapeGeometry';
 
     Shape? _shapes;
 
@@ -110,7 +110,6 @@ class ShapeGeometry extends BufferGeometry {
       }
     }
 
-
     for (var i = 0; i < shapes.length; i++) {
       addShape(shapes[i]);
       addGroup(groupStart, groupCount, i); // enables MultiMaterial support
@@ -136,12 +135,9 @@ class ShapeGeometry extends BufferGeometry {
     // build geometry
 
     setIndex(indices);
-    setAttribute('position',
-        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
-    setAttribute(
-        'normal', Float32BufferAttribute(Float32Array.from(normals), 3, false));
-    setAttribute(
-        'uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
+    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    setAttribute('normal', Float32BufferAttribute(Float32Array.from(normals), 3, false));
+    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
 
     // helper functions
   }

@@ -1,4 +1,4 @@
-String points_frag = """
+String pointsFrag = """
 uniform vec3 diffuse;
 uniform float opacity;
 

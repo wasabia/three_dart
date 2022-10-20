@@ -1,17 +1,10 @@
-
 import 'dart:convert';
 
 import 'package:three_dart/three3d/cameras/camera.dart';
 import 'package:three_dart/three3d/core/index.dart';
 
 class OrthographicCamera extends Camera {
-  OrthographicCamera(
-      [num left = -1,
-      num right = 1,
-      num top = 1,
-      num bottom = -1,
-      num near = 0.1,
-      num far = 2000])
+  OrthographicCamera([num left = -1, num right = 1, num top = 1, num bottom = -1, num near = 0.1, num far = 2000])
       : super() {
     type = 'OrthographicCamera';
     zoom = 1;
@@ -47,15 +40,7 @@ class OrthographicCamera extends Camera {
   }
 
   setViewOffset(fullWidth, fullHeight, x, y, width, height) {
-    view ??= {
-      "enabled": true,
-      "fullWidth": 1,
-      "fullHeight": 1,
-      "offsetX": 0,
-      "offsetY": 0,
-      "width": 1,
-      "height": 1
-    };
+    view ??= {"enabled": true, "fullWidth": 1, "fullHeight": 1, "offsetX": 0, "offsetY": 0, "width": 1, "height": 1};
 
     view!["enabled"] = true;
     view!["fullWidth"] = fullWidth;

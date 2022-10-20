@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/geometries/sphere_geometry.dart';
 import 'package:three_dart/three3d/lights/index.dart';
 import 'package:three_dart/three3d/materials/mesh_basic_material.dart';
@@ -6,12 +5,12 @@ import 'package:three_dart/three3d/math/color.dart';
 import 'package:three_dart/three3d/objects/index.dart';
 
 class PointLightHelper extends Mesh {
-  @override
-  String type = "PointLightHelper";
   late PointLight light;
   Color? color;
 
-  PointLightHelper.create(geometry, material) : super(geometry, material);
+  PointLightHelper.create(geometry, material) : super(geometry, material) {
+    type = "PointLightHelper";
+  }
 
   factory PointLightHelper(light, sphereSize, Color color) {
     var geometry = SphereGeometry(sphereSize, 4, 2);

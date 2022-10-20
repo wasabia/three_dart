@@ -250,7 +250,7 @@ class _State extends State<WebGlAnimationMultiple> {
         "modelName": "Parrot",
         "meshName": "mesh_0",
         "position": {"x": -4, "y": 0, "z": 0},
-        "rotation": {"x": 0, "y": three.Math.PI, "z": 0},
+        "rotation": {"x": 0, "y": three.Math.pi, "z": 0},
         "scale": 0.01,
         "animationName": "parrot_A_"
       },
@@ -258,7 +258,7 @@ class _State extends State<WebGlAnimationMultiple> {
         "modelName": "Parrot",
         "meshName": "mesh_0",
         "position": {"x": -2, "y": 0, "z": 0},
-        "rotation": {"x": 0, "y": three.Math.PI / 2, "z": 0},
+        "rotation": {"x": 0, "y": three.Math.pi / 2, "z": 0},
         "scale": 0.02,
         "animationName": null
       },
@@ -307,7 +307,7 @@ class _State extends State<WebGlAnimationMultiple> {
     var groundMesh =
         three.Mesh(three.PlaneGeometry(40, 40), three.MeshPhongMaterial({"color": 0x999999, "depthWrite": false}));
 
-    groundMesh.rotation.x = -three.Math.PI / 2;
+    groundMesh.rotation.x = -three.Math.pi / 2;
     groundMesh.receiveShadow = true;
     worldScene.add(groundMesh);
   }

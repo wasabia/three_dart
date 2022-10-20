@@ -1,20 +1,19 @@
-
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
-SRGBToLinear(c) {
-  return (c < 0.04045) ? c * 0.0773993808 : Math.pow(c * 0.9478672986 + 0.0521327014, 2.4);
+double sRGBToLinear(double c) {
+  return (c < 0.04045) ? c * 0.0773993808 : Math.pow(c * 0.9478672986 + 0.0521327014, 2.4).toDouble();
 }
 
-LinearToSRGB(c) {
+double linearToSRGB(double c) {
   return (c < 0.0031308) ? c * 12.92 : 1.055 * (Math.pow(c, 0.41666)) - 0.055;
 }
 
 // JavaScript RGB-to-RGB transforms, defined as
 // FN[InputColorSpace][OutputColorSpace] callback functions.
-var FN = {
-  SRGBColorSpace: {LinearSRGBColorSpace: SRGBToLinear},
-  LinearSRGBColorSpace: {SRGBColorSpace: LinearToSRGB},
+var fn = {
+  SRGBColorSpace: {LinearSRGBColorSpace: sRGBToLinear},
+  LinearSRGBColorSpace: {SRGBColorSpace: linearToSRGB},
 };
 
 class ColorManagement {
@@ -33,12 +32,12 @@ class ColorManagement {
       return color;
     }
 
-    if (FN[sourceColorSpace] != null && FN[sourceColorSpace]![targetColorSpace] != null) {
-      var fn = FN[sourceColorSpace]![targetColorSpace]!;
+    if (fn[sourceColorSpace] != null && fn[sourceColorSpace]![targetColorSpace] != null) {
+      var fun = fn[sourceColorSpace]![targetColorSpace]!;
 
-      color.r = fn(color.r);
-      color.g = fn(color.g);
-      color.b = fn(color.b);
+      color.r = fun(color.r);
+      color.g = fun(color.g);
+      color.b = fun(color.b);
 
       return color;
     }

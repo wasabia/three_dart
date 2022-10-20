@@ -1,4 +1,4 @@
-String logdepthbuf_vertex = """
+String logdepthbufVertex = """
 #ifdef USE_LOGDEPTHBUF
 
 	#ifdef USE_LOGDEPTHBUF_EXT

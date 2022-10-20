@@ -1,13 +1,9 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/extras/curves/quadratic_bezier_curve.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class TubeGeometry extends BufferGeometry {
-  @override
-  String type = "TubeGeometry";
-
   TubeGeometry([
     curve,
     tubularSegments = 64,
@@ -15,6 +11,7 @@ class TubeGeometry extends BufferGeometry {
     radialSegments = 8,
     closed = false,
   ]) : super() {
+    type = "TubeGeometry";
     var path = curve ?? QuadraticBezierCurve(Vector2(), Vector2(), Vector2());
     parameters = {
       "path": path,
@@ -48,7 +45,7 @@ class TubeGeometry extends BufferGeometry {
       final B = frames["binormals"][i];
       // generate normals and vertices for the current segment
       for (var j = 0; j <= radialSegments; j++) {
-        var v = j / radialSegments * Math.PI * 2;
+        var v = j / radialSegments * Math.pi * 2;
         var sin = Math.sin(v);
         var cos = -Math.cos(v);
         // normal
@@ -119,11 +116,8 @@ class TubeGeometry extends BufferGeometry {
     generateBufferData();
 
     setIndex(indices);
-    setAttribute('position',
-        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
-    setAttribute(
-        'normal', Float32BufferAttribute(Float32Array.from(normals), 3, false));
-    setAttribute(
-        'uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
+    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    setAttribute('normal', Float32BufferAttribute(Float32Array.from(normals), 3, false));
+    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
   }
 }

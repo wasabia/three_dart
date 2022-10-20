@@ -1,20 +1,12 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class CircleGeometry extends BufferGeometry {
-  CircleGeometry(
-      {radius = 1, segments = 8, thetaStart = 0, thetaLength = Math.PI * 2})
-      : super() {
+  CircleGeometry({radius = 1, segments = 8, thetaStart = 0, thetaLength = Math.pi * 2}) : super() {
     type = 'CircleGeometry';
 
-    parameters = {
-      "radius": radius,
-      "segments": segments,
-      "thetaStart": thetaStart,
-      "thetaLength": thetaLength
-    };
+    parameters = {"radius": radius, "segments": segments, "thetaStart": thetaStart, "thetaLength": thetaLength};
 
     segments = Math.max<num>(3, segments);
 
@@ -44,8 +36,7 @@ class CircleGeometry extends BufferGeometry {
       vertex.x = radius * Math.cos(segment);
       vertex.y = radius * Math.sin(segment);
 
-      vertices.addAll(
-          [vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
+      vertices.addAll([vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
 
       // normal
 
@@ -68,11 +59,8 @@ class CircleGeometry extends BufferGeometry {
     // build geometry
 
     setIndex(indices);
-    setAttribute('position',
-        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
-    setAttribute('normal',
-        Float32BufferAttribute(Float32Array.from(normals), 3, false));
-    setAttribute(
-        'uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
+    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    setAttribute('normal', Float32BufferAttribute(Float32Array.from(normals), 3, false));
+    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
   }
 }

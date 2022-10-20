@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/loaders/loader.dart';
 
 class LoadingManager {
@@ -13,14 +12,11 @@ class LoadingManager {
   Function? onProgress;
   Function? onError;
 
-  LoadingManager([onLoad, onProgress, onError]) {
+  LoadingManager([this.onLoad, this.onProgress, this.onError]) {
     // Refer to #5689 for the reason why we don't set .onStart
     // in the constructor
 
     onStart = null;
-    this.onLoad = onLoad;
-    this.onProgress = onProgress;
-    this.onError = onError;
   }
 
   void itemStart(String url) {
@@ -103,4 +99,4 @@ class LoadingManager {
   }
 }
 
-var DefaultLoadingManager = LoadingManager(null, null, null);
+var defaultLoadingManager = LoadingManager(null, null, null);

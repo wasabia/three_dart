@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/core/buffer_geometry.dart';
 import 'package:three_dart/three3d/core/object_3d.dart';
 import 'package:three_dart/three3d/math/index.dart';
@@ -6,7 +5,7 @@ import 'package:three_dart/three3d/math/index.dart';
 class InstancedBufferGeometry extends BufferGeometry {
   InstancedBufferGeometry() : super() {
     type = 'InstancedBufferGeometry';
-    instanceCount = Math.Infinity.toInt();
+    instanceCount = Math.infinity.toInt();
   }
 
   @override

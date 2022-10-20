@@ -227,7 +227,7 @@ class _MyAppState extends State<WebGlLoaderGlb> {
     object = result["scene"];
 
     object.scale.set(80, 80, 80);
-    object.rotation.set(0, 180 * three.Math.PI / 180.0, 0);
+    object.rotation.set(0, 180 * three.Math.pi / 180.0, 0);
 
     scene.add(object);
 

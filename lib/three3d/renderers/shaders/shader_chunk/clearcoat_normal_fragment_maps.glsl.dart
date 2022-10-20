@@ -1,4 +1,4 @@
-String clearcoat_normal_fragment_maps = """
+String clearcoatMormalFragmentMaps = """
 #ifdef USE_CLEARCOAT_NORMALMAP
 
 	vec3 clearcoatMapN = texture2D( clearcoatNormalMap, vUv ).xyz * 2.0 - 1.0;

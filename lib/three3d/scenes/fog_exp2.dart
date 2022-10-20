@@ -1,14 +1,12 @@
-
 import 'package:three_dart/three3d/math/index.dart';
 import 'package:three_dart/three3d/scenes/fog.dart';
 
 class FogExp2 extends FogBase {
-  @override
-  bool isFogExp2 = true;
   late num density;
 
   FogExp2(color, density) {
     name = '';
+    isFogExp2 = true;
 
     if (color is int) {
       this.color = Color(0, 0, 0).setHex(color);
@@ -26,11 +24,11 @@ class FogExp2 extends FogBase {
   }
 
   @override
-  toJSON(/* meta */) {
+  toJSON() {
     return {
       "type": 'FogExp2',
       "color": color.getHex(),
-      "density": density
+      "density": density,
     };
   }
 }

@@ -1,4 +1,4 @@
-String depth_frag = """
+String depthFrag = """
 #if DEPTH_PACKING == 3200
 
 	uniform float opacity;

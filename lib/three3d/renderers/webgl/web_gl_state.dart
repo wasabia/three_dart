@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/constants.dart';
@@ -557,15 +556,15 @@ class WebGLState {
     // }
   }
 
-  void texSubImage2D_IF(target, level, x, y, glFormat, glType, image) {
+  void texSubImage2DIf(target, level, x, y, glFormat, glType, image) {
     if (kIsWeb) {
-      texSubImage2D_NOSIZE(gl.TEXTURE_2D, 0, 0, 0, glFormat, glType, image.data);
+      texSubImage2DNoSize(gl.TEXTURE_2D, 0, 0, 0, glFormat, glType, image.data);
     } else {
       texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, image.width, image.height, glFormat, glType, image.data);
     }
   }
 
-  void texSubImage2D_NOSIZE(target, level, x, y, glFormat, glType, data) {
+  void texSubImage2DNoSize(target, level, x, y, glFormat, glType, data) {
     // try {
 
     gl.texSubImage2D_NOSIZE(target, level, x, y, glFormat, glType, data);
@@ -625,9 +624,9 @@ class WebGLState {
     // }
   }
 
-  void texImage2D_IF(int target, int level, int internalformat, int format, int type, image) {
+  void texImage2DIf(int target, int level, int internalformat, int format, int type, image) {
     if (kIsWeb) {
-      texImage2D_NOSIZE(target, level, internalformat, format, type, image.data);
+      texImage2DNoSize(target, level, internalformat, format, type, image.data);
     } else {
       texImage2D(target, level, internalformat, image.width, image.height, 0, format, type, image.data);
     }
@@ -638,7 +637,7 @@ class WebGLState {
     gl.texImage2D(target, level, internalformat, width, height, border, format, type, data);
   }
 
-  void texImage2D_NOSIZE(int target, int level, int internalformat, int format, int type, data) {
+  void texImage2DNoSize(int target, int level, int internalformat, int format, int type, data) {
     gl.texImage2D_NOSIZE(target, level, internalformat, format, type, data);
   }
 
@@ -832,7 +831,7 @@ class DepthBuffer {
     }
   }
 
-  setFunc(int depthFunc) {
+  setFunc(int? depthFunc) {
     if (currentDepthFunc != depthFunc) {
       if (depthFunc != null) {
         switch (depthFunc) {

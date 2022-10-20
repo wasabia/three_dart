@@ -1,4 +1,4 @@
-String metalnessmap_pars_fragment = """
+String metalnessmapParsFragment = """
 #ifdef USE_METALNESSMAP
 
 	uniform sampler2D metalnessMap;

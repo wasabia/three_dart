@@ -1,4 +1,4 @@
-String tonemapping_pars_fragment = """
+String tonemappingParsFragment = """
 #ifndef saturate
 // <common> may have defined saturate() already
 #define saturate(a) clamp( a, 0.0, 1.0 )

@@ -1,4 +1,3 @@
-
 class WebGLAnimation {
   var context;
   var isAnimating = false;

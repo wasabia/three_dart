@@ -1,10 +1,8 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/geometries/octahedron_geometry.dart';
 import 'package:three_dart/three3d/lights/light.dart';
 import 'package:three_dart/three3d/materials/index.dart';
-import 'package:three_dart/three3d/math/color.dart';
 import 'package:three_dart/three3d/math/index.dart';
 import 'package:three_dart/three3d/objects/index.dart';
 
@@ -23,17 +21,15 @@ class HemisphereLightHelper extends Object3D {
     matrixAutoUpdate = false;
 
     var geometry = OctahedronGeometry(size);
-    geometry.rotateY(Math.PI * 0.5);
+    geometry.rotateY(Math.pi * 0.5);
 
-    material = MeshBasicMaterial(
-        {"wireframe": true, "fog": false, "toneMapped": false});
+    material = MeshBasicMaterial({"wireframe": true, "fog": false, "toneMapped": false});
     if (color == null) material.vertexColors = true;
 
     var position = geometry.getAttribute('position');
     var colors = Float32Array(position.count * 3);
 
-    geometry.setAttribute(
-        'color', Float32BufferAttribute(colors, 3, false));
+    geometry.setAttribute('color', Float32BufferAttribute(colors, 3, false));
 
     add(Mesh(geometry, material));
 
@@ -66,8 +62,6 @@ class HemisphereLightHelper extends Object3D {
       colors.needsUpdate = true;
     }
 
-    mesh.lookAt(_vectorHemisphereLightHelper
-        .setFromMatrixPosition(light.matrixWorld)
-        .negate());
+    mesh.lookAt(_vectorHemisphereLightHelper.setFromMatrixPosition(light.matrixWorld).negate());
   }
 }

@@ -1,4 +1,4 @@
-String uv_pars_vertex = """
+String uvParsVertex = """
 #ifdef USE_UV
 
 	#ifdef UVS_VERTEX_ONLY

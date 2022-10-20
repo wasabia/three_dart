@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/math/euler.dart';
 import 'package:three_dart/three3d/math/math.dart';
@@ -22,8 +21,24 @@ class Matrix4 {
     elements = Float32Array.from([1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]);
   }
 
-  Matrix4 set(num n11, num n12, num n13, num n14, num n21, num n22, num n23, num n24, num n31, num n32, num n33,
-      num n34, num n41, num n42, num n43, num n44) {
+  Matrix4 set(
+    num n11,
+    num n12,
+    num n13,
+    num n14,
+    num n21,
+    num n22,
+    num n23,
+    num n24,
+    num n31,
+    num n32,
+    num n33,
+    num n34,
+    num n41,
+    num n42,
+    num n43,
+    num n44,
+  ) {
     var te = elements;
 
     te[0] = n11.toDouble();

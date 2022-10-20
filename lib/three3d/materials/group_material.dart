@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/materials/material.dart';
 
 class GroupMaterial extends Material {

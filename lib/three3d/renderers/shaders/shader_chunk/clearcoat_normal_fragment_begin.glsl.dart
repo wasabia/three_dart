@@ -1,4 +1,4 @@
-String clearcoat_normal_fragment_begin = """
+String clearcoatNormalFragmentBegin = """
 #ifdef USE_CLEARCOAT
 
 	vec3 clearcoatNormal = geometryNormal;

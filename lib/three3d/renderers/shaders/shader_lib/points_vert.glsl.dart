@@ -1,4 +1,4 @@
-String points_vert = """
+String pointsVert = """
 uniform float size;
 uniform float scale;
 

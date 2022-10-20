@@ -1,5 +1,3 @@
-
-import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/materials/material.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
@@ -12,9 +10,7 @@ class SpriteMaterial extends Material {
     setValues(parameters);
   }
 
-  SpriteMaterial.fromJSON(
-      Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON);
+  SpriteMaterial.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) : super.fromJSON(json, rootJSON);
 
   @override
   SpriteMaterial copy(Material source) {

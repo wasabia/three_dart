@@ -1,7 +1,5 @@
-
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
@@ -56,14 +54,11 @@ class FileLoader extends Loader {
 
     // Check for data: URI
     var dataUriRegex = RegExp(r"^data:(.*?)(;base64)?,(.*)$");
-    var dataUriRegexResult = dataUriRegex.firstMatch(url);
-    var request;
 
     // Safari can not handle Data URIs through XMLHttpRequest so process manually
     if (dataUriRegex.hasMatch(url)) {
       var dataUriRegexResult = dataUriRegex.firstMatch(url)!;
 
-      var mimeType = dataUriRegexResult.group(1);
       var isBase64 = dataUriRegexResult.group(2) != null;
 
       var data = dataUriRegexResult.group(3)!;
@@ -96,8 +91,6 @@ class FileLoader extends Loader {
           // response = parser.parseFromString( data, mimeType );
 
           throw ("FileLoader responseType: $responseType is not support ....  ");
-
-          break;
 
         case 'json':
           response = convert.jsonDecode(data);

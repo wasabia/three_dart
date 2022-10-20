@@ -290,9 +290,9 @@ class _MyAppState extends State<WebGlGeometryShapes> {
     var trackShape = three.Shape(null)
         .moveTo(40.0, 40.0)
         .lineTo(40.0, 160.0)
-        .absarc(60.0, 160.0, 20.0, three.Math.PI, 0.0, true)
+        .absarc(60.0, 160.0, 20.0, three.Math.pi, 0.0, true)
         .lineTo(80, 40)
-        .absarc(60, 40, 20, 2 * three.Math.PI, three.Math.PI, true);
+        .absarc(60, 40, 20, 2 * three.Math.pi, three.Math.pi, true);
 
     // Circle
 
@@ -316,19 +316,19 @@ class _MyAppState extends State<WebGlGeometryShapes> {
 
     // Arc circle
 
-    var arcShape = three.Shape(null).moveTo(50, 10).absarc(10, 10, 40, 0, three.Math.PI * 2, false);
+    var arcShape = three.Shape(null).moveTo(50, 10).absarc(10, 10, 40, 0, three.Math.pi * 2, false);
 
-    var holePath = three.Path(null).moveTo(20, 10).absarc(10, 10, 10, 0, three.Math.PI * 2, true);
+    var holePath = three.Path(null).moveTo(20, 10).absarc(10, 10, 10, 0, three.Math.pi * 2, true);
 
     arcShape.holes.add(holePath);
 
     // Smiley
 
-    var smileyShape = three.Shape(null).moveTo(80, 40).absarc(40, 40, 40, 0, three.Math.PI * 2, false);
+    var smileyShape = three.Shape(null).moveTo(80, 40).absarc(40, 40, 40, 0, three.Math.pi * 2, false);
 
-    var smileyEye1Path = three.Path(null).moveTo(35, 20).absellipse(25, 20, 10, 10, 0, three.Math.PI * 2, true, null);
+    var smileyEye1Path = three.Path(null).moveTo(35, 20).absellipse(25, 20, 10, 10, 0, three.Math.pi * 2, true, null);
 
-    var smileyEye2Path = three.Path(null).moveTo(65, 20).absarc(55, 20, 10, 0, three.Math.PI * 2, true);
+    var smileyEye2Path = three.Path(null).moveTo(65, 20).absarc(55, 20, 10, 0, three.Math.pi * 2, true);
 
     var smileyMouthPath = three.Path(null)
         .moveTo(20, 40)
@@ -367,17 +367,17 @@ class _MyAppState extends State<WebGlGeometryShapes> {
     addShape(roundedRectShape, extrudeSettings, 0x008000, -150, 150, 0, 0, 0, 0, 1);
     addShape(trackShape, extrudeSettings, 0x008080, 200, -100, 0, 0, 0, 0, 1);
     addShape(squareShape, extrudeSettings, 0x0040f0, 150, 100, 0, 0, 0, 0, 1);
-    addShape(heartShape, extrudeSettings, 0xf00000, 60, 100, 0, 0, 0, three.Math.PI, 1);
+    addShape(heartShape, extrudeSettings, 0xf00000, 60, 100, 0, 0, 0, three.Math.pi, 1);
     addShape(circleShape, extrudeSettings, 0x00f000, 120, 250, 0, 0, 0, 0, 1);
     addShape(fishShape, extrudeSettings, 0x404040, -60, 200, 0, 0, 0, 0, 1);
-    addShape(smileyShape, extrudeSettings, 0xf000f0, -200, 250, 0, 0, 0, three.Math.PI, 1);
+    addShape(smileyShape, extrudeSettings, 0xf000f0, -200, 250, 0, 0, 0, three.Math.pi, 1);
     addShape(arcShape, extrudeSettings, 0x804000, 150, 0, 0, 0, 0, 0, 1);
     addShape(splineShape, extrudeSettings, 0x808080, -50, -100, 0, 0, 0, 0, 1);
 
     addLineShape(arcShape.holes[0], 0x804000, 150, 0, 0, 0, 0, 0, 1);
 
     for (var i = 0; i < smileyShape.holes.length; i += 1) {
-      addLineShape(smileyShape.holes[i], 0xf000f0, -200, 250, 0, 0, 0, three.Math.PI, 1);
+      addLineShape(smileyShape.holes[i], 0xf000f0, -200, 250, 0, 0, 0, three.Math.pi, 1);
     }
 
     //

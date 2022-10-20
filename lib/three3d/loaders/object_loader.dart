@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/animation/index.dart';
 import 'package:three_dart/three3d/cameras/index.dart';
@@ -109,26 +108,12 @@ class ObjectLoader extends Loader {
     var shapes = parseShapes(json["shapes"]);
     var geometries = parseGeometries(json["geometries"], shapes);
 
-    // print(" ObjectLoader.parseAsync images1: ${json["images"]} ");
-
     var images = await parseImages(json["images"], null);
-
-    // print(" ObjectLoader.parseAsync images2: ${images} ");
-
-    if (images != null) {
-      images.keys.forEach((k) {
-        var im = images[k];
-        // print(" key: ${k} data: ${im.data} url: ${im.url} ");
-      });
-    }
 
     var textures = parseTextures(json["textures"], images);
     var materials = parseMaterials(json["materials"], textures);
 
     var object = parseObject(json["object"], geometries, materials, textures, animations);
-
-    // var skeletons = this.parseSkeletons( json.skeletons, object );
-    // this.bindSkeletons( object, skeletons );
 
     return object;
   }
@@ -138,7 +123,7 @@ class ObjectLoader extends Loader {
 
     if (json != null) {
       for (var i = 0, l = json.length; i < l; i++) {
-        var shape = Shape(null).fromJSON(json[i]);
+        var shape = Shape.fromJSON(json[i]);
 
         shapes[shape.uuid] = shape;
       }
@@ -412,7 +397,7 @@ class ObjectLoader extends Loader {
         if (data["name"] != null) texture.name = data["name"];
 
         if (data["mapping"] != null) {
-          texture.mapping = parseConstant(data["mapping"], TEXTURE_MAPPING);
+          texture.mapping = parseConstant(data["mapping"], textureMapping);
         }
 
         if (data["offset"] != null) texture.offset.fromArray(data["offset"]);
@@ -421,8 +406,8 @@ class ObjectLoader extends Loader {
         if (data["rotation"] != null) texture.rotation = data["rotation"];
 
         if (data["wrap"] != null) {
-          texture.wrapS = parseConstant(data["wrap"][0], TEXTURE_WRAPPING);
-          texture.wrapT = parseConstant(data["wrap"][1], TEXTURE_WRAPPING);
+          texture.wrapS = parseConstant(data["wrap"][0], textureWrapping);
+          texture.wrapT = parseConstant(data["wrap"][1], textureWrapping);
         }
 
         if (data["format"] != null) texture.format = data["format"];
@@ -430,10 +415,10 @@ class ObjectLoader extends Loader {
         if (data["encoding"] != null) texture.encoding = data["encoding"];
 
         if (data["minFilter"] != null) {
-          texture.minFilter = parseConstant(data["minFilter"], TEXTURE_FILTER);
+          texture.minFilter = parseConstant(data["minFilter"], textureFilter);
         }
         if (data["magFilter"] != null) {
-          texture.magFilter = parseConstant(data["magFilter"], TEXTURE_FILTER);
+          texture.magFilter = parseConstant(data["magFilter"], textureFilter);
         }
         if (data["anisotropy"] != null) texture.anisotropy = data["anisotropy"];
 
@@ -784,7 +769,7 @@ class ObjectLoader extends Loader {
   }
 }
 
-var TEXTURE_MAPPING = {
+var textureMapping = {
   "UVMapping": UVMapping,
   "CubeReflectionMapping": CubeReflectionMapping,
   "CubeRefractionMapping": CubeRefractionMapping,
@@ -793,13 +778,13 @@ var TEXTURE_MAPPING = {
   "CubeUVReflectionMapping": CubeUVReflectionMapping
 };
 
-var TEXTURE_WRAPPING = {
+var textureWrapping = {
   "RepeatWrapping": RepeatWrapping,
   "ClampToEdgeWrapping": ClampToEdgeWrapping,
   "MirroredRepeatWrapping": MirroredRepeatWrapping
 };
 
-var TEXTURE_FILTER = {
+var textureFilter = {
   "NearestFilter": NearestFilter,
   "NearestMipmapNearestFilter": NearestMipmapNearestFilter,
   "NearestMipmapLinearFilter": NearestMipmapLinearFilter,

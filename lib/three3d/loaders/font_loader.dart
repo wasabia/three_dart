@@ -1,4 +1,3 @@
-
 // loader font from typeface json
 import 'dart:convert' as convert;
 import 'package:three_dart/three3d/extras/core/ttf_font.dart';

@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/cameras/camera.dart';
 import 'package:three_dart/three3d/materials/material.dart';
 import 'package:three_dart/three3d/math/index.dart';
@@ -56,10 +55,7 @@ class WebGLClipping {
 
     var materialProperties = properties.get(material);
 
-    if (!localClippingEnabled ||
-        planes == null ||
-        planes.isEmpty ||
-        renderingShadows && !clipShadows) {
+    if (!localClippingEnabled || planes == null || planes.isEmpty || renderingShadows && !clipShadows) {
       // there's no local clipping
 
       if (renderingShadows) {
@@ -107,8 +103,7 @@ class WebGLClipping {
       dstArray = uniform["value"];
 
       if (skipTransform != true || dstArray == null) {
-        var flatSize = dstOffset + nPlanes * 4,
-            viewMatrix = camera.matrixWorldInverse;
+        var flatSize = dstOffset + nPlanes * 4, viewMatrix = camera.matrixWorldInverse;
 
         viewNormalMatrix.getNormalMatrix(viewMatrix);
 

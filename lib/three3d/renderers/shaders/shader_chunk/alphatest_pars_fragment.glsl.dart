@@ -1,4 +1,4 @@
-String alphatest_pars_fragment = """
+String alphatestParsFragment = """
 #ifdef USE_ALPHATEST
 	uniform float alphaTest;
 #endif

@@ -1,4 +1,4 @@
-String gradientmap_pars_fragment = """
+String gradientmapParsFragment = """
 
 #ifdef USE_GRADIENTMAP
 

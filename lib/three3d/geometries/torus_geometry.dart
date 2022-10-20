@@ -1,25 +1,22 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class TorusGeometry extends BufferGeometry {
-  @override
-  String type = "TorusGeometry";
-
-  TorusGeometry(
-      [radius = 1,
-      tube = 0.4,
-      radialSegments = 8,
-      tubularSegments = 6,
-      arc = Math.PI * 2])
-      : super() {
+  TorusGeometry([
+    radius = 1,
+    tube = 0.4,
+    radialSegments = 8,
+    tubularSegments = 6,
+    arc = Math.pi * 2,
+  ]) : super() {
+    type = "TorusGeometry";
     parameters = {
       "radius": radius,
       "tube": tube,
       "radialSegments": radialSegments,
       "tubularSegments": tubularSegments,
-      "arc": arc
+      "arc": arc,
     };
 
     radialSegments = Math.floor(radialSegments);
@@ -43,7 +40,7 @@ class TorusGeometry extends BufferGeometry {
     for (var j = 0; j <= radialSegments; j++) {
       for (var i = 0; i <= tubularSegments; i++) {
         var u = i / tubularSegments * arc;
-        var v = j / radialSegments * Math.PI * 2;
+        var v = j / radialSegments * Math.pi * 2;
 
         // vertex
 
@@ -51,8 +48,7 @@ class TorusGeometry extends BufferGeometry {
         vertex.y = (radius + tube * Math.cos(v)) * Math.sin(u);
         vertex.z = tube * Math.sin(v);
 
-        vertices.addAll(
-            [vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
+        vertices.addAll([vertex.x.toDouble(), vertex.y.toDouble(), vertex.z.toDouble()]);
 
         // normal
 
@@ -60,8 +56,7 @@ class TorusGeometry extends BufferGeometry {
         center.y = radius * Math.sin(u);
         normal.subVectors(vertex, center).normalize();
 
-        normals.addAll(
-            [normal.x.toDouble(), normal.y.toDouble(), normal.z.toDouble()]);
+        normals.addAll([normal.x.toDouble(), normal.y.toDouble(), normal.z.toDouble()]);
 
         // uv
 
@@ -91,15 +86,12 @@ class TorusGeometry extends BufferGeometry {
     // build geometry
 
     setIndex(indices);
-    setAttribute(
-        'position', Float32BufferAttribute(Float32Array.from(vertices), 3));
-    setAttribute(
-        'normal', Float32BufferAttribute(Float32Array.from(normals), 3));
+    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3));
+    setAttribute('normal', Float32BufferAttribute(Float32Array.from(normals), 3));
     setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvs), 2));
   }
 
   static fromJSON(data) {
-    return TorusGeometry(data.radius, data.tube, data.radialSegments,
-        data.tubularSegments, data.arc);
+    return TorusGeometry(data.radius, data.tube, data.radialSegments, data.tubularSegments, data.arc);
   }
 }

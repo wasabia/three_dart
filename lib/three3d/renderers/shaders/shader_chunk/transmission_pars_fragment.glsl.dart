@@ -1,4 +1,4 @@
-String transmission_pars_fragment = """
+String transmissionParsFragment = """
 #ifdef USE_TRANSMISSION
 
 	// Transmission code is based on glTF-Sampler-Viewer

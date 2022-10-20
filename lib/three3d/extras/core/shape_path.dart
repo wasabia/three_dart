@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/dart_helpers.dart';
 import 'package:three_dart/three3d/extras/core/path.dart';
 import 'package:three_dart/three3d/extras/core/shape.dart';
@@ -74,7 +73,7 @@ class ShapePath {
         var edgeDx = edgeHighPt.x - edgeLowPt.x;
         var edgeDy = edgeHighPt.y - edgeLowPt.y;
 
-        if (Math.abs(edgeDy) > Math.EPSILON) {
+        if (Math.abs(edgeDy) > Math.epsilon) {
           // not parallel
           if (edgeDy < 0) {
             edgeLowPt = inPolygon[q];
@@ -90,8 +89,7 @@ class ShapePath {
             // continue;				// no intersection or edgeLowPt => doesn't count !!!
 
           } else {
-            var perpEdge = edgeDy * (inPt.x - edgeLowPt.x) -
-                edgeDx * (inPt.y - edgeLowPt.y);
+            var perpEdge = edgeDy * (inPt.x - edgeLowPt.x) - edgeDx * (inPt.y - edgeLowPt.y);
             if (perpEdge == 0) return true; // inPt is on contour ?
             if (perpEdge < 0) continue;
             inside = !inside; // true intersection left of inPt
@@ -199,7 +197,7 @@ class ShapePath {
 
           for (var s2Idx = 0; s2Idx < newShapes.length; s2Idx++) {
             if (isPointInsidePolygon(ho["p"], newShapes[s2Idx]["p"])) {
-              if ( sIdx != s2Idx ) toChange ++;
+              if (sIdx != s2Idx) toChange++;
               if (holeUnassigned) {
                 holeUnassigned = false;
                 betterShapeHoles[s2Idx].add(ho);
@@ -214,8 +212,8 @@ class ShapePath {
           }
         }
       }
-      if ( toChange > 0 && ambiguous == false ) {
-				newShapeHoles = betterShapeHoles;
+      if (toChange > 0 && ambiguous == false) {
+        newShapeHoles = betterShapeHoles;
       }
     }
 

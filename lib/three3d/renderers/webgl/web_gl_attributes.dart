@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 
 import 'package:three_dart/three3d/core/index.dart';

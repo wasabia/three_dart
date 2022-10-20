@@ -1,22 +1,20 @@
-
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/extras/index.dart';
 import 'package:three_dart/three3d/materials/index.dart';
 import 'package:three_dart/three3d/scenes/fog.dart';
 
 class Scene extends Object3D {
-  @override
-  String type = 'Scene';
-
   FogBase? fog;
 
-  @override
-  bool autoUpdate = true; // checked by the renderer
+  Scene() : super() {
+    type = 'Scene';
+    autoUpdate = true;
+  }
 
-  Scene() : super();
-
-  Scene.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON);
+  Scene.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) : super.fromJSON(json, rootJSON) {
+    type = 'Scene';
+    autoUpdate = true;
+  }
 
   static Scene initJSON(Map<String, dynamic> json) {
     Map<String, dynamic> rootJSON = {};
