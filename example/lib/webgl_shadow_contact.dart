@@ -385,10 +385,10 @@ class _MyAppState extends State<WebGlShadowContact> {
     depthMaterial.depthTest = false;
     depthMaterial.depthWrite = false;
 
-    horizontalBlurMaterial = three.ShaderMaterial(three_jsm.HorizontalBlurShader);
+    horizontalBlurMaterial = three.ShaderMaterial(three_jsm.horizontalBlurShader);
     horizontalBlurMaterial.depthTest = false;
 
-    verticalBlurMaterial = three.ShaderMaterial(three_jsm.VerticalBlurShader);
+    verticalBlurMaterial = three.ShaderMaterial(three_jsm.verticalBlurShader);
     verticalBlurMaterial.depthTest = false;
 
     inited = true;

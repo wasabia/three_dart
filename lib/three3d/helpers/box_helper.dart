@@ -19,16 +19,16 @@ class BoxHelper extends LineSegments {
     geometry.setIndex(Uint16BufferAttribute(indices, 1, false));
     geometry.setAttribute('position', Float32BufferAttribute(positions, 3, false));
 
-    var _boxHelper = BoxHelper.create(geometry, LineBasicMaterial({"color": color, "toneMapped": false}));
+    var helper = BoxHelper.create(geometry, LineBasicMaterial({"color": color, "toneMapped": false}));
 
-    _boxHelper.object = object;
-    _boxHelper.type = 'BoxHelper';
+    helper.object = object;
+    helper.type = 'BoxHelper';
 
-    _boxHelper.matrixAutoUpdate = false;
+    helper.matrixAutoUpdate = false;
 
-    _boxHelper.update();
+    helper.update();
 
-    return _boxHelper;
+    return helper;
   }
 
   update() {

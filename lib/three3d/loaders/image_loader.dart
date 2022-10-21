@@ -42,9 +42,9 @@ class ImageLoader extends Loader {
       return cached;
     }
 
-    final _resp = await ImageLoaderLoader.loadImage(url, flipY);
-    onLoad(_resp);
+    final resp = await ImageLoaderLoader.loadImage(url, flipY);
+    onLoad(resp);
 
-    return _resp;
+    return resp;
   }
 }

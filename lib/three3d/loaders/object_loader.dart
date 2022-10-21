@@ -43,7 +43,7 @@ class ObjectLoader extends Loader {
       } catch (error) {
         if (onError != null) onError(error);
 
-        print('THREE:ObjectLoader: Can\'t parse ' + url + '.$error');
+        print('THREE:ObjectLoader: Can\'t parse $url $error');
 
         return;
       }
@@ -51,7 +51,7 @@ class ObjectLoader extends Loader {
       var metadata = json.metadata;
 
       if (metadata == null || metadata.type == null || metadata.type.toLowerCase() == 'geometry') {
-        print('three.ObjectLoader: Can\'t load ' + url);
+        print('three.ObjectLoader: Can\'t load $url');
         return;
       }
 
@@ -78,7 +78,7 @@ class ObjectLoader extends Loader {
     var metadata = json.metadata;
 
     if (metadata == null || metadata.type == null || metadata.type.toLowerCase() == 'geometry') {
-      throw ('three.ObjectLoader: Can\'t load ' + url);
+      throw ('three.ObjectLoader: Can\'t load $url');
     }
 
     return await scope.parseAsync(json);

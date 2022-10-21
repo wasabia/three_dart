@@ -20,11 +20,11 @@ class OctahedronGeometry extends PolyhedronGeometry {
 
     var indices = [0, 2, 4, 0, 4, 3, 0, 3, 5, 0, 5, 2, 1, 2, 5, 1, 5, 3, 1, 3, 4, 1, 4, 2];
 
-    var _octahedronGeometry = OctahedronGeometry.create(vertices, indices, radius, detail);
+    var octahedronGeometry = OctahedronGeometry.create(vertices, indices, radius, detail);
 
-    _octahedronGeometry.parameters = {"radius": radius, "detail": detail};
+    octahedronGeometry.parameters = {"radius": radius, "detail": detail};
 
-    return _octahedronGeometry;
+    return octahedronGeometry;
   }
 
   static fromJSON(data) {

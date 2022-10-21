@@ -54,12 +54,12 @@ class Sprite extends Object3D {
   void raycast(Raycaster raycaster, List<Intersection> intersects) {
     _worldScale.setFromMatrixScale(matrixWorld);
 
-    _viewWorldMatrix.copy(raycaster.camera.matrixWorld);
-    modelViewMatrix.multiplyMatrices(raycaster.camera.matrixWorldInverse, matrixWorld);
+    _viewWorldMatrix.copy(raycaster.camera?.matrixWorld ?? Matrix4());
+    modelViewMatrix.multiplyMatrices(raycaster.camera?.matrixWorldInverse ?? Matrix4(), matrixWorld);
 
     _mvPosition.setFromMatrixPosition(modelViewMatrix);
 
-    if (raycaster.camera.type == "PerspectiveCamera" && material.sizeAttenuation == false) {
+    if (raycaster.camera?.type == "PerspectiveCamera" && material.sizeAttenuation == false) {
       _worldScale.multiplyScalar(-_mvPosition.z);
     }
 

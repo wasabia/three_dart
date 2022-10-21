@@ -239,7 +239,7 @@ class Quaternion {
         break;
 
       default:
-        print('three.Quaternion: .setFromEuler() encountered an unknown order: ' + order);
+        print('three.Quaternion: .setFromEuler() encountered an unknown order: $order');
     }
 
     if (update) {

@@ -10,8 +10,8 @@ var _reservedRe = RegExp("[$_reservedCharsRe]");
 // Attempts to allow node names from any language. ES5's `\w` regexp matches
 // only latin characters, and the unicode \p{L} is not yet supported. So
 // instead, we exclude reserved characters and match everything else.
-var _wordChar = '[^' + _reservedCharsRe + ']';
-var _wordCharOrDot = '[^' + _reservedCharsRe.replaceAll('\\.', '') + ']';
+var _wordChar = '[^$_reservedCharsRe]';
+var _wordCharOrDot = '[^${_reservedCharsRe.replaceAll('\\.', '')}]';
 
 // Parent directories, delimited by '/' or ':'. Currently unused, but must
 // be matched to parse the rest of the track name.
@@ -115,13 +115,13 @@ class PropertyBinding {
 
   /// Replaces spaces with underscores and removes unsupported characters from
   /// node names, to ensure compatibility with parseTrackName().
-  static String sanitizeNodeName(String name) {
-    final _reg = RegExp(r"\s");
+  static String sanitizeNodeName(String input) {
+    final reg = RegExp(r"\s");
 
-    String _name = name.replaceAll(_reg, '_');
-    _name = _name.replaceAll(_reservedRe, '');
+    String name = input.replaceAll(reg, '_');
+    name = name.replaceAll(_reservedRe, '');
 
-    return _name;
+    return name;
   }
 
   static Map<String, String?> parseTrackName(trackName) {
@@ -244,8 +244,8 @@ class PropertyBinding {
 
   // 0
   void getValueDirect(List<int> buffer, int offset) {
-    var _v = targetObject.getProperty(propertyName);
-    buffer[offset] = _v;
+    var v = targetObject.getProperty(propertyName);
+    buffer[offset] = v;
   }
 
   // 1
@@ -431,7 +431,7 @@ class PropertyBinding {
 
     // ensure there is a value node
     if (targetObject == null) {
-      print('three.PropertyBinding: Trying to update node for track: ' + path + ' but it wasn\'t found.');
+      print('three.PropertyBinding: Trying to update node for track: $path but it wasn\'t found.');
       return;
     }
 

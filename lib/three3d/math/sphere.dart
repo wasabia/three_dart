@@ -15,10 +15,10 @@ class Sphere {
   }
 
   List<num> toJSON() {
-    var _data = center.toJSON();
-    _data.add(radius);
+    var data = center.toJSON();
+    data.add(radius);
 
-    return _data;
+    return data;
   }
 
   Sphere set(Vector3 center, double radius) {

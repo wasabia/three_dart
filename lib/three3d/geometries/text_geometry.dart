@@ -26,8 +26,6 @@ class TextGeometry extends ExtrudeGeometry {
     if (parameters["bevelSize"] == null) parameters["bevelSize"] = 8;
     if (parameters["bevelEnabled"] == null) parameters["bevelEnabled"] = false;
 
-    TextGeometry _textBufferGeometry = TextGeometry.create(shapes, parameters);
-
-    return _textBufferGeometry;
+    return TextGeometry.create(shapes, parameters);
   }
 }

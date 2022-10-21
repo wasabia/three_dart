@@ -237,11 +237,11 @@ abstract class BufferAttribute<TData extends NativeArray> extends BaseBufferAttr
   }
 
   void setXYZ(int index, num x, num y, num z) {
-    int _idx = index * itemSize;
+    int idx = index * itemSize;
 
-    array[_idx + 0] = x.toDouble();
-    array[_idx + 1] = y.toDouble();
-    array[_idx + 2] = z.toDouble();
+    array[idx + 0] = x.toDouble();
+    array[idx + 1] = y.toDouble();
+    array[idx + 2] = z.toDouble();
   }
 
   BufferAttribute setXYZW(int index, x, y, z, w) {

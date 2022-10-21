@@ -174,7 +174,7 @@ class MathUtils {
         break;
 
       default:
-        print('three.MathUtils: .setQuaternionFromProperEuler() encountered an unknown order: ' + order);
+        print('three.MathUtils: .setQuaternionFromProperEuler() encountered an unknown order: $order');
     }
   }
 

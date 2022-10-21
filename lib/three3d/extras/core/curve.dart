@@ -70,16 +70,16 @@ class Curve {
   }
 
   static castJSON(Map<String, dynamic> json) {
-    String _type = json["type"];
+    String type = json["type"];
 
-    if (_type == "Shape") {
+    if (type == "Shape") {
       return Shape.fromJSON(json);
-    } else if (_type == "Curve") {
+    } else if (type == "Curve") {
       return Curve.fromJSON(json);
-    } else if (_type == "LineCurve") {
+    } else if (type == "LineCurve") {
       return LineCurve.fromJSON(json);
     } else {
-      throw " type: $_type Curve.castJSON is not support yet... ";
+      throw " type: $type Curve.castJSON is not support yet... ";
     }
   }
 

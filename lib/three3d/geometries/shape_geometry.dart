@@ -23,16 +23,16 @@ class ShapeGeometry extends BufferGeometry {
     curveSegments = json["curveSegments"];
     type = 'ShapeGeometry';
 
-    Shape? _shapes;
+    Shape? shapes;
 
     if (json["shapes"] != null) {
       List<Shape> rootShapes = rootJSON["shapes"];
 
       String shapeUuid = json["shapes"];
-      _shapes = rootShapes.firstWhere((element) => element.uuid == shapeUuid);
+      shapes = rootShapes.firstWhere((element) => element.uuid == shapeUuid);
     }
 
-    shapes = _shapes != null ? [_shapes] : [];
+    this.shapes = shapes != null ? [shapes] : [];
 
     init();
   }

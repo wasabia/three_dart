@@ -403,13 +403,13 @@ class PMREMGenerator {
     // Number of standard deviations at which to cut off the discrete approximation.
     var stddev = 3;
 
-    BufferGeometry? _geometry;
+    BufferGeometry? geom;
 
     if (lodOut < _lodPlanes.length) {
-      _geometry = _lodPlanes[lodOut];
+      geom = _lodPlanes[lodOut];
     }
 
-    var blurMesh = Mesh(_geometry, blurMaterial);
+    var blurMesh = Mesh(geom, blurMaterial);
     var blurUniforms = blurMaterial.uniforms;
 
     var pixels = _sizeLods[lodIn] - 1;

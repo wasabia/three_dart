@@ -120,7 +120,7 @@ class WebGLPrograms {
 
     parameters.isWebGL2 = isWebGL2;
     parameters.shaderID = shaderID;
-    parameters.shaderName = material.type + " - " + material.name;
+    parameters.shaderName = "${material.type} - ${material.name}";
     parameters.vertexShader = vertexShader!;
     parameters.fragmentShader = fragmentShader!;
     parameters.defines = material.defines;
@@ -282,9 +282,7 @@ class WebGLPrograms {
 
     array.add(parameters.customProgramCacheKey);
 
-    String _key = array.join();
-
-    return _key;
+    return array.join();
   }
 
   getProgramCacheKeyParameters(array, parameters) {

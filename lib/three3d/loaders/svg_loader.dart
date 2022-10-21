@@ -62,8 +62,8 @@ class SVGLoader extends Loader {
   // Function parse =========== start
   @override
   parse(json, [String? path, Function? onLoad, Function? onError]) {
-    var _parse = SVGLoaderParser(json, defaultUnit: defaultUnit, defaultDPI: defaultDPI);
-    return _parse.parse(json);
+    var parse = SVGLoaderParser(json, defaultUnit: defaultUnit, defaultDPI: defaultDPI);
+    return parse.parse(json);
   }
   // Function parse ================ end
 
@@ -298,9 +298,9 @@ class SVGLoader extends Loader {
       return allIntersections;
     }
 
-    isHoleTo(simplePath, allPaths, scanlineMinX, scanlineMaxX, _fillRule) {
-      if (_fillRule == null || _fillRule == '') {
-        _fillRule = 'nonzero';
+    isHoleTo(simplePath, allPaths, scanlineMinX, scanlineMaxX, fillRule) {
+      if (fillRule == null || fillRule == '') {
+        fillRule = 'nonzero';
       }
 
       var centerBoundingBox = Vector2();
@@ -343,12 +343,12 @@ class SVGLoader extends Loader {
 
       stack.add(simplePath["identifier"]);
 
-      if (_fillRule == 'evenodd') {
+      if (fillRule == 'evenodd') {
         var isHole = stack.length % 2 == 0 ? true : false;
         var isHoleFor = stack[stack.length - 2];
 
         return {"identifier": simplePath["identifier"], "isHole": isHole, "for": isHoleFor};
-      } else if (_fillRule == 'nonzero') {
+      } else if (fillRule == 'nonzero') {
         // check if path is a hole by counting the amount of paths with alternating rotations it has to cross.
         var isHole = true;
         var isHoleFor;
@@ -368,7 +368,7 @@ class SVGLoader extends Loader {
 
         return {"identifier": simplePath["identifier"], "isHole": isHole, "for": isHoleFor};
       } else {
-        print('fill-rule: "' + _fillRule + '" is currently not implemented.');
+        print('fill-rule: $fillRule is currently not implemented.');
       }
     }
 

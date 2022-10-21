@@ -123,12 +123,12 @@ class CurvePath extends Curve {
     var points = [];
 
     for (var i = 0; i <= divisions; i++) {
-      var _offset = offset + i / divisions;
-      if (_offset > 1.0) {
-        _offset = _offset - 1.0;
+      var offset2 = offset + i / divisions;
+      if (offset2 > 1.0) {
+        offset2 = offset2 - 1.0;
       }
 
-      points.add(getPoint(_offset, null));
+      points.add(getPoint(offset2, null));
     }
 
     if (autoClose) {

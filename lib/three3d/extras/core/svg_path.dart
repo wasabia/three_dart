@@ -275,10 +275,10 @@ class SvgPath {
 
       if (canRepeat && nextIsNum()) continue;
 
-      var _index = idx++;
+      var index = idx++;
 
-      if (_index < len) {
-        activeCmd = svgPathStr[_index];
+      if (index < len) {
+        activeCmd = svgPathStr[index];
       } else {
         activeCmd = "";
       }

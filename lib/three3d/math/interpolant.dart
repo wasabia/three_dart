@@ -74,10 +74,10 @@ class Interpolant {
 
               t0 = t1;
 
-              int _idx = ++i1;
+              int idx = ++i1;
 
-              if (_idx < pp.length) {
-                t1 = pp[_idx];
+              if (idx < pp.length) {
+                t1 = pp[idx];
               } else {
                 t1 = null;
               }
