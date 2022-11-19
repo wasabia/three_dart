@@ -1,4 +1,4 @@
-String envmap_physical_pars_fragment = """
+String envmapPhysicalParsFragment = """
 #if defined( USE_ENVMAP )
 
 	vec3 getIBLIrradiance( const in vec3 normal ) {

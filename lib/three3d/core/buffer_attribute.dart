@@ -1,11 +1,9 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/core/base_buffer_attribute.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
-abstract class BufferAttribute<TData extends NativeArray>
-    extends BaseBufferAttribute<TData> {
+abstract class BufferAttribute<TData extends NativeArray> extends BaseBufferAttribute<TData> {
   final _vector = Vector3.init();
   final _vector2 = Vector2(null, null);
 
@@ -141,7 +139,7 @@ abstract class BufferAttribute<TData extends NativeArray>
 
   void applyMatrix4(Matrix4 m) {
     for (var i = 0, l = count; i < l; i++) {
-      _vector.fromBufferAttribute( this, i );
+      _vector.fromBufferAttribute(this, i);
 
       _vector.applyMatrix4(m);
 
@@ -151,7 +149,7 @@ abstract class BufferAttribute<TData extends NativeArray>
 
   BufferAttribute applyNormalMatrix(m) {
     for (var i = 0, l = count; i < l; i++) {
-      _vector.fromBufferAttribute( this, i );
+      _vector.fromBufferAttribute(this, i);
 
       _vector.applyNormalMatrix(m);
 
@@ -239,11 +237,11 @@ abstract class BufferAttribute<TData extends NativeArray>
   }
 
   void setXYZ(int index, num x, num y, num z) {
-    int _idx = index * itemSize;
+    int idx = index * itemSize;
 
-    array[_idx + 0] = x.toDouble();
-    array[_idx + 1] = y.toDouble();
-    array[_idx + 2] = z.toDouble();
+    array[idx + 0] = x.toDouble();
+    array[idx + 1] = y.toDouble();
+    array[idx + 2] = z.toDouble();
   }
 
   BufferAttribute setXYZW(int index, x, y, z, w) {
@@ -300,32 +298,26 @@ abstract class BufferAttribute<TData extends NativeArray>
 }
 
 class Int8BufferAttribute extends BufferAttribute<Int8Array> {
-  Int8BufferAttribute(Int8Array array, int itemSize, [bool normalized = false])
-      : super(array, itemSize, normalized) {
+  Int8BufferAttribute(Int8Array array, int itemSize, [bool normalized = false]) : super(array, itemSize, normalized) {
     type = "Int8BufferAttribute";
   }
 }
 
 class Uint8BufferAttribute extends BufferAttribute<Uint8Array> {
-  Uint8BufferAttribute(Uint8Array array, int itemSize,
-      [bool normalized = false])
-      : super(array, itemSize, normalized) {
+  Uint8BufferAttribute(Uint8Array array, int itemSize, [bool normalized = false]) : super(array, itemSize, normalized) {
     type = "Uint8BufferAttribute";
   }
 }
 
 class Uint8ClampedBufferAttribute extends BufferAttribute<Uint8Array> {
-  Uint8ClampedBufferAttribute(Uint8Array array, int itemSize,
-      [bool normalized = false])
+  Uint8ClampedBufferAttribute(Uint8Array array, int itemSize, [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Uint8ClampedBufferAttribute";
   }
 }
 
 class Int16BufferAttribute extends BufferAttribute<Int16Array> {
-  Int16BufferAttribute(Int16Array array, int itemSize,
-      [bool normalized = false])
-      : super(array, itemSize, normalized) {
+  Int16BufferAttribute(Int16Array array, int itemSize, [bool normalized = false]) : super(array, itemSize, normalized) {
     type = "Int16BufferAttribute";
   }
 }
@@ -334,47 +326,40 @@ class Int16BufferAttribute extends BufferAttribute<Int16Array> {
 // Int16BufferAttribute.prototype.constructor = Int16BufferAttribute;
 
 class Uint16BufferAttribute extends BufferAttribute<Uint16Array> {
-  Uint16BufferAttribute(Uint16Array array, int itemSize,
-      [bool normalized = false])
+  Uint16BufferAttribute(Uint16Array array, int itemSize, [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Uint16BufferAttribute";
   }
 }
 
 class Int32BufferAttribute extends BufferAttribute<Int32Array> {
-  Int32BufferAttribute(Int32Array array, int itemSize,
-      [bool normalized = false])
-      : super(array, itemSize, normalized) {
+  Int32BufferAttribute(Int32Array array, int itemSize, [bool normalized = false]) : super(array, itemSize, normalized) {
     type = "Int32BufferAttribute";
   }
 }
 
 class Uint32BufferAttribute extends BufferAttribute<Uint32Array> {
-  Uint32BufferAttribute(Uint32Array array, int itemSize,
-      [bool normalized = false])
+  Uint32BufferAttribute(Uint32Array array, int itemSize, [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Uint32BufferAttribute";
   }
 }
 
 class Float16BufferAttribute extends BufferAttribute {
-  Float16BufferAttribute(array, int itemSize, [bool normalized = false])
-      : super(array, itemSize, normalized) {
+  Float16BufferAttribute(array, int itemSize, [bool normalized = false]) : super(array, itemSize, normalized) {
     type = "Float16BufferAttribute";
   }
 }
 
 class Float32BufferAttribute extends BufferAttribute<Float32Array> {
-  Float32BufferAttribute(Float32Array array, int itemSize,
-      [bool normalized = false])
+  Float32BufferAttribute(Float32Array array, int itemSize, [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Float32BufferAttribute";
   }
 }
 
 class Float64BufferAttribute extends BufferAttribute<Float64Array> {
-  Float64BufferAttribute(Float64Array array, int itemSize,
-      [bool normalized = false])
+  Float64BufferAttribute(Float64Array array, int itemSize, [bool normalized = false])
       : super(array, itemSize, normalized) {
     type = "Float64BufferAttribute";
   }

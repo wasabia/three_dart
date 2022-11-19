@@ -252,11 +252,11 @@ class _State extends State<WebglGeometries> {
     scene.add(object);
 
     object = three.Mesh(
-        three.CircleGeometry(radius: 50, segments: 20, thetaStart: 0, thetaLength: three.Math.PI * 2), material);
+        three.CircleGeometry(radius: 50, segments: 20, thetaStart: 0, thetaLength: three.Math.pi * 2), material);
     object.position.set(100, 0, 0);
     scene.add(object);
 
-    object = three.Mesh(three.RingGeometry(10, 50, 20, 5, 0, three.Math.PI * 2), material);
+    object = three.Mesh(three.RingGeometry(10, 50, 20, 5, 0, three.Math.pi * 2), material);
     object.position.set(300, 0, 0);
     scene.add(object);
 

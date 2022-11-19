@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
@@ -9,17 +8,13 @@ class EdgesGeometry extends BufferGeometry {
   final _normal = Vector3.init();
   final _triangle = Triangle.init();
 
-  @override
-  String type = "EdgesGeometry";
-
   EdgesGeometry(BufferGeometry geometry, thresholdAngle) : super() {
+    type = "EdgesGeometry";
     parameters = {"thresholdAngle": thresholdAngle};
 
     thresholdAngle = (thresholdAngle != null) ? thresholdAngle : 1;
 
-    var precisionPoints = 4;
-    var precision = Math.pow(10, precisionPoints);
-    var thresholdDot = Math.cos(MathUtils.DEG2RAD * thresholdAngle);
+    var thresholdDot = Math.cos(MathUtils.deg2rad * thresholdAngle);
 
     var indexAttr = geometry.getIndex();
     var positionAttr = geometry.getAttribute('position');
@@ -57,9 +52,7 @@ class EdgesGeometry extends BufferGeometry {
       hashes[2] = "${c.x},${c.y},${c.z}";
 
       // skip degenerate triangles
-      if (hashes[0] == hashes[1] ||
-          hashes[1] == hashes[2] ||
-          hashes[2] == hashes[0]) {
+      if (hashes[0] == hashes[1] || hashes[1] == hashes[2] || hashes[2] == hashes[0]) {
         continue;
       }
 
@@ -75,15 +68,12 @@ class EdgesGeometry extends BufferGeometry {
         var hash = "${vecHash0}_$vecHash1";
         var reverseHash = "${vecHash1}_$vecHash0";
 
-        if (edgeData.containsKey(reverseHash) &&
-            edgeData[reverseHash] != null) {
+        if (edgeData.containsKey(reverseHash) && edgeData[reverseHash] != null) {
           // if we found a sibling edge add it into the vertex array if
           // it meets the angle threshold and delete the edge from the map.
           if (_normal.dot(edgeData[reverseHash]["normal"]) <= thresholdDot) {
-            vertices
-                .addAll([v0.x.toDouble(), v0.y.toDouble(), v0.z.toDouble()]);
-            vertices
-                .addAll([v1.x.toDouble(), v1.y.toDouble(), v1.z.toDouble()]);
+            vertices.addAll([v0.x.toDouble(), v0.y.toDouble(), v0.z.toDouble()]);
+            vertices.addAll([v1.x.toDouble(), v1.y.toDouble(), v1.z.toDouble()]);
           }
 
           edgeData[reverseHash] = null;
@@ -101,9 +91,9 @@ class EdgesGeometry extends BufferGeometry {
     // iterate over all remaining, unmatched edges and add them to the vertex array
     for (var key in edgeData.keys) {
       if (edgeData[key] != null) {
-        var _ed = edgeData[key];
-        var index0 = _ed["index0"];
-        var index1 = _ed["index1"];
+        var ed = edgeData[key];
+        var index0 = ed["index0"];
+        var index1 = ed["index1"];
         _v0.fromBufferAttribute(positionAttr, index0);
         _v1.fromBufferAttribute(positionAttr, index1);
 
@@ -112,7 +102,6 @@ class EdgesGeometry extends BufferGeometry {
       }
     }
 
-    setAttribute('position',
-        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
   }
 }

@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/core/buffer_attribute.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
@@ -302,7 +301,7 @@ class Vector4 {
 
       // otherwise this singularity is angle = 180
 
-      angle = Math.PI;
+      angle = Math.pi;
 
       var xx = (m11 + 1) / 2;
       var yy = (m22 + 1) / 2;

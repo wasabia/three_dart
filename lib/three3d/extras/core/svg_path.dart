@@ -1,9 +1,8 @@
-
 import 'package:three_dart/three3d/extras/core/shape_path.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
-double DEGS_TO_RADS = Math.PI / 180;
-num DIGIT_0 = 48, DIGIT_9 = 57, COMMA = 44, SPACE = 32, PERIOD = 46, MINUS = 45;
+double degsToRads = Math.pi / 180;
+num digit0 = 48, digit9 = 57, comma = 44, space = 32, period = 46, minus = 45;
 
 class SvgPath {
   static transformSVGPath(svgPathStr) {
@@ -17,24 +16,13 @@ class SvgPath {
     double nx = 0;
     double ny = 0;
     double firstX = 0, firstY = 0;
-    double x1 = 0,
-        x2 = 0,
-        y1 = 0,
-        y2 = 0,
-        rx = 0,
-        ry = 0,
-        xar = 0,
-        laf = 0,
-        sf = 0,
-        cx,
-        cy;
+    double x1 = 0, x2 = 0, y1 = 0, y2 = 0, rx = 0, ry = 0, xar = 0, laf = 0, sf = 0;
 
     var len = svgPathStr.length;
 
     double eatNum() {
       int sidx;
       double c = 0.0;
-      bool isFloat = false;
       String s;
 
       // eat delims
@@ -42,12 +30,12 @@ class SvgPath {
       while (idx < len) {
         c = svgPathStr.codeUnitAt(idx);
 
-        if (c != COMMA && c != SPACE) break;
+        if (c != comma && c != space) break;
 
         idx++;
       }
 
-      if (c == MINUS) {
+      if (c == minus) {
         sidx = idx++;
       } else {
         sidx = idx;
@@ -58,12 +46,11 @@ class SvgPath {
       while (idx < len) {
         c = svgPathStr.codeUnitAt(idx);
 
-        if (DIGIT_0 <= c && c <= DIGIT_9) {
+        if (digit0 <= c && c <= digit9) {
           idx++;
           continue;
-        } else if (c == PERIOD) {
+        } else if (c == period) {
           idx++;
-          isFloat = true;
           continue;
         }
 
@@ -88,13 +75,13 @@ class SvgPath {
       while (idx < len) {
         c = svgPathStr.codeUnitAt(idx);
 
-        if (c != COMMA && c != SPACE) break;
+        if (c != comma && c != space) break;
 
         idx++;
       }
 
       c = svgPathStr.codeUnitAt(idx);
-      return (c == MINUS || (DIGIT_0 <= c && c <= DIGIT_9));
+      return (c == minus || (digit0 <= c && c <= digit9));
     }
 
     bool canRepeat;
@@ -226,7 +213,7 @@ class SvgPath {
         case 'A':
           rx = eatNum();
           ry = eatNum();
-          xar = eatNum() * DEGS_TO_RADS;
+          xar = eatNum() * degsToRads;
           laf = eatNum();
           sf = eatNum();
           nx = eatNum();
@@ -246,8 +233,7 @@ class SvgPath {
           // step 2, using x2 as cx'
 
           var norm = Math.sqrt(
-              (rx * rx * ry * ry - rx * rx * y1 * y1 - ry * ry * x1 * x1) /
-                  (rx * rx * y1 * y1 + ry * ry * x1 * x1));
+              (rx * rx * ry * ry - rx * rx * y1 * y1 - ry * ry * x1 * x1) / (rx * rx * y1 * y1 + ry * ry * x1 * x1));
 
           if (laf == sf) norm = -norm;
 
@@ -255,9 +241,6 @@ class SvgPath {
           y2 = norm * -ry * x1 / rx;
 
           // step 3
-
-          cx = Math.cos(xar) * x2 - Math.sin(xar) * y2 + (x + nx) / 2;
-          cy = Math.sin(xar) * x2 + Math.cos(xar) * y2 + (y + ny) / 2;
 
           var u = Vector2(1, 0);
           var v = Vector2((x1 - x2) / rx, (y1 - y2) / ry);
@@ -278,15 +261,11 @@ class SvgPath {
 
           // if ( ! sf && deltaAng > 0 ) deltaAng -= Math.PI * 2;
           // if ( sf && deltaAng < 0 ) deltaAng += Math.PI * 2;
-          if (sf == 0 && deltaAng > 0) deltaAng -= Math.PI * 2;
-          if (sf != 0 && deltaAng < 0) deltaAng += Math.PI * 2;
+          if (sf == 0 && deltaAng > 0) deltaAng -= Math.pi * 2;
+          if (sf != 0 && deltaAng < 0) deltaAng += Math.pi * 2;
 
           // path.absarc( cx, cy, rx, startAng, startAng + deltaAng, sf );
           throw ("SvgPath path.absarc");
-
-          x = nx;
-          y = ny;
-          break;
 
         default:
           throw ("Wrong path command: $activeCmd");
@@ -296,10 +275,10 @@ class SvgPath {
 
       if (canRepeat && nextIsNum()) continue;
 
-      var _index = idx++;
+      var index = idx++;
 
-      if (_index < len) {
-        activeCmd = svgPathStr[_index];
+      if (index < len) {
+        activeCmd = svgPathStr[index];
       } else {
         activeCmd = "";
       }

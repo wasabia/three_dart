@@ -1,4 +1,4 @@
-String emissivemap_pars_fragment = """
+String emissivemapParseFragment = """
 #ifdef USE_EMISSIVEMAP
 
 	uniform sampler2D emissiveMap;

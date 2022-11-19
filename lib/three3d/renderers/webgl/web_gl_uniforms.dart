@@ -1,4 +1,3 @@
-
 /*
  * Uniforms of a program.
  * Those form a tree structure with a special top-level container for the root,

@@ -1,6 +1,5 @@
 library objects;
 
-
 export 'bone.dart';
 export 'group.dart';
 export 'instanced_mesh.dart';

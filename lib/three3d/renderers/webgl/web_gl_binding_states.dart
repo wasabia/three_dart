@@ -1,4 +1,3 @@
-
 import 'package:three_dart/extra/console.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/materials/index.dart';
@@ -32,9 +31,7 @@ class WebGLBindingStates {
 
     bindingStates = <int, dynamic>{};
 
-    extension = capabilities.isWebGL2
-        ? null
-        : extensions.get('OES_vertex_array_object');
+    extension = capabilities.isWebGL2 ? null : extensions.get('OES_vertex_array_object');
     vaoAvailable = capabilities.isWebGL2 || extension != null;
 
     defaultState = createBindingState(null);
@@ -86,8 +83,8 @@ class WebGLBindingStates {
       setupVertexAttributes(object, material, program, geometry);
 
       if (index != null) {
-        var _buffer = attributes.get(index)["buffer"];
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, _buffer);
+        var buf = attributes.get(index)["buffer"];
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buf);
       }
     }
   }
@@ -180,31 +177,26 @@ class WebGLBindingStates {
     var attributesNum = 0;
     var programAttributes = program.getAttributes();
 
-		for ( final name in programAttributes.keys ) {
+    for (final name in programAttributes.keys) {
+      Map programAttribute = programAttributes[name];
 
-			Map programAttribute = programAttributes[ name ];
+      if (programAttribute["location"] >= 0) {
+        var cachedAttribute = cachedAttributes[name];
+        var geometryAttribute = geometryAttributes[name];
 
-			if ( programAttribute["location"] >= 0 ) {
+        if (geometryAttribute == undefined) {
+          if (name == 'instanceMatrix' && object.instanceMatrix != null) geometryAttribute = object.instanceMatrix;
+          if (name == 'instanceColor' && object.instanceColor != null) geometryAttribute = object.instanceColor;
+        }
 
-				var cachedAttribute = cachedAttributes[ name ];
-				var geometryAttribute = geometryAttributes[ name ];
+        if (cachedAttribute == undefined) return true;
 
-				if ( geometryAttribute == undefined ) {
+        if (cachedAttribute["attribute"] != geometryAttribute) return true;
 
-					if ( name == 'instanceMatrix' && object.instanceMatrix != null ) geometryAttribute = object.instanceMatrix;
-					if ( name == 'instanceColor' && object.instanceColor != null ) geometryAttribute = object.instanceColor;
+        if (geometryAttribute != null && cachedAttribute["data"] != geometryAttribute.data) return true;
 
-				}
-
-				if ( cachedAttribute == undefined ) return true;
-
-				if ( cachedAttribute["attribute"] != geometryAttribute ) return true;
-
-				if ( geometryAttribute != null && cachedAttribute["data"] != geometryAttribute.data ) return true;
-
-				attributesNum ++;
-
-			}
+        attributesNum++;
+      }
     }
 
     if (currentState["attributesNum"] != attributesNum) return true;
@@ -219,35 +211,28 @@ class WebGLBindingStates {
 
     var programAttributes = program.getAttributes();
 
-    for ( final name in programAttributes.keys ) {
+    for (final name in programAttributes.keys) {
+      Map programAttribute = programAttributes[name];
 
-			Map programAttribute = programAttributes[ name ];
+      if (programAttribute["location"] >= 0) {
+        var attribute = attributes[name];
 
-			if ( programAttribute["location"] >= 0 ) {
+        if (attribute == undefined) {
+          if (name == 'instanceMatrix' && object.instanceMatrix != null) attribute = object.instanceMatrix;
+          if (name == 'instanceColor' && object.instanceColor != null) attribute = object.instanceColor;
+        }
 
-				var attribute = attributes[ name ];
+        var data = {};
+        data["attribute"] = attribute;
 
-				if ( attribute == undefined ) {
+        if (attribute != null && attribute.data != null) {
+          data["data"] = attribute.data;
+        }
 
-					if ( name == 'instanceMatrix' && object.instanceMatrix != null) attribute = object.instanceMatrix;
-					if ( name == 'instanceColor' && object.instanceColor != null) attribute = object.instanceColor;
+        cache[name] = data;
 
-				}
-
-				var data = {};
-				data["attribute"] = attribute;
-
-				if ( attribute != null && attribute.data != null ) {
-
-					data["data"] = attribute.data;
-
-				}
-
-				cache[ name ] = data;
-
-				attributesNum ++;
-
-			}
+        attributesNum++;
+      }
     }
 
     currentState["attributes"] = cache;
@@ -302,8 +287,7 @@ class WebGLBindingStates {
   }
 
   void vertexAttribPointer(index, size, type, normalized, stride, offset) {
-    if (capabilities.isWebGL2 == true &&
-        (type == gl.INT || type == gl.UNSIGNED_INT)) {
+    if (capabilities.isWebGL2 == true && (type == gl.INT || type == gl.UNSIGNED_INT)) {
       gl.vertexAttribIPointer(index, size, type, stride, offset);
     } else {
       gl.vertexAttribPointer(index, size, type, normalized, stride, offset);
@@ -316,8 +300,7 @@ class WebGLBindingStates {
     WebGLProgram program,
     BufferGeometry geometry,
   ) {
-    if (capabilities.isWebGL2 == false &&
-        (object is InstancedMesh || geometry is InstancedBufferGeometry)) {
+    if (capabilities.isWebGL2 == false && (object is InstancedMesh || geometry is InstancedBufferGeometry)) {
       if (extensions.get('ANGLE_instanced_arrays') == null) return;
     }
 
@@ -340,9 +323,7 @@ class WebGLBindingStates {
           if (name == 'instanceMatrix' && object is InstancedMesh) {
             geometryAttribute = object.instanceMatrix;
           }
-          if (name == 'instanceColor' &&
-              object is InstancedMesh &&
-              object.instanceColor != null) {
+          if (name == 'instanceColor' && object is InstancedMesh && object.instanceColor != null) {
             geometryAttribute = object.instanceColor;
           }
         }
@@ -356,8 +337,7 @@ class WebGLBindingStates {
           // TODO Attribute may not be available on context restore
 
           if (attribute == null) {
-            print(
-                "WebGLBindingState setupVertexAttributes name: $name attribute == null ");
+            print("WebGLBindingState setupVertexAttributes name: $name attribute == null ");
             continue;
           }
 
@@ -373,12 +353,10 @@ class WebGLBindingStates {
             if (data != null && data is InstancedInterleavedBuffer) {
               // enableAttributeAndDivisor( programAttribute, data.meshPerAttribute );
               for (var i = 0; i < programAttribute["locationSize"]; i++) {
-                enableAttributeAndDivisor(
-                    programAttribute["location"] + i, data.meshPerAttribute);
+                enableAttributeAndDivisor(programAttribute["location"] + i, data.meshPerAttribute);
               }
 
-              if (object is! InstancedMesh &&
-                  geometry.maxInstanceCount == null) {
+              if (object is! InstancedMesh && geometry.maxInstanceCount == null) {
                 geometry.maxInstanceCount = data.meshPerAttribute * data.count;
               }
             } else {
@@ -398,19 +376,16 @@ class WebGLBindingStates {
                   type,
                   normalized,
                   stride! * bytesPerElement,
-                  (offset + (size ~/ programAttribute["locationSize"]) * i) *
-                      bytesPerElement);
+                  (offset + (size ~/ programAttribute["locationSize"]) * i) * bytesPerElement);
             }
           } else {
             if (geometryAttribute is InstancedBufferAttribute) {
               // enableAttributeAndDivisor( programAttribute, geometryAttribute.meshPerAttribute );
               for (var i = 0; i < programAttribute["locationSize"]; i++) {
-                enableAttributeAndDivisor(programAttribute["location"] + i,
-                    geometryAttribute.meshPerAttribute);
+                enableAttributeAndDivisor(programAttribute["location"] + i, geometryAttribute.meshPerAttribute);
               }
 
-              geometry.maxInstanceCount ??=
-                  geometryAttribute.meshPerAttribute * geometryAttribute.count;
+              geometry.maxInstanceCount ??= geometryAttribute.meshPerAttribute * geometryAttribute.count;
             } else {
               // enableAttribute( programAttribute );
               for (var i = 0; i < programAttribute["locationSize"]; i++) {
@@ -421,15 +396,8 @@ class WebGLBindingStates {
             gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
             // vertexAttribPointer( programAttribute, size, type, normalized, 0, 0 );
             for (var i = 0; i < programAttribute["locationSize"]; i++) {
-              vertexAttribPointer(
-                  programAttribute["location"] + i,
-                  size ~/ programAttribute["locationSize"],
-                  type,
-                  normalized,
-                  size * bytesPerElement,
-                  (size ~/ programAttribute["locationSize"]) *
-                      i *
-                      bytesPerElement);
+              vertexAttribPointer(programAttribute["location"] + i, size ~/ programAttribute["locationSize"], type,
+                  normalized, size * bytesPerElement, (size ~/ programAttribute["locationSize"]) * i * bytesPerElement);
             }
           }
         } else if (materialDefaultAttributeValues != null) {

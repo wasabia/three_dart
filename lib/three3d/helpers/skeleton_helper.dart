@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/buffer_attribute.dart';
 import 'package:three_dart/three3d/core/buffer_geometry.dart';
@@ -12,15 +11,15 @@ var _boneMatrix = /*@__PURE__*/ Matrix4();
 var _matrixWorldInv = /*@__PURE__*/ Matrix4();
 
 class SkeletonHelper extends LineSegments {
-  @override
-  String type = 'SkeletonHelper';
   bool isSkeletonHelper = true;
-  @override
-  bool matrixAutoUpdate = false;
+
   late dynamic root;
   late dynamic bones;
 
-  SkeletonHelper.create(geometry, material) : super(geometry, material);
+  SkeletonHelper.create(geometry, material) : super(geometry, material) {
+    type = 'SkeletonHelper';
+    matrixAutoUpdate = false;
+  }
 
   factory SkeletonHelper(object) {
     var bones = getBoneList(object);
@@ -39,27 +38,16 @@ class SkeletonHelper extends LineSegments {
       if (bone.parent != null && bone.parent!.type == "Bone") {
         vertices.addAll([0, 0, 0]);
         vertices.addAll([0, 0, 0]);
-        colors.addAll(
-            [color1.r.toDouble(), color1.g.toDouble(), color1.b.toDouble()]);
-        colors.addAll(
-            [color2.r.toDouble(), color2.g.toDouble(), color2.b.toDouble()]);
+        colors.addAll([color1.r.toDouble(), color1.g.toDouble(), color1.b.toDouble()]);
+        colors.addAll([color2.r.toDouble(), color2.g.toDouble(), color2.b.toDouble()]);
       }
     }
 
-    geometry.setAttribute(
-        'position',
-        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
-    geometry.setAttribute(
-        'color',
-        Float32BufferAttribute(Float32Array.from(colors), 3, false));
+    geometry.setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    geometry.setAttribute('color', Float32BufferAttribute(Float32Array.from(colors), 3, false));
 
-    var material = LineBasicMaterial({
-      "vertexColors": true,
-      "depthTest": false,
-      "depthWrite": false,
-      "toneMapped": false,
-      "transparent": true
-    });
+    var material = LineBasicMaterial(
+        {"vertexColors": true, "depthTest": false, "depthWrite": false, "toneMapped": false, "transparent": true});
 
     var keletonHelper = SkeletonHelper.create(geometry, material);
 

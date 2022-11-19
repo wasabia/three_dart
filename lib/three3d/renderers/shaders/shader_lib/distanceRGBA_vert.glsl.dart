@@ -1,4 +1,4 @@
-String distanceRGBA_vert = """
+String distanceRgbaVert = """
 #define DISTANCE
 
 varying vec3 vWorldPosition;

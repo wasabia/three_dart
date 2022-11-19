@@ -217,7 +217,7 @@ class _State extends State<WebGlAnimationSkinningMorph> {
 
     var mesh =
         three.Mesh(three.PlaneGeometry(2000, 2000), three.MeshPhongMaterial({"color": 0x999999, "depthWrite": false}));
-    mesh.rotation.x = -three.Math.PI / 2;
+    mesh.rotation.x = -three.Math.pi / 2;
     scene.add(mesh);
 
     var grid = three.GridHelper(200, 40, 0x000000, 0x000000);

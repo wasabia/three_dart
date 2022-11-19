@@ -1,4 +1,4 @@
-String meshnormal_vert = """
+String meshnormalVert = """
 #define NORMAL
 
 #if defined( FLAT_SHADED ) || defined( USE_BUMPMAP ) || defined( TANGENTSPACE_NORMALMAP )

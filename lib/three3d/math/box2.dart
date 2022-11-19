@@ -1,19 +1,17 @@
-
-
 import 'package:three_dart/three3d/math/index.dart';
 
 var _vector = Vector2(null, null);
 
 class Box2 {
-  static double Infinity = Math.Infinity;
+  static double infinity = Math.infinity;
 
   bool isBox2 = true;
   late Vector2 min;
   late Vector2 max;
 
   Box2(Vector2? min, Vector2? max) {
-    this.min = (min != null) ? min : Vector2(Infinity, Infinity);
-    this.max = (max != null) ? max : Vector2(-Infinity, -Infinity);
+    this.min = (min != null) ? min : Vector2(infinity, infinity);
+    this.max = (max != null) ? max : Vector2(-infinity, -infinity);
   }
 
   Box2 set(Vector2 min, Vector2 max) {
@@ -53,8 +51,8 @@ class Box2 {
   }
 
   Box2 makeEmpty() {
-    min.x = min.y = Infinity;
-    max.x = max.y = -Infinity;
+    min.x = min.y = infinity;
+    max.x = max.y = -infinity;
 
     return this;
   }
@@ -66,9 +64,7 @@ class Box2 {
   }
 
   Vector2 getCenter(Vector2 target) {
-    return isEmpty()
-        ? target.set(0, 0)
-        : target.addVectors(min, max).multiplyScalar(0.5);
+    return isEmpty() ? target.set(0, 0) : target.addVectors(min, max).multiplyScalar(0.5);
   }
 
   Vector2 getSize(Vector2 target) {
@@ -97,38 +93,24 @@ class Box2 {
   }
 
   bool containsPoint(Vector2 point) {
-    return point.x < min.x ||
-            point.x > max.x ||
-            point.y < min.y ||
-            point.y > max.y
-        ? false
-        : true;
+    return point.x < min.x || point.x > max.x || point.y < min.y || point.y > max.y ? false : true;
   }
 
   bool containsBox(Box2 box) {
-    return min.x <= box.min.x &&
-        box.max.x <= max.x &&
-        min.y <= box.min.y &&
-        box.max.y <= max.y;
+    return min.x <= box.min.x && box.max.x <= max.x && min.y <= box.min.y && box.max.y <= max.y;
   }
 
   Vector2 getParameter(Vector2 point, Vector2 target) {
     // This can potentially have a divide by zero if the box
     // has a size dimension of 0.
 
-    return target.set((point.x - min.x) / (max.x - min.x),
-        (point.y - min.y) / (max.y - min.y));
+    return target.set((point.x - min.x) / (max.x - min.x), (point.y - min.y) / (max.y - min.y));
   }
 
   bool intersectsBox(Box2 box) {
     // using 4 splitting planes to rule out intersections
 
-    return box.max.x < min.x ||
-            box.min.x > max.x ||
-            box.max.y < min.y ||
-            box.min.y > max.y
-        ? false
-        : true;
+    return box.max.x < min.x || box.min.x > max.x || box.max.y < min.y || box.min.y > max.y ? false : true;
   }
 
   Vector2 clampPoint(Vector2 point, Vector2 target) {

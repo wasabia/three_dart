@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/math/vector3.dart';
 
 /// Primary reference:
@@ -77,20 +76,16 @@ class SphericalHarmonics3 {
     target.copy(coeff[0]).multiplyScalar(0.886227); // π * 0.282095
 
     // band 1
-    target.addScaledVector(
-        coeff[1], 2.0 * 0.511664 * y); // ( 2 * π / 3 ) * 0.488603
+    target.addScaledVector(coeff[1], 2.0 * 0.511664 * y); // ( 2 * π / 3 ) * 0.488603
     target.addScaledVector(coeff[2], 2.0 * 0.511664 * z);
     target.addScaledVector(coeff[3], 2.0 * 0.511664 * x);
 
     // band 2
-    target.addScaledVector(
-        coeff[4], 2.0 * 0.429043 * x * y); // ( π / 4 ) * 1.092548
+    target.addScaledVector(coeff[4], 2.0 * 0.429043 * x * y); // ( π / 4 ) * 1.092548
     target.addScaledVector(coeff[5], 2.0 * 0.429043 * y * z);
-    target.addScaledVector(
-        coeff[6], 0.743125 * z * z - 0.247708); // ( π / 4 ) * 0.315392 * 3
+    target.addScaledVector(coeff[6], 0.743125 * z * z - 0.247708); // ( π / 4 ) * 0.315392 * 3
     target.addScaledVector(coeff[7], 2.0 * 0.429043 * x * z);
-    target.addScaledVector(
-        coeff[8], 0.429043 * (x * x - y * y)); // ( π / 4 ) * 0.546274
+    target.addScaledVector(coeff[8], 0.429043 * (x * x - y * y)); // ( π / 4 ) * 0.546274
 
     return target;
   }

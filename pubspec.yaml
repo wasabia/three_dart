@@ -28,13 +28,13 @@ dependencies:
   #   path: ../flutter_webgpu
 
 # dependency_overrides:
-#   flutter_gl:
-#     path: ../flutter_gl/flutter_gl
+#   three_dart_jsm:
+#     path: ../three_dart_jsm
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  lints: ^1.0.1
+  lints: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

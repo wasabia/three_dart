@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/animation/index.dart';
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/math/math.dart';
@@ -268,13 +267,13 @@ class AnimationClip {
       } else {
         // ...assume skeletal animation
 
-        var boneName = '.bones[' + bones[h].name + ']';
+        var boneName = '.bones[${bones[h].name}]';
 
-        addNonemptyTrack("VectorKeyframeTrack", boneName + '.position', animationKeys, 'pos', tracks);
+        addNonemptyTrack("VectorKeyframeTrack", '$boneName.position', animationKeys, 'pos', tracks);
 
-        addNonemptyTrack("QuaternionKeyframeTrack", boneName + '.quaternion', animationKeys, 'rot', tracks);
+        addNonemptyTrack("QuaternionKeyframeTrack", '$boneName.quaternion', animationKeys, 'rot', tracks);
 
-        addNonemptyTrack("VectorKeyframeTrack", boneName + '.scale', animationKeys, 'scl', tracks);
+        addNonemptyTrack("VectorKeyframeTrack", '$boneName.scale', animationKeys, 'scl', tracks);
       }
     }
 

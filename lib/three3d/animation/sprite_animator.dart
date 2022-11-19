@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/dart_helpers.dart';
 import 'package:three_dart/three3d/math/math.dart';
 
@@ -7,8 +6,7 @@ class SpriteAnimator {
 
   // Add a new animation
   add(options) {
-    options.texture.repeat
-        .set(1 / options.tilesHorizontal, 1 / options.tilesVertical);
+    options.texture.repeat.set(1 / options.tilesHorizontal, 1 / options.tilesVertical);
 
     var animation = {
       "fps": 60,
@@ -48,20 +46,16 @@ class SpriteAnimator {
       // next one
       if (animation.duration > 1 / animation.fps) {
         // Advance this animation to the next tile
-        animation.currentTile =
-            (animation.currentTile + 1) % animation.numberOfTiles;
+        animation.currentTile = (animation.currentTile + 1) % animation.numberOfTiles;
 
         // Calcualte the new column and row
         currentColumn = animation.currentTile % animation.tilesHorizontal;
-        currentRow =
-            Math.floor(animation.currentTile / animation.tilesHorizontal);
+        currentRow = Math.floor(animation.currentTile / animation.tilesHorizontal);
 
         // Calculate the texture offset. The y was found through trial
         // and error and I have no idea why it works
         animation.texture.offset.x = currentColumn / animation.tilesHorizontal;
-        animation.texture.offset.y = 1 -
-            (1 / animation.tilesHorizontal) -
-            (currentRow / animation.tilesVertical);
+        animation.texture.offset.y = 1 - (1 / animation.tilesHorizontal) - (currentRow / animation.tilesVertical);
 
         animation.duration = 0;
 

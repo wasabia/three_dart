@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/animation/animation_utils.dart';
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/math/interpolants/cubic_interpolant.dart';
@@ -6,31 +5,32 @@ import 'package:three_dart/three3d/math/interpolants/discrete_interpolant.dart';
 import 'package:three_dart/three3d/math/interpolants/linear_interpolant.dart';
 import 'package:three_dart/three3d/math/math.dart';
 
+import '../math/interpolant.dart';
+
 class KeyframeTrack {
   late String name;
   late List<num> times;
   late List<num> values;
 
-  var TimeBufferType = "List<num>";
-  var ValueBufferType = "List<num>";
-  var DefaultInterpolation = InterpolateLinear;
-  late String ValueTypeName;
+  var timeBufferType = "List<num>";
+  var valueBufferType = "List<num>";
+  var defaultInterpolation = InterpolateLinear;
+  late String valueTypeName;
 
   Function? createInterpolant;
+
   late int? _interpolation;
 
-  KeyframeTrack(name, times, values, [interpolation]) {
-    if (name == null) throw ('three.KeyframeTrack: track name is null');
+  KeyframeTrack(this.name, times, values, [interpolation]) {
     if (times == null || times.length == 0) {
       throw ('three.KeyframeTrack: no keyframes in track named $name');
     }
 
-    this.name = name;
     _interpolation = interpolation;
-    this.times = AnimationUtils.convertArray(times, TimeBufferType, false);
-    this.values = AnimationUtils.convertArray(values, ValueBufferType, false);
+    this.times = AnimationUtils.convertArray(times, timeBufferType, false);
+    this.values = AnimationUtils.convertArray(values, valueBufferType, false);
 
-    setInterpolation(interpolation ?? DefaultInterpolation);
+    setInterpolation(interpolation ?? defaultInterpolation);
   }
 
   // Serialization (in static context, because of constructor invocation
@@ -39,7 +39,7 @@ class KeyframeTrack {
   static toJSON(track) {
     var trackType = track.constructor;
 
-    var json;
+    dynamic json;
 
     // derived classes can define a static toJSON method
     if (trackType.toJSON != null) {
@@ -54,25 +54,25 @@ class KeyframeTrack {
 
       var interpolation = track.getInterpolation();
 
-      if (interpolation != track.DefaultInterpolation) {
+      if (interpolation != track.defaultInterpolation) {
         json.interpolation = interpolation;
       }
     }
 
-    json.type = track.ValueTypeName; // mandatory
+    json.type = track.valueTypeName; // mandatory
 
     return json;
   }
 
-  InterpolantFactoryMethodDiscrete(result) {
+  Interpolant? interpolantFactoryMethodDiscrete(result) {
     return DiscreteInterpolant(times, values, getValueSize(), result);
   }
 
-  InterpolantFactoryMethodLinear(result) {
+  Interpolant? interpolantFactoryMethodLinear(result) {
     return LinearInterpolant(times, values, getValueSize(), result);
   }
 
-  InterpolantFactoryMethodSmooth(result) {
+  Interpolant? interpolantFactoryMethodSmooth(result) {
     return CubicInterpolant(times, values, getValueSize(), result);
   }
 
@@ -81,28 +81,28 @@ class KeyframeTrack {
 
     switch (interpolation) {
       case InterpolateDiscrete:
-        factoryMethod = InterpolantFactoryMethodDiscrete;
+        factoryMethod = interpolantFactoryMethodDiscrete;
 
         break;
 
       case InterpolateLinear:
-        factoryMethod = InterpolantFactoryMethodLinear;
+        factoryMethod = interpolantFactoryMethodLinear;
 
         break;
 
       case InterpolateSmooth:
-        factoryMethod = InterpolantFactoryMethodSmooth;
+        factoryMethod = interpolantFactoryMethodSmooth;
 
         break;
     }
 
     if (factoryMethod == null) {
-      var message = 'unsupported interpolation for $ValueTypeName keyframe track named $name';
+      var message = 'unsupported interpolation for $valueTypeName keyframe track named $name';
 
       if (createInterpolant == null) {
         // fall back to default, unless the default itself is messed up
-        if (interpolation != DefaultInterpolation) {
-          setInterpolation(DefaultInterpolation);
+        if (interpolation != defaultInterpolation) {
+          setInterpolation(defaultInterpolation);
         } else {
           throw (message); // fatal, in this case
 
@@ -212,7 +212,7 @@ class KeyframeTrack {
       valid = false;
     }
 
-    var times = this.times, values = this.values, nKeys = times.length;
+    var times = this.times, nKeys = times.length;
 
     if (nKeys == 0) {
       print('three.KeyframeTrack: Track is empty. ${this}');
@@ -224,30 +224,12 @@ class KeyframeTrack {
     for (var i = 0; i != nKeys; i++) {
       var currTime = times[i];
 
-      if (currTime == null) {
-        print('three.KeyframeTrack: Time is not a valid number. ${this} i: $i $currTime');
-        valid = false;
-        break;
-      }
-
       if (prevTime != null && prevTime > currTime) {
         print('three.KeyframeTrack: Out of order keys.${this} i: $i currTime: $currTime prevTime: $prevTime');
         valid = false;
         break;
       }
       prevTime = currTime;
-    }
-
-    if (AnimationUtils.isTypedArray(values)) {
-      for (var i = 0, n = values.length; i != n; ++i) {
-        var value = values[i];
-
-        if (value == null) {
-          print('three.KeyframeTrack: Value is not a valid number. ${this} i: $i value: $value');
-          valid = false;
-          break;
-        }
-      }
     }
 
     return valid;

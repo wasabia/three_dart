@@ -1,4 +1,4 @@
-String bumpmap_pars_fragment = """
+String bumpmapParsFragment = """
 #ifdef USE_BUMPMAP
 
 	uniform sampler2D bumpMap;

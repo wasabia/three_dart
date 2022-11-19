@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/cameras/perspective_camera.dart';
 import 'package:three_dart/three3d/lights/light.dart';
 import 'package:three_dart/three3d/lights/light_shadow.dart';
@@ -13,7 +12,7 @@ class SpotLightShadow extends LightShadow {
   void updateMatrices(Light light, {int viewportIndex = 0}) {
     PerspectiveCamera camera = this.camera as PerspectiveCamera;
 
-    var fov = MathUtils.RAD2DEG * 2 * light.angle! * focus;
+    var fov = MathUtils.rad2deg * 2 * light.angle! * focus;
     var aspect = mapSize.width / mapSize.height;
     var far = light.distance ?? camera.far;
 

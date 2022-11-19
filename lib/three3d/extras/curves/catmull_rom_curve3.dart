@@ -1,5 +1,3 @@
-
-
 import 'package:three_dart/three3d/extras/core/curve.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
@@ -69,21 +67,20 @@ var tmp = Vector3.init();
 var px = CubicPoly(), py = CubicPoly(), pz = CubicPoly();
 
 class CatmullRomCurve3 extends Curve {
-  @override
-  String type = 'CatmullRomCurve3';
   bool isCatmullRomCurve3 = true;
 
   late bool closed;
   late String curveType;
   late num tension;
 
-  CatmullRomCurve3(
-      {points, closed = false, curveType = 'centripetal', tension = 0.5})
-      : super() {
+  CatmullRomCurve3({
+    points,
+    this.closed = false,
+    this.curveType = 'centripetal',
+    this.tension = 0.5,
+  }) : super() {
+    type = 'CatmullRomCurve3';
     this.points = points ?? [];
-    this.closed = closed;
-    this.curveType = curveType;
-    this.tension = tension;
   }
 
   @override
@@ -98,8 +95,7 @@ class CatmullRomCurve3 extends Curve {
     var weight = p - intPoint;
 
     if (closed) {
-      intPoint +=
-          intPoint > 0 ? 0 : (Math.floor(Math.abs(intPoint) / l) + 1) * l;
+      intPoint += intPoint > 0 ? 0 : (Math.floor(Math.abs(intPoint) / l) + 1) * l;
     } else if (weight == 0 && intPoint == l - 1) {
       intPoint = l - 2;
       weight = 1;

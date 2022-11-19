@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/buffer_attribute.dart';
 import 'package:three_dart/three3d/core/interleaved_buffer.dart';
@@ -8,14 +7,18 @@ var _vector = Vector3.init();
 
 class InterleavedBufferAttribute extends BufferAttribute {
   int offset;
-  @override
-  InterleavedBuffer? data;
 
-  InterleavedBufferAttribute(this.data, int _itemSize, this.offset, bool _normalized)
-      : super(Float32Array(0), _itemSize) {
+  InterleavedBufferAttribute(
+    InterleavedBuffer? data,
+    int itemSize,
+    this.offset,
+    bool normalized,
+  ) : super(Float32Array(0), itemSize) {
+    this.data = data;
+
     type = "InterleavedBufferAttribute";
-    itemSize = _itemSize;
-    normalized = _normalized;
+    this.itemSize = itemSize;
+    this.normalized = normalized;
   }
 
   @override

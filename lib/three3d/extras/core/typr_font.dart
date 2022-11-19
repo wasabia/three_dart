@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/extras/core/shape.dart';
 import 'package:three_dart/three3d/extras/core/shape_path.dart';
 import 'package:three_dart/three3d/extras/core/ttf_font.dart';
@@ -29,15 +28,11 @@ class TYPRFont extends Font {
   // 同样文字路径不重复生成
   // 生成唯一文字路径
   // 记录 offset
-  Map<String, dynamic> createPaths2(
-      String text, num size, Map<String, dynamic> data) {
+  Map<String, dynamic> createPaths2(String text, num size, Map<String, dynamic> data) {
     List<String> chars = text.split("");
 
     num scale = size / data["resolution"];
-    num lineHeight = (data["boundingBox"]["yMax"] -
-            data["boundingBox"]["yMin"] +
-            data["underlineThickness"]) *
-        scale;
+    num lineHeight = (data["boundingBox"]["yMax"] - data["boundingBox"]["yMin"] + data["underlineThickness"]) * scale;
 
     // List<ShapePath> paths = [];
 
@@ -63,11 +58,7 @@ class TYPRFont extends Font {
           charPath = ret;
         }
 
-        Map<String, dynamic> charData = {
-          "char": char,
-          "offsetX": offsetX,
-          "offsetY": offsetY
-        };
+        Map<String, dynamic> charData = {"char": char, "offsetX": offsetX, "offsetY": offsetY};
 
         result.add(charData);
 
@@ -80,26 +71,20 @@ class TYPRFont extends Font {
       }
     }
 
-    Map<String, dynamic> _data = {
+    return {
       "paths": paths,
       "chars": result,
       "height": offsetY + lineHeight,
-      "width": maxWidth
+      "width": maxWidth,
     };
-
-    return _data;
   }
 
-  List<ShapePath> createPaths(
-      String text, num size, Map<String, dynamic> data) {
+  List<ShapePath> createPaths(String text, num size, Map<String, dynamic> data) {
     // var chars = Array.from ? Array.from( text ) : String( text ).split( '' ); // workaround for IE11, see #13988
     List<String> chars = text.split("");
 
     num scale = size / data["resolution"];
-    num lineHeight = (data["boundingBox"]["yMax"] -
-            data["boundingBox"]["yMin"] +
-            data["underlineThickness"]) *
-        scale;
+    num lineHeight = (data["boundingBox"]["yMax"] - data["boundingBox"]["yMin"] + data["underlineThickness"]) * scale;
 
     List<ShapePath> paths = [];
 
@@ -122,17 +107,16 @@ class TYPRFont extends Font {
     return paths;
   }
 
-  Map<String, dynamic> createPath(
-      String char, num scale, num offsetX, num offsetY, data) {
-    var _font = data["font"];
-    List<int> _glyphs = List<int>.from(_font.stringToGlyphs(char));
+  Map<String, dynamic> createPath(String char, num scale, num offsetX, num offsetY, data) {
+    var font = data["font"];
+    List<int> glyphs = List<int>.from(font.stringToGlyphs(char));
 
-    var gid = _glyphs[0];
-    var charPath = _font.glyphToPath(gid);
+    var gid = glyphs[0];
+    var charPath = font.glyphToPath(gid);
 
-    var _preScale = (100000) / ((_font.head["unitsPerEm"] ?? 2048) * 72);
+    var preScale = (100000) / ((font.head["unitsPerEm"] ?? 2048) * 72);
     // var _preScale = 1;
-    var ha = Math.round(_font.hmtx["aWidth"][gid] * _preScale);
+    var ha = Math.round(font.hmtx["aWidth"][gid] * preScale);
 
     var path = ShapePath();
 
@@ -146,7 +130,7 @@ class TYPRFont extends Font {
     // print(" charPath  before scale ....");
     // print(charPath);
 
-    crds = crds.map((n) => Math.round(n * _preScale).toDouble()).toList();
+    crds = crds.map((n) => Math.round(n * preScale).toDouble()).toList();
 
     // print(" charPath ha: ${ha} _preScale: ${_preScale} ");
     // print(cmds);

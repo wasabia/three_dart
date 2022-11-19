@@ -50,8 +50,7 @@ NativeArray getTypedArray(String type, List buffer) {
   }
 }
 
-BufferAttribute getTypedAttribute(NativeArray array, int itemSize,
-    [bool normalized = false]) {
+BufferAttribute getTypedAttribute(NativeArray array, int itemSize, [bool normalized = false]) {
   if (array is Uint32Array) {
     return Uint32BufferAttribute(array, itemSize, normalized);
   } else if (array is Uint16Array) {
@@ -59,6 +58,6 @@ BufferAttribute getTypedAttribute(NativeArray array, int itemSize,
   } else if (array is Float32Array) {
     return Float32BufferAttribute(array, itemSize, normalized);
   } else {
-    throw (" Util.dart getTypedArray type: ${array} is not support ");
+    throw (" Util.dart getTypedArray type: $array is not support ");
   }
 }

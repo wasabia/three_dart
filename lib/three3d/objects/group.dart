@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/core/object_3d.dart';
 
 class Group extends Object3D {
@@ -9,8 +8,7 @@ class Group extends Object3D {
   Group() : super() {
     type = 'Group';
   }
-  Group.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON) {
+  Group.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) : super.fromJSON(json, rootJSON) {
     type = 'Group';
   }
 }

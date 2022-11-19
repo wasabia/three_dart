@@ -1,4 +1,4 @@
-const String morphcolor_vertex = """
+const String morphcolorVertex = """
 #if defined( USE_MORPHCOLORS ) && defined( MORPHTARGETS_TEXTURE )
 
 	// morphTargetBaseInfluence is set based on BufferGeometry.morphTargetsRelative value:

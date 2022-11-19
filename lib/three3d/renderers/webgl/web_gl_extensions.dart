@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 
 class WebGLExtensions {
@@ -79,15 +78,15 @@ class WebGLExtensions {
 
   bool hasForApp(name) {
     if (extensions.keys.isEmpty) {
-      List<String> _extensions = gl.getExtension(name);
+      List<String> ex = gl.getExtension(name);
 
       extensions = {};
-      for (var element in _extensions) {
+      for (var element in ex) {
         extensions[element] = element;
       }
     }
 
-    Map<String, dynamic> _names = {
+    Map<String, dynamic> names = {
       "EXT_color_buffer_float": "GL_EXT_color_buffer_float",
       "EXT_texture_filter_anisotropic": "GL_EXT_texture_filter_anisotropic",
       "EXT_color_buffer_half_float": "GL_EXT_color_buffer_half_float",
@@ -99,13 +98,13 @@ class WebGLExtensions {
       "GL_EXT_texture_compression_astc_decode_mode_rgb9e5": "GL_EXT_texture_compression_astc_decode_mode_rgb9e5"
     };
 
-    var _name = _names[name] ?? name;
+    var n = names[name] ?? name;
 
     // print(" has for app : ${name} ");
     // developer.log( extensions.keys.toList().toString() );
 
-    if (extensions.containsKey(_name)) {
-      return extensions.containsKey(_name);
+    if (extensions.containsKey(n)) {
+      return extensions.containsKey(n);
     } else {
       return false;
     }

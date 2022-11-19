@@ -1,4 +1,3 @@
-
 /// https://github.com/mrdoob/eventdispatcher.js/
 
 class Event {
@@ -74,9 +73,9 @@ mixin EventDispatcher {
       var array = listenerArray.sublist(0);
 
       for (var i = 0, l = array.length; i < l; i++) {
-        Function _fn = array[i];
+        Function fn = array[i];
 
-        _fn(event);
+        fn(event);
       }
 
       event.target = null;

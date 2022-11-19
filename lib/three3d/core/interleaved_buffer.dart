@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/math/index.dart';
@@ -49,8 +48,7 @@ class InterleavedBuffer {
     return this;
   }
 
-  InterleavedBuffer copyAt(
-      int index1, InterleavedBuffer attribute, int index2) {
+  InterleavedBuffer copyAt(int index1, InterleavedBuffer attribute, int index2) {
     index1 *= stride;
     index2 *= attribute.stride;
 

@@ -1,4 +1,4 @@
-String roughnessmap_fragment = """
+String roughnessmapFragment = """
 float roughnessFactor = roughness;
 
 #ifdef USE_ROUGHNESSMAP

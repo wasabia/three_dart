@@ -1,47 +1,45 @@
-
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/extras/index.dart';
 import 'package:three_dart/three3d/materials/index.dart';
 import 'package:three_dart/three3d/scenes/fog.dart';
 
 class Scene extends Object3D {
-  @override
-  String type = 'Scene';
-
   FogBase? fog;
 
-  @override
-  bool autoUpdate = true; // checked by the renderer
+  Scene() : super() {
+    type = 'Scene';
+    autoUpdate = true;
+  }
 
-  Scene() : super();
-
-  Scene.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON)
-      : super.fromJSON(json, rootJSON);
+  Scene.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) : super.fromJSON(json, rootJSON) {
+    type = 'Scene';
+    autoUpdate = true;
+  }
 
   static Scene initJSON(Map<String, dynamic> json) {
     Map<String, dynamic> rootJSON = {};
 
-    List<Shape> _shapes = [];
-    List<Map<String, dynamic>> _shapesJSON = json["shapes"];
-    for (var _shape in _shapesJSON) {
-      _shapes.add(Curve.castJSON(_shape));
+    List<Shape> shapes = [];
+    List<Map<String, dynamic>> shapesJSON = json["shapes"];
+    for (var shape in shapesJSON) {
+      shapes.add(Curve.castJSON(shape));
     }
-    rootJSON["shapes"] = _shapes;
+    rootJSON["shapes"] = shapes;
 
-    List<BufferGeometry> _geometries = [];
-    List<Map<String, dynamic>> _geometriesJSON = json["geometries"];
-    for (var _geometry in _geometriesJSON) {
-      _geometries.add(BufferGeometry.castJSON(_geometry, rootJSON));
-    }
-
-    List<Material> _materials = [];
-    List<Map<String, dynamic>> _materialsJSON = json["materials"];
-    for (var _material in _materialsJSON) {
-      _materials.add(Material.fromJSON(_material, {}));
+    List<BufferGeometry> geometries = [];
+    List<Map<String, dynamic>> geometriesJSON = json["geometries"];
+    for (var geometry in geometriesJSON) {
+      geometries.add(BufferGeometry.castJSON(geometry, rootJSON));
     }
 
-    rootJSON["materials"] = _materials;
-    rootJSON["geometries"] = _geometries;
+    List<Material> materials = [];
+    List<Map<String, dynamic>> materialsJSON = json["materials"];
+    for (var material in materialsJSON) {
+      materials.add(Material.fromJSON(material, {}));
+    }
+
+    rootJSON["materials"] = materials;
+    rootJSON["geometries"] = geometries;
 
     return Object3D.castJSON(json["object"], rootJSON) as Scene;
   }

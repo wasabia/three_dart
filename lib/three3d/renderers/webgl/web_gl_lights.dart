@@ -1,11 +1,6 @@
-
 import 'package:three_dart/three3d/dart_helpers.dart';
 import 'package:three_dart/three3d/lights/index.dart';
-import 'package:three_dart/three3d/math/color.dart';
 import 'package:three_dart/three3d/math/index.dart';
-import 'package:three_dart/three3d/math/matrix4.dart';
-import 'package:three_dart/three3d/math/vector2.dart';
-import 'package:three_dart/three3d/math/vector3.dart';
 import 'package:three_dart/three3d/renderers/shaders/index.dart';
 import 'package:three_dart/three3d/renderers/webgl/web_gl_capabilities.dart';
 import 'package:three_dart/three3d/renderers/webgl/web_gl_extensions.dart';
@@ -186,7 +181,7 @@ class WebGLLights {
     lights.sort((a, b) => shadowCastingLightsFirst(a, b));
 
     // artist-friendly light intensity scaling factor
-    num scaleFactor = (physicallyCorrectLights != true) ? Math.PI : 1.0;
+    num scaleFactor = (physicallyCorrectLights != true) ? Math.pi : 1.0;
 
     for (var i = 0, l = lights.length; i < l; i++) {
       var light = lights[i];
@@ -347,17 +342,17 @@ class WebGLLights {
       if (capabilities.isWebGL2) {
         // WebGL 2
 
-        state.rectAreaLTC1 = UniformsLib["LTC_FLOAT_1"];
-        state.rectAreaLTC2 = UniformsLib["LTC_FLOAT_2"];
+        state.rectAreaLTC1 = uniformsLib["LTC_FLOAT_1"];
+        state.rectAreaLTC2 = uniformsLib["LTC_FLOAT_2"];
       } else {
         // WebGL 1
 
         if (extensions.has('OES_texture_float_linear') == true) {
-          state.rectAreaLTC1 = UniformsLib["LTC_FLOAT_1"];
-          state.rectAreaLTC2 = UniformsLib["LTC_FLOAT_2"];
+          state.rectAreaLTC1 = uniformsLib["LTC_FLOAT_1"];
+          state.rectAreaLTC2 = uniformsLib["LTC_FLOAT_2"];
         } else if (extensions.has('OES_texture_half_float_linear') == true) {
-          state.rectAreaLTC1 = UniformsLib["LTC_HALF_1"];
-          state.rectAreaLTC2 = UniformsLib["LTC_HALF_2"];
+          state.rectAreaLTC1 = uniformsLib["LTC_HALF_1"];
+          state.rectAreaLTC2 = uniformsLib["LTC_HALF_2"];
         } else {
           print('three.WebGLRenderer: Unable to use RectAreaLight. Missing WebGL extensions.');
         }

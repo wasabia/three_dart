@@ -1,4 +1,4 @@
-String envmap_pars_vertex = """
+String envmapParsVertex = """
 #ifdef USE_ENVMAP
 
 	#if defined( USE_BUMPMAP ) || defined( USE_NORMALMAP ) ||defined( PHONG )

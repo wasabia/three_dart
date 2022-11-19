@@ -1,6 +1,5 @@
 library core;
 
-
 export 'base_buffer_attribute.dart';
 export 'buffer_attribute.dart';
 export 'buffer_geometry.dart';

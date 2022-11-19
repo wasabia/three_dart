@@ -11,8 +11,8 @@ class ShaderMaterial extends Material {
     defines = {};
     uniforms = {};
 
-    vertexShader = default_vertex;
-    fragmentShader = default_fragment;
+    vertexShader = defaultVertex;
+    fragmentShader = defaultFragment;
 
     linewidth = 1;
 

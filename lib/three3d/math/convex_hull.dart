@@ -1,20 +1,18 @@
-
 import 'package:three_dart/three3d/core/buffer_geometry.dart';
 import 'package:three_dart/three3d/core/object_3d.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 /// Ported from: https://github.com/maurizzzio/quickhull3d/ by Mauricio Poppe (https://github.com/maurizzzio)
 
-var Visible = 0;
-var Deleted = 1;
+var visible = 0;
+var deleted = 1;
 
 class ConvexHull {
   Vector3 v1 = Vector3.init();
 
   num tolerance = -1;
   List<Face2> faces = []; // the generated faces of the convex hull
-  List<Face2> newFace2s =
-      []; // this array holds the faces that are generated within a single iteration
+  List<Face2> newFace2s = []; // this array holds the faces that are generated within a single iteration
 
   VertexList assigned = VertexList();
   VertexList unassigned = VertexList();
@@ -79,9 +77,7 @@ class ConvexHull {
             for (var i = 0, l = attribute.count; i < l; i++) {
               point = Vector3.init();
 
-              point
-                  .fromBufferAttribute(attribute, i)
-                  .applyMatrix4(node.matrixWorld);
+              point.fromBufferAttribute(attribute, i).applyMatrix4(node.matrixWorld);
 
               points.add(point);
             }
@@ -112,8 +108,8 @@ class ConvexHull {
 
     var faces = this.faces;
 
-    var tNear = -Math.Infinity;
-    var tFar = Math.Infinity;
+    var tNear = -Math.infinity;
+    var tFar = Math.infinity;
 
     for (var i = 0, l = faces.length; i < l; i++) {
       var face = faces[i];
@@ -160,7 +156,7 @@ class ConvexHull {
 
     // always try tNear first since its the closer intersection point
 
-    if (tNear != -Math.Infinity) {
+    if (tNear != -Math.infinity) {
       ray.at(tNear, target);
     } else {
       ray.at(tFar, target);
@@ -302,7 +298,7 @@ class ConvexHull {
         for (var i = 0; i < newFace2s.length; i++) {
           var face = newFace2s[i];
 
-          if (face.mark == Visible) {
+          if (face.mark == visible) {
             var distance = face.distanceToPoint(vertex.point);
 
             if (distance > maxDistance) {
@@ -336,7 +332,7 @@ class ConvexHull {
     List<VertexNode> minVertices = [];
     List<VertexNode> maxVertices = [];
 
-    var i, l, j;
+    var i, j;
 
     // initially assume that the first vertex is the min/max
 
@@ -377,7 +373,7 @@ class ConvexHull {
     // use min/max vectors to compute an optimal epsilon
 
     tolerance = 3 *
-        Math.EPSILON *
+        Math.epsilon *
         (Math.max<num>(Math.abs(min.x), Math.abs(max.x)) +
             Math.max(Math.abs(min.y), Math.abs(max.y)) +
             Math.max(Math.abs(min.z), Math.abs(max.z)));
@@ -403,7 +399,7 @@ class ConvexHull {
     var max = extremes["max"]!;
 
     var v0, v1, v2, v3;
-    var i, l, j;
+    var i, j;
 
     // 1. Find the two vertices 'v0' and 'v1' with the greatest 1d separation
     // (max.x - min.x)
@@ -464,16 +460,16 @@ class ConvexHull {
       }
     }
 
-    List<Face2> _faces = [];
+    List<Face2> faces = [];
 
     if (plane.distanceToPoint(v3.point) < 0) {
       // the face is not able to see the point so 'plane.normal' is pointing outside the tetrahedron
 
-      _faces.addAll([
+      faces.addAll([
         Face2.create(v0, v1, v2),
         Face2.create(v3, v1, v0),
         Face2.create(v3, v2, v1),
-        Face2.create(v3, v0, v2)
+        Face2.create(v3, v0, v2),
       ]);
 
       // set the twin edge
@@ -483,21 +479,17 @@ class ConvexHull {
 
         // join face[ i ] i > 0, with the first face
 
-        _faces[i + 1].getEdge(2)!.setTwin(_faces[0].getEdge(j));
+        faces[i + 1].getEdge(2)!.setTwin(faces[0].getEdge(j));
 
         // join face[ i ] with face[ i + 1 ], 1 <= i <= 3
 
-        _faces[i + 1].getEdge(1)!.setTwin(_faces[j + 1].getEdge(0));
+        faces[i + 1].getEdge(1)!.setTwin(faces[j + 1].getEdge(0));
       }
     } else {
       // the face is able to see the point so 'plane.normal' is pointing inside the tetrahedron
 
-      _faces.addAll([
-        Face2.create(v0, v2, v1),
-        Face2.create(v3, v0, v1),
-        Face2.create(v3, v1, v2),
-        Face2.create(v3, v2, v0)
-      ]);
+      faces.addAll(
+          [Face2.create(v0, v2, v1), Face2.create(v3, v0, v1), Face2.create(v3, v1, v2), Face2.create(v3, v2, v0)]);
 
       // set the twin edge
 
@@ -506,18 +498,18 @@ class ConvexHull {
 
         // join face[ i ] i > 0, with the first face
 
-        _faces[i + 1].getEdge(2)!.setTwin(_faces[0].getEdge((3 - i) % 3));
+        faces[i + 1].getEdge(2)!.setTwin(faces[0].getEdge((3 - i) % 3));
 
         // join face[ i ] with face[ i + 1 ]
 
-        _faces[i + 1].getEdge(0)!.setTwin(_faces[j + 1].getEdge(1));
+        faces[i + 1].getEdge(0)!.setTwin(faces[j + 1].getEdge(1));
       }
     }
 
     // the initial hull is the tetrahedron
 
     for (i = 0; i < 4; i++) {
-      faces.add(_faces[i]);
+      faces.add(faces[i]);
     }
 
     // initial assignment of vertices to the faces of the tetrahedron
@@ -555,7 +547,7 @@ class ConvexHull {
     for (var i = 0; i < faces.length; i++) {
       var face = faces[i];
 
-      if (face.mark == Visible) {
+      if (face.mark == visible) {
         activeFace2s.add(face);
       }
     }
@@ -603,7 +595,7 @@ class ConvexHull {
 
     deleteFace2Vertices(face, null);
 
-    face.mark = Deleted;
+    face.mark = deleted;
 
     var edge;
 
@@ -620,7 +612,7 @@ class ConvexHull {
       var twinEdge = edge.twin;
       var oppositeFace2 = twinEdge.face;
 
-      if (oppositeFace2.mark == Visible) {
+      if (oppositeFace2.mark == visible) {
         if (oppositeFace2.distanceToPoint(eyePoint) > tolerance) {
           // the opposite face can see the vertex, so proceed with next edge
 
@@ -744,9 +736,8 @@ class Face2 {
   num area = 0;
 
   num constant = 0; // signed distance from face to the origin
-  VertexNode?
-      outside; // reference to a vertex in a vertex list this face can see
-  num mark = Visible;
+  VertexNode? outside; // reference to a vertex in a vertex list this face can see
+  num mark = visible;
   HalfEdge? edge;
 
   static Face2 create(VertexNode a, VertexNode b, VertexNode c) {

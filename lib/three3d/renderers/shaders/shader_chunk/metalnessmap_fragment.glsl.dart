@@ -1,4 +1,4 @@
-String metalnessmap_fragment = """
+String metalnessmapFragment = """
 float metalnessFactor = metalness;
 
 #ifdef USE_METALNESSMAP

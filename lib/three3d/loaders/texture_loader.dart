@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -7,10 +6,8 @@ import 'package:image/image.dart';
 import 'package:three_dart/extra/blob.dart';
 import 'package:three_dart/three3d/loaders/index.dart';
 import 'package:three_dart/three3d/textures/index.dart';
-import 'package:three_dart/three3d/textures/texture.dart';
 
 class TextureLoader extends Loader {
-
   TextureLoader(manager) : super(manager);
 
   @override
@@ -29,8 +26,7 @@ class TextureLoader extends Loader {
     Texture texture;
 
     // if(kIsWeb) {
-    texture =
-        Texture(null, null, null, null, null, null, null, null, null, null);
+    texture = Texture(null, null, null, null, null, null, null, null, null, null);
     // } else {
     //   texture = DataTexture(null, null, null,null, null, null,null, null, null, null, null, null);
     // }
@@ -47,20 +43,13 @@ class TextureLoader extends Loader {
       // Web better way ???
       if (kIsWeb && image is! Image) {
         imageElement = ImageElement(
-            url: url is Blob ? "" : url,
-            data: image,
-            width: image.width!.toDouble(),
-            height: image.height!.toDouble());
+            url: url is Blob ? "" : url, data: image, width: image.width!.toDouble(), height: image.height!.toDouble());
       } else {
-        var _pixels = image.getBytes(format: Format.rgba);
+        var pixels = image.getBytes(format: Format.rgba);
 
         // print(" _pixels : ${_pixels.length} ");
         // print(" ------------------------------------------- ");
-        imageElement = ImageElement(
-            url: url,
-            data: Uint8Array.from(_pixels),
-            width: image.width,
-            height: image.height);
+        imageElement = ImageElement(url: url, data: Uint8Array.from(pixels), width: image.width, height: image.height);
       }
 
       // print(" image.width: ${image.width} image.height: ${image.height} isJPEG: ${isJPEG} ");

@@ -220,7 +220,7 @@ class _MyAppState extends State<MiscControlsMap> {
     controls.minDistance = 100;
     controls.maxDistance = 500;
 
-    controls.maxPolarAngle = three.Math.PI / 2;
+    controls.maxPolarAngle = three.Math.pi / 2;
 
     // world
     var geometry = three.BoxGeometry(1, 1, 1);

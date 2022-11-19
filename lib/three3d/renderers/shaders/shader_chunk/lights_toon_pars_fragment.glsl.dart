@@ -1,4 +1,4 @@
-String lights_toon_pars_fragment = """
+String lightsToonParsFragment = """
 varying vec3 vViewPosition;
 
 struct ToonMaterial {

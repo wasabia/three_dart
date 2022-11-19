@@ -1,4 +1,4 @@
-String map_fragment = """
+String mapFragment = """
 #ifdef USE_MAP
 	vec4 sampledDiffuseColor = texture2D( map, vUv );
 	#ifdef DECODE_VIDEO_TEXTURE

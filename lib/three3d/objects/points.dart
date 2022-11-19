@@ -1,6 +1,4 @@
-
 import 'package:three_dart/three3d/core/index.dart';
-import 'package:three_dart/three3d/core/object_3d.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 var _pointsinverseMatrix = Matrix4();

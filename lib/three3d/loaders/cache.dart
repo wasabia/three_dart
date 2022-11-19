@@ -1,4 +1,3 @@
-
 class Cache {
   static bool enabled = false;
   static Map<String, dynamic> files = {};

@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/euler.dart';
 import 'package:three_dart/three3d/math/math.dart';
@@ -33,7 +32,7 @@ class Quaternion {
     return [_x, _y, _z, _w];
   }
 
-  static Quaternion static_slerp(Quaternion qa, Quaternion qb, Quaternion qm, num t) {
+  static Quaternion staticSlerp(Quaternion qa, Quaternion qb, Quaternion qm, num t) {
     print(
         'three.Quaternion: Static .slerp() has been deprecated. Use is now qm.slerpQuaternions( qa, qb, t ) instead.');
     return qm.slerpQuaternions(qa, qb, t);
@@ -74,7 +73,7 @@ class Quaternion {
       var dir = (cos >= 0 ? 1 : -1), sqrSin = 1 - cos * cos;
 
       // Skip the Slerp for tiny steps to avoid numeric problems:
-      if (sqrSin > Math.EPSILON) {
+      if (sqrSin > Math.epsilon) {
         var sin = Math.sqrt(sqrSin), len = Math.atan2(sin, cos * dir);
 
         s = Math.sin(s * len) / sin;
@@ -240,7 +239,7 @@ class Quaternion {
         break;
 
       default:
-        print('three.Quaternion: .setFromEuler() encountered an unknown order: ' + order);
+        print('three.Quaternion: .setFromEuler() encountered an unknown order: $order');
     }
 
     if (update) {
@@ -323,7 +322,7 @@ class Quaternion {
 
     var r = vFrom.dot(vTo) + 1;
 
-    if (r < Math.EPSILON) {
+    if (r < Math.epsilon) {
       r = 0;
 
       if (Math.abs(vFrom.x) > Math.abs(vFrom.z)) {
@@ -480,7 +479,7 @@ class Quaternion {
 
     var sqrSinHalfTheta = 1.0 - cosHalfTheta * cosHalfTheta;
 
-    if (sqrSinHalfTheta <= Math.EPSILON) {
+    if (sqrSinHalfTheta <= Math.epsilon) {
       var s = 1 - t;
       _w = s * w + t * _w;
       _x = s * x + t * _x;
@@ -520,9 +519,9 @@ class Quaternion {
     var sqrt1u1 = Math.sqrt(1 - u1);
     var sqrtu1 = Math.sqrt(u1);
 
-    var u2 = 2 * Math.PI * Math.random();
+    var u2 = 2 * Math.pi * Math.random();
 
-    var u3 = 2 * Math.PI * Math.random();
+    var u3 = 2 * Math.pi * Math.random();
 
     return set(
       sqrt1u1 * Math.cos(u2),

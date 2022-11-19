@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/animation/property_binding.dart';
 import 'package:three_dart/three3d/math/quaternion.dart';
 
@@ -18,11 +17,8 @@ class PropertyMixer {
   late List buffer;
   late int cacheIndex;
 
-  PropertyMixer(PropertyBinding binding, String typeName, int valueSize) {
-    this.binding = binding;
-    this.valueSize = valueSize;
-
-    var mixFunction, mixFunctionAdditive, setIdentity;
+  PropertyMixer(this.binding, String typeName, this.valueSize) {
+    dynamic mixFunction, mixFunctionAdditive, setIdentity;
 
     // buffer layout: [ incoming | accu0 | accu1 | orig | addAccu | (optional work) ]
     //
@@ -122,9 +118,7 @@ class PropertyMixer {
 
   // accumulate data in the 'incoming' region into 'add'
   accumulateAdditive(int weight) {
-    var buffer = this.buffer,
-        stride = valueSize,
-        offset = stride * _addIndex;
+    var buffer = this.buffer, stride = valueSize, offset = stride * _addIndex;
 
     if (cumulativeWeightAdditive == 0) {
       // add = identity
@@ -155,15 +149,13 @@ class PropertyMixer {
 
       var originalValueOffset = stride * _origIndex;
 
-      _mixBufferRegion(
-          buffer, offset, originalValueOffset, 1 - weight, stride);
+      _mixBufferRegion(buffer, offset, originalValueOffset, 1 - weight, stride);
     }
 
     if (weightAdditive > 0) {
       // accuN := accuN + additive accuN
 
-      _mixBufferRegionAdditive(
-          buffer, offset, _addIndex * stride, 1, stride);
+      _mixBufferRegionAdditive(buffer, offset, _addIndex * stride, 1, stride);
     }
 
     for (var i = stride, e = stride + stride; i != e; ++i) {
@@ -179,9 +171,7 @@ class PropertyMixer {
   saveOriginalState() {
     var binding = this.binding;
 
-    var buffer = this.buffer,
-        stride = valueSize,
-        originalValueOffset = stride * _origIndex;
+    var buffer = this.buffer, stride = valueSize, originalValueOffset = stride * _origIndex;
 
     binding.getValue(buffer, originalValueOffset);
 
@@ -237,20 +227,17 @@ class PropertyMixer {
   }
 
   _slerp(buffer, dstOffset, srcOffset, t, stride) {
-    Quaternion.slerpFlat(
-        buffer, dstOffset, buffer, dstOffset, buffer, srcOffset, t);
+    Quaternion.slerpFlat(buffer, dstOffset, buffer, dstOffset, buffer, srcOffset, t);
   }
 
   _slerpAdditive(buffer, dstOffset, srcOffset, t, stride) {
     var workOffset = _workIndex * stride;
 
     // Store result in intermediate buffer offset
-    Quaternion.multiplyQuaternionsFlat(
-        buffer, workOffset, buffer, dstOffset, buffer, srcOffset);
+    Quaternion.multiplyQuaternionsFlat(buffer, workOffset, buffer, dstOffset, buffer, srcOffset);
 
     // Slerp to the intermediate result
-    Quaternion.slerpFlat(
-        buffer, dstOffset, buffer, dstOffset, buffer, workOffset, t);
+    Quaternion.slerpFlat(buffer, dstOffset, buffer, dstOffset, buffer, workOffset, t);
   }
 
   _lerp(buffer, dstOffset, srcOffset, t, stride) {

@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/animation/animation_action.dart';
 import 'package:three_dart/three3d/animation/animation_clip.dart';
 import 'package:three_dart/three3d/animation/property_binding.dart';
@@ -31,12 +30,12 @@ class AnimationMixer with EventDispatcher {
   }
 
   _bindAction(action, prototypeAction) {
-    var _root = action.localRoot ?? root,
+    var root = action.localRoot ?? this.root,
         tracks = action.clip.tracks,
         nTracks = tracks.length,
         bindings = action.propertyBindings,
         interpolants = action.interpolants,
-        rootUuid = _root.uuid,
+        rootUuid = root.uuid,
         bindingsByRoot = _bindingsByRootAndName;
 
     var bindingsByName = bindingsByRoot[rootUuid];
@@ -71,7 +70,7 @@ class AnimationMixer with EventDispatcher {
         var path = prototypeAction != null ? prototypeAction.propertyBindings[i].binding.parsedPath : null;
 
         binding =
-            PropertyMixer(PropertyBinding.create(_root, trackName, path), track.ValueTypeName, track.getValueSize());
+            PropertyMixer(PropertyBinding.create(root, trackName, path), track.valueTypeName, track.getValueSize());
 
         ++binding.referenceCount;
         _addInactiveBinding(binding, rootUuid, trackName);
@@ -420,10 +419,10 @@ class AnimationMixer with EventDispatcher {
   // object (this method allocates a lot of dynamic memory in case a
   // previously unknown clip/root combination is specified)
   AnimationAction? clipAction(clip, [optionalRoot, blendMode]) {
-    var _root = optionalRoot ?? root;
-    var rootUuid = _root.uuid;
+    var root = optionalRoot ?? this.root;
+    var rootUuid = root.uuid;
 
-    AnimationClip? clipObject = clip is String ? AnimationClip.findByName(_root, clip) : clip;
+    AnimationClip? clipObject = clip is String ? AnimationClip.findByName(root, clip) : clip;
 
     var clipUuid = clipObject != null ? clipObject.uuid : clip;
 
@@ -469,10 +468,10 @@ class AnimationMixer with EventDispatcher {
 
   // get an existing action
   existingAction(clip, optionalRoot) {
-    var _root = optionalRoot ?? root;
-    var rootUuid = _root.uuid;
+    var root = optionalRoot ?? this.root;
+    var rootUuid = root.uuid;
 
-    var clipObject = clip is String ? AnimationClip.findByName(_root, clip) : clip,
+    var clipObject = clip is String ? AnimationClip.findByName(root, clip) : clip,
         clipUuid = clipObject ? clipObject.uuid : clip,
         actionsForClip = _actionsByClip[clipUuid];
 
@@ -516,8 +515,8 @@ class AnimationMixer with EventDispatcher {
     var bindings = _bindings, nBindings = _nActiveBindings;
 
     for (var i = 0; i != nBindings; ++i) {
-      var _binding = bindings[i];
-      _binding.apply(accuIndex);
+      var binding = bindings[i];
+      binding.apply(accuIndex);
     }
 
     return this;

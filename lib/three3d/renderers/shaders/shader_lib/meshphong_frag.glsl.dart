@@ -1,4 +1,4 @@
-String meshphong_frag = """
+String meshphongFrag = """
 #define PHONG
 
 uniform vec3 diffuse;

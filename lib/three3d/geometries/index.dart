@@ -1,6 +1,5 @@
 library geometries;
 
-
 export 'cone_geometry.dart';
 export 'edges_geometry.dart';
 export 'lathe_geometry.dart';

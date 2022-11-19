@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/box3.dart';
 import 'package:three_dart/three3d/math/matrix4.dart';

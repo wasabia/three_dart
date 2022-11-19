@@ -1,4 +1,4 @@
-String shadow_vert = """
+String shadowVert = """
 #include <common>
 #include <fog_pars_vertex>
 #include <shadowmap_pars_vertex>

@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/core/buffer_attribute.dart';
 import 'package:three_dart/three3d/math/euler.dart';
 import 'package:three_dart/three3d/math/math.dart';
@@ -478,7 +477,7 @@ class Vector3 {
   double angleTo(v) {
     var denominator = Math.sqrt(lengthSq() * v.lengthSq());
 
-    if (denominator == 0) return Math.PI / 2;
+    if (denominator == 0) return Math.pi / 2;
 
     var theta = dot(v) / denominator;
 
@@ -614,7 +613,7 @@ class Vector3 {
     // Derived from https://mathworld.wolfram.com/SpherePointPicking.html
 
     var u = (Math.random() - 0.5) * 2;
-    var t = Math.random() * Math.PI * 2;
+    var t = Math.random() * Math.pi * 2;
     var f = Math.sqrt(1 - u * u);
 
     x = f * Math.cos(t);

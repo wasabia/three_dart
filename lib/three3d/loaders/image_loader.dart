@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:three_dart/three3d/loaders/cache.dart';
@@ -6,10 +5,9 @@ import 'package:three_dart/three3d/loaders/loader.dart';
 import 'image_loader_for_app.dart' if (dart.library.js) 'image_loader_for_web.dart';
 
 class ImageLoader extends Loader {
-  @override
-  bool flipY = true;
-
-  ImageLoader(manager) : super(manager);
+  ImageLoader(manager) : super(manager) {
+    flipY = true;
+  }
 
   @override
   loadAsync(url, [Function? onProgress]) async {
@@ -44,9 +42,9 @@ class ImageLoader extends Loader {
       return cached;
     }
 
-    final _resp = await ImageLoaderLoader.loadImage(url, flipY);
-    onLoad(_resp);
+    final resp = await ImageLoaderLoader.loadImage(url, flipY);
+    onLoad(resp);
 
-    return _resp;
+    return resp;
   }
 }

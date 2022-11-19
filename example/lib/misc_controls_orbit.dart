@@ -220,7 +220,7 @@ class _MyAppState extends State<MiscControlsOrbit> {
     controls.minDistance = 10;
     controls.maxDistance = 1000;
 
-    controls.maxPolarAngle = three.Math.PI / 2;
+    controls.maxPolarAngle = three.Math.pi / 2;
 
     // world
 

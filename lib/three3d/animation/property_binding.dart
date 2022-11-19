@@ -1,18 +1,17 @@
-
 // Characters [].:/ are reserved for track binding syntax.
 import 'package:three_dart/three3d/animation/animation_object_group.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/materials/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
-var _RESERVED_CHARS_RE = '\\[\\]\\.:\\/';
-var _reservedRe = RegExp("[$_RESERVED_CHARS_RE]");
+var _reservedCharsRe = '\\[\\]\\.:\\/';
+var _reservedRe = RegExp("[$_reservedCharsRe]");
 
 // Attempts to allow node names from any language. ES5's `\w` regexp matches
 // only latin characters, and the unicode \p{L} is not yet supported. So
 // instead, we exclude reserved characters and match everything else.
-var _wordChar = '[^' + _RESERVED_CHARS_RE + ']';
-var _wordCharOrDot = '[^' + _RESERVED_CHARS_RE.replaceAll('\\.', '') + ']';
+var _wordChar = '[^$_reservedCharsRe]';
+var _wordCharOrDot = '[^${_reservedCharsRe.replaceAll('\\.', '')}]';
 
 // Parent directories, delimited by '/' or ':'. Currently unused, but must
 // be matched to parse the rest of the track name.
@@ -93,19 +92,17 @@ class PropertyBinding {
   late Function setValue;
   late dynamic propertyIndex;
 
-  var BindingType = {"Direct": 0, "EntireArray": 1, "ArrayElement": 2, "HasFromToArray": 3};
+  var bindingTypeObject = {"Direct": 0, "EntireArray": 1, "ArrayElement": 2, "HasFromToArray": 3};
 
-  var Versioning = {"None": 0, "NeedsUpdate": 1, "MatrixWorldNeedsUpdate": 2};
+  var versioningObject = {"None": 0, "NeedsUpdate": 1, "MatrixWorldNeedsUpdate": 2};
 
-  PropertyBinding(rootNode, path, parsedPath) {
-    this.path = path;
+  PropertyBinding(this.rootNode, this.path, [Map<String, String?>? parsedPath]) {
     this.parsedPath = parsedPath ?? PropertyBinding.parseTrackName(path);
 
     node = PropertyBinding.findNode(rootNode, this.parsedPath["nodeName"]) ?? rootNode;
 
-    this.rootNode = rootNode;
-    getValue = getValue_unbound;
-    setValue = setValue_unbound;
+    getValue = getValueUnbound;
+    setValue = setValueUnbound;
   }
 
   static create(root, path, parsedPath) {
@@ -116,23 +113,18 @@ class PropertyBinding {
     }
   }
 
-  /**
-	 * Replaces spaces with underscores and removes unsupported characters from
-	 * node names, to ensure compatibility with parseTrackName().
-	 *
-	 * @param {string} name Node name to be sanitized.
-	 * @return {string}
-	 */
-  static sanitizeNodeName(String name) {
-    final _reg = RegExp(r"\s");
+  /// Replaces spaces with underscores and removes unsupported characters from
+  /// node names, to ensure compatibility with parseTrackName().
+  static String sanitizeNodeName(String input) {
+    final reg = RegExp(r"\s");
 
-    String _name = name.replaceAll(_reg, '_');
-    _name = _name.replaceAll(_reservedRe, '');
+    String name = input.replaceAll(reg, '_');
+    name = name.replaceAll(_reservedRe, '');
 
-    return _name;
+    return name;
   }
 
-  static parseTrackName(trackName) {
+  static Map<String, String?> parseTrackName(trackName) {
     var matches = _trackRe.firstMatch(trackName);
 
     if (matches == null) {
@@ -148,7 +140,7 @@ class PropertyBinding {
     // 	"propertyIndex": matches[ 6 ]
     // };
 
-    var results = {
+    var results = <String, String?>{
       // directoryName: matches[ 1 ], // (tschw) currently unused
       "nodeName": matches.group(2),
       "objectName": matches.group(3),
@@ -233,31 +225,31 @@ class PropertyBinding {
   }
 
   // these are used to "bind" a nonexistent property
-  _getValue_unavailable() {}
-  _setValue_unavailable() {}
+  _getValueUnavailable() {}
+  _setValueUnavailable() {}
 
-  getterByBindingType(int idx) {
+  void Function(List<int>, int) getterByBindingType(int idx) {
     if (idx == 0) {
-      return getValue_direct;
+      return getValueDirect;
     } else if (idx == 1) {
-      return getValue_array;
+      return getValueArray;
     } else if (idx == 2) {
-      return getValue_arrayElement;
+      return getValueArrayElement;
     } else if (idx == 3) {
-      return getValue_toArray;
+      return getValueToArray;
     } else {
       throw ("PropertyBinding.getterByBindingType idx: $idx is not support ");
     }
   }
 
   // 0
-  getValue_direct(buffer, offset) {
-    var _v = targetObject.getProperty(propertyName);
-    buffer[offset] = _v;
+  void getValueDirect(List<int> buffer, int offset) {
+    var v = targetObject.getProperty(propertyName);
+    buffer[offset] = v;
   }
 
   // 1
-  getValue_array(buffer, offset) {
+  void getValueArray(List<int> buffer, int offset) {
     var source = resolvedProperty;
     for (var i = 0, n = source.length; i != n; ++i) {
       buffer[offset++] = source[i];
@@ -265,12 +257,12 @@ class PropertyBinding {
   }
 
   // 2
-  getValue_arrayElement(buffer, offset) {
+  void getValueArrayElement(List<int> buffer, int offset) {
     buffer[offset] = resolvedProperty[propertyIndex];
   }
 
   // 3
-  getValue_toArray(buffer, offset) {
+  void getValueToArray(List<int> buffer, int offset) {
     resolvedProperty.toArray(buffer, offset);
   }
 
@@ -301,64 +293,64 @@ class PropertyBinding {
 
     if (bindingType == 0) {
       if (versioning == 0) {
-        return setValue_direct;
+        return setValueDirect;
       } else if (versioning == 1) {
-        return setValue_direct_setNeedsUpdate;
+        return setValueDirectSetNeedsUpdate;
       } else if (versioning == 2) {
-        return setValue_direct_setMatrixWorldNeedsUpdate;
+        return setValueDirectSetMatrixWorldNeedsUpdate;
       }
     } else if (bindingType == 1) {
       if (versioning == 0) {
-        return setValue_array;
+        return setValueArray;
       } else if (versioning == 1) {
-        return setValue_array_setNeedsUpdate;
+        return setValueArraySetNeedsUpdate;
       } else if (versioning == 2) {
-        return setValue_array_setMatrixWorldNeedsUpdate;
+        return setValueArraySetMatrixWorldNeedsUpdate;
       }
     } else if (bindingType == 2) {
       if (versioning == 0) {
-        return setValue_arrayElement;
+        return setValueArrayElement;
       } else if (versioning == 1) {
-        return setValue_arrayElement_setNeedsUpdate;
+        return setValueArrayElementSetNeedsUpdate;
       } else if (versioning == 2) {
-        return setValue_arrayElement_setMatrixWorldNeedsUpdate;
+        return setValueArrayElementSetMatrixWorldNeedsUpdate;
       }
     } else if (bindingType == 3) {
       if (versioning == 0) {
-        return setValue_fromArray;
+        return setValueFromArray;
       } else if (versioning == 1) {
-        return setValue_fromArray_setNeedsUpdate;
+        return setValueFromArraySetNeedsUpdate;
       } else if (versioning == 2) {
-        return setValue_fromArray_setMatrixWorldNeedsUpdate;
+        return setValueFromArraySetMatrixWorldNeedsUpdate;
       }
     }
   }
 
-  setValue_direct(buffer, offset) {
+  setValueDirect(buffer, offset) {
     // this.targetObject[ this.propertyName ] = buffer[ offset ];
     targetObject.setProperty(propertyName, buffer[offset]);
   }
 
-  setValue_direct_setNeedsUpdate(buffer, offset) {
+  setValueDirectSetNeedsUpdate(buffer, offset) {
     // this.targetObject[ this.propertyName ] = buffer[ offset ];
     targetObject.setProperty(propertyName, buffer[offset]);
     targetObject.needsUpdate = true;
   }
 
-  setValue_direct_setMatrixWorldNeedsUpdate(buffer, offset) {
+  setValueDirectSetMatrixWorldNeedsUpdate(buffer, offset) {
     // this.targetObject[ this.propertyName ] = buffer[ offset ];
     targetObject.setProperty(propertyName, buffer[offset]);
     targetObject.matrixWorldNeedsUpdate = true;
   }
 
-  setValue_array(buffer, offset) {
+  setValueArray(buffer, offset) {
     var dest = resolvedProperty;
     for (var i = 0, n = dest.length; i != n; ++i) {
       dest[i] = buffer[offset++];
     }
   }
 
-  setValue_array_setNeedsUpdate(buffer, offset) {
+  setValueArraySetNeedsUpdate(buffer, offset) {
     var dest = resolvedProperty;
     for (var i = 0, n = dest.length; i != n; ++i) {
       dest[i] = buffer[offset++];
@@ -366,7 +358,7 @@ class PropertyBinding {
     targetObject.needsUpdate = true;
   }
 
-  setValue_array_setMatrixWorldNeedsUpdate(buffer, offset) {
+  setValueArraySetMatrixWorldNeedsUpdate(buffer, offset) {
     var dest = resolvedProperty;
     for (var i = 0, n = dest.length; i != n; ++i) {
       dest[i] = buffer[offset++];
@@ -374,35 +366,35 @@ class PropertyBinding {
     targetObject.matrixWorldNeedsUpdate = true;
   }
 
-  setValue_arrayElement(buffer, offset) {
+  setValueArrayElement(buffer, offset) {
     resolvedProperty[propertyIndex] = buffer[offset];
   }
 
-  setValue_arrayElement_setNeedsUpdate(buffer, offset) {
+  setValueArrayElementSetNeedsUpdate(buffer, offset) {
     resolvedProperty[propertyIndex] = buffer[offset];
     targetObject.needsUpdate = true;
   }
 
-  setValue_arrayElement_setMatrixWorldNeedsUpdate(buffer, offset) {
+  setValueArrayElementSetMatrixWorldNeedsUpdate(buffer, offset) {
     resolvedProperty[propertyIndex] = buffer[offset];
     targetObject.matrixWorldNeedsUpdate = true;
   }
 
-  setValue_fromArray(buffer, offset) {
+  setValueFromArray(buffer, offset) {
     resolvedProperty.fromArray(buffer, offset);
   }
 
-  setValue_fromArray_setNeedsUpdate(buffer, offset) {
+  setValueFromArraySetNeedsUpdate(buffer, offset) {
     resolvedProperty.fromArray(List<double>.from(buffer.map((e) => e.toDouble())), offset);
     targetObject.needsUpdate = true;
   }
 
-  setValue_fromArray_setMatrixWorldNeedsUpdate(buffer, offset) {
+  setValueFromArraySetMatrixWorldNeedsUpdate(buffer, offset) {
     resolvedProperty.fromArray(buffer, offset);
     targetObject.matrixWorldNeedsUpdate = true;
   }
 
-  getValue_unbound(targetArray, offset) {
+  getValueUnbound(targetArray, offset) {
     bind();
     getValue(targetArray, offset);
 
@@ -413,7 +405,7 @@ class PropertyBinding {
     // become no-ops.
   }
 
-  setValue_unbound(sourceArray, offset) {
+  setValueUnbound(sourceArray, offset) {
     bind();
     setValue(sourceArray, offset);
   }
@@ -434,12 +426,12 @@ class PropertyBinding {
     }
 
     // set fail state so we can just 'return' on error
-    getValue = _getValue_unavailable;
-    setValue = _setValue_unavailable;
+    getValue = _getValueUnavailable;
+    setValue = _setValueUnavailable;
 
     // ensure there is a value node
     if (targetObject == null) {
-      print('three.PropertyBinding: Trying to update node for track: ' + path + ' but it wasn\'t found.');
+      print('three.PropertyBinding: Trying to update node for track: $path but it wasn\'t found.');
       return;
     }
 
@@ -518,21 +510,21 @@ class PropertyBinding {
     }
 
     // determine versioning scheme
-    var versioning = Versioning["None"];
+    var versioning = versioningObject["None"];
 
     this.targetObject = targetObject;
 
     if (targetObject is Material) {
       // material
-      versioning = Versioning["NeedsUpdate"];
+      versioning = versioningObject["NeedsUpdate"];
     } else if (targetObject is Object3D) {
       // node transform
 
-      versioning = Versioning["MatrixWorldNeedsUpdate"];
+      versioning = versioningObject["MatrixWorldNeedsUpdate"];
     }
 
     // determine how the property gets bound
-    var bindingType = BindingType["Direct"];
+    var bindingType = bindingTypeObject["Direct"];
 
     if (propertyIndex != null) {
       // access a sub element of the property array (only primitives are supported right now)
@@ -564,22 +556,22 @@ class PropertyBinding {
         }
       }
 
-      bindingType = BindingType["ArrayElement"];
+      bindingType = bindingTypeObject["ArrayElement"];
 
       resolvedProperty = nodeProperty;
       this.propertyIndex = propertyIndex;
     } else if (nodeProperty is Color || nodeProperty is Vector3 || nodeProperty is Quaternion) {
       // must use copy for Object3D.Euler/Quaternion
 
-      bindingType = BindingType["HasFromToArray"];
+      bindingType = bindingTypeObject["HasFromToArray"];
 
       resolvedProperty = nodeProperty;
     } else if (nodeProperty is List) {
-      bindingType = BindingType["EntireArray"];
+      bindingType = bindingTypeObject["EntireArray"];
 
       resolvedProperty = nodeProperty;
     } else {
-      this.propertyName = propertyName;
+      propertyName = propertyName;
     }
 
     // select getter / setter
@@ -592,15 +584,15 @@ class PropertyBinding {
 
     // back to the prototype version of getValue / setValue
     // note: avoiding to mutate the shape of 'this' via 'delete'
-    getValue = _getValue_unbound;
-    setValue = _setValue_unbound;
+    getValue = _getValueUnbound;
+    setValue = _setValueUnbound;
   }
 
-  _getValue_unbound() {
+  _getValueUnbound() {
     return getValue();
   }
 
-  _setValue_unbound() {
+  _setValueUnbound() {
     return setValue();
   }
 }

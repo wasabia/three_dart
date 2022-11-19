@@ -1,8 +1,6 @@
-
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/core/layers.dart';
 import 'package:three_dart/three3d/materials/index.dart';
-import 'package:three_dart/three3d/materials/material.dart';
 import 'package:three_dart/three3d/objects/index.dart';
 import 'package:three_dart/three3d/renderers/shaders/index.dart';
 import 'package:three_dart/three3d/renderers/web_gl_renderer.dart';
@@ -98,7 +96,7 @@ class WebGLPrograms {
     var customVertexShaderID, customFragmentShaderID;
 
     if (shaderID != null) {
-      var shader = ShaderLib[shaderID];
+      var shader = shaderLib[shaderID];
       vertexShader = shader["vertexShader"];
       fragmentShader = shader["fragmentShader"];
     } else {
@@ -122,7 +120,7 @@ class WebGLPrograms {
 
     parameters.isWebGL2 = isWebGL2;
     parameters.shaderID = shaderID;
-    parameters.shaderName = material.type + " - " + material.name;
+    parameters.shaderName = "${material.type} - ${material.name}";
     parameters.vertexShader = vertexShader!;
     parameters.fragmentShader = fragmentShader!;
     parameters.defines = material.defines;
@@ -206,7 +204,6 @@ class WebGLPrograms {
             material.roughnessMap != null ||
             material.metalnessMap != null ||
             material.clearcoatNormalMap != null ||
-            material.transmission != null ||
             material.transmissionMap != null ||
             material.thicknessMap != null ||
             material.sheen > 0 ||
@@ -285,9 +282,7 @@ class WebGLPrograms {
 
     array.add(parameters.customProgramCacheKey);
 
-    String _key = array.join();
-
-    return _key;
+    return array.join();
   }
 
   getProgramCacheKeyParameters(array, parameters) {
@@ -387,7 +382,7 @@ class WebGLPrograms {
     Map<String, dynamic> uniforms;
 
     if (shaderID != null) {
-      var shader = ShaderLib[shaderID];
+      var shader = shaderLib[shaderID];
       uniforms = cloneUniforms(shader["uniforms"]);
     } else {
       uniforms = material.uniforms;

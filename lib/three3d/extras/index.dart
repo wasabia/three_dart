@@ -1,6 +1,5 @@
 library extras;
 
-
 export 'core/curve.dart';
 export 'core/curve_path.dart';
 export 'core/typr_font.dart';

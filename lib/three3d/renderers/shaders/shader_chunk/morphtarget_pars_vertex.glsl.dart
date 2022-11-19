@@ -1,4 +1,4 @@
-String morphtarget_pars_vertex = """
+String morphtargetParsVertex = """
 #ifdef USE_MORPHTARGETS
 
 	uniform float morphTargetBaseInfluence;

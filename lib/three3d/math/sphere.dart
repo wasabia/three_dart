@@ -1,5 +1,3 @@
-
-
 import 'package:three_dart/three3d/math/index.dart';
 
 class Sphere {
@@ -17,10 +15,10 @@ class Sphere {
   }
 
   List<num> toJSON() {
-    var _data = center.toJSON();
-    _data.add(radius);
+    var data = center.toJSON();
+    data.add(radius);
 
-    return _data;
+    return data;
   }
 
   Sphere set(Vector3 center, double radius) {
@@ -166,10 +164,7 @@ class Sphere {
     if (center.equals(sphere.center) == true) {
       _toFarthestPoint.set(0, 0, 1).multiplyScalar(sphere.radius);
     } else {
-      _toFarthestPoint
-          .subVectors(sphere.center, center)
-          .normalize()
-          .multiplyScalar(sphere.radius);
+      _toFarthestPoint.subVectors(sphere.center, center).normalize().multiplyScalar(sphere.radius);
     }
 
     expandByPoint(_v1.copy(sphere.center).add(_toFarthestPoint));

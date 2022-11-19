@@ -1,4 +1,4 @@
-String linedashed_frag = """
+String linedashedFrag = """
 uniform vec3 diffuse;
 uniform float opacity;
 

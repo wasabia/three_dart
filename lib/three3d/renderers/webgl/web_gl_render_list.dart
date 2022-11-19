@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/materials/index.dart';
 import 'package:three_dart/three3d/renderers/webgl/index.dart';
@@ -183,8 +182,8 @@ class WebGLRenderList {
     } else if (a.renderOrder != b.renderOrder) {
       return a.renderOrder - b.renderOrder;
     } else if (a.z != b.z) {
-      final _v = b.z - a.z;
-      return _v > 0 ? 1 : -1;
+      final v = b.z - a.z;
+      return v > 0 ? 1 : -1;
     } else {
       return a.id - b.id;
     }

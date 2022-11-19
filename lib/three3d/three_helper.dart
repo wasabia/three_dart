@@ -47,7 +47,7 @@ class ThreeHelper {
 
   //make sure rotateAxis is already Normalize:
   static rotatePointWithPoint(Vector3 point, Vector3 rotateAxis, num angle) {
-    var _point = point.clone();
+    var p = point.clone();
 
     var axis = rotateAxis;
 
@@ -55,7 +55,7 @@ class ThreeHelper {
     var matrix = Matrix4();
 
     // Define the rotation in radians:
-    var radians = angle * Math.PI / 180.0;
+    var radians = angle * Math.pi / 180.0;
 
     // Rotate the matrix:
     matrix.makeRotationAxis(axis, radians);
@@ -63,8 +63,8 @@ class ThreeHelper {
     // Now apply the rotation to all vectors in the tree
     // Define the vector3:
 
-    _point.applyMatrix4(matrix);
+    p.applyMatrix4(matrix);
 
-    return _point;
+    return p;
   }
 }

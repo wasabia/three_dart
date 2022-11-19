@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/cameras/index.dart';
 import 'package:three_dart/three3d/core/layers.dart';
 import 'package:three_dart/three3d/core/object_3d.dart';
@@ -8,9 +7,10 @@ class Raycaster {
   late Ray ray;
   late num near;
   late num far;
-  late Camera camera;
   late Layers layers;
   late Map<String, dynamic> params;
+
+  Camera? camera;
 
   Raycaster([Vector3? origin, Vector3? direction, num? near, num? far]) {
     ray = Ray(origin, direction);
@@ -65,18 +65,18 @@ class Raycaster {
       ray.direction.set(0, 0, -1).transformDirection(camera.matrixWorld);
       this.camera = camera;
     } else {
-      print('three.Raycaster: Unsupported camera type: ' + camera.type);
+      print('three.Raycaster: Unsupported camera type: ${camera.type}');
     }
   }
 
   List<Intersection> intersectObject(Object3D object, bool recursive, [List<Intersection>? intersects]) {
-    List<Intersection> _intersects = intersects ?? [];
+    List<Intersection> intersections = intersects ?? [];
 
-    intersectObject4(object, this, _intersects, recursive);
+    intersectObject4(object, this, intersections, recursive);
 
-    _intersects.sort(ascSort);
+    intersections.sort(ascSort);
 
-    return _intersects;
+    return intersections;
   }
 
   List<Intersection> intersectObjects(List<Object3D> objects, bool recursive, [List<Intersection>? intersects]) {

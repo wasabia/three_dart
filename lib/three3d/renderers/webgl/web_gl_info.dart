@@ -1,4 +1,3 @@
-
 class WebGLInfo {
   dynamic gl;
 

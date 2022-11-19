@@ -1,4 +1,4 @@
-String alphatest_fragment = """
+String alphatestFragment = """
 #ifdef USE_ALPHATEST
 
 	if ( diffuseColor.a < alphaTest ) discard;

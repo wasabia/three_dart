@@ -1,7 +1,6 @@
 import 'package:three_dart/three3d/materials/material.dart';
 import 'package:three_dart/three3d/math/vector3.dart';
 
-
 class MeshDistanceMaterial extends Material {
   late Vector3 referencePosition;
   late num nearDistance;

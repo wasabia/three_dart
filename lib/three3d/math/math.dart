@@ -1,16 +1,17 @@
 import 'dart:math' as math;
+
 class Math {
-  static double Infinity = double.maxFinite;
-  static const double PI = math.pi;
-  static double LN2 = math.ln2;
-  static const double EPSILON = 4.94065645841247E-324;
-  static double LOG2E = math.log2e;
-  static double MAX_VALUE = double.maxFinite;
-  static double LN10 = math.ln10;
-  static double SQRT1_2 = math.sqrt1_2;
+  static double infinity = double.maxFinite;
+  static const double pi = math.pi;
+  static double ln2 = math.ln2;
+  static const double epsilon = 4.94065645841247E-324;
+  static double log2e = math.log2e;
+  static double maxValue = double.maxFinite;
+  static double ln10 = math.ln10;
+  static double sqrt1_2 = math.sqrt1_2;
 
   // TODO
-  static int MAX_SAFE_INTEGER = 9007199254740991;
+  static int maxSafeInteger = 9007199254740991;
 
   static T min<T extends num>(T x, T y) {
     return math.min(x, y);
@@ -102,7 +103,7 @@ class Math {
   }
 
   static double log2(num x) {
-    return log(x) / LN2;
+    return log(x) / ln2;
   }
 
   // Random float from <low, high> interval
@@ -116,7 +117,6 @@ class Math {
   }
 }
 
-
 bool isFinite(num v) {
-  return v != Math.Infinity || v != -Math.Infinity;
+  return v != Math.infinity || v != -Math.infinity;
 }

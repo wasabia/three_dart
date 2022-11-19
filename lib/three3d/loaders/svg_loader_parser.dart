@@ -1,8 +1,8 @@
-
 import 'package:three_dart/three3d/dart_helpers.dart';
 import 'package:three_dart/three3d/extras/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 import 'package:universal_html/parsing.dart';
+
 class SVGLoaderParser {
   //
   List<ShapePath> paths = [];
@@ -38,11 +38,8 @@ class SVGLoaderParser {
     "px": {'px': 1}
   };
 
-  SVGLoaderParser(String text, {num defaultDPI = 90, String defaultUnit = "px"}) {
-    xml = parseXmlDocument(text); // application/xml
-
-    this.defaultDPI = defaultDPI;
-    this.defaultUnit = defaultUnit;
+  SVGLoaderParser(String text, {this.defaultDPI = 90, this.defaultUnit = "px"}) {
+    xml = parseXmlDocument(text);
   }
 
   SVGLoaderParser.parser();
@@ -102,22 +99,22 @@ class SVGLoaderParser {
       }
     }
 
-    String _str = "$string";
+    String str = "$string";
     // if(_str.startsWith("-.")) {
     //   _str = _str.replaceFirst("-.", "-0.");
     // }
 
-    List<String> _strs = _str.split(".");
+    List<String> strs = str.split(".");
 
-    if (_strs.length >= 3) {
-      _strs = _strs.sublist(0, 2);
+    if (strs.length >= 3) {
+      strs = strs.sublist(0, 2);
 
-      _str = _strs.join(".");
+      str = strs.join(".");
     }
 
     // print(" string: ${_str} ");
 
-    return scale * num.parse(_str);
+    return scale * num.parse(str);
   }
 
   // from https://github.com/ppvg/svg-numbers (MIT License)
@@ -127,7 +124,7 @@ class SVGLoaderParser {
     }
 
     // Character groups
-    Map<String, dynamic> RE = {
+    Map<String, dynamic> re = {
       "SEPARATOR": RegExp(r"[ \t\r\n\,.\-+]"),
       "WHITESPACE": RegExp(r"[ \t\r\n]"),
       "DIGIT": RegExp(r"[\d]"),
@@ -139,18 +136,18 @@ class SVGLoaderParser {
     };
 
     // States
-    const SEP = 0;
-    const INT = 1;
-    const FLOAT = 2;
-    const EXP = 3;
+    const sepValue = 0;
+    const intValue = 1;
+    const floatValue = 2;
+    const expValue = 3;
 
-    var state = SEP;
+    var state = sepValue;
     var seenComma = true;
     var number = '', exponent = '';
     List<double> result = [];
 
     throwSyntaxError(current, i, partial) {
-      var error = ('Unexpected character "' + current + '" at index ' + i + '.');
+      var error = ('Unexpected character "$current" at index $i.');
       throw (error);
     }
 
@@ -174,35 +171,35 @@ class SVGLoaderParser {
       current = input[i];
 
       // check for flags
-      if (flags is List && flags.contains(result.length % stride) && RE["FLAGS"].hasMatch(current)) {
-        state = INT;
+      if (flags is List && flags.contains(result.length % stride) && re["FLAGS"].hasMatch(current)) {
+        state = intValue;
         number = current;
         newNumber();
         continue;
       }
 
       // parse until next number
-      if (state == SEP) {
+      if (state == sepValue) {
         // eat whitespace
-        if (RE["WHITESPACE"].hasMatch(current)) {
+        if (re["WHITESPACE"].hasMatch(current)) {
           continue;
         }
 
         // start new number
-        if (RE["DIGIT"].hasMatch(current) || RE["SIGN"].hasMatch(current)) {
-          state = INT;
+        if (re["DIGIT"].hasMatch(current) || re["SIGN"].hasMatch(current)) {
+          state = intValue;
           number = current;
           continue;
         }
 
-        if (RE["POINT"].hasMatch(current)) {
-          state = FLOAT;
+        if (re["POINT"].hasMatch(current)) {
+          state = floatValue;
           number = current;
           continue;
         }
 
         // throw on double commas (e.g. "1, , 2")
-        if (RE["COMMA"].hasMatch(current)) {
+        if (re["COMMA"].hasMatch(current)) {
           if (seenComma) {
             throwSyntaxError(current, i, result);
           }
@@ -212,82 +209,82 @@ class SVGLoaderParser {
       }
 
       // parse integer part
-      if (state == INT) {
-        if (RE["DIGIT"].hasMatch(current)) {
+      if (state == intValue) {
+        if (re["DIGIT"].hasMatch(current)) {
           number += current;
           continue;
         }
 
-        if (RE["POINT"].hasMatch(current)) {
+        if (re["POINT"].hasMatch(current)) {
           number += current;
-          state = FLOAT;
+          state = floatValue;
           continue;
         }
 
-        if (RE["EXP"].hasMatch(current)) {
-          state = EXP;
+        if (re["EXP"].hasMatch(current)) {
+          state = expValue;
           continue;
         }
 
         // throw on double signs ("-+1"), but not on sign as separator ("-1-2")
-        if (RE["SIGN"].hasMatch(current) && number.length == 1 && RE["SIGN"].hasMatch(number[0])) {
+        if (re["SIGN"].hasMatch(current) && number.length == 1 && re["SIGN"].hasMatch(number[0])) {
           throwSyntaxError(current, i, result);
         }
       }
 
       // parse decimal part
-      if (state == FLOAT) {
-        if (RE["DIGIT"].hasMatch(current)) {
+      if (state == floatValue) {
+        if (re["DIGIT"].hasMatch(current)) {
           number += current;
           continue;
         }
 
-        if (RE["EXP"].hasMatch(current)) {
-          state = EXP;
+        if (re["EXP"].hasMatch(current)) {
+          state = expValue;
           continue;
         }
 
         // throw on double decimal points (e.g. "1..2")
-        if (RE["POINT"].hasMatch(current) && number[number.length - 1] == '.') {
+        if (re["POINT"].hasMatch(current) && number[number.length - 1] == '.') {
           throwSyntaxError(current, i, result);
         }
       }
 
       // parse exponent part
-      if (state == EXP) {
-        if (RE["DIGIT"].hasMatch(current)) {
+      if (state == expValue) {
+        if (re["DIGIT"].hasMatch(current)) {
           exponent += current;
           continue;
         }
 
-        if (RE["SIGN"].hasMatch(current)) {
+        if (re["SIGN"].hasMatch(current)) {
           if (exponent == '') {
             exponent += current;
             continue;
           }
 
-          if (exponent.length == 1 && RE["SIGN"].hasMatch(exponent)) {
+          if (exponent.length == 1 && re["SIGN"].hasMatch(exponent)) {
             throwSyntaxError(current, i, result);
           }
         }
       }
 
       // end of number
-      if (RE["WHITESPACE"].hasMatch(current)) {
+      if (re["WHITESPACE"].hasMatch(current)) {
         newNumber();
-        state = SEP;
+        state = sepValue;
         seenComma = false;
-      } else if (RE["COMMA"].hasMatch(current)) {
+      } else if (re["COMMA"].hasMatch(current)) {
         newNumber();
-        state = SEP;
+        state = sepValue;
         seenComma = true;
-      } else if (RE["SIGN"].hasMatch(current)) {
+      } else if (re["SIGN"].hasMatch(current)) {
         newNumber();
-        state = INT;
+        state = intValue;
         number = current;
-      } else if (RE["POINT"].hasMatch(current)) {
+      } else if (re["POINT"].hasMatch(current)) {
         newNumber();
-        state = FLOAT;
+        state = floatValue;
         number = current;
       } else {
         throwSyntaxError(current, i, result);
@@ -353,7 +350,7 @@ class SVGLoaderParser {
                 double cy = 0;
 
                 // Angle
-                angle = -array[0] * Math.PI / 180.0;
+                angle = -array[0] * Math.pi / 180.0;
 
                 if (array.length >= 3) {
                   // Center x, y
@@ -387,14 +384,14 @@ class SVGLoaderParser {
 
             case 'skewX':
               if (array.length == 1) {
-                currentTransform.set(1, Math.tan(array[0] * Math.PI / 180), 0, 0, 1, 0, 0, 0, 1);
+                currentTransform.set(1, Math.tan(array[0] * Math.pi / 180), 0, 0, 1, 0, 0, 0, 1);
               }
 
               break;
 
             case 'skewY':
               if (array.length == 1) {
-                currentTransform.set(1, 0, 0, Math.tan(array[0] * Math.PI / 180), 1, 0, 0, 0, 1);
+                currentTransform.set(1, 0, 0, Math.tan(array[0] * Math.pi / 180), 1, 0, 0, 0, 1);
               }
 
               break;
@@ -445,8 +442,8 @@ class SVGLoaderParser {
 
       if (stylesheet.type != 1) continue;
 
-      RegExp _reg = RegExp(r",", multiLine: true);
-      var selectorList = stylesheet.selectorText.split(_reg).map((i) => i.trim()).toList();
+      RegExp reg = RegExp(r",", multiLine: true);
+      var selectorList = stylesheet.selectorText.split(reg).map((i) => i.trim()).toList();
 
       // var selectorList = stylesheet.selectorText
       // 	.split( /,/gm )
@@ -454,12 +451,12 @@ class SVGLoaderParser {
       // 	.map( i => i.trim() );
 
       for (var j = 0; j < selectorList.length; j++) {
-        var _sj = selectorList[j];
+        var sj = selectorList[j];
 
-        if (stylesheets[_sj] == null) {
-          stylesheets[_sj] = {};
+        if (stylesheets[sj] == null) {
+          stylesheets[sj] = {};
         }
-        stylesheets[_sj].addAll(stylesheet.style);
+        stylesheets[sj].addAll(stylesheet.style);
         // stylesheets[ selectorList[ j ] ] = Object.assign(
         // 	stylesheets[ selectorList[ j ] ] || {},
         // 	stylesheet.style
@@ -478,24 +475,24 @@ class SVGLoaderParser {
     var stylesheetStyles = {};
 
     if (node.hasAttribute('class')) {
-      var _reg = RegExp(r"\s");
+      var reg = RegExp(r"\s");
       var classSelectors = node
           .getAttribute('class')
-          .split(_reg)
+          .split(reg)
           // .filter( Boolean )
           .map((i) => i.trim())
           .toList();
 
       for (var i = 0; i < classSelectors.length; i++) {
         // stylesheetStyles = Object.assign( stylesheetStyles, stylesheets[ '.' + classSelectors[ i ] ] );
-        stylesheetStyles.addAll(stylesheets['.' + classSelectors[i]] ?? {});
+        stylesheetStyles.addAll(stylesheets['.${classSelectors[i]}'] ?? {});
       }
     }
 
     if (node.hasAttribute('id')) {
       // stylesheetStyles = Object.assign( stylesheetStyles, stylesheets[ '#' + node.getAttribute( 'id' ) ] );
 
-      stylesheetStyles.addAll(stylesheets['#' + node.getAttribute('id')] ?? {});
+      stylesheetStyles.addAll(stylesheets['#${node.getAttribute('id')}'] ?? {});
     }
 
     void addStyle(svgName, jsName, [adjustFunction]) {
@@ -515,11 +512,11 @@ class SVGLoaderParser {
       }
 
       if (node.style != null) {
-        var _style = node.style;
-        var _value = _style.getPropertyValue(svgName);
-        if (_value != "") {
+        var st = node.style;
+        var val = st.getPropertyValue(svgName);
+        if (val != "") {
           // print("svgName: ${svgName} value: ${_value} ");
-          style2[jsName] = adjustFunction(_value);
+          style2[jsName] = adjustFunction(val);
         }
       }
     }
@@ -561,15 +558,12 @@ class SVGLoaderParser {
     return ang;
   }
 
-  /**
-		 * https://www.w3.org/TR/SVG/implnote.html#ArcImplementationNotes
-		 * https://mortoray.com/2017/02/16/rendering-an-svg-elliptical-arc-as-bezier-curves/ Appendix: Endpoint to center arc conversion
-		 * From
-		 * rx ry x-axis-rotation large-arc-flag sweep-flag x y
-		 * To
-		 * aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise, aRotation
-		 */
-
+  /// https://www.w3.org/TR/SVG/implnote.html#ArcImplementationNotes
+  /// https://mortoray.com/2017/02/16/rendering-an-svg-elliptical-arc-as-bezier-curves/ Appendix: Endpoint to center arc conversion
+  /// From
+  /// rx ry x-axis-rotation large-arc-flag sweep-flag x y
+  /// To
+  /// aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise, aRotation
   parseArcCommand(path, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, start, end) {
     if (rx == 0 || ry == 0) {
       // draw a line if either of the radii == 0
@@ -577,7 +571,7 @@ class SVGLoaderParser {
       return;
     }
 
-    xAxisRotation = xAxisRotation * Math.PI / 180;
+    xAxisRotation = xAxisRotation * Math.pi / 180;
 
     // Ensure radii are positive
     rx = Math.abs(rx);
@@ -620,7 +614,7 @@ class SVGLoaderParser {
 
     // Step 4: Compute θ1 and Δθ
     var theta = svgAngle(1, 0, (x1p - cxp) / rx, (y1p - cyp) / ry);
-    var delta = svgAngle((x1p - cxp) / rx, (y1p - cyp) / ry, (-x1p - cxp) / rx, (-y1p - cyp) / ry) % (Math.PI * 2);
+    var delta = svgAngle((x1p - cxp) / rx, (y1p - cyp) / ry, (-x1p - cxp) / rx, (-y1p - cyp) / ry) % (Math.pi * 2);
 
     path.currentPath.absellipse(cx, cy, rx, ry, theta, theta + delta, sweepFlag == 0, xAxisRotation);
   }
@@ -635,8 +629,8 @@ class SVGLoaderParser {
     var isFirstPoint = true;
     var doSetFirstPoint = false;
 
-    var _reg = RegExp(r"[a-df-z][^a-df-z]*", caseSensitive: false);
-    var commands = _reg.allMatches(d);
+    var reg = RegExp(r"[a-df-z][^a-df-z]*", caseSensitive: false);
+    var commands = reg.allMatches(d);
 
     // var commands = d.match( /[a-df-z][^a-df-z]*/ig );
 
@@ -1040,8 +1034,8 @@ class SVGLoaderParser {
     // };
     // node.getAttribute('points').replace(regex, iterator);
 
-    String _points = node.getAttribute('points');
-    var matches = regex.allMatches(_points);
+    String points = node.getAttribute('points');
+    var matches = regex.allMatches(points);
 
     // print(" _points: ${_points} ");
 
@@ -1104,7 +1098,7 @@ class SVGLoaderParser {
     var r = parseFloatWithUnits(node.getAttribute('r'));
 
     var subpath = Path(null);
-    subpath.absarc(x, y, r, 0, Math.PI * 2, null);
+    subpath.absarc(x, y, r, 0, Math.pi * 2, null);
 
     var path = ShapePath();
     path.subPaths.add(subpath);
@@ -1119,7 +1113,7 @@ class SVGLoaderParser {
     var ry = parseFloatWithUnits(node.getAttribute('ry'));
 
     var subpath = Path(null);
-    subpath.absellipse(x, y, rx, ry, 0, Math.PI * 2, null, null);
+    subpath.absellipse(x, y, rx, ry, 0, Math.pi * 2, null, null);
 
     var path = ShapePath();
     path.subPaths.add(subpath);

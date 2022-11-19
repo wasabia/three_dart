@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/core/object_3d.dart';
 import 'package:three_dart/three3d/lights/light.dart';
 import 'package:three_dart/three3d/math/spherical_harmonics3.dart';

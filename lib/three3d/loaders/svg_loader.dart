@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter_gl/flutter_gl.dart';
@@ -62,9 +61,9 @@ class SVGLoader extends Loader {
 
   // Function parse =========== start
   @override
-  parse(text, [String? path, Function? onLoad, Function? onError]) {
-    var _parse = SVGLoaderParser(text, defaultUnit: defaultUnit, defaultDPI: defaultDPI);
-    return _parse.parse(text);
+  parse(json, [String? path, Function? onLoad, Function? onError]) {
+    var parse = SVGLoaderParser(json, defaultUnit: defaultUnit, defaultDPI: defaultDPI);
+    return parse.parse(json);
   }
   // Function parse ================ end
 
@@ -126,9 +125,9 @@ class SVGLoader extends Loader {
     // Param shapePath: a shapepath as returned by the parse function of this class
     // Returns Shape object
 
-    const BIGNUMBER = 99999999999999.0;
+    const bugNumber = 99999999999999.0;
 
-    var IntersectionLocationType = {
+    var intersectionLocationType = {
       "ORIGIN": 0,
       "DESTINATION": 1,
       "BETWEEN": 2,
@@ -138,7 +137,7 @@ class SVGLoader extends Loader {
       "BEYOND": 6
     };
 
-    Map<String, dynamic> classifyResult = {"loc": IntersectionLocationType["ORIGIN"], "t": 0};
+    Map<String, dynamic> classifyResult = {"loc": intersectionLocationType["ORIGIN"], "t": 0};
 
     classifyPoint(p, edgeStart, edgeEnd) {
       var ax = edgeEnd.x - edgeStart.x;
@@ -148,34 +147,34 @@ class SVGLoader extends Loader {
       var sa = ax * by - bx * ay;
 
       if ((p.x == edgeStart.x) && (p.y == edgeStart.y)) {
-        classifyResult["loc"] = IntersectionLocationType["ORIGIN"];
+        classifyResult["loc"] = intersectionLocationType["ORIGIN"];
         classifyResult["t"] = 0;
         return;
       }
 
       if ((p.x == edgeEnd.x) && (p.y == edgeEnd.y)) {
-        classifyResult["loc"] = IntersectionLocationType["DESTINATION"];
+        classifyResult["loc"] = intersectionLocationType["DESTINATION"];
         classifyResult["t"] = 1;
         return;
       }
 
-      if (sa < -Math.EPSILON) {
-        classifyResult["loc"] = IntersectionLocationType["LEFT"];
+      if (sa < -Math.epsilon) {
+        classifyResult["loc"] = intersectionLocationType["LEFT"];
         return;
       }
 
-      if (sa > Math.EPSILON) {
-        classifyResult["loc"] = IntersectionLocationType["RIGHT"];
+      if (sa > Math.epsilon) {
+        classifyResult["loc"] = intersectionLocationType["RIGHT"];
         return;
       }
 
       if (((ax * bx) < 0) || ((ay * by) < 0)) {
-        classifyResult["loc"] = IntersectionLocationType["BEHIND"];
+        classifyResult["loc"] = intersectionLocationType["BEHIND"];
         return;
       }
 
       if ((Math.sqrt(ax * ax + ay * ay)) < (Math.sqrt(bx * bx + by * by))) {
-        classifyResult["loc"] = IntersectionLocationType["BEYOND"];
+        classifyResult["loc"] = intersectionLocationType["BEYOND"];
         return;
       }
 
@@ -187,7 +186,7 @@ class SVGLoader extends Loader {
         t = by / ay;
       }
 
-      classifyResult["loc"] = IntersectionLocationType["BETWEEN"];
+      classifyResult["loc"] = intersectionLocationType["BETWEEN"];
       classifyResult["t"] = t;
     }
 
@@ -217,10 +216,10 @@ class SVGLoader extends Loader {
         for (var i = 0; i < 2; i++) {
           classifyPoint(i == 0 ? b0 : b1, a0, a1);
           //find position of this endpoints relatively to edge1
-          if (classifyResult["loc"] == IntersectionLocationType["ORIGIN"]) {
+          if (classifyResult["loc"] == intersectionLocationType["ORIGIN"]) {
             var point = (i == 0 ? b0 : b1);
             return {"x": point.x, "y": point.y, "t": classifyResult["t"]};
-          } else if (classifyResult["loc"] == IntersectionLocationType["BETWEEN"]) {
+          } else if (classifyResult["loc"] == intersectionLocationType["BETWEEN"]) {
             var x = num.parse((x1 + classifyResult["t"]! * (x2 - x1)).toStringAsPrecision(10));
             var y = num.parse((y1 + classifyResult["t"]! * (y2 - y1)).toStringAsPrecision(10));
             return {"x": x, "y": y, "t": classifyResult["t"]};
@@ -234,7 +233,7 @@ class SVGLoader extends Loader {
         for (var i = 0; i < 2; i++) {
           classifyPoint(i == 0 ? b0 : b1, a0, a1);
 
-          if (classifyResult["loc"] == IntersectionLocationType["ORIGIN"]) {
+          if (classifyResult["loc"] == intersectionLocationType["ORIGIN"]) {
             var point = (i == 0 ? b0 : b1);
             return {"x": point.x, "y": point.y, "t": classifyResult["t"]};
           }
@@ -262,7 +261,7 @@ class SVGLoader extends Loader {
 
           if (intersection != null &&
               intersectionsRaw.indexWhere(
-                      (i) => i["t"] <= intersection["t"] + Math.EPSILON && i["t"] >= intersection["t"] - Math.EPSILON) <
+                      (i) => i["t"] <= intersection["t"] + Math.epsilon && i["t"] >= intersection["t"] - Math.epsilon) <
                   0) {
             intersectionsRaw.add(intersection);
             intersections.add(Vector2(intersection["x"], intersection["y"]));
@@ -299,9 +298,9 @@ class SVGLoader extends Loader {
       return allIntersections;
     }
 
-    isHoleTo(simplePath, allPaths, scanlineMinX, scanlineMaxX, _fillRule) {
-      if (_fillRule == null || _fillRule == '') {
-        _fillRule = 'nonzero';
+    isHoleTo(simplePath, allPaths, scanlineMinX, scanlineMaxX, fillRule) {
+      if (fillRule == null || fillRule == '') {
+        fillRule = 'nonzero';
       }
 
       var centerBoundingBox = Vector2();
@@ -344,12 +343,12 @@ class SVGLoader extends Loader {
 
       stack.add(simplePath["identifier"]);
 
-      if (_fillRule == 'evenodd') {
+      if (fillRule == 'evenodd') {
         var isHole = stack.length % 2 == 0 ? true : false;
         var isHoleFor = stack[stack.length - 2];
 
         return {"identifier": simplePath["identifier"], "isHole": isHole, "for": isHoleFor};
-      } else if (_fillRule == 'nonzero') {
+      } else if (fillRule == 'nonzero') {
         // check if path is a hole by counting the amount of paths with alternating rotations it has to cross.
         var isHole = true;
         var isHoleFor;
@@ -369,7 +368,7 @@ class SVGLoader extends Loader {
 
         return {"identifier": simplePath["identifier"], "isHole": isHole, "for": isHoleFor};
       } else {
-        print('fill-rule: "' + _fillRule + '" is currently not implemented.');
+        print('fill-rule: $fillRule is currently not implemented.');
       }
     }
 
@@ -382,15 +381,15 @@ class SVGLoader extends Loader {
     // prepare paths for hole detection
     var identifier = 0;
 
-    num scanlineMinX = BIGNUMBER;
-    num scanlineMaxX = -BIGNUMBER;
+    num scanlineMinX = bugNumber;
+    num scanlineMaxX = -bugNumber;
 
     List simplePaths = shapePath.subPaths.map((p) {
       var points = p.getPoints();
-      double maxY = -BIGNUMBER;
-      double minY = BIGNUMBER;
-      double maxX = -BIGNUMBER;
-      double minX = BIGNUMBER;
+      double maxY = -bugNumber;
+      double minY = bugNumber;
+      double maxX = -bugNumber;
+      double minX = bugNumber;
 
       //points.forEach(p => p.y *= -1);
 

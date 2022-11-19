@@ -1,23 +1,12 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class PlaneGeometry extends BufferGeometry {
-  PlaneGeometry(
-      [num width = 1,
-      num height = 1,
-      num widthSegments = 1,
-      num heightSegments = 1])
-      : super() {
+  PlaneGeometry([num width = 1, num height = 1, num widthSegments = 1, num heightSegments = 1]) : super() {
     type = 'PlaneGeometry';
 
-    parameters = {
-      "width": width,
-      "height": height,
-      "widthSegments": widthSegments,
-      "heightSegments": heightSegments
-    };
+    parameters = {"width": width, "height": height, "widthSegments": widthSegments, "heightSegments": heightSegments};
 
     num widthHalf = width / 2.0;
     num heightHalf = height / 2.0;
@@ -66,16 +55,12 @@ class PlaneGeometry extends BufferGeometry {
     }
 
     setIndex(indices);
-    setAttribute('position',
-        Float32BufferAttribute(Float32Array.from(vertices), 3, false));
-    setAttribute('normal',
-        Float32BufferAttribute(Float32Array.from(normals), 3, false));
-    setAttribute(
-        'uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
+    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    setAttribute('normal', Float32BufferAttribute(Float32Array.from(normals), 3, false));
+    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
   }
 
   static fromJSON(data) {
-    return PlaneGeometry(data["width"], data["height"],
-        data["widthSegments"], data["heightSegments"]);
+    return PlaneGeometry(data["width"], data["height"], data["widthSegments"], data["heightSegments"]);
   }
 }

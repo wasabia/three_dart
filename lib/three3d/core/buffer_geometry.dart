@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter_gl/flutter_gl.dart';
@@ -66,16 +65,16 @@ class BufferGeometry with EventDispatcher {
   }
 
   static BufferGeometry castJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) {
-    String _type = json["type"];
+    String type = json["type"];
 
-    if (_type == "BufferGeometry") {
+    if (type == "BufferGeometry") {
       return BufferGeometry.fromJSON(json, rootJSON);
-    } else if (_type == "ShapeBufferGeometry") {
+    } else if (type == "ShapeBufferGeometry") {
       return ShapeGeometry.fromJSON(json, rootJSON);
-    } else if (_type == "ExtrudeBufferGeometry") {
+    } else if (type == "ExtrudeBufferGeometry") {
       return ExtrudeGeometry.fromJSON(json, rootJSON);
     } else {
-      throw (" BufferGeometry castJSON _type: $_type is not support yet ");
+      throw (" BufferGeometry castJSON _type: $type is not support yet ");
     }
   }
 
@@ -285,9 +284,9 @@ class BufferGeometry with EventDispatcher {
       print(
           'three.BufferGeometry.computeBoundingBox(): GLBufferAttribute requires a manual bounding box. Alternatively set "mesh.frustumCulled" to "false". ${this}');
 
-      double Infinity = 9999999999.0;
+      double inf = 9999999999.0;
 
-      boundingBox!.set(Vector3(-Infinity, -Infinity, -Infinity), Vector3(Infinity, Infinity, Infinity));
+      boundingBox!.set(Vector3(-inf, -inf, -inf), Vector3(inf, inf, inf));
 
       return;
     }
@@ -866,7 +865,7 @@ class BufferGeometry with EventDispatcher {
 
     // used for storing cloned, shared data
 
-    var data = {};
+    // var data = {};
 
     // name
 
@@ -963,7 +962,7 @@ class BufferGeometryParameters {
   late num bevelOffset;
   late num bevelSegments;
   late Curve extrudePath;
-  late dynamic UVGenerator;
+  late dynamic uVGenerator;
   late num amount;
 
   // UVGenerator

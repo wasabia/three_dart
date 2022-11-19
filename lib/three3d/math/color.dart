@@ -1,4 +1,3 @@
-
 import 'package:three_dart/three3d/constants.dart';
 import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/dart_helpers.dart';
@@ -199,7 +198,7 @@ class Color {
   double g = 1.0;
   double b = 1.0;
 
-  static const Map<String, int> NAMES = _colorKeywords;
+  static const Map<String, int> names = _colorKeywords;
 
   /// Color class.
   /// r g b value range (0.0 ~ 1.0)
@@ -237,22 +236,22 @@ class Color {
 
   //
   factory Color.setRGB255(int r, int g, int b) {
-    var _color = Color(r / 255.0, g / 255.0, b / 255.0);
+    var color = Color(r / 255.0, g / 255.0, b / 255.0);
 
-    return _color;
+    return color;
   }
 
   factory Color.setRGBArray(List<double> cl) {
-    var _color = Color(cl[0], cl[1], cl[2]);
+    var color = Color(cl[0], cl[1], cl[2]);
 
-    return _color;
+    return color;
   }
 
   // 0 ~ 255
   factory Color.fromArray(List<int> list) {
-    var _color = Color.setRGB255(list[0], list[1], list[2]);
+    var color = Color.setRGB255(list[0], list[1], list[2]);
 
-    return _color;
+    return color;
   }
 
   static Color fromHex(int hex) {
@@ -323,10 +322,10 @@ class Color {
       }
     }
 
-    var _reg1 = RegExp(r"^\#([A-Fa-f\d]+)$");
+    var reg1 = RegExp(r"^\#([A-Fa-f\d]+)$");
 
-    if (_reg1.hasMatch(style)) {
-      var match = _reg1.firstMatch(style);
+    if (reg1.hasMatch(style)) {
+      var match = reg1.firstMatch(style);
       var hex = match!.group(1)!;
       var size = hex.length;
 
@@ -346,10 +345,10 @@ class Color {
         return this;
       }
     } else {
-      var _reg2 = RegExp(r"^((?:rgb|hsl)a?)\(\s*([^\)]*)\)");
+      var reg2 = RegExp(r"^((?:rgb|hsl)a?)\(\s*([^\)]*)\)");
 
-      if (_reg2.hasMatch(style)) {
-        var match = _reg2.firstMatch(style)!;
+      if (reg2.hasMatch(style)) {
+        var match = reg2.firstMatch(style)!;
 
         // print(" match.groupCount: ${match.groupCount} 1: ${match.group(1)} 2: ${match.group(2)} ");
 
@@ -359,9 +358,9 @@ class Color {
         switch (name) {
           case 'rgb':
           case 'rgba':
-            var _colorReg1 = RegExp(r"^(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d*\.?\d+)\s*)?$");
-            if (_colorReg1.hasMatch(components)) {
-              var match1 = _colorReg1.firstMatch(components)!;
+            var colorReg1 = RegExp(r"^(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d*\.?\d+)\s*)?$");
+            if (colorReg1.hasMatch(components)) {
+              var match1 = colorReg1.firstMatch(components)!;
 
               var c1 = match1.group(1)!;
               var c2 = match1.group(2)!;
@@ -378,9 +377,9 @@ class Color {
 
               return this;
             } else {
-              var _colorReg2 = RegExp(r"^(\d+)\%\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$");
-              if (_colorReg2.hasMatch(components)) {
-                var match2 = _colorReg2.firstMatch(components)!;
+              var colorReg2 = RegExp(r"^(\d+)\%\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$");
+              if (colorReg2.hasMatch(components)) {
+                var match2 = colorReg2.firstMatch(components)!;
 
                 var c1 = match2.group(1)!;
                 var c2 = match2.group(2)!;
@@ -404,9 +403,9 @@ class Color {
 
           case 'hsl':
           case 'hsla':
-            var _colorReg3 = RegExp(r"^(\d*\.?\d+)\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$");
-            if (_colorReg3.hasMatch(components)) {
-              var match3 = _colorReg3.firstMatch(components)!;
+            var colorReg3 = RegExp(r"^(\d*\.?\d+)\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$");
+            if (colorReg3.hasMatch(components)) {
+              var match3 = colorReg3.firstMatch(components)!;
 
               var c1 = match3.group(1)!;
               var c2 = match3.group(2)!;
@@ -452,7 +451,7 @@ class Color {
       setHex(hex, colorSpace);
     } else {
       // unknown color
-      print('three.Color: Unknown color ' + style);
+      print('three.Color: Unknown color $style');
     }
 
     return this;
@@ -509,17 +508,17 @@ class Color {
   }
 
   Color copySRGBToLinear(Color color) {
-    r = SRGBToLinear(color.r);
-    g = SRGBToLinear(color.g);
-    b = SRGBToLinear(color.b);
+    r = sRGBToLinear(color.r);
+    g = sRGBToLinear(color.g);
+    b = sRGBToLinear(color.b);
 
     return this;
   }
 
   Color copyLinearToSRGB(Color color) {
-    r = LinearToSRGB(color.r);
-    g = LinearToSRGB(color.g);
-    b = LinearToSRGB(color.b);
+    r = linearToSRGB(color.r);
+    g = linearToSRGB(color.g);
+    b = linearToSRGB(color.b);
 
     return this;
   }
@@ -543,8 +542,8 @@ class Color {
   }
 
   String getHexString([String colorSpace = SRGBColorSpace]) {
-    String _str = ('000000' + getHex().toRadixString(16));
-    return _str.substring(_str.length - 6);
+    String str = '000000${getHex().toRadixString(16)}';
+    return str.substring(str.length - 6);
   }
 
   // target map target = { "h": 0, "s": 0, "l": 0 };
@@ -717,7 +716,7 @@ class Color {
   /// so have to set array length enough first.
   // It's working, but ugly. consider to adds a new function:
   // toBufferAttribute(BufferAttribute attribute, int index) ???
-  toArray([array, int offset = 0]) {
+  List<double> toArray([array, int offset = 0]) {
     array ??= List<double>.filled(3, 0.0);
 
     array[offset] = r;

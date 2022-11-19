@@ -1,4 +1,3 @@
-
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/cameras/index.dart';
 import 'package:three_dart/three3d/constants.dart';
@@ -6,7 +5,6 @@ import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/lights/index.dart';
 import 'package:three_dart/three3d/materials/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
-import 'package:three_dart/three3d/math/vector2.dart';
 import 'package:three_dart/three3d/objects/index.dart';
 import 'package:three_dart/three3d/renderers/index.dart';
 import 'package:three_dart/three3d/renderers/shaders/index.dart';
@@ -62,13 +60,13 @@ class WebGLShadowMap {
         "resolution": {"value": Vector2(null, null)},
         "radius": {"value": 4.0}
       },
-      "vertexShader": vsm_vert,
-      "fragmentShader": vsm_frag
+      "vertexShader": vsmCert,
+      "fragmentShader": vsmFrag
     });
 
-    var _float32List = Float32Array.from([-1.0, -1.0, 0.5, 3.0, -1.0, 0.5, -1.0, 3.0, 0.5]);
+    var float32List = Float32Array.from([-1.0, -1.0, 0.5, 3.0, -1.0, 0.5, -1.0, 3.0, 0.5]);
 
-    fullScreenTri.setAttribute('position', Float32BufferAttribute(_float32List, 3, false));
+    fullScreenTri.setAttribute('position', Float32BufferAttribute(float32List, 3, false));
 
     fullScreenMesh = Mesh(fullScreenTri, shadowMaterialVertical);
 
@@ -88,13 +86,13 @@ class WebGLShadowMap {
     var activeCubeFace = _renderer.getActiveCubeFace();
     var activeMipmapLevel = _renderer.getActiveMipmapLevel();
 
-    var _state = _renderer.state;
+    var state = _renderer.state;
 
     // Set GL state for depth map.
-    _state.setBlending(NoBlending);
-    _state.buffers["color"].setClear(1.0, 1.0, 1.0, 1.0, false);
-    _state.buffers["depth"].setTest(true);
-    _state.setScissorTest(false);
+    state.setBlending(NoBlending);
+    state.buffers["color"].setClear(1.0, 1.0, 1.0, 1.0, false);
+    state.buffers["depth"].setTest(true);
+    state.setScissorTest(false);
 
     // render depth map
 
@@ -131,7 +129,7 @@ class WebGLShadowMap {
 
       if (shadow.map == null && shadow is! PointLightShadow && type == VSMShadowMap) {
         shadow.map = WebGLRenderTarget(_shadowMapSize.x.toInt(), _shadowMapSize.y.toInt());
-        shadow.map!.texture.name = light.name + '.shadowMap';
+        shadow.map!.texture.name = '${light.name}.shadowMap';
 
         shadow.mapPass = WebGLRenderTarget(_shadowMapSize.x.toInt(), _shadowMapSize.y.toInt());
 
@@ -143,7 +141,7 @@ class WebGLShadowMap {
             WebGLRenderTargetOptions({"minFilter": NearestFilter, "magFilter": NearestFilter, "format": RGBAFormat});
 
         shadow.map = WebGLRenderTarget(_shadowMapSize.x.toInt(), _shadowMapSize.y.toInt(), pars);
-        shadow.map!.texture.name = light.name + '.shadowMap';
+        shadow.map!.texture.name = '${light.name}.shadowMap';
 
         shadow.camera!.updateProjectionMatrix();
       }
@@ -159,7 +157,7 @@ class WebGLShadowMap {
         _viewport.set(_viewportSize.x * viewport.x, _viewportSize.y * viewport.y, _viewportSize.x * viewport.z,
             _viewportSize.y * viewport.w);
 
-        _state.viewport(_viewport);
+        state.viewport(_viewport);
 
         shadow.updateMatrices(light, viewportIndex: vp);
 
@@ -171,7 +169,7 @@ class WebGLShadowMap {
       // do blur pass for VSM
 
       if (shadow is! PointLightShadow && type == VSMShadowMap) {
-        VSMPass(shadow, camera);
+        vSMPass(shadow, camera);
       }
 
       shadow.needsUpdate = false;
@@ -182,7 +180,7 @@ class WebGLShadowMap {
     _renderer.setRenderTarget(currentRenderTarget, activeCubeFace, activeMipmapLevel);
   }
 
-  void VSMPass(LightShadow shadow, Camera camera) {
+  void vSMPass(LightShadow shadow, Camera camera) {
     var geometry = _objects.update(fullScreenMesh);
 
     if (shadowMaterialVertical.defines!["VSM_SAMPLES"] != shadow.blurSamples) {

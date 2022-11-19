@@ -306,7 +306,7 @@ class _MyAppState extends State<WebGlShadowContact> {
     var material = three.MeshNormalMaterial();
 
     for (var i = 0, l = geometries.length; i < l; i++) {
-      var angle = (i / l) * three.Math.PI * 2;
+      var angle = (i / l) * three.Math.pi * 2;
 
       var geometry = geometries[i];
       var mesh = three.Mesh(geometry, material);
@@ -332,7 +332,7 @@ class _MyAppState extends State<WebGlShadowContact> {
     renderTargetBlur.texture.generateMipmaps = false;
 
     // make a plane and make it face up
-    var planeGeometry = three.PlaneGeometry(planeWidth, planeHeight).rotateX(three.Math.PI / 2);
+    var planeGeometry = three.PlaneGeometry(planeWidth, planeHeight).rotateX(three.Math.pi / 2);
     var planeMaterial = three.MeshBasicMaterial({
       "map": renderTarget2.texture,
       "opacity": state["shadow"]!["opacity"]!,
@@ -360,13 +360,13 @@ class _MyAppState extends State<WebGlShadowContact> {
       "depthWrite": false,
     });
     fillPlane = three.Mesh(planeGeometry, fillPlaneMaterial);
-    fillPlane.rotateX(three.Math.PI);
+    fillPlane.rotateX(three.Math.pi);
     shadowGroup.add(fillPlane);
 
     // the camera to render the depth material from
     shadowCamera =
         three.OrthographicCamera(-planeWidth / 2, planeWidth / 2, planeHeight / 2, -planeHeight / 2, 0, cameraHeight);
-    shadowCamera.rotation.x = three.Math.PI / 2; // get the camera to look up
+    shadowCamera.rotation.x = three.Math.pi / 2; // get the camera to look up
     shadowGroup.add(shadowCamera);
 
     cameraHelper = three.CameraHelper(shadowCamera);
@@ -385,10 +385,10 @@ class _MyAppState extends State<WebGlShadowContact> {
     depthMaterial.depthTest = false;
     depthMaterial.depthWrite = false;
 
-    horizontalBlurMaterial = three.ShaderMaterial(three_jsm.HorizontalBlurShader);
+    horizontalBlurMaterial = three.ShaderMaterial(three_jsm.horizontalBlurShader);
     horizontalBlurMaterial.depthTest = false;
 
-    verticalBlurMaterial = three.ShaderMaterial(three_jsm.VerticalBlurShader);
+    verticalBlurMaterial = three.ShaderMaterial(three_jsm.verticalBlurShader);
     verticalBlurMaterial.depthTest = false;
 
     inited = true;

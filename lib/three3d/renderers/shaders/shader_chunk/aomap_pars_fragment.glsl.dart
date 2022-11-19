@@ -1,4 +1,4 @@
-String aomap_pars_fragment = """
+String aomapParsFragment = """
 #ifdef USE_AOMAP
 
 	uniform sampler2D aoMap;
