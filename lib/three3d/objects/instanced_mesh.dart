@@ -12,7 +12,8 @@ List<Intersection> _instanceIntersects = [];
 var _mesh = Mesh(BufferGeometry(), Material());
 
 class InstancedMesh extends Mesh {
-  InstancedMesh(BufferGeometry? geometry, material, int count) : super(geometry, material) {
+  InstancedMesh(BufferGeometry? geometry, material, int count)
+      : super(geometry, material) {
     type = "InstancedMesh";
 
     var dl = Float32Array(count * 16);
@@ -81,10 +82,11 @@ class InstancedMesh extends Mesh {
     }
   }
 
-  List setColorAt(int index, Color color) {
-    instanceColor ??= InstancedBufferAttribute(Float32Array((instanceMatrix!.count * 3).toInt()), 3, false);
+  void setColorAt(int index, Color color) {
+    instanceColor ??= InstancedBufferAttribute(
+        Float32Array((instanceMatrix!.count * 3).toInt()), 3, false);
 
-    return color.toArray(instanceColor!.array, index * 3);
+    color.toArray(instanceColor!.array, index);
   }
 
   void setMatrixAt(int index, Matrix4 matrix) {

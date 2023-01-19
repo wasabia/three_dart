@@ -12,7 +12,8 @@ class ConvexHull {
 
   num tolerance = -1;
   List<Face2> faces = []; // the generated faces of the convex hull
-  List<Face2> newFace2s = []; // this array holds the faces that are generated within a single iteration
+  List<Face2> newFace2s =
+      []; // this array holds the faces that are generated within a single iteration
 
   VertexList assigned = VertexList();
   VertexList unassigned = VertexList();
@@ -77,7 +78,9 @@ class ConvexHull {
             for (var i = 0, l = attribute.count; i < l; i++) {
               point = Vector3.init();
 
-              point.fromBufferAttribute(attribute, i).applyMatrix4(node.matrixWorld);
+              point
+                  .fromBufferAttribute(attribute, i)
+                  .applyMatrix4(node.matrixWorld);
 
               points.add(point);
             }
@@ -488,8 +491,12 @@ class ConvexHull {
     } else {
       // the face is able to see the point so 'plane.normal' is pointing inside the tetrahedron
 
-      faces.addAll(
-          [Face2.create(v0, v2, v1), Face2.create(v3, v0, v1), Face2.create(v3, v1, v2), Face2.create(v3, v2, v0)]);
+      faces.addAll([
+        Face2.create(v0, v2, v1),
+        Face2.create(v3, v0, v1),
+        Face2.create(v3, v1, v2),
+        Face2.create(v3, v2, v0)
+      ]);
 
       // set the twin edge
 
@@ -736,7 +743,8 @@ class Face2 {
   num area = 0;
 
   num constant = 0; // signed distance from face to the origin
-  VertexNode? outside; // reference to a vertex in a vertex list this face can see
+  VertexNode?
+      outside; // reference to a vertex in a vertex list this face can see
   num mark = visible;
   HalfEdge? edge;
 
