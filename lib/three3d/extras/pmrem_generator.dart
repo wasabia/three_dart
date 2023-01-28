@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_gl/flutter_gl.dart';
@@ -183,8 +184,11 @@ class PMREMGenerator {
   }
 
   _fromTexture(texture, [renderTarget]) {
-    if (texture.mapping == CubeReflectionMapping || texture.mapping == CubeRefractionMapping) {
-      _setSize(texture.image.length == 0 ? 16 : (texture.image[0].width ?? texture.image[0].image.width));
+    if (texture.mapping == CubeReflectionMapping ||
+        texture.mapping == CubeRefractionMapping) {
+      _setSize(texture.image.length == 0
+          ? 16
+          : (texture.image[0].width ?? texture.image[0].image.width));
     } else {
       // Equirectangular
 
@@ -292,7 +296,8 @@ class PMREMGenerator {
         cubeCamera.lookAt(Vector3(0, 0, forwardSign[i]));
       }
       var size = _cubeSize;
-      _setViewport(cubeUVRenderTarget, col * size, i > 2 ? size : 0, size, size);
+      _setViewport(
+          cubeUVRenderTarget, col * size, i > 2 ? size : 0, size, size);
       renderer.setRenderTarget(cubeUVRenderTarget);
       if (useSolidColor) {
         renderer.render(backgroundBox, cubeCamera);
@@ -310,12 +315,14 @@ class PMREMGenerator {
   _textureToCubeUV(texture, cubeUVRenderTarget) {
     var renderer = _renderer;
 
-    bool isCubeTexture = (texture.mapping == CubeReflectionMapping || texture.mapping == CubeRefractionMapping);
+    bool isCubeTexture = (texture.mapping == CubeReflectionMapping ||
+        texture.mapping == CubeRefractionMapping);
 
     if (isCubeTexture) {
       _cubemapMaterial ??= _getCubemapShader();
 
-      _cubemapMaterial.uniforms["flipEnvMap"]["value"] = (texture.isRenderTargetTexture == false) ? -1 : 1;
+      _cubemapMaterial.uniforms["flipEnvMap"]["value"] =
+          (texture.isRenderTargetTexture == false) ? -1 : 1;
     } else {
       _equirectMaterial ??= _getEquirectMaterial();
     }
@@ -345,7 +352,8 @@ class PMREMGenerator {
     renderer.autoClear = false;
 
     for (var i = 1; i < _lodPlanes.length; i++) {
-      var sigma = Math.sqrt(_sigmas[i] * _sigmas[i] - _sigmas[i - 1] * _sigmas[i - 1]);
+      var sigma =
+          Math.sqrt(_sigmas[i] * _sigmas[i] - _sigmas[i - 1] * _sigmas[i - 1]);
 
       var poleAxis = _axisDirections[(i - 1) % _axisDirections.length];
 
@@ -413,9 +421,13 @@ class PMREMGenerator {
     var blurUniforms = blurMaterial.uniforms;
 
     var pixels = _sizeLods[lodIn] - 1;
-    var radiansPerPixel = isFinite(sigmaRadians) ? Math.pi / (2 * pixels) : 2 * Math.pi / (2 * maxSamples - 1);
+    var radiansPerPixel = isFinite(sigmaRadians)
+        ? Math.pi / (2 * pixels)
+        : 2 * Math.pi / (2 * maxSamples - 1);
     var sigmaPixels = sigmaRadians / radiansPerPixel;
-    var samples = isFinite(sigmaRadians) ? 1 + Math.floor(stddev * sigmaPixels) : maxSamples;
+    var samples = isFinite(sigmaRadians)
+        ? 1 + Math.floor(stddev * sigmaPixels)
+        : maxSamples;
 
     if (samples > maxSamples) {
       print(
@@ -454,7 +466,9 @@ class PMREMGenerator {
     blurUniforms['mipInt']["value"] = _lodMax - lodIn;
 
     var outputSize = _sizeLods[lodOut];
-    var x = 3 * outputSize * (lodOut > _lodMax - lodMin ? lodOut - _lodMax + lodMin : 0);
+    var x = 3 *
+        outputSize *
+        (lodOut > _lodMax - lodMin ? lodOut - _lodMax + lodMin : 0);
     var y = 4 * (_cubeSize - outputSize);
 
     _setViewport(targetOut, x, y, 3 * outputSize, 2 * outputSize);
@@ -540,9 +554,11 @@ class PMREMGenerator {
       }
 
       var planes = BufferGeometry();
-      planes.setAttribute('position', Float32BufferAttribute(position, positionSize, false));
+      planes.setAttribute(
+          'position', Float32BufferAttribute(position, positionSize, false));
       planes.setAttribute('uv', Float32BufferAttribute(uv, uvSize, false));
-      planes.setAttribute('faceIndex', Float32BufferAttribute(faceIndex, faceIndexSize, false));
+      planes.setAttribute(
+          'faceIndex', Float32BufferAttribute(faceIndex, faceIndexSize, false));
       lodPlanes.add(planes);
 
       if (lod > lodMin) {
@@ -554,7 +570,8 @@ class PMREMGenerator {
   }
 
   _createRenderTarget(int width, int height, params) {
-    var cubeUVRenderTarget = WebGLRenderTarget(width, height, WebGLRenderTargetOptions(params));
+    var cubeUVRenderTarget =
+        WebGLRenderTarget(width, height, WebGLRenderTargetOptions(params));
     cubeUVRenderTarget.texture.mapping = CubeUVReflectionMapping;
     cubeUVRenderTarget.texture.name = 'PMREM.cubeUv';
     cubeUVRenderTarget.scissorTest = true;
