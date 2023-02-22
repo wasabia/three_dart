@@ -105,7 +105,6 @@ class KeyframeTrack {
           setInterpolation(defaultInterpolation);
         } else {
           throw (message); // fatal, in this case
-
         }
       }
 
@@ -208,14 +207,14 @@ class KeyframeTrack {
 
     var valueSize = getValueSize();
     if (valueSize - Math.floor(valueSize) != 0) {
-      print('three.KeyframeTrack: Invalid value size in track. ${this}');
+      print('three.KeyframeTrack: Invalid value size in track. $this');
       valid = false;
     }
 
     var times = this.times, nKeys = times.length;
 
     if (nKeys == 0) {
-      print('three.KeyframeTrack: Track is empty. ${this}');
+      print('three.KeyframeTrack: Track is empty. $this');
       valid = false;
     }
 
@@ -225,7 +224,7 @@ class KeyframeTrack {
       var currTime = times[i];
 
       if (prevTime != null && prevTime > currTime) {
-        print('three.KeyframeTrack: Out of order keys.${this} i: $i currTime: $currTime prevTime: $prevTime');
+        print('three.KeyframeTrack: Out of order keys. $this i: $i currTime: $currTime prevTime: $prevTime');
         valid = false;
         break;
       }

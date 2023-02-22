@@ -282,7 +282,7 @@ class BufferGeometry with EventDispatcher {
 
     if (position != null && position is GLBufferAttribute) {
       print(
-          'three.BufferGeometry.computeBoundingBox(): GLBufferAttribute requires a manual bounding box. Alternatively set "mesh.frustumCulled" to "false". ${this}');
+          'three.BufferGeometry.computeBoundingBox(): GLBufferAttribute requires a manual bounding box. Alternatively set "mesh.frustumCulled" to "false". $this');
 
       double inf = 9999999999.0;
 
@@ -404,7 +404,7 @@ class BufferGeometry with EventDispatcher {
 
       if (boundingSphere?.radius == null) {
         print(
-            'three.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values. ${this}');
+            'three.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values. $this');
       }
     }
   }
