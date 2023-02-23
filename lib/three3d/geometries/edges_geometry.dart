@@ -8,6 +8,8 @@ class EdgesGeometry extends BufferGeometry {
   final _normal = Vector3.init();
   final _triangle = Triangle.init();
 
+  NativeArray? verticesArray;
+
   EdgesGeometry(BufferGeometry geometry, thresholdAngle) : super() {
     type = "EdgesGeometry";
     parameters = {"thresholdAngle": thresholdAngle};
@@ -102,6 +104,12 @@ class EdgesGeometry extends BufferGeometry {
       }
     }
 
-    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    setAttribute('position', Float32BufferAttribute(verticesArray = Float32Array.from(vertices), 3, false));
+  }
+
+  @override
+  void dispose() {
+    verticesArray?.dispose();
+    super.dispose();
   }
 }

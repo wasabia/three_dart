@@ -105,10 +105,9 @@ packages:
   flutter_gl:
     dependency: "direct main"
     description:
-      name: flutter_gl
-      sha256: de74c88f77228f47dd280e2092b50eb49fe1fc008de74047d195a27f2db0b491
-      url: "https://pub.dev"
-    source: hosted
+      path: "../flutter_gl/flutter_gl"
+      relative: true
+    source: path
     version: "0.0.21"
   flutter_gl_macos:
     dependency: transitive
@@ -217,13 +216,21 @@ packages:
     source: hosted
     version: "0.2.0"
   meta:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: meta
       sha256: "6c268b42ed578a53088d834796959e4a1814b5e9e164f147f580a386e5decf42"
       url: "https://pub.dev"
     source: hosted
     version: "1.8.0"
+  opentype_dart:
+    dependency: transitive
+    description:
+      name: opentype_dart
+      sha256: "4bd96aeed494289a87e92bde20afe60f59648dcef253c0a7159b65ffa23899dc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   path:
     dependency: transitive
     description:
@@ -309,6 +316,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.16"
+  three_dart_jsm:
+    dependency: "direct overridden"
+    description:
+      path: "../three_dart_jsm"
+      relative: true
+    source: path
+    version: "0.0.10"
   typed_data:
     dependency: transitive
     description:
@@ -317,6 +331,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+  typr_dart:
+    dependency: transitive
+    description:
+      name: typr_dart
+      sha256: e8aa717c1445ceccd77bd6ba471683c8e17a9b14797ac09db3bd52d6fbd2fe7b
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   universal_html:
     dependency: "direct main"
     description:
@@ -351,4 +373,4 @@ packages:
     version: "6.2.2"
 sdks:
   dart: ">=2.18.0 <3.0.0"
-  flutter: ">=3.0.1"
+  flutter: ">=2.5.0"

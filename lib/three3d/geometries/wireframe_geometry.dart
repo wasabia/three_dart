@@ -3,6 +3,8 @@ import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class WireframeGeometry extends BufferGeometry {
+  NativeArray? verticesArray;
+
   WireframeGeometry(BufferGeometry geometry) : super() {
     type = "WireframeGeometry";
     // buffer
@@ -77,7 +79,13 @@ class WireframeGeometry extends BufferGeometry {
 
     // build geometry
 
-    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
+    setAttribute('position', Float32BufferAttribute(verticesArray = Float32Array.from(vertices), 3, false));
+  }
+
+  @override
+  void dispose() {
+    verticesArray?.dispose();
+    super.dispose();
   }
 }
 

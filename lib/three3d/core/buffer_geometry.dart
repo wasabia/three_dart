@@ -57,6 +57,8 @@ class BufferGeometry with EventDispatcher {
   int? maxInstanceCount;
   int? instanceCount;
 
+  Float32Array? array;
+
   BufferGeometry();
 
   BufferGeometry.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) {
@@ -268,8 +270,9 @@ class BufferGeometry with EventDispatcher {
       }
     }
 
-    final array = Float32Array.from(position);
-    setAttribute('position', Float32BufferAttribute(array, 3, false));
+    array?.dispose();
+    array = Float32Array.from(position);
+    setAttribute('position', Float32BufferAttribute(array!, 3, false));
 
     return this;
   }
@@ -947,6 +950,23 @@ class BufferGeometry with EventDispatcher {
     print(" BufferGeometry dispose ........... ");
 
     dispatchEvent(Event({"type": "dispose"}));
+
+    if (attributes["color"] is BufferAttribute) {
+      (attributes["color"] as BufferAttribute).array.dispose();
+    }
+    if (attributes["position"] is BufferAttribute) {
+      (attributes["position"] as BufferAttribute).array.dispose();
+    }
+
+    if (attributes["normal"] is BufferAttribute) {
+      (attributes["normal"] as BufferAttribute).array.dispose();
+    }
+    if (attributes["uv"] is BufferAttribute) {
+      (attributes["uv"] as BufferAttribute).array.dispose();
+    }
+
+    index?.array.dispose();
+    array?.dispose();
   }
 }
 

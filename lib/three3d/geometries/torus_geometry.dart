@@ -3,6 +3,10 @@ import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class TorusGeometry extends BufferGeometry {
+  NativeArray? verticesArray;
+  NativeArray? normalsArray;
+  NativeArray? uvsArray;
+
   TorusGeometry([
     radius = 1,
     tube = 0.4,
@@ -86,9 +90,17 @@ class TorusGeometry extends BufferGeometry {
     // build geometry
 
     setIndex(indices);
-    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3));
-    setAttribute('normal', Float32BufferAttribute(Float32Array.from(normals), 3));
-    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvs), 2));
+    setAttribute('position', Float32BufferAttribute(verticesArray = Float32Array.from(vertices), 3));
+    setAttribute('normal', Float32BufferAttribute(normalsArray = Float32Array.from(normals), 3));
+    setAttribute('uv', Float32BufferAttribute(uvsArray = Float32Array.from(uvs), 2));
+  }
+
+  @override
+  void dispose() {
+    verticesArray?.dispose();
+    normalsArray?.dispose();
+    uvsArray?.dispose();
+    super.dispose();
   }
 
   static fromJSON(data) {

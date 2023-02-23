@@ -308,4 +308,8 @@ class Matrix3 {
   Map<String, dynamic> toJson() {
     return {'elements': elements};
   }
+
+  void dispose() {
+    elements.dispose();
+  }
 }

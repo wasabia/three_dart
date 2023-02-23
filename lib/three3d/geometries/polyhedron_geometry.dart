@@ -4,6 +4,10 @@ import 'package:three_dart/three3d/dart_helpers.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class PolyhedronGeometry extends BufferGeometry {
+  NativeArray? verticesArray;
+  NativeArray? normalsArray;
+  NativeArray? uvsArray;
+
   PolyhedronGeometry(vertices, indices, [radius = 1, detail = 0]) : super() {
     type = "PolyhedronGeometry";
     // default buffer data
@@ -217,16 +221,24 @@ class PolyhedronGeometry extends BufferGeometry {
 
     // build non-indexed geometry
 
-    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertexBuffer), 3, false));
-    setAttribute('normal', Float32BufferAttribute(Float32Array.from(slice<double>(vertexBuffer, 0)), 3, false));
-    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvBuffer), 2, false));
+    setAttribute('position', Float32BufferAttribute(verticesArray = Float32Array.from(vertexBuffer), 3, false));
+    setAttribute(
+        'normal', Float32BufferAttribute(normalsArray = Float32Array.from(slice<double>(vertexBuffer, 0)), 3, false));
+    setAttribute('uv', Float32BufferAttribute(uvsArray = Float32Array.from(uvBuffer), 2, false));
 
     if (detail == 0) {
       computeVertexNormals(); // flat normals
-
     } else {
       normalizeNormals(); // smooth normals
-
     }
+  }
+
+  @override
+  void dispose() {
+    verticesArray?.dispose();
+    normalsArray?.dispose();
+    uvsArray?.dispose();
+
+    super.dispose();
   }
 }

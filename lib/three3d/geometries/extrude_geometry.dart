@@ -529,9 +529,12 @@ class ExtrudeGeometry extends BufferGeometry {
     }
 
     // build geometry
+    final nativeVertices = Float32Array.from(verticesArray);
+    final nativeUv = Float32Array.from(uvArray);
+    arrays.addAll([nativeVertices, nativeUv]);
 
-    setAttribute('position', Float32BufferAttribute(Float32Array.from(verticesArray), 3, false));
-    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvArray), 2, false));
+    setAttribute('position', Float32BufferAttribute(nativeVertices, 3, false));
+    setAttribute('uv', Float32BufferAttribute(nativeUv, 2, false));
 
     computeVertexNormals();
 
@@ -548,6 +551,16 @@ class ExtrudeGeometry extends BufferGeometry {
     var options = parameters?["options"];
 
     return toJSON2(shapes, options, data);
+  }
+
+  final arrays = <NativeArray>[];
+
+  @override
+  void dispose() {
+    for (var element in arrays) {
+      element.dispose();
+    }
+    super.dispose();
   }
 }
 

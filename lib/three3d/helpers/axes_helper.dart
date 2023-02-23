@@ -72,7 +72,7 @@ class AxesHelper extends LineSegments {
 
   @override
   void dispose() {
-    geometry!.dispose();
+    geometry?.dispose();
     material.dispose();
   }
 }
