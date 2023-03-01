@@ -57,6 +57,8 @@ class BufferGeometry with EventDispatcher {
   int? maxInstanceCount;
   int? instanceCount;
 
+  Float32Array? array;
+
   BufferGeometry();
 
   BufferGeometry.fromJSON(Map<String, dynamic> json, Map<String, dynamic> rootJSON) {
@@ -268,8 +270,9 @@ class BufferGeometry with EventDispatcher {
       }
     }
 
-    final array = Float32Array.from(position);
-    setAttribute('position', Float32BufferAttribute(array, 3, false));
+    array?.dispose();
+    array = Float32Array.from(position);
+    setAttribute('position', Float32BufferAttribute(array!, 3, false));
 
     return this;
   }
@@ -282,7 +285,7 @@ class BufferGeometry with EventDispatcher {
 
     if (position != null && position is GLBufferAttribute) {
       print(
-          'three.BufferGeometry.computeBoundingBox(): GLBufferAttribute requires a manual bounding box. Alternatively set "mesh.frustumCulled" to "false". ${this}');
+          'three.BufferGeometry.computeBoundingBox(): GLBufferAttribute requires a manual bounding box. Alternatively set "mesh.frustumCulled" to "false". $this');
 
       double inf = 9999999999.0;
 
@@ -404,7 +407,7 @@ class BufferGeometry with EventDispatcher {
 
       if (boundingSphere?.radius == null) {
         print(
-            'three.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values. ${this}');
+            'three.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values. $this');
       }
     }
   }
@@ -947,6 +950,23 @@ class BufferGeometry with EventDispatcher {
     print(" BufferGeometry dispose ........... ");
 
     dispatchEvent(Event({"type": "dispose"}));
+
+    if (attributes["color"] is BufferAttribute) {
+      (attributes["color"] as BufferAttribute).array.dispose();
+    }
+    if (attributes["position"] is BufferAttribute) {
+      (attributes["position"] as BufferAttribute).array.dispose();
+    }
+
+    if (attributes["normal"] is BufferAttribute) {
+      (attributes["normal"] as BufferAttribute).array.dispose();
+    }
+    if (attributes["uv"] is BufferAttribute) {
+      (attributes["uv"] as BufferAttribute).array.dispose();
+    }
+
+    index?.array.dispose();
+    array?.dispose();
   }
 }
 

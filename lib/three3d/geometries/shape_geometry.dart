@@ -3,6 +3,10 @@ import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/extras/index.dart';
 
 class ShapeGeometry extends BufferGeometry {
+  NativeArray? verticesArray;
+  NativeArray? normalsArray;
+  NativeArray? uvsArray;
+
   ShapeGeometry(shapes, {num curveSegments = 12}) : super() {
     type = 'ShapeGeometry';
     parameters = {};
@@ -93,7 +97,6 @@ class ShapeGeometry extends BufferGeometry {
         vertices.addAll([vertex.x.toDouble(), vertex.y.toDouble(), 0.0]);
         normals.addAll([0.0, 0.0, 1.0]);
         uvs.addAll([vertex.x.toDouble(), vertex.y.toDouble()]); // world uvs
-
       }
 
       // incides
@@ -135,11 +138,19 @@ class ShapeGeometry extends BufferGeometry {
     // build geometry
 
     setIndex(indices);
-    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
-    setAttribute('normal', Float32BufferAttribute(Float32Array.from(normals), 3, false));
-    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
+    setAttribute('position', Float32BufferAttribute(verticesArray = Float32Array.from(vertices), 3, false));
+    setAttribute('normal', Float32BufferAttribute(normalsArray = Float32Array.from(normals), 3, false));
+    setAttribute('uv', Float32BufferAttribute(uvsArray = Float32Array.from(uvs), 2, false));
 
     // helper functions
+  }
+
+  @override
+  void dispose() {
+    verticesArray?.dispose();
+    normalsArray?.dispose();
+    uvsArray?.dispose();
+    super.dispose();
   }
 
   // addShape( List<num> vertices, List<num> normals, List<num> uvs, shape, groupCount ) {

@@ -3,6 +3,10 @@ import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class ParametricGeometry extends BufferGeometry {
+  NativeArray? verticesArray;
+  NativeArray? uvsArray;
+  NativeArray? normalsArray;
+
   ParametricGeometry(func, slices, stacks) : super() {
     type = "ParametricGeometry";
     parameters = {"func": func, "slices": slices, "stacks": stacks};
@@ -91,8 +95,17 @@ class ParametricGeometry extends BufferGeometry {
     // build geometry
 
     setIndex(indices);
-    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3));
-    setAttribute('normal', Float32BufferAttribute(Float32Array.from(normals), 3));
-    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvs), 2));
+    setAttribute('position', Float32BufferAttribute(verticesArray = Float32Array.from(vertices), 3));
+    setAttribute('normal', Float32BufferAttribute(normalsArray = Float32Array.from(normals), 3));
+    setAttribute('uv', Float32BufferAttribute(uvsArray = Float32Array.from(uvs), 2));
+  }
+
+  @override
+  void dispose() {
+    verticesArray?.dispose();
+    uvsArray?.dispose();
+    normalsArray?.dispose();
+
+    super.dispose();
   }
 }

@@ -3,6 +3,9 @@ import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class ConvexGeometry extends BufferGeometry {
+  NativeArray? verticesArray;
+  NativeArray? normalsArray;
+
   ConvexGeometry(points) : super() {
     List<double> vertices = [];
     List<double> normals = [];
@@ -32,8 +35,15 @@ class ConvexGeometry extends BufferGeometry {
     }
 
     // build geometry
+    setAttribute('position', Float32BufferAttribute(verticesArray = Float32Array.from(vertices), 3, false));
+    setAttribute('normal', Float32BufferAttribute(normalsArray = Float32Array.from(normals), 3, false));
+  }
 
-    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
-    setAttribute('normal', Float32BufferAttribute(Float32Array.from(normals), 3, false));
+  @override
+  void dispose() {
+    verticesArray?.dispose();
+    normalsArray?.dispose();
+
+    super.dispose();
   }
 }

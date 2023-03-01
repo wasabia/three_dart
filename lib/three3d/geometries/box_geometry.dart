@@ -6,6 +6,10 @@ class BoxGeometry extends BufferGeometry {
   late int groupStart;
   late int numberOfVertices;
 
+  NativeArray? positionsArray;
+  NativeArray? normalsArray;
+  NativeArray? uvsArray;
+
   BoxGeometry([
     width = 1,
     height = 1,
@@ -170,9 +174,9 @@ class BoxGeometry extends BufferGeometry {
     // build geometry
 
     setIndex(indices);
-    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
-    setAttribute('normal', Float32BufferAttribute(Float32Array.from(normals), 3, false));
-    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
+    setAttribute('position', Float32BufferAttribute(positionsArray = Float32Array.from(vertices), 3, false));
+    setAttribute('normal', Float32BufferAttribute(normalsArray = Float32Array.from(normals), 3, false));
+    setAttribute('uv', Float32BufferAttribute(uvsArray = Float32Array.from(uvs), 2, false));
   }
 
   static fromJSON(data) {
@@ -184,5 +188,14 @@ class BoxGeometry extends BufferGeometry {
       data["heightSegments"],
       data["depthSegments"],
     );
+  }
+
+  @override
+  void dispose() {
+    positionsArray?.dispose();
+    normalsArray?.dispose();
+    uvsArray?.dispose();
+
+    super.dispose();
   }
 }

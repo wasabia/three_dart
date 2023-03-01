@@ -15,6 +15,7 @@ dependencies:
   image: ^3.1.1
   flutter_gl: ^0.0.20
   crypto: ^3.0.1
+  meta:
   
   # opentype:
   #   git: git@github.com:wasabia/opentype.git
@@ -27,9 +28,11 @@ dependencies:
   # flutter_webgpu:
   #   path: ../flutter_webgpu
 
-# dependency_overrides:
-#   three_dart_jsm:
-#     path: ../three_dart_jsm
+dependency_overrides:
+  three_dart_jsm:
+    path: ../three_dart_jsm
+  flutter_gl:
+    path: ../flutter_gl/flutter_gl
 
 dev_dependencies:
   flutter_test:

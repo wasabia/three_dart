@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +10,7 @@ import 'package:three_dart/three_dart.dart' as three;
 class WebGlDebugForMacos extends StatefulWidget {
   final String fileName;
 
-  const WebGlDebugForMacos({Key? key, required this.fileName})
-      : super(key: key);
+  const WebGlDebugForMacos({Key? key, required this.fileName}) : super(key: key);
 
   @override
   State<WebGlDebugForMacos> createState() => _MyAppState();
@@ -138,13 +136,10 @@ class _MyAppState extends State<WebGlDebugForMacos> {
                 child: Builder(builder: (BuildContext context) {
                   if (kIsWeb) {
                     return three3dRender.isInitialized
-                        ? HtmlElementView(
-                            viewType: three3dRender.textureId!.toString())
+                        ? HtmlElementView(viewType: three3dRender.textureId!.toString())
                         : Container();
                   } else {
-                    return three3dRender.isInitialized
-                        ? Texture(textureId: three3dRender.textureId!)
-                        : Container();
+                    return three3dRender.isInitialized ? Texture(textureId: three3dRender.textureId!) : Container();
                   }
                 })),
           ],
@@ -221,13 +216,9 @@ class _MyAppState extends State<WebGlDebugForMacos> {
     renderer!.shadowMap.type = three.BasicShadowMap;
 
     if (!kIsWeb) {
-      var pars = three.WebGLRenderTargetOptions({
-        "minFilter": three.LinearFilter,
-        "magFilter": three.LinearFilter,
-        "format": three.RGBAFormat
-      });
-      renderTarget = three.WebGLMultisampleRenderTarget(
-          (width * dpr).toInt(), (height * dpr).toInt(), pars);
+      var pars = three.WebGLRenderTargetOptions(
+          {"minFilter": three.LinearFilter, "magFilter": three.LinearFilter, "format": three.RGBAFormat});
+      renderTarget = three.WebGLMultisampleRenderTarget((width * dpr).toInt(), (height * dpr).toInt(), pars);
       renderer!.setRenderTarget(renderTarget);
       sourceTexture = renderer!.getRenderTargetGLTexture(renderTarget);
     }

@@ -442,13 +442,13 @@ class PropertyBinding {
       switch (objectName) {
         case 'materials':
           if (!targetObject.material) {
-            print('three.PropertyBinding: Can not bind to material as node does not have a material. ${this}');
+            print('three.PropertyBinding: Can not bind to material as node does not have a material. $this');
             return;
           }
 
           if (!targetObject.material.materials) {
             print(
-                'three.PropertyBinding: Can not bind to material.materials as node.material does not have a materials array. ${this}');
+                'three.PropertyBinding: Can not bind to material.materials as node.material does not have a materials array. $this');
             return;
           }
 
@@ -458,7 +458,7 @@ class PropertyBinding {
 
         case 'bones':
           if (!targetObject.skeleton) {
-            print('three.PropertyBinding: Can not bind to bones as node does not have a skeleton. ${this}');
+            print('three.PropertyBinding: Can not bind to bones as node does not have a skeleton. $this');
             return;
           }
 
@@ -479,7 +479,7 @@ class PropertyBinding {
 
         default:
           if (targetObject.getProperty(objectName) == null) {
-            print('three.PropertyBinding: Can not bind to objectName of node null. ${this}');
+            print('three.PropertyBinding: Can not bind to objectName of node null. $this');
             return;
           }
 
@@ -489,8 +489,7 @@ class PropertyBinding {
 
       if (objectIndex != null) {
         if (targetObject[objectIndex] == null) {
-          print(
-              'three.PropertyBinding: Trying to bind to objectIndex of objectName, but is null.${this} $targetObject');
+          print('three.PropertyBinding: Trying to bind to objectIndex of objectName, but is null.$this $targetObject');
           return;
         }
 
@@ -535,14 +534,14 @@ class PropertyBinding {
         // support resolving morphTarget names into indices.
         if (!targetObject.geometry) {
           print(
-              'three.PropertyBinding: Can not bind to morphTargetInfluences because node does not have a geometry. ${this}');
+              'three.PropertyBinding: Can not bind to morphTargetInfluences because node does not have a geometry. $this');
           return;
         }
 
         if (targetObject.geometry is BufferGeometry) {
           if (!targetObject.geometry.morphAttributes) {
             print(
-                'three.PropertyBinding: Can not bind to morphTargetInfluences because node does not have a geometry.morphAttributes. ${this}');
+                'three.PropertyBinding: Can not bind to morphTargetInfluences because node does not have a geometry.morphAttributes. $this');
             return;
           }
 
@@ -551,7 +550,7 @@ class PropertyBinding {
           }
         } else {
           print(
-              'three.PropertyBinding: Can not bind to morphTargetInfluences on three.Geometry. Use three.BufferGeometry instead. ${this}');
+              'three.PropertyBinding: Can not bind to morphTargetInfluences on three.Geometry. Use three.BufferGeometry instead. $this');
           return;
         }
       }

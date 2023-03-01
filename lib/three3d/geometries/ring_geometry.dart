@@ -3,6 +3,10 @@ import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class RingGeometry extends BufferGeometry {
+  NativeArray? verticesArray;
+  NativeArray? normalsArray;
+  NativeArray? uvsArray;
+
   RingGeometry([
     innerRadius = 0.5,
     outerRadius = 1,
@@ -93,13 +97,22 @@ class RingGeometry extends BufferGeometry {
     // build geometry
 
     setIndex(indices);
-    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3));
-    setAttribute('normal', Float32BufferAttribute(Float32Array.from(normals), 3));
-    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvs), 2));
+    setAttribute('position', Float32BufferAttribute(verticesArray = Float32Array.from(vertices), 3));
+    setAttribute('normal', Float32BufferAttribute(normalsArray = Float32Array.from(normals), 3));
+    setAttribute('uv', Float32BufferAttribute(uvsArray = Float32Array.from(uvs), 2));
   }
 
   static fromJSON(data) {
     return RingGeometry(
         data.innerRadius, data.outerRadius, data.thetaSegments, data.phiSegments, data.thetaStart, data.thetaLength);
+  }
+
+  @override
+  void dispose() {
+    verticesArray?.dispose();
+    normalsArray?.dispose();
+    uvsArray?.dispose();
+
+    super.dispose();
   }
 }

@@ -827,4 +827,8 @@ class Matrix4 {
     print('three.Matrix4: .getInverse() has been removed. Use matrixInv.copy( matrix ).invert(); instead.');
     return copy(matrix).invert();
   }
+
+  void dispose() {
+    elements.dispose();
+  }
 }

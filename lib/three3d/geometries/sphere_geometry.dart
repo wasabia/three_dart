@@ -3,6 +3,10 @@ import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class SphereGeometry extends BufferGeometry {
+  NativeArray? verticesArray;
+  NativeArray? normalsArray;
+  NativeArray? uvsArray;
+
   SphereGeometry([
     radius = 1,
     num widthSegments = 32,
@@ -103,9 +107,17 @@ class SphereGeometry extends BufferGeometry {
     // build geometry
 
     setIndex(indices);
-    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
-    setAttribute('normal', Float32BufferAttribute(Float32Array.from(normals), 3, false));
-    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
+    setAttribute('position', Float32BufferAttribute(verticesArray = Float32Array.from(vertices), 3, false));
+    setAttribute('normal', Float32BufferAttribute(normalsArray = Float32Array.from(normals), 3, false));
+    setAttribute('uv', Float32BufferAttribute(uvsArray = Float32Array.from(uvs), 2, false));
+  }
+
+  @override
+  void dispose() {
+    verticesArray?.dispose();
+    normalsArray?.dispose();
+    uvsArray?.dispose();
+    super.dispose();
   }
 
   static fromJSON(data) {

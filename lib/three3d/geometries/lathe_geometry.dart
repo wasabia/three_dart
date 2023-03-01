@@ -3,6 +3,10 @@ import 'package:three_dart/three3d/core/index.dart';
 import 'package:three_dart/three3d/math/index.dart';
 
 class LatheGeometry extends BufferGeometry {
+  NativeArray? verticesArray;
+  NativeArray? uvsArray;
+  NativeArray? normalsArray;
+
   LatheGeometry(
     points, {
     segments = 12,
@@ -142,8 +146,17 @@ class LatheGeometry extends BufferGeometry {
     // build geometry
 
     setIndex(indices);
-    setAttribute('position', Float32BufferAttribute(Float32Array.from(vertices), 3, false));
-    setAttribute('uv', Float32BufferAttribute(Float32Array.from(uvs), 2, false));
-    setAttribute('normal', Float32BufferAttribute(Float32Array.from(normals), 3, false));
+    setAttribute('position', Float32BufferAttribute(verticesArray = Float32Array.from(vertices), 3, false));
+    setAttribute('normal', Float32BufferAttribute(normalsArray = Float32Array.from(normals), 3, false));
+    setAttribute('uv', Float32BufferAttribute(uvsArray = Float32Array.from(uvs), 2, false));
+  }
+
+  @override
+  void dispose() {
+    verticesArray?.dispose();
+    uvsArray?.dispose();
+    normalsArray?.dispose();
+
+    super.dispose();
   }
 }

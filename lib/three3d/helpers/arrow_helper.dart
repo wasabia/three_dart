@@ -13,6 +13,8 @@ class ArrowHelper extends Object3D {
   late Line line;
   late Mesh cone;
 
+  NativeArray? positionArray;
+
   ArrowHelper(dir, origin, length, color, headLength, headWidth) : super() {
     // dir is assumed to be normalized
 
@@ -27,7 +29,8 @@ class ArrowHelper extends Object3D {
 
     if (_lineGeometry == null) {
       _lineGeometry = BufferGeometry();
-      _lineGeometry.setAttribute('position', Float32BufferAttribute(Float32Array.from([0, 0, 0, 0, 1, 0]), 3, false));
+      _lineGeometry.setAttribute(
+          'position', Float32BufferAttribute(positionArray = Float32Array.from([0, 0, 0, 0, 1, 0]), 3, false));
 
       _coneGeometry = CylinderGeometry(0, 0.5, 1, 5, 1);
       _coneGeometry.translate(0, -0.5, 0);
@@ -88,5 +91,15 @@ class ArrowHelper extends Object3D {
       cone.copy(source.cone, false);
     }
     return this;
+  }
+
+  @override
+  void dispose() {
+    positionArray?.dispose();
+
+    line.dispose();
+    cone.dispose();
+
+    super.dispose();
   }
 }

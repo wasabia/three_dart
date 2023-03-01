@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert' as convert;
-import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -48,8 +47,7 @@ class FileLoader extends Loader {
     // Check if request is duplicate
 
     if (loading[url] != null) {
-      loading[url].add(
-          {"onLoad": onLoad, "onProgress": onProgress, "onError": onError});
+      loading[url].add({"onLoad": onLoad, "onProgress": onProgress, "onError": onError});
 
       return;
     }
@@ -143,8 +141,7 @@ class FileLoader extends Loader {
 
     loading[url] = [];
 
-    loading[url]
-        .add({"onLoad": onLoad, "onProgress": onProgress, "onError": onError});
+    loading[url].add({"onLoad": onLoad, "onProgress": onProgress, "onError": onError});
 
     var callbacks = loading[url];
 
