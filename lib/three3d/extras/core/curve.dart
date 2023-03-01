@@ -199,7 +199,6 @@ class Curve {
         break;
 
         // DONE
-
       }
     }
 
@@ -343,6 +342,8 @@ class Curve {
         binormals[i].crossVectors(tangents[i], normals[i]);
       }
     }
+
+    mat.dispose();
 
     return {"tangents": tangents, "normals": normals, "binormals": binormals};
   }

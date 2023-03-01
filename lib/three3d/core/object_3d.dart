@@ -877,7 +877,13 @@ class Object3D with EventDispatcher {
     }
   }
 
-  void dispose() {}
+  void dispose() {
+    matrix?.dispose();
+    matrixWorld?.dispose();
+    modelViewMatrix?.dispose();
+    normalMatrix?.dispose();
+    bindMatrix?.dispose();
+  }
 }
 
 class Object3dMeta {
