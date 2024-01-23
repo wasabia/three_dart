@@ -22,7 +22,7 @@ class TextureLoader extends Loader {
   }
 
   @override
-  load(url, Function onLoad, [Function? onProgress, Function? onError]) {
+  Future<Texture> load(url, Function onLoad, [Function? onProgress, Function? onError]) {
     Texture texture;
 
     // if(kIsWeb) {
@@ -30,6 +30,7 @@ class TextureLoader extends Loader {
     // } else {
     //   texture = DataTexture(null, null, null,null, null, null,null, null, null, null, null, null);
     // }
+    texture.flipY = flipY;
 
     var loader = ImageLoader(manager);
     loader.setCrossOrigin(crossOrigin);

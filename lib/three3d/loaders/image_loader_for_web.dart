@@ -4,6 +4,7 @@ import 'dart:html' as html;
 
 class ImageLoaderLoader {
   // flipY 在web环境下 忽略
+  // in web the flipping is done when rendering the texture, rather than when loading the texture
   static Future<html.ImageElement> loadImage(url, flipY, {Function? imageDecoder}) {
     var completer = Completer<html.ImageElement>();
     var imageDom = html.ImageElement();
