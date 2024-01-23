@@ -30,6 +30,7 @@ class TextureLoader extends Loader {
     // } else {
     //   texture = DataTexture(null, null, null,null, null, null,null, null, null, null, null, null);
     // }
+    texture.flipY = flipY;
 
     var loader = ImageLoader(manager);
     loader.setCrossOrigin(crossOrigin);
