@@ -43,7 +43,7 @@ class ImageLoader extends Loader {
       return cached;
     }
     // Note - see conditional import - 'image_loader_for_app.dart' or 'image_loader_for_web.dart'
-    final resp = await image_loader_web.ImageLoaderLoader.loadImage(url, flipY);
+    final resp = await ImageLoaderLoader.loadImage(url, flipY);
     onLoad(resp);
 
     return resp;
