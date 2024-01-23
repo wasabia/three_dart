@@ -22,7 +22,7 @@ class TextureLoader extends Loader {
   }
 
   @override
-  load(url, Function onLoad, [Function? onProgress, Function? onError]) {
+  Future<Texture> load(url, Function onLoad, [Function? onProgress, Function? onError]) {
     Texture texture;
 
     // if(kIsWeb) {
