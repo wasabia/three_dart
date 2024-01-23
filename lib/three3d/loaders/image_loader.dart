@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:three_dart/three3d/loaders/cache.dart';
 import 'package:three_dart/three3d/loaders/loader.dart';
-import 'image_loader_for_app.dart' if (dart.library.js) 'image_loader_for_web.dart';
+import 'image_loader_for_app.dart' as image_loader_app;
+import 'image_loader_for_web.dart' as image_loader_web;
 
 class ImageLoader extends Loader {
   ImageLoader(manager) : super(manager) {
@@ -41,8 +43,9 @@ class ImageLoader extends Loader {
 
       return cached;
     }
-
-    final resp = await ImageLoaderLoader.loadImage(url, flipY);
+    final resp = kIsWeb
+        ? await image_loader_web.ImageLoaderLoader.loadImage(url, flipY)
+        : await image_loader_app.ImageLoaderLoader.loadImage(url, flipY);
     onLoad(resp);
 
     return resp;
